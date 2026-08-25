@@ -13,6 +13,12 @@
   },
   "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority.",
   "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+  "deployment_review": {
+    "reviewed": "2026-08-25",
+    "reviewed_source_commit": "b1c83ea08bf2be194616335ece9476a2920296f5",
+    "run": "https://github.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/32891045168",
+    "url": "https://exo-robotics.github.io/jlg-equipment-explorer/es1930m/"
+  },
   "files": {
     "asset": {
       "bytes": 963508,
@@ -66,14 +72,14 @@
     "maximum_translation_per_0_01_sample_m": 0.049164512674566105,
     "sampled_lift_states": 101
   },
-  "release": "1.0.0-candidate",
-  "release_status": "candidate_not_deployable",
+  "release": "1.0.0",
+  "release_status": "release",
   "review_flags": {
     "600s_regression_suite_pass": true,
     "accessible_control_names_pass": true,
     "asset_contract_pass": true,
     "cross_pvc_quarantine_pass": true,
-    "deployed_pages_reviewed": false,
+    "deployed_pages_reviewed": true,
     "desktop_browser_zero_errors": true,
     "evidence_hashes_pass": true,
     "extension_browser_reviewed": true,
