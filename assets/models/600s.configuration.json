@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
+  "baseline_release": "0.2.0",
+  "target_release": "1.0.0",
+  "model": "600S",
+  "pvc": "2607",
+  "market": "ANSI_US",
+  "serial_family": "B3",
+  "choices": {
+    "drive": "4WD_HYDROSTATIC",
+    "steer": "2WS_FRONT",
+    "engine": "DEUTZ_D2_9L4_TIER4F_49HP",
+    "tires": "355_55D625_FOAM_FILLED_STANDARD",
+    "platform": "B3_RAPID_REPLACE_36X96_SWING_GATE",
+    "hoods": "B3_DCPD",
+    "options": []
+  },
+  "published_dimensions_m": {
+    "stowed_envelope": [8.71, 2.48, 2.5],
+    "wheelbase": 2.5,
+    "ground_clearance": 0.29,
+    "tailswing": 1.22,
+    "platform": [0.91, 2.44]
+  },
+  "published_capacity_lb": {
+    "unrestricted": 600,
+    "restricted": 1000
+  },
+  "interaction_volumes": [
+    "Chassis_Hit",
+    "Turntable_Hit",
+    "Boom_Hit",
+    "Telescope_Hit",
+    "Platform_Hit"
+  ],
+  "required_parent_edges": {
+    "Chassis": "600S_ROOT",
+    "Frame": "Chassis",
+    "AxleFront": "Chassis",
+    "AxleRear": "Chassis",
+    "Wheel_FL": "Chassis",
+    "Wheel_FR": "Chassis",
+    "Wheel_RL": "Chassis",
+    "Wheel_RR": "Chassis",
+    "TurntablePivot": "600S_ROOT",
+    "Turntable": "TurntablePivot",
+    "SlewRing": "Turntable",
+    "UpperFrame": "Turntable",
+    "EngineCover": "Turntable",
+    "TankCover": "Turntable",
+    "Counterweight": "Turntable",
+    "Controls": "Turntable",
+    "BoomPivot": "Turntable",
+    "MainBoom": "BoomPivot",
+    "Telescope": "MainBoom",
+    "MidBoom": "Telescope",
+    "FlyBoom": "MidBoom",
+    "PlatformPivot": "FlyBoom",
+    "Platform": "PlatformPivot",
+    "LiftCylinder": "Turntable",
+    "TowerLinkLower": "BoomPivot",
+    "TowerLinkUpper": "BoomPivot",
+    "Powertrack": "MainBoom",
+    "PlatformRotator": "PlatformPivot",
+    "PlatformSwingGate": "Platform",
+    "PlatformConsole": "Platform",
+    "PlatformFootswitch": "Platform",
+    "Chassis_Hit": "Chassis",
+    "Turntable_Hit": "Turntable",
+    "Boom_Hit": "MainBoom",
+    "Telescope_Hit": "Telescope",
+    "Platform_Hit": "Platform"
+  },
+  "sections": {
+    "chassis": {
+      "required_nodes": ["Frame", "AxleFront", "AxleRear", "Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR"],
+      "evidence": ["3122579800:20-64"]
+    },
+    "turntable": {
+      "required_nodes": ["SlewRing", "UpperFrame", "EngineCover", "TankCover", "Counterweight", "Controls"],
+      "evidence": ["3122579800:70-242"]
+    },
+    "boom": {
+      "required_nodes": ["BoomPivot", "MainBoom", "Telescope", "MidBoom", "FlyBoom", "TowerLinkLower", "TowerLinkUpper", "Powertrack"],
+      "evidence": ["3122579800:520", "3122579800:540", "3122579700:641", "3122579700:648"]
+    },
+    "platform": {
+      "required_nodes": ["PlatformPivot", "PlatformRotator", "Platform", "PlatformSwingGate", "PlatformConsole", "PlatformFootswitch"],
+      "evidence": ["3122579800:654", "3122579800:660", "3122579800:666-668", "3122579700:659"]
+    },
+    "hydraulic_visible": {
+      "required_nodes": ["LiftCylinder"],
+      "evidence": ["3122579800:592-600", "3122579800:724-804", "3122579700:641-659"]
+    },
+    "electrical_visible": {
+      "required_nodes": [],
+      "evidence": ["3122579800:898-1054", "3122579700:973-1018"]
+    }
+  },
+  "source_publications": {
+    "specification": {
+      "publication": "3131050",
+      "revision": "R0626_04",
+      "sha256": "56123e6ef835a4c1caebc00ad26f2e1f02e16899a2bbe6e6f4bbd871ee8885b5"
+    },
+    "parts": {
+      "publication": "3122579800",
+      "revision": "PVC2607_2026-07-13",
+      "sha256": "6e0e8ae6fe3b5ce6d726c13945bb8c6fd006ed7183631a0c74044803306ea1fc"
+    },
+    "service": {
+      "publication": "3122579700",
+      "revision": "A_2026-07-13",
+      "sha256": "2e74966adf93d7432c43647eccc02105f2a868f379d4a74c8b9a8d01e5a2c7b5"
+    },
+    "operation": {
+      "publication": "3122579600",
+      "revision": "A_2026-07-13",
+      "sha256": "0a60dd1e8ed70d9a782f36f4ffbf5ca0260d3faedbd43f136cb0fe7f1d8a52c6"
+    }
+  },
+  "authority_policy": {
+    "allowed": ["verified", "derived", "reconstructed", "deferred"],
+    "manual_diagrams_are_fabrication_dimensions": false,
+    "safety_or_service_simulation": false,
+    "standalone_pvc2601_schematics_admitted": false
+  }
+}

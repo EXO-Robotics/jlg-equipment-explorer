@@ -21,10 +21,23 @@ The web viewer should depend on a small, stable node hierarchy rather than Blend
         ├── Controls
         └── BoomPivot
             ├── MainBoom
+            │   ├── Powertrack
             │   └── Telescope
-            │       └── PlatformPivot
-            │           └── Platform
-            └── LiftCylinder
+            │       └── MidBoom
+            │           └── FlyBoom
+            │               └── PlatformPivot
+            │                   ├── PlatformRotator
+            │                   └── Platform
+            │                       ├── PlatformSwingGate
+            │                       ├── PlatformConsole
+            │                       └── PlatformFootswitch
+            ├── TowerLinkLower
+            └── TowerLinkUpper
+
+Turntable also owns the evidence-bounded `LiftCylinder` assembly so the viewer can
+solve it between a turntable-side lower anchor and boom-side upper anchor as the
+boom moves. A rigid cylinder parented to the moving boom is not acceptable for the
+detailed release.
 ```
 
 Optional visible nodes may be added freely. Animation code must only require the nodes above.
@@ -33,7 +46,7 @@ Optional visible nodes may be added freely. Animation code must only require the
 
 - `TurntablePivot`: local origin at the center of the slew bearing; local Y is the swing axis.
 - `BoomPivot`: local origin at the physical boom hinge; local Z is the lift axis.
-- `Telescope`: local X points from the boom pivot toward the platform; extension is positive X.
+- `Telescope`: local X points from the boom pivot toward the platform; extension is positive X. It is the motion group for the nested `MidBoom` and `FlyBoom` reconstruction.
 - Front wheel nodes: local Y is the steering axis.
 - `PlatformPivot`: local origin is the platform-leveling/rotation center; the viewer counter-rotates local Z against boom lift.
 - `Platform`: remains a distinct child of `PlatformPivot`. Platform rotation about the rotator axis is still deferred.
@@ -61,6 +74,8 @@ independently translating `Telescope` node.
 - Keep the root at world origin with the ground plane at Y = 0.
 - Export +Y up and +Z forward using Blender's glTF exporter defaults.
 - Avoid negative scales, unapplied mirrored transforms, and material names generated from temporary imports.
+- Every detailed node must carry an `authority` extra with one of `verified`, `derived`, `reconstructed`, or `deferred`.
+- The target configuration is frozen in `assets/models/600s.configuration.json`; a model built from a different steering, engine, tire, hood, platform, market, or serial-family branch is a different asset.
 
 ## Web budget
 

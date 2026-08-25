@@ -25,15 +25,16 @@ An industrial product study presented like a dark technical stage: one safety-or
 - Procedural 600S-style proxy
 - Articulation, picking, responsive UI, and documentation contracts
 
-### M1 — Evidence freeze (in progress)
+### M1 — Evidence freeze (complete)
 
 - [x] Capture official product-page URLs and access dates
 - [x] Record the current PVC 2607 manual identifiers and quarantine the PVC 2601 schematics
 - [x] Save a 12-slot reference-board inventory without redistributing restricted assets
 - [x] Resolve current/legacy dimensional applicability and the restricted/unrestricted capacity labels
-- [ ] Download and inspect the current parts, service, and operation manuals outside the deployable repository
-- [ ] Capture the exact current boom, chassis/turntable, pivot, and platform pages
-- [ ] Fill the remaining platform-detail evidence gap
+- [x] Download and inspect the current parts, service, and operation manuals outside the deployable repository
+- [x] Capture the exact current boom, chassis/turntable, pivot, and platform pages
+- [x] Freeze one current B3/2WS/D2.9/foam-filled/36x96 rapid-platform configuration
+- [x] Resolve the platform-detail gate with the current B3 platform and console assemblies
 
 ### M2 — Blender blockout v0.1 (complete)
 

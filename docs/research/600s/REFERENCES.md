@@ -6,7 +6,7 @@ Evidence freeze date: 2026-08-25
 
 The target is the current standard JLG 600S represented by the June/July 2026 public product material. The 600S HC3, legacy 600S generations, 600SJ, and 660SJ are separate configurations. They may explain shared mechanisms but must not silently supply current 600S geometry.
 
-JLG uses a Product Variation Code (PVC) in its current publication catalog. The current parts, service, and operation set is listed under PVC 2607. Current hydraulic and electrical schematics are listed under PVC 2601. Until JLG confirms cross-PVC applicability, those schematics are not authoritative for the PVC 2607 model.
+JLG uses a Product Variation Code (PVC) in its current publication catalog. The current parts, service, and operation set is listed under PVC 2607. The separately cataloged hydraulic and electrical schematic files are listed under PVC 2601 and remain quarantined. The inspected PVC 2607 service and parts manuals contain their own applicable hydraulic and electrical diagrams; those in-manual diagrams are authoritative within their stated model, market, steering, engine, and serial-family scope.
 
 ## Primary sources
 
@@ -45,15 +45,33 @@ JLG uses a Product Variation Code (PVC) in its current publication catalog. The 
 - Model-filter URL: https://onlineexpress.jlg.com/technical-publications/search/english-united-states/model-600s/_/N-1063887702%2B1277404462?locale=en-us
 - Catalog inspected: 2026-08-25
 - Used for: publication identity, release date, language, model, PVC, file size, and manual-family selection
-- Confidence: high for catalog metadata; manual contents remain pending direct inspection
+- Confidence: high for catalog metadata; all three PVC 2607 manuals were directly inspected on 2026-08-25
 
 Current PVC 2607 English set listed on 2026-08-25:
 
 | Type | Publication | Release date | Listed size | Content status |
 |---|---:|---|---:|---|
-| Parts | 3122579800 | 2026-07-13 | 91.68 MB | download/page capture pending |
-| Service | 3122579700 | 2026-07-13 | 119.82 MB | download/page capture pending |
-| Operation | 3122579600 | 2026-07-13 | 29.11 MB | download/page capture pending |
+| Parts | 3122579800 | 2026-07-13 | 91.68 MB | inspected; SHA-256 `6e0e8ae6fe3b5ce6d726c13945bb8c6fd006ed7183631a0c74044803306ea1fc` |
+| Service | 3122579700 | 2026-07-13 | 119.82 MB | inspected; SHA-256 `2e74966adf93d7432c43647eccc02105f2a868f379d4a74c8b9a8d01e5a2c7b5` |
+| Operation | 3122579600 | 2026-07-13 | 29.11 MB | inspected; SHA-256 `0a60dd1e8ed70d9a782f36f4ffbf5ca0260d3faedbd43f136cb0fe7f1d8a52c6` |
+
+Directly inspected current-page anchors used by the reconstruction:
+
+| Publication | Pages | Verified modeling use |
+|---:|---:|---|
+| 3122579600 | 28 | 600S nomenclature: base, mid, and fly boom; powertrack; rotator; leveling cylinder; controls |
+| 3122579600 | 135-141 | capacity, 2WS/4WS weights, dimensions, engines, and standard tire data |
+| 3122579800 | 20-64 | axle, steering, wheel-drive, tire/wheel, and frame-cover assemblies |
+| 3122579800 | 70-242 | 600S turntable valves, slew, bearing, tanks, electrical components, controls, hoods, and covers |
+| 3122579800 | 520, 540 | 600S boom installation and base-section assembly |
+| 3122579800 | 568-612 | rotator, powertrack, boom valves/sensors, and 600S rapid-platform support |
+| 3122579800 | 654-668 | B3 36 x 96 in rapid-replace platform, gate family, console, and footswitch |
+| 3122579800 | 724-804 | axle, level, lift, steer, and telescope cylinders plus applicable hydraulic diagrams |
+| 3122579800 | 898-1054 | boom sensors and current harness families |
+| 3122579700 | 641 | base/mid/fly boom, powertrack, tower links, and platform rotator relationships |
+| 3122579700 | 648 | main boom, tower-link, support-strap, and pivot-pin relationships |
+| 3122579700 | 659 | 600S platform removal/installation relationship |
+| 3122579700 | 973-1018 | in-manual electrical and hydraulic schematics for the covered PVC 2607 manual |
 
 Current catalog entries that must remain quarantined from PVC 2607 geometry until applicability is confirmed:
 
@@ -113,10 +131,9 @@ The following local images were visually inspected on 2026-08-25 but are not adm
 
 Do not use these files to resolve current PVC 2607 enclosure profiles, pivots, cylinder anchors, telescope construction, platform details, or decals. Do not copy them into the public repository without source and redistribution permission.
 
-## Unresolved source gates
+## Remaining source gates
 
-1. Obtain direct, local working copies of publications 3122579800, 3122579700, and 3122579600 outside the deployable repository.
-2. Record their checksums and inspect covers for exact applicability.
-3. Capture only the specific boom, chassis/turntable, platform, and pivot pages required by the reference-board manifest.
-4. Confirm whether schematics 3122588600 and 3122586300 apply to PVC 2607 before consulting them.
-5. Acquire current front, rear, and platform close-ups from JLG material or record a same-generation secondary source with explicit lower confidence.
+1. Acquire current front, rear, underside, and engine-bay photographs from JLG material or record same-generation secondary sources with explicit lower confidence.
+2. Do not use a serial-dependent assembly unless it matches the frozen B3 configuration in `CONFIGURATION.md` or is clearly recorded as a common-family reconstruction.
+3. Keep standalone schematic publications 3122588600 and 3122586300 quarantined unless JLG confirms PVC 2607 applicability.
+4. Treat manual exploded views as assembly-relationship evidence, not fabrication dimensions.

@@ -31,18 +31,18 @@ jobs:
         run: |
           mkdir -p _site/assets/models _site/vendor
           cp index.html viewer.css viewer.js _site/
-          cp assets/models/600s.glb assets/models/600s.version.js _site/assets/models/
+          cp assets/models/600s.glb assets/models/600s.version.js assets/models/600s.configuration.json _site/assets/models/
           cp -R vendor/three-r160 _site/vendor/
           touch _site/.nojekyll
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
