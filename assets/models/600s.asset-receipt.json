@@ -7,11 +7,11 @@
   "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T18:33:00Z",
-  "sha256": "81e886f5f1df2f85d780d8b36c45f81b49daba5f777edbcdf39fac47cc00e76f",
-  "source_blend_sha256": "2209b7312a6a5a03f1c7befe2a544d3439741d946b4a13c737991673c51f103e",
-  "cache_key": "81e886f5f1df",
-  "runtime_sha256": "4f2867ca46738868018eb233b33cec0a8e23aa652c2171421f6982c5e45207ec",
+  "exported_at": "2026-08-25T18:49:39Z",
+  "sha256": "cce862032f8d77ad2de44aec245b3aafecb8f42668904e33e105e994319459d9",
+  "source_blend_sha256": "737d1e0aa92e254f9c322eae44a44d5e043bf7fc12354602996f37ca0f826ade",
+  "cache_key": "cce862032f8d",
+  "runtime_sha256": "55919777758f3a224be0d70f732526e3b42f9e67f66fbd291c2e52350298b8ec",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -28,8 +28,8 @@
   ],
   "telescope_travel_m": 0.9,
   "telescope_overlap_at_100_m": 1.207,
-  "triangle_count": 23128,
-  "node_count": 453,
+  "triangle_count": 23976,
+  "node_count": 457,
   "required_parent_edges": 100,
   "interaction_volumes": [
     "Chassis_Hit",
@@ -40,8 +40,8 @@
   ],
   "mechanical_validation": {
     "status": "PASS",
-    "bytes": 1165004,
-    "mesh_count": 398,
+    "bytes": 1214924,
+    "mesh_count": 402,
     "visible_bounds_min_m": [
       -2.9093,
       -0.0,
@@ -56,17 +56,17 @@
   },
   "review": {
     "loads_without_console_error": true,
-    "articulation_pivots_pass": false,
+    "articulation_pivots_pass": true,
     "selection_volumes_pass": true,
     "stowed_silhouette_reviewed": true,
-    "working_pose_silhouette_pass": false,
+    "working_pose_silhouette_pass": true,
     "mobile_view_reviewed": false,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Fresh local in-app browser 2026-08-25: exact 81e886f5f1df GLB loaded as blender-showcase-v1.1.0 with 82 optimized visible meshes and zero warning/error logs.",
-      "motion": null,
-      "selection": "Five-volume runtime selection self-test passed on exact 81e886f5f1df GLB.",
-      "silhouette_scope": "Fresh Blender side-profile review and local runtime chassis focus confirmed the supplied reference silhouette: sculpted orange front pod, compact center bridge, exposed rear axle structure, and open space below the turntable. Working-pose and mobile reviews remain open."
+      "browser": "Fresh local in-app browser 2026-08-25: exact cce862032f8d GLB loaded as blender-showcase-v1.1.0 with 82 optimized visible meshes and zero runtime errors.",
+      "motion": "Exact cce862032f8d GLB exercised at boom 45, extend 80, rotate 35, and steer 18 with all values applied together.",
+      "selection": "Five-volume runtime selection self-test passed on exact cce862032f8d GLB.",
+      "silhouette_scope": "Desktop stowed and working poses reviewed after replacing four detached tie-down cylinders with flush pockets, attaching both side steps, and supporting the boom-rest saddle and pad with a two-post chassis pedestal. Mobile remains unreviewed for this exact hash."
     }
   },
   "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."

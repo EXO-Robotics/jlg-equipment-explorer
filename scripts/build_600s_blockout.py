@@ -392,6 +392,29 @@ def world_bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector, Vecto
     return minimum, maximum, maximum - minimum
 
 
+def world_aabb(obj: bpy.types.Object) -> tuple[Vector, Vector]:
+    """Return an object's world-space bounds for build-time attachment checks."""
+    corners = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
+    minimum = Vector((min(point[axis] for point in corners) for axis in range(3)))
+    maximum = Vector((max(point[axis] for point in corners) for axis in range(3)))
+    return minimum, maximum
+
+
+def assert_attached(part_name: str, support_name: str, minimum_overlap_m: float = 0.004) -> None:
+    """Fail the build when a visible accessory drifts away from its support."""
+    part_min, part_max = world_aabb(bpy.data.objects[part_name])
+    support_min, support_max = world_aabb(bpy.data.objects[support_name])
+    overlap = Vector((
+        min(part_max[axis], support_max[axis]) - max(part_min[axis], support_min[axis])
+        for axis in range(3)
+    ))
+    if any(value < minimum_overlap_m for value in overlap):
+        raise RuntimeError(
+            f"Detached accessory: {part_name} does not overlap {support_name}; "
+            f"axis overlap={tuple(round(value, 4) for value in overlap)}"
+        )
+
+
 if bpy.data.filepath:
     open_path = Path(bpy.data.filepath).resolve()
     allowed_paths = {BLEND_PATH.resolve(), *(path.resolve() for path in MIGRATION_SOURCE_PATHS)}
@@ -532,8 +555,23 @@ box("AxlePumpkin_F", (0.48, 0.62, 0.38), chassis, (1.25, 0.0, 0.58), MAT_DARK_ME
 box("AxlePumpkin_R", (0.48, 0.62, 0.38), chassis, (-1.25, 0.0, 0.58), MAT_DARK_METAL, "chassis", round=0.06, evidence="3122579800:24-26")
 box("BoomRest", (0.62, 0.92, 0.18), chassis, (2.20, 0.0, 1.68), MAT_METAL, "chassis", round=0.03)
 box("BoomRestPad", (0.42, 0.52, 0.06), chassis, (2.20, 0.0, 1.79), MAT_DARK, "chassis")
-box("SideStep_L", (0.55, 0.28, 0.08), chassis, (0.85, 0.92, 1.02), MAT_METAL, "chassis")
-box("SideStep_R", (0.55, 0.28, 0.08), chassis, (0.85, -0.92, 1.02), MAT_METAL, "chassis")
+for side, y in (("L", 0.32), ("R", -0.32)):
+    box(
+        f"BoomRestPost_{side}", (0.18, 0.14, 0.80), chassis, (2.05, y, 1.26),
+        MAT_ORANGE_DEEP, "chassis", round=0.025,
+        evidence="3122579800:62; upright boom-rest support placement reconstructed",
+    )
+for side, y in (("L", 0.83), ("R", -0.83)):
+    box(
+        f"SideStep_{side}", (0.55, 0.22, 0.06), chassis, (0.85, y, 1.04),
+        MAT_DARK_METAL, "chassis", round=0.018,
+        evidence="3122579800:62; inset to meet chassis deck",
+    )
+    box(
+        f"SideStepBracket_{side}", (0.12, 0.22, 0.18), chassis, (0.85, 0.73 if y > 0 else -0.73, 0.95),
+        MAT_DARK_METAL, "chassis", round=0.018,
+        evidence="3122579800:62; support bracket placement reconstructed",
+    )
 wheel_fl = add_wheel("Wheel_FL", 1.25, 1.04, True)
 wheel_fr = add_wheel("Wheel_FR", 1.25, -1.04, True)
 add_wheel("Wheel_RL", -1.25, 1.04, False)
@@ -574,8 +612,12 @@ tube_path("ChassisDriveHarness_R", ((-1.95, -0.62, 0.82), (-0.25, -0.62, 0.82), 
 for side, y in (("L", 0.56), ("R", -0.56)):
     box(f"ForkPocket_{side}_Front", (0.74, 0.24, 0.15), chassis, (1.78, y, 0.45), MAT_DARK_METAL, "chassis", round=0.015, evidence="3131050:R0626_04")
     box(f"ForkPocket_{side}_Rear", (0.74, 0.24, 0.15), chassis, (-1.78, y, 0.45), MAT_DARK_METAL, "chassis", round=0.015, evidence="3131050:R0626_04")
-for tag, x, y in (("FL", 2.45, 0.72), ("FR", 2.45, -0.72), ("RL", -2.45, 0.72), ("RR", -2.45, -0.72)):
-    cylinder_mesh(f"TieDown_{tag}", 0.055, 0.07, chassis, (x, y, 0.53), (math.pi / 2.0, 0.0, 0.0), MAT_METAL, "chassis", 14, evidence="3131050:R0626_04")
+for tag, x, y in (("FL", 1.50, 0.657), ("FR", 1.50, -0.657), ("RL", -1.55, 0.657), ("RR", -1.55, -0.657)):
+    box(
+        f"TieDownPocket_{tag}", (0.26, 0.035, 0.14), chassis, (x, y, 0.64),
+        MAT_DARK, "chassis", round=0.024,
+        evidence="3131050:R0626_04; flush transport-point cue, placement reconstructed",
+    )
 
 turntable_pivot = empty("TurntablePivot", root, (-0.45, 0.0, 1.18))
 set_authority(turntable_pivot, "reconstructed", "3122579800:92; 3131050:R0626_04")
@@ -844,6 +886,15 @@ box("Platform_Hit", (0.91, 2.44, 1.17), platform, (0.455, 0.0, -0.185), MAT_HIT,
 
 bpy.context.view_layer.update()
 objects = list(collection.all_objects)
+for side in ("L", "R"):
+    assert_attached(f"SideStep_{side}", "LowerDeck")
+    assert_attached(f"SideStepBracket_{side}", f"SideStep_{side}")
+    assert_attached(f"SideStepBracket_{side}", "ChassisFrontPod")
+    assert_attached(f"BoomRestPost_{side}", "ChassisFrontPod")
+    assert_attached(f"BoomRestPost_{side}", "BoomRest")
+assert_attached("BoomRestPad", "BoomRest")
+for tag, rail in (("FL", "FrameRail_L"), ("FR", "FrameRail_R"), ("RL", "FrameRail_L"), ("RR", "FrameRail_R")):
+    assert_attached(f"TieDownPocket_{tag}", rail)
 minimum, maximum, dimensions = world_bounds(objects)
 for axis, actual, expected in zip("XYZ", dimensions, PUBLISHED_ENVELOPE_M):
     if not math.isclose(actual, expected, abs_tol=0.002):
