@@ -1,22 +1,42 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=0.2.0";
 
+document.body.dataset.viewerStarted = "true";
 const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+const compactRender = window.matchMedia?.("(max-width: 800px)").matches ?? false;
+const lowMemoryDevice = Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4;
+const renderProfile = lowMemoryDevice ? "economy" : compactRender ? "mobile" : "desktop";
+const maximumPixelRatio = lowMemoryDevice ? 1.15 : compactRender ? 1.35 : 1.75;
+const shadowMapSize = lowMemoryDevice || compactRender ? 1024 : 2048;
+const minimumFrameInterval = lowMemoryDevice ? 1000 / 30 : compactRender ? 1000 / 45 : 0;
 const app = document.querySelector("#app");
 const loader = document.querySelector("#loader");
+const loaderStatus = document.querySelector("#loader-status");
+const loaderDetail = document.querySelector("#loader-detail");
 const errorPanel = document.querySelector("#error");
+document.body.dataset.renderProfile = renderProfile;
 
-try {
-  const test = document.createElement("canvas");
-  if (!window.WebGLRenderingContext || !(test.getContext("webgl2") || test.getContext("webgl"))) throw new Error("WebGL unavailable");
-} catch (error) {
-  loader.hidden = true;
-  errorPanel.hidden = false;
-  throw error;
+function pixelRatio() {
+  return Math.min(devicePixelRatio || 1, maximumPixelRatio);
 }
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+function createRenderer() {
+  try {
+    const test = document.createElement("canvas");
+    if (!window.WebGLRenderingContext || !(test.getContext("webgl2") || test.getContext("webgl"))) return null;
+    return new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+  } catch {
+    return null;
+  }
+}
+
+const renderer = createRenderer();
+if (!renderer) {
+  loader.hidden = true;
+  errorPanel.hidden = false;
+} else {
+renderer.setPixelRatio(pixelRatio());
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -26,28 +46,35 @@ renderer.toneMappingExposure = 1.02;
 app.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x171a18);
-scene.fog = new THREE.Fog(0x171a18, 22, 46);
+scene.background = new THREE.Color(0x121719);
+scene.fog = new THREE.Fog(0x121719, 32, 68);
 
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 100);
-const hemi = new THREE.HemisphereLight(0xf5f1e8, 0x252821, 2.2);
+const hemi = new THREE.HemisphereLight(0xd9e8f2, 0x34362f, 1.8);
 scene.add(hemi);
-const key = new THREE.DirectionalLight(0xfff1d3, 4.2);
-key.position.set(-8, 14, 9);
+const key = new THREE.DirectionalLight(0xfff7e8, 3.4);
+key.position.set(-9, 13, 10);
 key.castShadow = true;
-key.shadow.mapSize.set(2048, 2048);
+key.shadow.mapSize.set(shadowMapSize, shadowMapSize);
 key.shadow.camera.left = -14;
 key.shadow.camera.right = 14;
 key.shadow.camera.top = 14;
 key.shadow.camera.bottom = -8;
+key.shadow.camera.near = 1;
+key.shadow.camera.far = 38;
+key.shadow.bias = -0.00025;
+key.shadow.normalBias = 0.025;
 scene.add(key);
-const rim = new THREE.DirectionalLight(0xf3a51f, 2.4);
+const fill = new THREE.DirectionalLight(0x9ebbd0, 1.6);
+fill.position.set(8, 6, 10);
+scene.add(fill);
+const rim = new THREE.DirectionalLight(0xff9a55, 1.35);
 rim.position.set(10, 6, -8);
 scene.add(rim);
 
 const floor = new THREE.Mesh(
   new THREE.CircleGeometry(18, 96),
-  new THREE.MeshStandardMaterial({ color: 0x20231f, roughness: 1, metalness: 0 })
+  new THREE.MeshStandardMaterial({ color: 0x242a2a, roughness: 0.96, metalness: 0 })
 );
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
@@ -56,7 +83,7 @@ scene.add(floor);
 const grid = new THREE.GridHelper(34, 34, 0x5c5f56, 0x30342f);
 grid.position.y = 0.004;
 grid.material.transparent = true;
-grid.material.opacity = 0.24;
+grid.material.opacity = 0.12;
 scene.add(grid);
 
 const palette = {
@@ -163,10 +190,13 @@ function createProcedural600S() {
   telescope.add(box("TelescopeShell", [4.7, 0.42, 0.51], [2.35, 0, 0], palette.dark, "boom"));
   baseBoom.add(telescope);
 
+  const platformPivot = new THREE.Group();
+  platformPivot.name = "PlatformPivot";
+  platformPivot.position.set(4.75, -0.12, 0);
+  telescope.add(platformPivot);
   const platformMount = new THREE.Group();
   platformMount.name = "Platform";
-  platformMount.position.set(4.75, -0.12, 0);
-  telescope.add(platformMount);
+  platformPivot.add(platformMount);
   platformMount.add(box("PlatformDeck", [1.42, 0.13, 1.02], [0.7, -0.38, 0], palette.orange, "platform"));
   platformMount.add(box("ControlConsole", [0.34, 0.38, 0.78], [1.14, 0.25, -0.03], palette.dark, "platform"));
   const corners = [[0.05,-.45],[1.35,-.45],[.05,.45],[1.35,.45]];
@@ -194,9 +224,12 @@ function createProcedural600S() {
     boomPivot,
     telescope,
     telescopeHomeX: telescope.position.x,
+    telescopeTravelM: 3.8,
+    platformPivot,
     platformMount,
     steeringPivots,
     hitVolumes,
+    source: "procedural-fixture",
   };
 }
 
@@ -213,6 +246,45 @@ const interactionComponents = {
   Telescope_Hit: "boom",
   Platform_Hit: "platform",
 };
+
+const materialProfiles = {
+  JLG_Blockout_Orange: { color: "#f27624", roughness: 0.48, metalness: 0.04 },
+  JLG_Blockout_OrangeDeep: { color: "#bd4518", roughness: 0.55, metalness: 0.04 },
+  JLG_Blockout_Dark: { color: "#151a1b", roughness: 0.72, metalness: 0.08 },
+  JLG_Blockout_Tire: { color: "#111313", roughness: 0.94, metalness: 0 },
+  JLG_Blockout_Metal: { color: "#747c7d", roughness: 0.4, metalness: 0.64 },
+};
+
+function applyMaterialProfile(material, profile) {
+  if (!material || !profile) return;
+  material.color.set(profile.color);
+  material.roughness = profile.roughness;
+  material.metalness = profile.metalness;
+  material.needsUpdate = true;
+}
+
+function applyDisplayMaterial(node, profile, suffix) {
+  if (!node?.isMesh || Array.isArray(node.material)) return;
+  node.material = node.material.clone();
+  node.material.name = `${node.material.name}_${suffix}`;
+  applyMaterialProfile(node.material, profile);
+}
+
+function tuneBlockoutMaterials(root) {
+  const materials = new Set();
+  root.traverse((node) => {
+    if (!node.isMesh || node.userData.is_hit_volume) return;
+    const nodeMaterials = Array.isArray(node.material) ? node.material : [node.material];
+    nodeMaterials.forEach((value) => materials.add(value));
+  });
+  materials.forEach((value) => applyMaterialProfile(value, materialProfiles[value.name]));
+
+  const boomCream = { color: "#d8c28e", roughness: 0.52, metalness: 0.03 };
+  applyDisplayMaterial(root.getObjectByName("MainBoomShell"), boomCream, "DisplayCream");
+  applyDisplayMaterial(root.getObjectByName("TelescopeShell"), boomCream, "DisplayCream");
+  applyDisplayMaterial(root.getObjectByName("EngineCover"), materialProfiles.JLG_Blockout_Orange, "DisplayOrange");
+  applyDisplayMaterial(root.getObjectByName("EngineCover_R"), materialProfiles.JLG_Blockout_Orange, "DisplayOrange");
+}
 
 function configureBlockoutRig(gltf) {
   const nodes = Object.fromEntries(requiredNodes.map((name) => [name, gltf.scene.getObjectByName(name)]));
@@ -236,7 +308,19 @@ function configureBlockoutRig(gltf) {
     node.castShadow = true;
     node.receiveShadow = true;
   });
-  gltf.scene.userData.source = "blender-blockout-v0.1";
+  gltf.scene.userData.source = `blender-blockout-v${SHOWCASE_RELEASE}`;
+  const extras = nodes["600S_ROOT"].userData || {};
+  const travel = Number(extras.telescope_travel_m);
+  if (extras.asset_version !== SHOWCASE_RELEASE || extras.units !== "meters") {
+    throw new Error(`600S GLB release contract failed: expected ${SHOWCASE_RELEASE} in meters`);
+  }
+  if (!Number.isFinite(travel) || Math.abs(travel - TELESCOPE_TRAVEL_M) > 0.001) {
+    throw new Error(`600S GLB telescope contract failed: ${travel}`);
+  }
+  if (extras.platform_leveling !== "counter_rotate_local_z") {
+    throw new Error("600S GLB platform-leveling contract failed");
+  }
+  tuneBlockoutMaterials(gltf.scene);
 
   return {
     machine: gltf.scene,
@@ -245,9 +329,12 @@ function configureBlockoutRig(gltf) {
     boomPivot: nodes.BoomPivot,
     telescope: nodes.Telescope,
     telescopeHomeX: nodes.Telescope.position.x,
+    telescopeTravelM: travel,
+    platformPivot: nodes.PlatformPivot,
     platformMount: nodes.Platform,
     steeringPivots: [nodes.Wheel_FL, nodes.Wheel_FR],
     hitVolumes,
+    source: `blender-blockout-v${SHOWCASE_RELEASE}`,
   };
 }
 
@@ -256,46 +343,41 @@ let rig = createProcedural600S();
 
 function loadBlockoutRig() {
   return new Promise((resolve) => {
-    new GLTFLoader().load("assets/models/600s.glb", (gltf) => {
+    loaderStatus.textContent = "Loading equipment model";
+    loaderDetail.textContent = "Fetching the optimized 600S blockout";
+    new GLTFLoader().load(GLB_URL, (gltf) => {
       try {
+        loaderStatus.textContent = "Preparing materials and shadows";
+        loaderDetail.textContent = `Applying the ${renderProfile} render profile`;
         const loadedRig = configureBlockoutRig(gltf);
         scene.add(loadedRig.machine);
         scene.remove(rig.machine);
         rig = loadedRig;
-        document.body.dataset.machineSource = "blender-blockout-v0.1";
-        projectOverview.facts[0] = ["Model", "Blender structural blockout v0.1"];
+        document.body.dataset.machineSource = loadedRig.source;
+        projectOverview.facts[0] = ["Model", `Blender structural blockout v${SHOWCASE_RELEASE}`];
       } catch (error) {
-        console.warn("600S GLB contract validation failed; retaining procedural fallback.", error);
+        console.warn("600S GLB contract validation failed; retaining procedural degraded fixture.", error);
         document.body.dataset.machineSource = "procedural-contract-fallback";
+        projectOverview.facts[0] = ["Model", "Procedural degraded fixture"];
       }
       resolve();
-    }, undefined, (error) => {
-      console.warn("600S GLB failed to load; retaining procedural fallback.", error);
+    }, (event) => {
+      if (event.total > 0) {
+        const progress = Math.min(100, Math.round((event.loaded / event.total) * 100));
+        loaderDetail.textContent = `${progress}% · ${(event.loaded / 1024).toFixed(0)} KB`;
+      } else {
+        loaderDetail.textContent = `${(event.loaded / 1024).toFixed(0)} KB received`;
+      }
+    }, (error) => {
+      console.warn("600S GLB failed to load; retaining procedural degraded fixture.", error);
       document.body.dataset.machineSource = "procedural-load-fallback";
+      projectOverview.facts[0] = ["Model", "Procedural degraded fixture"];
+      loaderStatus.textContent = "Using simplified fallback";
+      loaderDetail.textContent = "The Blender model could not be loaded";
       resolve();
     });
   });
 }
-
-const rangeGuide = new THREE.Group();
-const rangePoints = [];
-for (let i = 0; i <= 56; i += 1) {
-  const angle = THREE.MathUtils.degToRad(i * 1.28);
-  rangePoints.push(new THREE.Vector3(1.35 + Math.cos(angle) * 9.2, 3.18 + Math.sin(angle) * 9.2, 0));
-}
-const rangeLine = new THREE.Line(
-  new THREE.BufferGeometry().setFromPoints(rangePoints),
-  new THREE.LineBasicMaterial({ color: 0xf3a51f, transparent: true, opacity: 0.58 })
-);
-rangeGuide.add(rangeLine);
-rangeGuide.add(new THREE.Mesh(
-  new THREE.RingGeometry(9.05, 9.25, 72, 1, 0, Math.PI * 0.4),
-  new THREE.MeshBasicMaterial({ color: 0xf3a51f, transparent: true, opacity: 0.075, side: THREE.DoubleSide })
-));
-rangeGuide.rotation.y = Math.PI / 2;
-rangeGuide.position.set(-1.35, 0, 0);
-rangeGuide.visible = false;
-scene.add(rangeGuide);
 
 const machineState = { boomAngle: 0, telescope: 0, turntableAngle: 0, steeringAngle: 0 };
 const targets = { ...machineState };
@@ -328,27 +410,39 @@ function syncInputs() {
   });
 }
 
+function applyQueryPose() {
+  const params = new URLSearchParams(location.search);
+  const mapping = { boom: "boomAngle", extend: "telescope", rotate: "turntableAngle", steer: "steeringAngle" };
+  Object.entries(mapping).forEach(([query, key]) => {
+    if (!params.has(query)) return;
+    const value = Number(params.get(query));
+    if (!Number.isFinite(value)) return;
+    const input = inputs[key];
+    targets[key] = THREE.MathUtils.clamp(value, Number(input.min), Number(input.max));
+  });
+  syncInputs();
+}
+applyQueryPose();
+
 document.querySelector("#stow").addEventListener("click", () => {
   Object.keys(targets).forEach((key) => { targets[key] = 0; });
   syncInputs();
 });
 
-const rangeButton = document.querySelector("#range-toggle");
-rangeButton.addEventListener("click", () => {
-  rangeGuide.visible = !rangeGuide.visible;
-  rangeButton.setAttribute("aria-pressed", String(rangeGuide.visible));
-});
-
 function defaultOrbitRadius() {
-  return innerWidth <= 800 ? 25.5 : 16.5;
+  return innerWidth <= 800 ? 29 : 18;
+}
+
+function defaultOrbitTargetY(boomAngle = 0) {
+  return 1.85 + Math.sin(THREE.MathUtils.degToRad(boomAngle)) * 2.35;
 }
 
 const orbit = {
   theta: 0.76,
-  phi: 1.08,
+  phi: 1.44,
   radius: defaultOrbitRadius(),
-  target: new THREE.Vector3(0.5, 2.6, 0),
-  targetGoal: new THREE.Vector3(0.5, 2.6, 0),
+  target: new THREE.Vector3(0.8, defaultOrbitTargetY(), 0),
+  targetGoal: new THREE.Vector3(0.8, defaultOrbitTargetY(), 0),
   radiusGoal: defaultOrbitRadius(),
   vTheta: 0,
   vPhi: 0,
@@ -362,6 +456,7 @@ const orbit = {
 };
 const canvas = renderer.domElement;
 const pointers = new Map();
+let focusedComponent = null;
 
 canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 canvas.addEventListener("pointerdown", (event) => {
@@ -429,14 +524,15 @@ canvas.addEventListener("wheel", (event) => {
 }, { passive: false });
 
 function resetView() {
+  focusedComponent = null;
   document.querySelectorAll("[data-focus]").forEach((button) => {
     button.classList.remove("active");
     button.setAttribute("aria-pressed", "false");
   });
-  orbit.targetGoal.set(0.5, 2.6, 0);
+  orbit.targetGoal.set(0.8, defaultOrbitTargetY(machineState.boomAngle), 0);
   orbit.radiusGoal = defaultOrbitRadius();
   orbit.theta = 0.76;
-  orbit.phi = 1.08;
+  orbit.phi = 1.44;
   orbit.vTheta = 0;
   orbit.vPhi = 0;
 }
@@ -446,7 +542,7 @@ const componentContent = {
   chassis: {
     title: "Chassis",
     copy: "The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.",
-    facts: [["Visible system", "Frame, axles, wheels, and deck"], ["Prototype", "Front steering is transform-driven"], ["Model note", "Proxy proportions require reference validation"]],
+    facts: [["Visible system", "Frame, axles, wheels, and deck"], ["Prototype", "Front steering is transform-driven"], ["Model note", "Structural blockout; pivot offsets are visually reconstructed"]],
     radius: 8.5,
   },
   turntable: {
@@ -458,13 +554,13 @@ const componentContent = {
   boom: {
     title: "Telescopic boom",
     copy: "The primary lifting structure changes elevation at its base pivot while a nested section extends the platform outward.",
-    facts: [["Motion", "Lift and extension are independently controlled"], ["Hierarchy", "BoomPivot → MainBoom → Telescope"], ["Boundary", "Visual kinematics only"]],
+    facts: [["Motion", "Lift and a capped visual telescope travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope"], ["Boundary", "Travel is an overlap cap, not a published stroke"]],
     radius: 9.5,
   },
   platform: {
     title: "Platform",
     copy: "The work platform is parented to the telescoping section so it follows the boom through elevation, extension, and swing.",
-    facts: [["Visible system", "Deck, railings, and control console"], ["Hierarchy", "Telescope → PlatformPivot → Platform"], ["Future pass", "Add leveling and platform rotation"]],
+    facts: [["Visible system", "Deck, tubular rails, and control console"], ["Hierarchy", "Telescope → PlatformPivot → Platform"], ["Leveling", "Visual counter-rotation; rotator geometry is unresolved"]],
     radius: 6.2,
   },
 };
@@ -507,6 +603,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 function focusComponent(component) {
+  focusedComponent = component;
   document.querySelectorAll("[data-focus]").forEach((button) => {
     const selected = button.dataset.focus === component;
     button.classList.toggle("active", selected);
@@ -539,9 +636,11 @@ function updateRig(dt) {
     machineState[key] = THREE.MathUtils.damp(machineState[key], targets[key], speed, dt);
   });
   rig.boomPivot.rotation.z = THREE.MathUtils.degToRad(machineState.boomAngle);
-  rig.telescope.position.x = rig.telescopeHomeX + machineState.telescope * 0.038;
+  if (rig.platformPivot) rig.platformPivot.rotation.z = -THREE.MathUtils.degToRad(machineState.boomAngle);
+  rig.telescope.position.x = rig.telescopeHomeX + (machineState.telescope / 100) * rig.telescopeTravelM;
   rig.turntablePivot.rotation.y = THREE.MathUtils.degToRad(machineState.turntableAngle);
   rig.steeringPivots.forEach((pivot) => { pivot.rotation.y = THREE.MathUtils.degToRad(machineState.steeringAngle); });
+  if (!focusedComponent) orbit.targetGoal.y = defaultOrbitTargetY(machineState.boomAngle);
   const moving = Object.keys(machineState).some((key) => Math.abs(machineState[key] - targets[key]) > 0.1);
   const stowed = Object.values(targets).every((value) => Math.abs(value) < 0.1);
   document.querySelector("#motion-status").value = moving ? "Positioning" : stowed ? "Stowed" : "Holding";
@@ -570,13 +669,16 @@ function updateCamera(dt) {
 addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(pixelRatio());
   renderer.setSize(innerWidth, innerHeight);
 });
 
 const clock = new THREE.Clock();
-function animate() {
+let lastRenderedAt = 0;
+function animate(now = 0) {
   requestAnimationFrame(animate);
+  if (minimumFrameInterval && now - lastRenderedAt < minimumFrameInterval) return;
+  lastRenderedAt = now;
   const dt = Math.min(clock.getDelta(), 0.1);
   updateRig(dt);
   updateCamera(dt);
@@ -589,5 +691,11 @@ renderer.render(scene, camera);
 animate();
 setTimeout(() => document.querySelector("#interaction-hint").classList.add("fade"), 6500);
 loadBlockoutRig().finally(() => {
-  requestAnimationFrame(() => requestAnimationFrame(() => loader.classList.add("done")));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.body.dataset.loadMs = String(Math.round(performance.now() - (window.__showcaseBootAt || 0)));
+    loader.classList.add("done");
+    const focus = new URLSearchParams(location.search).get("focus");
+    if (focus && componentContent[focus]) focusComponent(focus);
+  }));
 });
+}

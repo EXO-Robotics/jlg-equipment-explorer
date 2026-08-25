@@ -1,6 +1,6 @@
 {
   "name": "jlg-equipment-explorer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Unofficial interactive equipment visualization prototype",
   "repository": {
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "python3 -B -m http.server 8080",
-    "check": "node --check viewer.js"
+    "check": "node --check viewer.js && python3 -B scripts/validate_600s_glb.py",
+    "receipt": "python3 -B scripts/write_600s_receipt.py"
   }
 }

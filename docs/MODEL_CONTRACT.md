@@ -35,8 +35,8 @@ Optional visible nodes may be added freely. Animation code must only require the
 - `BoomPivot`: local origin at the physical boom hinge; local Z is the lift axis.
 - `Telescope`: local X points from the boom pivot toward the platform; extension is positive X.
 - Front wheel nodes: local Y is the steering axis.
-- `PlatformPivot`: local origin is the platform-leveling/rotation center.
-- `Platform`: should remain a distinct child even while leveling is deferred.
+- `PlatformPivot`: local origin is the platform-leveling/rotation center; the viewer counter-rotates local Z against boom lift.
+- `Platform`: remains a distinct child of `PlatformPivot`. Platform rotation about the rotator axis is still deferred.
 
 ## Interaction volumes
 
@@ -57,7 +57,7 @@ independently translating `Telescope` node.
 ## Units and transforms
 
 - Model in meters.
-- Apply object scale before export.
+- Export identity object scale. If a node is scaled, apply that scale before export.
 - Keep the root at world origin with the ground plane at Y = 0.
 - Export +Y up and +Z forward using Blender's glTF exporter defaults.
 - Avoid negative scales, unapplied mirrored transforms, and material names generated from temporary imports.
@@ -79,3 +79,7 @@ independently translating `Telescope` node.
 6. Mobile orbit and controls remain usable at 390 × 844 CSS pixels.
 7. The final asset's provenance and license are recorded.
 8. Dedicated component hit volumes resolve and remain aligned through the full visual motion range.
+9. The inner boom remains nested through 100% of the GLB's visual telescope travel.
+10. Platform deck world-up stays within about 2° of vertical at 0°, 36°, and 72° lift.
+11. Lower-chassis ground clearance remains 0.29 m and modeled tailswing remains 1.22 m, within the blockout drift tolerance.
+12. `LiftCylinder` may remain an empty contract node while its two anchor locations are unresolved; false fixed-to-boom cylinder motion is not acceptable.

@@ -11,7 +11,7 @@ JLG labels all dimensions on the sheet as approximate. Here, **verified** means 
 | Platform width | 36 in | 0.91 m | platform outside envelope |
 | Platform length | 96 in | 2.44 m | platform outside envelope |
 | Machine width | 8 ft 2 in | 2.48 m | maximum stowed body/wheel envelope |
-| Tailswing | 4 ft | 1.22 m | turntable/counterweight envelope |
+| Tailswing | 4 ft | 1.22 m | rear turntable extension beyond the 2.48 m drive-chassis envelope during swing |
 | Machine height | 8 ft 2.4 in | 2.50 m | stowed maximum height |
 | Machine length | 28 ft 7 in | 8.71 m | stowed end-to-end envelope |
 | Wheelbase | 8 ft 2.7 in | 2.5 m | axle-center spacing |
@@ -37,6 +37,7 @@ JLG labels all dimensions on the sheet as approximate. Here, **verified** means 
 - Use 1 Blender unit = 1 meter.
 - Ground contact is Y = 0 after web export.
 - Establish the first blockout from the 8.71 m stowed length, 2.48 m width, 2.50 m height, and 2.5 m published wheelbase.
+- Constrain the rear turntable swing radius to 2.46 m as a derived blockout target: 1.24 m chassis half-width plus 1.22 m published tailswing.
 - Resolve the 2.5 m rounded metric wheelbase against the 8 ft 2.7 in imperial value visually; do not invent extra precision in public copy.
 
 ## Derived values

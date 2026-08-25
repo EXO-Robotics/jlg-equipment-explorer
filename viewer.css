@@ -35,9 +35,10 @@ canvas:active { cursor: grabbing; }
   letter-spacing: .16em;
   text-transform: uppercase;
 }
-.loader { transition: opacity .55s ease, visibility .55s ease; }
+.loader { transition: opacity .28s ease, visibility .28s ease; }
 .loader.done { opacity: 0; visibility: hidden; }
 .loader-mark { width: 42px; height: 42px; margin: auto; border: 2px solid rgba(255,255,255,.14); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+.loader small { max-width: 420px; color: var(--muted); font: 400 10px/1.5 Arial, sans-serif; letter-spacing: .02em; text-transform: none; }
 .error p { max-width: 360px; color: var(--muted); font-weight: 400; line-height: 1.6; letter-spacing: .05em; text-transform: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -73,7 +74,7 @@ input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: li
 input[type="range"]::-webkit-slider-thumb { width: 13px; height: 13px; margin-top: -5px; appearance: none; border: 2px solid var(--ink); border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--paper); }
 input[type="range"]::-moz-range-track { height: 2px; background: var(--line); }
 input[type="range"]::-moz-range-thumb { width: 10px; height: 10px; border: 2px solid var(--ink); border-radius: 50%; background: var(--paper); }
-.action-row { display: grid; grid-template-columns: 1.35fr 1fr .6fr; gap: 7px; margin-top: 15px; }
+.action-row { display: grid; grid-template-columns: 1.35fr 1fr; gap: 7px; margin-top: 15px; }
 .action-row button { min-height: 40px; border: 1px solid var(--line); cursor: pointer; font: 700 8px/1 "Courier New", monospace; letter-spacing: .1em; text-transform: uppercase; transition: background .2s, color .2s, border-color .2s; }
 .primary-action { background: var(--accent); border-color: var(--accent) !important; color: #17120b; }
 .secondary-action { background: transparent; }
@@ -115,11 +116,10 @@ body.inspector-open .scrim { opacity: 1; visibility: visible; }
   .specs strong { font-size: 16px; }
   .specs span { font-size: 7px; }
   .control-panel { left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); width: auto; padding: 14px; }
-  .compact-control { display: none; }
   .control-row { padding-top: 9px; }
   .action-row { margin-top: 12px; }
   .motion-boundary { margin-top: 8px; font-size: 7px; }
-  .component-nav { left: 12px; right: 12px; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 292px); display: flex; width: auto; }
+  .component-nav { left: 12px; right: 12px; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 315px); display: flex; width: auto; }
   .component-nav > span { display: none; }
   .component-nav button { flex: 1; display: block; min-height: 34px; border: 1px solid var(--line); border-right: 0; background: rgba(16,18,17,.72); text-align: center; font-size: 8px; backdrop-filter: blur(12px); }
   .component-nav button:last-child { border-right: 1px solid var(--line); }
@@ -130,6 +130,7 @@ body.inspector-open .scrim { opacity: 1; visibility: visible; }
 @media (max-height: 670px) and (max-width: 800px) {
   .specs { display: none; }
   .identity h1 { font-size: 52px; }
+  .compact-control { display: none; }
   .component-nav { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 270px); }
   .control-row { padding-top: 7px; }
 }

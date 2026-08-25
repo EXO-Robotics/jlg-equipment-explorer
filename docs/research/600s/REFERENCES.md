@@ -77,6 +77,15 @@ Current catalog entries that must remain quarantined from PVC 2607 geometry unti
 - Confidence: high within its stated serial range
 - Prohibited use: do not overwrite current R02 dimensions or infer current PVC 2607 geometry from this manual.
 
+### R05 - Official JLG MEWP terminology
+
+- Owner: JLG Industries, Inc.
+- Title: Learn the Lingo: Common MEWP Terms
+- URL: https://www.jlg.com/en/directaccess/learn-the-lingo-common-mewp-terms
+- Inspected: 2026-08-25
+- Used for: interpreting `tailswing` as the rear of the rotating turntable extending beyond an edge of the drive chassis
+- Confidence: high for JLG terminology; R02 remains authoritative for the current 600S value
+
 ## Official gallery assets
 
 These asset identifiers are linked by R01. Record them for reference-board retrieval; do not copy them into the public repository without permission.
@@ -91,6 +100,18 @@ These asset identifiers are linked by R01. Record them for reference-board retri
 ## Secondary sources
 
 No secondary source is admitted into the dimensional authority chain. Manufacturer-attributed BIM, rental photos, dealer photos, and commercial models may be logged later for visual comparison only. Each must identify generation/configuration and license before use.
+
+## User-supplied comparison images
+
+The following local images were visually inspected on 2026-08-25 but are not admitted as current-generation geometry evidence:
+
+| Local filename | Resolution | Status | Permitted use |
+|---|---:|---|---|
+| `images.jpeg` | 638 x 480 | source, license, serial range, and generation unknown; appears legacy | broad orange/cream/dark material separation and silhouette comparison only |
+| `images-2.jpeg` | 554 x 554 | source, license, serial range, and generation unknown; appears legacy | broad material and extended-pose comparison only |
+| `images-3.jpeg` | 300 x 508 | source, license, serial range, and generation unknown; appears legacy | broad elevated-pose and tire-value comparison only |
+
+Do not use these files to resolve current PVC 2607 enclosure profiles, pivots, cylinder anchors, telescope construction, platform details, or decals. Do not copy them into the public repository without source and redistribution permission.
 
 ## Unresolved source gates
 

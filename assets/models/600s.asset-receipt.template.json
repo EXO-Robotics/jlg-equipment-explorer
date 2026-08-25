@@ -1,27 +1,28 @@
 {
   "asset": "assets/models/600s.glb",
   "status": "PENDING_ASSET",
+  "release": "0.2.0",
   "authorship": "owned-simplified-reconstruction",
-  "source_blend": null,
+  "source_blend": "source/blender/600s-blockout-v0.2.blend",
+  "builder": "scripts/build_600s_blockout.py",
+  "validator": "scripts/validate_600s_glb.py",
   "exported_at": null,
   "sha256": null,
+  "source_blend_sha256": null,
+  "cache_key": null,
+  "runtime_sha256": null,
   "units": "meters",
   "root_node": "600S_ROOT",
-  "required_nodes": [
-    "Chassis",
-    "Wheel_FL",
-    "Wheel_FR",
-    "Wheel_RL",
-    "Wheel_RR",
-    "TurntablePivot",
-    "Turntable",
-    "BoomPivot",
-    "MainBoom",
-    "Telescope",
-    "PlatformPivot",
-    "Platform",
-    "LiftCylinder"
-  ],
+  "visible_envelope_m": [8.71, 2.48, 2.5],
+  "wheelbase_m": 2.5,
+  "ground_clearance_m": 0.29,
+  "tailswing_m": 1.22,
+  "platform_envelope_m": [0.91, 2.44],
+  "telescope_travel_m": 0.9,
+  "telescope_overlap_at_100_m": 0.05,
+  "triangle_count": null,
+  "node_count": null,
+  "required_parent_edges": 24,
   "interaction_volumes": [
     "Chassis_Hit",
     "Turntable_Hit",
@@ -29,13 +30,28 @@
     "Telescope_Hit",
     "Platform_Hit"
   ],
-  "validation": {
+  "mechanical_validation": {
+    "status": "PENDING",
+    "bytes": null,
+    "mesh_count": null,
+    "visible_bounds_min_m": null,
+    "visible_bounds_max_m": null,
+    "telescope_overlap_stowed_m": null
+  },
+  "review": {
     "loads_without_console_error": false,
-    "node_contract_passes": false,
     "articulation_pivots_pass": false,
     "selection_volumes_pass": false,
     "stowed_silhouette_reviewed": false,
+    "working_pose_silhouette_pass": false,
     "mobile_view_reviewed": false,
-    "provenance_reviewed": false
-  }
+    "provenance_reviewed": false,
+    "evidence": {
+      "browser": null,
+      "motion": null,
+      "selection": null,
+      "silhouette_scope": null
+    }
+  },
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. Lift-cylinder geometry is deferred until its anchors are supported. Internal pivot offsets, boom section lengths, turntable internals, and platform rotator geometry remain visually reconstructed or unresolved."
 }

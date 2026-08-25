@@ -5,22 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="An unofficial interactive visualization of a telescopic boom lift.">
   <title>600S Interactive Equipment Study</title>
-  <link rel="stylesheet" href="viewer.css?v=0.1.1">
+  <link rel="preload" href="assets/models/600s.glb?v=f2dc38949c8f" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="viewer.css?v=0.2.0">
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        "three": "./vendor/three-r160/build/three.module.min.js",
+        "three/addons/": "./vendor/three-r160/examples/jsm/"
       }
     }
   </script>
+  <link rel="modulepreload" href="./vendor/three-r160/build/three.module.min.js">
+  <link rel="modulepreload" href="./vendor/three-r160/examples/jsm/loaders/GLTFLoader.js">
 </head>
 <body>
   <div id="app" aria-hidden="true"></div>
 
   <div class="loader" id="loader" role="status">
     <span class="loader-mark"></span>
-    <span>Preparing equipment study</span>
+    <span id="loader-status">Loading 3D runtime</span>
+    <small id="loader-detail">Preparing the interactive viewer</small>
   </div>
 
   <div class="error" id="error" hidden>
@@ -35,7 +39,7 @@
       <a class="wordmark" href="./" aria-label="Equipment Explorer home">
         <span>Equipment</span><b>Explorer</b>
       </a>
-      <div class="prototype-label">Visual prototype / 01</div>
+      <div class="prototype-label">Visual prototype / 02</div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 
@@ -78,7 +82,6 @@
       <div class="action-row">
         <button class="primary-action" id="stow" type="button">Stow machine</button>
         <button class="secondary-action" id="reset-view" type="button">Reset view</button>
-        <button class="secondary-action" id="range-toggle" type="button" aria-pressed="false">Range</button>
       </div>
       <p class="motion-boundary">Prototype motion limits. Not operational data.</p>
     </section>
@@ -101,12 +104,22 @@
     <h2 id="inspector-title">A visual replica,<br>not an engineering model.</h2>
     <p id="inspector-copy">This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.</p>
     <dl id="inspector-facts">
-      <div><dt>Model</dt><dd>Procedural interaction blockout</dd></div>
+      <div><dt>Model</dt><dd>Blender structural blockout v0.2</dd></div>
       <div><dt>Purpose</dt><dd>Portfolio and educational visualization</dd></div>
       <div><dt>Boundary</dt><dd>Not a service, training, fabrication, or safety reference</dd></div>
     </dl>
   </aside>
 
-  <script type="module" src="viewer.js?v=0.1.2"></script>
+  <script>
+    window.__showcaseBootAt = performance.now();
+    window.setTimeout(() => {
+      if (document.body.dataset.viewerStarted) return;
+      const status = document.querySelector("#loader-status");
+      const detail = document.querySelector("#loader-detail");
+      if (status) status.textContent = "Rendering runtime delayed";
+      if (detail) detail.textContent = "The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.";
+    }, 8000);
+  </script>
+  <script type="module" src="viewer.js?v=0.2.0"></script>
 </body>
 </html>

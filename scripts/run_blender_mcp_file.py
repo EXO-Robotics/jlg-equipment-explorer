@@ -41,6 +41,7 @@ async def execute(script_path: Path) -> None:
     code = (
         "from pathlib import Path\n"
         f"_jlg_script = Path({str(resolved)!r})\n"
+        "__file__ = str(_jlg_script)\n"
         "exec(compile(_jlg_script.read_text(encoding='utf-8'), str(_jlg_script), 'exec'), globals())\n"
     )
 
