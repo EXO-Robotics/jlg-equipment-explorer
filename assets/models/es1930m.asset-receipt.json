@@ -1,0 +1,90 @@
+{
+  "asset_metrics": {
+    "explicit_scissor_link_groups": 20,
+    "meshes": 142,
+    "nodes": 253,
+    "pivot_markers": 68,
+    "stowed_envelope_xyz_m": [
+      1.4800000578309422,
+      1.974000026701648,
+      0.7600000672911782
+    ],
+    "triangles": 30448
+  },
+  "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority.",
+  "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+  "files": {
+    "asset": {
+      "bytes": 963508,
+      "path": "assets/models/es1930m.glb",
+      "sha256": "adda71683962cf5894e3bdbc57719eab9627832bd908cfc37bb340e43a0510de"
+    },
+    "configuration": {
+      "bytes": 2570,
+      "path": "machines/es1930m/es1930m.configuration.json",
+      "sha256": "dd2b9d9c3f6d2ab8ca8dc031cee555bb54cd7e719e0d8e4d03e89b884206afa3"
+    },
+    "mechanism": {
+      "bytes": 2445,
+      "path": "machines/es1930m/mechanism.json",
+      "sha256": "0dd3b7a57e04c52f44aaa84a27fb98c2c7a2885326e53a8a785b2353ea4d5dc2"
+    },
+    "mechanism_evidence": {
+      "bytes": 9629,
+      "path": "docs/research/es1930m/MECHANISM_EVIDENCE.json",
+      "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
+    },
+    "source_blend": {
+      "bytes": 186277,
+      "path": "source/blender/es1930m-showcase-v1.0.blend",
+      "sha256": "6044325c4ca4b4e545f2375cc99278e4b5c9033cdb4f8ab74a7ac790f5810ac9"
+    },
+    "source_manifest": {
+      "bytes": 4860,
+      "path": "docs/research/es1930m/SOURCE_MANIFEST.json",
+      "sha256": "3ebf4f79a8bd9ea16e9314f937d14e59beeccc6310f0d7048d4b01686402c6c8"
+    }
+  },
+  "mechanism_metrics": {
+    "cylinder_observed_stroke_m": 0.6855,
+    "levels": 5,
+    "maximum_link_length_error_m": 4.440892098500626e-16,
+    "maximum_shared_pivot_error_m": 0.0,
+    "sampled_lift_states": 101
+  },
+  "release": "1.0.0-candidate",
+  "release_status": "candidate_not_deployable",
+  "review_flags": {
+    "600s_regression_suite_pass": true,
+    "accessible_control_names_pass": true,
+    "asset_contract_pass": true,
+    "cross_pvc_quarantine_pass": true,
+    "deployed_pages_reviewed": false,
+    "desktop_browser_zero_errors": true,
+    "evidence_hashes_pass": true,
+    "extension_browser_reviewed": true,
+    "kinematic_samples_pass": true,
+    "mobile_view_reviewed": true,
+    "performance_reviewed": true,
+    "raised_pose_browser_reviewed": true,
+    "selection_and_focus_reviewed": true,
+    "steering_closeup_reviewed": true,
+    "stowed_silhouette_reviewed": true
+  },
+  "runtime": {
+    "files": [
+      "es1930m/index.html",
+      "viewer.css",
+      "viewer/multi-machine.css",
+      "viewer/runtime.js",
+      "machines/es1930m/machine.js",
+      "machines/es1930m/articulation.js",
+      "machines/es1930m/inspector.js",
+      "machines/es1930m/cameras.js",
+      "machines/es1930m/version.js"
+    ],
+    "sha256": "12b4a58b6511254ce713ea559083a9acea14699de66cb46211a28743297174bb"
+  },
+  "schema_version": "1.0.0",
+  "written": "2026-08-25"
+}

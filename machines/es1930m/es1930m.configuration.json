@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+  "model": "ES1930M",
+  "family": "MICRO_SIZED_SERIES",
+  "pvc": "2404",
+  "market": "ANSI_US",
+  "language": "en-US",
+  "choices": {
+    "platform": "STANDARD_52_8X27_6_WITH_21_6_EXTENSION",
+    "rails": "STANDARD_FIXED_RAILS",
+    "mid_rail_deck": false,
+    "battery": "TWO_12V_130AH_FLOODED_LEAD_ACID",
+    "tires": "10X3_NON_MARKING",
+    "drive": "TWO_WHEEL_ELECTRIC_DRIVE",
+    "steer": "HYDRAULIC_DOUBLE_ROD_FRONT_STEER",
+    "leak_containment": true,
+    "active_pothole_protection": true,
+    "options": []
+  },
+  "published_dimensions_m": {
+    "platform_height_indoor": 5.64,
+    "platform_height_outdoor": 4.57,
+    "machine_height_stowed": 1.98,
+    "machine_length_extension_retracted": 1.48,
+    "machine_length_extension_deployed": 2.03,
+    "machine_width": 0.76,
+    "wheelbase": 1.07,
+    "ground_clearance_pothole_retracted": 0.06,
+    "ground_clearance_pothole_deployed": 0.025,
+    "platform_width": 0.70,
+    "platform_length": 1.34,
+    "platform_extension_travel": 0.55
+  },
+  "published_capacity_kg": {
+    "platform_total": 227,
+    "extension_deck": 115
+  },
+  "published_mass_kg": 1351,
+  "published_motion": {
+    "inside_turning_radius_m": 0.0,
+    "outside_turning_radius_m": 1.40,
+    "lift_time_rated_seconds": [20, 25],
+    "lower_time_rated_seconds": [20, 26]
+  },
+  "hydraulic_cylinders_mm": {
+    "lift": {
+      "bore_outer": 70,
+      "bore_inner": 60,
+      "rod": 45,
+      "stroke": 685.5,
+      "operation": "single_acting_pressure_extend_gravity_retract"
+    },
+    "steer": {
+      "bore_inner": 60,
+      "rod": 35,
+      "stroke_each_direction": 80,
+      "operation": "double_rod_double_acting"
+    }
+  },
+  "scissor_topology": {
+    "levels": 5,
+    "installation": "1001333761",
+    "arm_kit": "1001324232",
+    "lift_cylinder": "1001322163",
+    "kicker_arm": "1001322659",
+    "lower_slide_blocks": 2,
+    "authority": "verified_topology_not_dimensioned_geometry"
+  },
+  "excluded_configurations": [
+    "INTEGRATED_MID_RAIL_DECK",
+    "HVAC_PLATFORM_CONFIGURATION",
+    "CEILING_TILE_PLATFORM_CONFIGURATION",
+    "AGM_BATTERIES",
+    "LITHIUM_ION_BATTERIES",
+    "PERIMETER_LIGHTING",
+    "INVERTER",
+    "HOSTILE_ENVIRONMENT_PACKAGE",
+    "FOLD_DOWN_RAILS"
+  ],
+  "authority_policy": {
+    "allowed": ["verified", "derived", "reconstructed", "deferred"],
+    "manual_diagrams_are_fabrication_dimensions": false,
+    "safety_or_service_simulation": false,
+    "pvc1001_schematics_admitted_as_pvc2404_geometry": false
+  }
+}

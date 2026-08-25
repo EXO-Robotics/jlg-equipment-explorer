@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+  "coordinate_system": {
+    "units": "m",
+    "x": "machine_longitudinal_positive_toward_extension",
+    "y": "up",
+    "z": "machine_lateral_positive_left"
+  },
+  "solver": {
+    "branch": "positive_vertical_five_level_pantograph",
+    "level_count": 5,
+    "arm_pin_center_length_m": 1.11,
+    "base_pivot_height_m": 0.30,
+    "deck_floor_offset_above_upper_pivots_m": 0.10,
+    "stowed_deck_floor_height_m": 0.90,
+    "indoor_deck_floor_height_m": 5.64,
+    "outdoor_deck_floor_height_m": 4.57,
+    "lateral_planes_m": [-0.27, 0.27],
+    "crossing_arm_lane_offset_m": 0.018,
+    "continuity_max_translation_per_0_01_sample_m": 0.07,
+    "closure_epsilon_m": 0.000001,
+    "link_length_epsilon_m": 0.000001,
+    "symmetry_epsilon_m": 0.000001,
+    "platform_level_epsilon_rad": 0.000001
+  },
+  "slides": {
+    "lower_left": "fixed",
+    "lower_right": "longitudinal_track",
+    "upper_left": "fixed_to_platform_reference",
+    "upper_right": "longitudinal_track",
+    "track_center_x_m": 0.0,
+    "authority": "reconstructed_geometry_from_verified_slide_topology"
+  },
+  "lift_cylinder": {
+    "published_stroke_m": 0.6855,
+    "stroke_tolerance_m": 0.0015,
+    "reconstructed_closed_pin_distance_m": 0.43,
+    "reconstructed_open_pin_distance_m": 1.1155,
+    "lower_pin_m": [-0.31, 0.29, 0.0],
+    "kicker_pivot_m": [0.27, 0.31, 0.0],
+    "kicker_pin_radius_m": 0.56,
+    "intersection_branch": "positive_y",
+    "authority": "published_cylinder_dimensions_reconstructed_installation_coordinates"
+  },
+  "deck_extension": {
+    "travel_m": 0.55,
+    "axis": [1, 0, 0],
+    "authority": "published_travel_reconstructed_local_zero"
+  },
+  "steering": {
+    "cylinder_stroke_each_direction_m": 0.08,
+    "inside_turning_radius_m": 0.0,
+    "outside_turning_radius_m": 1.4,
+    "wheelbase_m": 1.07,
+    "wheel_angle_curve": "deferred_until_authored_spindle_and_cylinder_graph",
+    "authority": "published_stroke_and_envelope_topology_verified_angles_deferred"
+  },
+  "authority_notes": [
+    "Arm pin-center length and all pivot coordinates are reconstructed, not published JLG fabrication dimensions.",
+    "The solver uses the verified five-level topology, published platform-height envelope, and published cylinder stroke.",
+    "This contract is for visual mechanism closure only and is not a stability, load, safety, or service simulation."
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+  "policy": {
+    "coordinate_authority": "no published fabrication coordinate set exists",
+    "illustration_measurement": "prohibited",
+    "cross_pvc_geometry": "prohibited",
+    "reconstruction_rule": "author geometry from verified topology and published envelopes, then label and validate reconstructed quantities"
+  },
+  "systems": [
+    {
+      "id": "scissor_stack",
+      "claims": [
+        {
+          "id": "SC-001",
+          "statement": "The production lift stack has five scissor levels and ten separately identified inboard/outboard arm groups.",
+          "source": "3122602400",
+          "pvc": "2404",
+          "pages": [68, 70, 71],
+          "components": ["levels_1_through_5", "inboard_arms", "outboard_arms"],
+          "part_numbers": ["1001322650", "1001322651", "1001322652", "1001322653", "1001322654", "1001322655", "1001322656", "1001322657", "1001322658"],
+          "evidence_type": "parts_relationship",
+          "authority": "verified",
+          "geometry_use": "topology_only",
+          "confidence": "high"
+        },
+        {
+          "id": "SC-002",
+          "statement": "The stack includes two lower slide blocks and a distinct kicker arm; service assembly proceeds bottom-up and disassembly top-down.",
+          "source": "3122602400+3122602300",
+          "pvc": "2404",
+          "pages": [70, 71, 217, 218, 219, 220, 221],
+          "components": ["lower_slide_blocks", "kicker_arm", "pivot_families"],
+          "part_numbers": ["1001204311", "1001322659"],
+          "evidence_type": "parts_and_service_relationship",
+          "authority": "verified",
+          "geometry_use": "topology_only",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "lift_actuation",
+      "claims": [
+        {
+          "id": "LA-001",
+          "statement": "The lift cylinder is a single-acting pressure-extend, gravity-retract cylinder attached by lower and upper pins through the kicker/scissor system.",
+          "source": "3122602300+3122602400",
+          "pvc": "2404",
+          "pages": [144, 203, 204, 205, 110],
+          "components": ["lift_cylinder", "upper_pin", "lower_pin", "kicker_arm"],
+          "part_numbers": ["1001322163", "1001322659"],
+          "evidence_type": "service_operation_and_parts_relationship",
+          "authority": "verified",
+          "geometry_use": "constraint_and_topology",
+          "confidence": "high"
+        },
+        {
+          "id": "LA-002",
+          "statement": "Published lift cylinder dimensions are 70 mm outer bore, 60 mm inner bore, 45 mm rod and 685.5 plus-or-minus 1.5 mm stroke.",
+          "source": "3122602300",
+          "pvc": "2404",
+          "pages": [21],
+          "components": ["lift_cylinder_barrel", "lift_cylinder_rod"],
+          "part_numbers": ["1001322163"],
+          "evidence_type": "service_specification",
+          "authority": "verified",
+          "geometry_use": "published_dimension",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "steering_and_drive",
+      "claims": [
+        {
+          "id": "ST-001",
+          "statement": "Both front steering spindles are joined by one hydraulic double-rod steering cylinder, with the electric drive assemblies carried at the steer spindles.",
+          "source": "3122602400+3122602300",
+          "pvc": "2404",
+          "pages": [12, 206, 207],
+          "components": ["left_steer_spindle", "right_steer_spindle", "double_rod_steer_cylinder", "left_drive", "right_drive"],
+          "part_numbers": [],
+          "evidence_type": "parts_and_service_relationship",
+          "authority": "verified",
+          "geometry_use": "topology_only",
+          "confidence": "high"
+        },
+        {
+          "id": "ST-002",
+          "statement": "The steer cylinder has a 60 mm inner bore, 35 mm rod and 80 plus-or-minus 1 mm stroke in each direction.",
+          "source": "3122602300",
+          "pvc": "2404",
+          "pages": [21],
+          "components": ["double_rod_steer_cylinder"],
+          "part_numbers": [],
+          "evidence_type": "service_specification",
+          "authority": "verified",
+          "geometry_use": "published_dimension",
+          "confidence": "high"
+        },
+        {
+          "id": "ST-003",
+          "statement": "Published turning radii are zero inside and 1.40 m outside; wheel-angle mapping remains reconstructed until a steering-angle authority is found.",
+          "source": "3131313",
+          "pvc": "2404-current-product",
+          "pages": [2],
+          "components": ["steering_envelope"],
+          "part_numbers": [],
+          "evidence_type": "product_specification",
+          "authority": "verified_envelope",
+          "geometry_use": "envelope_constraint",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "platform_and_envelope",
+      "claims": [
+        {
+          "id": "PF-001",
+          "statement": "The frozen standard platform is 1.34 by 0.70 m with 0.55 m extension travel; deployed overall machine length is 2.03 m.",
+          "source": "3131313+3122602200",
+          "pvc": "2404-current-product",
+          "pages": [2, 90],
+          "components": ["main_deck", "extension_deck", "rails"],
+          "part_numbers": [],
+          "evidence_type": "product_and_operation_specification",
+          "authority": "verified",
+          "geometry_use": "published_dimension",
+          "confidence": "high"
+        },
+        {
+          "id": "PF-002",
+          "statement": "Indoor platform height is 5.64 m and outdoor platform height is limited to 4.57 m.",
+          "source": "3131313+3122602200",
+          "pvc": "2404-current-product",
+          "pages": [2, 89],
+          "components": ["platform_height_envelope"],
+          "part_numbers": [],
+          "evidence_type": "product_and_operation_specification",
+          "authority": "verified",
+          "geometry_use": "envelope_constraint",
+          "confidence": "high"
+        },
+        {
+          "id": "PF-003",
+          "statement": "The frozen configuration carries 227 kg total platform capacity and 115 kg extension-deck capacity.",
+          "source": "3131313+3122602200",
+          "pvc": "2404-current-product",
+          "pages": [2, 90],
+          "components": ["platform_capacity", "extension_capacity"],
+          "part_numbers": [],
+          "evidence_type": "product_and_operation_specification",
+          "authority": "verified",
+          "geometry_use": "metadata_only",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "chassis_and_safety",
+      "claims": [
+        {
+          "id": "CH-001",
+          "statement": "The machine uses an active linked pothole protection assembly with published clearance of 0.06 m retracted and 0.025 m deployed.",
+          "source": "3122602400+3131313",
+          "pvc": "2404-current-product",
+          "pages": [22, 2],
+          "components": ["left_pothole_bar", "right_pothole_bar", "pothole_linkage"],
+          "part_numbers": [],
+          "evidence_type": "parts_relationship_and_product_specification",
+          "authority": "verified",
+          "geometry_use": "topology_and_envelope",
+          "confidence": "high"
+        },
+        {
+          "id": "CH-002",
+          "statement": "Frozen chassis envelope is 1.48 m long with extension retracted, 0.76 m wide, 1.98 m stowed high, 1.07 m wheelbase and 1351 kg nominal mass.",
+          "source": "3131313+3122602200",
+          "pvc": "2404-current-product",
+          "pages": [2, 89, 90],
+          "components": ["machine_envelope", "wheelbase"],
+          "part_numbers": [],
+          "evidence_type": "product_and_operation_specification",
+          "authority": "verified",
+          "geometry_use": "published_dimension",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "schematics",
+      "claims": [
+        {
+          "id": "SY-001",
+          "statement": "PVC 2404 service Figure 89 is the current hydraulic authority; standalone PVC 1001 publication 3122602600 is corroboration only.",
+          "source": "3122602300+3122602600",
+          "pvc": "2404+1001",
+          "pages": [309, 1],
+          "components": ["hydraulic_system"],
+          "part_numbers": [],
+          "evidence_type": "cross_publication_reconciliation",
+          "authority": "verified_primary_plus_quarantined_corroboration",
+          "geometry_use": "prohibited_for_cross_pvc",
+          "confidence": "high"
+        },
+        {
+          "id": "SY-002",
+          "statement": "PVC 2404 service Figure 90 is the current seven-sheet electrical authority; standalone PVC 1001 publication 3122602500 is corroboration only.",
+          "source": "3122602300+3122602500",
+          "pvc": "2404+1001",
+          "pages": [310, 311, 312, 313, 314, 315, 316, 317, 318, 1, 2, 3, 4, 5, 6, 7],
+          "components": ["electrical_system"],
+          "part_numbers": [],
+          "evidence_type": "cross_publication_reconciliation",
+          "authority": "verified_primary_plus_quarantined_corroboration",
+          "geometry_use": "prohibited_for_cross_pvc",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "deferred_geometry": [
+    "scissor pivot coordinates",
+    "individual arm center distances",
+    "lift cylinder upper and lower attachment coordinates",
+    "steering spindle axis and maximum wheel angles",
+    "pothole linkage pivot coordinates",
+    "internal component packaging not visible in authoritative illustrations"
+  ]
+}
