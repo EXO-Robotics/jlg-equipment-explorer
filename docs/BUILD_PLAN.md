@@ -53,7 +53,7 @@ Stowed envelope, hierarchy, selection, and transform integration accepted; worki
 - [x] Cap GLB telescope travel so the inner section stays nested through 100%
 - [x] Counter-rotate `PlatformPivot` against boom lift
 - [x] Constrain modeled ground clearance and tailswing to the published outer dimensions
-- [x] Keep `LiftCylinder` as a contract-only node until its anchors are supported
+- [x] Replace the contract-only lift cylinder with a two-anchor visual solver once the current service/parts assemblies support the relationship
 - [x] Disable the circular range overlay until it can be traced from the manufacturer chart
 - [x] Strengthen the GLB validator against receipt hashes, AABB, wheelbase, platform size, hit meshes, scale, and extra scenes
 - [x] Generate mechanical receipt facts; keep browser/visual review separately recorded
@@ -64,12 +64,14 @@ Stowed envelope, hierarchy, selection, and transform integration accepted; worki
 
 - [x] Remove the third-party CDN startup dependency with a hash-pinned local Three.js runtime
 - [x] Add adaptive pixel-ratio, shadow, and frame-rate profiles for desktop and mobile
+- [x] Consolidate 325 authored detail meshes into 50 rigid runtime meshes without collapsing articulation or hit volumes
 - [x] Establish neutral product lighting, a lower three-quarter camera, and display-only material tuning
-- [ ] Replace blockout wheels with optimized tread, sidewall, rim, and hub geometry
-- [ ] Replace boxy exterior covers with evidence-bounded beveled/curved shells and visible panel seams
-- [ ] Add platform mesh flooring, gate treatment, fasteners, wear pads, reflectors, and owned decals after slot 12 is resolved
+- [x] Replace blockout wheels with modeled foam-filled tire, tread, rim, drive-hub, lug, and front-steer geometry
+- [x] Replace boxy exterior covers with evidence-bounded B3 profiled shells, panel seams, latches, service labels, and rear cooling grille
+- [x] Add platform flooring, swing-gate treatment, control console, footswitch, SkyGuard, lanyard points, labels, and orange rail finish
+- [x] Add visible hydraulic/electrical cues for the steering circuit, main valve bank, lift cylinder, boom, platform rotator, ground controls, engine, and platform harness
 - [ ] Add restrained surface variation through reusable roughness/normal textures; keep the GLB texture budget at or below 4 MB
-- [ ] Refine pivot, turntable, and platform geometry only after slots 09–12 are resolved
+- [x] Refine the evidence-supported pivot, slew ring, tower links, rapid-replace platform support, and rotator relationship while classifying undimensioned offsets as reconstructed
 - [ ] Improve hover/select treatment
 - [ ] Validate keyboard access and reduced motion with the real GLB
 - [ ] Capture a Chrome performance trace and current-generation source-comparison visual proof

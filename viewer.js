@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=0.2.0";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=0.3.0";
 
 document.body.dataset.viewerStarted = "true";
 const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
@@ -236,8 +237,13 @@ function createProcedural600S() {
 const requiredNodes = [
   "600S_ROOT", "Chassis", "Frame", "AxleFront", "AxleRear",
   "Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR", "TurntablePivot",
-  "Turntable", "EngineCover", "Counterweight", "Controls", "BoomPivot",
-  "MainBoom", "Telescope", "PlatformPivot", "Platform", "LiftCylinder",
+  "Turntable", "SlewRing", "UpperFrame", "EngineCover", "TankCover",
+  "Counterweight", "Controls", "BoomPivot", "MainBoom", "Telescope",
+  "MidBoom", "FlyBoom", "PlatformPivot", "PlatformRotator", "Platform",
+  "LiftCylinder", "LiftCylinderLowerAnchor", "LiftCylinderUpperAnchor",
+  "LiftCylinderBarrel", "LiftCylinderRod", "LiftCylinderBasePin", "LiftCylinderRodPin",
+  "TowerLinkLower", "TowerLinkUpper", "Powertrack", "PlatformSwingGate",
+  "PlatformConsole", "PlatformFootswitch",
 ];
 const interactionComponents = {
   Chassis_Hit: "chassis",
@@ -253,6 +259,20 @@ const materialProfiles = {
   JLG_Blockout_Dark: { color: "#151a1b", roughness: 0.72, metalness: 0.08 },
   JLG_Blockout_Tire: { color: "#111313", roughness: 0.94, metalness: 0 },
   JLG_Blockout_Metal: { color: "#747c7d", roughness: 0.4, metalness: 0.64 },
+  JLG_Orange_PowderCoat: { color: "#f36f21", roughness: 0.42, metalness: 0.04 },
+  JLG_Orange_Shadow: { color: "#a93612", roughness: 0.56, metalness: 0.05 },
+  JLG_Boom_Cream: { color: "#d8c992", roughness: 0.48, metalness: 0.03 },
+  JLG_Black_PowderCoat: { color: "#111516", roughness: 0.64, metalness: 0.18 },
+  JLG_Tire_Rubber: { color: "#111313", roughness: 0.94, metalness: 0 },
+  JLG_Zinc_Steel: { color: "#777b76", roughness: 0.38, metalness: 0.68 },
+  JLG_Dark_Steel: { color: "#252b2a", roughness: 0.44, metalness: 0.72 },
+  JLG_Rim_OffWhite: { color: "#c0bfae", roughness: 0.42, metalness: 0.58 },
+  JLG_Hydraulic_Black: { color: "#111515", roughness: 0.7, metalness: 0.12 },
+  JLG_Sensor_Black: { color: "#171a1a", roughness: 0.48, metalness: 0.04 },
+  JLG_Control_Red: { color: "#b1140c", roughness: 0.42, metalness: 0.02 },
+  JLG_Beacon_Amber: { color: "#ff6a0a", roughness: 0.18, metalness: 0 },
+  JLG_Label_White: { color: "#eee9d8", roughness: 0.55, metalness: 0.02 },
+  JLG_Warning_Yellow: { color: "#f5a514", roughness: 0.5, metalness: 0.01 },
 };
 
 function applyMaterialProfile(material, profile) {
@@ -279,11 +299,84 @@ function tuneBlockoutMaterials(root) {
   });
   materials.forEach((value) => applyMaterialProfile(value, materialProfiles[value.name]));
 
-  const boomCream = { color: "#d8c28e", roughness: 0.52, metalness: 0.03 };
-  applyDisplayMaterial(root.getObjectByName("MainBoomShell"), boomCream, "DisplayCream");
-  applyDisplayMaterial(root.getObjectByName("TelescopeShell"), boomCream, "DisplayCream");
-  applyDisplayMaterial(root.getObjectByName("EngineCover"), materialProfiles.JLG_Blockout_Orange, "DisplayOrange");
-  applyDisplayMaterial(root.getObjectByName("EngineCover_R"), materialProfiles.JLG_Blockout_Orange, "DisplayOrange");
+  const boomCream = materialProfiles.JLG_Boom_Cream;
+  ["BaseBoomShell", "MidBoomShell", "FlyBoomShell"].forEach((name) => {
+    applyDisplayMaterial(root.getObjectByName(name), boomCream, "DisplayCream");
+  });
+}
+
+function isInsideExcludedBranch(node, group, excludedRoots) {
+  let current = node;
+  while (current && current !== group) {
+    if (excludedRoots.includes(current)) return true;
+    current = current.parent;
+  }
+  return false;
+}
+
+function geometrySignature(geometry) {
+  const attributes = Object.entries(geometry.attributes)
+    .map(([name, attribute]) => `${name}:${attribute.itemSize}:${attribute.normalized}:${attribute.array.constructor.name}`)
+    .sort()
+    .join("|");
+  return `${geometry.index ? "indexed" : "plain"}|${attributes}`;
+}
+
+function mergeRigidGroup(group, excludedRoots = []) {
+  if (!group) return 0;
+  group.updateWorldMatrix(true, true);
+  const groupInverse = new THREE.Matrix4().copy(group.matrixWorld).invert();
+  const localMatrix = new THREE.Matrix4();
+  const buckets = new Map();
+
+  group.traverse((node) => {
+    if (!node.isMesh || node.userData.is_hit_volume || Array.isArray(node.material)) return;
+    if (isInsideExcludedBranch(node, group, excludedRoots)) return;
+    const key = `${node.material.uuid}|${geometrySignature(node.geometry)}`;
+    if (!buckets.has(key)) buckets.set(key, { material: node.material, geometries: [], sources: [] });
+    localMatrix.multiplyMatrices(groupInverse, node.matrixWorld);
+    const geometry = node.geometry.clone();
+    geometry.applyMatrix4(localMatrix);
+    buckets.get(key).geometries.push(geometry);
+    buckets.get(key).sources.push(node);
+  });
+
+  let mergedCount = 0;
+  buckets.forEach((bucket) => {
+    if (bucket.geometries.length < 2) {
+      bucket.geometries.forEach((value) => value.dispose());
+      return;
+    }
+    const geometry = mergeGeometries(bucket.geometries, false);
+    bucket.geometries.forEach((value) => value.dispose());
+    if (!geometry) return;
+    const mesh = new THREE.Mesh(geometry, bucket.material);
+    mesh.name = `RuntimeMerged_${group.name}_${mergedCount + 1}`;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    group.add(mesh);
+    bucket.sources.forEach((source) => source.removeFromParent());
+    mergedCount += 1;
+  });
+  return mergedCount;
+}
+
+function optimizeDetailedRig(nodes) {
+  let mergedBuckets = 0;
+  mergedBuckets += mergeRigidGroup(nodes.Wheel_FL);
+  mergedBuckets += mergeRigidGroup(nodes.Wheel_FR);
+  mergedBuckets += mergeRigidGroup(nodes.Chassis, [nodes.Wheel_FL, nodes.Wheel_FR]);
+  mergedBuckets += mergeRigidGroup(nodes.LiftCylinder, [nodes.LiftCylinderRod, nodes.LiftCylinderRodPin]);
+  mergedBuckets += mergeRigidGroup(nodes.PlatformPivot);
+  mergedBuckets += mergeRigidGroup(nodes.Telescope, [nodes.PlatformPivot]);
+  mergedBuckets += mergeRigidGroup(nodes.BoomPivot, [nodes.Telescope]);
+  mergedBuckets += mergeRigidGroup(nodes.Turntable, [nodes.BoomPivot, nodes.LiftCylinder]);
+  nodes["600S_ROOT"].updateMatrixWorld(true);
+  let visibleMeshes = 0;
+  nodes["600S_ROOT"].traverse((node) => {
+    if (node.isMesh && !node.userData.is_hit_volume) visibleMeshes += 1;
+  });
+  return { mergedBuckets, visibleMeshes };
 }
 
 function configureBlockoutRig(gltf) {
@@ -308,7 +401,7 @@ function configureBlockoutRig(gltf) {
     node.castShadow = true;
     node.receiveShadow = true;
   });
-  gltf.scene.userData.source = `blender-blockout-v${SHOWCASE_RELEASE}`;
+  gltf.scene.userData.source = `blender-detailed-v${SHOWCASE_RELEASE}`;
   const extras = nodes["600S_ROOT"].userData || {};
   const travel = Number(extras.telescope_travel_m);
   if (extras.asset_version !== SHOWCASE_RELEASE || extras.units !== "meters") {
@@ -320,7 +413,16 @@ function configureBlockoutRig(gltf) {
   if (extras.platform_leveling !== "counter_rotate_local_z") {
     throw new Error("600S GLB platform-leveling contract failed");
   }
+  if (extras.configuration_id !== "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696") {
+    throw new Error(`600S GLB configuration contract failed: ${extras.configuration_id}`);
+  }
+  if (nodes.LiftCylinder.userData.runtime_solver !== "two_anchor_visual") {
+    throw new Error("600S lift-cylinder solver contract failed");
+  }
   tuneBlockoutMaterials(gltf.scene);
+  const optimization = optimizeDetailedRig(nodes);
+  document.body.dataset.machineVisibleMeshes = String(optimization.visibleMeshes);
+  document.body.dataset.machineMergedBuckets = String(optimization.mergedBuckets);
 
   return {
     machine: gltf.scene,
@@ -332,9 +434,17 @@ function configureBlockoutRig(gltf) {
     telescopeTravelM: travel,
     platformPivot: nodes.PlatformPivot,
     platformMount: nodes.Platform,
+    liftCylinder: nodes.LiftCylinder,
+    liftCylinderLowerAnchor: nodes.LiftCylinderLowerAnchor,
+    liftCylinderUpperAnchor: nodes.LiftCylinderUpperAnchor,
+    liftCylinderRod: nodes.LiftCylinderRod,
+    liftCylinderRodPin: nodes.LiftCylinderRodPin,
+    liftCylinderRodStart: 0.82,
+    liftCylinderRodNominalLength: 0.70,
     steeringPivots: [nodes.Wheel_FL, nodes.Wheel_FR],
     hitVolumes,
-    source: `blender-blockout-v${SHOWCASE_RELEASE}`,
+    visibleMeshCount: optimization.visibleMeshes,
+    source: `blender-detailed-v${SHOWCASE_RELEASE}`,
   };
 }
 
@@ -344,7 +454,7 @@ let rig = createProcedural600S();
 function loadBlockoutRig() {
   return new Promise((resolve) => {
     loaderStatus.textContent = "Loading equipment model";
-    loaderDetail.textContent = "Fetching the optimized 600S blockout";
+    loaderDetail.textContent = "Fetching the optimized 600S detailed reconstruction";
     new GLTFLoader().load(GLB_URL, (gltf) => {
       try {
         loaderStatus.textContent = "Preparing materials and shadows";
@@ -354,7 +464,7 @@ function loadBlockoutRig() {
         scene.remove(rig.machine);
         rig = loadedRig;
         document.body.dataset.machineSource = loadedRig.source;
-        projectOverview.facts[0] = ["Model", `Blender structural blockout v${SHOWCASE_RELEASE}`];
+        projectOverview.facts[0] = ["Model", `Blender detailed reconstruction v${SHOWCASE_RELEASE} · ${loadedRig.visibleMeshCount} runtime meshes`];
       } catch (error) {
         console.warn("600S GLB contract validation failed; retaining procedural degraded fixture.", error);
         document.body.dataset.machineSource = "procedural-contract-fallback";
@@ -542,25 +652,25 @@ const componentContent = {
   chassis: {
     title: "Chassis",
     copy: "The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.",
-    facts: [["Visible system", "Frame, axles, wheels, and deck"], ["Prototype", "Front steering is transform-driven"], ["Model note", "Structural blockout; pivot offsets are visually reconstructed"]],
+    facts: [["Visible system", "Frame, axles, drive hubs, wheels, steering linkage, and deck"], ["Configuration", "4WD hydrostatic with two-wheel front steer"], ["Boundary", "Undimensioned offsets remain visually reconstructed"]],
     radius: 8.5,
   },
   turntable: {
     title: "Turntable",
     copy: "The upper structure rotates around the slew axis while carrying the counterweight, power enclosure, and boom assembly.",
-    facts: [["Motion", "Interactive rotation around the vertical axis"], ["Attached", "Boom pivot and upper structure"], ["Boundary", "No stability or collision calculation"]],
+    facts: [["Visible system", "B3 hoods, counterweight, slew ring, tanks, controls, valve and harness cues"], ["Motion", "Interactive rotation around the vertical axis"], ["Boundary", "No stability, pressure, or collision calculation"]],
     radius: 8,
   },
   boom: {
     title: "Telescopic boom",
     copy: "The primary lifting structure changes elevation at its base pivot while a nested section extends the platform outward.",
-    facts: [["Motion", "Lift and a capped visual telescope travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope"], ["Boundary", "Travel is an overlap cap, not a published stroke"]],
+    facts: [["Motion", "Lift, two-anchor cylinder solve, and capped visual telescope travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope → MidBoom → FlyBoom"], ["Boundary", "Travel and cylinder stroke are visual reconstructions"]],
     radius: 9.5,
   },
   platform: {
     title: "Platform",
     copy: "The work platform is parented to the telescoping section so it follows the boom through elevation, extension, and swing.",
-    facts: [["Visible system", "Deck, tubular rails, and control console"], ["Hierarchy", "Telescope → PlatformPivot → Platform"], ["Leveling", "Visual counter-rotation; rotator geometry is unresolved"]],
+    facts: [["Visible system", "Rapid-replace deck, orange rails, swing gate, console, footswitch, SkyGuard, and labels"], ["Hierarchy", "FlyBoom → PlatformPivot → Platform"], ["Leveling", "Visual counter-rotation; rotator dimensions remain reconstructed"]],
     radius: 6.2,
   },
 };
@@ -571,7 +681,7 @@ const projectOverview = {
   kicker: "Project note",
   title: "A visual replica,<br>not an engineering model.",
   copy: "This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.",
-  facts: [["Model", "Loading Blender structural blockout"], ["Purpose", "Portfolio and educational visualization"], ["Boundary", "Not a service, training, fabrication, or safety reference"]],
+  facts: [["Model", "Loading Blender detailed reconstruction"], ["Purpose", "Portfolio and educational visualization"], ["Boundary", "Not a service, training, fabrication, or safety reference"]],
 };
 function openInspector(component) {
   if (component) {
@@ -630,6 +740,39 @@ function hitComponentAt(x, y) {
   return raycaster.intersectObjects(rig.hitVolumes, false)[0]?.object?.userData?.component ?? null;
 }
 
+const cylinderLowerWorld = new THREE.Vector3();
+const cylinderUpperWorld = new THREE.Vector3();
+const cylinderLowerLocal = new THREE.Vector3();
+const cylinderUpperLocal = new THREE.Vector3();
+const cylinderDirection = new THREE.Vector3();
+const cylinderAxis = new THREE.Vector3(1, 0, 0);
+
+function updateLiftCylinder() {
+  const cylinder = rig.liftCylinder;
+  const lowerAnchor = rig.liftCylinderLowerAnchor;
+  const upperAnchor = rig.liftCylinderUpperAnchor;
+  if (!cylinder || !lowerAnchor || !upperAnchor || !cylinder.parent) return;
+
+  rig.machine.updateMatrixWorld(true);
+  lowerAnchor.getWorldPosition(cylinderLowerWorld);
+  upperAnchor.getWorldPosition(cylinderUpperWorld);
+  cylinderLowerLocal.copy(cylinderLowerWorld);
+  cylinderUpperLocal.copy(cylinderUpperWorld);
+  cylinder.parent.worldToLocal(cylinderLowerLocal);
+  cylinder.parent.worldToLocal(cylinderUpperLocal);
+  cylinderDirection.subVectors(cylinderUpperLocal, cylinderLowerLocal);
+  const solvedLength = cylinderDirection.length();
+  if (solvedLength < 0.001) return;
+
+  const rodLength = Math.max(0.2, solvedLength - rig.liftCylinderRodStart);
+  cylinder.position.copy(cylinderLowerLocal);
+  cylinder.quaternion.setFromUnitVectors(cylinderAxis, cylinderDirection.normalize());
+  cylinder.scale.set(1, 1, 1);
+  rig.liftCylinderRod.position.x = rig.liftCylinderRodStart + rodLength * 0.5;
+  rig.liftCylinderRod.scale.set(1, 1, rodLength / rig.liftCylinderRodNominalLength);
+  rig.liftCylinderRodPin.position.x = solvedLength;
+}
+
 function updateRig(dt) {
   const speed = reducedMotion ? 18 : 6;
   Object.keys(machineState).forEach((key) => {
@@ -640,6 +783,7 @@ function updateRig(dt) {
   rig.telescope.position.x = rig.telescopeHomeX + (machineState.telescope / 100) * rig.telescopeTravelM;
   rig.turntablePivot.rotation.y = THREE.MathUtils.degToRad(machineState.turntableAngle);
   rig.steeringPivots.forEach((pivot) => { pivot.rotation.y = THREE.MathUtils.degToRad(machineState.steeringAngle); });
+  updateLiftCylinder();
   if (!focusedComponent) orbit.targetGoal.y = defaultOrbitTargetY(machineState.boomAngle);
   const moving = Object.keys(machineState).some((key) => Math.abs(machineState[key] - targets[key]) > 0.1);
   const stowed = Object.values(targets).every((value) => Math.abs(value) < 0.1);

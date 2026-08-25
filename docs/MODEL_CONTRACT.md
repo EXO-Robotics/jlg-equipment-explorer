@@ -96,5 +96,5 @@ independently translating `Telescope` node.
 8. Dedicated component hit volumes resolve and remain aligned through the full visual motion range.
 9. The inner boom remains nested through 100% of the GLB's visual telescope travel.
 10. Platform deck world-up stays within about 2° of vertical at 0°, 36°, and 72° lift.
-11. Lower-chassis ground clearance remains 0.29 m and modeled tailswing remains 1.22 m, within the blockout drift tolerance.
-12. `LiftCylinder` may remain an empty contract node while its two anchor locations are unresolved; false fixed-to-boom cylinder motion is not acceptable.
+11. Lower-chassis ground clearance remains 0.29 m and modeled tailswing remains 1.22 m, within the reconstruction drift tolerance.
+12. `LiftCylinder` must use the evidence-bounded two-anchor visual solver. Its exported lower and upper anchors are visually reconstructed, not fabrication measurements, and false fixed-to-boom cylinder motion is not acceptable.

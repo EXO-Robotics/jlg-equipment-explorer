@@ -10,7 +10,17 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from validate_600s_glb import ASSET_VERSION, GLB_PATH, PROJECT_ROOT, RECEIPT_PATH, REVIEW_FLAGS, validate, version_js_text
+from validate_600s_glb import (
+    ASSET_VERSION,
+    GLB_PATH,
+    HASH_PREFIX_LEN,
+    PROJECT_ROOT,
+    RECEIPT_PATH,
+    REVIEW_FLAGS,
+    sha256_file,
+    validate,
+    version_js_text,
+)
 
 
 VERSION_JS_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
@@ -56,6 +66,8 @@ def write_version_js(cache_key: str) -> None:
 
 
 def main() -> None:
+    # The manifest participates in the runtime hash, so update it before validation.
+    write_version_js(sha256_file(GLB_PATH)[:HASH_PREFIX_LEN])
     mechanical = validate(require_receipt=False)
     review, exported_at = load_existing_record(
         mechanical["sha256"], mechanical["source_blend_sha256"], mechanical["runtime_sha256"]
@@ -63,8 +75,9 @@ def main() -> None:
     accepted = all(review.get(flag) is True for flag in REVIEW_FLAGS)
     receipt = {
         "asset": mechanical["asset"],
-        "status": "BLOCKOUT_V0_2_ACCEPTED" if accepted else "BLOCKOUT_V0_2_MECHANICAL_PASS",
+        "status": "DETAILED_V0_3_ACCEPTED" if accepted else "DETAILED_V0_3_MECHANICAL_PASS",
         "release": ASSET_VERSION,
+        "configuration_id": mechanical["configuration_id"],
         "authorship": "owned-simplified-reconstruction",
         "source_blend": mechanical["source_blend"],
         "builder": "scripts/build_600s_blockout.py",
@@ -99,9 +112,10 @@ def main() -> None:
         "evidence_boundary": (
             "Overall published envelopes are authoritative and approximate per JLG. "
             "Telescope travel is a visual overlap cap, not a published stroke. "
-            "Lift-cylinder geometry is deferred until its anchors are supported. "
-            "Internal pivot offsets, boom section lengths, turntable internals, "
-            "and platform rotator geometry remain visually reconstructed or unresolved."
+            "The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions "
+            "are reconstructed and are not fabrication or service measurements. Internal pivot offsets, "
+            "boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform "
+            "rotator geometry remain visually reconstructed or unresolved."
         ),
     }
     RECEIPT_PATH.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")

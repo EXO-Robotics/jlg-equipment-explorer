@@ -1,6 +1,6 @@
 # JLG Equipment Explorer
 
-A static Three.js prototype for an unofficial, educational product visualization of access equipment. Version 0.2 loads an owned Blender 600S structural blockout as the primary machine and keeps a procedural model only as a degraded fixture.
+A static Three.js prototype for an unofficial, educational product visualization of access equipment. Version 0.3 loads an owned, evidence-bounded Blender reconstruction of the current-generation 600S as the primary machine and keeps a procedural model only as a degraded fixture.
 
 ## Run locally
 
@@ -10,7 +10,7 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=0.2.0`.
+Then open `http://localhost:8080/?v=0.3.0`.
 
 The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
 
@@ -28,7 +28,9 @@ Validate the current GLB, source, receipt, release identity, and cache manifest 
 - Neutral product-lighting look development with display-only material tuning
 - A documented Blender-to-GLB node contract
 - A documented, local-only official Blender MCP setup
-- An owned Blender structural blockout loaded as the primary `600s.glb`
+- An owned Blender detailed reconstruction loaded as the primary `600s.glb`
+- PVC 2607 configuration identity frozen as `600S-PVC2607-US-B3-2WS-D29-FF-RRP3696`
+- Detailed B3 enclosure, chassis, four-wheel 4WD/2WS running gear, three-section boom, powertrack, platform controls, SkyGuard, and evidence-bounded lift-cylinder solver
 - Independent GLB and procedural motion profiles, platform leveling, and nested telescope travel
 - Research and source-ledger templates that separate verified public facts from working assumptions
 
@@ -52,7 +54,7 @@ Validate the current GLB, source, receipt, release identity, and cache manifest 
 
 ## Deliberate boundary
 
-The Blender blockout is a visual interaction model, not an engineering model. Dimensions, motion limits, load information, and operating envelopes must not be treated as fabrication, service, training, or safety data. Public specifications should be captured in the research ledger with a URL, publication identifier, access date, and verification status before they become authoritative UI copy.
+The Blender reconstruction is a visual interaction model, not an engineering model. Dimensions, motion limits, load information, hydraulic or electrical routing, and operating envelopes must not be treated as fabrication, service, training, or safety data. Public specifications are captured in the research ledger with a URL, publication identifier, access date, and verification status before they become authoritative UI copy.
 
 ## License and use
 
@@ -72,9 +74,8 @@ Three.js runtime and third-party ownership boundaries.
 
 ## Next gate
 
-Keep the mechanically validated M2.1 blockout stable while resolving reference-board slots
-09–12. The next realism pass may safely refine materials, lighting, tire tread,
-rounded enclosure surfaces, mesh flooring, fasteners, and decals from current-generation
-appearance references. Refine boom-pivot, turntable, cylinder, telescope, and platform-rotator
-geometry only when the missing sources support those changes. Then validate keyboard access,
-reduced motion, performance, and source-comparison visuals before extracting a reusable machine layer.
+Validate the v0.3 reconstruction in the actual browser at desktop and mobile sizes, record
+fresh motion/selection/silhouette evidence, and publish its mechanical-pass receipt. The next
+detail pass should prioritize silhouette refinements, owned typography/markings, visible hose
+and harness routing, enclosure seams/vents, platform mesh, and proportion corrections supported
+by the frozen PVC 2607 sources. Fabrication dimensions and safety/service simulation remain out of scope.

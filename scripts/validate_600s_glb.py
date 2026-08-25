@@ -14,7 +14,8 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GLB_PATH = PROJECT_ROOT / "assets/models/600s.glb"
-BLEND_PATH = PROJECT_ROOT / "source/blender/600s-blockout-v0.2.blend"
+BLEND_PATH = PROJECT_ROOT / "source/blender/600s-detailed-v0.3.blend"
+CONFIGURATION_PATH = PROJECT_ROOT / "assets/models/600s.configuration.json"
 RECEIPT_PATH = PROJECT_ROOT / "assets/models/600s.asset-receipt.json"
 RECEIPT_TEMPLATE_PATH = PROJECT_ROOT / "assets/models/600s.asset-receipt.template.json"
 VERSION_JS_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
@@ -36,14 +37,15 @@ RUNTIME_FILES = (
     *(PROJECT_ROOT / relative_path for relative_path in VENDOR_HASHES if relative_path != "vendor/three-r160/LICENSE"),
 )
 
-ASSET_VERSION = "0.2.0"
+ASSET_VERSION = "0.3.0"
+CONFIGURATION_ID = "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696"
 PUBLISHED_ENVELOPE_M = (8.71, 2.48, 2.50)  # length, width, height
 PLATFORM_ENVELOPE_M = (0.91, 2.44)
 WHEELBASE_M = 2.50
 GROUND_CLEARANCE_M = 0.29
 TAILSWING_M = 1.22
 TELESCOPE_TRAVEL_M = 0.90
-TRIANGLE_BUDGET = 20_000
+TRIANGLE_BUDGET = 60_000
 ENVELOPE_TOLERANCE_M = 0.002
 HASH_PREFIX_LEN = 12
 TAILSWING_TOLERANCE_M = 0.002
@@ -66,17 +68,55 @@ EXPECTED_PARENTS = {
     "Wheel_FR": "Chassis",
     "Wheel_RL": "Chassis",
     "Wheel_RR": "Chassis",
+    "SteerHydraulicHose_L": "Chassis",
+    "SteerHydraulicHose_R": "Chassis",
+    "ChassisDriveHarness_L": "Chassis",
+    "ChassisDriveHarness_R": "Chassis",
     "TurntablePivot": "600S_ROOT",
     "Turntable": "TurntablePivot",
+    "SlewRing": "Turntable",
+    "UpperFrame": "Turntable",
     "EngineCover": "Turntable",
+    "TankCover": "Turntable",
     "Counterweight": "Turntable",
     "Controls": "Turntable",
+    "MainValveBank": "Turntable",
+    "EngineControlModule": "Turntable",
+    "GroundControlHarness": "Turntable",
+    "EngineHarness": "Turntable",
     "BoomPivot": "Turntable",
     "MainBoom": "BoomPivot",
-    "LiftCylinder": "BoomPivot",
     "Telescope": "MainBoom",
-    "PlatformPivot": "Telescope",
+    "MidBoom": "Telescope",
+    "FlyBoom": "MidBoom",
+    "PlatformPivot": "FlyBoom",
     "Platform": "PlatformPivot",
+    "LiftCylinder": "Turntable",
+    "LiftCylinderLowerAnchor": "Turntable",
+    "LiftCylinderUpperAnchor": "MainBoom",
+    "LiftCylinderBarrel": "LiftCylinder",
+    "LiftCylinderRod": "LiftCylinder",
+    "LiftCylinderBasePin": "LiftCylinder",
+    "LiftCylinderRodPin": "LiftCylinder",
+    "LiftCylinderHose_A": "LiftCylinder",
+    "LiftCylinderHose_B": "LiftCylinder",
+    "BoomHydraulicBundle_L": "MainBoom",
+    "BoomHydraulicBundle_R": "MainBoom",
+    "BoomSensorLower": "MainBoom",
+    "BoomSensorUpper": "MidBoom",
+    "TeleProximitySensor": "FlyBoom",
+    "BoomCableUpper": "MainBoom",
+    "PlatformHarness": "FlyBoom",
+    "TowerLinkLower": "BoomPivot",
+    "TowerLinkUpper": "BoomPivot",
+    "Powertrack": "MainBoom",
+    "PlatformRotator": "PlatformPivot",
+    "PlatformSwingGate": "Platform",
+    "PlatformConsole": "Platform",
+    "PlatformFootswitch": "Platform",
+    "PlatformRotatorHose_A": "PlatformPivot",
+    "PlatformRotatorHose_B": "PlatformPivot",
+    "FootswitchHarness": "Platform",
     "Chassis_Hit": "Chassis",
     "Turntable_Hit": "Turntable",
     "Boom_Hit": "MainBoom",
@@ -85,7 +125,7 @@ EXPECTED_PARENTS = {
 }
 
 HIT_VOLUMES = ("Chassis_Hit", "Turntable_Hit", "Boom_Hit", "Telescope_Hit", "Platform_Hit")
-IDENTITY_CHAIN = ("MainBoom", "Telescope", "PlatformPivot", "Platform")
+IDENTITY_CHAIN = ("MainBoom", "Telescope", "MidBoom", "FlyBoom", "PlatformPivot", "Platform")
 
 POSITION_COMPONENT_TYPE = 5126
 POSITION_STRIDE = 12
@@ -306,6 +346,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
         "builder": "scripts/build_600s_blockout.py",
         "validator": "scripts/validate_600s_glb.py",
         "release": report["release"],
+        "configuration_id": report["configuration_id"],
         "source_blend": report["source_blend"],
         "sha256": report["sha256"],
         "source_blend_sha256": report["source_blend_sha256"],
@@ -321,7 +362,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     for key, expected in expected_values.items():
         require_equal(receipt.get(key), expected, key)
     review = receipt.get("review") or {}
-    expected_status = "BLOCKOUT_V0_2_ACCEPTED" if all(review.get(flag) is True for flag in REVIEW_FLAGS) else "BLOCKOUT_V0_2_MECHANICAL_PASS"
+    expected_status = "DETAILED_V0_3_ACCEPTED" if all(review.get(flag) is True for flag in REVIEW_FLAGS) else "DETAILED_V0_3_MECHANICAL_PASS"
     require_equal(receipt.get("status"), expected_status, "status")
     for key in ("visible_envelope_m", "platform_envelope_m"):
         require_close_list(receipt.get(key), report[key], key)
@@ -351,7 +392,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     require_equal(receipt.get("evidence_boundary"), template.get("evidence_boundary"), "evidence_boundary")
     if not isinstance(receipt.get("exported_at"), str) or not receipt["exported_at"].endswith("Z"):
         raise RuntimeError("Receipt exported_at must be a UTC timestamp")
-    if expected_status == "BLOCKOUT_V0_2_ACCEPTED":
+    if expected_status == "DETAILED_V0_3_ACCEPTED":
         evidence = review.get("evidence") or {}
         for key in template["review"]["evidence"]:
             if not isinstance(evidence.get(key), str) or not evidence[key].strip():
@@ -390,6 +431,16 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         raise RuntimeError(f"Missing GLB: {GLB_PATH}")
     if not BLEND_PATH.is_file():
         raise RuntimeError(f"Missing Blender source: {BLEND_PATH}")
+    if not CONFIGURATION_PATH.is_file():
+        raise RuntimeError(f"Missing frozen configuration: {CONFIGURATION_PATH}")
+
+    configuration = json.loads(CONFIGURATION_PATH.read_text(encoding="utf-8"))
+    if configuration.get("configuration_id") != CONFIGURATION_ID:
+        raise RuntimeError("Frozen 600S configuration identity drift")
+    if configuration.get("required_parent_edges") != EXPECTED_PARENTS:
+        raise RuntimeError("Validator hierarchy has drifted from 600s.configuration.json")
+    if configuration.get("interaction_volumes") != list(HIT_VOLUMES):
+        raise RuntimeError("Validator interaction volumes have drifted from the frozen configuration")
 
     document, blob = load_glb(GLB_PATH)
     nodes = document.get("nodes") or []
@@ -410,6 +461,11 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         if actual_parent != by_name[parent_name]:
             actual_name = nodes[actual_parent].get("name") if actual_parent is not None else None
             raise RuntimeError(f"{child_name} parent is {actual_name!r}, expected {parent_name!r}")
+
+    for section_name, section in (configuration.get("sections") or {}).items():
+        for required_name in section.get("required_nodes") or []:
+            if required_name not in by_name:
+                raise RuntimeError(f"Missing {section_name} detail node: {required_name}")
 
     for hit_name in HIT_VOLUMES:
         node = nodes[by_name[hit_name]]
@@ -437,6 +493,8 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     extras = root.get("extras") or {}
     if extras.get("asset_version") != ASSET_VERSION or extras.get("units") != "meters":
         raise RuntimeError("Root provenance/version extras are missing or stale")
+    if extras.get("configuration_id") != CONFIGURATION_ID:
+        raise RuntimeError("Root configuration_id is missing or stale")
     travel = extras.get("telescope_travel_m", TELESCOPE_TRAVEL_M)
     if not close(float(travel), TELESCOPE_TRAVEL_M, 0.001):
         raise RuntimeError(f"Unexpected telescope_travel_m extra: {travel}")
@@ -449,8 +507,19 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
 
     cylinder = nodes[by_name["LiftCylinder"]]
     cylinder_extras = cylinder.get("extras") or {}
-    if "mesh" in cylinder or cylinder_extras.get("visual_state") != "contract_node_only":
-        raise RuntimeError("LiftCylinder must remain geometry-deferred until its anchors are supported")
+    if "mesh" in cylinder or cylinder_extras.get("runtime_solver") != "two_anchor_visual":
+        raise RuntimeError("LiftCylinder must be an empty two-anchor visual-solver group")
+    for anchor_name, parent_name in (
+        ("LiftCylinderLowerAnchor", "Turntable"),
+        ("LiftCylinderUpperAnchor", "MainBoom"),
+    ):
+        if anchor_name not in by_name:
+            raise RuntimeError(f"Missing lift-cylinder anchor: {anchor_name}")
+        anchor = nodes[by_name[anchor_name]]
+        if "mesh" in anchor:
+            raise RuntimeError(f"{anchor_name} must be a non-rendering transform node")
+        if parents.get(by_name[anchor_name]) != by_name[parent_name]:
+            raise RuntimeError(f"{anchor_name} must be parented to {parent_name}")
 
     triangle_count = 0
     for mesh in document.get("meshes", []):
@@ -483,8 +552,8 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     if not close(platform_size[0], PLATFORM_ENVELOPE_M[0]) or not close(platform_size[1], PLATFORM_ENVELOPE_M[1]):
         raise RuntimeError(f"Platform envelope drift: {platform_size}")
 
-    main_min, main_max = mesh_world_aabb(document, blob, nodes, parents, by_name["MainBoomShell"])
-    tel_min, tel_max = mesh_world_aabb(document, blob, nodes, parents, by_name["TelescopeShell"])
+    main_min, main_max = mesh_world_aabb(document, blob, nodes, parents, by_name["BaseBoomShell"])
+    tel_min, tel_max = mesh_world_aabb(document, blob, nodes, parents, by_name["MidBoomShell"])
     overlap_stowed = main_max[0] - tel_min[0]
     overlap_100 = main_max[0] - (tel_min[0] + TELESCOPE_TRAVEL_M)
     if overlap_100 <= 0.001:
@@ -512,6 +581,7 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     report = {
         "status": "PASS",
         "asset": str(GLB_PATH.relative_to(PROJECT_ROOT)),
+        "configuration_id": CONFIGURATION_ID,
         "source_blend": str(BLEND_PATH.relative_to(PROJECT_ROOT)),
         "release": ASSET_VERSION,
         "bytes": GLB_PATH.stat().st_size,

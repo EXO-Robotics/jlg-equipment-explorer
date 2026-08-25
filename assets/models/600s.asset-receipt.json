@@ -1,35 +1,36 @@
 {
   "asset": "assets/models/600s.glb",
-  "status": "BLOCKOUT_V0_2_ACCEPTED",
-  "release": "0.2.0",
+  "status": "DETAILED_V0_3_MECHANICAL_PASS",
+  "release": "0.3.0",
+  "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
-  "source_blend": "source/blender/600s-blockout-v0.2.blend",
+  "source_blend": "source/blender/600s-detailed-v0.3.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T13:50:03Z",
-  "sha256": "f2dc38949c8fdc020a9c09dbd1bd8c1e0da5eb90af034ee4c6c04323f5ece5c8",
-  "source_blend_sha256": "227942e017456e3e7ebe69879bc4533a84f2c0c1bdfd72c979baed4ca1842178",
-  "cache_key": "f2dc38949c8f",
-  "runtime_sha256": "251b11f818618bf3f23bd1795d130ca081f08312df4d5dc665bd2b58201ede9d",
+  "exported_at": "2026-08-25T15:47:09Z",
+  "sha256": "08c9cc50fc0070cd5f5a94839719d44b5789012584422efaee4bb81519f01703",
+  "source_blend_sha256": "f701529c26d5ef29563cfe2a2092b0369937d25bbcfda68acab8065efa11b862",
+  "cache_key": "08c9cc50fc00",
+  "runtime_sha256": "2df6e984b387088363421de0f28620770bc7c650fc4e2f0a23490fc8b197b242",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
-    8.71,
+    8.7093,
     2.48,
     2.5
   ],
   "wheelbase_m": 2.5,
   "ground_clearance_m": 0.29,
-  "tailswing_m": 1.22,
+  "tailswing_m": 1.2193,
   "platform_envelope_m": [
     0.91,
     2.44
   ],
   "telescope_travel_m": 0.9,
-  "telescope_overlap_at_100_m": 0.05,
-  "triangle_count": 3716,
-  "node_count": 85,
-  "required_parent_edges": 24,
+  "telescope_overlap_at_100_m": 0.667,
+  "triangle_count": 18172,
+  "node_count": 359,
+  "required_parent_edges": 62,
   "interaction_volumes": [
     "Chassis_Hit",
     "Turntable_Hit",
@@ -39,10 +40,10 @@
   ],
   "mechanical_validation": {
     "status": "PASS",
-    "bytes": 169404,
-    "mesh_count": 71,
+    "bytes": 915668,
+    "mesh_count": 325,
     "visible_bounds_min_m": [
-      -2.91,
+      -2.9093,
       -0.0,
       -1.24
     ],
@@ -51,22 +52,22 @@
       2.5,
       1.24
     ],
-    "telescope_overlap_stowed_m": 0.95
+    "telescope_overlap_stowed_m": 1.567
   },
   "review": {
-    "loads_without_console_error": true,
+    "loads_without_console_error": false,
     "articulation_pivots_pass": true,
-    "selection_volumes_pass": true,
+    "selection_volumes_pass": false,
     "stowed_silhouette_reviewed": true,
     "working_pose_silhouette_pass": true,
     "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Self-contained hash-pinned runtime verified in the Codex in-app browser at exact 1280x720 and 390x844 CSS pixels; source flag blender-blockout-v0.2.0; desktop/mobile adaptive profiles selected; loader completed; WebGL overlay hidden; warning/error log empty; all four controls visible at the mobile gate.",
-      "motion": "Direct control inputs 40 degrees lift, 55 percent extend, -35 degrees swing, and 18 degrees steer reached Holding in the self-contained runtime; Stow returned all four controls to zero and Stowed. The platform remained visually level and the telescope remained nested.",
-      "selection": "A direct canvas click on the platform hit volume opened the Platform inspector and activated the platform component; no query shortcut was used for this selection gate.",
-      "silhouette_scope": "M2.1 structural review covers the stowed envelope, published tailswing and ground clearance, telescope overlap, platform leveling, and complete working-pose framing. Detailed pivots, nested-section lengths, cylinder anchors, turntable internals, and platform rotator geometry remain outside acceptance."
+      "browser": "Local Safari proof on 2026-08-25 loaded GLB 08c9cc50fc00 at desktop and a 390 px window. The About inspector reported 50 runtime meshes after rigid-group consolidation. Console state was not directly inspected, so loads_without_console_error remains false.",
+      "motion": "Post-consolidation Safari proof observed 52 degrees lift and 76 percent visual telescope extension with platform leveling and the two-anchor lift-cylinder solver intact; Stow returned all four target controls to zero.",
+      "selection": "Direct canvas ray hits opened Platform and Telescopic boom inspectors after runtime mesh consolidation; the mobile Chassis focus control also opened correctly. All five ray volumes were not individually re-proven, so selection_volumes_pass remains false.",
+      "silhouette_scope": "Current GLB stowed and working poses were visually reviewed at desktop and mobile widths against the frozen current-generation reference scope. PASS means recognizable evidence-bounded reconstruction, not exact undimensioned geometry or engineering accuracy."
     }
   },
-  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. Lift-cylinder geometry is deferred until its anchors are supported. Internal pivot offsets, boom section lengths, turntable internals, and platform rotator geometry remain visually reconstructed or unresolved."
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions are reconstructed and are not fabrication or service measurements. Internal pivot offsets, boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform rotator geometry remain visually reconstructed or unresolved."
 }
