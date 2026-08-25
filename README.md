@@ -54,6 +54,22 @@ Validate the current GLB, source, receipt, release identity, and cache manifest 
 
 The Blender blockout is a visual interaction model, not an engineering model. Dimensions, motion limits, load information, and operating envelopes must not be treated as fabrication, service, training, or safety data. Public specifications should be captured in the research ledger with a URL, publication identifier, access date, and verification status before they become authoritative UI copy.
 
+## License and use
+
+Copyright © 2026 EXO-Robotics. All rights reserved.
+
+This is a publicly viewable portfolio repository, not an open-source project.
+No permission is granted to run, copy, modify, redistribute, deploy, or use the
+original project materials commercially or internally without a separate
+written license. This restriction applies to every person and organization,
+including JLG Industries and its affiliates.
+
+GitHub may permit users to view and fork a public repository under its terms,
+but that does not grant a license to use its contents. See [`LICENSE`](LICENSE)
+for the controlling notice and
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the separately licensed
+Three.js runtime and third-party ownership boundaries.
+
 ## Next gate
 
 Keep the mechanically validated M2.1 blockout stable while resolving reference-board slots

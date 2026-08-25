@@ -1,0 +1,45 @@
+JLG EQUIPMENT EXPLORER — PROPRIETARY NOTICE
+
+Copyright (c) 2026 EXO-Robotics. All rights reserved.
+
+This repository is publicly visible for portfolio review and evaluation only.
+No license is granted to any person or entity to use, execute, reproduce,
+modify, adapt, translate, create derivative works from, distribute,
+redistribute, sublicense, sell, lease, host, deploy, publish, or commercially
+exploit the original contents of this repository, in whole or in part.
+
+For clarity, the restrictions above apply to the original source code,
+documentation, Blender source files, 3D models, visual design, project-specific
+assets, and compiled or exported forms of those materials. They apply equally
+to commercial use, internal business use, product development, training,
+marketing, demonstrations, and incorporation into another product or service.
+
+Access to this repository does not create an implied license. Rights that a
+hosting provider must receive under its terms of service, and rights that
+cannot lawfully be restricted, are not expanded by this notice. In particular,
+the ability to view or fork this repository on GitHub does not grant permission
+to use, run, modify, redistribute, deploy, or commercialize its contents.
+
+No company, including JLG Industries, Inc. or any of its parents, subsidiaries,
+affiliates, contractors, or successors, receives any additional right or
+license by being depicted, referenced, or named in this project.
+
+THIRD-PARTY MATERIALS
+
+This notice does not replace or restrict licenses that apply to third-party
+materials. Third-party components remain governed by their own licenses. The
+vendored Three.js runtime is licensed separately under the MIT License; see
+vendor/three-r160/LICENSE. Product names, trademarks, manufacturer materials,
+and public specifications remain the property of their respective owners.
+
+PERMISSION
+
+Any permission beyond portfolio review must be obtained in advance through a
+separate written license from the copyright holder. Silence or failure to
+respond is not permission.
+
+THE ORIGINAL CONTENTS OF THIS REPOSITORY ARE PROVIDED "AS IS," WITHOUT WARRANTY
+OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. TO THE MAXIMUM
+EXTENT PERMITTED BY LAW, THE COPYRIGHT HOLDER SHALL NOT BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY ARISING FROM ACCESS TO OR USE OF THE MATERIALS.
