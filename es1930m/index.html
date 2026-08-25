@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG ES1930M micro scissor lift.">
+  <title>ES1930M Interactive Equipment Study</title>
+  <link rel="preload" href="../assets/models/es1930m.glb?v=adda71683962" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="../viewer.css?v=1.2.0">
+  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.2.0">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../vendor/three-r160/build/three.module.min.js",
+        "three/addons/": "../vendor/three-r160/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body data-machine="es1930m">
+  <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG ES1930M visualization" aria-describedby="viewer-instructions"></div>
+  <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.</p>
+
+  <div class="loader" id="loader" role="status">
+    <span class="loader-mark"></span>
+    <span id="loader-status">Loading ES1930M</span>
+    <small id="loader-detail">Validating the PVC 2404 reconstruction</small>
+  </div>
+  <div class="error" id="error" hidden><div><strong>Viewer unavailable.</strong><p id="error-copy">This interactive study needs WebGL and a valid ES1930M asset.</p></div></div>
+
+  <main class="interface">
+    <header class="topbar">
+      <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
+      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0</div>
+      <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
+    </header>
+
+    <section class="identity identity-long" aria-labelledby="machine-title">
+      <div class="status"><i></i>Interactive mechanism study</div>
+      <h1 id="machine-title">ES1930M</h1>
+      <p>Micro-sized scissor lift <span class="evidence-chip">PVC 2404</span></p>
+    </section>
+
+    <section class="specs" aria-label="Published product specifications">
+      <div><strong>18′ 6″</strong><span>Indoor platform height</span></div>
+      <div><strong>500 lb</strong><span>Platform capacity</span></div>
+      <div><strong>30 in</strong><span>Overall width</span></div>
+      <p>Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.</p>
+    </section>
+
+    <section class="control-panel" aria-labelledby="operate-title">
+      <div class="panel-heading">
+        <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
+        <div class="panel-state">
+          <output id="motion-status" aria-live="polite" aria-atomic="true">Stowed</output>
+          <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button>
+        </div>
+      </div>
+      <div class="controls-body" id="machine-controls-body">
+        <label class="control-row"><span>Platform lift</span><output id="lift-value">0%</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Platform lift" aria-describedby="motion-boundary"></label>
+        <label class="control-row"><span>Extension deck</span><output id="deck-value">0.00 m</output><input id="deck-control" type="range" min="0" max="100" value="0" step="1" aria-label="Extension deck" aria-describedby="motion-boundary"></label>
+        <label class="control-row compact-control"><span>Steering cylinder</span><output id="steer-value">Center</output><input id="steer-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Steering cylinder" aria-describedby="motion-boundary"></label>
+        <div class="action-row"><button class="primary-action" id="stow" type="button">Stow machine</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
+        <p class="motion-boundary" id="motion-boundary">Visual mechanism reconstruction. Not operational, stability, load, or safety data.</p>
+      </div>
+    </section>
+
+    <nav class="component-nav" aria-label="Explore components">
+      <span>Explore</span>
+      <button type="button" data-focus="chassis" aria-pressed="false"><i>01</i>Chassis</button>
+      <button type="button" data-focus="scissor" aria-pressed="false"><i>02</i>Scissor</button>
+      <button type="button" data-focus="platform" aria-pressed="false"><i>03</i>Platform</button>
+      <button type="button" data-focus="steering" aria-pressed="false"><i>04</i>Steering</button>
+    </nav>
+    <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll to zoom <span>/</span> Select a component</div>
+    <output class="diagnostics" id="diagnostics" hidden aria-live="polite"></output>
+  </main>
+
+  <div class="scrim" id="scrim" aria-hidden="true"></div>
+  <aside class="inspector" id="inspector" role="dialog" aria-modal="true" aria-labelledby="inspector-title" aria-describedby="inspector-copy" inert>
+    <button class="inspector-close" id="inspector-close" type="button" aria-label="Close inspector">×</button>
+    <div class="inspector-kicker" id="inspector-kicker">Evidence boundary</div>
+    <h2 id="inspector-title">PVC 2404,<br>reconstructed honestly.</h2>
+    <p id="inspector-copy">Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.</p>
+    <dl id="inspector-facts"><div><dt>Model</dt><dd>ES1930M standard ANSI/US configuration</dd></div><div><dt>Primary set</dt><dd>Parts 3122602400 · Service 3122602300 · Operation 3122602200</dd></div><div><dt>Boundary</dt><dd>Not a service, training, fabrication, stability, or safety reference</dd></div></dl>
+  </aside>
+
+  <script>window.__showcaseBootAt = performance.now();</script>
+  <script type="module" src="../viewer/runtime.js?v=1.2.0"></script>
+</body>
+</html>

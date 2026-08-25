@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_freeze_date": "2026-08-25",
+  "target": {
+    "model": "ES1930M",
+    "family": "Micro-Sized Series",
+    "market": "ANSI_US",
+    "language": "en-US",
+    "primary_pvc": "2404",
+    "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM"
+  },
+  "repository_policy": {
+    "manual_binaries_committed": false,
+    "signed_download_urls_committed": false,
+    "local_verification_directory": "tmp/es1930m",
+    "manual_illustrations_are_scale_drawings": false,
+    "cross_pvc_geometry_use": "prohibited"
+  },
+  "sources": [
+    {
+      "id": "R01",
+      "kind": "product_page",
+      "owner": "JLG Industries, Inc.",
+      "url": "https://www.jlg.com/en/equipment/scissor-lifts/micro-sized-series/es1930m",
+      "accessed": "2026-08-25",
+      "applicability": "current North American ES1930M identity and gallery",
+      "admission": "primary"
+    },
+    {
+      "id": "R02",
+      "kind": "specification",
+      "publication": "3131313",
+      "revision": "R0625_05",
+      "pages": 2,
+      "sha256": "d73a16c847cbc2ad115d90db44fd6dd476ac51c194cd91b5ba088dd1cea4b4c3",
+      "local_filename": "3131313-r0625-05-specification.pdf",
+      "url": "https://www.jlg.com/dfsmedia/e4042b10c9ce4595b4cc059f1299f079/162725-source",
+      "applicability": "current standard ES1930M product specification linked by R01",
+      "admission": "primary"
+    },
+    {
+      "id": "R03",
+      "kind": "parts_manual",
+      "publication": "3122602400",
+      "release_date": "2026-03-30",
+      "pvc": "2404",
+      "pages": 246,
+      "sha256": "df656f24d6b8f2b217709d5b58b6cb475e04add454e90f778ce4ddb7accc0d05",
+      "local_filename": "3122602400-pvc2404-parts.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/l-english-united-states/model-n35e/model-245-12/model-c-351-h-x4-stage-iiia/model-es1930m/_/N-1063887702%2B686609005%2B2430521195%2B2898485107%2B1873825838?locale=en-us",
+      "applicability": "current PVC 2404 assemblies subject to option notes",
+      "admission": "primary"
+    },
+    {
+      "id": "R04",
+      "kind": "service_manual",
+      "publication": "3122602300",
+      "release_date": "2026-07-15",
+      "pvc": "2404",
+      "pages": 318,
+      "sha256": "bd0b0a583e776be20c77efabffd2e874f0bc9c8474c13f380b6faa1ef65af02e",
+      "local_filename": "3122602300-pvc2404-service.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/l-english-united-states/model-n35e/model-245-12/model-c-351-h-x4-stage-iiia/model-es1930m/_/N-1063887702%2B686609005%2B2430521195%2B2898485107%2B1873825838?locale=en-us",
+      "applicability": "current PVC 2404 service relationships and embedded schematics",
+      "admission": "primary"
+    },
+    {
+      "id": "R05",
+      "kind": "operation_manual",
+      "publication": "3122602200",
+      "release_date": "2026-06-01",
+      "pvc": "2404",
+      "pages": 120,
+      "sha256": "83fbf9556ac58f5a4f8e645c9411b028e23f987b60ef3a7759361b66d2b42bb1",
+      "local_filename": "3122602200-pvc2404-operation.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/l-english-united-states/model-n35e/model-245-12/model-c-351-h-x4-stage-iiia/model-es1930m/_/N-1063887702%2B686609005%2B2430521195%2B2898485107%2B1873825838?locale=en-us",
+      "applicability": "current PVC 2404 controls, operation and machine specifications",
+      "admission": "primary"
+    },
+    {
+      "id": "B01",
+      "kind": "hydraulic_schematic",
+      "publication": "3122602600",
+      "release_date": "2026-05-15",
+      "pvc": "1001",
+      "pages": 1,
+      "sha256": "f641038acffd1229fd9dbbb178b4611302bd280b9d83f0ed9c5453e4b550c81e",
+      "local_filename": "3122602600-pvc1001-hydraulic.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/l-english-united-states/model-n35e/model-245-12/model-c-351-h-x4-stage-iiia/model-es1930m/_/N-1063887702%2B686609005%2B2430521195%2B2898485107%2B1873825838?locale=en-us",
+      "applicability": "different-PVC comparison against current service manual Figure 89",
+      "admission": "quarantined"
+    },
+    {
+      "id": "B02",
+      "kind": "electrical_schematic",
+      "publication": "3122602500",
+      "release_date": "2026-05-15",
+      "pvc": "1001",
+      "pages": 7,
+      "sha256": "fd473e1506a8b763c5473c9f8a3ba35c87280c3fcee65eba7d5bdc4929f745a8",
+      "local_filename": "3122602500-pvc1001-electrical.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/l-english-united-states/model-n35e/model-245-12/model-c-351-h-x4-stage-iiia/model-es1930m/_/N-1063887702%2B686609005%2B2430521195%2B2898485107%2B1873825838?locale=en-us",
+      "applicability": "different-PVC comparison against current service manual Figure 90",
+      "admission": "quarantined"
+    }
+  ]
+}
