@@ -7,11 +7,11 @@
   "source_blend": "source/blender/600s-showcase-v1.0.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T16:16:49Z",
+  "exported_at": "2026-08-25T16:46:16Z",
   "sha256": "858415279e5d9e93e941474905465bc0def19b81239abd0d4b7e90e26f488ca1",
   "source_blend_sha256": "02d2ccefd2171c1f2130f234ab988b6f7648d684c609bd8017c3fd082bbbbcd3",
   "cache_key": "858415279e5d",
-  "runtime_sha256": "3266fcf7879b3c51f545f47edb43e0b883b0d90a910be13d98bcbaa7f3bb220f",
+  "runtime_sha256": "44f47c2c866207f710fd103f550bd9f1c197976b6aae190b0cf2e71a32ef59ca",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -63,10 +63,10 @@
     "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Fresh Safari 2026-08-25: exact 858415279e5d GLB, 60 runtime meshes, 145-3149 ms observed warm/cold local load range, 60 fps, 17.0-18.0 ms p95 sample, selection self-test 5/5, uncaught runtime error counter 0; developer console not directly inspected.",
-      "motion": "Fresh Safari stowed and combined 36-degree lift / 60-percent extension / 45-degree swing / 20-degree front-steer poses; stow, platform leveling, two-anchor cylinder relationship, keyboard focus, and reduced-motion snapping visually reviewed.",
-      "selection": "Runtime individual-ray self-test reports 5/5 at stowed and reduced-motion working poses. This is not direct end-user ray arbitration across every pose, so selection_volumes_pass remains false.",
-      "silhouette_scope": "Stowed and working poses compared with current JLG gallery assets 140381, 139098, and 138896. Stowed baseline reviewed; working-pose pass withheld because 0.90 m presentation telescope cap does not represent full machine outreach and fixed-camera paired overlays remain pending. Exact 390 x 844 layout reviewed."
+      "browser": "Fresh Safari 2026-08-25: runtime 1.0.1 with exact 858415279e5d GLB; 60 runtime meshes, selection self-test 5/5, uncaught runtime error counter 0, and 60 fps in the mobile render profile. Collapsed and expanded controls reviewed at 430 x 932 and 390 x 844 window bounds; developer console not directly inspected.",
+      "motion": "The exact GLB and source hashes are unchanged from the v1.0 mechanical review: stowed and combined 36-degree lift / 60-percent extension / 45-degree swing / 20-degree front-steer poses; stow, platform leveling, two-anchor cylinder relationship, keyboard focus, and reduced-motion snapping were visually reviewed.",
+      "selection": "Runtime individual-ray self-test reports 5/5. This is not direct end-user ray arbitration across every pose, so selection_volumes_pass remains false.",
+      "silhouette_scope": "Stowed and working poses were compared with current JLG gallery assets 140381, 139098, and 138896. Stowed baseline reviewed; working-pose pass withheld because the 0.90 m presentation telescope cap does not represent full machine outreach and fixed-camera paired overlays remain pending. Mobile control drawer reviewed collapsed and expanded at 430 x 932 and 390 x 844 window bounds."
     }
   },
   "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions are reconstructed and are not fabrication or service measurements. Internal pivot offsets, boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform rotator geometry remain visually reconstructed or unresolved."

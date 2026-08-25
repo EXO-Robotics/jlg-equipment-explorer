@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import struct
 from pathlib import Path
 from typing import Any
@@ -410,8 +411,9 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
             raise RuntimeError(f"Pinned viewer dependency hash drift: {relative_path}")
 
     package = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
-    if package.get("version") != ASSET_VERSION:
-        raise RuntimeError("package.json release does not match the asset")
+    runtime_version = package.get("version")
+    if not isinstance(runtime_version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", runtime_version):
+        raise RuntimeError("package.json must declare a semantic runtime version")
     index_source = INDEX_PATH.read_text(encoding="utf-8")
     if "cdn.jsdelivr.net" in index_source:
         raise RuntimeError("index.html must use the pinned local Three.js runtime")
@@ -419,13 +421,13 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
         if dependency_path not in index_source:
             raise RuntimeError(f"index.html is missing pinned dependency path: {dependency_path}")
     for asset_name in ("viewer.css", "viewer.js"):
-        if f'{asset_name}?v={ASSET_VERSION}' not in index_source:
-            raise RuntimeError(f"index.html does not cache-key {asset_name} with the release")
+        if f'{asset_name}?v={runtime_version}' not in index_source:
+            raise RuntimeError(f"index.html does not cache-key {asset_name} with runtime {runtime_version}")
     if f'assets/models/600s.glb?v={report["cache_key"]}' not in index_source:
         raise RuntimeError("index.html GLB preload cache key does not match the validated asset")
     viewer_source = VIEWER_PATH.read_text(encoding="utf-8")
-    if f'./assets/models/600s.version.js?v={ASSET_VERSION}' not in viewer_source:
-        raise RuntimeError("viewer.js does not cache-key the asset manifest with the release")
+    if f'./assets/models/600s.version.js?v={runtime_version}' not in viewer_source:
+        raise RuntimeError("viewer.js does not cache-key the asset manifest with the runtime release")
 
 
 def validate(*, require_receipt: bool = True) -> dict[str, Any]:

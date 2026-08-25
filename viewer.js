@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
-import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=1.0.0";
+import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=1.0.1";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -18,6 +18,10 @@ const loaderStatus = document.querySelector("#loader-status");
 const loaderDetail = document.querySelector("#loader-detail");
 const errorPanel = document.querySelector("#error");
 const diagnosticsOutput = document.querySelector("#diagnostics");
+const controlPanel = document.querySelector(".control-panel");
+const controlsBody = document.querySelector("#machine-controls-body");
+const controlsToggle = document.querySelector("#controls-toggle");
+const mobileControlsQuery = window.matchMedia("(max-width: 800px)");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 const runtimeDiagnostics = {
   errors: 0,
@@ -27,6 +31,35 @@ const runtimeDiagnostics = {
 };
 document.body.dataset.renderProfile = renderProfile;
 document.body.dataset.reducedMotion = String(reducedMotion);
+
+function updateMobileControlHeight() {
+  if (!mobileControlsQuery.matches || !controlPanel) {
+    document.documentElement.style.removeProperty("--mobile-controls-height");
+    return;
+  }
+  document.documentElement.style.setProperty("--mobile-controls-height", `${Math.ceil(controlPanel.getBoundingClientRect().height)}px`);
+}
+
+function setMobileControls(open) {
+  const isMobile = mobileControlsQuery.matches;
+  const expanded = isMobile ? open : true;
+  controlsBody.hidden = !expanded;
+  controlsBody.inert = !expanded;
+  controlsToggle.hidden = !isMobile;
+  controlsToggle.setAttribute("aria-expanded", String(expanded));
+  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Adjust machine controls");
+  controlsToggle.textContent = expanded ? "Close" : "Adjust";
+  document.body.classList.toggle("mobile-controls-open", isMobile && expanded);
+  requestAnimationFrame(updateMobileControlHeight);
+}
+
+controlsToggle.addEventListener("click", () => {
+  setMobileControls(controlsToggle.getAttribute("aria-expanded") !== "true");
+});
+const handleMobileControlsChange = () => setMobileControls(false);
+if (mobileControlsQuery.addEventListener) mobileControlsQuery.addEventListener("change", handleMobileControlsChange);
+else mobileControlsQuery.addListener(handleMobileControlsChange);
+setMobileControls(false);
 
 function recordRuntimeError() {
   runtimeDiagnostics.errors += 1;
@@ -1081,6 +1114,7 @@ addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setPixelRatio(pixelRatio());
   renderer.setSize(innerWidth, innerHeight);
+  updateMobileControlHeight();
 });
 
 const clock = new THREE.Clock();

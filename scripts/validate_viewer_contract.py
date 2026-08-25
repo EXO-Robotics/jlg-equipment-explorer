@@ -13,6 +13,7 @@ INDEX_PATH = PROJECT_ROOT / "index.html"
 STYLE_PATH = PROJECT_ROOT / "viewer.css"
 VIEWER_PATH = PROJECT_ROOT / "viewer.js"
 VERSION_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
+PACKAGE_PATH = PROJECT_ROOT / "package.json"
 
 
 def require_tokens(source: str, tokens: list[str], contract: str) -> None:
@@ -30,11 +31,16 @@ def main() -> None:
     if not version_match:
         raise RuntimeError("Cannot read showcase release from version module")
     release = version_match.group(1)
+    runtime_release = json.loads(PACKAGE_PATH.read_text(encoding="utf-8")).get("version")
+    if not isinstance(runtime_release, str):
+        raise RuntimeError("Cannot read runtime release from package.json")
 
     require_tokens(index, [
         'id="app" role="application" tabindex="0"',
         'aria-describedby="viewer-instructions"',
         'id="motion-status" aria-live="polite" aria-atomic="true"',
+        'id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false"',
+        'class="controls-body" id="machine-controls-body"',
         'id="motion-boundary"',
         'id="diagnostics" hidden aria-live="polite"',
         'id="inspector" role="dialog" aria-modal="true"',
@@ -46,8 +52,8 @@ def main() -> None:
     if index.count('aria-describedby="motion-boundary"') != 4:
         raise RuntimeError("Every motion range must reference the presentation-only boundary")
     for asset in ("viewer.css", "viewer.js"):
-        if f'{asset}?v={release}' not in index:
-            raise RuntimeError(f"{asset} cache key does not match release {release}")
+        if f'{asset}?v={runtime_release}' not in index:
+            raise RuntimeError(f"{asset} cache key does not match runtime release {runtime_release}")
     if re.search(r"(?:src|href)=[\"']https?://", index, flags=re.IGNORECASE):
         raise RuntimeError("Viewer startup must not depend on remote script or stylesheet assets")
 
@@ -58,6 +64,8 @@ def main() -> None:
         "@media (forced-colors: active)",
         ".diagnostics",
         ".sr-only",
+        "--mobile-controls-height",
+        "body.mobile-controls-open .panel-heading",
     ], "CSS accessibility")
 
     require_tokens(viewer, [
@@ -84,11 +92,16 @@ def main() -> None:
         "not_manufacturer_artwork",
         "frameP95Ms",
         "document.hidden",
+        "setMobileControls(false)",
+        'controlsBody.inert = !expanded',
+        '"--mobile-controls-height"',
     ], "viewer runtime")
 
     print(json.dumps({
         "status": "PASS",
         "release": release,
+        "runtime_release": runtime_release,
+        "mobile_controls_default": "collapsed",
         "keyboard_components": 4,
         "motion_ranges_described": 4,
         "selection_volumes_self_tested": 5,
