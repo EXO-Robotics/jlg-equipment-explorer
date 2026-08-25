@@ -1,10 +1,10 @@
 {
   "asset": "assets/models/600s.glb",
   "status": "PENDING_ASSET",
-  "release": "1.0.0",
+  "release": "1.1.0",
   "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
-  "source_blend": "source/blender/600s-showcase-v1.0.blend",
+  "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
   "exported_at": null,
@@ -20,10 +20,10 @@
   "tailswing_m": 1.22,
   "platform_envelope_m": [0.91, 2.44],
   "telescope_travel_m": 0.9,
-  "telescope_overlap_at_100_m": 0.667,
+  "telescope_overlap_at_100_m": 1.207,
   "triangle_count": null,
   "node_count": null,
-  "required_parent_edges": 62,
+  "required_parent_edges": 100,
   "interaction_volumes": [
     "Chassis_Hit",
     "Turntable_Hit",
@@ -54,5 +54,5 @@
       "silhouette_scope": null
     }
   },
-  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions are reconstructed and are not fabrication or service measurements. Internal pivot offsets, boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform rotator geometry remain visually reconstructed or unresolved."
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
 }

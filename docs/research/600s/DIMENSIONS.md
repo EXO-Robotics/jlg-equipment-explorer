@@ -52,7 +52,7 @@ Derived values are reproducible calculations from the R02 published dimensions. 
 | Platform length / machine width | 0.984 | 2.44 / 2.48 |
 | Ground clearance / machine height | 0.116 | 0.29 / 2.50 |
 
-The current parts/service pages now support the assembly relationships below, but do not dimension them. The v1.0 model therefore records their implemented values as `reconstructed`, not as additional derived or manufacturer dimensions:
+The current parts/service pages now support the assembly relationships below, but do not dimension them. The v1.1 model therefore records their implemented values as `reconstructed`, not as additional derived or manufacturer dimensions:
 
 - turntable pivot offset from the axle centers
 - counterweight radius and compound profile (bounded by published tailswing)
@@ -60,6 +60,11 @@ The current parts/service pages now support the assembly relationships below, bu
 - main-boom and nested-section visible lengths
 - platform-pivot offset
 - lift-cylinder lower and upper anchor coordinates
+- 0.36 m MidBoom and 0.54 m FlyBoom visual stage split within the 0.90 m cap
+- steering-cylinder and tie-rod anchor coordinates
+- tower-link and tension-link pivot coordinates
+- platform-level cylinder and rotator-pin coordinates
+- powertrack display-link count, pitch, and attachment coordinates
 
 ## Visual approximations
 

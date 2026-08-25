@@ -74,6 +74,7 @@ def main() -> None:
         'window.addEventListener("unhandledrejection", recordRuntimeError)',
         "runSelectionVolumeSelfTest",
         'dataset.selectionSelftest = result',
+        'dataset.lastSelectionVolume = hit.object.name',
         "prepareHitVolumes",
         "updateHitVolumeEmphasis",
         'focusKeys = { "1": "chassis", "2": "turntable", "3": "boom", "4": "platform" }',

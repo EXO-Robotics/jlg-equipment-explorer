@@ -1,6 +1,6 @@
 # JLG Equipment Explorer
 
-A static Three.js showcase for an unofficial, educational product visualization of access equipment. Version 1.0 loads an owned, evidence-bounded Blender reconstruction of the current-generation 600S as the primary machine and keeps a procedural model only as a degraded fixture.
+A static Three.js showcase for an unofficial, educational product visualization of access equipment. Version 1.1 loads an owned, evidence-bounded Blender reconstruction of the current-generation 600S as the primary machine and keeps a procedural model only as a degraded fixture.
 
 ## Run locally
 
@@ -10,7 +10,7 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=1.0.1`.
+Then open `http://localhost:8080/?v=1.1.2`.
 
 The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
 
@@ -32,8 +32,10 @@ Validate the current GLB, source, receipt, release identity, and cache manifest 
 - A documented, local-only official Blender MCP setup
 - An owned Blender detailed reconstruction loaded as the primary `600s.glb`
 - PVC 2607 configuration identity frozen as `600S-PVC2607-US-B3-2WS-D29-FF-RRP3696`
-- Detailed B3 enclosure, chassis, four-wheel 4WD/2WS running gear, three-section boom, powertrack, platform controls, SkyGuard, and evidence-bounded lift-cylinder solver
-- Independent GLB and procedural motion profiles, platform leveling, and nested telescope travel
+- Detailed B3 enclosure, chassis, four-wheel 4WD/2WS running gear, three-section boom, staged powertrack, platform controls, SkyGuard, and evidence-bounded linkage solvers
+- Separate coupled MidBoom/FlyBoom transforms, moving steering cylinders/tie rod, tower/tension links, starting-angle platform leveling, and positive nested overlap through the visual travel cap
+- Distinct hydraulic-hose, electrical-loom, control-cable, telescope-wire-rope, and powertrack-carrier material identities
+- A hash-bound mechanism evidence pack with page-level current-PVC claims and explicit cross-PVC quarantine
 - Research and source-ledger templates that separate verified public facts from working assumptions
 
 ## Project structure
@@ -76,4 +78,4 @@ Three.js runtime and third-party ownership boundaries.
 
 ## Current acceptance gate
 
-The v1.0 mechanical, hierarchy, provenance, and static viewer contracts pass. Browser review remains a separate gate: verify the real GLB on desktop and mobile, exercise motion and keyboard access, inspect the five-volume self-test and error counter, then record only the visual comparisons actually observed. Fabrication dimensions and safety/service simulation remain out of scope.
+The v1.1 mechanical, hierarchy, provenance, and static viewer contracts pass. A fresh desktop browser run loaded the exact v1.1 GLB, exercised all four motion controls, passed the five-volume self-test, and recorded zero runtime errors. Mobile layout and fixed-camera source overlays remain separate visual gates. Fabrication dimensions and safety/service simulation remain out of scope.

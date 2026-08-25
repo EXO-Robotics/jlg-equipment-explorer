@@ -15,7 +15,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GLB_PATH = PROJECT_ROOT / "assets/models/600s.glb"
-BLEND_PATH = PROJECT_ROOT / "source/blender/600s-showcase-v1.0.blend"
+BLEND_PATH = PROJECT_ROOT / "source/blender/600s-showcase-v1.1.blend"
 CONFIGURATION_PATH = PROJECT_ROOT / "assets/models/600s.configuration.json"
 RECEIPT_PATH = PROJECT_ROOT / "assets/models/600s.asset-receipt.json"
 RECEIPT_TEMPLATE_PATH = PROJECT_ROOT / "assets/models/600s.asset-receipt.template.json"
@@ -38,7 +38,7 @@ RUNTIME_FILES = (
     *(PROJECT_ROOT / relative_path for relative_path in VENDOR_HASHES if relative_path != "vendor/three-r160/LICENSE"),
 )
 
-ASSET_VERSION = "1.0.0"
+ASSET_VERSION = "1.1.0"
 CONFIGURATION_ID = "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696"
 PUBLISHED_ENVELOPE_M = (8.71, 2.48, 2.50)  # length, width, height
 PLATFORM_ENVELOPE_M = (0.91, 2.44)
@@ -46,6 +46,8 @@ WHEELBASE_M = 2.50
 GROUND_CLEARANCE_M = 0.29
 TAILSWING_M = 1.22
 TELESCOPE_TRAVEL_M = 0.90
+TELESCOPE_MID_TRAVEL_M = 0.36
+TELESCOPE_FLY_TRAVEL_M = 0.54
 TRIANGLE_BUDGET = 60_000
 ENVELOPE_TOLERANCE_M = 0.002
 HASH_PREFIX_LEN = 12
@@ -60,70 +62,7 @@ REVIEW_FLAGS = (
     "provenance_reviewed",
 )
 
-EXPECTED_PARENTS = {
-    "Chassis": "600S_ROOT",
-    "Frame": "Chassis",
-    "AxleFront": "Chassis",
-    "AxleRear": "Chassis",
-    "Wheel_FL": "Chassis",
-    "Wheel_FR": "Chassis",
-    "Wheel_RL": "Chassis",
-    "Wheel_RR": "Chassis",
-    "SteerHydraulicHose_L": "Chassis",
-    "SteerHydraulicHose_R": "Chassis",
-    "ChassisDriveHarness_L": "Chassis",
-    "ChassisDriveHarness_R": "Chassis",
-    "TurntablePivot": "600S_ROOT",
-    "Turntable": "TurntablePivot",
-    "SlewRing": "Turntable",
-    "UpperFrame": "Turntable",
-    "EngineCover": "Turntable",
-    "TankCover": "Turntable",
-    "Counterweight": "Turntable",
-    "Controls": "Turntable",
-    "MainValveBank": "Turntable",
-    "EngineControlModule": "Turntable",
-    "GroundControlHarness": "Turntable",
-    "EngineHarness": "Turntable",
-    "BoomPivot": "Turntable",
-    "MainBoom": "BoomPivot",
-    "Telescope": "MainBoom",
-    "MidBoom": "Telescope",
-    "FlyBoom": "MidBoom",
-    "PlatformPivot": "FlyBoom",
-    "Platform": "PlatformPivot",
-    "LiftCylinder": "Turntable",
-    "LiftCylinderLowerAnchor": "Turntable",
-    "LiftCylinderUpperAnchor": "MainBoom",
-    "LiftCylinderBarrel": "LiftCylinder",
-    "LiftCylinderRod": "LiftCylinder",
-    "LiftCylinderBasePin": "LiftCylinder",
-    "LiftCylinderRodPin": "LiftCylinder",
-    "LiftCylinderHose_A": "LiftCylinder",
-    "LiftCylinderHose_B": "LiftCylinder",
-    "BoomHydraulicBundle_L": "MainBoom",
-    "BoomHydraulicBundle_R": "MainBoom",
-    "BoomSensorLower": "MainBoom",
-    "BoomSensorUpper": "MidBoom",
-    "TeleProximitySensor": "FlyBoom",
-    "BoomCableUpper": "MainBoom",
-    "PlatformHarness": "FlyBoom",
-    "TowerLinkLower": "BoomPivot",
-    "TowerLinkUpper": "BoomPivot",
-    "Powertrack": "MainBoom",
-    "PlatformRotator": "PlatformPivot",
-    "PlatformSwingGate": "Platform",
-    "PlatformConsole": "Platform",
-    "PlatformFootswitch": "Platform",
-    "PlatformRotatorHose_A": "PlatformPivot",
-    "PlatformRotatorHose_B": "PlatformPivot",
-    "FootswitchHarness": "Platform",
-    "Chassis_Hit": "Chassis",
-    "Turntable_Hit": "Turntable",
-    "Boom_Hit": "MainBoom",
-    "Telescope_Hit": "Telescope",
-    "Platform_Hit": "Platform",
-}
+EXPECTED_PARENTS = json.loads(CONFIGURATION_PATH.read_text(encoding="utf-8"))["required_parent_edges"]
 
 HIT_VOLUMES = ("Chassis_Hit", "Turntable_Hit", "Boom_Hit", "Telescope_Hit", "Platform_Hit")
 IDENTITY_CHAIN = ("MainBoom", "Telescope", "MidBoom", "FlyBoom", "PlatformPivot", "Platform")
@@ -155,6 +94,8 @@ def version_js_text(cache_key: str) -> str:
     return (
         f"export const SHOWCASE_RELEASE = {ASSET_VERSION!r};\n"
         f"export const TELESCOPE_TRAVEL_M = {TELESCOPE_TRAVEL_M!r};\n"
+        f"export const TELESCOPE_MID_TRAVEL_M = {TELESCOPE_MID_TRAVEL_M!r};\n"
+        f"export const TELESCOPE_FLY_TRAVEL_M = {TELESCOPE_FLY_TRAVEL_M!r};\n"
         f"export const GLB_URL = {'assets/models/600s.glb?v=' + cache_key!r};\n"
     )
 
@@ -363,7 +304,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     for key, expected in expected_values.items():
         require_equal(receipt.get(key), expected, key)
     review = receipt.get("review") or {}
-    expected_status = "SHOWCASE_V1_0_ACCEPTED" if all(review.get(flag) is True for flag in REVIEW_FLAGS) else "SHOWCASE_V1_0_MECHANICAL_PASS"
+    expected_status = "SHOWCASE_V1_1_ACCEPTED" if all(review.get(flag) is True for flag in REVIEW_FLAGS) else "SHOWCASE_V1_1_MECHANICAL_PASS"
     require_equal(receipt.get("status"), expected_status, "status")
     for key in ("visible_envelope_m", "platform_envelope_m"):
         require_close_list(receipt.get(key), report[key], key)
@@ -393,7 +334,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     require_equal(receipt.get("evidence_boundary"), template.get("evidence_boundary"), "evidence_boundary")
     if not isinstance(receipt.get("exported_at"), str) or not receipt["exported_at"].endswith("Z"):
         raise RuntimeError("Receipt exported_at must be a UTC timestamp")
-    if expected_status == "SHOWCASE_V1_0_ACCEPTED":
+    if expected_status == "SHOWCASE_V1_1_ACCEPTED":
         evidence = review.get("evidence") or {}
         for key in template["review"]["evidence"]:
             if not isinstance(evidence.get(key), str) or not evidence[key].strip():
@@ -453,10 +394,10 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     scenes = document.get("scenes") or []
     if len(scenes) != 1:
         raise RuntimeError(f"Expected one export scene, found {len(scenes)}: {[scene.get('name') for scene in scenes]}")
-    if scenes[0].get("name") != "JLG_600S_SHOWCASE_V10":
+    if scenes[0].get("name") != "JLG_600S_SHOWCASE_V11":
         raise RuntimeError(f"Showcase scene identity drift: {scenes[0].get('name')!r}")
     scene_extras = scenes[0].get("extras") or {}
-    if scene_extras.get("asset") != "600S Showcase reconstruction v1.0":
+    if scene_extras.get("asset") != "600S Showcase reconstruction v1.1":
         raise RuntimeError(f"Showcase scene asset label drift: {scene_extras.get('asset')!r}")
     if scene_extras.get("asset_version") != ASSET_VERSION:
         raise RuntimeError("Showcase scene release metadata drift")
@@ -509,6 +450,12 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     travel = extras.get("telescope_travel_m", TELESCOPE_TRAVEL_M)
     if not close(float(travel), TELESCOPE_TRAVEL_M, 0.001):
         raise RuntimeError(f"Unexpected telescope_travel_m extra: {travel}")
+    if not close(float(extras.get("telescope_mid_travel_m", float("nan"))), TELESCOPE_MID_TRAVEL_M, 0.001):
+        raise RuntimeError("Root is missing the visual MidBoom travel contract")
+    if not close(float(extras.get("telescope_fly_travel_m", float("nan"))), TELESCOPE_FLY_TRAVEL_M, 0.001):
+        raise RuntimeError("Root is missing the visual FlyBoom travel contract")
+    if extras.get("telescope_staging") != "evidence_bounded_coupled_visual":
+        raise RuntimeError("Root is missing the coupled telescope evidence boundary")
     if extras.get("platform_leveling") != "counter_rotate_local_z":
         raise RuntimeError("Root is missing platform_leveling extra")
     if not close(float(extras.get("ground_clearance_m", float("nan"))), GROUND_CLEARANCE_M):
@@ -531,6 +478,27 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
             raise RuntimeError(f"{anchor_name} must be a non-rendering transform node")
         if parents.get(by_name[anchor_name]) != by_name[parent_name]:
             raise RuntimeError(f"{anchor_name} must be parented to {parent_name}")
+
+    visual_solvers = {
+        "TowerLink": "two_anchor_visual_link",
+        "TensionLink": "two_anchor_visual_link",
+        "SteerTieRod": "two_anchor_visual_link",
+        "SteerCylinder_L": "two_anchor_visual_cylinder",
+        "SteerCylinder_R": "two_anchor_visual_cylinder",
+        "PlatformLevelCylinder": "two_anchor_visual_cylinder",
+    }
+    for solver_name, solver_kind in visual_solvers.items():
+        solver = nodes[by_name[solver_name]]
+        if "mesh" in solver or (solver.get("extras") or {}).get("runtime_solver") != solver_kind:
+            raise RuntimeError(f"{solver_name} must be an empty {solver_kind} group")
+
+    materials = {material.get("name") for material in document.get("materials", [])}
+    required_system_materials = {
+        "JLG_Hydraulic_Black", "JLG_Electrical_Loom", "JLG_Control_Cable",
+        "JLG_Wire_Rope", "JLG_Powertrack_Carrier",
+    }
+    if not required_system_materials.issubset(materials):
+        raise RuntimeError(f"Visible-system material taxonomy drift: {sorted(required_system_materials - materials)}")
 
     triangle_count = 0
     for mesh in document.get("meshes", []):
@@ -564,11 +532,18 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         raise RuntimeError(f"Platform envelope drift: {platform_size}")
 
     main_min, main_max = mesh_world_aabb(document, blob, nodes, parents, by_name["BaseBoomShell"])
-    tel_min, tel_max = mesh_world_aabb(document, blob, nodes, parents, by_name["MidBoomShell"])
-    overlap_stowed = main_max[0] - tel_min[0]
-    overlap_100 = main_max[0] - (tel_min[0] + TELESCOPE_TRAVEL_M)
+    mid_min, mid_max = mesh_world_aabb(document, blob, nodes, parents, by_name["MidBoomShell"])
+    fly_min, _ = mesh_world_aabb(document, blob, nodes, parents, by_name["FlyBoomShell"])
+    overlap_stowed = main_max[0] - mid_min[0]
+    mid_overlap_100 = main_max[0] - (mid_min[0] + TELESCOPE_MID_TRAVEL_M)
+    fly_overlap_stowed = mid_max[0] - fly_min[0]
+    fly_overlap_100 = fly_overlap_stowed - TELESCOPE_FLY_TRAVEL_M
+    overlap_100 = min(mid_overlap_100, fly_overlap_100)
     if overlap_100 <= 0.001:
-        raise RuntimeError(f"Telescope separates at 100% travel: overlap {overlap_100:.4f} m")
+        raise RuntimeError(
+            f"Coupled telescope separates at 100% travel: mid={mid_overlap_100:.4f}, "
+            f"fly={fly_overlap_100:.4f}"
+        )
 
     frame_min, _ = mesh_world_aabb(document, blob, nodes, parents, by_name["Frame"])
     belly_min, _ = mesh_world_aabb(document, blob, nodes, parents, by_name["BellyPan"])
@@ -615,6 +590,10 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         "telescope_travel_m": TELESCOPE_TRAVEL_M,
         "telescope_overlap_stowed_m": round(overlap_stowed, 4),
         "telescope_overlap_at_100_m": round(overlap_100, 4),
+        "telescope_mid_travel_m": TELESCOPE_MID_TRAVEL_M,
+        "telescope_fly_travel_m": TELESCOPE_FLY_TRAVEL_M,
+        "telescope_mid_overlap_at_100_m": round(mid_overlap_100, 4),
+        "telescope_fly_overlap_at_100_m": round(fly_overlap_100, 4),
         "units": "meters",
         "root_node": "600S_ROOT",
     }

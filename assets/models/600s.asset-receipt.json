@@ -1,17 +1,17 @@
 {
   "asset": "assets/models/600s.glb",
-  "status": "SHOWCASE_V1_0_MECHANICAL_PASS",
-  "release": "1.0.0",
+  "status": "SHOWCASE_V1_1_MECHANICAL_PASS",
+  "release": "1.1.0",
   "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
-  "source_blend": "source/blender/600s-showcase-v1.0.blend",
+  "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T16:46:16Z",
-  "sha256": "858415279e5d9e93e941474905465bc0def19b81239abd0d4b7e90e26f488ca1",
-  "source_blend_sha256": "02d2ccefd2171c1f2130f234ab988b6f7648d684c609bd8017c3fd082bbbbcd3",
-  "cache_key": "858415279e5d",
-  "runtime_sha256": "44f47c2c866207f710fd103f550bd9f1c197976b6aae190b0cf2e71a32ef59ca",
+  "exported_at": "2026-08-25T18:33:00Z",
+  "sha256": "81e886f5f1df2f85d780d8b36c45f81b49daba5f777edbcdf39fac47cc00e76f",
+  "source_blend_sha256": "2209b7312a6a5a03f1c7befe2a544d3439741d946b4a13c737991673c51f103e",
+  "cache_key": "81e886f5f1df",
+  "runtime_sha256": "4f2867ca46738868018eb233b33cec0a8e23aa652c2171421f6982c5e45207ec",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -27,10 +27,10 @@
     2.44
   ],
   "telescope_travel_m": 0.9,
-  "telescope_overlap_at_100_m": 0.667,
-  "triangle_count": 18172,
-  "node_count": 359,
-  "required_parent_edges": 62,
+  "telescope_overlap_at_100_m": 1.207,
+  "triangle_count": 23128,
+  "node_count": 453,
+  "required_parent_edges": 100,
   "interaction_volumes": [
     "Chassis_Hit",
     "Turntable_Hit",
@@ -40,8 +40,8 @@
   ],
   "mechanical_validation": {
     "status": "PASS",
-    "bytes": 915664,
-    "mesh_count": 325,
+    "bytes": 1165004,
+    "mesh_count": 398,
     "visible_bounds_min_m": [
       -2.9093,
       -0.0,
@@ -55,19 +55,19 @@
     "telescope_overlap_stowed_m": 1.567
   },
   "review": {
-    "loads_without_console_error": false,
-    "articulation_pivots_pass": true,
-    "selection_volumes_pass": false,
+    "loads_without_console_error": true,
+    "articulation_pivots_pass": false,
+    "selection_volumes_pass": true,
     "stowed_silhouette_reviewed": true,
     "working_pose_silhouette_pass": false,
-    "mobile_view_reviewed": true,
+    "mobile_view_reviewed": false,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Fresh Safari 2026-08-25: runtime 1.0.1 with exact 858415279e5d GLB; 60 runtime meshes, selection self-test 5/5, uncaught runtime error counter 0, and 60 fps in the mobile render profile. Collapsed and expanded controls reviewed at 430 x 932 and 390 x 844 window bounds; developer console not directly inspected.",
-      "motion": "The exact GLB and source hashes are unchanged from the v1.0 mechanical review: stowed and combined 36-degree lift / 60-percent extension / 45-degree swing / 20-degree front-steer poses; stow, platform leveling, two-anchor cylinder relationship, keyboard focus, and reduced-motion snapping were visually reviewed.",
-      "selection": "Runtime individual-ray self-test reports 5/5. This is not direct end-user ray arbitration across every pose, so selection_volumes_pass remains false.",
-      "silhouette_scope": "Stowed and working poses were compared with current JLG gallery assets 140381, 139098, and 138896. Stowed baseline reviewed; working-pose pass withheld because the 0.90 m presentation telescope cap does not represent full machine outreach and fixed-camera paired overlays remain pending. Mobile control drawer reviewed collapsed and expanded at 430 x 932 and 390 x 844 window bounds."
+      "browser": "Fresh local in-app browser 2026-08-25: exact 81e886f5f1df GLB loaded as blender-showcase-v1.1.0 with 82 optimized visible meshes and zero warning/error logs.",
+      "motion": null,
+      "selection": "Five-volume runtime selection self-test passed on exact 81e886f5f1df GLB.",
+      "silhouette_scope": "Fresh Blender side-profile review and local runtime chassis focus confirmed the supplied reference silhouette: sculpted orange front pod, compact center bridge, exposed rear axle structure, and open space below the turntable. Working-pose and mobile reviews remain open."
     }
   },
-  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions are reconstructed and are not fabrication or service measurements. Internal pivot offsets, boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform rotator geometry remain visually reconstructed or unresolved."
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
 }

@@ -31,10 +31,11 @@ The web viewer should depend on a small, stable node hierarchy rather than Blend
             │                       ├── PlatformSwingGate
             │                       ├── PlatformConsole
             │                       └── PlatformFootswitch
-            ├── TowerLinkLower
-            └── TowerLinkUpper
+            ├── TowerLink
+            └── TensionLink
 
-Turntable also owns the evidence-bounded `LiftCylinder` assembly so the viewer can
+Turntable also owns the evidence-bounded `LiftCylinder`, `TowerLink`, and
+`TensionLink` visual-solver assemblies so the viewer can
 solve it between a turntable-side lower anchor and boom-side upper anchor as the
 boom moves. A rigid cylinder parented to the moving boom is not acceptable for the
 detailed release.
@@ -46,9 +47,13 @@ Optional visible nodes may be added freely. Animation code must only require the
 
 - `TurntablePivot`: local origin at the center of the slew bearing; local Y is the swing axis.
 - `BoomPivot`: local origin at the physical boom hinge; local Z is the lift axis.
-- `Telescope`: local X points from the boom pivot toward the platform; extension is positive X. It is the motion group for the nested `MidBoom` and `FlyBoom` reconstruction.
+- `Telescope`: stable UI/controller boundary. `MidBoom` and `FlyBoom` each translate
+  in positive local X under one evidence-bounded coupled visual control. The
+  exported split is presentation-only and must not be labeled as a factory ratio.
 - Front wheel nodes: local Y is the steering axis.
-- `PlatformPivot`: local origin is the platform-leveling/rotation center; the viewer counter-rotates local Z against boom lift.
+- `PlatformPivot`: local origin is the reconstructed platform-leveling/rotation
+  center; the viewer preserves the operator-set starting angle and solves a
+  visible `PlatformLevelCylinder`. This is not gravity auto-leveling.
 - `Platform`: remains a distinct child of `PlatformPivot`. Platform rotation about the rotator axis is still deferred.
 
 ## Interaction volumes
@@ -64,8 +69,8 @@ Platform_Hit
 ```
 
 Hit meshes should be boxes or low-segment capsules, should follow the articulated parent they represent, and should remain independent of material or topology changes in the visible model.
-`Telescope_Hit` maps to the viewer's `boom` component while following the
-independently translating `Telescope` node.
+`Telescope_Hit` maps to the viewer's `boom` component while following `FlyBoom`,
+the furthest independently translating telescope stage.
 
 ## Units and transforms
 
@@ -102,3 +107,11 @@ independently translating `Telescope` node.
 12. `LiftCylinder` must use the evidence-bounded two-anchor visual solver. Its exported lower and upper anchors are visually reconstructed, not fabrication measurements, and false fixed-to-boom cylinder motion is not acceptable.
 13. Keyboard orbit, zoom, component focus, reset, dialog focus restoration, and reduced-motion snapping remain functional with the real GLB.
 14. Runtime diagnostics identify the actual model source, self-test all five hit volumes, count uncaught runtime errors, and sample frame pacing without presenting the result as engineering validation.
+15. `MidBoom` and `FlyBoom` receive independent positive-X transforms under the
+    single telescope control; both retain positive overlap at 100% visual travel.
+16. `TowerLink`, `TensionLink`, both steer cylinders, `SteerTieRod`, and
+    `PlatformLevelCylinder` resolve as empty two-anchor visual-solver groups.
+17. Electrical loom, control cable, telescope wire rope, hydraulic hose, and
+    powertrack carrier resolve as distinct material identities.
+18. Any displayed powertrack link count is presentation sampling, not a physical
+    link-count claim.

@@ -83,6 +83,39 @@ Current catalog entries that must remain quarantined from PVC 2607 geometry unti
 | Service | 3122560400 | 2601 | 2026-06-30 | different PVC |
 | Operation | 3122560300 | 2601 | 2026-01-12 | different PVC |
 
+Locally inspected, uncommitted standalone schematic identities:
+
+| Type | Publication | Pages | Retrieved-file SHA-256 | Permitted use |
+|---|---:|---:|---|---|
+| Hydraulic | 3122588600 | 7 | `ba0101934d194ef2141945bc7f1c7703a1ac7915c1260a987e1e68e6ca42d18e` | provisional circuit and component taxonomy only |
+| Electrical | 3122586300 | 13 | `4fffbb392e2adfb0ea9728e244d6e6106d103472b87c53c86ae77ac307e998ff` | provisional harness and system taxonomy only |
+
+The hashes and authority rules are machine checked by `SOURCE_MANIFEST.json` and
+`MECHANISM_EVIDENCE.json`. Signed catalog download URLs are intentionally excluded
+from Git; they are transient delivery links, not stable source identifiers.
+
+## Current mechanism corrections
+
+- PVC 2607 parts pages 542-543 identify telescope cylinder `1001309294`, base
+  weldment `1001176208`, mid weldment `1001176212`, and fly weldment
+  `1001265639`, together with current extend/retract ropes and sheaves.
+- Service pages 51-52 establish coupled rope behavior but do not publish an exact
+  Mid-to-Fly transform ratio or current physical telescope stroke.
+- Service pages 643-645 establish a folded powertrack carrier, push tube, support,
+  wear pad, and mixed hydraulic/electrical contents. They do not establish a
+  frozen-B3 link count, pitch, or deployed length.
+- Parts pages 28-29 establish the no-tow 2WS topology: two steer cylinders
+  (`1001181792`), one tie rod (`1001181793`), knuckles (`1001263271`), and
+  kingpins. Anchor coordinates and stroke remain unresolved.
+- Service pages 36 and 656-658 establish electronic starting-angle retention,
+  the platform-angle sensor/pin relationship, and the leveling-cylinder/rotator
+  linkage. This is not automatic leveling to gravity.
+
+Two frequently repeated legacy claims are explicitly rejected as current-PVC
+geometry authority: cylinder `1683618` with 18.8/32.8 ft lengths, and powertrack
+`1001099832` with a 228 in/57-link description. Neither may drive the current
+model without a new applicability record.
+
 ### R04 - Serial-bound legacy JLG operation manual
 
 - Owner: JLG Industries, Inc.

@@ -1,0 +1,380 @@
+{
+  "schema_version": "1.0.0",
+  "target_configuration": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
+  "evidence_freeze_date": "2026-08-25",
+  "authority_order": [
+    "3131050-R0626_04-current-specification",
+    "3122579800-PVC2607-parts",
+    "3122579700-PVC2607-service",
+    "3122579600-PVC2607-operation",
+    "official-current-JLG-gallery-and-part-pages",
+    "PVC2601-schematics-taxonomy-only",
+    "legacy-or-secondary-visual-comparison-only"
+  ],
+  "claim_fields": {
+    "evidence_type": ["dimensional", "topological", "functional", "visual"],
+    "authority": ["verified-current", "provisional-cross-pvc", "reconstructed", "deferred"],
+    "geometry_use": ["published-dimension", "topology-only", "visual-shape-only", "prohibited"],
+    "confidence": ["high", "medium", "low"]
+  },
+  "systems": [
+    {
+      "id": "boom-nesting-and-telescope",
+      "implementation_gate": "admitted",
+      "claims": [
+        {
+          "id": "TEL-001",
+          "statement": "The current 600S boom has distinct Base Boom, Mid Boom, and Fly Boom sections.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [641],
+          "components": ["BaseBoom", "MidBoom", "FlyBoom"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "TEL-002",
+          "statement": "The current boom assembly is 1001180883 and contains base 1001176208, mid 1001176212, and fly 1001265639 weldments.",
+          "source": "3122579800",
+          "pvc": "2607",
+          "pages": [542, 543],
+          "components": ["BaseBoom", "MidBoom", "FlyBoom"],
+          "part_numbers": ["1001180883", "1001176208", "1001176212", "1001265639"],
+          "evidence_type": ["topological"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "TEL-003",
+          "statement": "The current telescope assembly uses cylinder 1001309294 with extend and retract wire ropes and sheaves; the fly section may lag if ropes are loose.",
+          "source": "3122579800+3122579700",
+          "pvc": "2607",
+          "pages": [51, 52, 540, 542, 543],
+          "components": ["TelescopeCylinder", "ExtendWireRope", "RetractWireRope", "ExtendSheave", "RetractSheave"],
+          "part_numbers": ["1001309294", "1001175998", "1001307698", "1001308335", "1001184913", "3580243", "1001191048"],
+          "evidence_type": ["topological", "functional"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "TEL-004",
+          "statement": "The exact current physical stroke, section overlap, and Mid-to-Fly transform ratio are not published in the admitted evidence.",
+          "source": "evidence-gap",
+          "pvc": "2607",
+          "pages": [],
+          "components": ["MidBoom", "FlyBoom"],
+          "part_numbers": [],
+          "evidence_type": ["functional"],
+          "authority": "deferred",
+          "geometry_use": "prohibited",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "tower-links-and-lift-cylinder",
+      "implementation_gate": "admitted-with-reconstructed-anchor-coordinates",
+      "claims": [
+        {
+          "id": "LIFT-001",
+          "statement": "The current lift structure has a distinct boom lift cylinder, tower link, and tension link with separate pivots.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [641, 648, 649],
+          "components": ["LiftCylinder", "TowerLink", "TensionLink"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "LIFT-002",
+          "statement": "A boom-angle sensor is concentric with the pin connecting the base boom and tension link.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [36],
+          "components": ["BoomAngleSensor", "BaseBoom", "TensionLink"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "functional"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "LIFT-003",
+          "statement": "Dimensioned current lift-cylinder anchor coordinates, bore, stroke, and force are unresolved; exported anchor positions remain visual reconstruction.",
+          "source": "evidence-gap",
+          "pvc": "2607",
+          "pages": [],
+          "components": ["LiftCylinderLowerAnchor", "LiftCylinderUpperAnchor"],
+          "part_numbers": [],
+          "evidence_type": ["dimensional"],
+          "authority": "reconstructed",
+          "geometry_use": "prohibited",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "powertrack-travel",
+      "implementation_gate": "admitted-generic-carrier-without-unverified-link-count",
+      "claims": [
+        {
+          "id": "PWR-001",
+          "statement": "The current main-boom powertrack contains hydraulic lines and electrical cables and moves through a folded carrier path supported by a push tube, support, wear pad, plates, and clamps.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [643, 644, 645],
+          "components": ["PowertrackCarrier", "PowertrackPushTube", "PowertrackSupport"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "functional", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "PWR-002",
+          "statement": "The push tube attaches to fly- and mid-boom brackets, while the carrier is supported at the base boom.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [643, 644, 645],
+          "components": ["FlyBoom", "MidBoom", "BaseBoom", "PowertrackPushTube"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "functional"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "PWR-003",
+          "statement": "PVC 2607 B3 documentation includes powertrack 1001288406 with more than one clamp-installation branch; the frozen serial/configuration does not establish which clamp branch applies.",
+          "source": "3122579800",
+          "pvc": "2607",
+          "pages": [578, 579, 580, 581, 588, 589],
+          "components": ["PowertrackCarrier"],
+          "part_numbers": ["1001288406", "1001288408", "1001294147", "1001174631"],
+          "evidence_type": ["topological"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "medium"
+        },
+        {
+          "id": "PWR-004",
+          "statement": "Exact link count, deployed length, clamp branch, link pitch, and attachment coordinates remain unresolved for the frozen B3 machine.",
+          "source": "evidence-gap",
+          "pvc": "2607",
+          "pages": [],
+          "components": ["PowertrackCarrier"],
+          "part_numbers": [],
+          "evidence_type": ["dimensional"],
+          "authority": "deferred",
+          "geometry_use": "prohibited",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "front-steering-linkage",
+      "implementation_gate": "admitted-with-reconstructed-anchor-coordinates",
+      "claims": [
+        {
+          "id": "STR-001",
+          "statement": "The frozen no-tow 2WS front installation uses two steering cylinders, one tie rod, front knuckles, and kingpins.",
+          "source": "3122579800",
+          "pvc": "2607",
+          "pages": [28, 29],
+          "components": ["SteerCylinderLeft", "SteerCylinderRight", "SteerTieRod", "WheelKnuckleLeft", "WheelKnuckleRight"],
+          "part_numbers": ["1001181792", "1001181793", "1001263271"],
+          "evidence_type": ["topological", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "STR-002",
+          "statement": "Cylinder and tie-rod ends must follow the moving knuckle pivots rather than remain rigidly attached to the chassis.",
+          "source": "derived-from-STR-001",
+          "pvc": "2607",
+          "pages": [28],
+          "components": ["SteerCylinderLeft", "SteerCylinderRight", "SteerTieRod"],
+          "part_numbers": [],
+          "evidence_type": ["functional"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "STR-003",
+          "statement": "The current steering-cylinder anchor coordinates and stroke are unresolved; PVC 2601 hydraulic values cannot be used as PVC 2607 dimensions.",
+          "source": "evidence-gap+B1-HYDRAULIC",
+          "pvc": "2607-with-cross-pvc-quarantine",
+          "pages": [5],
+          "components": ["SteerCylinderLeft", "SteerCylinderRight"],
+          "part_numbers": [],
+          "evidence_type": ["dimensional"],
+          "authority": "deferred",
+          "geometry_use": "prohibited",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "platform-support-level-and-rotation",
+      "implementation_gate": "admitted-with-reconstructed-anchor-coordinates",
+      "claims": [
+        {
+          "id": "PLT-001",
+          "statement": "The current 600S uses electronic platform leveling that adjusts a leveling cylinder using boom-linkage geometry; it retains the operator-set starting angle rather than auto-leveling to gravity.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [36],
+          "components": ["PlatformLevelCylinder", "BoomAngleSensor", "PlatformAngleSensor"],
+          "part_numbers": [],
+          "evidence_type": ["functional", "topological"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "PLT-002",
+          "statement": "A platform-angle sensor is concentric with the pin between platform rotator and fly boom; the leveling cylinder is housed in the fly boom.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [36, 656, 657, 658],
+          "components": ["PlatformAngleSensor", "PlatformRotator", "FlyBoom", "PlatformLevelCylinder"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "functional", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "PLT-003",
+          "statement": "The leveling-cylinder rod end and rotator share a pin, and the rotator pivots on the fly boom.",
+          "source": "3122579700",
+          "pvc": "2607",
+          "pages": [656, 657, 658],
+          "components": ["PlatformLevelCylinder", "PlatformRotator", "FlyBoom"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "functional"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "PLT-004",
+          "statement": "The B3/C3 rapid-replace support is a shaped weldment/frame with pin and load-cell/support relationships; exact dimensions and pin coordinates remain unresolved.",
+          "source": "3122579800",
+          "pvc": "2607",
+          "pages": [620, 621, 654, 659],
+          "components": ["PlatformSupport", "PlatformLoadCell", "Platform"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "visual-shape-only",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "hydraulic-electrical-and-rope-taxonomy",
+      "implementation_gate": "admitted-taxonomy-separate-materials",
+      "claims": [
+        {
+          "id": "SYS-001",
+          "statement": "Hydraulic hose, electrical loom or harness, boom power/control cable, telescope wire rope, and powertrack carrier are distinct visible system classes and must not share one generic hydraulic material identity.",
+          "source": "3122579800+3122579700+3122586300",
+          "pvc": "2607-with-PVC2601-taxonomy-cross-check",
+          "pages": [37, 542, 543, 643, 645, 898, 992, 994],
+          "components": ["HydraulicHose", "ElectricalLoom", "ControlCable", "WireRope", "PowertrackCarrier"],
+          "part_numbers": [],
+          "evidence_type": ["topological", "functional", "visual"],
+          "authority": "verified-current",
+          "geometry_use": "topology-only",
+          "confidence": "high"
+        },
+        {
+          "id": "SYS-002",
+          "statement": "PVC 2601 schematic identifiers may corroborate system taxonomy but do not establish current PVC 2607 dimensions, anchor points, exact routing, or part applicability.",
+          "source": "3122586300+3122588600",
+          "pvc": "2601",
+          "pages": [1, 5],
+          "components": ["HydraulicCircuit", "ElectricalHarness"],
+          "part_numbers": ["1001238409", "1001188533", "1001189003", "1001238191", "1001238192", "1001189005", "1001315949", "1001316672", "1001299626", "1001205923", "1001233895"],
+          "evidence_type": ["topological", "functional"],
+          "authority": "provisional-cross-pvc",
+          "geometry_use": "prohibited",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "current-generation-material-and-silhouette",
+      "implementation_gate": "admitted-visual-only",
+      "claims": [
+        {
+          "id": "VIS-001",
+          "statement": "Current official gallery imagery shows cream base and mid boom sections with an orange fly section, boom head, rotator/support area, and platform structure.",
+          "source": "JLG-gallery-140381+139098+138896",
+          "pvc": "current-product-page",
+          "pages": [],
+          "components": ["BaseBoomShell", "MidBoomShell", "FlyBoomShell", "BoomHead", "PlatformRotator", "Platform"],
+          "part_numbers": [],
+          "evidence_type": ["visual"],
+          "authority": "verified-current",
+          "geometry_use": "visual-shape-only",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "rejected_or_quarantined_claims": [
+    {
+      "claim": "Cylinder 1683618 with 18.8 ft retracted and 32.8 ft extended length controls the current PVC 2607 telescope geometry.",
+      "status": "rejected-current-applicability",
+      "reason": "PVC 2607 parts publication 3122579800 identifies current telescope cylinder 1001309294; no admitted current source supplies those legacy lengths."
+    },
+    {
+      "claim": "Powertrack 1001099832 is the current PVC 2607 carrier and establishes 228 inches and 57 links.",
+      "status": "rejected-current-applicability",
+      "reason": "The frozen PVC 2607 B3 manuals identify other powertrack assembly branches and do not establish that legacy length or link count."
+    },
+    {
+      "claim": "PVC 2601 hydraulic cylinder dimensions are current PVC 2607 fabrication dimensions.",
+      "status": "quarantined",
+      "reason": "Different PVC; use is limited to provisional circuit taxonomy unless applicability is proven."
+    }
+  ],
+  "implementation_boundaries": {
+    "allowed": [
+      "semantic hierarchy correction",
+      "two-anchor visual linkage solvers",
+      "evidence-bounded coupled telescope presentation",
+      "generic articulated powertrack carrier",
+      "separate visible system materials",
+      "current-gallery color correction"
+    ],
+    "must_be_labeled_reconstructed": [
+      "telescope travel and stage ratio",
+      "lift-cylinder anchors",
+      "tower-link pivot coordinates",
+      "steering anchors and angles",
+      "platform-level cylinder anchors",
+      "powertrack link count, pitch, and attachment coordinates"
+    ],
+    "prohibited_claims": [
+      "engineering drawing",
+      "service procedure simulation",
+      "safe operating envelope",
+      "fabrication dimensions",
+      "hydraulic-force simulation",
+      "serial-exact assembly without serial evidence"
+    ]
+  }
+}

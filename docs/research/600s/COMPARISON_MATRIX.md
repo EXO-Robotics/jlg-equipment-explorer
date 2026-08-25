@@ -39,3 +39,29 @@ The query poses are presentation controls, not manufacturer operating positions.
 - The v1.0 additions improve recognition without crossing authority boundaries: independently typeset nominative marks, a generic independently authored hazard-band cue, restrained per-part finish variation, and visible moving hit-volume outlines.
 
 Because the fixed-camera paired overlay and full-reach reconstruction are not complete, the receipt remains a mechanical pass rather than full visual acceptance.
+
+## v1.1 mechanism-authority pass — 2026-08-25
+
+- Corrected the current telescope identity to cylinder `1001309294` and rejected
+  legacy cylinder `1683618` dimensions as current-PVC geometry authority.
+- Replaced one rigid telescope translation with separate MidBoom and FlyBoom
+  visual transforms while retaining a clearly labeled 0.90 m presentation cap.
+- Replaced static tower-link, steering-cylinder, and tie-rod dressing with moving
+  two-anchor visual linkages; added a visible platform-level cylinder.
+- Rebuilt the powertrack as static, moving, bend, support, and push-tube groups.
+  The displayed link sampling is deliberately not labeled as the physical count.
+- Corrected the current official gallery color read to cream base/mid sections and
+  an orange fly section, boom head, rotator/support area, and platform.
+- Separated hydraulic hose, electrical loom, power/control cable, telescope wire
+  rope, and carrier materials so system identity is no longer hidden by one black
+  hydraulic material.
+
+Fresh local desktop proof loaded GLB hash prefix `d480ff121514`, exercised lift,
+coupled extension, swing, and steering together, passed five of five selection
+volume self-tests, and recorded zero runtime errors. This is runtime proof, not a
+fixed-camera dimensional overlay or mobile acceptance.
+
+Runtime 1.1.2 then directly selected all five named hit volumes from the default
+camera. The chassis volume was shortened below the turntable deck and nested
+platform/telescope/boom volumes receive deterministic semantic priority, removing
+the earlier turntable-click interception without coupling selection to render meshes.

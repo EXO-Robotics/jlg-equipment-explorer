@@ -1,11 +1,11 @@
 # Model assets
 
-`600s.glb` is the v1.0 Showcase reconstruction. It preserves the verified stowed
+`600s.glb` is the v1.1 Accuracy reconstruction. It preserves the verified stowed
 envelope while adding the frozen PVC 2607 hierarchy, B3 bodywork, detailed running
 gear, three boom sections, visible powertrack and lift cylinder, and the rapid-replace
 36 × 96 platform assembly. It remains a portfolio visualization, not an engineering model.
-The GLB retains 325 authored meshes for traceability; the viewer consolidates rigid same-material
-detail into 60 observed runtime meshes, including runtime presentation marks and hazard-band cues,
+The GLB retains 345 authored meshes for traceability; the viewer consolidates rigid same-material
+detail into 80 observed runtime meshes, including runtime presentation marks and hazard-band cues,
 without merging articulation or interaction volumes.
 
 Mechanical facts are generated into `600s.asset-receipt.json` by
@@ -13,7 +13,7 @@ Mechanical facts are generated into `600s.asset-receipt.json` by
 file is recorded separately and is never auto-accepted. The template remains
 the schema for future asset revisions. Cache identity lives in
 `600s.version.js`. The authored Blender source is
-`source/blender/600s-showcase-v1.0.blend`. The exact authored target is recorded in
+`source/blender/600s-showcase-v1.1.blend`. The exact authored target is recorded in
 `600s.configuration.json`.
 
 Do not commit manufacturer BIM, commercial reference meshes, proprietary CAD, or any source asset whose license does not explicitly allow modification and public redistribution.
