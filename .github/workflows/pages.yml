@@ -25,13 +25,23 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Validate model and runtime contracts
-        run: npm run check
+        run: |
+          npm run check
+          node --check viewer/runtime.js
+          node --check machines/es1930m/articulation.js
+          node --check machines/es1930m/machine.js
+          python3 -B scripts/validate_es1930m_evidence.py
+          python3 -B scripts/validate_es1930m_kinematics.py
+          python3 -B scripts/validate_es1930m_glb.py
+          python3 -B scripts/validate_es1930m_receipt.py
 
       - name: Assemble static site
         run: |
           mkdir -p _site/assets/models _site/vendor
           cp index.html viewer.css viewer.js _site/
+          cp -R 600s es1930m machines viewer _site/
           cp assets/models/600s.glb assets/models/600s.version.js assets/models/600s.configuration.json _site/assets/models/
+          cp assets/models/es1930m.glb assets/models/es1930m.asset-receipt.json _site/assets/models/
           cp -R vendor/three-r160 _site/vendor/
           touch _site/.nojekyll
 

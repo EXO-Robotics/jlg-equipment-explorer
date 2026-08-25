@@ -25,3 +25,15 @@ python3 -B scripts/validate_es1930m_evidence.py --sources-dir tmp/es1930m
 After an intentional Blender export, update `machines/es1930m/version.js` with the exact GLB SHA-256 and regenerate the candidate receipt with `python3 -B scripts/write_es1930m_receipt.py`.
 
 The receipt intentionally remains `candidate_not_deployable` until the branch is pushed by authorization, GitHub Pages deploys it, and the deployed route is reviewed. `python3 -B scripts/validate_es1930m_receipt.py --require-release` must continue to fail until that external gate is genuinely complete.
+
+The Pages workflow validates both machines and packages the legacy root, `/600s/` compatibility route, `/es1930m/`, shared runtime, machine modules, ES1930M GLB, and public candidate receipt. After reviewing an exact successful deployment, promote the receipt by supplying all three bindings together:
+
+```sh
+python3 -B scripts/write_es1930m_receipt.py \
+  --deployment-url https://exo-robotics.github.io/jlg-equipment-explorer/es1930m/ \
+  --deployment-run https://github.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/RUN_ID \
+  --reviewed-source-commit FULL_40_CHARACTER_SHA
+python3 -B scripts/validate_es1930m_receipt.py --require-release
+```
+
+The promotion commit may change only the receipt and deployment documentation; changing a hash-bound asset, source, configuration, mechanism, evidence file, review renderer, or runtime invalidates the prior browser review and requires a fresh candidate deployment.
