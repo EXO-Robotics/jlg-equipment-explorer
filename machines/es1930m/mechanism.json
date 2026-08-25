@@ -47,10 +47,10 @@
     "stroke_tolerance_m": 0.0015,
     "reconstructed_closed_pin_distance_m": 0.43,
     "reconstructed_open_pin_distance_m": 1.1155,
-    "reconstructed_lower_frame_pin_m": [0.073884411905, 0.168081864473, 0.0],
+    "reconstructed_lower_frame_pin_m": [0.082863611531, 0.134320145689, 0.0],
     "reconstructed_kicker_pivot_fraction_on_level01_a": 0.5,
-    "reconstructed_cylinder_pin_fraction_on_level01_a": 0.9,
-    "reconstructed_kicker_roller_offset_local_m": [-0.10, 0.0, 0.0],
+    "reconstructed_cylinder_pin_offset_link_frame_m": [0.26, 0.16, 0.0],
+    "reconstructed_kicker_roller_offset_link_frame_m": [-0.12, 0.18, 0.0],
     "authority": "published_stroke_and_verified_cylinder_to_kicker_to_scissor_graph; attachment_coordinates_are_reconstruction_hypothesis_h1"
   },
   "deck_extension": {

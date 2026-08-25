@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Check duplicated browser constants and motion invariants against mechanism.json."""
+
+import json
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+spec = json.loads((ROOT / "machines/es1930m/mechanism.json").read_text())
+source = (ROOT / "machines/es1930m/articulation.js").read_text()
+
+expected = {
+    "levels": spec["solver"]["level_count"],
+    "armLength": spec["solver"]["arm_pin_center_length_m"],
+    "basePivotY": spec["solver"]["base_pivot_height_m"],
+    "deckOffsetY": spec["solver"]["deck_floor_offset_above_upper_pivots_m"],
+    "stowedDeckY": spec["solver"]["stowed_deck_floor_height_m"],
+    "indoorDeckY": spec["solver"]["indoor_deck_floor_height_m"],
+    "outdoorDeckY": spec["solver"]["outdoor_deck_floor_height_m"],
+    "extensionTravel": spec["deck_extension"]["travel_m"],
+    "cylinderStroke": spec["lift_cylinder"]["published_stroke_m"],
+    "steeringCylinderStrokeEachDirection": spec["steering"]["cylinder_stroke_each_direction_m"],
+    "rearFixedX": spec["slides"]["rear_fixed_x_m"],
+}
+for name, value in expected.items():
+    match = re.search(rf"\b{name}:\s*(-?[0-9.]+)", source)
+    if not match or abs(float(match.group(1)) - float(value)) > 1e-9:
+        raise RuntimeError(f"Runtime/mechanism constant drift: {name}")
+
+required_motion = [
+    "slide.position.y = state.boundaries.at(-1).front.y",
+    "for (const spindle of rig.steerSpindles) spindle.rotation.y = 0",
+    "selfTestES1930MRig",
+    "cylinderUpperOffset",
+    "kickerRollerOffset",
+]
+for snippet in required_motion:
+    if snippet not in source:
+        raise RuntimeError(f"Runtime motion contract missing: {snippet}")
+print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion)}, indent=2))

@@ -70,8 +70,10 @@ def solve(spec: dict, lift: float) -> dict:
 
     cylinder = spec["lift_cylinder"]
     lower_pin = tuple(cylinder["reconstructed_lower_frame_pin_m"][:2])
-    upper_pin = interpolate(levels[0]["a"][0], levels[0]["a"][1], cylinder["reconstructed_cylinder_pin_fraction_on_level01_a"])
     kicker_center = interpolate(levels[0]["a"][0], levels[0]["a"][1], cylinder["reconstructed_kicker_pivot_fraction_on_level01_a"])
+    direction = ((levels[0]["a"][1][0] - levels[0]["a"][0][0]) / arm_length, (levels[0]["a"][1][1] - levels[0]["a"][0][1]) / arm_length)
+    offset = cylinder["reconstructed_cylinder_pin_offset_link_frame_m"]
+    upper_pin = (kicker_center[0] + direction[0] * offset[0] - direction[1] * offset[1], kicker_center[1] + direction[1] * offset[0] + direction[0] * offset[1])
     pin_distance = distance(lower_pin, upper_pin)
 
     return {

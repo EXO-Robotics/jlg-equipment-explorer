@@ -27,6 +27,7 @@ jobs:
       - name: Validate model and runtime contracts
         run: |
           npm run check
+          python3 -B scripts/validate_es1930m_receipt.py --require-predeploy
 
       - name: Assemble static site
         run: |

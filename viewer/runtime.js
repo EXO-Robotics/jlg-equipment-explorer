@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.1-candidate";
+import { pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.1-candidate";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -115,7 +116,7 @@ renderer.domElement.addEventListener("pointerdown", (event) => {
   renderer.domElement.setPointerCapture(event.pointerId);
   if (pointers.size === 2) {
     const [a, b] = [...pointers.values()];
-    pinchDistance = Math.hypot(a.x - b.x, a.y - b.y);
+    pinchDistance = pointerDistance(a, b);
   }
 });
 renderer.domElement.addEventListener("pointermove", (event) => {
@@ -128,8 +129,8 @@ renderer.domElement.addEventListener("pointermove", (event) => {
   pointer.moved += Math.abs(dx) + Math.abs(dy);
   if (pointers.size >= 2) {
     const [a, b] = [...pointers.values()];
-    const nextDistance = Math.hypot(a.x - b.x, a.y - b.y);
-    if (pinchDistance && nextDistance > 0) orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * pinchDistance / nextDistance, 1.6, 11);
+    const nextDistance = pointerDistance(a, b);
+    orbit.desiredDistance = scaledPinchDistance(orbit.desiredDistance, pinchDistance, nextDistance);
     pinchDistance = nextDistance;
     for (const active of pointers.values()) active.moved += Math.abs(dx) + Math.abs(dy) + 8;
     return;
@@ -148,7 +149,7 @@ renderer.domElement.addEventListener("pointercancel", (event) => finishPointer(e
 renderer.domElement.addEventListener("lostpointercapture", (event) => finishPointer(event, false));
 renderer.domElement.addEventListener("wheel", (event) => {
   event.preventDefault();
-  orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), 1.6, 11);
+  orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), 1.6, 18);
 }, { passive: false });
 
 const raycaster = new THREE.Raycaster();
@@ -303,12 +304,13 @@ document.addEventListener("keydown", (event) => {
     }
     return;
   }
+  if (event.target instanceof HTMLElement && event.target.matches("input, select, textarea, button, [contenteditable='true']")) return;
   if (event.key === "ArrowLeft") orbit.azimuth += 0.12;
   else if (event.key === "ArrowRight") orbit.azimuth -= 0.12;
   else if (event.key === "ArrowUp") orbit.polar = Math.max(0.25, orbit.polar - 0.08);
   else if (event.key === "ArrowDown") orbit.polar = Math.min(1.52, orbit.polar + 0.08);
   else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(1.6, orbit.desiredDistance * 0.9);
-  else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(11, orbit.desiredDistance * 1.1);
+  else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(18, orbit.desiredDistance * 1.1);
   else if (event.key === "0") focusCamera("default");
   else if (/^[1-4]$/.test(event.key)) document.querySelectorAll("[data-focus]")[Number(event.key) - 1]?.click();
   else return;

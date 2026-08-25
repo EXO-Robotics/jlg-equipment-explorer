@@ -1,6 +1,6 @@
 {
   "asset": "assets/models/600s.glb",
-  "status": "SHOWCASE_V1_1_MECHANICAL_PASS",
+  "status": "SHOWCASE_V1_1_ACCEPTED",
   "release": "1.1.0",
   "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
@@ -60,7 +60,7 @@
     "selection_volumes_pass": true,
     "stowed_silhouette_reviewed": true,
     "working_pose_silhouette_pass": true,
-    "mobile_view_reviewed": false,
+    "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
       "browser": "Fresh local in-app browser 2026-08-25: exact 4dd98f412238 GLB loaded as blender-showcase-v1.1.0 under runtime 1.1.5 with zero runtime errors on desktop and a 390 x 844 mobile viewport.",

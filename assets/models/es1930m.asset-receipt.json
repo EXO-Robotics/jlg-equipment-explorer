@@ -17,7 +17,7 @@
     "asset": {
       "bytes": 981344,
       "path": "assets/models/es1930m.glb",
-      "sha256": "c9d981659b258e73396b0fddbe96d3d11198b2e3972987a0831cf8f8664e062f"
+      "sha256": "07d42ccf5e985fd8b2232715a1ac3448e68ea4f80d158c4b6d8d8657d70d5255"
     },
     "configuration": {
       "bytes": 2570,
@@ -25,9 +25,9 @@
       "sha256": "dd2b9d9c3f6d2ab8ca8dc031cee555bb54cd7e719e0d8e4d03e89b884206afa3"
     },
     "mechanism": {
-      "bytes": 3420,
+      "bytes": 3438,
       "path": "machines/es1930m/mechanism.json",
-      "sha256": "6865bcb9ce13eb595bfe85e60d369658994a18c6fe0f876edf77093ceebc9aad"
+      "sha256": "2b6e0c3cb3a08f83673661d14e8ca34a7f3518c913f3569e349e23e47d3e3380"
     },
     "mechanism_evidence": {
       "bytes": 9629,
@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 4464,
+      "bytes": 5040,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "240d0ebb1da3afaabc951bb10e8c46c45a62db35dc82105484775f25bbcc6567"
+      "sha256": "383ae6305255068dab59fde07e782eea1f7cdc92a3773a5908594a5bdaa0ff61"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -45,9 +45,9 @@
       "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
-      "bytes": 188798,
+      "bytes": 188817,
       "path": "source/blender/es1930m-showcase-v1.0.blend",
-      "sha256": "015f70775e379c62be320f06346d77507679e0e9ebeca05a84719483e47915dc"
+      "sha256": "7b7dca3a112fdea07e6f6ef00d0713ab9e7079dd2f5620f2099705cc6468bf4d"
     },
     "source_manifest": {
       "bytes": 4860,
@@ -63,7 +63,7 @@
   "mechanism_metrics": {
     "collision_proxy_assertions": 4141,
     "collision_proxy_status": "PASS",
-    "cylinder_observed_stroke_m": 0.6855000573053831,
+    "cylinder_observed_stroke_m": 0.6855000428797274,
     "levels": 5,
     "maximum_link_length_error_m": 4.440892098500626e-16,
     "maximum_rear_fixed_anchor_error_m": 0.0,
@@ -79,7 +79,7 @@
     "deployed_pages_reviewed": false,
     "desktop_browser_zero_errors": true,
     "extension_browser_reviewed": true,
-    "mobile_and_pinch_reviewed": false,
+    "mobile_and_pinch_reviewed": true,
     "performance_reviewed": true,
     "raised_pose_browser_reviewed": true,
     "selection_and_focus_reviewed": true,
@@ -92,13 +92,14 @@
       "viewer.css",
       "viewer/multi-machine.css",
       "viewer/runtime.js",
+      "viewer/pointer-gestures.mjs",
       "machines/es1930m/machine.js",
       "machines/es1930m/articulation.js",
       "machines/es1930m/inspector.js",
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "a5272a5bc9649229eecfaad70af316678a423e8dd15cf73f10ca3ffb31e86da5"
+    "sha256": "0f61ad459f94ff2895a905f313c272feeb6ac85e31ddb615a74f0a5efcf03415"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-25"

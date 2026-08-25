@@ -13,10 +13,10 @@ export const ES1930M_MECHANISM = Object.freeze({
   cylinderClosedPins: 0.43,
   steeringCylinderStrokeEachDirection: 0.08,
   rearFixedX: -0.552743210183,
-  cylinderLower: Object.freeze(new THREE.Vector3(0.073884411905, 0.168081864473, 0)),
+  cylinderLower: Object.freeze(new THREE.Vector3(0.082863611531, 0.134320145689, 0)),
   kickerPivotFraction: 0.5,
-  cylinderUpperFraction: 0.9,
-  kickerRollerOffset: 0.10,
+  cylinderUpperOffset: Object.freeze(new THREE.Vector2(0.26, 0.16)),
+  kickerRollerOffset: Object.freeze(new THREE.Vector2(-0.12, 0.18)),
 });
 
 const X_AXIS = new THREE.Vector3(1, 0, 0);
@@ -28,6 +28,12 @@ function clampUnit(value) {
 
 function pointAlong(start, end, fraction) {
   return start.clone().lerp(end, fraction);
+}
+
+function pointInLinkFrame(pivot, direction, offset) {
+  return pivot.clone()
+    .addScaledVector(direction, offset.x)
+    .addScaledVector(new THREE.Vector3(-direction.y, direction.x, 0), offset.y);
 }
 
 export function solveES1930MState(liftInput, deckInput = 0, steerInput = 0) {
@@ -46,9 +52,9 @@ export function solveES1930MState(liftInput, deckInput = 0, steerInput = 0) {
   const levelOneAStart = levelOne.rear;
   const levelOneAEnd = levelTwo.front;
   const kickerPivot = pointAlong(levelOneAStart, levelOneAEnd, ES1930M_MECHANISM.kickerPivotFraction);
-  const cylinderUpper = pointAlong(levelOneAStart, levelOneAEnd, ES1930M_MECHANISM.cylinderUpperFraction);
   const armDirection = levelOneAEnd.clone().sub(levelOneAStart).normalize();
-  const kickerRoller = kickerPivot.clone().add(new THREE.Vector3(-armDirection.y, armDirection.x, 0).multiplyScalar(ES1930M_MECHANISM.kickerRollerOffset));
+  const cylinderUpper = pointInLinkFrame(kickerPivot, armDirection, ES1930M_MECHANISM.cylinderUpperOffset);
+  const kickerRoller = pointInLinkFrame(kickerPivot, armDirection, ES1930M_MECHANISM.kickerRollerOffset);
   const cylinderPinDistance = cylinderUpper.distanceTo(ES1930M_MECHANISM.cylinderLower);
   return Object.freeze({
     lift,
@@ -147,6 +153,9 @@ export function selfTestES1930MRig(rig, restoreState) {
     }
     if (Math.abs(rig.lowerSlides[0].position.x - rig.lowerSlides[1].position.x) > 1e-6) failures.push("lower slide pair split");
     if (Math.abs(rig.lowerSlides[0].position.x - solved.boundaries[0].front.x) > 1e-6) failures.push("front track mismatch");
+    for (const slide of rig.upperSlides) {
+      if (Math.abs(slide.position.x - solved.boundaries.at(-1).front.x) > 1e-6 || Math.abs(slide.position.y - solved.boundaries.at(-1).front.y) > 1e-6) failures.push("upper slide track mismatch");
+    }
     if (Math.abs(rig.hitVolumes.Platform_Hit.position.y - (1.44 + rig.platform.position.y)) > 1e-6) failures.push("platform hit-volume drift");
     if (Math.abs(rig.cylinderUpperMarker.position.x - solved.cylinderUpper.x) > 1e-6 || Math.abs(rig.cylinderUpperMarker.position.y - solved.cylinderUpper.y) > 1e-6) failures.push("cylinder attachment drift");
   }
@@ -176,7 +185,10 @@ export function applyES1930MState(rig, state) {
     }
   }
   for (const slide of rig.lowerSlides) slide.position.x = state.boundaries[0].front.x;
-  for (const slide of rig.upperSlides) slide.position.x = state.boundaries.at(-1).front.x;
+  for (const slide of rig.upperSlides) {
+    slide.position.x = state.boundaries.at(-1).front.x;
+    slide.position.y = state.boundaries.at(-1).front.y;
+  }
   rig.platform.position.y = state.floorY - ES1930M_MECHANISM.stowedDeckY;
   rig.extension.position.x = state.deckTranslation;
 

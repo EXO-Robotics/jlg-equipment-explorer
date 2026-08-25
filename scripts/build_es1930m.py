@@ -269,9 +269,12 @@ def build():
     a_start = Vector((boundaries[0]["rear"][0], 0, boundaries[0]["rear"][1]))
     a_end = Vector((boundaries[1]["front"][0], 0, boundaries[1]["front"][1]))
     center = a_start.lerp(a_end, cylinder_spec["reconstructed_kicker_pivot_fraction_on_level01_a"])
-    upper = a_start.lerp(a_end, cylinder_spec["reconstructed_cylinder_pin_fraction_on_level01_a"])
     arm_direction = (a_end - a_start).normalized()
-    roller = center + Vector((-arm_direction.z, 0, arm_direction.x)) * abs(cylinder_spec["reconstructed_kicker_roller_offset_local_m"][0])
+    arm_normal = Vector((-arm_direction.z, 0, arm_direction.x))
+    cylinder_offset = cylinder_spec["reconstructed_cylinder_pin_offset_link_frame_m"]
+    roller_offset = cylinder_spec["reconstructed_kicker_roller_offset_link_frame_m"]
+    upper = center + arm_direction * cylinder_offset[0] + arm_normal * cylinder_offset[1]
+    roller = center + arm_direction * roller_offset[0] + arm_normal * roller_offset[1]
     barrel_end = lower.lerp(upper, 0.72)
     rod_start = lower.lerp(upper, 0.48)
     beam_between("LiftCylinderBarrel", lower, barrel_end, 0.035, MAT["scissor"], cylinder_root, "lift_cylinder", 24)

@@ -20,6 +20,12 @@ VERSION_PATH = ROOT / "machines/es1930m/version.js"
 CONFIGURATION_ID = "ES1930M-PVC2404-US-STD-FR-FLA130-NM"
 TRIANGLE_BUDGET = 60_000
 HIT_VOLUMES = {"Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"}
+REQUIRED_MECHANISM_NODES = {
+    "LowerSlideBlock_RIGHT_PLANE", "LowerSlideBlock_LEFT_PLANE",
+    "UpperSlideBlock_RIGHT_PLANE", "UpperSlideBlock_LEFT_PLANE",
+    "KickerArmWeb_SCISSOR_CYLINDER", "KickerArmWeb_CYLINDER_ROLLER", "KickerArmWeb_ROLLER_SCISSOR",
+    "PIVOT_KICKER_TO_SCISSOR", "PIVOT_KICKER_ROLLER", "PIVOT_LIFT_CYLINDER_UPPER",
+}
 REQUIRED_EDGES = {
     "Chassis": "ES1930M_ROOT",
     "ScissorAssembly": "ES1930M_ROOT",
@@ -172,6 +178,8 @@ def main():
     root_extras = nodes[by_name["ES1930M_ROOT"]].get("extras") or {}
     if root_extras.get("configuration_id") != CONFIGURATION_ID or root_extras.get("pvc") != "2404":
         raise RuntimeError("GLB root evidence identity mismatch")
+    if missing := sorted(REQUIRED_MECHANISM_NODES - by_name.keys()):
+        raise RuntimeError(f"Missing mechanism nodes: {missing}")
     for child, expected_parent in REQUIRED_EDGES.items():
         if child not in by_name:
             raise RuntimeError(f"Missing required node: {child}")

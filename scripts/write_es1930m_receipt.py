@@ -31,6 +31,7 @@ RUNTIME_FILES = [
     ROOT / "viewer.css",
     ROOT / "viewer/multi-machine.css",
     ROOT / "viewer/runtime.js",
+    ROOT / "viewer/pointer-gestures.mjs",
     ROOT / "machines/es1930m/machine.js",
     ROOT / "machines/es1930m/articulation.js",
     ROOT / "machines/es1930m/inspector.js",
