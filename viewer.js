@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.4";
+} from "./assets/models/600s.version.js?v=1.1.5";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -222,6 +222,7 @@ function createProcedural600S() {
   chassis.add(box("LowerDeck", [4.6, 0.18, 1.78], [0.1, 1.39, 0], palette.orange, "chassis"));
 
   const steeringPivots = [];
+  const rollingWheels = [];
   const wheelX = [-1.9, 1.9];
   const wheelZ = [-1.08, 1.08];
   wheelX.forEach((x, axleIndex) => wheelZ.forEach((z) => {
@@ -231,6 +232,7 @@ function createProcedural600S() {
     const hub = cylinder("WheelHub", 0.23, 0.5, [0, 0, 0], [Math.PI / 2, 0, 0], palette.metal, "chassis", 24);
     pivot.add(wheel, hub);
     chassis.add(pivot);
+    rollingWheels.push(pivot);
     if (axleIndex === 1) steeringPivots.push(pivot);
   }));
   machine.add(chassis);
@@ -302,6 +304,7 @@ function createProcedural600S() {
     platformPivot,
     platformMount,
     steeringPivots,
+    rollingWheels,
     hitVolumes,
     source: "procedural-fixture",
   };
@@ -680,6 +683,7 @@ function configureBlockoutRig(gltf) {
     liftCylinderRodStart: 0.82,
     liftCylinderRodNominalLength: 0.70,
     steeringPivots: [nodes.Wheel_FL, nodes.Wheel_FR],
+    rollingWheels: [nodes.Wheel_FL, nodes.Wheel_FR, nodes.Wheel_RL, nodes.Wheel_RR],
     visualLinks: [
       { group: nodes.TowerLink, lower: nodes.TowerLinkLowerAnchor, upper: nodes.TowerLinkUpperAnchor, body: nodes.TowerLinkBody, nominalLength: 1.0 },
       { group: nodes.TensionLink, lower: nodes.TensionLinkLowerAnchor, upper: nodes.TensionLinkUpperAnchor, body: nodes.TensionLinkBody, nominalLength: 1.0 },
@@ -709,6 +713,10 @@ function loadBlockoutRig() {
         loaderStatus.textContent = "Preparing materials and shadows";
         loaderDetail.textContent = `Applying the ${renderProfile} render profile`;
         const loadedRig = configureBlockoutRig(gltf);
+        if (autonomy.enabled) {
+          loadedRig.machine.position.copy(rig.machine.position);
+          loadedRig.machine.rotation.y = rig.machine.rotation.y;
+        }
         scene.add(loadedRig.machine);
         scene.remove(rig.machine);
         rig = loadedRig;
@@ -755,8 +763,37 @@ const outputs = {
   steeringAngle: document.querySelector("#steer-value"),
 };
 const motionStatus = document.querySelector("#motion-status");
+const autonomyToggle = document.querySelector("#autonomy-toggle");
+const autonomyMode = document.querySelector("#autonomy-mode");
+const autonomyNote = document.querySelector("#autonomy-note");
+const driveHeadingOutput = document.querySelector("#drive-heading");
+const driveLoopOutput = document.querySelector("#drive-loop");
 let lastMotionStatus = motionStatus.value || motionStatus.textContent;
 const suffixes = { boomAngle: "°", telescope: "%", turntableAngle: "°", steeringAngle: "°" };
+const controlNames = { boomAngle: "Boom", telescope: "Extend", turntableAngle: "Rotate", steeringAngle: "Steer" };
+const fixedPoseQuery = ["boom", "extend", "rotate", "steer"].some((key) => query.has(key));
+const autonomyLocked = reducedMotion || fixedPoseQuery;
+const autonomy = {
+  enabled: !autonomyLocked && query.get("auto") !== "0",
+  phase: 0,
+  activeControl: null,
+  overrideUntil: Object.fromEntries(Object.keys(targets).map((key) => [key, 0])),
+  wheelRotation: 0,
+  x: 0,
+  z: 0,
+  heading: 0,
+  routeError: 0,
+};
+const AUTONOMY_OVERRIDE_MS = 6000;
+const AUTONOMY_PATH = {
+  radiusX: 7.5,
+  radiusZ: 6.5,
+  centerZ: -6.5,
+  speed: 0.72,
+  lookaheadPhase: 0.25,
+  wheelbase: 2.5,
+  wheelRadius: 0.62,
+};
 
 function setMotionStatus(value) {
   if (value === lastMotionStatus) return;
@@ -765,11 +802,19 @@ function setMotionStatus(value) {
 }
 
 Object.entries(inputs).forEach(([key, input]) => {
+  input.addEventListener("pointerdown", () => { autonomy.activeControl = key; });
+  const releaseControl = () => {
+    if (autonomy.activeControl === key) autonomy.activeControl = null;
+  };
+  input.addEventListener("pointerup", releaseControl);
+  input.addEventListener("pointercancel", releaseControl);
+  input.addEventListener("change", releaseControl);
   input.addEventListener("input", () => {
     targets[key] = Number(input.value);
+    if (autonomy.enabled) autonomy.overrideUntil[key] = performance.now() + AUTONOMY_OVERRIDE_MS;
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
     input.setAttribute("aria-valuetext", outputs[key].value);
-    setMotionStatus("Positioning");
+    setMotionStatus(autonomy.enabled ? "Manual override" : "Positioning");
   });
 });
 
@@ -795,7 +840,47 @@ function applyQueryPose() {
 }
 applyQueryPose();
 
+function activeOverrideKey(now = performance.now()) {
+  return Object.keys(targets).find((key) => autonomy.activeControl === key || now < autonomy.overrideUntil[key]) || null;
+}
+
+function normalizedHeadingDegrees(radians) {
+  return (Math.round(THREE.MathUtils.radToDeg(radians)) + 360) % 360;
+}
+
+function updateAutonomyTelemetry(now = performance.now()) {
+  const overrideKey = autonomy.enabled ? activeOverrideKey(now) : null;
+  const recovering = autonomy.enabled && !overrideKey && autonomy.routeError > 0.6;
+  const mode = autonomyLocked ? "Static pose" : autonomy.enabled ? overrideKey ? `Override · ${controlNames[overrideKey]}` : recovering ? "Route recovery" : "Auto loop" : "Manual";
+  autonomyMode.value = mode;
+  autonomyNote.textContent = autonomyLocked
+    ? reducedMotion ? "Reduced motion keeps the route stationary." : "Query poses keep the route stationary."
+    : autonomy.enabled ? recovering ? "Steering back onto the presentation route." : "Move a slider for a 6 s override." : "All machine controls are live.";
+  driveHeadingOutput.value = `${String(normalizedHeadingDegrees(autonomy.heading)).padStart(3, "0")}°`;
+  driveLoopOutput.value = `${Math.round((autonomy.phase / (Math.PI * 2)) * 100)}%`;
+  autonomyToggle.disabled = autonomyLocked;
+  autonomyToggle.setAttribute("aria-pressed", String(autonomy.enabled));
+  autonomyToggle.textContent = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
+  document.body.dataset.autonomyMode = autonomyLocked ? "static" : autonomy.enabled ? overrideKey ? "override" : recovering ? "recovering" : "auto" : "manual";
+  document.body.dataset.autonomyOverrides = overrideKey || "none";
+  document.body.dataset.driveHeading = String(normalizedHeadingDegrees(autonomy.heading));
+  document.body.dataset.driveLoop = String(Math.round((autonomy.phase / (Math.PI * 2)) * 100));
+  document.body.dataset.driveRouteErrorM = autonomy.routeError.toFixed(2);
+}
+
+function setAutonomyEnabled(enabled) {
+  autonomy.enabled = Boolean(enabled) && !autonomyLocked;
+  autonomy.activeControl = null;
+  Object.keys(autonomy.overrideUntil).forEach((key) => { autonomy.overrideUntil[key] = 0; });
+  setMotionStatus(autonomy.enabled ? "Autonomous" : "Manual");
+  updateAutonomyTelemetry();
+}
+
+autonomyToggle.addEventListener("click", () => setAutonomyEnabled(!autonomy.enabled));
+updateAutonomyTelemetry();
+
 document.querySelector("#stow").addEventListener("click", () => {
+  setAutonomyEnabled(false);
   Object.keys(targets).forEach((key) => { targets[key] = 0; });
   syncInputs();
 });
@@ -916,7 +1001,13 @@ function resetView() {
     button.classList.remove("active");
     button.setAttribute("aria-pressed", "false");
   });
-  orbit.targetGoal.set(0.8, defaultOrbitTargetY(machineState.boomAngle), 0);
+  const headingCos = Math.cos(autonomy.heading);
+  const headingSin = Math.sin(autonomy.heading);
+  orbit.targetGoal.set(
+    rig.machine.position.x + headingCos * 0.8,
+    defaultOrbitTargetY(machineState.boomAngle),
+    rig.machine.position.z - headingSin * 0.8
+  );
   orbit.radiusGoal = defaultOrbitRadius();
   orbit.theta = 0.76;
   orbit.phi = 1.44;
@@ -1033,6 +1124,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 function focusComponent(component) {
+  setAutonomyEnabled(false);
   focusedComponent = component;
   document.querySelectorAll("[data-focus]").forEach((button) => {
     const selected = button.dataset.focus === component;
@@ -1169,6 +1261,74 @@ function updateEvidenceBoundedLinkages() {
   rig.visualCylinders?.forEach(solveVisualCylinder);
 }
 
+function updateAutonomy(dt, now) {
+  if (!autonomy.enabled) {
+    updateAutonomyTelemetry(now);
+    return;
+  }
+
+  autonomy.phase = Math.atan2(
+    autonomy.x / AUTONOMY_PATH.radiusX,
+    (autonomy.z - AUTONOMY_PATH.centerZ) / AUTONOMY_PATH.radiusZ
+  );
+  if (autonomy.phase < 0) autonomy.phase += Math.PI * 2;
+  const phase = autonomy.phase;
+  const dx = AUTONOMY_PATH.radiusX * Math.cos(phase);
+  const dz = -AUTONOMY_PATH.radiusZ * Math.sin(phase);
+  const ddx = -AUTONOMY_PATH.radiusX * Math.sin(phase);
+  const ddz = -AUTONOMY_PATH.radiusZ * Math.cos(phase);
+  const derivativeLength = Math.max(0.001, Math.hypot(dx, dz));
+  const curvature = (dx * ddz - dz * ddx) / Math.pow(derivativeLength, 3);
+
+  const lookaheadPhase = phase + AUTONOMY_PATH.lookaheadPhase;
+  const targetX = AUTONOMY_PATH.radiusX * Math.sin(lookaheadPhase);
+  const targetZ = AUTONOMY_PATH.centerZ + AUTONOMY_PATH.radiusZ * Math.cos(lookaheadPhase);
+  const desiredHeading = Math.atan2(-(targetZ - autonomy.z), targetX - autonomy.x);
+  const headingError = Math.atan2(
+    Math.sin(desiredHeading - autonomy.heading),
+    Math.cos(desiredHeading - autonomy.heading)
+  );
+  const steeringCommand = THREE.MathUtils.clamp(
+    THREE.MathUtils.radToDeg(Math.atan(-AUTONOMY_PATH.wheelbase * curvature) + headingError),
+    -24,
+    24
+  );
+
+  const driveSpeed = activeOverrideKey(now) === "steeringAngle" ? 0.2 : AUTONOMY_PATH.speed;
+  autonomy.heading += (driveSpeed / AUTONOMY_PATH.wheelbase) *
+    Math.tan(THREE.MathUtils.degToRad(machineState.steeringAngle)) * dt;
+  autonomy.x += Math.cos(autonomy.heading) * driveSpeed * dt;
+  autonomy.z -= Math.sin(autonomy.heading) * driveSpeed * dt;
+  const projectedPhase = Math.atan2(
+    autonomy.x / AUTONOMY_PATH.radiusX,
+    (autonomy.z - AUTONOMY_PATH.centerZ) / AUTONOMY_PATH.radiusZ
+  );
+  const routePhase = projectedPhase < 0 ? projectedPhase + Math.PI * 2 : projectedPhase;
+  const routeX = AUTONOMY_PATH.radiusX * Math.sin(routePhase);
+  const routeZ = AUTONOMY_PATH.centerZ + AUTONOMY_PATH.radiusZ * Math.cos(routePhase);
+  autonomy.routeError = Math.hypot(autonomy.x - routeX, autonomy.z - routeZ);
+
+  autonomy.wheelRotation -= (driveSpeed * dt) / AUTONOMY_PATH.wheelRadius;
+  rig.machine.position.x = autonomy.x;
+  rig.machine.position.z = autonomy.z;
+  rig.machine.rotation.y = autonomy.heading;
+
+  const commands = {
+    boomAngle: 21 + Math.sin(phase - 0.6) * 8,
+    telescope: 34 + Math.sin(phase * 2 + 0.8) * 14,
+    turntableAngle: Math.sin(phase + 1.2) * 34,
+    steeringAngle: steeringCommand,
+  };
+  Object.keys(targets).forEach((key) => {
+    if (autonomy.activeControl === key || now < autonomy.overrideUntil[key]) return;
+    targets[key] = THREE.MathUtils.damp(targets[key], commands[key], key === "steeringAngle" ? 8 : 2.8, dt);
+  });
+  syncInputs();
+  updateAutonomyTelemetry(now);
+  document.body.dataset.driveX = autonomy.x.toFixed(2);
+  document.body.dataset.driveZ = autonomy.z.toFixed(2);
+}
+
 function updateRig(dt) {
   Object.keys(machineState).forEach((key) => {
     machineState[key] = reducedMotion ? targets[key] : THREE.MathUtils.damp(machineState[key], targets[key], 6, dt);
@@ -1184,12 +1344,22 @@ function updateRig(dt) {
   }
   rig.turntablePivot.rotation.y = THREE.MathUtils.degToRad(machineState.turntableAngle);
   rig.steeringPivots.forEach((pivot) => { pivot.rotation.y = THREE.MathUtils.degToRad(machineState.steeringAngle); });
+  rig.rollingWheels?.forEach((pivot) => { pivot.rotation.z = autonomy.wheelRotation; });
   updateLiftCylinder();
   updateEvidenceBoundedLinkages();
-  if (!focusedComponent) orbit.targetGoal.y = defaultOrbitTargetY(machineState.boomAngle);
+  if (!focusedComponent) {
+    const headingCos = Math.cos(autonomy.heading);
+    const headingSin = Math.sin(autonomy.heading);
+    orbit.targetGoal.set(
+      rig.machine.position.x + headingCos * 0.8,
+      defaultOrbitTargetY(machineState.boomAngle),
+      rig.machine.position.z - headingSin * 0.8
+    );
+  }
   const moving = Object.keys(machineState).some((key) => Math.abs(machineState[key] - targets[key]) > 0.1);
   const stowed = Object.values(targets).every((value) => Math.abs(value) < 0.1);
-  setMotionStatus(moving ? "Positioning" : stowed ? "Stowed" : "Holding");
+  const overrideKey = autonomy.enabled ? activeOverrideKey() : null;
+  setMotionStatus(autonomy.enabled ? overrideKey ? "Manual override" : autonomy.routeError > 0.6 ? "Route recovery" : "Autonomous" : moving ? "Positioning" : stowed ? "Stowed" : "Holding");
 }
 
 function updateCamera(dt) {
@@ -1243,6 +1413,7 @@ function animate(now = 0) {
   const renderedInterval = lastRenderedAt ? now - lastRenderedAt : 0;
   lastRenderedAt = now;
   const dt = Math.min(clock.getDelta(), 0.1);
+  updateAutonomy(dt, now);
   updateRig(dt);
   updateCamera(dt);
   renderer.render(scene, camera);

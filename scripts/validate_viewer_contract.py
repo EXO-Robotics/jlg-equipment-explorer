@@ -41,6 +41,10 @@ def main() -> None:
         'id="motion-status" aria-live="polite" aria-atomic="true"',
         'id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false"',
         'class="controls-body" id="machine-controls-body"',
+        'id="autonomy-toggle" type="button" aria-pressed="true"',
+        'id="autonomy-mode" aria-live="polite" aria-atomic="true"',
+        'id="drive-heading"',
+        'id="drive-loop"',
         'id="motion-boundary"',
         'id="diagnostics" hidden aria-live="polite"',
         'id="inspector" role="dialog" aria-modal="true"',
@@ -66,6 +70,7 @@ def main() -> None:
         ".sr-only",
         "--mobile-controls-height",
         "body.mobile-controls-open .panel-heading",
+        ".autonomy-bar",
     ], "CSS accessibility")
 
     require_tokens(viewer, [
@@ -96,6 +101,12 @@ def main() -> None:
         "setMobileControls(false)",
         'controlsBody.inert = !expanded',
         '"--mobile-controls-height"',
+        "function updateAutonomy(dt, now)",
+        'dataset.autonomyMode',
+        'dataset.driveRouteErrorM',
+        'AUTONOMY_OVERRIDE_MS = 6000',
+        'setAutonomyEnabled(false)',
+        'rig.rollingWheels?.forEach',
     ], "viewer runtime")
 
     print(json.dumps({

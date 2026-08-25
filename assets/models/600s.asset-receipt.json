@@ -1,17 +1,17 @@
 {
   "asset": "assets/models/600s.glb",
-  "status": "SHOWCASE_V1_1_MECHANICAL_PASS",
+  "status": "SHOWCASE_V1_1_ACCEPTED",
   "release": "1.1.0",
   "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
   "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T18:55:40Z",
+  "exported_at": "2026-08-25T19:21:11Z",
   "sha256": "4dd98f4122381b3fa797f4d1e00b42b2179939364cf8238681e0b0041326fcfd",
   "source_blend_sha256": "f6c4f94095fab931ec185d83ccf421d3c621f08d983ed743359d461b227bccf1",
   "cache_key": "4dd98f412238",
-  "runtime_sha256": "a695003afc861538696f82be856e7c4f875c10c751d1b4b629915fbc1d65e052",
+  "runtime_sha256": "aa93f66540774f4829ce757abdf0a61a85318d8ca89dbb91a1bc892495f2f185",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -60,13 +60,13 @@
     "selection_volumes_pass": true,
     "stowed_silhouette_reviewed": true,
     "working_pose_silhouette_pass": true,
-    "mobile_view_reviewed": false,
+    "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Fresh local in-app browser 2026-08-25: exact 4dd98f412238 GLB loaded as blender-showcase-v1.1.0 with 82 optimized visible meshes and zero runtime errors.",
-      "motion": "Exact 4dd98f412238 GLB reviewed at boom 20 / extension 0 and boom 35 / extension 100 / rotate 20 / steer 15; carrier remained continuous through the full visual telescope range.",
-      "selection": "Five-volume runtime selection self-test passed on exact 4dd98f412238 GLB.",
-      "silhouette_scope": "Desktop stowed, raised-boom close-up, and full-extension poses reviewed. Neighboring carrier samples have at most a 0.002 m seam and the fixed/moving sampled runs retain zero positive gap at full visual travel. Mobile remains unreviewed for this exact hash."
+      "browser": "Fresh local in-app browser 2026-08-25: exact 4dd98f412238 GLB loaded as blender-showcase-v1.1.0 under runtime 1.1.5 with zero runtime errors on desktop and a 390 x 844 mobile viewport.",
+      "motion": "Runtime 1.1.5 exercised autonomous boom, telescope, turntable, curvature steering, wheel roll, manual pause, a six-second steering override, and closed-loop route recovery on exact 4dd98f412238 GLB.",
+      "selection": "Five-volume runtime selection self-test passed on exact 4dd98f412238 GLB under runtime 1.1.5.",
+      "silhouette_scope": "Desktop autonomous working poses and collapsed/expanded mobile layouts were reviewed under runtime 1.1.5. Exact-GLB stowed and full-extension silhouette evidence remains applicable because the 4dd98f412238 model and f6c4f94095fa source blend are unchanged."
     }
   },
   "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
