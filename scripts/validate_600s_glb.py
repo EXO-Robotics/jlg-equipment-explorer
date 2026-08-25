@@ -66,6 +66,24 @@ EXPECTED_PARENTS = json.loads(CONFIGURATION_PATH.read_text(encoding="utf-8"))["r
 
 HIT_VOLUMES = ("Chassis_Hit", "Turntable_Hit", "Boom_Hit", "Telescope_Hit", "Platform_Hit")
 IDENTITY_CHAIN = ("MainBoom", "Telescope", "MidBoom", "FlyBoom", "PlatformPivot", "Platform")
+LEGACY_DETACHED_ACCESSORIES = ("TieDown_FL", "TieDown_FR", "TieDown_RL", "TieDown_RR")
+ACCESSORY_ATTACHMENTS = (
+    ("BoomRestPost_L", "ChassisFrontPod"),
+    ("BoomRestPost_R", "ChassisFrontPod"),
+    ("BoomRestPost_L", "BoomRest"),
+    ("BoomRestPost_R", "BoomRest"),
+    ("BoomRestPad", "BoomRest"),
+    ("SideStep_L", "LowerDeck"),
+    ("SideStep_R", "LowerDeck"),
+    ("SideStepBracket_L", "SideStep_L"),
+    ("SideStepBracket_R", "SideStep_R"),
+    ("SideStepBracket_L", "ChassisFrontPod"),
+    ("SideStepBracket_R", "ChassisFrontPod"),
+    ("TieDownPocket_FL", "FrameRail_L"),
+    ("TieDownPocket_FR", "FrameRail_R"),
+    ("TieDownPocket_RL", "FrameRail_L"),
+    ("TieDownPocket_RR", "FrameRail_R"),
+)
 
 POSITION_COMPONENT_TYPE = 5126
 POSITION_STRIDE = 12
@@ -419,6 +437,24 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
             if required_name not in by_name:
                 raise RuntimeError(f"Missing {section_name} detail node: {required_name}")
 
+    legacy_accessories = sorted(name for name in LEGACY_DETACHED_ACCESSORIES if name in by_name)
+    if legacy_accessories:
+        raise RuntimeError(f"Detached legacy chassis accessories remain in the GLB: {legacy_accessories}")
+    for part_name, support_name in ACCESSORY_ATTACHMENTS:
+        if part_name not in by_name or support_name not in by_name:
+            raise RuntimeError(f"Missing chassis attachment pair: {part_name} -> {support_name}")
+        part_min, part_max = mesh_world_aabb(document, blob, nodes, parents, by_name[part_name])
+        support_min, support_max = mesh_world_aabb(document, blob, nodes, parents, by_name[support_name])
+        overlap = [
+            min(part_max[axis], support_max[axis]) - max(part_min[axis], support_min[axis])
+            for axis in range(3)
+        ]
+        if any(value < 0.004 for value in overlap):
+            raise RuntimeError(
+                f"Detached chassis accessory: {part_name} does not overlap {support_name}; "
+                f"axis overlap={[round(value, 4) for value in overlap]}"
+            )
+
     for hit_name in HIT_VOLUMES:
         node = nodes[by_name[hit_name]]
         if "mesh" not in node:
@@ -580,6 +616,7 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         "triangle_count": triangle_count,
         "required_parent_edges": len(EXPECTED_PARENTS),
         "interaction_volumes": list(HIT_VOLUMES),
+        "validated_chassis_attachments": len(ACCESSORY_ATTACHMENTS),
         "visible_envelope_m": [round(value, 4) for value in envelope],
         "visible_bounds_min_m": [round(value, 4) for value in mins],
         "visible_bounds_max_m": [round(value, 4) for value in maxs],

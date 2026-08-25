@@ -96,12 +96,12 @@ voltage, pinout, fault-isolation, or diagnostic behavior is simulated.
 
 ## Current proof and remaining gap
 
-The GLB validator enforces one rooted scene, 100 critical parent edges, 400 named nodes, five moving
+The GLB validator enforces one rooted scene, 100 critical parent edges, 457 named nodes, five moving
 hit volumes, identity export scale, configuration/provenance extras, published stowed dimensions,
 platform size, wheelbase, clearance, tailswing, triangle budget, and telescope overlap. Safari proof
 has covered real-GLB load, lift, extension, stow, platform leveling, mobile controls, and the component
-inspector. The authored GLB contains 345 mesh records for traceable detail, then the viewer merges only
-same-material geometry inside rigid motion groups. The observed v1.1 runtime contains 80 visible meshes
+inspector. The authored GLB contains 402 mesh records for traceable detail, then the viewer merges only
+same-material geometry inside rigid motion groups. The observed v1.1 runtime contains 82 visible meshes
 (including independently authored model/product marks and generic hazard-band cues),
 while front steering, boom lift, telescope extension, platform leveling, lift-cylinder solving, and all
 five hit volumes remain separate.
@@ -115,6 +115,14 @@ Earlier v1.0 Safari evidence remains the latest keyboard-focus and reduced-motio
 Independently typeset product/model marks,
 a generic independently authored hazard-band cue, and restrained per-part powder-coat/boom/deck
 finishes are runtime presentation assets rather than copied manufacturer artwork.
+
+Runtime 1.1.3 artifact proof covers exact GLB `cce862032f8d`: the four detached zinc tie-down
+cylinders were replaced with dark pockets embedded in the chassis rails, both side steps were inset
+and given visible brackets, and the boom-rest saddle/pad gained a two-post pedestal tied into the
+front chassis pod. The GLB validator now rejects the legacy detached tie-down nodes and proves fifteen
+explicit accessory/support overlaps. Fresh desktop stowed and 45/80/35/18 working-pose renders load
+the real GLB with 82 optimized visible meshes, five-of-five selection self-tests, and zero instrumented
+runtime errors. A mobile render remains unreviewed for this exact hash.
 
 Remaining acceptance work is narrower: a captured Chrome performance trace and fixed-camera paired
 source overlays. The source comparison also confirms that the 0.90 m evidence-safe telescope cap cannot

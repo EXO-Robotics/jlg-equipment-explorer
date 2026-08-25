@@ -65,3 +65,11 @@ Runtime 1.1.2 then directly selected all five named hit volumes from the default
 camera. The chassis volume was shortened below the turntable deck and nested
 platform/telescope/boom volumes receive deterministic semantic priority, removing
 the earlier turntable-click interception without coupling selection to render meshes.
+
+Runtime 1.1.3 corrects the detached-chassis artifacts visible in the prior base close-up.
+Four shiny cylindrical tie-down placeholders are now flush dark rail pockets; the side
+steps overlap the lower deck and have visible supports; and the boom-rest saddle/pad is
+carried by two chassis-mounted posts so it remains connected when the boom lifts. Exact
+GLB `cce862032f8d` passed fifteen attachment-overlap checks plus the existing mechanical,
+motion, selection, stowed, and working-pose desktop gates. Mobile remains a separate gate
+for this exact asset hash.
