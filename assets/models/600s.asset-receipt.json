@@ -1,0 +1,61 @@
+{
+  "asset": "assets/models/600s.glb",
+  "status": "BLOCKOUT_V0_1_ACCEPTED",
+  "authorship": "owned-simplified-reconstruction",
+  "source_blend": "source/blender/600s-blockout-v0.1.blend",
+  "builder": "scripts/build_600s_blockout.py",
+  "exported_at": "2026-08-25T12:48:40Z",
+  "sha256": "c24adc98a808b9983120fe8193ba9dee22d7a473d5e0543eec94ed4cb912b551",
+  "source_blend_sha256": "740b31f418c8581ad129f1d34d4b3a702694966fbd99cd1ae592461df25f7e0c",
+  "units": "meters",
+  "root_node": "600S_ROOT",
+  "visible_envelope_m": [8.71, 2.48, 2.50],
+  "wheelbase_m": 2.50,
+  "platform_envelope_m": [0.91, 2.44],
+  "triangle_count": 1320,
+  "required_nodes": [
+    "Chassis",
+    "Frame",
+    "AxleFront",
+    "AxleRear",
+    "Wheel_FL",
+    "Wheel_FR",
+    "Wheel_RL",
+    "Wheel_RR",
+    "TurntablePivot",
+    "Turntable",
+    "EngineCover",
+    "Counterweight",
+    "Controls",
+    "BoomPivot",
+    "MainBoom",
+    "Telescope",
+    "PlatformPivot",
+    "Platform",
+    "LiftCylinder"
+  ],
+  "interaction_volumes": [
+    "Chassis_Hit",
+    "Turntable_Hit",
+    "Boom_Hit",
+    "Telescope_Hit",
+    "Platform_Hit"
+  ],
+  "validation": {
+    "loads_without_console_error": true,
+    "node_contract_passes": true,
+    "articulation_pivots_pass": true,
+    "selection_volumes_pass": true,
+    "stowed_silhouette_reviewed": true,
+    "mobile_view_reviewed": true,
+    "provenance_reviewed": true
+  },
+  "validation_evidence": {
+    "mechanical": "scripts/validate_600s_glb.py: 49 nodes, 24 required parent edges, 1320 triangles",
+    "browser": "In-app browser at 1280x720 and 390x844; source flag blender-blockout-v0.1; zero warnings/errors",
+    "motion": "45 degree lift, 60 percent extension, 35 degree swing, 20 degree steering reached Holding; Stow returned all controls to zero",
+    "selection": "Canvas hit-volume raycast opened the boom component inspector",
+    "silhouette_scope": "Structural blockout review against published envelopes and reference-board manifest; not a detailed geometry approval"
+  },
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Internal pivot offsets, cylinder anchors, boom section lengths, turntable internals, and platform rotator geometry remain visibly reconstructed or unresolved."
+}

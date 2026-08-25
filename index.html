@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="An unofficial interactive visualization of a telescopic boom lift.">
+  <title>600S Interactive Equipment Study</title>
+  <link rel="stylesheet" href="viewer.css?v=0.1.1">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app" aria-hidden="true"></div>
+
+  <div class="loader" id="loader" role="status">
+    <span class="loader-mark"></span>
+    <span>Preparing equipment study</span>
+  </div>
+
+  <div class="error" id="error" hidden>
+    <div>
+      <strong>WebGL is unavailable.</strong>
+      <p>This interactive study needs a browser with WebGL enabled.</p>
+    </div>
+  </div>
+
+  <main class="interface">
+    <header class="topbar">
+      <a class="wordmark" href="./" aria-label="Equipment Explorer home">
+        <span>Equipment</span><b>Explorer</b>
+      </a>
+      <div class="prototype-label">Visual prototype / 01</div>
+      <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
+    </header>
+
+    <section class="identity" aria-labelledby="machine-title">
+      <div class="status"><i></i>Interactive study</div>
+      <h1 id="machine-title">600S</h1>
+      <p>Telescopic boom lift</p>
+    </section>
+
+    <section class="specs" aria-label="Published product specifications">
+      <div><strong>59′ 8″</strong><span>Platform height</span></div>
+      <div><strong>50′ 2″</strong><span>Horizontal outreach</span></div>
+      <div><strong>1,000 lb</strong><span>Restricted capacity</span></div>
+      <p>Unofficial visualization. Not an engineering or service reference.</p>
+    </section>
+
+    <section class="control-panel" aria-labelledby="operate-title">
+      <div class="panel-heading">
+        <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
+        <output id="motion-status">Stowed</output>
+      </div>
+
+      <label class="control-row">
+        <span>Boom lift</span><output id="boom-value">0°</output>
+        <input id="boom-control" type="range" min="0" max="72" value="0" step="1">
+      </label>
+      <label class="control-row">
+        <span>Extend</span><output id="extend-value">0%</output>
+        <input id="extend-control" type="range" min="0" max="100" value="0" step="1">
+      </label>
+      <label class="control-row">
+        <span>Rotate</span><output id="rotate-value">0°</output>
+        <input id="rotate-control" type="range" min="-180" max="180" value="0" step="1">
+      </label>
+      <label class="control-row compact-control">
+        <span>Steering</span><output id="steer-value">0°</output>
+        <input id="steer-control" type="range" min="-28" max="28" value="0" step="1">
+      </label>
+
+      <div class="action-row">
+        <button class="primary-action" id="stow" type="button">Stow machine</button>
+        <button class="secondary-action" id="reset-view" type="button">Reset view</button>
+        <button class="secondary-action" id="range-toggle" type="button" aria-pressed="false">Range</button>
+      </div>
+      <p class="motion-boundary">Prototype motion limits. Not operational data.</p>
+    </section>
+
+    <nav class="component-nav" aria-label="Explore components">
+      <span>Explore</span>
+      <button type="button" data-focus="chassis" aria-pressed="false"><i>01</i>Chassis</button>
+      <button type="button" data-focus="turntable" aria-pressed="false"><i>02</i>Turntable</button>
+      <button type="button" data-focus="boom" aria-pressed="false"><i>03</i>Boom</button>
+      <button type="button" data-focus="platform" aria-pressed="false"><i>04</i>Platform</button>
+    </nav>
+
+    <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Select a component</div>
+  </main>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="inspector" id="inspector" aria-labelledby="inspector-title" inert>
+    <button class="inspector-close" id="inspector-close" type="button" aria-label="Close inspector">×</button>
+    <div class="inspector-kicker" id="inspector-kicker">Project note</div>
+    <h2 id="inspector-title">A visual replica,<br>not an engineering model.</h2>
+    <p id="inspector-copy">This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.</p>
+    <dl id="inspector-facts">
+      <div><dt>Model</dt><dd>Procedural interaction blockout</dd></div>
+      <div><dt>Purpose</dt><dd>Portfolio and educational visualization</dd></div>
+      <div><dt>Boundary</dt><dd>Not a service, training, fabrication, or safety reference</dd></div>
+    </dl>
+  </aside>
+
+  <script type="module" src="viewer.js?v=0.1.2"></script>
+</body>
+</html>

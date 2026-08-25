@@ -1,0 +1,41 @@
+{
+  "asset": "assets/models/600s.glb",
+  "status": "PENDING_ASSET",
+  "authorship": "owned-simplified-reconstruction",
+  "source_blend": null,
+  "exported_at": null,
+  "sha256": null,
+  "units": "meters",
+  "root_node": "600S_ROOT",
+  "required_nodes": [
+    "Chassis",
+    "Wheel_FL",
+    "Wheel_FR",
+    "Wheel_RL",
+    "Wheel_RR",
+    "TurntablePivot",
+    "Turntable",
+    "BoomPivot",
+    "MainBoom",
+    "Telescope",
+    "PlatformPivot",
+    "Platform",
+    "LiftCylinder"
+  ],
+  "interaction_volumes": [
+    "Chassis_Hit",
+    "Turntable_Hit",
+    "Boom_Hit",
+    "Telescope_Hit",
+    "Platform_Hit"
+  ],
+  "validation": {
+    "loads_without_console_error": false,
+    "node_contract_passes": false,
+    "articulation_pivots_pass": false,
+    "selection_volumes_pass": false,
+    "stowed_silhouette_reviewed": false,
+    "mobile_view_reviewed": false,
+    "provenance_reviewed": false
+  }
+}

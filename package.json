@@ -1,0 +1,14 @@
+{
+  "name": "jlg-equipment-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unofficial interactive equipment visualization prototype",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EXO-Robotics/jlg-equipment-explorer.git"
+  },
+  "scripts": {
+    "start": "python3 -B -m http.server 8080",
+    "check": "node --check viewer.js"
+  }
+}

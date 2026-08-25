@@ -1,0 +1,12 @@
+.DS_Store
+*.log
+__pycache__/
+*.py[cod]
+*.blend1
+.blender-mcp/
+tools/blender_mcp_official/
+docs/research/600s/reference-board/*.png
+docs/research/600s/reference-board/*.jpg
+docs/research/600s/reference-board/*.jpeg
+docs/research/600s/reference-board/*.webp
+docs/research/600s/reference-board/*.pdf
