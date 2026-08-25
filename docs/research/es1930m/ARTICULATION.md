@@ -78,7 +78,7 @@ The future steering solver must use the authored cylinder/spindle pivot graph an
 
 ## Sampled validator
 
-At lift values 0.00 through 1.00 in 0.10 increments, require:
+At lift values 0.00 through 1.00 in 0.01 increments, require:
 
 - every authored arm-link length remains invariant;
 - every shared pivot closes within the declared meter epsilon;
@@ -88,9 +88,11 @@ At lift values 0.00 through 1.00 in 0.10 increments, require:
 - cylinder pin distance remains compatible with its 685.5 mm stroke envelope;
 - the solver remains on one continuous branch with no link inversion;
 - transform deltas remain below the continuity threshold;
-- broad-phase arm/chassis/platform collision proxies do not report impossible penetration.
+- the declared broad-phase collision proxies do not report non-adjacent arm crossing, arm-body intrusion through the platform underside outside the intended upper-pin neighborhood, escape beyond the published machine-width/length envelope, or loss of lateral clearance between the center cylinder and either scissor plane.
 
 These checks validate the authored reconstruction. They do not establish real-machine structural, stability or safety performance.
+
+The collision pass is deliberately a centerline/section proxy rather than a triangle-level mesh collision test. Same-level arm crossings and adjacent-level shared endpoints are required parts of the pantograph and are excluded. The upper 30 percent of each top link is also excluded from the deck-underside proxy because the links terminate in the platform slide/pin structure. Chassis-to-link clearance is bounded by the authored lower-pivot height and exported stowed-pose GLB envelope, not asserted as measured JLG clearance. The proxy dimensions in `mechanism.json` are reconstruction values and must never be cited as factory dimensions.
 
 ## Frozen reconstructed branch
 
@@ -98,4 +100,4 @@ These checks validate the authored reconstruction. They do not establish real-ma
 
 The cylinder installation is likewise a circle-intersection reconstruction: its fixed lower pin, kicker pivot, and kicker-pin radius are authored coordinates, while the change in cylinder pin distance is constrained to the published 0.6855 m stroke. This preserves a mechanically continuous relationship without claiming that the chosen leverage geometry is a measured factory installation.
 
-`scripts/validate_es1930m_kinematics.py` samples 101 lift states, checks both crossing links in every level, shared-center closure, mirror symmetry, branch monotonicity, transform continuity, and exact presentation-cylinder stroke. Later GLB validation must repeat these tests against exported marker transforms rather than treating this analytic test as asset proof.
+`scripts/validate_es1930m_kinematics.py` samples 101 lift states, checks both crossing links in every level, shared-center closure, mirror symmetry, branch monotonicity, transform continuity, exact presentation-cylinder stroke, and 4,141 collision/envelope proxy assertions. `scripts/validate_es1930m_glb.py` separately checks the exported node hierarchy, explicit marker/link counts, asset envelope, interaction volumes, and hash-bound runtime contract. The analytic solver check and exported-asset check remain separate evidence; neither is a substitute for physical-machine validation.

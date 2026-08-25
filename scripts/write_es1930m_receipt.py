@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -20,6 +22,8 @@ FILES = {
     "mechanism": ROOT / "machines/es1930m/mechanism.json",
     "source_manifest": ROOT / "docs/research/es1930m/SOURCE_MANIFEST.json",
     "mechanism_evidence": ROOT / "docs/research/es1930m/MECHANISM_EVIDENCE.json",
+    "visual_comparison": ROOT / "docs/research/es1930m/VISUAL_COMPARISON.md",
+    "review_renderer": ROOT / "scripts/render_es1930m_preview.py",
 }
 RUNTIME_FILES = [
     ROOT / "es1930m/index.html",
@@ -61,6 +65,13 @@ def main():
         for mesh in document.get("meshes", [])
         for primitive in mesh.get("primitives", [])
     )
+    kinematics = json.loads(subprocess.check_output(
+        [sys.executable, "-B", str(ROOT / "scripts/validate_es1930m_kinematics.py")],
+        cwd=ROOT,
+        text=True,
+    ))
+    if kinematics.get("status") != "PASS":
+        raise RuntimeError("ES1930M kinematic validator did not pass")
     receipt = {
         "schema_version": "1.0.0",
         "release": "1.0.0-candidate",
@@ -84,11 +95,15 @@ def main():
             "stowed_envelope_xyz_m": [maximum[index] - minimum[index] for index in range(3)]
         },
         "mechanism_metrics": {
-            "sampled_lift_states": 101,
-            "levels": 5,
-            "maximum_link_length_error_m": 4.440892098500626e-16,
-            "maximum_shared_pivot_error_m": 0.0,
-            "cylinder_observed_stroke_m": 0.6855
+            "sampled_lift_states": kinematics["samples"],
+            "levels": kinematics["levels"],
+            "maximum_link_length_error_m": kinematics["maximum_link_length_error_m"],
+            "maximum_shared_pivot_error_m": kinematics["maximum_shared_pivot_error_m"],
+            "maximum_symmetry_error_m": kinematics["maximum_symmetry_error_m"],
+            "maximum_translation_per_0_01_sample_m": kinematics["maximum_translation_per_0_01_sample_m"],
+            "cylinder_observed_stroke_m": kinematics["cylinder_observed_stroke_m"],
+            "collision_proxy_assertions": kinematics["collision_proxy_assertions"],
+            "collision_proxy_status": kinematics["collision_proxy_status"],
         },
         "review_flags": {
             "evidence_hashes_pass": True,
