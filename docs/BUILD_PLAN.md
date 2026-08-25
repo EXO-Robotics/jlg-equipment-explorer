@@ -72,8 +72,8 @@ Stowed envelope, hierarchy, selection, and transform integration accepted; worki
 - [x] Add visible hydraulic/electrical cues for the steering circuit, main valve bank, lift cylinder, boom, platform rotator, ground controls, engine, and platform harness
 - [ ] Add restrained surface variation through reusable roughness/normal textures; keep the GLB texture budget at or below 4 MB
 - [x] Refine the evidence-supported pivot, slew ring, tower links, rapid-replace platform support, and rotator relationship while classifying undimensioned offsets as reconstructed
-- [ ] Improve hover/select treatment
-- [ ] Validate keyboard access and reduced motion with the real GLB
+- [x] Improve hover/select treatment with hit-volume-aligned moving outlines
+- [x] Validate keyboard access and reduced motion with the real GLB in Safari
 - [ ] Capture a Chrome performance trace and current-generation source-comparison visual proof
 
 ### M4 — Reusable machine layer

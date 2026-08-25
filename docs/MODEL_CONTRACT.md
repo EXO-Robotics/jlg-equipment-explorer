@@ -83,6 +83,8 @@ independently translating `Telescope` node.
 - Prefer one 2K texture atlas or a small set of reusable PBR materials.
 - Keep draw calls below 100 on the machine.
 - Use mesh compression only after an uncompressed GLB is proven in the viewer.
+- Runtime-only product/model markings must be independently typeset and tagged `independently-typeset-nominative-mark`; copied manufacturer artwork is not admitted.
+- Hover and focused-component outlines must be children of the five hit volumes so they follow articulation without changing selection topology.
 
 ## Acceptance checks
 
@@ -98,3 +100,5 @@ independently translating `Telescope` node.
 10. Platform deck world-up stays within about 2° of vertical at 0°, 36°, and 72° lift.
 11. Lower-chassis ground clearance remains 0.29 m and modeled tailswing remains 1.22 m, within the reconstruction drift tolerance.
 12. `LiftCylinder` must use the evidence-bounded two-anchor visual solver. Its exported lower and upper anchors are visually reconstructed, not fabrication measurements, and false fixed-to-boom cylinder motion is not acceptable.
+13. Keyboard orbit, zoom, component focus, reset, dialog focus restoration, and reduced-motion snapping remain functional with the real GLB.
+14. Runtime diagnostics identify the actual model source, self-test all five hit volumes, count uncaught runtime errors, and sample frame pacing without presenting the result as engineering validation.

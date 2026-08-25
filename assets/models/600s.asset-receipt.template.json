@@ -1,10 +1,10 @@
 {
   "asset": "assets/models/600s.glb",
   "status": "PENDING_ASSET",
-  "release": "0.3.0",
+  "release": "1.0.0",
   "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
-  "source_blend": "source/blender/600s-detailed-v0.3.blend",
+  "source_blend": "source/blender/600s-showcase-v1.0.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
   "exported_at": null,

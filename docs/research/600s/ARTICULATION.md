@@ -26,7 +26,7 @@ These are interaction-test values, not JLG operating data. The Blender GLB and t
 | Steering slider | -28 to +28 degrees | -28 to +28 degrees | visual approximation |
 | Platform leveling | counter-rotate `PlatformPivot` | counter-rotate `PlatformPivot` | visual only |
 
-The production UI must retain a visible `prototype motion limits` disclaimer until current manual evidence replaces the unverified values.
+The production UI retains a visible `presentation-only motion limits` disclaimer because these values remain unverified.
 
 ## Reach-envelope policy
 
@@ -43,7 +43,7 @@ The production UI must retain a visible `prototype motion limits` disclaimer unt
 3. True platform-leveling mechanism during boom elevation.
 4. Platform-rotator center, neutral pose, and allowed direction split within the published 160 degrees.
 5. Exact steering modes available on the modeled configuration.
-6. Lift-cylinder base and rod-end anchor positions.
+6. Dimensioned lift-cylinder base and rod-end anchor positions; current anchors establish only a visually supported relationship.
 7. Whether current PVC 2601 schematics apply to the PVC 2607 machine.
 
 ## Animation hierarchy
@@ -60,4 +60,4 @@ The production UI must retain a visible `prototype motion limits` disclaimer unt
             └── LiftCylinder
 ```
 
-`LiftCylinder` remains a contract-only node until both anchors are supported. A later visual aim/scale solution may be used without making a hydraulic-physics or inverse-kinematics claim.
+`LiftCylinder` now uses a two-anchor visual solver: its lower anchor follows the turntable and its upper anchor follows `MainBoom`. The barrel stays fixed-length while the rod visually spans the remaining distance. The anchor coordinates, rod stroke, bore, pressure, force, and service geometry remain reconstructed and are not hydraulic-physics, inverse-kinematics, fabrication, or service claims.

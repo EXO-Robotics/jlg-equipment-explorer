@@ -1,17 +1,17 @@
 {
   "asset": "assets/models/600s.glb",
-  "status": "DETAILED_V0_3_MECHANICAL_PASS",
-  "release": "0.3.0",
+  "status": "SHOWCASE_V1_0_MECHANICAL_PASS",
+  "release": "1.0.0",
   "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
   "authorship": "owned-simplified-reconstruction",
-  "source_blend": "source/blender/600s-detailed-v0.3.blend",
+  "source_blend": "source/blender/600s-showcase-v1.0.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T15:47:09Z",
-  "sha256": "08c9cc50fc0070cd5f5a94839719d44b5789012584422efaee4bb81519f01703",
-  "source_blend_sha256": "f701529c26d5ef29563cfe2a2092b0369937d25bbcfda68acab8065efa11b862",
-  "cache_key": "08c9cc50fc00",
-  "runtime_sha256": "2df6e984b387088363421de0f28620770bc7c650fc4e2f0a23490fc8b197b242",
+  "exported_at": "2026-08-25T16:16:49Z",
+  "sha256": "858415279e5d9e93e941474905465bc0def19b81239abd0d4b7e90e26f488ca1",
+  "source_blend_sha256": "02d2ccefd2171c1f2130f234ab988b6f7648d684c609bd8017c3fd082bbbbcd3",
+  "cache_key": "858415279e5d",
+  "runtime_sha256": "3266fcf7879b3c51f545f47edb43e0b883b0d90a910be13d98bcbaa7f3bb220f",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -40,7 +40,7 @@
   ],
   "mechanical_validation": {
     "status": "PASS",
-    "bytes": 915668,
+    "bytes": 915664,
     "mesh_count": 325,
     "visible_bounds_min_m": [
       -2.9093,
@@ -59,14 +59,14 @@
     "articulation_pivots_pass": true,
     "selection_volumes_pass": false,
     "stowed_silhouette_reviewed": true,
-    "working_pose_silhouette_pass": true,
+    "working_pose_silhouette_pass": false,
     "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Local Safari proof on 2026-08-25 loaded GLB 08c9cc50fc00 at desktop and a 390 px window. The About inspector reported 50 runtime meshes after rigid-group consolidation. Console state was not directly inspected, so loads_without_console_error remains false.",
-      "motion": "Post-consolidation Safari proof observed 52 degrees lift and 76 percent visual telescope extension with platform leveling and the two-anchor lift-cylinder solver intact; Stow returned all four target controls to zero.",
-      "selection": "Direct canvas ray hits opened Platform and Telescopic boom inspectors after runtime mesh consolidation; the mobile Chassis focus control also opened correctly. All five ray volumes were not individually re-proven, so selection_volumes_pass remains false.",
-      "silhouette_scope": "Current GLB stowed and working poses were visually reviewed at desktop and mobile widths against the frozen current-generation reference scope. PASS means recognizable evidence-bounded reconstruction, not exact undimensioned geometry or engineering accuracy."
+      "browser": "Fresh Safari 2026-08-25: exact 858415279e5d GLB, 60 runtime meshes, 145-3149 ms observed warm/cold local load range, 60 fps, 17.0-18.0 ms p95 sample, selection self-test 5/5, uncaught runtime error counter 0; developer console not directly inspected.",
+      "motion": "Fresh Safari stowed and combined 36-degree lift / 60-percent extension / 45-degree swing / 20-degree front-steer poses; stow, platform leveling, two-anchor cylinder relationship, keyboard focus, and reduced-motion snapping visually reviewed.",
+      "selection": "Runtime individual-ray self-test reports 5/5 at stowed and reduced-motion working poses. This is not direct end-user ray arbitration across every pose, so selection_volumes_pass remains false.",
+      "silhouette_scope": "Stowed and working poses compared with current JLG gallery assets 140381, 139098, and 138896. Stowed baseline reviewed; working-pose pass withheld because 0.90 m presentation telescope cap does not represent full machine outreach and fixed-camera paired overlays remain pending. Exact 390 x 844 layout reviewed."
     }
   },
   "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. Telescope travel is a visual overlap cap, not a published stroke. The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions are reconstructed and are not fabrication or service measurements. Internal pivot offsets, boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform rotator geometry remain visually reconstructed or unresolved."

@@ -75,7 +75,7 @@ def main() -> None:
     accepted = all(review.get(flag) is True for flag in REVIEW_FLAGS)
     receipt = {
         "asset": mechanical["asset"],
-        "status": "DETAILED_V0_3_ACCEPTED" if accepted else "DETAILED_V0_3_MECHANICAL_PASS",
+        "status": "SHOWCASE_V1_0_ACCEPTED" if accepted else "SHOWCASE_V1_0_MECHANICAL_PASS",
         "release": ASSET_VERSION,
         "configuration_id": mechanical["configuration_id"],
         "authorship": "owned-simplified-reconstruction",

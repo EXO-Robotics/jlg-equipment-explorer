@@ -14,7 +14,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GLB_PATH = PROJECT_ROOT / "assets/models/600s.glb"
-BLEND_PATH = PROJECT_ROOT / "source/blender/600s-detailed-v0.3.blend"
+BLEND_PATH = PROJECT_ROOT / "source/blender/600s-showcase-v1.0.blend"
 CONFIGURATION_PATH = PROJECT_ROOT / "assets/models/600s.configuration.json"
 RECEIPT_PATH = PROJECT_ROOT / "assets/models/600s.asset-receipt.json"
 RECEIPT_TEMPLATE_PATH = PROJECT_ROOT / "assets/models/600s.asset-receipt.template.json"
@@ -37,7 +37,7 @@ RUNTIME_FILES = (
     *(PROJECT_ROOT / relative_path for relative_path in VENDOR_HASHES if relative_path != "vendor/three-r160/LICENSE"),
 )
 
-ASSET_VERSION = "0.3.0"
+ASSET_VERSION = "1.0.0"
 CONFIGURATION_ID = "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696"
 PUBLISHED_ENVELOPE_M = (8.71, 2.48, 2.50)  # length, width, height
 PLATFORM_ENVELOPE_M = (0.91, 2.44)
@@ -362,7 +362,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     for key, expected in expected_values.items():
         require_equal(receipt.get(key), expected, key)
     review = receipt.get("review") or {}
-    expected_status = "DETAILED_V0_3_ACCEPTED" if all(review.get(flag) is True for flag in REVIEW_FLAGS) else "DETAILED_V0_3_MECHANICAL_PASS"
+    expected_status = "SHOWCASE_V1_0_ACCEPTED" if all(review.get(flag) is True for flag in REVIEW_FLAGS) else "SHOWCASE_V1_0_MECHANICAL_PASS"
     require_equal(receipt.get("status"), expected_status, "status")
     for key in ("visible_envelope_m", "platform_envelope_m"):
         require_close_list(receipt.get(key), report[key], key)
@@ -392,7 +392,7 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     require_equal(receipt.get("evidence_boundary"), template.get("evidence_boundary"), "evidence_boundary")
     if not isinstance(receipt.get("exported_at"), str) or not receipt["exported_at"].endswith("Z"):
         raise RuntimeError("Receipt exported_at must be a UTC timestamp")
-    if expected_status == "DETAILED_V0_3_ACCEPTED":
+    if expected_status == "SHOWCASE_V1_0_ACCEPTED":
         evidence = review.get("evidence") or {}
         for key in template["review"]["evidence"]:
             if not isinstance(evidence.get(key), str) or not evidence[key].strip():
@@ -421,6 +421,8 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
     for asset_name in ("viewer.css", "viewer.js"):
         if f'{asset_name}?v={ASSET_VERSION}' not in index_source:
             raise RuntimeError(f"index.html does not cache-key {asset_name} with the release")
+    if f'assets/models/600s.glb?v={report["cache_key"]}' not in index_source:
+        raise RuntimeError("index.html GLB preload cache key does not match the validated asset")
     viewer_source = VIEWER_PATH.read_text(encoding="utf-8")
     if f'./assets/models/600s.version.js?v={ASSET_VERSION}' not in viewer_source:
         raise RuntimeError("viewer.js does not cache-key the asset manifest with the release")
@@ -449,6 +451,13 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     scenes = document.get("scenes") or []
     if len(scenes) != 1:
         raise RuntimeError(f"Expected one export scene, found {len(scenes)}: {[scene.get('name') for scene in scenes]}")
+    if scenes[0].get("name") != "JLG_600S_SHOWCASE_V10":
+        raise RuntimeError(f"Showcase scene identity drift: {scenes[0].get('name')!r}")
+    scene_extras = scenes[0].get("extras") or {}
+    if scene_extras.get("asset") != "600S Showcase reconstruction v1.0":
+        raise RuntimeError(f"Showcase scene asset label drift: {scene_extras.get('asset')!r}")
+    if scene_extras.get("asset_version") != ASSET_VERSION:
+        raise RuntimeError("Showcase scene release metadata drift")
     scene_nodes = scenes[0].get("nodes") or []
     if scene_nodes != [by_name.get("600S_ROOT")]:
         raise RuntimeError("Export scene must contain only 600S_ROOT")

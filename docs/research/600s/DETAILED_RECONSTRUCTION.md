@@ -89,11 +89,20 @@ hit volumes, identity export scale, configuration/provenance extras, published s
 platform size, wheelbase, clearance, tailswing, triangle budget, and telescope overlap. Safari proof
 has covered real-GLB load, lift, extension, stow, platform leveling, mobile controls, and the component
 inspector. The authored GLB contains 325 mesh records for traceable detail, then the viewer merges only
-same-material geometry inside rigid motion groups. The observed v0.3 runtime contains 50 visible meshes,
+same-material geometry inside rigid motion groups. The observed v1.0 runtime contains 60 visible meshes
+(including independently authored model/product marks and generic hazard-band cues),
 while front steering, boom lift, telescope extension, platform leveling, lift-cylinder solving, and all
 five hit volumes remain separate.
 
-Remaining acceptance work is narrower: direct browser-console inspection, direct canvas ray-hit
-coverage across all five hit volumes, keyboard/reduced-motion proof, performance tracing, improved
-owned markings, restrained surface texture variation, and source-comparison captures. Those gates
-must not be inferred from the mechanical validator.
+Fresh Safari v1.0 evidence covers real-GLB load, uncaught runtime-error instrumentation at zero,
+five-of-five individual ray-hit self-tests, 60 fps with a 17.0–18.0 ms p95 frame sample on the tested
+desktop, lift/stow, component inspection, keyboard component focus, moving selection outlines,
+reduced-motion snapping, and the exact 390 × 844 layout. Independently typeset product/model marks,
+a generic independently authored hazard-band cue, and restrained per-part powder-coat/boom/deck
+finishes are runtime presentation assets rather than copied manufacturer artwork.
+
+Remaining acceptance work is narrower: direct browser-console inspection, direct user-ray coverage
+across all five hit volumes, a captured Chrome performance trace, and fixed-camera paired source
+overlays. The source comparison also confirms that the 0.90 m evidence-safe telescope cap cannot
+represent the real machine's full outreach. Those gaps must not be inferred away from the mechanical
+validator or the runtime diagnostic self-test.

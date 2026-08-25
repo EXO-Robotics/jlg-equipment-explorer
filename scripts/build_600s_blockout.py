@@ -1,4 +1,4 @@
-"""Build and export the evidence-bounded detailed 600S reconstruction v0.3."""
+"""Build and export the evidence-bounded detailed 600S Showcase v1.0."""
 
 from __future__ import annotations
 
@@ -13,14 +13,15 @@ from mathutils import Vector
 
 _SCRIPT = Path(globals().get("__file__") or globals()["_jlg_script"]).resolve()
 PROJECT_ROOT = _SCRIPT.parents[1]
-BLEND_PATH = PROJECT_ROOT / "source/blender/600s-detailed-v0.3.blend"
+BLEND_PATH = PROJECT_ROOT / "source/blender/600s-showcase-v1.0.blend"
 MIGRATION_SOURCE_PATHS = {
+    PROJECT_ROOT / "source/blender/600s-detailed-v0.3.blend",
     PROJECT_ROOT / "source/blender/600s-blockout-v0.2.blend",
     PROJECT_ROOT / "source/blender/600s-blockout-v0.1.blend",
 }
 GLB_PATH = PROJECT_ROOT / "assets/models/600s.glb"
-SCENE_NAME = "JLG_600S_DETAILED_V03"
-COLLECTION_NAME = "JLG_600S_DETAILED_V03"
+SCENE_NAME = "JLG_600S_SHOWCASE_V10"
+COLLECTION_NAME = "JLG_600S_SHOWCASE_V10"
 
 PUBLISHED_ENVELOPE_M = Vector((8.71, 2.48, 2.50))
 PLATFORM_SIZE_M = Vector((0.91, 2.44))
@@ -28,7 +29,7 @@ WHEELBASE_M = 2.50
 GROUND_CLEARANCE_M = 0.29
 TAILSWING_M = 1.22
 TELESCOPE_TRAVEL_M = 0.90
-ASSET_VERSION = "0.3.0"
+ASSET_VERSION = "1.0.0"
 CONFIGURATION_ID = "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696"
 
 CHASSIS_HALF_WIDTH_M = PUBLISHED_ENVELOPE_M.y / 2.0
@@ -394,28 +395,42 @@ if bpy.data.filepath:
     if open_path not in allowed_paths:
         raise RuntimeError(f"Refusing to replace an unrelated saved Blender file: {open_path}")
 
-for old_collection in list(bpy.data.collections):
-    if old_collection.name.startswith(("JLG_600S_BLOCKOUT", "JLG_600S_DETAILED")):
-        for old_object in list(old_collection.all_objects):
-            bpy.data.objects.remove(old_object, do_unlink=True)
-        bpy.data.collections.remove(old_collection)
+generated_prefixes = ("JLG_600S_BLOCKOUT", "JLG_600S_DETAILED", "JLG_600S_SHOWCASE")
+generated_collections = [
+    value for value in list(bpy.data.collections)
+    if value.name.startswith(generated_prefixes)
+]
+generated_objects = {obj for value in generated_collections for obj in value.all_objects}
+generated_meshes = {obj.data for obj in generated_objects if obj.type == "MESH" and obj.data}
+generated_materials = {
+    material_slot.material
+    for obj in generated_objects
+    for material_slot in obj.material_slots
+    if material_slot.material
+}
+for old_object in generated_objects:
+    bpy.data.objects.remove(old_object, do_unlink=True)
+for old_collection in generated_collections:
+    bpy.data.collections.remove(old_collection)
+for old_mesh in generated_meshes:
+    if old_mesh.users == 0:
+        bpy.data.meshes.remove(old_mesh)
+for old_material in generated_materials:
+    if old_material.users == 0:
+        bpy.data.materials.remove(old_material)
 
-scene = bpy.data.scenes.new(SCENE_NAME)
+scene = bpy.data.scenes.new("JLG_600S_BUILD_TEMP")
 if bpy.context.window:
     bpy.context.window.scene = scene
 for old_scene in list(bpy.data.scenes):
-    if old_scene != scene:
+    if old_scene != scene and old_scene.name.startswith(generated_prefixes):
         bpy.data.scenes.remove(old_scene)
-
-for datablock_collection in (bpy.data.meshes, bpy.data.materials, bpy.data.objects, bpy.data.cameras, bpy.data.lights):
-    for datablock in list(datablock_collection):
-        if datablock.users == 0:
-            datablock_collection.remove(datablock)
+scene.name = SCENE_NAME
 
 scene.unit_settings.system = "METRIC"
 scene.unit_settings.length_unit = "METERS"
 scene.unit_settings.scale_length = 1.0
-scene["asset"] = "600S detailed reconstruction v0.3"
+scene["asset"] = "600S Showcase reconstruction v1.0"
 scene["asset_version"] = ASSET_VERSION
 scene["configuration_id"] = CONFIGURATION_ID
 scene["published_envelope_m"] = list(PUBLISHED_ENVELOPE_M)
@@ -739,7 +754,7 @@ bpy.ops.export_scene.gltf(
 
 result = {
     "status": "PASS",
-    "asset": "600S Detailed v0.3",
+    "asset": "600S Showcase v1.0",
     "configuration_id": CONFIGURATION_ID,
     "asset_version": ASSET_VERSION,
     "blend_path": str(BLEND_PATH),

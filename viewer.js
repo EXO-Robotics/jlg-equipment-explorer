@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
-import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=0.3.0";
+import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=1.0.0";
 
 document.body.dataset.viewerStarted = "true";
-const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+const query = new URLSearchParams(location.search);
+const reducedMotion = query.get("reduce") === "1" || (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false);
 const compactRender = window.matchMedia?.("(max-width: 800px)").matches ?? false;
 const lowMemoryDevice = Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4;
 const renderProfile = lowMemoryDevice ? "economy" : compactRender ? "mobile" : "desktop";
@@ -16,7 +17,40 @@ const loader = document.querySelector("#loader");
 const loaderStatus = document.querySelector("#loader-status");
 const loaderDetail = document.querySelector("#loader-detail");
 const errorPanel = document.querySelector("#error");
+const diagnosticsOutput = document.querySelector("#diagnostics");
+const diagnosticsEnabled = query.get("diagnostics") === "1";
+const runtimeDiagnostics = {
+  errors: 0,
+  selectionHits: "pending",
+  frameRate: "sampling",
+  loadMs: "pending",
+};
 document.body.dataset.renderProfile = renderProfile;
+document.body.dataset.reducedMotion = String(reducedMotion);
+
+function recordRuntimeError() {
+  runtimeDiagnostics.errors += 1;
+  document.body.dataset.runtimeErrorCount = String(runtimeDiagnostics.errors);
+  updateDiagnostics();
+}
+window.addEventListener("error", recordRuntimeError);
+window.addEventListener("unhandledrejection", recordRuntimeError);
+
+function updateDiagnostics() {
+  if (!diagnosticsOutput) return;
+  diagnosticsOutput.hidden = !diagnosticsEnabled;
+  diagnosticsOutput.value = [
+    `source ${document.body.dataset.machineSource || "initializing"}`,
+    `meshes ${document.body.dataset.machineVisibleMeshes || "pending"}`,
+    `selection ${runtimeDiagnostics.selectionHits}`,
+    `errors ${runtimeDiagnostics.errors}`,
+    `load ${runtimeDiagnostics.loadMs}`,
+    `render ${renderProfile} / ${runtimeDiagnostics.frameRate}`,
+    `reduced motion ${reducedMotion ? "on" : "off"}`,
+  ].join(" · ");
+}
+document.body.dataset.runtimeErrorCount = "0";
+updateDiagnostics();
 
 function pixelRatio() {
   return Math.min(devicePixelRatio || 1, maximumPixelRatio);
@@ -290,6 +324,92 @@ function applyDisplayMaterial(node, profile, suffix) {
   applyMaterialProfile(node.material, profile);
 }
 
+const markingTextureCache = new Map();
+function createMarkingTexture(text, foreground) {
+  const cacheKey = `${text}|${foreground}`;
+  if (markingTextureCache.has(cacheKey)) return markingTextureCache.get(cacheKey);
+  const markingCanvas = document.createElement("canvas");
+  markingCanvas.width = 512;
+  markingCanvas.height = 128;
+  const context = markingCanvas.getContext("2d");
+  context.clearRect(0, 0, markingCanvas.width, markingCanvas.height);
+  context.fillStyle = foreground;
+  context.font = "italic 900 82px Arial, Helvetica, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(text, markingCanvas.width / 2, markingCanvas.height / 2 + 3);
+  const texture = new THREE.CanvasTexture(markingCanvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  markingTextureCache.set(cacheKey, texture);
+  return texture;
+}
+
+function addSideMarking(parent, name, text, size, position, side, foreground) {
+  if (!parent) return;
+  const material = new THREE.MeshBasicMaterial({
+    map: createMarkingTexture(text, foreground),
+    transparent: true,
+    alphaTest: 0.18,
+    toneMapped: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
+  material.name = `Independent_${name}_Marking`;
+  const marking = new THREE.Mesh(new THREE.PlaneGeometry(...size), material);
+  marking.name = name;
+  marking.position.set(...position);
+  marking.rotation.y = side < 0 ? Math.PI : 0;
+  marking.userData.authority = "independently-typeset-nominative-mark";
+  marking.userData.not_manufacturer_artwork = true;
+  parent.add(marking);
+}
+
+function createHazardTexture() {
+  const stripeCanvas = document.createElement("canvas");
+  stripeCanvas.width = 512;
+  stripeCanvas.height = 64;
+  const context = stripeCanvas.getContext("2d");
+  context.fillStyle = "#e6a411";
+  context.fillRect(0, 0, stripeCanvas.width, stripeCanvas.height);
+  context.strokeStyle = "#171a19";
+  context.lineWidth = 46;
+  for (let x = -80; x < stripeCanvas.width + 80; x += 88) {
+    context.beginPath();
+    context.moveTo(x, stripeCanvas.height + 12);
+    context.lineTo(x + 74, -12);
+    context.stroke();
+  }
+  const texture = new THREE.CanvasTexture(stripeCanvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function addHazardBands(turntable) {
+  const material = new THREE.MeshBasicMaterial({ map: createHazardTexture(), toneMapped: false });
+  material.name = "Independent_HazardBand_Presentation";
+  [-1, 1].forEach((side) => {
+    const band = new THREE.Mesh(new THREE.PlaneGeometry(1.48, 0.105), material);
+    band.name = `HazardBand_${side < 0 ? "L" : "R"}`;
+    band.position.set(-1.58, 0.49, side * 1.052);
+    band.rotation.y = side < 0 ? Math.PI : 0;
+    band.userData.authority = "independently-authored-generic-safety-pattern";
+    band.userData.not_operational_label = true;
+    turntable.add(band);
+  });
+}
+
+function addOwnedPresentationMarkings(nodes) {
+  const dark = "#151a1b";
+  [-1, 1].forEach((side) => {
+    addSideMarking(nodes.Turntable, `600S_Marking_${side < 0 ? "L" : "R"}`, "600S", [0.66, 0.19], [-1.71, 0.74, side * 1.048], side, "#f4efe1");
+    addSideMarking(nodes.MainBoom, `JLG_Lift_Marking_${side < 0 ? "L" : "R"}`, "JLG LIFT", [1.40, 0.28], [2.68, 0.04, side * 0.348], side, dark);
+    addSideMarking(nodes.Platform, `JLG_Platform_Marking_${side < 0 ? "L" : "R"}`, "JLG", [0.58, 0.18], [0.46, -0.515, side * 1.221], side, dark);
+  });
+  addHazardBands(nodes.Turntable);
+}
+
 function tuneBlockoutMaterials(root) {
   const materials = new Set();
   root.traverse((node) => {
@@ -303,6 +423,16 @@ function tuneBlockoutMaterials(root) {
   ["BaseBoomShell", "MidBoomShell", "FlyBoomShell"].forEach((name) => {
     applyDisplayMaterial(root.getObjectByName(name), boomCream, "DisplayCream");
   });
+  const finishVariations = [
+    ["EngineCover", { color: "#ef6821", roughness: 0.40, metalness: 0.04 }, "WarmPowderCoat"],
+    ["TankCover", { color: "#e95f1e", roughness: 0.46, metalness: 0.04 }, "TankPowderCoat"],
+    ["Counterweight", { color: "#e85d1d", roughness: 0.51, metalness: 0.05 }, "CastPowderCoat"],
+    ["LowerDeck", { color: "#e86520", roughness: 0.58, metalness: 0.06 }, "DeckPowderCoat"],
+    ["PlatformDeck", { color: "#e76220", roughness: 0.62, metalness: 0.06 }, "WearDeckPowderCoat"],
+    ["MidBoomShell", { color: "#d1c28d", roughness: 0.53, metalness: 0.03 }, "NestedCream"],
+    ["FlyBoomShell", { color: "#cabc88", roughness: 0.57, metalness: 0.03 }, "InnerCream"],
+  ];
+  finishVariations.forEach(([name, profile, suffix]) => applyDisplayMaterial(root.getObjectByName(name), profile, suffix));
 }
 
 function isInsideExcludedBranch(node, group, excludedRoots) {
@@ -379,6 +509,39 @@ function optimizeDetailedRig(nodes) {
   return { mergedBuckets, visibleMeshes };
 }
 
+function prepareHitVolumes(hitVolumes) {
+  hitVolumes.forEach((hit) => {
+    if (hit.userData.selectionOutline) return;
+    const material = new THREE.LineBasicMaterial({
+      color: 0xf3a51f,
+      transparent: true,
+      opacity: 0,
+      depthTest: false,
+      depthWrite: false,
+      toneMapped: false,
+    });
+    const outline = new THREE.LineSegments(new THREE.EdgesGeometry(hit.geometry), material);
+    outline.name = `${hit.name}_SelectionOutline`;
+    outline.visible = false;
+    outline.raycast = () => {};
+    outline.renderOrder = 20;
+    hit.add(outline);
+    hit.userData.selectionOutline = outline;
+  });
+}
+
+function updateHitVolumeEmphasis(hoveredHit = null) {
+  if (!rig?.hitVolumes) return;
+  rig.hitVolumes.forEach((hit) => {
+    const outline = hit.userData.selectionOutline;
+    if (!outline) return;
+    const isHovered = hit === hoveredHit;
+    const isFocused = Boolean(focusedComponent && hit.userData.component === focusedComponent);
+    outline.visible = isHovered || isFocused;
+    outline.material.opacity = isHovered ? 0.92 : isFocused ? 0.38 : 0;
+  });
+}
+
 function configureBlockoutRig(gltf) {
   const nodes = Object.fromEntries(requiredNodes.map((name) => [name, gltf.scene.getObjectByName(name)]));
   const missingNodes = requiredNodes.filter((name) => !nodes[name]);
@@ -401,7 +564,7 @@ function configureBlockoutRig(gltf) {
     node.castShadow = true;
     node.receiveShadow = true;
   });
-  gltf.scene.userData.source = `blender-detailed-v${SHOWCASE_RELEASE}`;
+  gltf.scene.userData.source = `blender-showcase-v${SHOWCASE_RELEASE}`;
   const extras = nodes["600S_ROOT"].userData || {};
   const travel = Number(extras.telescope_travel_m);
   if (extras.asset_version !== SHOWCASE_RELEASE || extras.units !== "meters") {
@@ -420,7 +583,9 @@ function configureBlockoutRig(gltf) {
     throw new Error("600S lift-cylinder solver contract failed");
   }
   tuneBlockoutMaterials(gltf.scene);
+  addOwnedPresentationMarkings(nodes);
   const optimization = optimizeDetailedRig(nodes);
+  prepareHitVolumes(hitVolumes);
   document.body.dataset.machineVisibleMeshes = String(optimization.visibleMeshes);
   document.body.dataset.machineMergedBuckets = String(optimization.mergedBuckets);
 
@@ -444,12 +609,13 @@ function configureBlockoutRig(gltf) {
     steeringPivots: [nodes.Wheel_FL, nodes.Wheel_FR],
     hitVolumes,
     visibleMeshCount: optimization.visibleMeshes,
-    source: `blender-detailed-v${SHOWCASE_RELEASE}`,
+    source: `blender-showcase-v${SHOWCASE_RELEASE}`,
   };
 }
 
 document.body.dataset.machineSource = "procedural-fallback";
 let rig = createProcedural600S();
+prepareHitVolumes(rig.hitVolumes);
 
 function loadBlockoutRig() {
   return new Promise((resolve) => {
@@ -464,7 +630,9 @@ function loadBlockoutRig() {
         scene.remove(rig.machine);
         rig = loadedRig;
         document.body.dataset.machineSource = loadedRig.source;
-        projectOverview.facts[0] = ["Model", `Blender detailed reconstruction v${SHOWCASE_RELEASE} · ${loadedRig.visibleMeshCount} runtime meshes`];
+        updateHitVolumeEmphasis();
+        updateDiagnostics();
+        projectOverview.facts[0] = ["Model", `Blender Showcase reconstruction v${SHOWCASE_RELEASE} · ${loadedRig.visibleMeshCount} runtime meshes`];
       } catch (error) {
         console.warn("600S GLB contract validation failed; retaining procedural degraded fixture.", error);
         document.body.dataset.machineSource = "procedural-contract-fallback";
@@ -503,13 +671,22 @@ const outputs = {
   turntableAngle: document.querySelector("#rotate-value"),
   steeringAngle: document.querySelector("#steer-value"),
 };
+const motionStatus = document.querySelector("#motion-status");
+let lastMotionStatus = motionStatus.value || motionStatus.textContent;
 const suffixes = { boomAngle: "°", telescope: "%", turntableAngle: "°", steeringAngle: "°" };
+
+function setMotionStatus(value) {
+  if (value === lastMotionStatus) return;
+  lastMotionStatus = value;
+  motionStatus.value = value;
+}
 
 Object.entries(inputs).forEach(([key, input]) => {
   input.addEventListener("input", () => {
     targets[key] = Number(input.value);
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
-    document.querySelector("#motion-status").value = "Positioning";
+    input.setAttribute("aria-valuetext", outputs[key].value);
+    setMotionStatus("Positioning");
   });
 });
 
@@ -517,6 +694,7 @@ function syncInputs() {
   Object.entries(inputs).forEach(([key, input]) => {
     input.value = String(Math.round(targets[key]));
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
+    input.setAttribute("aria-valuetext", outputs[key].value);
   });
 }
 
@@ -544,7 +722,7 @@ function defaultOrbitRadius() {
 }
 
 function defaultOrbitTargetY(boomAngle = 0) {
-  return 1.85 + Math.sin(THREE.MathUtils.degToRad(boomAngle)) * 2.35;
+  return 1.85 + Math.sin(THREE.MathUtils.degToRad(boomAngle)) * 3.0;
 }
 
 const orbit = {
@@ -567,11 +745,13 @@ const orbit = {
 const canvas = renderer.domElement;
 const pointers = new Map();
 let focusedComponent = null;
+let hoveredHit = null;
 
 canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 canvas.addEventListener("pointerdown", (event) => {
   if (event.button !== 0 && event.pointerType !== "touch") return;
   event.preventDefault();
+  app.focus({ preventScroll: true });
   pointers.set(event.pointerId, [event.clientX, event.clientY]);
   orbit.idle = 0;
   orbit.moved = false;
@@ -591,7 +771,10 @@ canvas.addEventListener("pointerdown", (event) => {
 canvas.addEventListener("pointermove", (event) => {
   event.preventDefault();
   if (!pointers.size) {
-    canvas.style.cursor = hitComponentAt(event.clientX, event.clientY) ? "pointer" : "grab";
+    const hit = hitComponentAt(event.clientX, event.clientY);
+    hoveredHit = hit?.object ?? null;
+    updateHitVolumeEmphasis(hoveredHit);
+    canvas.style.cursor = hit ? "pointer" : "grab";
     return;
   }
   if (pointers.has(event.pointerId)) pointers.set(event.pointerId, [event.clientX, event.clientY]);
@@ -622,11 +805,19 @@ function endPointer(event) {
   orbit.dragging = false;
   orbit.pinch = 0;
   const hit = wasClick ? hitComponentAt(event.clientX, event.clientY) : null;
-  if (hit) focusComponent(hit);
+  hoveredHit = hit?.object ?? null;
+  updateHitVolumeEmphasis(hoveredHit);
+  if (hit) focusComponent(hit.component);
   canvas.style.cursor = hit ? "pointer" : "grab";
 }
 canvas.addEventListener("pointerup", endPointer);
 canvas.addEventListener("pointercancel", endPointer);
+canvas.addEventListener("pointerleave", () => {
+  if (pointers.size) return;
+  hoveredHit = null;
+  updateHitVolumeEmphasis();
+  canvas.style.cursor = "grab";
+});
 canvas.addEventListener("wheel", (event) => {
   event.preventDefault();
   orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal * Math.exp(event.deltaY * 0.0012), 7, 27);
@@ -645,8 +836,26 @@ function resetView() {
   orbit.phi = 1.44;
   orbit.vTheta = 0;
   orbit.vPhi = 0;
+  updateHitVolumeEmphasis(hoveredHit);
 }
 document.querySelector("#reset-view").addEventListener("click", resetView);
+
+app.addEventListener("keydown", (event) => {
+  const focusKeys = { "1": "chassis", "2": "turntable", "3": "boom", "4": "platform" };
+  let handled = true;
+  if (event.key === "ArrowLeft") orbit.theta -= 0.12;
+  else if (event.key === "ArrowRight") orbit.theta += 0.12;
+  else if (event.key === "ArrowUp") orbit.phi = THREE.MathUtils.clamp(orbit.phi - 0.08, 0.42, 1.48);
+  else if (event.key === "ArrowDown") orbit.phi = THREE.MathUtils.clamp(orbit.phi + 0.08, 0.42, 1.48);
+  else if (event.key === "+" || event.key === "=") orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal - 1.2, 7, 27);
+  else if (event.key === "-" || event.key === "_") orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal + 1.2, 7, 27);
+  else if (focusKeys[event.key]) focusComponent(focusKeys[event.key]);
+  else if (event.key === "0") resetView();
+  else handled = false;
+  if (!handled) return;
+  event.preventDefault();
+  orbit.idle = 0;
+});
 
 const componentContent = {
   chassis: {
@@ -677,6 +886,8 @@ const componentContent = {
 
 const inspector = document.querySelector("#inspector");
 const infoToggle = document.querySelector("#info-toggle");
+const inspectorClose = document.querySelector("#inspector-close");
+let focusBeforeInspector = null;
 const projectOverview = {
   kicker: "Project note",
   title: "A visual replica,<br>not an engineering model.",
@@ -684,6 +895,7 @@ const projectOverview = {
   facts: [["Model", "Loading Blender detailed reconstruction"], ["Purpose", "Portfolio and educational visualization"], ["Boundary", "Not a service, training, fabrication, or safety reference"]],
 };
 function openInspector(component) {
+  if (!document.body.classList.contains("inspector-open")) focusBeforeInspector = document.activeElement;
   if (component) {
     const data = componentContent[component];
     document.querySelector("#inspector-kicker").textContent = "Component view";
@@ -699,17 +911,39 @@ function openInspector(component) {
   document.body.classList.add("inspector-open");
   inspector.inert = false;
   infoToggle.setAttribute("aria-expanded", "true");
+  requestAnimationFrame(() => inspectorClose.focus());
 }
 function closeInspector() {
+  if (!document.body.classList.contains("inspector-open")) return;
   document.body.classList.remove("inspector-open");
   inspector.inert = true;
   infoToggle.setAttribute("aria-expanded", "false");
+  const restoreTarget = focusBeforeInspector;
+  focusBeforeInspector = null;
+  if (restoreTarget instanceof HTMLElement) restoreTarget.focus({ preventScroll: true });
 }
 infoToggle.addEventListener("click", () => openInspector());
-document.querySelector("#inspector-close").addEventListener("click", closeInspector);
+inspectorClose.addEventListener("click", closeInspector);
 document.querySelector("#scrim").addEventListener("click", closeInspector);
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeInspector();
+  if (!document.body.classList.contains("inspector-open")) return;
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeInspector();
+    return;
+  }
+  if (event.key !== "Tab") return;
+  const focusable = [...inspector.querySelectorAll("button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex='-1'])")];
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 });
 
 function focusComponent(component) {
@@ -727,6 +961,7 @@ function focusComponent(component) {
   orbit.targetGoal.copy(worldPosition);
   orbit.radiusGoal = componentContent[component].radius;
   orbit.idle = 0;
+  updateHitVolumeEmphasis(hoveredHit);
   openInspector(component);
 }
 document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => focusComponent(button.dataset.focus)));
@@ -737,7 +972,30 @@ function hitComponentAt(x, y) {
   const rect = canvas.getBoundingClientRect();
   pointer.set(((x - rect.left) / rect.width) * 2 - 1, -((y - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointer, camera);
-  return raycaster.intersectObjects(rig.hitVolumes, false)[0]?.object?.userData?.component ?? null;
+  const intersection = raycaster.intersectObjects(rig.hitVolumes, false)[0];
+  return intersection ? { component: intersection.object.userData.component, object: intersection.object, intersection } : null;
+}
+
+function runSelectionVolumeSelfTest() {
+  rig.machine.updateMatrixWorld(true);
+  camera.updateMatrixWorld(true);
+  const selfTestRaycaster = new THREE.Raycaster();
+  const center = new THREE.Vector3();
+  let passed = 0;
+  rig.hitVolumes.forEach((hit) => {
+    new THREE.Box3().setFromObject(hit).getCenter(center);
+    const projected = center.clone().project(camera);
+    selfTestRaycaster.setFromCamera(new THREE.Vector2(projected.x, projected.y), camera);
+    const intersection = selfTestRaycaster.intersectObjects([hit], false)[0];
+    const expected = interactionComponents[hit.name];
+    if (intersection?.object === hit && hit.userData.component === expected) passed += 1;
+  });
+  const total = rig.hitVolumes.length;
+  const result = total === 5 && passed === total ? "pass" : "fail";
+  document.body.dataset.selectionSelftest = result;
+  runtimeDiagnostics.selectionHits = `${passed}/${total} ${result}`;
+  updateDiagnostics();
+  return result === "pass";
 }
 
 const cylinderLowerWorld = new THREE.Vector3();
@@ -774,9 +1032,8 @@ function updateLiftCylinder() {
 }
 
 function updateRig(dt) {
-  const speed = reducedMotion ? 18 : 6;
   Object.keys(machineState).forEach((key) => {
-    machineState[key] = THREE.MathUtils.damp(machineState[key], targets[key], speed, dt);
+    machineState[key] = reducedMotion ? targets[key] : THREE.MathUtils.damp(machineState[key], targets[key], 6, dt);
   });
   rig.boomPivot.rotation.z = THREE.MathUtils.degToRad(machineState.boomAngle);
   if (rig.platformPivot) rig.platformPivot.rotation.z = -THREE.MathUtils.degToRad(machineState.boomAngle);
@@ -787,20 +1044,29 @@ function updateRig(dt) {
   if (!focusedComponent) orbit.targetGoal.y = defaultOrbitTargetY(machineState.boomAngle);
   const moving = Object.keys(machineState).some((key) => Math.abs(machineState[key] - targets[key]) > 0.1);
   const stowed = Object.values(targets).every((value) => Math.abs(value) < 0.1);
-  document.querySelector("#motion-status").value = moving ? "Positioning" : stowed ? "Stowed" : "Holding";
+  setMotionStatus(moving ? "Positioning" : stowed ? "Stowed" : "Holding");
 }
 
 function updateCamera(dt) {
-  if (!orbit.dragging) {
+  if (!orbit.dragging && !reducedMotion) {
     orbit.theta += orbit.vTheta;
     orbit.phi = THREE.MathUtils.clamp(orbit.phi + orbit.vPhi, 0.42, 1.48);
     orbit.vTheta *= 0.91;
     orbit.vPhi *= 0.91;
   }
+  if (reducedMotion) {
+    orbit.vTheta = 0;
+    orbit.vPhi = 0;
+  }
   orbit.idle += dt;
   if (orbit.idle > 4 && !reducedMotion) orbit.theta += dt * 0.025;
-  orbit.radius = THREE.MathUtils.damp(orbit.radius, orbit.radiusGoal, 5, dt);
-  orbit.target.lerp(orbit.targetGoal, 1 - Math.exp(-5 * dt));
+  if (reducedMotion) {
+    orbit.radius = orbit.radiusGoal;
+    orbit.target.copy(orbit.targetGoal);
+  } else {
+    orbit.radius = THREE.MathUtils.damp(orbit.radius, orbit.radiusGoal, 5, dt);
+    orbit.target.lerp(orbit.targetGoal, 1 - Math.exp(-5 * dt));
+  }
   const sinPhi = Math.sin(orbit.phi);
   camera.position.set(
     orbit.target.x + orbit.radius * sinPhi * Math.sin(orbit.theta),
@@ -819,14 +1085,35 @@ addEventListener("resize", () => {
 
 const clock = new THREE.Clock();
 let lastRenderedAt = 0;
+let collectFrameSamples = false;
+const frameSamples = [];
 function animate(now = 0) {
   requestAnimationFrame(animate);
+  if (document.hidden) {
+    clock.getDelta();
+    return;
+  }
   if (minimumFrameInterval && now - lastRenderedAt < minimumFrameInterval) return;
+  const renderedInterval = lastRenderedAt ? now - lastRenderedAt : 0;
   lastRenderedAt = now;
   const dt = Math.min(clock.getDelta(), 0.1);
   updateRig(dt);
   updateCamera(dt);
   renderer.render(scene, camera);
+  if (collectFrameSamples && renderedInterval > 0 && renderedInterval < 250) {
+    frameSamples.push(renderedInterval);
+    if (frameSamples.length >= 120) {
+      collectFrameSamples = false;
+      const sorted = [...frameSamples].sort((a, b) => a - b);
+      const average = frameSamples.reduce((sum, value) => sum + value, 0) / frameSamples.length;
+      const p95 = sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))];
+      const fps = Math.round(1000 / average);
+      runtimeDiagnostics.frameRate = `${fps} fps / p95 ${p95.toFixed(1)} ms`;
+      document.body.dataset.sampledFps = String(fps);
+      document.body.dataset.frameP95Ms = p95.toFixed(1);
+      updateDiagnostics();
+    }
+  }
 }
 
 resetView();
@@ -836,7 +1123,12 @@ animate();
 setTimeout(() => document.querySelector("#interaction-hint").classList.add("fade"), 6500);
 loadBlockoutRig().finally(() => {
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    document.body.dataset.loadMs = String(Math.round(performance.now() - (window.__showcaseBootAt || 0)));
+    const loadMs = Math.round(performance.now() - (window.__showcaseBootAt || 0));
+    document.body.dataset.loadMs = String(loadMs);
+    runtimeDiagnostics.loadMs = `${loadMs} ms`;
+    collectFrameSamples = true;
+    runSelectionVolumeSelfTest();
+    updateDiagnostics();
     loader.classList.add("done");
     const focus = new URLSearchParams(location.search).get("focus");
     if (focus && componentContent[focus]) focusComponent(focus);

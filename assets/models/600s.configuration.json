@@ -151,5 +151,13 @@
     "manual_diagrams_are_fabrication_dimensions": false,
     "safety_or_service_simulation": false,
     "standalone_pvc2601_schematics_admitted": false
+  },
+  "runtime_presentation": {
+    "markings": "independently-typeset-nominative-marks",
+    "hazard_band": "independently-authored-generic-safety-pattern",
+    "manufacturer_artwork_embedded": false,
+    "surface_finish": "display-only-scalar-pbr-variation",
+    "selection_outline_source": "moving-interaction-volumes",
+    "diagnostic_self_test_scope": "individual-ray-hittability-not-visual-or-safety-acceptance"
   }
 }

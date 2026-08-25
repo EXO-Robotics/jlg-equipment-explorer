@@ -80,6 +80,17 @@ def main() -> None:
     if authority.get("standalone_pvc2601_schematics_admitted") is not False:
         raise RuntimeError("Standalone PVC 2601 schematics must remain quarantined")
 
+    presentation = config.get("runtime_presentation") or {}
+    if presentation != {
+        "markings": "independently-typeset-nominative-marks",
+        "hazard_band": "independently-authored-generic-safety-pattern",
+        "manufacturer_artwork_embedded": False,
+        "surface_finish": "display-only-scalar-pbr-variation",
+        "selection_outline_source": "moving-interaction-volumes",
+        "diagnostic_self_test_scope": "individual-ray-hittability-not-visual-or-safety-acceptance",
+    }:
+        raise RuntimeError("Runtime presentation/provenance contract drift")
+
     print(json.dumps({
         "status": "PASS",
         "configuration_id": config["configuration_id"],
