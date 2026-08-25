@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -49,6 +50,14 @@ def main():
         raise RuntimeError(f"Release review gates incomplete: {incomplete}")
     if args.require_release and receipt.get("release_status") != "release":
         raise RuntimeError("Receipt is not marked release")
+    if args.require_release:
+        deployment = receipt.get("deployment_review") or {}
+        if deployment.get("url") != "https://exo-robotics.github.io/jlg-equipment-explorer/es1930m/":
+            raise RuntimeError("Receipt deployment URL is not the canonical ES1930M route")
+        if not re.fullmatch(r"https://github\.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/\d+", deployment.get("run", "")):
+            raise RuntimeError("Receipt deployment run is missing or malformed")
+        if not re.fullmatch(r"[0-9a-f]{40}", deployment.get("reviewed_source_commit", "")):
+            raise RuntimeError("Receipt reviewed source commit is missing or malformed")
     print(json.dumps({
         "status": "PASS",
         "configuration_id": receipt["configuration_id"],

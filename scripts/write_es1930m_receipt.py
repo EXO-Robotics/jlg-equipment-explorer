@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -53,6 +54,15 @@ def runtime_digest() -> str:
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--deployment-url")
+    parser.add_argument("--deployment-run")
+    parser.add_argument("--reviewed-source-commit")
+    args = parser.parse_args()
+    deployment_values = [args.deployment_url, args.deployment_run, args.reviewed_source_commit]
+    if any(deployment_values) and not all(deployment_values):
+        raise RuntimeError("Deployment URL, run, and reviewed source commit must be supplied together")
+    deployed = all(deployment_values)
     for label, path in FILES.items():
         if not path.is_file():
             raise RuntimeError(f"Missing {label}: {path}")
@@ -74,8 +84,8 @@ def main():
         raise RuntimeError("ES1930M kinematic validator did not pass")
     receipt = {
         "schema_version": "1.0.0",
-        "release": "1.0.0-candidate",
-        "release_status": "candidate_not_deployable",
+        "release": "1.0.0" if deployed else "1.0.0-candidate",
+        "release_status": "release" if deployed else "candidate_not_deployable",
         "written": str(date.today()),
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
         "files": {
@@ -119,11 +129,18 @@ def main():
             "mobile_view_reviewed": True,
             "selection_and_focus_reviewed": True,
             "performance_reviewed": True,
-            "deployed_pages_reviewed": False,
+            "deployed_pages_reviewed": deployed,
             "600s_regression_suite_pass": True
         },
         "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority."
     }
+    if deployed:
+        receipt["deployment_review"] = {
+            "url": args.deployment_url,
+            "run": args.deployment_run,
+            "reviewed_source_commit": args.reviewed_source_commit,
+            "reviewed": str(date.today()),
+        }
     RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"status": "PASS", "receipt": str(RECEIPT.relative_to(ROOT)), "sha256": digest(RECEIPT)}, indent=2))
 
