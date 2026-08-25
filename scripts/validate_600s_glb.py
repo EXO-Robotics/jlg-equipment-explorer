@@ -48,6 +48,11 @@ TAILSWING_M = 1.22
 TELESCOPE_TRAVEL_M = 0.90
 TELESCOPE_MID_TRAVEL_M = 0.36
 TELESCOPE_FLY_TRAVEL_M = 0.54
+POWERTRACK_LINK_LENGTH_M = 0.198
+POWERTRACK_LINK_PITCH_M = 0.20
+POWERTRACK_BASE_DISPLAY_COUNT = 18
+POWERTRACK_MOVING_DISPLAY_COUNT = 9
+POWERTRACK_MAX_VISIBLE_GAP_M = 0.004
 TRIANGLE_BUDGET = 60_000
 ENVELOPE_TOLERANCE_M = 0.002
 HASH_PREFIX_LEN = 12
@@ -528,6 +533,54 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         if "mesh" in solver or (solver.get("extras") or {}).get("runtime_solver") != solver_kind:
             raise RuntimeError(f"{solver_name} must be an empty {solver_kind} group")
 
+    powertrack_extras = nodes[by_name["Powertrack"]].get("extras") or {}
+    expected_powertrack_extras = {
+        "display_link_count_is_physical_claim": False,
+        "display_link_length_m": POWERTRACK_LINK_LENGTH_M,
+        "display_link_pitch_m": POWERTRACK_LINK_PITCH_M,
+        "base_display_sample_count": POWERTRACK_BASE_DISPLAY_COUNT,
+        "moving_display_sample_count": POWERTRACK_MOVING_DISPLAY_COUNT,
+    }
+    for key, expected in expected_powertrack_extras.items():
+        actual = powertrack_extras.get(key)
+        if isinstance(expected, float):
+            if not close(float(actual), expected, 0.0005):
+                raise RuntimeError(f"Powertrack {key} drift: {actual!r} != {expected!r}")
+        elif actual != expected:
+            raise RuntimeError(f"Powertrack {key} drift: {actual!r} != {expected!r}")
+
+    maximum_powertrack_gap = 0.0
+    for prefix, count in (
+        ("PowertrackBaseDisplayLink", POWERTRACK_BASE_DISPLAY_COUNT),
+        ("PowertrackMovingDisplayLink", POWERTRACK_MOVING_DISPLAY_COUNT),
+    ):
+        for link_index in range(1, count):
+            left_name = f"{prefix}_{link_index:02d}"
+            right_name = f"{prefix}_{link_index + 1:02d}"
+            if left_name not in by_name or right_name not in by_name:
+                raise RuntimeError(f"Missing powertrack display neighbor: {left_name} -> {right_name}")
+            left_min, left_max = mesh_world_aabb(document, blob, nodes, parents, by_name[left_name])
+            right_min, right_max = mesh_world_aabb(document, blob, nodes, parents, by_name[right_name])
+            axis_gap = [
+                max(left_min[axis] - right_max[axis], right_min[axis] - left_max[axis], 0.0)
+                for axis in range(3)
+            ]
+            maximum_powertrack_gap = max(maximum_powertrack_gap, *axis_gap)
+            if any(value > POWERTRACK_MAX_VISIBLE_GAP_M for value in axis_gap):
+                raise RuntimeError(
+                    f"Disconnected powertrack display neighbors: {left_name} -> {right_name}; "
+                    f"axis gap={[round(value, 4) for value in axis_gap]}"
+                )
+
+    base_end_name = f"PowertrackBaseDisplayLink_{POWERTRACK_BASE_DISPLAY_COUNT:02d}"
+    base_end_max = mesh_world_aabb(document, blob, nodes, parents, by_name[base_end_name])[1][0]
+    moving_start_min = mesh_world_aabb(
+        document, blob, nodes, parents, by_name["PowertrackMovingDisplayLink_01"]
+    )[0][0]
+    full_travel_run_gap = max(0.0, moving_start_min + TELESCOPE_MID_TRAVEL_M - base_end_max)
+    if full_travel_run_gap > POWERTRACK_MAX_VISIBLE_GAP_M:
+        raise RuntimeError(f"Powertrack sampled runs separate at full visual travel: {full_travel_run_gap:.4f} m")
+
     materials = {material.get("name") for material in document.get("materials", [])}
     required_system_materials = {
         "JLG_Hydraulic_Black", "JLG_Electrical_Loom", "JLG_Control_Cable",
@@ -617,6 +670,8 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         "required_parent_edges": len(EXPECTED_PARENTS),
         "interaction_volumes": list(HIT_VOLUMES),
         "validated_chassis_attachments": len(ACCESSORY_ATTACHMENTS),
+        "powertrack_max_neighbor_gap_m": round(maximum_powertrack_gap, 4),
+        "powertrack_full_travel_run_gap_m": round(full_travel_run_gap, 4),
         "visible_envelope_m": [round(value, 4) for value in envelope],
         "visible_bounds_min_m": [round(value, 4) for value in mins],
         "visible_bounds_max_m": [round(value, 4) for value in maxs],
