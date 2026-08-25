@@ -9,14 +9,14 @@ export const ES1930M_CAMERAS = Object.freeze({
 export function es1930mFollowView(state, compact) {
   return Object.freeze({
     target: [0, 1.05 + (3.30 - 1.05) * state.lift, 0],
-    distance: (compact ? 5.3 : 4.5) + (10.3 - (compact ? 5.3 : 4.5)) * state.lift,
+    distance: (compact ? 5.3 : 4.5) + (11.0 - (compact ? 5.3 : 4.5)) * state.lift,
   });
 }
 
 export function es1930mComponentView(component, state, compact) {
   const views = {
     chassis: { target: [0, 0.36, 0], distance: 2.55, azimuth: -0.72, polar: 1.22 },
-    scissor: { target: [0, 0.72 + (3.30 - 0.72) * state.lift, 0], distance: 3.4 + (10.3 - 3.4) * state.lift, azimuth: -0.75, polar: 1.16 },
+    scissor: { target: [0, 0.72 + (3.30 - 0.72) * state.lift, 0], distance: 3.4 + (11.0 - 3.4) * state.lift, azimuth: -0.75, polar: 1.16 },
     platform: { target: [0.05, Math.max(1.45, 0.90 + (5.64 - 0.90) * state.lift + 0.45), 0], distance: 3.2, azimuth: -0.72, polar: 1.15 },
     steering: { target: [0.52, 0.28, 0], distance: 2.15, azimuth: 0, polar: 1.28 },
     default: { target: [0, 1.05, 0], distance: compact ? 5.3 : 4.5, azimuth: -0.72, polar: 1.18 },
