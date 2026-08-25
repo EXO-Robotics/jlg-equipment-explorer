@@ -4,8 +4,8 @@
 envelope while adding the frozen PVC 2607 hierarchy, B3 bodywork, detailed running
 gear, three boom sections, visible powertrack and lift cylinder, and the rapid-replace
 36 × 96 platform assembly. It remains a portfolio visualization, not an engineering model.
-The GLB retains 345 authored meshes for traceability; the viewer consolidates rigid same-material
-detail into 80 observed runtime meshes, including runtime presentation marks and hazard-band cues,
+The GLB retains 408 authored meshes for traceability; the viewer consolidates rigid same-material
+detail into 92 observed runtime meshes, including runtime presentation marks and hazard-band cues,
 without merging articulation or interaction volumes.
 
 Mechanical facts are generated into `600s.asset-receipt.json` by

@@ -151,6 +151,10 @@ def qmul(a: tuple[float, ...], b: tuple[float, ...]) -> tuple[float, float, floa
     )
 
 
+def qz(radians: float) -> tuple[float, float, float, float]:
+    return (0.0, 0.0, math.sin(radians * 0.5), math.cos(radians * 0.5))
+
+
 def qrot(q: tuple[float, ...], v: tuple[float, float, float]) -> tuple[float, float, float]:
     x, y, z, w = q
     vx, vy, vz = v
@@ -527,11 +531,34 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         "SteerCylinder_L": "two_anchor_visual_cylinder",
         "SteerCylinder_R": "two_anchor_visual_cylinder",
         "PlatformLevelCylinder": "two_anchor_visual_cylinder",
+        "SteerHydraulicHose_L_Flexible": "two_anchor_visual_hose",
+        "SteerHydraulicHose_R_Flexible": "two_anchor_visual_hose",
     }
     for solver_name, solver_kind in visual_solvers.items():
         solver = nodes[by_name[solver_name]]
         if "mesh" in solver or (solver.get("extras") or {}).get("runtime_solver") != solver_kind:
             raise RuntimeError(f"{solver_name} must be an empty {solver_kind} group")
+
+    for wheel_name in ("Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR"):
+        roll_name = f"{wheel_name}_Roll"
+        roll = nodes[by_name[roll_name]]
+        if "mesh" in roll or (roll.get("extras") or {}).get("runtime_axis") != "local_y_blender_local_z_gltf":
+            raise RuntimeError(f"{roll_name} must be an empty tire-only roll transform")
+        for moving_name in (f"{wheel_name}_Tire", f"{wheel_name}_Rim", f"{wheel_name}_DriveHub"):
+            if parents.get(by_name[moving_name]) != by_name[roll_name]:
+                raise RuntimeError(f"{moving_name} must inherit {roll_name}")
+        fixed_name = f"{wheel_name}_SteerKnuckle" if wheel_name in ("Wheel_FL", "Wheel_FR") else f"{wheel_name}_AxleEnd"
+        if parents.get(by_name[fixed_name]) != by_name[wheel_name]:
+            raise RuntimeError(f"{fixed_name} must not inherit tire roll")
+
+    for side in ("L", "R"):
+        flexible = nodes[by_name[f"SteerHydraulicHose_{side}_Flexible"]]
+        nominal_length = float((flexible.get("extras") or {}).get("nominal_length_m", 0.0))
+        if not 0.30 < nominal_length < 0.80:
+            raise RuntimeError(f"SteerHydraulicHose_{side} nominal moving-leg length drift: {nominal_length}")
+
+    if parents.get(by_name["PowertrackBend"]) != parents.get(by_name["PowertrackMovingRun"]):
+        raise RuntimeError("Powertrack bend and moving run must inherit the same telescope stage")
 
     powertrack_extras = nodes[by_name["Powertrack"]].get("extras") or {}
     expected_powertrack_extras = {
@@ -620,6 +647,22 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     if not close(platform_size[0], PLATFORM_ENVELOPE_M[0]) or not close(platform_size[1], PLATFORM_ENVELOPE_M[1]):
         raise RuntimeError(f"Platform envelope drift: {platform_size}")
 
+    platform_leveling_max_error_degrees = 0.0
+    for boom_degrees in (0.0, 36.0, 72.0):
+        posed_nodes = [dict(node) for node in nodes]
+        posed_nodes[by_name["BoomPivot"]]["rotation"] = qz(math.radians(boom_degrees))
+        posed_nodes[by_name["PlatformPivot"]]["rotation"] = qz(math.radians(-boom_degrees))
+        deck_rotation = world_trs(posed_nodes, parents, by_name["PlatformDeck"])[1]
+        deck_up = qrot(deck_rotation, (0.0, 1.0, 0.0))
+        deck_up_length = math.sqrt(sum(value * value for value in deck_up))
+        up_alignment = max(-1.0, min(1.0, deck_up[1] / max(deck_up_length, 1e-9)))
+        level_error_degrees = math.degrees(math.acos(up_alignment))
+        platform_leveling_max_error_degrees = max(platform_leveling_max_error_degrees, level_error_degrees)
+        if level_error_degrees > 0.05:
+            raise RuntimeError(
+                f"Platform leveling drift at boom {boom_degrees:.0f} degrees: {level_error_degrees:.4f} degrees"
+            )
+
     main_min, main_max = mesh_world_aabb(document, blob, nodes, parents, by_name["BaseBoomShell"])
     mid_min, mid_max = mesh_world_aabb(document, blob, nodes, parents, by_name["MidBoomShell"])
     fly_min, _ = mesh_world_aabb(document, blob, nodes, parents, by_name["FlyBoomShell"])
@@ -671,6 +714,7 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         "interaction_volumes": list(HIT_VOLUMES),
         "validated_chassis_attachments": len(ACCESSORY_ATTACHMENTS),
         "powertrack_max_neighbor_gap_m": round(maximum_powertrack_gap, 4),
+        "platform_leveling_max_error_degrees": round(platform_leveling_max_error_degrees, 4),
         "powertrack_full_travel_run_gap_m": round(full_travel_run_gap, 4),
         "visible_envelope_m": [round(value, 4) for value in envelope],
         "visible_bounds_min_m": [round(value, 4) for value in mins],

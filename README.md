@@ -10,7 +10,7 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=1.1.5`.
+Then open `http://localhost:8080/?v=1.1.6`.
 
 The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
 
@@ -79,4 +79,4 @@ Three.js runtime and third-party ownership boundaries.
 
 ## Current acceptance gate
 
-The v1.1 mechanical, hierarchy, provenance, and static viewer contracts pass. A fresh desktop browser run loaded the exact v1.1 GLB, exercised all four motion controls, passed the five-volume self-test, and recorded zero runtime errors. Mobile layout and fixed-camera source overlays remain separate visual gates. Fabrication dimensions and safety/service simulation remain out of scope.
+The v1.1 mechanical, hierarchy, provenance, and static viewer contracts pass. A fresh local desktop and mobile browser run loaded the exact v1.1 GLB, exercised all four motion controls, passed the five-volume self-test, and recorded zero runtime errors. Fixed-camera paired source overlays remain a separate visual gate. Fabrication dimensions and safety/service simulation remain out of scope.

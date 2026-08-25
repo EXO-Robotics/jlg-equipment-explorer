@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.5";
+} from "./assets/models/600s.version.js?v=1.1.6";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -145,6 +145,14 @@ scene.add(fill);
 const rim = new THREE.DirectionalLight(0xff9a55, 1.35);
 rim.position.set(10, 6, -8);
 scene.add(rim);
+const lightTarget = new THREE.Object3D();
+const keyOffset = new THREE.Vector3(-9, 13, 10);
+const fillOffset = new THREE.Vector3(8, 6, 10);
+const rimOffset = new THREE.Vector3(10, 6, -8);
+key.target = lightTarget;
+fill.target = lightTarget;
+rim.target = lightTarget;
+scene.add(lightTarget);
 
 const floor = new THREE.Mesh(
   new THREE.CircleGeometry(18, 96),
@@ -227,12 +235,16 @@ function createProcedural600S() {
   const wheelZ = [-1.08, 1.08];
   wheelX.forEach((x, axleIndex) => wheelZ.forEach((z) => {
     const pivot = new THREE.Group();
+    pivot.name = `WheelPivot_${axleIndex}_${z > 0 ? "L" : "R"}`;
     pivot.position.set(x, 0.75, z);
+    const roll = new THREE.Group();
+    roll.name = `${pivot.name}_Roll`;
     const wheel = cylinder(`Wheel_${axleIndex}_${z > 0 ? "L" : "R"}`, 0.67, 0.48, [0, 0, 0], [Math.PI / 2, 0, 0], palette.tire, "chassis", 32);
     const hub = cylinder("WheelHub", 0.23, 0.5, [0, 0, 0], [Math.PI / 2, 0, 0], palette.metal, "chassis", 24);
-    pivot.add(wheel, hub);
+    roll.add(wheel, hub);
+    pivot.add(roll);
     chassis.add(pivot);
-    rollingWheels.push(pivot);
+    rollingWheels.push(roll);
     if (axleIndex === 1) steeringPivots.push(pivot);
   }));
   machine.add(chassis);
@@ -304,6 +316,7 @@ function createProcedural600S() {
     platformPivot,
     platformMount,
     steeringPivots,
+    steeringTrackM: Math.abs(wheelZ[0] - wheelZ[1]),
     rollingWheels,
     hitVolumes,
     source: "procedural-fixture",
@@ -313,6 +326,7 @@ function createProcedural600S() {
 const requiredNodes = [
   "600S_ROOT", "Chassis", "Frame", "AxleFront", "AxleRear",
   "Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR", "TurntablePivot",
+  "Wheel_FL_Roll", "Wheel_FR_Roll", "Wheel_RL_Roll", "Wheel_RR_Roll",
   "Turntable", "SlewRing", "UpperFrame", "EngineCover", "TankCover",
   "Counterweight", "Controls", "BoomPivot", "MainBoom", "Telescope",
   "MidBoom", "FlyBoom", "PlatformPivot", "PlatformRotator", "Platform",
@@ -324,7 +338,9 @@ const requiredNodes = [
   "SteerCylinder_L", "SteerCylinder_L_LowerAnchor", "SteerCylinder_L_UpperAnchor", "SteerCylinder_L_Rod",
   "SteerCylinder_R", "SteerCylinder_R_LowerAnchor", "SteerCylinder_R_UpperAnchor", "SteerCylinder_R_Rod",
   "PlatformLevelCylinder", "PlatformLevelCylinderLowerAnchor", "PlatformLevelCylinderUpperAnchor", "PlatformLevelCylinderRod",
-  "Powertrack", "PowertrackSupport", "PowertrackPushTube", "PlatformSwingGate",
+  "Powertrack", "PowertrackMovingRun", "PowertrackBend", "PowertrackSupport", "PowertrackPushTube", "PlatformSwingGate",
+  "SteerHydraulicHose_L", "SteerHydraulicHose_L_LowerAnchor", "SteerHydraulicHose_L_UpperAnchor", "SteerHydraulicHose_L_Flexible", "SteerHydraulicHose_L_Segment_02",
+  "SteerHydraulicHose_R", "SteerHydraulicHose_R_LowerAnchor", "SteerHydraulicHose_R_UpperAnchor", "SteerHydraulicHose_R_Flexible", "SteerHydraulicHose_R_Segment_02",
   "PlatformConsole", "PlatformFootswitch",
 ];
 const interactionComponents = {
@@ -545,10 +561,12 @@ function mergeRigidGroup(group, excludedRoots = []) {
 
 function optimizeDetailedRig(nodes) {
   let mergedBuckets = 0;
-  mergedBuckets += mergeRigidGroup(nodes.Wheel_FL);
-  mergedBuckets += mergeRigidGroup(nodes.Wheel_FR);
+  const wheelRollNodes = [nodes.Wheel_FL_Roll, nodes.Wheel_FR_Roll, nodes.Wheel_RL_Roll, nodes.Wheel_RR_Roll];
+  wheelRollNodes.forEach((roll) => { mergedBuckets += mergeRigidGroup(roll); });
   mergedBuckets += mergeRigidGroup(nodes.Chassis, [
-    nodes.Wheel_FL, nodes.Wheel_FR, nodes.SteerTieRod, nodes.SteerCylinder_L, nodes.SteerCylinder_R,
+    nodes.Wheel_FL, nodes.Wheel_FR, nodes.Wheel_RL, nodes.Wheel_RR,
+    nodes.SteerTieRod, nodes.SteerCylinder_L, nodes.SteerCylinder_R,
+    nodes.SteerHydraulicHose_L, nodes.SteerHydraulicHose_R,
   ]);
   mergedBuckets += mergeRigidGroup(nodes.LiftCylinder, [nodes.LiftCylinderRod, nodes.LiftCylinderRodPin]);
   mergedBuckets += mergeRigidGroup(nodes.SteerCylinder_L, [nodes.SteerCylinder_L_Rod]);
@@ -659,6 +677,13 @@ function configureBlockoutRig(gltf) {
   prepareHitVolumes(hitVolumes);
   document.body.dataset.machineVisibleMeshes = String(optimization.visibleMeshes);
   document.body.dataset.machineMergedBuckets = String(optimization.mergedBuckets);
+  document.body.dataset.wheelRollHierarchy = [
+    [nodes.Wheel_FL_Roll, nodes.Wheel_FL], [nodes.Wheel_FR_Roll, nodes.Wheel_FR],
+    [nodes.Wheel_RL_Roll, nodes.Wheel_RL], [nodes.Wheel_RR_Roll, nodes.Wheel_RR],
+  ].every(([roll, owner]) => roll.parent === owner) ? "separated" : "invalid";
+  document.body.dataset.hoseSolverCount = String([
+    nodes.SteerHydraulicHose_L_Flexible, nodes.SteerHydraulicHose_R_Flexible,
+  ].filter((node) => node.userData.runtime_solver === "two_anchor_visual_hose").length);
 
   return {
     machine: gltf.scene,
@@ -683,7 +708,8 @@ function configureBlockoutRig(gltf) {
     liftCylinderRodStart: 0.82,
     liftCylinderRodNominalLength: 0.70,
     steeringPivots: [nodes.Wheel_FL, nodes.Wheel_FR],
-    rollingWheels: [nodes.Wheel_FL, nodes.Wheel_FR, nodes.Wheel_RL, nodes.Wheel_RR],
+    steeringTrackM: Math.abs(nodes.Wheel_FL.position.z - nodes.Wheel_FR.position.z),
+    rollingWheels: [nodes.Wheel_FL_Roll, nodes.Wheel_FR_Roll, nodes.Wheel_RL_Roll, nodes.Wheel_RR_Roll],
     visualLinks: [
       { group: nodes.TowerLink, lower: nodes.TowerLinkLowerAnchor, upper: nodes.TowerLinkUpperAnchor, body: nodes.TowerLinkBody, nominalLength: 1.0 },
       { group: nodes.TensionLink, lower: nodes.TensionLinkLowerAnchor, upper: nodes.TensionLinkUpperAnchor, body: nodes.TensionLinkBody, nominalLength: 1.0 },
@@ -693,6 +719,10 @@ function configureBlockoutRig(gltf) {
       { group: nodes.SteerCylinder_L, lower: nodes.SteerCylinder_L_LowerAnchor, upper: nodes.SteerCylinder_L_UpperAnchor, rod: nodes.SteerCylinder_L_Rod, rodStart: 0.32, nominalRodLength: 0.40 },
       { group: nodes.SteerCylinder_R, lower: nodes.SteerCylinder_R_LowerAnchor, upper: nodes.SteerCylinder_R_UpperAnchor, rod: nodes.SteerCylinder_R_Rod, rodStart: 0.32, nominalRodLength: 0.40 },
       { group: nodes.PlatformLevelCylinder, lower: nodes.PlatformLevelCylinderLowerAnchor, upper: nodes.PlatformLevelCylinderUpperAnchor, rod: nodes.PlatformLevelCylinderRod, rodStart: 0.44, nominalRodLength: 0.44 },
+    ],
+    visualHoses: [
+      { group: nodes.SteerHydraulicHose_L_Flexible, lower: nodes.SteerHydraulicHose_L_LowerAnchor, upper: nodes.SteerHydraulicHose_L_UpperAnchor, body: nodes.SteerHydraulicHose_L_Segment_02, nominalLength: Number(nodes.SteerHydraulicHose_L_Flexible.userData.nominal_length_m) },
+      { group: nodes.SteerHydraulicHose_R_Flexible, lower: nodes.SteerHydraulicHose_R_LowerAnchor, upper: nodes.SteerHydraulicHose_R_UpperAnchor, body: nodes.SteerHydraulicHose_R_Segment_02, nominalLength: Number(nodes.SteerHydraulicHose_R_Flexible.userData.nominal_length_m) },
     ],
     hitVolumes,
     visibleMeshCount: optimization.visibleMeshes,
@@ -840,8 +870,12 @@ function applyQueryPose() {
 }
 applyQueryPose();
 
+function activeOverrideKeys(now = performance.now()) {
+  return Object.keys(targets).filter((key) => autonomy.activeControl === key || now < autonomy.overrideUntil[key]);
+}
+
 function activeOverrideKey(now = performance.now()) {
-  return Object.keys(targets).find((key) => autonomy.activeControl === key || now < autonomy.overrideUntil[key]) || null;
+  return activeOverrideKeys(now)[0] || null;
 }
 
 function normalizedHeadingDegrees(radians) {
@@ -849,9 +883,10 @@ function normalizedHeadingDegrees(radians) {
 }
 
 function updateAutonomyTelemetry(now = performance.now()) {
-  const overrideKey = autonomy.enabled ? activeOverrideKey(now) : null;
-  const recovering = autonomy.enabled && !overrideKey && autonomy.routeError > 0.6;
-  const mode = autonomyLocked ? "Static pose" : autonomy.enabled ? overrideKey ? `Override · ${controlNames[overrideKey]}` : recovering ? "Route recovery" : "Auto loop" : "Manual";
+  const overrideKeys = autonomy.enabled ? activeOverrideKeys(now) : [];
+  const recovering = autonomy.enabled && !overrideKeys.length && autonomy.routeError > 0.6;
+  const overrideLabel = overrideKeys.map((key) => controlNames[key]).join(" + ");
+  const mode = autonomyLocked ? "Static pose" : autonomy.enabled ? overrideKeys.length ? `Override · ${overrideLabel}` : recovering ? "Route recovery" : "Auto loop" : "Manual";
   autonomyMode.value = mode;
   autonomyNote.textContent = autonomyLocked
     ? reducedMotion ? "Reduced motion keeps the route stationary." : "Query poses keep the route stationary."
@@ -861,8 +896,8 @@ function updateAutonomyTelemetry(now = performance.now()) {
   autonomyToggle.disabled = autonomyLocked;
   autonomyToggle.setAttribute("aria-pressed", String(autonomy.enabled));
   autonomyToggle.textContent = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
-  document.body.dataset.autonomyMode = autonomyLocked ? "static" : autonomy.enabled ? overrideKey ? "override" : recovering ? "recovering" : "auto" : "manual";
-  document.body.dataset.autonomyOverrides = overrideKey || "none";
+  document.body.dataset.autonomyMode = autonomyLocked ? "static" : autonomy.enabled ? overrideKeys.length ? "override" : recovering ? "recovering" : "auto" : "manual";
+  document.body.dataset.autonomyOverrides = overrideKeys.join(",") || "none";
   document.body.dataset.driveHeading = String(normalizedHeadingDegrees(autonomy.heading));
   document.body.dataset.driveLoop = String(Math.round((autonomy.phase / (Math.PI * 2)) * 100));
   document.body.dataset.driveRouteErrorM = autonomy.routeError.toFixed(2);
@@ -882,11 +917,23 @@ updateAutonomyTelemetry();
 document.querySelector("#stow").addEventListener("click", () => {
   setAutonomyEnabled(false);
   Object.keys(targets).forEach((key) => { targets[key] = 0; });
+  autonomy.phase = 0;
+  autonomy.x = 0;
+  autonomy.z = 0;
+  autonomy.heading = 0;
+  autonomy.routeError = 0;
+  autonomy.wheelRotation = 0;
+  rig.machine.position.set(0, 0, 0);
+  rig.machine.rotation.y = 0;
+  document.body.dataset.driveX = "0.00";
+  document.body.dataset.driveZ = "0.00";
   syncInputs();
+  resetView();
+  updateAutonomyTelemetry();
 });
 
 function defaultOrbitRadius() {
-  return innerWidth <= 800 ? 29 : 18;
+  return innerWidth <= 800 ? 24 : 18;
 }
 
 function defaultOrbitTargetY(boomAngle = 0) {
@@ -1135,7 +1182,7 @@ function focusComponent(component) {
   const node = component === "chassis" ? rig.chassis : component === "turntable" ? rig.turntablePivot : component === "boom" ? rig.boomPivot : rig.platformMount;
   node.getWorldPosition(worldPosition);
   if (component === "platform") worldPosition.y += 0.2;
-  if (component === "boom") worldPosition.x += 2.2;
+  if (component === "boom") worldPosition.copy(node.localToWorld(new THREE.Vector3(2.2, 0, 0)));
   orbit.targetGoal.copy(worldPosition);
   orbit.radiusGoal = componentContent[component].radius;
   orbit.idle = 0;
@@ -1258,7 +1305,33 @@ function updateEvidenceBoundedLinkages() {
   if (!rig.machine) return;
   rig.machine.updateMatrixWorld(true);
   rig.visualLinks?.forEach(solveVisualLink);
+  rig.visualHoses?.forEach(solveVisualLink);
   rig.visualCylinders?.forEach(solveVisualCylinder);
+}
+
+function ackermannSteeringAngles(centerAngleDegrees) {
+  const centerAngle = THREE.MathUtils.degToRad(centerAngleDegrees);
+  if (Math.abs(centerAngle) < 0.0001) return [0, 0];
+  const wheelbase = AUTONOMY_PATH.wheelbase;
+  const halfTrack = Math.max(0.1, (rig.steeringTrackM || 2.08) * 0.5);
+  const turnRadius = Math.abs(wheelbase / Math.tan(centerAngle));
+  const visualLimit = THREE.MathUtils.degToRad(28);
+  const inner = Math.min(visualLimit, Math.atan(wheelbase / Math.max(0.2, turnRadius - halfTrack)));
+  const outer = Math.min(visualLimit, Math.atan(wheelbase / (turnRadius + halfTrack)));
+  if (centerAngle > 0) return [inner, outer];
+  return [-outer, -inner];
+}
+
+const lightingAnchor = new THREE.Vector3();
+function updatePresentationLighting() {
+  if (!rig?.machine) return;
+  rig.machine.getWorldPosition(lightingAnchor);
+  lightingAnchor.y += 1.35;
+  lightTarget.position.copy(lightingAnchor);
+  key.position.copy(lightingAnchor).add(keyOffset);
+  fill.position.copy(lightingAnchor).add(fillOffset);
+  rim.position.copy(lightingAnchor).add(rimOffset);
+  lightTarget.updateMatrixWorld();
 }
 
 function updateAutonomy(dt, now) {
@@ -1343,8 +1416,11 @@ function updateRig(dt) {
     rig.telescope.position.x = rig.telescopeHomeX + telescopeProgress * rig.telescopeTravelM;
   }
   rig.turntablePivot.rotation.y = THREE.MathUtils.degToRad(machineState.turntableAngle);
-  rig.steeringPivots.forEach((pivot) => { pivot.rotation.y = THREE.MathUtils.degToRad(machineState.steeringAngle); });
+  const steerAngles = ackermannSteeringAngles(machineState.steeringAngle);
+  rig.steeringPivots.forEach((pivot, index) => { pivot.rotation.y = steerAngles[index] ?? 0; });
   rig.rollingWheels?.forEach((pivot) => { pivot.rotation.z = autonomy.wheelRotation; });
+  document.body.dataset.steerLeftDeg = THREE.MathUtils.radToDeg(steerAngles[0] || 0).toFixed(1);
+  document.body.dataset.steerRightDeg = THREE.MathUtils.radToDeg(steerAngles[1] || 0).toFixed(1);
   updateLiftCylinder();
   updateEvidenceBoundedLinkages();
   if (!focusedComponent) {
@@ -1415,6 +1491,7 @@ function animate(now = 0) {
   const dt = Math.min(clock.getDelta(), 0.1);
   updateAutonomy(dt, now);
   updateRig(dt);
+  updatePresentationLighting();
   updateCamera(dt);
   renderer.render(scene, camera);
   if (collectFrameSamples && renderedInterval > 0 && renderedInterval < 250) {

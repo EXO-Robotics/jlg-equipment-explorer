@@ -16,6 +16,7 @@ from validate_600s_glb import (
     HASH_PREFIX_LEN,
     PROJECT_ROOT,
     RECEIPT_PATH,
+    RECEIPT_TEMPLATE_PATH,
     REVIEW_FLAGS,
     sha256_file,
     validate,
@@ -109,14 +110,7 @@ def main() -> None:
             "telescope_overlap_stowed_m": mechanical["telescope_overlap_stowed_m"],
         },
         "review": review,
-        "evidence_boundary": (
-            "Overall published envelopes are authoritative and approximate per JLG. "
-            "MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; "
-            "neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, "
-            "tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and "
-            "strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, "
-            "electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
-        ),
+        "evidence_boundary": json.loads(RECEIPT_TEMPLATE_PATH.read_text(encoding="utf-8"))["evidence_boundary"],
     }
     RECEIPT_PATH.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     write_version_js(mechanical["cache_key"])
@@ -127,7 +121,7 @@ def main() -> None:
         "sha256": mechanical["sha256"],
         "cache_key": mechanical["cache_key"],
         "glb": str(GLB_PATH.relative_to(PROJECT_ROOT)),
-        "review_auto_accepted": False,
+        "review_auto_accepted": accepted,
     }, indent=2, sort_keys=True))
 
 

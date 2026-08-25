@@ -43,6 +43,10 @@
     "Wheel_FR": "Chassis",
     "Wheel_RL": "Chassis",
     "Wheel_RR": "Chassis",
+    "Wheel_FL_Roll": "Wheel_FL",
+    "Wheel_FR_Roll": "Wheel_FR",
+    "Wheel_RL_Roll": "Wheel_RL",
+    "Wheel_RR_Roll": "Wheel_RR",
     "SteerTieRod": "Chassis",
     "SteerTieRodLowerAnchor": "Wheel_FR",
     "SteerTieRodUpperAnchor": "Wheel_FL",
@@ -59,6 +63,14 @@
     "SteerCylinder_R_Rod": "SteerCylinder_R",
     "SteerHydraulicHose_L": "Chassis",
     "SteerHydraulicHose_R": "Chassis",
+    "SteerHydraulicHose_L_LowerAnchor": "SteerHydraulicHose_L",
+    "SteerHydraulicHose_L_UpperAnchor": "Wheel_FL",
+    "SteerHydraulicHose_L_Flexible": "SteerHydraulicHose_L",
+    "SteerHydraulicHose_L_Segment_02": "SteerHydraulicHose_L_Flexible",
+    "SteerHydraulicHose_R_LowerAnchor": "SteerHydraulicHose_R",
+    "SteerHydraulicHose_R_UpperAnchor": "Wheel_FR",
+    "SteerHydraulicHose_R_Flexible": "SteerHydraulicHose_R",
+    "SteerHydraulicHose_R_Segment_02": "SteerHydraulicHose_R_Flexible",
     "ChassisDriveHarness_L": "Chassis",
     "ChassisDriveHarness_R": "Chassis",
     "TurntablePivot": "600S_ROOT",
@@ -108,7 +120,7 @@
     "PowertrackBaseRun": "Powertrack",
     "PowertrackSupport": "MainBoom",
     "PowertrackMovingRun": "MidBoom",
-    "PowertrackBend": "FlyBoom",
+    "PowertrackBend": "MidBoom",
     "PowertrackPushTube": "FlyBoom",
     "TelescopeCylinderBarrel": "MainBoom",
     "TelescopeCylinderRod": "MidBoom",
@@ -138,7 +150,7 @@
   },
   "sections": {
     "chassis": {
-      "required_nodes": ["Frame", "AxleFront", "AxleRear", "Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR", "SteerTieRod", "SteerCylinder_L", "SteerCylinder_R"],
+      "required_nodes": ["Frame", "AxleFront", "AxleRear", "Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR", "Wheel_FL_Roll", "Wheel_FR_Roll", "Wheel_RL_Roll", "Wheel_RR_Roll", "SteerTieRod", "SteerCylinder_L", "SteerCylinder_R"],
       "evidence": ["3122579800:20-64"]
     },
     "turntable": {

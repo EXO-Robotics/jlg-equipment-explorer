@@ -7,11 +7,11 @@
   "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T19:21:11Z",
-  "sha256": "4dd98f4122381b3fa797f4d1e00b42b2179939364cf8238681e0b0041326fcfd",
-  "source_blend_sha256": "f6c4f94095fab931ec185d83ccf421d3c621f08d983ed743359d461b227bccf1",
-  "cache_key": "4dd98f412238",
-  "runtime_sha256": "aa93f66540774f4829ce757abdf0a61a85318d8ca89dbb91a1bc892495f2f185",
+  "exported_at": "2026-08-25T23:33:33Z",
+  "sha256": "e830ae3a5504feb7891a1ebb59f7f23946b32d1e6bd684f1339b70bc7bf5bc9c",
+  "source_blend_sha256": "1cb3a5d7df4e44d094fff2f18952ad066a69008ad837499cc3e30f1f7cd4a383",
+  "cache_key": "e830ae3a5504",
+  "runtime_sha256": "e28d21bf647d74d360d7cbe306ee686cdb3bdd5de751aff400f372a3c63617f8",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -29,8 +29,8 @@
   "telescope_travel_m": 0.9,
   "telescope_overlap_at_100_m": 1.207,
   "triangle_count": 24624,
-  "node_count": 463,
-  "required_parent_edges": 100,
+  "node_count": 473,
+  "required_parent_edges": 112,
   "interaction_volumes": [
     "Chassis_Hit",
     "Turntable_Hit",
@@ -40,7 +40,7 @@
   ],
   "mechanical_validation": {
     "status": "PASS",
-    "bytes": 1250732,
+    "bytes": 1253072,
     "mesh_count": 408,
     "visible_bounds_min_m": [
       -2.9093,
@@ -63,11 +63,11 @@
     "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Fresh local in-app browser 2026-08-25: exact 4dd98f412238 GLB loaded as blender-showcase-v1.1.0 under runtime 1.1.5 with zero runtime errors on desktop and a 390 x 844 mobile viewport.",
-      "motion": "Runtime 1.1.5 exercised autonomous boom, telescope, turntable, curvature steering, wheel roll, manual pause, a six-second steering override, and closed-loop route recovery on exact 4dd98f412238 GLB.",
-      "selection": "Five-volume runtime selection self-test passed on exact 4dd98f412238 GLB under runtime 1.1.5.",
-      "silhouette_scope": "Desktop autonomous working poses and collapsed/expanded mobile layouts were reviewed under runtime 1.1.5. Exact-GLB stowed and full-extension silhouette evidence remains applicable because the 4dd98f412238 model and f6c4f94095fa source blend are unchanged."
+      "browser": "Fresh local in-app browser 2026-08-25: exact e830ae3a5504 GLB loaded as blender-showcase-v1.1.0 under runtime 1.1.6 with 92 optimized visible meshes and zero runtime errors at 1280 x 720, 390 x 844, and 390 x 650.",
+      "motion": "Runtime 1.1.6 exercised autonomous drive with chassis-follow lighting, bounded 28.0/23.5 degree inner/outer steering, four tire-only roll transforms, two endpoint-follow steer-hose solvers, full visual telescope travel with the moving carrier bend, simultaneous Boom + Steer override reporting, and stow reset from x 6.28/z -3.37 to the origin.",
+      "selection": "Five-volume runtime selection self-test passed on exact e830ae3a5504 GLB under runtime 1.1.6 with zero instrumented errors.",
+      "silhouette_scope": "Fresh local desktop stowed and 20-degree/full-extension working poses were reviewed on exact e830ae3a5504. Collapsed and expanded 390 x 844 plus expanded 390 x 650 mobile layouts were reviewed with Steering visible and reachable. Fixed-camera paired source overlays and deployed Pages proof remain separate gates."
     }
   },
-  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Wheel roll is separated from steer/axle transforms, while the inner/outer visual steering split remains reconstructed. Lift, steering, tower/tension, platform-level, and steering-hose endpoint linkages use visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
 }

@@ -51,6 +51,7 @@ def main() -> None:
         'aria-describedby="inspector-copy" inert',
         "Not an engineering or service reference.",
         "Presentation-only motion limits. Not operational data.",
+        ".compact-control { display: grid; }",
     ], "HTML accessibility/safety")
 
     if index.count('aria-describedby="motion-boundary"') != 4:
@@ -107,6 +108,21 @@ def main() -> None:
         'AUTONOMY_OVERRIDE_MS = 6000',
         'setAutonomyEnabled(false)',
         'rig.rollingWheels?.forEach',
+        '"Wheel_FL_Roll"',
+        "rig.visualHoses?.forEach",
+        "function ackermannSteeringAngles",
+        "function updatePresentationLighting",
+        "lightTarget.position.copy(lightingAnchor)",
+        "activeOverrideKeys(now)",
+        'document.body.dataset.autonomyOverrides = overrideKeys.join(",") || "none"',
+        "autonomy.wheelRotation = 0",
+        "node.localToWorld(new THREE.Vector3(2.2, 0, 0))",
+        "innerWidth <= 800 ? 24 : 18",
+        'dataset.wheelRollHierarchy',
+        'dataset.hoseSolverCount',
+        'dataset.steerLeftDeg',
+        'dataset.steerRightDeg',
+        'const visualLimit = THREE.MathUtils.degToRad(28)',
     ], "viewer runtime")
 
     print(json.dumps({

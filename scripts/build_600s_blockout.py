@@ -338,14 +338,18 @@ def add_wheel(name: str, x: float, y: float, front: bool) -> bpy.types.Object:
     pivot["component"] = "chassis"
     pivot["steering_pivot"] = front
     set_authority(pivot, "derived" if front else "verified", "3122579800:20-35")
-    torus_y(f"{name}_Tire", 0.45, 0.18, pivot, (0.0, 0.0, 0.0), MAT_TIRE, "chassis")
+    roll = empty(f"{name}_Roll", pivot)
+    roll["component"] = "chassis"
+    roll["runtime_axis"] = "local_y_blender_local_z_gltf"
+    set_authority(roll, "derived", "3122579800:20-50; tire roll separated from steering/axle transform")
+    torus_y(f"{name}_Tire", 0.45, 0.18, roll, (0.0, 0.0, 0.0), MAT_TIRE, "chassis")
     for tread_index in range(18):
         angle = math.tau * tread_index / 18
         radius = 0.6117
         tread = box(
             f"{name}_Tread_{tread_index + 1:02d}",
             (0.18, 0.40, 0.065),
-            pivot,
+            roll,
             (radius * math.cos(angle), 0.0, radius * math.sin(angle)),
             MAT_TIRE,
             "chassis",
@@ -354,19 +358,19 @@ def add_wheel(name: str, x: float, y: float, front: bool) -> bpy.types.Object:
         )
         tread.rotation_euler.y = math.pi / 2.0 - angle
     cylinder_mesh(
-        f"{name}_Rim", 0.31, 0.31, pivot, (0.0, 0.0, 0.0),
+        f"{name}_Rim", 0.31, 0.31, roll, (0.0, 0.0, 0.0),
         (math.pi / 2.0, 0.0, 0.0), MAT_RIM, "chassis", 28,
         evidence="3122579800:46-50",
     )
     cylinder_mesh(
-        f"{name}_DriveHub", 0.145, 0.35, pivot, (0.0, 0.0, 0.0),
+        f"{name}_DriveHub", 0.145, 0.35, roll, (0.0, 0.0, 0.0),
         (math.pi / 2.0, 0.0, 0.0), MAT_DARK_METAL, "chassis", 20,
         evidence="3122579800:32-40",
     )
     for lug_index in range(9):
         angle = math.tau * lug_index / 9
         cylinder_mesh(
-            f"{name}_Lug_{lug_index + 1:02d}", 0.018, 0.035, pivot,
+            f"{name}_Lug_{lug_index + 1:02d}", 0.018, 0.035, roll,
             (0.095 * math.cos(angle), -0.175 if y < 0 else 0.175, 0.095 * math.sin(angle)),
             (math.pi / 2.0, 0.0, 0.0), MAT_DARK_METAL, "chassis", 8, smooth=False,
             evidence="3122579800:32-50",
@@ -378,6 +382,39 @@ def add_wheel(name: str, x: float, y: float, front: bool) -> bpy.types.Object:
     )
     knuckle["steering"] = "front_2ws" if front else "rear_fixed"
     return pivot
+
+
+def articulated_hose(
+    name: str,
+    fixed_start: tuple[float, float, float],
+    fixed_end: tuple[float, float, float],
+    moving_parent: bpy.types.Object,
+    moving_anchor: tuple[float, float, float],
+) -> bpy.types.Object:
+    """Build one fixed hose leg plus one evidence-bounded moving visual leg."""
+    group = empty(name, chassis)
+    group["component"] = "chassis"
+    set_authority(group, "reconstructed", "3122579800:28-31; routing reconstructed")
+    tube(
+        f"{name}_Segment_01", fixed_start, fixed_end, 0.015, group, MAT_HYDRAULIC, "chassis",
+        evidence="3122579800:28-31; routing reconstructed",
+    )
+    lower = empty(f"{name}_LowerAnchor", group, fixed_end)
+    upper = empty(f"{name}_UpperAnchor", moving_parent, moving_anchor)
+    set_authority(lower, "reconstructed", "MECHANISM_EVIDENCE:STR-003; hose endpoint reconstructed")
+    set_authority(upper, "reconstructed", "MECHANISM_EVIDENCE:STR-003; hose endpoint reconstructed")
+    moving_parent_world = moving_parent.location + Vector(moving_anchor)
+    direction = moving_parent_world - Vector(fixed_end)
+    flexible = empty(f"{name}_Flexible", group, fixed_end)
+    flexible["runtime_solver"] = "two_anchor_visual_hose"
+    flexible["nominal_length_m"] = direction.length
+    flexible.rotation_euler = direction.to_track_quat("X", "Z").to_euler()
+    set_authority(flexible, "reconstructed", "3122579800:28-31; endpoint-follow visual solver")
+    tube(
+        f"{name}_Segment_02", (0.0, 0.0, 0.0), (direction.length, 0.0, 0.0), 0.015,
+        flexible, MAT_HYDRAULIC, "chassis", evidence="3122579800:28-31; routing reconstructed",
+    )
+    return group
 
 
 def world_bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector, Vector]:
@@ -625,8 +662,8 @@ for side, wheel, body_y, wheel_y in (
     steer_cylinder.rotation_euler = (initial_upper - initial_lower).to_track_quat("X", "Z").to_euler()
     tube(f"SteerCylinder_{side}_Barrel", (0.0, 0.0, 0.0), (0.38, 0.0, 0.0), 0.052, steer_cylinder, MAT_HYDRAULIC, "chassis", 14, evidence="3122579800:28-29")
     tube(f"SteerCylinder_{side}_Rod", (0.32, 0.0, 0.0), (0.72, 0.0, 0.0), 0.029, steer_cylinder, MAT_METAL, "chassis", 12, evidence="3122579800:28-29")
-tube_path("SteerHydraulicHose_L", ((0.70, 0.25, 0.73), (0.98, 0.42, 0.73), (1.16, 0.73, 0.73)), 0.015, chassis, MAT_HYDRAULIC, "chassis", evidence="3122579800:28-31; routing reconstructed")
-tube_path("SteerHydraulicHose_R", ((0.70, -0.25, 0.73), (0.98, -0.42, 0.73), (1.16, -0.73, 0.73)), 0.015, chassis, MAT_HYDRAULIC, "chassis", evidence="3122579800:28-31; routing reconstructed")
+articulated_hose("SteerHydraulicHose_L", (0.70, 0.25, 0.73), (0.98, 0.42, 0.73), wheel_fl, (0.0, -0.22, 0.08))
+articulated_hose("SteerHydraulicHose_R", (0.70, -0.25, 0.73), (0.98, -0.42, 0.73), wheel_fr, (0.0, 0.22, 0.08))
 tube_path("ChassisDriveHarness_L", ((-1.95, 0.62, 0.82), (-0.25, 0.62, 0.82), (1.12, 0.62, 0.76)), 0.012, chassis, MAT_ELECTRICAL, "chassis", evidence="3122579800:908-920; routing reconstructed")
 tube_path("ChassisDriveHarness_R", ((-1.95, -0.62, 0.82), (-0.25, -0.62, 0.82), (1.12, -0.62, 0.76)), 0.012, chassis, MAT_ELECTRICAL, "chassis", evidence="3122579800:908-920; routing reconstructed")
 for side, y in (("L", 0.56), ("R", -0.56)):
@@ -730,7 +767,7 @@ set_authority(powertrack_moving_run, "reconstructed", "3122579700:643-645; displ
 for link_index in range(POWERTRACK_MOVING_DISPLAY_COUNT):
     x = 0.12 + link_index * POWERTRACK_LINK_PITCH_M
     box(f"PowertrackMovingDisplayLink_{link_index + 1:02d}", (POWERTRACK_LINK_LENGTH_M, 0.44, 0.09), powertrack_moving_run, (x, 0.0, -0.43), MAT_POWERTRACK, "boom", round=0.012, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
-powertrack_bend = empty("PowertrackBend", fly_boom, (0.10, 0.0, -0.38))
+powertrack_bend = empty("PowertrackBend", mid_boom, (0.85, 0.0, -0.38))
 set_authority(powertrack_bend, "reconstructed", "3122579700:645; display sampling only")
 for bend_index, angle in enumerate((-1.15, -0.65, -0.15, 0.35, 0.85), start=1):
     link = box(f"PowertrackBendDisplayLink_{bend_index:02d}", (0.15, 0.44, 0.09), powertrack_bend, (0.16 * math.cos(angle), 0.0, 0.16 * math.sin(angle)), MAT_POWERTRACK, "boom", round=0.018, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
@@ -919,6 +956,22 @@ for side in ("L", "R"):
 assert_attached("BoomRestPad", "BoomRest")
 for tag, rail in (("FL", "FrameRail_L"), ("FR", "FrameRail_R"), ("RL", "FrameRail_L"), ("RR", "FrameRail_R")):
     assert_attached(f"TieDownPocket_{tag}", rail)
+for wheel_name in ("Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR"):
+    if bpy.data.objects[f"{wheel_name}_Roll"].parent is not bpy.data.objects[wheel_name]:
+        raise RuntimeError(f"{wheel_name} roll transform must remain below its steer/axle transform")
+    if bpy.data.objects[f"{wheel_name}_Tire"].parent is not bpy.data.objects[f"{wheel_name}_Roll"]:
+        raise RuntimeError(f"{wheel_name} tire must be owned by its roll transform")
+    fixed_part = f"{wheel_name}_SteerKnuckle" if wheel_name in ("Wheel_FL", "Wheel_FR") else f"{wheel_name}_AxleEnd"
+    if bpy.data.objects[fixed_part].parent is not bpy.data.objects[wheel_name]:
+        raise RuntimeError(f"{fixed_part} must not inherit tire roll")
+for side, wheel_name in (("L", "Wheel_FL"), ("R", "Wheel_FR")):
+    hose_name = f"SteerHydraulicHose_{side}"
+    if bpy.data.objects[f"{hose_name}_Flexible"].get("runtime_solver") != "two_anchor_visual_hose":
+        raise RuntimeError(f"{hose_name} moving leg is missing its endpoint-follow solver")
+    if bpy.data.objects[f"{hose_name}_UpperAnchor"].parent is not bpy.data.objects[wheel_name]:
+        raise RuntimeError(f"{hose_name} moving anchor must follow {wheel_name}")
+if powertrack_bend.parent is not powertrack_moving_run.parent:
+    raise RuntimeError("Powertrack bend and moving run must inherit the same telescope stage")
 for prefix, count in (
     ("PowertrackBaseDisplayLink", POWERTRACK_BASE_DISPLAY_COUNT),
     ("PowertrackMovingDisplayLink", POWERTRACK_MOVING_DISPLAY_COUNT),
