@@ -10,7 +10,7 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=1.1.4`.
+Then open `http://localhost:8080/?v=1.1.5`.
 
 The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
 
@@ -21,6 +21,7 @@ Validate the current GLB, source, receipt, release identity, and cache manifest 
 - Orbit, wheel zoom, pinch zoom, inertia, idle drift, and reset
 - Procedural 600S-style proxy with named, articulated assemblies
 - Boom lift, telescope, turntable, and steering controls
+- Autonomous oval presentation route with bicycle-model steering, rolling wheels, live heading/loop telemetry, route recovery, pause-to-manual control, and six-second per-channel overrides
 - Stow sequence, clickable component focus, and inspector copy
 - Responsive desktop/mobile interface and reduced-motion support
 - Keyboard orbit, zoom, component inspection, reset, focus-trapped inspector, and visible focus treatment
