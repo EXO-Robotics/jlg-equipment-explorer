@@ -73,3 +73,11 @@ carried by two chassis-mounted posts so it remains connected when the boom lifts
 GLB `cce862032f8d` passed fifteen attachment-overlap checks plus the existing mechanical,
 motion, selection, stowed, and working-pose desktop gates. Mobile remains a separate gate
 for this exact asset hash.
+
+Runtime 1.1.4 corrects the visibly disconnected underside carrier samples. Exact GLB
+`4dd98f412238` limits neighboring display seams to 0.002 m and proves zero positive
+gap between the fixed and moving sampled runs at full visual extension. Desktop
+stowed, 20-degree raised-boom, and 35-degree/full-extension views passed with the
+real GLB, five selection volumes, and zero runtime errors. The displayed pitch and
+sample counts remain explicitly non-authoritative because current PVC 2607 sources
+establish carrier topology but not the exact frozen-machine link dimensions/count.

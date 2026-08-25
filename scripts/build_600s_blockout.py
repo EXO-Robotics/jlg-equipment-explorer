@@ -32,6 +32,11 @@ TAILSWING_M = 1.22
 TELESCOPE_TRAVEL_M = 0.90
 TELESCOPE_MID_TRAVEL_M = 0.36
 TELESCOPE_FLY_TRAVEL_M = 0.54
+POWERTRACK_LINK_LENGTH_M = 0.198
+POWERTRACK_LINK_PITCH_M = 0.20
+POWERTRACK_BASE_DISPLAY_COUNT = 18
+POWERTRACK_MOVING_DISPLAY_COUNT = 9
+POWERTRACK_MAX_VISIBLE_GAP_M = 0.004
 ASSET_VERSION = "1.1.0"
 CONFIGURATION_ID = "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696"
 
@@ -415,6 +420,21 @@ def assert_attached(part_name: str, support_name: str, minimum_overlap_m: float 
         )
 
 
+def assert_near(part_name: str, neighbor_name: str, maximum_gap_m: float) -> None:
+    """Fail when adjacent presentation geometry has a visible world-space air gap."""
+    part_min, part_max = world_aabb(bpy.data.objects[part_name])
+    neighbor_min, neighbor_max = world_aabb(bpy.data.objects[neighbor_name])
+    gap = Vector((
+        max(part_min[axis] - neighbor_max[axis], neighbor_min[axis] - part_max[axis], 0.0)
+        for axis in range(3)
+    ))
+    if any(value > maximum_gap_m for value in gap):
+        raise RuntimeError(
+            f"Disconnected presentation geometry: {part_name} -> {neighbor_name}; "
+            f"axis gap={tuple(round(value, 4) for value in gap)}"
+        )
+
+
 if bpy.data.filepath:
     open_path = Path(bpy.data.filepath).resolve()
     allowed_paths = {BLEND_PATH.resolve(), *(path.resolve() for path in MIGRATION_SOURCE_PATHS)}
@@ -675,11 +695,15 @@ for index, x in enumerate((0.84, 1.18, 1.52, 1.86, 2.20, 2.54, 2.88, 3.22, 3.56)
 powertrack = empty("Powertrack", main_boom, (0.0, 0.0, 0.0))
 set_authority(powertrack, "verified", "MECHANISM_EVIDENCE:PWR-001,PWR-002")
 powertrack["display_link_count_is_physical_claim"] = False
+powertrack["display_link_length_m"] = POWERTRACK_LINK_LENGTH_M
+powertrack["display_link_pitch_m"] = POWERTRACK_LINK_PITCH_M
+powertrack["base_display_sample_count"] = POWERTRACK_BASE_DISPLAY_COUNT
+powertrack["moving_display_sample_count"] = POWERTRACK_MOVING_DISPLAY_COUNT
 powertrack_base_run = empty("PowertrackBaseRun", powertrack)
 set_authority(powertrack_base_run, "reconstructed", "3122579700:643-645; display sampling only")
-for link_index in range(12):
-    x = 0.52 + link_index * 0.20
-    box(f"PowertrackBaseDisplayLink_{link_index + 1:02d}", (0.16, 0.44, 0.09), powertrack_base_run, (x, 0.0, -0.49), MAT_POWERTRACK, "boom", round=0.018, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
+for link_index in range(POWERTRACK_BASE_DISPLAY_COUNT):
+    x = 0.52 + link_index * POWERTRACK_LINK_PITCH_M
+    box(f"PowertrackBaseDisplayLink_{link_index + 1:02d}", (POWERTRACK_LINK_LENGTH_M, 0.44, 0.09), powertrack_base_run, (x, 0.0, -0.49), MAT_POWERTRACK, "boom", round=0.012, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
 box("PowertrackSupport", (2.60, 0.52, 0.08), main_boom, (1.72, 0.0, -0.59), MAT_DARK_METAL, "boom", round=0.018, evidence="3122579700:643-645")
 
 telescope = empty("Telescope", main_boom, (3.60, 0.0, 0.0))
@@ -703,9 +727,9 @@ box("BoomHead", (0.26, 0.46, 0.44), fly_boom, (1.78, 0.0, 0.0), MAT_ORANGE, "boo
 
 powertrack_moving_run = empty("PowertrackMovingRun", mid_boom)
 set_authority(powertrack_moving_run, "reconstructed", "3122579700:643-645; display sampling only")
-for link_index in range(9):
-    x = 0.12 + link_index * 0.20
-    box(f"PowertrackMovingDisplayLink_{link_index + 1:02d}", (0.16, 0.44, 0.09), powertrack_moving_run, (x, 0.0, -0.43), MAT_POWERTRACK, "boom", round=0.018, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
+for link_index in range(POWERTRACK_MOVING_DISPLAY_COUNT):
+    x = 0.12 + link_index * POWERTRACK_LINK_PITCH_M
+    box(f"PowertrackMovingDisplayLink_{link_index + 1:02d}", (POWERTRACK_LINK_LENGTH_M, 0.44, 0.09), powertrack_moving_run, (x, 0.0, -0.43), MAT_POWERTRACK, "boom", round=0.012, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
 powertrack_bend = empty("PowertrackBend", fly_boom, (0.10, 0.0, -0.38))
 set_authority(powertrack_bend, "reconstructed", "3122579700:645; display sampling only")
 for bend_index, angle in enumerate((-1.15, -0.65, -0.15, 0.35, 0.85), start=1):
@@ -895,6 +919,25 @@ for side in ("L", "R"):
 assert_attached("BoomRestPad", "BoomRest")
 for tag, rail in (("FL", "FrameRail_L"), ("FR", "FrameRail_R"), ("RL", "FrameRail_L"), ("RR", "FrameRail_R")):
     assert_attached(f"TieDownPocket_{tag}", rail)
+for prefix, count in (
+    ("PowertrackBaseDisplayLink", POWERTRACK_BASE_DISPLAY_COUNT),
+    ("PowertrackMovingDisplayLink", POWERTRACK_MOVING_DISPLAY_COUNT),
+):
+    for link_index in range(1, count):
+        assert_near(
+            f"{prefix}_{link_index:02d}",
+            f"{prefix}_{link_index + 1:02d}",
+            POWERTRACK_MAX_VISIBLE_GAP_M,
+        )
+base_run_end_x = world_aabb(bpy.data.objects[f"PowertrackBaseDisplayLink_{POWERTRACK_BASE_DISPLAY_COUNT:02d}"])[1].x
+moving_run_start_x_at_full_travel = (
+    world_aabb(bpy.data.objects["PowertrackMovingDisplayLink_01"])[0].x + TELESCOPE_MID_TRAVEL_M
+)
+if moving_run_start_x_at_full_travel - base_run_end_x > POWERTRACK_MAX_VISIBLE_GAP_M:
+    raise RuntimeError(
+        "Powertrack sampled runs separate at full visual telescope travel: "
+        f"gap={moving_run_start_x_at_full_travel - base_run_end_x:.4f} m"
+    )
 minimum, maximum, dimensions = world_bounds(objects)
 for axis, actual, expected in zip("XYZ", dimensions, PUBLISHED_ENVELOPE_M):
     if not math.isclose(actual, expected, abs_tol=0.002):

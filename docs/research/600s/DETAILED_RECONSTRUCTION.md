@@ -96,11 +96,11 @@ voltage, pinout, fault-isolation, or diagnostic behavior is simulated.
 
 ## Current proof and remaining gap
 
-The GLB validator enforces one rooted scene, 100 critical parent edges, 457 named nodes, five moving
+The GLB validator enforces one rooted scene, 100 critical parent edges, 463 named nodes, five moving
 hit volumes, identity export scale, configuration/provenance extras, published stowed dimensions,
 platform size, wheelbase, clearance, tailswing, triangle budget, and telescope overlap. Safari proof
 has covered real-GLB load, lift, extension, stow, platform leveling, mobile controls, and the component
-inspector. The authored GLB contains 402 mesh records for traceable detail, then the viewer merges only
+inspector. The authored GLB contains 408 mesh records for traceable detail, then the viewer merges only
 same-material geometry inside rigid motion groups. The observed v1.1 runtime contains 82 visible meshes
 (including independently authored model/product marks and generic hazard-band cues),
 while front steering, boom lift, telescope extension, platform leveling, lift-cylinder solving, and all
@@ -123,6 +123,16 @@ front chassis pod. The GLB validator now rejects the legacy detached tie-down no
 explicit accessory/support overlaps. Fresh desktop stowed and 45/80/35/18 working-pose renders load
 the real GLB with 82 optimized visible meshes, five-of-five selection self-tests, and zero instrumented
 runtime errors. A mobile render remains unreviewed for this exact hash.
+
+Runtime 1.1.4 carrier-continuity proof covers exact GLB `4dd98f412238`. The generic display
+samples under the boom now use 0.198 m visual links on a 0.20 m pitch, leaving a restrained 2 mm
+seam instead of the earlier 40 mm air gaps. The stationary sampled run was extended so it retains
+zero positive separation from the moving run through 100% of the evidence-safe visual telescope
+range. The validator checks every neighboring base/moving sample plus the full-travel run boundary.
+These pitch and sample-count values are presentation geometry only; they are not claimed as JLG
+link dimensions or physical link count. Fresh desktop stowed, 20-degree raised-boom, and full-
+extension views loaded the real GLB with 82 optimized visible meshes, five-of-five selection tests,
+and zero instrumented runtime errors. Mobile remains unreviewed for this exact hash.
 
 Remaining acceptance work is narrower: a captured Chrome performance trace and fixed-camera paired
 source overlays. The source comparison also confirms that the 0.90 m evidence-safe telescope cap cannot
