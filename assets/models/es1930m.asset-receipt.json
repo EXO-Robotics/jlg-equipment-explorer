@@ -25,14 +25,19 @@
       "sha256": "dd2b9d9c3f6d2ab8ca8dc031cee555bb54cd7e719e0d8e4d03e89b884206afa3"
     },
     "mechanism": {
-      "bytes": 2445,
+      "bytes": 2868,
       "path": "machines/es1930m/mechanism.json",
-      "sha256": "0dd3b7a57e04c52f44aaa84a27fb98c2c7a2885326e53a8a785b2353ea4d5dc2"
+      "sha256": "f8f1ff54b4ccf0627c21569f343a58e2801db7442335f6d9588bd966ba51b5b3"
     },
     "mechanism_evidence": {
       "bytes": 9629,
       "path": "docs/research/es1930m/MECHANISM_EVIDENCE.json",
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
+    },
+    "review_renderer": {
+      "bytes": 2416,
+      "path": "scripts/render_es1930m_preview.py",
+      "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
       "bytes": 186277,
@@ -43,13 +48,22 @@
       "bytes": 4860,
       "path": "docs/research/es1930m/SOURCE_MANIFEST.json",
       "sha256": "3ebf4f79a8bd9ea16e9314f937d14e59beeccc6310f0d7048d4b01686402c6c8"
+    },
+    "visual_comparison": {
+      "bytes": 3798,
+      "path": "docs/research/es1930m/VISUAL_COMPARISON.md",
+      "sha256": "45f7521d2ce8f099d683b22ba8272ff8943fbc5ef711e128d2a113f2a48db4e1"
     }
   },
   "mechanism_metrics": {
+    "collision_proxy_assertions": 4141,
+    "collision_proxy_status": "PASS",
     "cylinder_observed_stroke_m": 0.6855,
     "levels": 5,
     "maximum_link_length_error_m": 4.440892098500626e-16,
     "maximum_shared_pivot_error_m": 0.0,
+    "maximum_symmetry_error_m": 0.0,
+    "maximum_translation_per_0_01_sample_m": 0.049164512674566105,
     "sampled_lift_states": 101
   },
   "release": "1.0.0-candidate",

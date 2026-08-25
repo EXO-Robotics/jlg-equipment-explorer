@@ -8,11 +8,18 @@ from mathutils import Vector
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "tmp/es1930m/es1930m-authored-stowed-preview.png"
+OUTPUT_DIR = ROOT / "tmp/es1930m/review-renders"
 
 
 def point_at(obj, target):
     obj.rotation_euler = (Vector(target) - obj.location).to_track_quat("-Z", "Y").to_euler()
+
+
+# Interaction volumes are exported for browser ray selection and hidden by the
+# runtime. Mirror that presentation contract in offline review renders.
+for obj in bpy.data.objects:
+    if obj.name.endswith("_Hit"):
+        obj.hide_render = True
 
 
 bpy.ops.object.camera_add(location=(3.2, -3.7, 2.55))
@@ -49,10 +56,21 @@ scene.render.resolution_x = 1000
 scene.render.resolution_y = 1000
 scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = "PNG"
-scene.render.filepath = str(OUTPUT)
 scene.render.film_transparent = False
 scene.world.color = (0.018, 0.025, 0.027)
 scene.view_settings.look = "AgX - Medium High Contrast"
-OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-bpy.ops.render.render(write_still=True)
-print(OUTPUT)
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+views = {
+    "front-right": (3.2, -3.7, 2.55),
+    "front-left": (3.2, 3.7, 2.55),
+    "rear-right": (-3.2, -3.7, 2.55),
+    "rear-left": (-3.2, 3.7, 2.55),
+}
+for name, location in views.items():
+    camera.location = location
+    point_at(camera, (0, 0, 0.95))
+    output = OUTPUT_DIR / f"es1930m-stowed-{name}.png"
+    scene.render.filepath = str(output)
+    bpy.ops.render.render(write_still=True)
+    print(output)

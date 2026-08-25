@@ -11,4 +11,4 @@ Manufacturer image binaries are not redistributed in Git. Local review copies li
 
 Stable asset endpoints follow `https://dam.jlg.com/DigizuiteCore/LegacyService/api/assetstream/<asset>/-1.jpg`. Access date: 2026-08-25.
 
-Before visual acceptance, add fixed-camera comparison slots for front, rear, both sides, upper platform, both chassis compartments, steer axle, pothole mechanism, stowed stack and three intermediate lift poses. Dealer photographs may fill blind-side gaps only after first-party coverage is exhausted and must remain lower authority.
+The completed comparison record is `../VISUAL_COMPARISON.md`. Four deterministic authored stowed views cover the exterior quadrants; V01 and V02 bind the closest stowed and raised comparisons. No exact first-party view exists in this evidence set for every blind side, compartment interior, steer axle, or pothole close-up, so those areas remain explicitly reconstruction-only rather than being silently accepted. Dealer photographs were not promoted into the frozen authority set.

@@ -16,6 +16,24 @@ def distance(a: tuple[float, ...], b: tuple[float, ...]) -> float:
     return math.sqrt(sum((av - bv) ** 2 for av, bv in zip(a, b)))
 
 
+def orientation(a, b, c) -> float:
+    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+
+
+def proper_segment_intersection(first, second, epsilon=1e-10) -> bool:
+    a, b = first
+    c, d = second
+    o1 = orientation(a, b, c)
+    o2 = orientation(a, b, d)
+    o3 = orientation(c, d, a)
+    o4 = orientation(c, d, b)
+    return o1 * o2 < -epsilon and o3 * o4 < -epsilon
+
+
+def interpolate(a, b, amount):
+    return tuple(a[index] + (b[index] - a[index]) * amount for index in range(len(a)))
+
+
 def circle_intersection(
     anchor: tuple[float, float],
     center: tuple[float, float],
@@ -102,6 +120,9 @@ def main() -> None:
     max_closure_error = 0.0
     max_symmetry_error = 0.0
     max_translation_step = 0.0
+    collision_assertions = 0
+    failures = []
+    collision = spec["collision_proxies"]
     for state in samples:
         for level_index, level in enumerate(state["levels"]):
             for link_name in ("a", "b"):
@@ -119,6 +140,55 @@ def main() -> None:
                     local_error = min(distance(shared, point) for point in candidates)
                     max_closure_error = max(max_closure_error, local_error)
 
+        # A and B are expected to cross within one level, and neighboring levels
+        # share end pivots. Any proper centerline crossing between non-adjacent
+        # levels would indicate branch inversion or an impossible stack collision.
+        for first_level in range(solver["level_count"]):
+            for second_level in range(first_level + 2, solver["level_count"]):
+                for first_branch in ("a", "b"):
+                    for second_branch in ("a", "b"):
+                        collision_assertions += 1
+                        if proper_segment_intersection(
+                            state["levels"][first_level][first_branch],
+                            state["levels"][second_level][second_branch],
+                        ):
+                            failures.append(
+                                f"non-adjacent link intersection at lift {state['lift']:.2f}: "
+                                f"level {first_level + 1}{first_branch} / level {second_level + 1}{second_branch}"
+                            )
+
+        # Exclude the intended upper pin neighborhood, then require the arm body
+        # plus half its authored section height to remain below the deck underside.
+        deck_underside_y = state["floor_y"] - collision["platform_deck_thickness_m"]
+        exclusion = collision["platform_joint_exclusion_fraction"]
+        for branch in ("a", "b"):
+            start, end = state["levels"][-1][branch]
+            trimmed = interpolate(start, end, 1 - exclusion)
+            collision_assertions += 1
+            if trimmed[1] + collision["arm_section_height_m"] / 2 > deck_underside_y + 1e-9:
+                failures.append(f"top arm body intersects platform proxy at lift {state['lift']:.2f}")
+
+        # Both scissor planes and their authored lane offsets must remain inside
+        # the published machine width, while the center-mounted cylinder retains
+        # clearance from the nearest arm plane outside intentional pin hardware.
+        half_arm_lateral = collision["arm_section_lateral_m"] / 2
+        for plane in solver["lateral_planes_m"]:
+            collision_assertions += 1
+            if abs(plane) + abs(solver["crossing_arm_lane_offset_m"]) + half_arm_lateral > abs(collision["machine_lateral_bounds_m"][1]) + 1e-9:
+                failures.append(f"scissor plane escapes machine width at lift {state['lift']:.2f}")
+        nearest_arm_surface = min(abs(plane) for plane in solver["lateral_planes_m"]) - abs(solver["crossing_arm_lane_offset_m"]) - half_arm_lateral
+        cylinder_surface = 0.035
+        collision_assertions += 1
+        if nearest_arm_surface - cylinder_surface < collision["minimum_cylinder_to_arm_plane_clearance_m"]:
+            failures.append("center lift cylinder violates lateral scissor-plane clearance")
+
+        # Pivot centerlines must remain within the frozen longitudinal envelope.
+        for boundary in state["boundaries"]:
+            for side in ("left", "right"):
+                collision_assertions += 1
+                if not collision["machine_longitudinal_bounds_m"][0] <= boundary[side][0] <= collision["machine_longitudinal_bounds_m"][1]:
+                    failures.append(f"pivot escapes longitudinal envelope at lift {state['lift']:.2f}")
+
     for prior, current in zip(samples, samples[1:]):
         for boundary_index in range(solver["level_count"] + 1):
             for side in ("left", "right"):
@@ -128,7 +198,6 @@ def main() -> None:
 
     cylinder = spec["lift_cylinder"]
     observed_stroke = samples[-1]["cylinder_pin_distance"] - samples[0]["cylinder_pin_distance"]
-    failures = []
     if max_link_error > link_epsilon:
         failures.append(f"link length error {max_link_error}")
     if max_closure_error > closure_epsilon:
@@ -160,6 +229,8 @@ def main() -> None:
         "maximum_translation_per_0_01_sample_m": max_translation_step,
         "cylinder_observed_stroke_m": observed_stroke,
         "outdoor_lift_ratio": outdoor_ratio,
+        "collision_proxy_assertions": collision_assertions,
+        "collision_proxy_status": "PASS",
         "stowed_span_m": samples[0]["span"],
         "indoor_raised_span_m": samples[-1]["span"],
     }, indent=2, sort_keys=True))

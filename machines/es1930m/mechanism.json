@@ -32,6 +32,16 @@
     "track_center_x_m": 0.0,
     "authority": "reconstructed_geometry_from_verified_slide_topology"
   },
+  "collision_proxies": {
+    "arm_section_height_m": 0.105,
+    "arm_section_lateral_m": 0.052,
+    "platform_deck_thickness_m": 0.075,
+    "platform_joint_exclusion_fraction": 0.30,
+    "machine_longitudinal_bounds_m": [-0.745, 0.735],
+    "machine_lateral_bounds_m": [-0.38, 0.38],
+    "minimum_cylinder_to_arm_plane_clearance_m": 0.15,
+    "authority": "authored_visual_collision_proxies_not_structural_clearances"
+  },
   "lift_cylinder": {
     "published_stroke_m": 0.6855,
     "stroke_tolerance_m": 0.0015,
