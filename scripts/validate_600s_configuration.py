@@ -27,6 +27,8 @@ def main() -> None:
         raise RuntimeError("Frozen configuration identity drift")
     if config.get("model") != "600S" or config.get("pvc") != "2607":
         raise RuntimeError("Model/PVC drift")
+    if config.get("target_release") != "1.1.0":
+        raise RuntimeError("Accuracy-pass release drift")
     if config.get("published_dimensions_m") != EXPECTED_DIMENSIONS:
         raise RuntimeError("Published dimensional contract drift")
     if config.get("interaction_volumes") != EXPECTED_HITS:
@@ -67,6 +69,25 @@ def main() -> None:
     missing = sorted(node for node in required_by_section if node not in edges)
     if missing:
         raise RuntimeError(f"Section nodes missing from hierarchy: {missing}")
+
+    expected_mechanism_edges = {
+        "MidBoom": "Telescope",
+        "FlyBoom": "MidBoom",
+        "Telescope_Hit": "FlyBoom",
+        "TowerLink": "Turntable",
+        "TowerLinkUpperAnchor": "MainBoom",
+        "TensionLink": "Turntable",
+        "TensionLinkUpperAnchor": "MainBoom",
+        "SteerTieRodLowerAnchor": "Wheel_FR",
+        "SteerTieRodUpperAnchor": "Wheel_FL",
+        "SteerCylinder_L_UpperAnchor": "Wheel_FL",
+        "SteerCylinder_R_UpperAnchor": "Wheel_FR",
+        "PlatformLevelCylinder": "FlyBoom",
+        "PlatformLevelCylinderUpperAnchor": "PlatformPivot",
+    }
+    for node, expected_parent in expected_mechanism_edges.items():
+        if edges.get(node) != expected_parent:
+            raise RuntimeError(f"Mechanism hierarchy drift: {node} -> {edges.get(node)!r}")
 
     for source in (config.get("source_publications") or {}).values():
         if not re.fullmatch(r"[0-9a-f]{64}", source.get("sha256", "")):

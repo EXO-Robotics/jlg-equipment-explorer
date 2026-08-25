@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="An unofficial interactive visualization of a telescopic boom lift.">
   <title>600S Interactive Equipment Study</title>
-  <link rel="preload" href="assets/models/600s.glb?v=858415279e5d" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="viewer.css?v=1.0.1">
+  <link rel="preload" href="assets/models/600s.glb?v=81e886f5f1df" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="viewer.css?v=1.1.2">
   <script type="importmap">
     {
       "imports": {
@@ -40,7 +40,7 @@
       <a class="wordmark" href="./" aria-label="Equipment Explorer home">
         <span>Equipment</span><b>Explorer</b>
       </a>
-      <div class="prototype-label">Showcase reconstruction / 1.0</div>
+      <div class="prototype-label">Accuracy reconstruction / 1.1</div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 
@@ -111,7 +111,7 @@
     <h2 id="inspector-title">A visual replica,<br>not an engineering model.</h2>
     <p id="inspector-copy">This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.</p>
     <dl id="inspector-facts">
-      <div><dt>Model</dt><dd>Blender Showcase reconstruction v1.0</dd></div>
+      <div><dt>Model</dt><dd>Blender Accuracy reconstruction v1.1</dd></div>
       <div><dt>Purpose</dt><dd>Portfolio and educational visualization</dd></div>
       <div><dt>Boundary</dt><dd>Not a service, training, fabrication, or safety reference</dd></div>
     </dl>
@@ -127,6 +127,6 @@
       if (detail) detail.textContent = "The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.";
     }, 8000);
   </script>
-  <script type="module" src="viewer.js?v=1.0.1"></script>
+  <script type="module" src="viewer.js?v=1.1.2"></script>
 </body>
 </html>

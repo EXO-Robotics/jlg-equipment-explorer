@@ -1,7 +1,13 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
-import { GLB_URL, SHOWCASE_RELEASE, TELESCOPE_TRAVEL_M } from "./assets/models/600s.version.js?v=1.0.1";
+import {
+  GLB_URL,
+  SHOWCASE_RELEASE,
+  TELESCOPE_TRAVEL_M,
+  TELESCOPE_MID_TRAVEL_M,
+  TELESCOPE_FLY_TRAVEL_M,
+} from "./assets/models/600s.version.js?v=1.1.2";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -309,7 +315,13 @@ const requiredNodes = [
   "MidBoom", "FlyBoom", "PlatformPivot", "PlatformRotator", "Platform",
   "LiftCylinder", "LiftCylinderLowerAnchor", "LiftCylinderUpperAnchor",
   "LiftCylinderBarrel", "LiftCylinderRod", "LiftCylinderBasePin", "LiftCylinderRodPin",
-  "TowerLinkLower", "TowerLinkUpper", "Powertrack", "PlatformSwingGate",
+  "TowerLink", "TowerLinkLowerAnchor", "TowerLinkUpperAnchor", "TowerLinkBody",
+  "TensionLink", "TensionLinkLowerAnchor", "TensionLinkUpperAnchor", "TensionLinkBody",
+  "SteerTieRod", "SteerTieRodLowerAnchor", "SteerTieRodUpperAnchor", "SteerTieRodBody",
+  "SteerCylinder_L", "SteerCylinder_L_LowerAnchor", "SteerCylinder_L_UpperAnchor", "SteerCylinder_L_Rod",
+  "SteerCylinder_R", "SteerCylinder_R_LowerAnchor", "SteerCylinder_R_UpperAnchor", "SteerCylinder_R_Rod",
+  "PlatformLevelCylinder", "PlatformLevelCylinderLowerAnchor", "PlatformLevelCylinderUpperAnchor", "PlatformLevelCylinderRod",
+  "Powertrack", "PowertrackSupport", "PowertrackPushTube", "PlatformSwingGate",
   "PlatformConsole", "PlatformFootswitch",
 ];
 const interactionComponents = {
@@ -335,6 +347,10 @@ const materialProfiles = {
   JLG_Dark_Steel: { color: "#252b2a", roughness: 0.44, metalness: 0.72 },
   JLG_Rim_OffWhite: { color: "#c0bfae", roughness: 0.42, metalness: 0.58 },
   JLG_Hydraulic_Black: { color: "#111515", roughness: 0.7, metalness: 0.12 },
+  JLG_Electrical_Loom: { color: "#202525", roughness: 0.84, metalness: 0.02 },
+  JLG_Control_Cable: { color: "#2d3230", roughness: 0.78, metalness: 0.03 },
+  JLG_Wire_Rope: { color: "#777c78", roughness: 0.42, metalness: 0.78 },
+  JLG_Powertrack_Carrier: { color: "#171b1a", roughness: 0.80, metalness: 0.06 },
   JLG_Sensor_Black: { color: "#171a1a", roughness: 0.48, metalness: 0.04 },
   JLG_Control_Red: { color: "#b1140c", roughness: 0.42, metalness: 0.02 },
   JLG_Beacon_Amber: { color: "#ff6a0a", roughness: 0.18, metalness: 0 },
@@ -453,7 +469,7 @@ function tuneBlockoutMaterials(root) {
   materials.forEach((value) => applyMaterialProfile(value, materialProfiles[value.name]));
 
   const boomCream = materialProfiles.JLG_Boom_Cream;
-  ["BaseBoomShell", "MidBoomShell", "FlyBoomShell"].forEach((name) => {
+  ["BaseBoomShell", "MidBoomShell"].forEach((name) => {
     applyDisplayMaterial(root.getObjectByName(name), boomCream, "DisplayCream");
   });
   const finishVariations = [
@@ -463,7 +479,7 @@ function tuneBlockoutMaterials(root) {
     ["LowerDeck", { color: "#e86520", roughness: 0.58, metalness: 0.06 }, "DeckPowderCoat"],
     ["PlatformDeck", { color: "#e76220", roughness: 0.62, metalness: 0.06 }, "WearDeckPowderCoat"],
     ["MidBoomShell", { color: "#d1c28d", roughness: 0.53, metalness: 0.03 }, "NestedCream"],
-    ["FlyBoomShell", { color: "#cabc88", roughness: 0.57, metalness: 0.03 }, "InnerCream"],
+    ["FlyBoomShell", { color: "#e96720", roughness: 0.48, metalness: 0.04 }, "CurrentFlyOrange"],
   ];
   finishVariations.forEach(([name, profile, suffix]) => applyDisplayMaterial(root.getObjectByName(name), profile, suffix));
 }
@@ -528,12 +544,21 @@ function optimizeDetailedRig(nodes) {
   let mergedBuckets = 0;
   mergedBuckets += mergeRigidGroup(nodes.Wheel_FL);
   mergedBuckets += mergeRigidGroup(nodes.Wheel_FR);
-  mergedBuckets += mergeRigidGroup(nodes.Chassis, [nodes.Wheel_FL, nodes.Wheel_FR]);
+  mergedBuckets += mergeRigidGroup(nodes.Chassis, [
+    nodes.Wheel_FL, nodes.Wheel_FR, nodes.SteerTieRod, nodes.SteerCylinder_L, nodes.SteerCylinder_R,
+  ]);
   mergedBuckets += mergeRigidGroup(nodes.LiftCylinder, [nodes.LiftCylinderRod, nodes.LiftCylinderRodPin]);
+  mergedBuckets += mergeRigidGroup(nodes.SteerCylinder_L, [nodes.SteerCylinder_L_Rod]);
+  mergedBuckets += mergeRigidGroup(nodes.SteerCylinder_R, [nodes.SteerCylinder_R_Rod]);
+  mergedBuckets += mergeRigidGroup(nodes.PlatformLevelCylinder, [nodes.PlatformLevelCylinderRod]);
   mergedBuckets += mergeRigidGroup(nodes.PlatformPivot);
-  mergedBuckets += mergeRigidGroup(nodes.Telescope, [nodes.PlatformPivot]);
+  mergedBuckets += mergeRigidGroup(nodes.FlyBoom, [nodes.PlatformPivot, nodes.PlatformLevelCylinder]);
+  mergedBuckets += mergeRigidGroup(nodes.MidBoom, [nodes.FlyBoom]);
+  mergedBuckets += mergeRigidGroup(nodes.Telescope, [nodes.MidBoom]);
   mergedBuckets += mergeRigidGroup(nodes.BoomPivot, [nodes.Telescope]);
-  mergedBuckets += mergeRigidGroup(nodes.Turntable, [nodes.BoomPivot, nodes.LiftCylinder]);
+  mergedBuckets += mergeRigidGroup(nodes.Turntable, [
+    nodes.BoomPivot, nodes.LiftCylinder, nodes.TowerLink, nodes.TensionLink,
+  ]);
   nodes["600S_ROOT"].updateMatrixWorld(true);
   let visibleMeshes = 0;
   nodes["600S_ROOT"].traverse((node) => {
@@ -600,11 +625,21 @@ function configureBlockoutRig(gltf) {
   gltf.scene.userData.source = `blender-showcase-v${SHOWCASE_RELEASE}`;
   const extras = nodes["600S_ROOT"].userData || {};
   const travel = Number(extras.telescope_travel_m);
+  const midTravel = Number(extras.telescope_mid_travel_m);
+  const flyTravel = Number(extras.telescope_fly_travel_m);
   if (extras.asset_version !== SHOWCASE_RELEASE || extras.units !== "meters") {
     throw new Error(`600S GLB release contract failed: expected ${SHOWCASE_RELEASE} in meters`);
   }
   if (!Number.isFinite(travel) || Math.abs(travel - TELESCOPE_TRAVEL_M) > 0.001) {
     throw new Error(`600S GLB telescope contract failed: ${travel}`);
+  }
+  if (!Number.isFinite(midTravel) || Math.abs(midTravel - TELESCOPE_MID_TRAVEL_M) > 0.001 ||
+      !Number.isFinite(flyTravel) || Math.abs(flyTravel - TELESCOPE_FLY_TRAVEL_M) > 0.001 ||
+      Math.abs(midTravel + flyTravel - travel) > 0.001) {
+    throw new Error(`600S GLB coupled telescope contract failed: ${midTravel} + ${flyTravel}`);
+  }
+  if (nodes.Telescope.userData.runtime_solver !== "evidence_bounded_coupled_visual") {
+    throw new Error("600S telescope staging evidence boundary failed");
   }
   if (extras.platform_leveling !== "counter_rotate_local_z") {
     throw new Error("600S GLB platform-leveling contract failed");
@@ -628,8 +663,13 @@ function configureBlockoutRig(gltf) {
     turntablePivot: nodes.TurntablePivot,
     boomPivot: nodes.BoomPivot,
     telescope: nodes.Telescope,
-    telescopeHomeX: nodes.Telescope.position.x,
+    midBoom: nodes.MidBoom,
+    midBoomHomeX: nodes.MidBoom.position.x,
+    flyBoom: nodes.FlyBoom,
+    flyBoomHomeX: nodes.FlyBoom.position.x,
     telescopeTravelM: travel,
+    telescopeMidTravelM: midTravel,
+    telescopeFlyTravelM: flyTravel,
     platformPivot: nodes.PlatformPivot,
     platformMount: nodes.Platform,
     liftCylinder: nodes.LiftCylinder,
@@ -640,6 +680,16 @@ function configureBlockoutRig(gltf) {
     liftCylinderRodStart: 0.82,
     liftCylinderRodNominalLength: 0.70,
     steeringPivots: [nodes.Wheel_FL, nodes.Wheel_FR],
+    visualLinks: [
+      { group: nodes.TowerLink, lower: nodes.TowerLinkLowerAnchor, upper: nodes.TowerLinkUpperAnchor, body: nodes.TowerLinkBody, nominalLength: 1.0 },
+      { group: nodes.TensionLink, lower: nodes.TensionLinkLowerAnchor, upper: nodes.TensionLinkUpperAnchor, body: nodes.TensionLinkBody, nominalLength: 1.0 },
+      { group: nodes.SteerTieRod, lower: nodes.SteerTieRodLowerAnchor, upper: nodes.SteerTieRodUpperAnchor, body: nodes.SteerTieRodBody, nominalLength: 1.64 },
+    ],
+    visualCylinders: [
+      { group: nodes.SteerCylinder_L, lower: nodes.SteerCylinder_L_LowerAnchor, upper: nodes.SteerCylinder_L_UpperAnchor, rod: nodes.SteerCylinder_L_Rod, rodStart: 0.32, nominalRodLength: 0.40 },
+      { group: nodes.SteerCylinder_R, lower: nodes.SteerCylinder_R_LowerAnchor, upper: nodes.SteerCylinder_R_UpperAnchor, rod: nodes.SteerCylinder_R_Rod, rodStart: 0.32, nominalRodLength: 0.40 },
+      { group: nodes.PlatformLevelCylinder, lower: nodes.PlatformLevelCylinderLowerAnchor, upper: nodes.PlatformLevelCylinderUpperAnchor, rod: nodes.PlatformLevelCylinderRod, rodStart: 0.44, nominalRodLength: 0.44 },
+    ],
     hitVolumes,
     visibleMeshCount: optimization.visibleMeshes,
     source: `blender-showcase-v${SHOWCASE_RELEASE}`,
@@ -840,7 +890,10 @@ function endPointer(event) {
   const hit = wasClick ? hitComponentAt(event.clientX, event.clientY) : null;
   hoveredHit = hit?.object ?? null;
   updateHitVolumeEmphasis(hoveredHit);
-  if (hit) focusComponent(hit.component);
+  if (hit) {
+    document.body.dataset.lastSelectionVolume = hit.object.name;
+    focusComponent(hit.component);
+  }
   canvas.style.cursor = hit ? "pointer" : "grab";
 }
 canvas.addEventListener("pointerup", endPointer);
@@ -894,7 +947,7 @@ const componentContent = {
   chassis: {
     title: "Chassis",
     copy: "The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.",
-    facts: [["Visible system", "Frame, axles, drive hubs, wheels, steering linkage, and deck"], ["Configuration", "4WD hydrostatic with two-wheel front steer"], ["Boundary", "Undimensioned offsets remain visually reconstructed"]],
+    facts: [["Visible system", "Frame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deck"], ["Configuration", "4WD hydrostatic with two-wheel front steer"], ["Boundary", "Steering anchors and angles remain visual reconstructions"]],
     radius: 8.5,
   },
   turntable: {
@@ -906,13 +959,13 @@ const componentContent = {
   boom: {
     title: "Telescopic boom",
     copy: "The primary lifting structure changes elevation at its base pivot while a nested section extends the platform outward.",
-    facts: [["Motion", "Lift, two-anchor cylinder solve, and capped visual telescope travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope → MidBoom → FlyBoom"], ["Boundary", "Travel and cylinder stroke are visual reconstructions"]],
+    facts: [["Motion", "Lift, coupled Mid/Fly staging, moving tower/tension links, and carrier travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope controller → MidBoom → FlyBoom"], ["Boundary", "The 0.90 m cap and stage split are visual reconstructions, not JLG stroke data"]],
     radius: 9.5,
   },
   platform: {
     title: "Platform",
     copy: "The work platform is parented to the telescoping section so it follows the boom through elevation, extension, and swing.",
-    facts: [["Visible system", "Rapid-replace deck, orange rails, swing gate, console, footswitch, SkyGuard, and labels"], ["Hierarchy", "FlyBoom → PlatformPivot → Platform"], ["Leveling", "Visual counter-rotation; rotator dimensions remain reconstructed"]],
+    facts: [["Visible system", "Rapid-replace support, load-cell cue, rotator, level cylinder, deck, controls, SkyGuard, and labels"], ["Hierarchy", "FlyBoom → rotator/level linkage → PlatformPivot → Platform"], ["Leveling", "Visual starting-angle retention; not automatic leveling to gravity"]],
     radius: 6.2,
   },
 };
@@ -1001,11 +1054,19 @@ document.querySelectorAll("[data-focus]").forEach((button) => button.addEventLis
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
+const selectionPriority = {
+  Platform_Hit: 4,
+  Telescope_Hit: 3,
+  Boom_Hit: 2,
+  Turntable_Hit: 1,
+  Chassis_Hit: 0,
+};
 function hitComponentAt(x, y) {
   const rect = canvas.getBoundingClientRect();
   pointer.set(((x - rect.left) / rect.width) * 2 - 1, -((y - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointer, camera);
-  const intersection = raycaster.intersectObjects(rig.hitVolumes, false)[0];
+  const intersection = raycaster.intersectObjects(rig.hitVolumes, false)
+    .sort((a, b) => (selectionPriority[b.object.name] - selectionPriority[a.object.name]) || a.distance - b.distance)[0];
   return intersection ? { component: intersection.object.userData.component, object: intersection.object, intersection } : null;
 }
 
@@ -1064,16 +1125,67 @@ function updateLiftCylinder() {
   rig.liftCylinderRodPin.position.x = solvedLength;
 }
 
+function solveVisualLink(link) {
+  if (!link?.group || !link.lower || !link.upper || !link.body || !link.group.parent) return;
+  link.lower.getWorldPosition(cylinderLowerWorld);
+  link.upper.getWorldPosition(cylinderUpperWorld);
+  cylinderLowerLocal.copy(cylinderLowerWorld);
+  cylinderUpperLocal.copy(cylinderUpperWorld);
+  link.group.parent.worldToLocal(cylinderLowerLocal);
+  link.group.parent.worldToLocal(cylinderUpperLocal);
+  cylinderDirection.subVectors(cylinderUpperLocal, cylinderLowerLocal);
+  const solvedLength = cylinderDirection.length();
+  if (solvedLength < 0.001) return;
+  link.group.position.copy(cylinderLowerLocal);
+  link.group.quaternion.setFromUnitVectors(cylinderAxis, cylinderDirection.normalize());
+  link.group.scale.set(1, 1, 1);
+  link.body.position.x = solvedLength * 0.5;
+  link.body.scale.set(1, 1, solvedLength / link.nominalLength);
+}
+
+function solveVisualCylinder(cylinder) {
+  if (!cylinder?.group || !cylinder.lower || !cylinder.upper || !cylinder.rod || !cylinder.group.parent) return;
+  cylinder.lower.getWorldPosition(cylinderLowerWorld);
+  cylinder.upper.getWorldPosition(cylinderUpperWorld);
+  cylinderLowerLocal.copy(cylinderLowerWorld);
+  cylinderUpperLocal.copy(cylinderUpperWorld);
+  cylinder.group.parent.worldToLocal(cylinderLowerLocal);
+  cylinder.group.parent.worldToLocal(cylinderUpperLocal);
+  cylinderDirection.subVectors(cylinderUpperLocal, cylinderLowerLocal);
+  const solvedLength = cylinderDirection.length();
+  if (solvedLength < 0.001) return;
+  const rodLength = Math.max(0.12, solvedLength - cylinder.rodStart);
+  cylinder.group.position.copy(cylinderLowerLocal);
+  cylinder.group.quaternion.setFromUnitVectors(cylinderAxis, cylinderDirection.normalize());
+  cylinder.group.scale.set(1, 1, 1);
+  cylinder.rod.position.x = cylinder.rodStart + rodLength * 0.5;
+  cylinder.rod.scale.set(1, 1, rodLength / cylinder.nominalRodLength);
+}
+
+function updateEvidenceBoundedLinkages() {
+  if (!rig.machine) return;
+  rig.machine.updateMatrixWorld(true);
+  rig.visualLinks?.forEach(solveVisualLink);
+  rig.visualCylinders?.forEach(solveVisualCylinder);
+}
+
 function updateRig(dt) {
   Object.keys(machineState).forEach((key) => {
     machineState[key] = reducedMotion ? targets[key] : THREE.MathUtils.damp(machineState[key], targets[key], 6, dt);
   });
   rig.boomPivot.rotation.z = THREE.MathUtils.degToRad(machineState.boomAngle);
   if (rig.platformPivot) rig.platformPivot.rotation.z = -THREE.MathUtils.degToRad(machineState.boomAngle);
-  rig.telescope.position.x = rig.telescopeHomeX + (machineState.telescope / 100) * rig.telescopeTravelM;
+  const telescopeProgress = machineState.telescope / 100;
+  if (rig.midBoom && rig.flyBoom) {
+    rig.midBoom.position.x = rig.midBoomHomeX + telescopeProgress * rig.telescopeMidTravelM;
+    rig.flyBoom.position.x = rig.flyBoomHomeX + telescopeProgress * rig.telescopeFlyTravelM;
+  } else {
+    rig.telescope.position.x = rig.telescopeHomeX + telescopeProgress * rig.telescopeTravelM;
+  }
   rig.turntablePivot.rotation.y = THREE.MathUtils.degToRad(machineState.turntableAngle);
   rig.steeringPivots.forEach((pivot) => { pivot.rotation.y = THREE.MathUtils.degToRad(machineState.steeringAngle); });
   updateLiftCylinder();
+  updateEvidenceBoundedLinkages();
   if (!focusedComponent) orbit.targetGoal.y = defaultOrbitTargetY(machineState.boomAngle);
   const moving = Object.keys(machineState).some((key) => Math.abs(machineState[key] - targets[key]) > 0.1);
   const stowed = Object.values(targets).every((value) => Math.abs(value) < 0.1);

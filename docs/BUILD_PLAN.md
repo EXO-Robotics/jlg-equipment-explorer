@@ -64,7 +64,7 @@ Stowed envelope, hierarchy, selection, and transform integration accepted; worki
 
 - [x] Remove the third-party CDN startup dependency with a hash-pinned local Three.js runtime
 - [x] Add adaptive pixel-ratio, shadow, and frame-rate profiles for desktop and mobile
-- [x] Consolidate 325 authored detail meshes into 50 rigid runtime meshes without collapsing articulation or hit volumes
+- [x] Consolidate 345 authored detail meshes into 80 observed runtime meshes without collapsing articulation or hit volumes
 - [x] Establish neutral product lighting, a lower three-quarter camera, and display-only material tuning
 - [x] Replace blockout wheels with modeled foam-filled tire, tread, rim, drive-hub, lug, and front-steer geometry
 - [x] Replace boxy exterior covers with evidence-bounded B3 profiled shells, panel seams, latches, service labels, and rear cooling grille
@@ -75,6 +75,20 @@ Stowed envelope, hierarchy, selection, and transform integration accepted; worki
 - [x] Improve hover/select treatment with hit-volume-aligned moving outlines
 - [x] Validate keyboard access and reduced motion with the real GLB in Safari
 - [ ] Capture a Chrome performance trace and current-generation source-comparison visual proof
+
+### M3.1 — v1.1 mechanism-authority pass (mechanical complete; visual review current)
+
+- [x] Freeze and validate a page-level mechanism evidence pack with source hashes
+- [x] Reject legacy cylinder `1683618` and legacy 228 in/57-link powertrack claims as current authority
+- [x] Drive distinct MidBoom and FlyBoom transforms under one explicitly reconstructed control
+- [x] Add current telescope cylinder, extend/retract rope, and sheave topology cues
+- [x] Replace static tower/tension, steering-cylinder, tie-rod, and platform-level dressing with moving two-anchor solvers
+- [x] Split powertrack into base run, moving run, bend, support, and push-tube groups without claiming an exact link count
+- [x] Separate hydraulic, electrical, control-cable, wire-rope, and carrier material identities
+- [x] Correct the current-gallery fly section to orange while retaining cream base/mid sections
+- [x] Pass the v1.1 mechanical, hierarchy, evidence, static-viewer, five-volume direct-selection, and desktop runtime gates
+- [x] Capture fresh v1.1 390 × 844 mobile proof
+- [ ] Capture fixed-camera source overlays
 
 ### M4 — Reusable machine layer
 

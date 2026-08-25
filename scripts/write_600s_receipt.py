@@ -75,7 +75,7 @@ def main() -> None:
     accepted = all(review.get(flag) is True for flag in REVIEW_FLAGS)
     receipt = {
         "asset": mechanical["asset"],
-        "status": "SHOWCASE_V1_0_ACCEPTED" if accepted else "SHOWCASE_V1_0_MECHANICAL_PASS",
+        "status": "SHOWCASE_V1_1_ACCEPTED" if accepted else "SHOWCASE_V1_1_MECHANICAL_PASS",
         "release": ASSET_VERSION,
         "configuration_id": mechanical["configuration_id"],
         "authorship": "owned-simplified-reconstruction",
@@ -111,11 +111,11 @@ def main() -> None:
         "review": review,
         "evidence_boundary": (
             "Overall published envelopes are authoritative and approximate per JLG. "
-            "Telescope travel is a visual overlap cap, not a published stroke. "
-            "The lift cylinder uses a two-anchor visual solver; its anchors, stroke, and section dimensions "
-            "are reconstructed and are not fabrication or service measurements. Internal pivot offsets, "
-            "boom section lengths, turntable internals, hydraulic routing, electrical routing, and platform "
-            "rotator geometry remain visually reconstructed or unresolved."
+            "MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; "
+            "neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, "
+            "tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and "
+            "strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, "
+            "electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
         ),
     }
     RECEIPT_PATH.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")

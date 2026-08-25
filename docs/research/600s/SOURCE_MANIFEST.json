@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_freeze_date": "2026-08-25",
+  "target": {
+    "model": "600S",
+    "pvc": "2607",
+    "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696"
+  },
+  "repository_policy": {
+    "manual_binaries_committed": false,
+    "signed_download_urls_committed": false,
+    "local_verification_directory": "tmp/pdfs",
+    "manual_illustrations_are_scale_drawings": false
+  },
+  "sources": [
+    {
+      "id": "R02",
+      "kind": "specification",
+      "publication": "3131050",
+      "revision": "R0626_04",
+      "pvc": "2607-current-product-family",
+      "pages": 2,
+      "sha256": "56123e6ef835a4c1caebc00ad26f2e1f02e16899a2bbe6e6f4bbd871ee8885b5",
+      "local_filename": "3131050-r0626-04-specification.pdf",
+      "url": "https://www.jlg.com/dfsmedia/e4042b10c9ce4595b4cc059f1299f079/125485-source",
+      "applicability": "current-standard-600S",
+      "admission": "primary"
+    },
+    {
+      "id": "R03-PARTS",
+      "kind": "parts_manual",
+      "publication": "3122579800",
+      "revision": "2026-07-13",
+      "pvc": "2607",
+      "pages": 1156,
+      "sha256": "6e0e8ae6fe3b5ce6d726c13945bb8c6fd006ed7183631a0c74044803306ea1fc",
+      "local_filename": "3122579800-pvc2607-parts.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/english-united-states/model-600s/_/N-1063887702%2B1277404462?locale=en-us",
+      "applicability": "current-600S-pvc2607-subject-to-serial-and-option-notes",
+      "admission": "primary"
+    },
+    {
+      "id": "R03-SERVICE",
+      "kind": "service_manual",
+      "publication": "3122579700",
+      "revision": "A-2026-07-13",
+      "pvc": "2607",
+      "pages": 1020,
+      "sha256": "2e74966adf93d7432c43647eccc02105f2a868f379d4a74c8b9a8d01e5a2c7b5",
+      "local_filename": "3122579700-pvc2607-service.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/english-united-states/model-600s/_/N-1063887702%2B1277404462?locale=en-us",
+      "applicability": "current-600S-pvc2607-subject-to-serial-and-option-notes",
+      "admission": "primary"
+    },
+    {
+      "id": "R03-OPERATION",
+      "kind": "operation_manual",
+      "publication": "3122579600",
+      "revision": "A-2026-07-13",
+      "pvc": "2607",
+      "pages": 220,
+      "sha256": "0a60dd1e8ed70d9a782f36f4ffbf5ca0260d3faedbd43f136cb0fe7f1d8a52c6",
+      "local_filename": "3122579600-pvc2607-operation.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/english-united-states/model-600s/_/N-1063887702%2B1277404462?locale=en-us",
+      "applicability": "current-600S-pvc2607-subject-to-market-notes",
+      "admission": "primary"
+    },
+    {
+      "id": "B1-HYDRAULIC",
+      "kind": "hydraulic_schematic",
+      "publication": "3122588600",
+      "revision": "2026-01-12",
+      "pvc": "2601",
+      "pages": 7,
+      "sha256": "ba0101934d194ef2141945bc7f1c7703a1ac7915c1260a987e1e68e6ca42d18e",
+      "local_filename": "3122588600-pvc2601-hydraulic.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/english-united-states/model-600s/_/N-1063887702%2B1277404462?locale=en-us",
+      "applicability": "different-pvc-provisional-taxonomy-only",
+      "admission": "quarantined"
+    },
+    {
+      "id": "B2-ELECTRICAL",
+      "kind": "electrical_schematic",
+      "publication": "3122586300",
+      "revision": "2026-01-12",
+      "pvc": "2601",
+      "pages": 13,
+      "sha256": "4fffbb392e2adfb0ea9728e244d6e6106d103472b87c53c86ae77ac307e998ff",
+      "local_filename": "3122586300-pvc2601-electrical.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications/search/english-united-states/model-600s/_/N-1063887702%2B1277404462?locale=en-us",
+      "applicability": "different-pvc-provisional-taxonomy-only",
+      "admission": "quarantined"
+    }
+  ]
+}
