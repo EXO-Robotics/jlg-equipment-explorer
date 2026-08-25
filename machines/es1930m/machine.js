@@ -1,7 +1,7 @@
-import { ES1930M_CAMERAS, es1930mComponentView, es1930mFollowView } from "./cameras.js";
-import { ES1930M_COMPONENTS } from "./inspector.js";
-import { applyES1930MState, createES1930MRig, solveES1930MState } from "./articulation.js";
-import { ES1930M_GLB_URL, ES1930M_RELEASE } from "./version.js";
+import { ES1930M_CAMERAS, es1930mComponentView, es1930mFollowView } from "./cameras.js?v=1.0.1-candidate";
+import { ES1930M_COMPONENTS } from "./inspector.js?v=1.0.1-candidate";
+import { applyES1930MState, createES1930MRig, selfTestES1930MRig, solveES1930MState } from "./articulation.js?v=1.0.1-candidate";
+import { ES1930M_GLB_URL, ES1930M_RELEASE } from "./version.js?v=1.0.1-candidate";
 
 export const ES1930M_MACHINE = Object.freeze({
   id: "es1930m",
@@ -13,7 +13,7 @@ export const ES1930M_MACHINE = Object.freeze({
   controls: Object.freeze([
     Object.freeze({ id: "lift", inputId: "lift-control", outputId: "lift-value", inputDivisor: 100, label: "Platform lift", min: 0, max: 1, step: 0.001, authority: "verified envelope; reconstructed linkage coordinates" }),
     Object.freeze({ id: "deck", inputId: "deck-control", outputId: "deck-value", inputDivisor: 100, label: "Extension deck", min: 0, max: 1, step: 0.001, displayMaximum: "0.55 m", authority: "verified travel" }),
-    Object.freeze({ id: "steer", inputId: "steer-control", outputId: "steer-value", inputDivisor: 100, label: "Steering", min: -1, max: 1, step: 0.001, authority: "verified cylinder stroke; reconstructed spindle angles" }),
+    Object.freeze({ id: "steer", inputId: "steer-control", outputId: "steer-value", inputDivisor: 100, label: "Steering actuator", min: -1, max: 1, step: 0.001, authority: "verified cylinder stroke; spindle angles deferred" }),
   ]),
   components: ES1930M_COMPONENTS,
   cameras: ES1930M_CAMERAS,
@@ -25,6 +25,7 @@ export const ES1930M_MACHINE = Object.freeze({
     const missing = this.requiredNodes.filter((name) => !root.getObjectByName(name));
     const assetRoot = root.getObjectByName("ES1930M_ROOT");
     if (assetRoot?.userData?.configuration_id !== this.configurationId) missing.push("configuration identity");
+    if (assetRoot?.userData?.release !== this.release) missing.push("release identity");
     return Object.freeze({ ok: missing.length === 0, missing });
   },
   createRig: createES1930MRig,
@@ -32,6 +33,7 @@ export const ES1930M_MACHINE = Object.freeze({
     return solveES1930MState(state.lift, state.deck, state.steer);
   },
   applyState: applyES1930MState,
+  selfTestRig(rig, state) { return selfTestES1930MRig(rig, this.solveState(state)); },
   followView: es1930mFollowView,
   componentView: es1930mComponentView,
   presentState(state) {

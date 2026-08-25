@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.1-candidate";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -10,7 +10,6 @@ document.body.dataset.viewerStarted = "true";
 document.body.dataset.configurationId = machine.configurationId;
 const query = new URLSearchParams(location.search);
 const reducedMotion = query.get("reduce") === "1" || matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-const compact = matchMedia?.("(max-width: 800px)").matches;
 const app = document.querySelector("#app");
 const loader = document.querySelector("#loader");
 const loaderStatus = document.querySelector("#loader-status");
@@ -25,7 +24,7 @@ const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 
 const state = { ...machine.stowState };
-const runtime = { errors: 0, frames: 0, fps: "sampling", loadMs: "pending", selection: "pending" };
+const runtime = { errors: 0, frames: 0, fps: "sampling", p95: "sampling", frameDurations: [], loadMs: "pending", selection: "pending" };
 let model = null;
 let rig = null;
 let selected = null;
@@ -44,7 +43,7 @@ document.body.dataset.runtimeErrorCount = "0";
 
 function updateDiagnostics() {
   diagnostics.hidden = !diagnosticsEnabled;
-  diagnostics.value = `machine ${machine.id} · config ${machine.configurationId} · source ${document.body.dataset.machineSource || "loading"} · selection ${runtime.selection} · errors ${runtime.errors} · load ${runtime.loadMs} · ${runtime.fps}`;
+  diagnostics.value = `machine ${machine.id} · config ${machine.configurationId} · source ${document.body.dataset.machineSource || "loading"} · selection ${runtime.selection} · errors ${runtime.errors} · load ${runtime.loadMs} · ${runtime.fps} · ${runtime.p95}`;
 }
 
 function rendererOrNull() {
@@ -63,7 +62,7 @@ if (!renderer) {
   errorPanel.hidden = false;
   throw new Error("WebGL unavailable");
 }
-renderer.setPixelRatio(Math.min(devicePixelRatio || 1, compact ? 1.35 : 1.75));
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobileQuery.matches ? 1.35 : 1.75));
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -81,7 +80,7 @@ for (const [color, intensity, position] of [[0xffefd4, 4.0, [-5, 9, 7]], [0x9fc9
   const light = new THREE.DirectionalLight(color, intensity);
   light.position.set(...position);
   light.castShadow = intensity > 3;
-  light.shadow.mapSize.set(compact ? 1024 : 2048, compact ? 1024 : 2048);
+  light.shadow.mapSize.set(mobileQuery.matches ? 1024 : 2048, mobileQuery.matches ? 1024 : 2048);
   scene.add(light);
 }
 const floor = new THREE.Mesh(new THREE.CircleGeometry(8, 80), new THREE.MeshStandardMaterial({ color: 0x242a29, roughness: 0.96 }));
@@ -94,7 +93,7 @@ grid.material.transparent = true;
 grid.material.opacity = 0.12;
 scene.add(grid);
 
-const orbit = { azimuth: -0.72, polar: 1.18, distance: compact ? 5.3 : 4.5, target: new THREE.Vector3(0, 1.05, 0), desiredTarget: new THREE.Vector3(0, 1.05, 0), desiredDistance: compact ? 5.3 : 4.5 };
+const orbit = { azimuth: -0.72, polar: 1.18, distance: mobileQuery.matches ? 5.3 : 4.5, target: new THREE.Vector3(0, 1.05, 0), desiredTarget: new THREE.Vector3(0, 1.05, 0), desiredDistance: mobileQuery.matches ? 5.3 : 4.5 };
 function updateCamera(delta = 1) {
   const ease = reducedMotion ? 1 : Math.min(1, delta * 7);
   orbit.target.lerp(orbit.desiredTarget, ease);
@@ -109,25 +108,44 @@ function updateCamera(delta = 1) {
 }
 updateCamera();
 
-let pointer = null;
+const pointers = new Map();
+let pinchDistance = null;
 renderer.domElement.addEventListener("pointerdown", (event) => {
-  pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: 0 };
+  pointers.set(event.pointerId, { x: event.clientX, y: event.clientY, startX: event.clientX, startY: event.clientY, moved: 0 });
   renderer.domElement.setPointerCapture(event.pointerId);
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinchDistance = Math.hypot(a.x - b.x, a.y - b.y);
+  }
 });
 renderer.domElement.addEventListener("pointermove", (event) => {
-  if (!pointer || pointer.id !== event.pointerId) return;
+  const pointer = pointers.get(event.pointerId);
+  if (!pointer) return;
   const dx = event.clientX - pointer.x;
   const dy = event.clientY - pointer.y;
   pointer.x = event.clientX;
   pointer.y = event.clientY;
   pointer.moved += Math.abs(dx) + Math.abs(dy);
+  if (pointers.size >= 2) {
+    const [a, b] = [...pointers.values()];
+    const nextDistance = Math.hypot(a.x - b.x, a.y - b.y);
+    if (pinchDistance && nextDistance > 0) orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * pinchDistance / nextDistance, 1.6, 11);
+    pinchDistance = nextDistance;
+    for (const active of pointers.values()) active.moved += Math.abs(dx) + Math.abs(dy) + 8;
+    return;
+  }
   orbit.azimuth -= dx * 0.006;
   orbit.polar = THREE.MathUtils.clamp(orbit.polar + dy * 0.006, 0.25, 1.52);
 });
-renderer.domElement.addEventListener("pointerup", (event) => {
-  if (pointer && pointer.moved < 8) selectAt(event.clientX, event.clientY);
-  pointer = null;
-});
+function finishPointer(event, allowSelection) {
+  const pointer = pointers.get(event.pointerId);
+  if (allowSelection && pointers.size === 1 && pointer?.moved < 8) selectAt(event.clientX, event.clientY);
+  pointers.delete(event.pointerId);
+  pinchDistance = null;
+}
+renderer.domElement.addEventListener("pointerup", (event) => finishPointer(event, true));
+renderer.domElement.addEventListener("pointercancel", (event) => finishPointer(event, false));
+renderer.domElement.addEventListener("lostpointercapture", (event) => finishPointer(event, false));
 renderer.domElement.addEventListener("wheel", (event) => {
   event.preventDefault();
   orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), 1.6, 11);
@@ -148,7 +166,8 @@ function selectAt(clientX, clientY) {
   const rect = renderer.domElement.getBoundingClientRect();
   pointerNdc.set((clientX - rect.left) / rect.width * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointerNdc, camera);
-  const hit = raycaster.intersectObject(model, true).find((candidate) => candidate.object.visible);
+  const volumes = machine.interactionVolumes.map((name) => model.getObjectByName(name)).filter(Boolean);
+  const hit = raycaster.intersectObjects(volumes, false)[0];
   const component = hit ? componentFor(hit.object) : null;
   runtime.selection = component || "miss";
   if (component) openInspector(component);
@@ -161,18 +180,34 @@ function setControlOutputs() {
   document.body.dataset.zone = presentation.zone;
   document.querySelector("#motion-status").value = presentation.status;
 }
+function fitMachineBounds() {
+  if (!model) return;
+  const bounds = new THREE.Box3();
+  model.updateMatrixWorld(true);
+  model.traverse((node) => {
+    if (node.isMesh && node.visible && !node.userData?.is_hit_volume) bounds.expandByObject(node);
+  });
+  if (bounds.isEmpty()) return;
+  const size = bounds.getSize(new THREE.Vector3());
+  const center = bounds.getCenter(new THREE.Vector3());
+  const verticalFov = THREE.MathUtils.degToRad(camera.fov);
+  const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect);
+  const verticalDistance = size.y / (2 * Math.tan(verticalFov / 2));
+  const horizontalDistance = Math.max(size.x, size.z) / (2 * Math.tan(horizontalFov / 2));
+  const mobileControlsOpen = mobileQuery.matches && document.body.classList.contains("mobile-controls-open");
+  const padding = mobileControlsOpen ? 2.08 : mobileQuery.matches ? 1.62 : 1.34;
+  orbit.desiredTarget.copy(center);
+  if (mobileControlsOpen) orbit.desiredTarget.y -= size.y * 0.21;
+  orbit.desiredDistance = THREE.MathUtils.clamp(Math.max(verticalDistance, horizontalDistance) * padding, 2.2, 18);
+}
 function applyControls() {
   if (rig) machine.applyState(rig, machine.solveState(state));
   setControlOutputs();
+  fitMachineBounds();
 }
 for (const control of machine.controls) {
   document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
     state[control.id] = Number(event.currentTarget.value) / control.inputDivisor;
-    const followedView = machine.followView?.(state, compact, control.id);
-    if (followedView && control.id === "lift") {
-      orbit.desiredTarget.set(...followedView.target);
-      orbit.desiredDistance = followedView.distance;
-    }
     applyControls();
   });
 }
@@ -183,7 +218,7 @@ document.querySelector("#stow").addEventListener("click", () => {
 });
 
 function focusCamera(name) {
-  const preset = machine.componentView(name, state, compact);
+  const preset = machine.componentView(name, state, mobileQuery.matches);
   orbit.desiredTarget.set(...preset.target);
   orbit.desiredDistance = preset.distance;
   orbit.azimuth = preset.azimuth;
@@ -200,13 +235,25 @@ document.querySelectorAll("[data-focus]").forEach((button, index) => button.addE
 
 const inspector = document.querySelector("#inspector");
 const infoToggle = document.querySelector("#info-toggle");
+let inspectorOpener = null;
 function openInspector(component) {
   const detail = machine.components[component];
   if (detail) {
     document.querySelector("#inspector-kicker").textContent = detail.eyebrow;
     document.querySelector("#inspector-title").textContent = detail.title;
     document.querySelector("#inspector-copy").textContent = detail.body;
+    const facts = detail.facts || [["Authority", detail.eyebrow], ["Configuration", machine.configurationId], ["Boundary", "Visual reconstruction; not service or safety authority"]];
+    document.querySelector("#inspector-facts").replaceChildren(...facts.map(([term, value]) => {
+      const row = document.createElement("div");
+      const dt = document.createElement("dt");
+      const dd = document.createElement("dd");
+      dt.textContent = term;
+      dd.textContent = value;
+      row.append(dt, dd);
+      return row;
+    }));
   }
+  if (!document.body.classList.contains("inspector-open")) inspectorOpener = document.activeElement;
   document.body.classList.add("inspector-open");
   inspector.inert = false;
   infoToggle.setAttribute("aria-expanded", "true");
@@ -216,7 +263,9 @@ function closeInspector() {
   document.body.classList.remove("inspector-open");
   inspector.inert = true;
   infoToggle.setAttribute("aria-expanded", "false");
-  infoToggle.focus();
+  const restore = inspectorOpener;
+  inspectorOpener = null;
+  if (restore?.isConnected && typeof restore.focus === "function") restore.focus();
 }
 infoToggle.addEventListener("click", () => openInspector("about"));
 document.querySelector("#inspector-close").addEventListener("click", closeInspector);
@@ -231,6 +280,7 @@ function setMobileControls(open) {
   controlsToggle.textContent = expanded ? "Close" : "Adjust";
   document.body.classList.toggle("mobile-controls-open", mobileQuery.matches && expanded);
   requestAnimationFrame(syncMobileControlHeight);
+  requestAnimationFrame(fitMachineBounds);
 }
 function syncMobileControlHeight() {
   if (!mobileQuery.matches) return document.documentElement.style.removeProperty("--mobile-controls-height");
@@ -241,8 +291,18 @@ controlsToggle.addEventListener("click", () => setMobileControls(controlsToggle.
 mobileQuery.addEventListener?.("change", () => setMobileControls(false));
 setMobileControls(query.get("controls") === "1");
 
-app.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && document.body.classList.contains("inspector-open")) return closeInspector();
+document.addEventListener("keydown", (event) => {
+  if (document.body.classList.contains("inspector-open")) {
+    if (event.key === "Escape") { event.preventDefault(); closeInspector(); }
+    else if (event.key === "Tab") {
+      const focusable = [...inspector.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])')].filter((node) => !node.hidden);
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    return;
+  }
   if (event.key === "ArrowLeft") orbit.azimuth += 0.12;
   else if (event.key === "ArrowRight") orbit.azimuth -= 0.12;
   else if (event.key === "ArrowUp") orbit.polar = Math.max(0.25, orbit.polar - 0.08);
@@ -264,16 +324,21 @@ new GLTFLoader().load(machine.assetUrl, (gltf) => {
     if (node.isMesh) {
       if (node.userData?.is_hit_volume) {
         node.material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false });
+        node.castShadow = false;
+        node.receiveShadow = false;
+      } else {
+        node.castShadow = true;
+        node.receiveShadow = true;
       }
-      node.castShadow = true;
-      node.receiveShadow = true;
     }
   });
   scene.add(model);
   rig = machine.createRig(model);
   applyControls();
+  const selfTest = machine.selfTestRig?.(rig, state) || { ok: true, failures: [] };
+  if (!selfTest.ok) throw new Error(`Interaction motion self-test failed: ${selfTest.failures.join(", ")}`);
   runtime.loadMs = `${Math.round(performance.now() - loadStarted)} ms`;
-  runtime.selection = "ready";
+  runtime.selection = "self-test-pass";
   document.body.dataset.machineSource = "glb";
   document.body.dataset.machineVisibleMeshes = String(model.getObjectsByProperty("isMesh", true).length);
   loaderStatus.textContent = `${machine.identity.model} ready`;
@@ -295,9 +360,13 @@ function animate(now) {
   updateCamera(delta);
   renderer.render(scene, camera);
   runtime.frames += 1;
+  runtime.frameDurations.push(delta * 1000);
   if (now - fpsStart > 1500) {
     runtime.fps = `${Math.round(runtime.frames * 1000 / (now - fpsStart))} fps`;
+    const sortedDurations = runtime.frameDurations.slice().sort((a, b) => a - b);
+    runtime.p95 = `p95 ${sortedDurations[Math.min(sortedDurations.length - 1, Math.floor(sortedDurations.length * 0.95))].toFixed(1)} ms`;
     runtime.frames = 0;
+    runtime.frameDurations.length = 0;
     fpsStart = now;
     updateDiagnostics();
   }
@@ -307,6 +376,7 @@ addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
+  fitMachineBounds();
 });
 setControlOutputs();
 updateDiagnostics();

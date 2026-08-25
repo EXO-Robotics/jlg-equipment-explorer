@@ -143,7 +143,8 @@ def solve_stowed():
     boundaries = []
     for index in range(solver["level_count"] + 1):
         height = solver["base_pivot_height_m"] + index * rise
-        boundaries.append({"left": (-span / 2, height), "right": (span / 2, height)})
+        rear = SPEC["slides"]["rear_fixed_x_m"]
+        boundaries.append({"rear": (rear, height), "front": (rear + span, height)})
     return rise, span, boundaries
 
 
@@ -170,7 +171,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.0"
+    root["release"] = "1.0.1-candidate"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
@@ -240,44 +241,48 @@ def build():
         level_root = empty(f"Level{level + 1:02d}", parent=scissor)
         lower, upper = boundaries[level], boundaries[level + 1]
         for plane_name, lateral in (("Right", -0.27), ("Left", 0.27)):
-            link_group(f"Level{level + 1:02d}_A_{plane_name}", lower["left"], upper["right"], lateral, -lane_offset, level_root)
-            link_group(f"Level{level + 1:02d}_B_{plane_name}", lower["right"], upper["left"], lateral, lane_offset, level_root)
-        for boundary_name, point in (("LOWER_L", lower["left"]), ("LOWER_R", lower["right"]), ("UPPER_L", upper["left"]), ("UPPER_R", upper["right"])):
+            link_group(f"Level{level + 1:02d}_A_{plane_name}", lower["rear"], upper["front"], lateral, -lane_offset, level_root)
+            link_group(f"Level{level + 1:02d}_B_{plane_name}", lower["front"], upper["rear"], lateral, lane_offset, level_root)
+        for boundary_name, point in (("LOWER_L", lower["rear"]), ("LOWER_R", lower["front"]), ("UPPER_L", upper["rear"]), ("UPPER_R", upper["front"])):
             pin = beam_between(f"Level{level + 1:02d}_PIN_{boundary_name}", (point[0], -0.31, point[1]), (point[0], 0.31, point[1]), 0.024, MAT["zinc"], level_root, "scissor")
             pin["is_pivot_pin"] = True
-        center_y = (lower["left"][1] + upper["right"][1]) / 2
-        center_pin = beam_between(f"Level{level + 1:02d}_PIN_CENTER", (0, -0.31, center_y), (0, 0.31, center_y), 0.026, MAT["zinc"], level_root, "scissor")
+        center_x = (lower["rear"][0] + upper["front"][0]) / 2
+        center_y = (lower["rear"][1] + upper["front"][1]) / 2
+        center_pin = beam_between(f"Level{level + 1:02d}_PIN_CENTER", (center_x, -0.31, center_y), (center_x, 0.31, center_y), 0.026, MAT["zinc"], level_root, "scissor")
         center_pin["is_pivot_pin"] = True
 
-    for side, x in (("LEFT", -span / 2), ("RIGHT", span / 2)):
-        block = bevelled_box(f"LowerSlideBlock_{side}", (0.12, 0.11, 0.06), (x, 0, SPEC["solver"]["base_pivot_height_m"]), MAT["zinc"], scissor, 0.012, "scissor")
+    front_x = boundaries[0]["front"][0]
+    rear_x = boundaries[0]["rear"][0]
+    for plane, lateral in (("RIGHT_PLANE", -0.27), ("LEFT_PLANE", 0.27)):
+        block = bevelled_box(f"LowerSlideBlock_{plane}", (0.12, 0.065, 0.06), (front_x, lateral, SPEC["solver"]["base_pivot_height_m"]), MAT["zinc"], scissor, 0.012, "scissor")
         block["slide_axis"] = "X"
-        pivot = empty(f"PIVOT_STACK_LOWER_{side}", (x, 0, SPEC["solver"]["base_pivot_height_m"]), scissor, "SPHERE", 0.03)
+        pivot = empty(f"PIVOT_STACK_LOWER_FRONT_{plane}", (front_x, lateral, SPEC["solver"]["base_pivot_height_m"]), scissor, "SPHERE", 0.03)
         pivot["is_pivot_marker"] = True
+        fixed = empty(f"PIVOT_STACK_LOWER_REAR_{plane}", (rear_x, lateral, SPEC["solver"]["base_pivot_height_m"]), scissor, "SPHERE", 0.03)
+        fixed["is_pivot_marker"] = True
+        upper_block = bevelled_box(f"UpperSlideBlock_{plane}", (0.12, 0.065, 0.06), (boundaries[-1]["front"][0], lateral, boundaries[-1]["front"][1]), MAT["zinc"], scissor, 0.012, "scissor")
+        upper_block["slide_axis"] = "X"
 
     cylinder_root = empty("LiftCylinder", parent=root)
     cylinder_spec = SPEC["lift_cylinder"]
-    lower = Vector((cylinder_spec["lower_pin_m"][0], 0, cylinder_spec["lower_pin_m"][1]))
-    center = Vector((cylinder_spec["kicker_pivot_m"][0], 0, cylinder_spec["kicker_pivot_m"][1]))
-    closed = cylinder_spec["reconstructed_closed_pin_distance_m"]
-    radius = cylinder_spec["kicker_pin_radius_m"]
-    dx, dz = center.x - lower.x, center.z - lower.z
-    separation = math.hypot(dx, dz)
-    along = (closed**2 - radius**2 + separation**2) / (2 * separation)
-    h = math.sqrt(max(closed**2 - along**2, 0))
-    options = [
-        Vector((lower.x + along * dx / separation - h * dz / separation, 0, lower.z + along * dz / separation + h * dx / separation)),
-        Vector((lower.x + along * dx / separation + h * dz / separation, 0, lower.z + along * dz / separation - h * dx / separation)),
-    ]
-    upper = max(options, key=lambda value: value.z)
+    lower = Vector((cylinder_spec["reconstructed_lower_frame_pin_m"][0], 0, cylinder_spec["reconstructed_lower_frame_pin_m"][1]))
+    a_start = Vector((boundaries[0]["rear"][0], 0, boundaries[0]["rear"][1]))
+    a_end = Vector((boundaries[1]["front"][0], 0, boundaries[1]["front"][1]))
+    center = a_start.lerp(a_end, cylinder_spec["reconstructed_kicker_pivot_fraction_on_level01_a"])
+    upper = a_start.lerp(a_end, cylinder_spec["reconstructed_cylinder_pin_fraction_on_level01_a"])
+    arm_direction = (a_end - a_start).normalized()
+    roller = center + Vector((-arm_direction.z, 0, arm_direction.x)) * abs(cylinder_spec["reconstructed_kicker_roller_offset_local_m"][0])
     barrel_end = lower.lerp(upper, 0.72)
     rod_start = lower.lerp(upper, 0.48)
     beam_between("LiftCylinderBarrel", lower, barrel_end, 0.035, MAT["scissor"], cylinder_root, "lift_cylinder", 24)
     beam_between("LiftCylinderRod", rod_start, upper, 0.0225, MAT["zinc"], cylinder_root, "lift_cylinder", 24)
-    for name, point in (("PIVOT_LIFT_CYLINDER_LOWER", lower), ("PIVOT_LIFT_CYLINDER_UPPER", upper), ("PIVOT_KICKER", center)):
+    for name, point in (("PIVOT_LIFT_CYLINDER_LOWER", lower), ("PIVOT_LIFT_CYLINDER_UPPER", upper), ("PIVOT_KICKER_TO_SCISSOR", center), ("PIVOT_KICKER_ROLLER", roller)):
         marker = empty(name, point, cylinder_root, "SPHERE", 0.03)
         marker["is_pivot_marker"] = True
-    beam_between("KickerArm", center + Vector((0, -0.025, 0)), upper + Vector((0, -0.025, 0)), 0.038, MAT["scissor"], cylinder_root, "scissor", 18)
+    beam_between("KickerArmWeb_SCISSOR_CYLINDER", center, upper, 0.038, MAT["scissor"], cylinder_root, "scissor", 18)
+    beam_between("KickerArmWeb_CYLINDER_ROLLER", upper, roller, 0.038, MAT["scissor"], cylinder_root, "scissor", 18)
+    beam_between("KickerArmWeb_ROLLER_SCISSOR", roller, center, 0.038, MAT["scissor"], cylinder_root, "scissor", 18)
+    cylinder("KickerRoller", 0.052, 0.075, roller, MAT["zinc"], cylinder_root, rotation=(math.pi / 2, 0, 0), component="scissor")
 
     platform = empty("PlatformAssembly", parent=root)
     deck_y = SPEC["solver"]["stowed_deck_floor_height_m"]

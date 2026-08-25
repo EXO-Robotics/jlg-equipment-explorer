@@ -1,29 +1,23 @@
 {
   "asset_metrics": {
     "explicit_scissor_link_groups": 20,
-    "meshes": 142,
-    "nodes": 253,
-    "pivot_markers": 68,
+    "meshes": 147,
+    "nodes": 261,
+    "pivot_markers": 71,
     "stowed_envelope_xyz_m": [
       1.4800000578309422,
       1.974000026701648,
       0.7600000672911782
     ],
-    "triangles": 30448
+    "triangles": 30700
   },
   "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority.",
   "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
-  "deployment_review": {
-    "reviewed": "2026-08-25",
-    "reviewed_source_commit": "b1c83ea08bf2be194616335ece9476a2920296f5",
-    "run": "https://github.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/32891045168",
-    "url": "https://exo-robotics.github.io/jlg-equipment-explorer/es1930m/"
-  },
   "files": {
     "asset": {
-      "bytes": 963508,
+      "bytes": 981344,
       "path": "assets/models/es1930m.glb",
-      "sha256": "adda71683962cf5894e3bdbc57719eab9627832bd908cfc37bb340e43a0510de"
+      "sha256": "c9d981659b258e73396b0fddbe96d3d11198b2e3972987a0831cf8f8664e062f"
     },
     "configuration": {
       "bytes": 2570,
@@ -31,14 +25,19 @@
       "sha256": "dd2b9d9c3f6d2ab8ca8dc031cee555bb54cd7e719e0d8e4d03e89b884206afa3"
     },
     "mechanism": {
-      "bytes": 2868,
+      "bytes": 3420,
       "path": "machines/es1930m/mechanism.json",
-      "sha256": "f8f1ff54b4ccf0627c21569f343a58e2801db7442335f6d9588bd966ba51b5b3"
+      "sha256": "6865bcb9ce13eb595bfe85e60d369658994a18c6fe0f876edf77093ceebc9aad"
     },
     "mechanism_evidence": {
       "bytes": 9629,
       "path": "docs/research/es1930m/MECHANISM_EVIDENCE.json",
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
+    },
+    "review_evidence": {
+      "bytes": 4464,
+      "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
+      "sha256": "240d0ebb1da3afaabc951bb10e8c46c45a62db35dc82105484775f25bbcc6567"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -46,9 +45,9 @@
       "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
-      "bytes": 186277,
+      "bytes": 188798,
       "path": "source/blender/es1930m-showcase-v1.0.blend",
-      "sha256": "6044325c4ca4b4e545f2375cc99278e4b5c9033cdb4f8ab74a7ac790f5810ac9"
+      "sha256": "015f70775e379c62be320f06346d77507679e0e9ebeca05a84719483e47915dc"
     },
     "source_manifest": {
       "bytes": 4860,
@@ -56,39 +55,35 @@
       "sha256": "3ebf4f79a8bd9ea16e9314f937d14e59beeccc6310f0d7048d4b01686402c6c8"
     },
     "visual_comparison": {
-      "bytes": 3798,
+      "bytes": 3820,
       "path": "docs/research/es1930m/VISUAL_COMPARISON.md",
-      "sha256": "45f7521d2ce8f099d683b22ba8272ff8943fbc5ef711e128d2a113f2a48db4e1"
+      "sha256": "0adc7707e26eb09dfa3da9536925473ed74e35ec3cb1f1150a0f58aaa6632aac"
     }
   },
   "mechanism_metrics": {
     "collision_proxy_assertions": 4141,
     "collision_proxy_status": "PASS",
-    "cylinder_observed_stroke_m": 0.6855,
+    "cylinder_observed_stroke_m": 0.6855000573053831,
     "levels": 5,
     "maximum_link_length_error_m": 4.440892098500626e-16,
+    "maximum_rear_fixed_anchor_error_m": 0.0,
     "maximum_shared_pivot_error_m": 0.0,
-    "maximum_symmetry_error_m": 0.0,
-    "maximum_translation_per_0_01_sample_m": 0.049164512674566105,
+    "maximum_translation_per_0_01_sample_m": 0.05411392820809057,
     "sampled_lift_states": 101
   },
-  "release": "1.0.0",
-  "release_status": "release",
+  "release": "1.0.1-candidate",
+  "release_status": "candidate_not_deployable",
   "review_flags": {
     "600s_regression_suite_pass": true,
-    "accessible_control_names_pass": true,
-    "asset_contract_pass": true,
-    "cross_pvc_quarantine_pass": true,
-    "deployed_pages_reviewed": true,
+    "accessibility_reviewed": true,
+    "deployed_pages_reviewed": false,
     "desktop_browser_zero_errors": true,
-    "evidence_hashes_pass": true,
     "extension_browser_reviewed": true,
-    "kinematic_samples_pass": true,
-    "mobile_view_reviewed": true,
+    "mobile_and_pinch_reviewed": false,
     "performance_reviewed": true,
     "raised_pose_browser_reviewed": true,
     "selection_and_focus_reviewed": true,
-    "steering_closeup_reviewed": true,
+    "steering_boundary_reviewed": true,
     "stowed_silhouette_reviewed": true
   },
   "runtime": {
@@ -103,7 +98,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "1cc1e6e9e80fdace09966634c91de75e7f7552e839a3c00ee500044573fcd01c"
+    "sha256": "a5272a5bc9649229eecfaad70af316678a423e8dd15cf73f10ca3ffb31e86da5"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-25"

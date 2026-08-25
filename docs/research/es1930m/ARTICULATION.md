@@ -62,6 +62,12 @@ The familiar ideal relation `h = sum(L_i * sin(theta_i))` is a diagnostic intuit
 
 R04 establishes a 685.5 mm single-acting cylinder that extends hydraulically and retracts under gravity. It connects through lower and upper pivot pins to the scissor/kicker mechanism and includes a holding/check valve plus manual-descent valve. Exact anchor coordinates and leverage are not published and remain reconstructed.
 
+### Frozen connected reconstruction H1
+
+PVC 2404 service pp. 196-198 establishes a rear frame pivot and a lateral pair of lower slide blocks in the front channel. Pages 201-202 establish one platform pin pair and one upper-slide-block pair; their matching rear-fixed/front-track assignment is reconstructed because the procedure does not name the ends. Pages 203-205 and 217-221 establish a lower cylinder pin, upper cylinder pin, kicker pivot and separate kicker roller pin.
+
+The browser therefore keeps the rear boundary fixed, places both lower blocks at the one front-track coordinate, and derives every boundary from a single five-level pantograph state. The cylinder upper pin and the three-point kicker presentation are derived from Level01; cylinder pin distance emerges from that posed graph. H1 attachment fractions are calibrated only so the endpoint distance change falls within the published 685.5 +/- 1.5 mm stroke. They are visual reconstruction coordinates, not JLG fabrication data or a claimed factory leverage curve.
+
 The viewer may reproduce the physical relationship and measured cylinder stroke but must not simulate pressure, stability, load sensing, failure, manual descent, or safe operating behavior.
 
 ## Extension deck

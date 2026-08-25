@@ -10,7 +10,10 @@
   },
   "scripts": {
     "start": "python3 -B -m http.server 8080",
-    "check": "node --check viewer.js && python3 -B scripts/validate_viewer_contract.py && python3 -B scripts/validate_600s_evidence.py && python3 -B scripts/validate_600s_configuration.py && python3 -B scripts/validate_600s_glb.py",
+    "check": "npm run check:600s && npm run check:es1930m",
+    "check:600s": "node --check viewer.js && python3 -B scripts/validate_viewer_contract.py && python3 -B scripts/validate_600s_evidence.py && python3 -B scripts/validate_600s_configuration.py && python3 -B scripts/validate_600s_glb.py",
+    "check:es1930m": "node --check viewer/runtime.js && node --check machines/es1930m/articulation.js && node --check machines/es1930m/machine.js && python3 -B scripts/validate_es1930m_evidence.py && python3 -B scripts/validate_es1930m_kinematics.py && python3 -B scripts/validate_es1930m_glb.py && python3 -B scripts/validate_es1930m_receipt.py",
+    "check:pages": "python3 -B scripts/validate_pages_bundle.py _site",
     "receipt": "python3 -B scripts/write_600s_receipt.py"
   }
 }
