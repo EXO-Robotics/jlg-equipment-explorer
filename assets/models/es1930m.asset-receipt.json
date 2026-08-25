@@ -83,7 +83,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "12b4a58b6511254ce713ea559083a9acea14699de66cb46211a28743297174bb"
+    "sha256": "cbec1dfa3c999f96141a6f666aedf29a5f11e024e15281f7a14a0b5d97794dc5"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-25"
