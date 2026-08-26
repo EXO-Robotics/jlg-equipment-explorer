@@ -11,6 +11,7 @@ from validate_742_browser_evidence import (
     _independent_selection_expected,
     _validate_environment,
     _validate_frame_capture,
+    _validate_selection_fixtures,
     expected_selection_outcomes,
 )
 
@@ -98,13 +99,32 @@ def main() -> None:
     fixtures = expected_selection_outcomes()
     if len(fixtures) != 4 or [item["expectedVolume"] for item in fixtures] != ["front", "high-tie", "front", "front"]:
         raise RuntimeError("independent selection fixture set drift")
+    raw_fixtures = [
+        {"case": 1, "hits": [{"volume": "rear", "component": "rear", "distanceM": 2, "priority": 5}, {"volume": "front", "component": "front", "distanceM": 1, "priority": 0}], "visibleSurfaceComponent": None, "basis": "nearest-distance", "expectedComponent": "front", "observedComponent": "front", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+        {"case": 2, "hits": [{"volume": "low-tie", "component": "low-tie", "distanceM": 1, "priority": 1}, {"volume": "high-tie", "component": "high-tie", "distanceM": 1.01, "priority": 4}], "visibleSurfaceComponent": None, "basis": "distance-tie", "expectedComponent": "high-tie", "observedComponent": "high-tie", "expectedVolume": "high-tie", "observedVolume": "high-tie", "pass": True},
+        {"case": 3, "hits": [{"volume": "front", "component": "front", "distanceM": 1, "priority": 0}, {"volume": "front", "component": "front", "distanceM": 1.8, "priority": 0}, {"volume": "rear", "component": "rear", "distanceM": 2, "priority": 5}], "visibleSurfaceComponent": None, "basis": "nearest-distance", "expectedComponent": "front", "observedComponent": "front", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+        {"case": 4, "hits": [{"volume": "rear", "component": "rear", "distanceM": 0.8, "priority": 5}, {"volume": "front", "component": "front", "distanceM": 1, "priority": 0}], "visibleSurfaceComponent": "front", "basis": "visible-surface", "expectedComponent": "front", "observedComponent": "front", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+    ]
+    _validate_selection_fixtures(raw_fixtures, json.loads(json.dumps(raw_fixtures)))
+    stripped_fixture = json.loads(json.dumps(raw_fixtures))
+    stripped_fixture[0].pop("hits")
+    expect_failure(lambda: _validate_selection_fixtures(stripped_fixture, stripped_fixture), "stripped raw fixture was accepted")
+    forged_hit = json.loads(json.dumps(raw_fixtures))
+    forged_hit[0]["hits"][0]["distanceM"] = 0.5
+    expect_failure(lambda: _validate_selection_fixtures(forged_hit, forged_hit), "forged fixture winner was accepted")
+    forged_observation = json.loads(json.dumps(raw_fixtures))
+    forged_observation[1]["observedVolume"] = "low-tie"
+    expect_failure(lambda: _validate_selection_fixtures(forged_observation, forged_observation), "forged fixture observation was accepted")
+    dom_mismatch = json.loads(json.dumps(raw_fixtures))
+    dom_mismatch[3]["hits"][0]["priority"] = 4
+    expect_failure(lambda: _validate_selection_fixtures(raw_fixtures, dom_mismatch), "fixture record not bound exactly to DOM was accepted")
     ray = {
         "hitComponents": ["chassis", "cab"], "hitDistancesM": [1.0, 1.01],
         "visibleSurfaceComponent": None,
     }
     if _independent_selection_expected(ray) != "cab":
         raise RuntimeError("independent distance-tie priority recomputation drift")
-    print(json.dumps({"status": "PASS", "negative_cases": 6, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
+    print(json.dumps({"status": "PASS", "negative_cases": 10, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

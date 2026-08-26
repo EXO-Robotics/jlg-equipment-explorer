@@ -805,17 +805,17 @@
     "review_evidence_parser": {
       "arguments": [],
       "result": {
-        "negative_cases": 6,
+        "negative_cases": 10,
         "screenshot_viewport_contracts": 7,
         "selection_fixtures": 4,
         "status": "PASS"
       },
-      "result_sha256": "be0cb1a90e6a07beb6bfab1cd7a2df48c5fdb7ec8b4e499fbe3765736688438d",
+      "result_sha256": "6e305507bdb045b29928bf8868d917d3fa1106ce699f25dfe3eee4895724f45a",
       "status": "pass",
       "validator": {
-        "bytes": 5056,
+        "bytes": 7723,
         "path": "scripts/test_742_browser_evidence.py",
-        "sha256": "1bba0ac6e9c05ec4f241b0cc1c5693411b88e25e741427a89c53526bcdd9213a"
+        "sha256": "8488e42397b1cdce0d86e914fa70934ca97c223ac5db21668d1ebf2f5c34aa52"
       }
     },
     "route_contract": {
@@ -865,7 +865,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "5ae5f5c1cd557ad84aae7a4248df83a63bff96427bb9e9e32124e342404a3eff",
+  "candidate_tree_sha256": "204d5add69454d760de9db86775bfae938fd88206886abcdb7a79f8b139b6dc5",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -888,9 +888,9 @@
       "sha256": "169ad3cabfc7f4a7d5ee6165c93c3d048da858d829efd03f856c366c92a60323"
     },
     "browser_capture_parser_tests": {
-      "bytes": 5056,
+      "bytes": 7723,
       "path": "scripts/test_742_browser_evidence.py",
-      "sha256": "1bba0ac6e9c05ec4f241b0cc1c5693411b88e25e741427a89c53526bcdd9213a"
+      "sha256": "8488e42397b1cdce0d86e914fa70934ca97c223ac5db21668d1ebf2f5c34aa52"
     },
     "browser_capture_probe": {
       "bytes": 3749,
@@ -898,14 +898,14 @@
       "sha256": "a87b31d24c9e76634c357d325d5384c0dd4c2c428c8ef0590c472b6cde9aedd1"
     },
     "browser_capture_requirements": {
-      "bytes": 4803,
+      "bytes": 5335,
       "path": "docs/review/742/CAPTURE_REQUIREMENTS.json",
-      "sha256": "3c052bfd90d2f83ab7b963f0bb79e58b9a049788bdc8f612ffb57f6c20b3a75a"
+      "sha256": "9c3583b3aff9a5616558d4c154aa53862812184687e6e93728ae9a4f23684880"
     },
     "browser_capture_validator": {
-      "bytes": 36670,
+      "bytes": 39985,
       "path": "scripts/validate_742_browser_evidence.py",
-      "sha256": "e9331f85c1db540966f19b60277f1b2916077622d07b161269f47c0964dddfe8"
+      "sha256": "e2a422a21edb981bb1868373e731bd4aad1684ff2a6b3f9221f7ee904d7f1bee"
     },
     "builder": {
       "bytes": 29963,

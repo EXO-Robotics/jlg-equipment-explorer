@@ -42,11 +42,12 @@
       "transcript_ids": ["select_each_component", "clear_selection", "pinch_suppression"],
       "independent_priority": {"chassis": 0, "steering": 1, "boom": 2, "hydraulics": 3, "cab": 4, "carriage": 5},
       "raw_ray_rule": "Copy and parse data-selection-overlap-outcomes for all 15 rays. The validator independently recomputes the expected component from hit components/distances, visible-surface component, the fixed 0.025 m tie rule, and its own priority map.",
+      "raw_fixture_rule": "Copy every full 9-field data-selection-fixture-outcomes record without stripping hits or semantic fields. The validator independently recomputes basis, component, and volume from raw hit distances/priorities plus visibleSurfaceComponent, checks the committed 5-field projection, and requires exact equality with the DOM-parsed records.",
       "fixed_fixture_expectations": [
-        {"case": 1, "basis": "nearest-distance", "expectedVolume": "front"},
-        {"case": 2, "basis": "distance-tie", "expectedVolume": "high-tie"},
-        {"case": 3, "basis": "nearest-distance", "expectedVolume": "front"},
-        {"case": 4, "basis": "visible-surface", "expectedVolume": "front"}
+        {"case": 1, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": true},
+        {"case": 2, "basis": "distance-tie", "expectedVolume": "high-tie", "observedVolume": "high-tie", "pass": true},
+        {"case": 3, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": true},
+        {"case": 4, "basis": "visible-surface", "expectedVolume": "front", "observedVolume": "front", "pass": true}
       ]
     },
     "performance_profile": {

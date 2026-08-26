@@ -44,10 +44,10 @@ EXPECTED_SELECTION_PRIORITY = {
     "carriage": 5,
 }
 EXPECTED_SELECTION_FIXTURES = [
-    {"case": 1, "basis": "nearest-distance", "expectedVolume": "front"},
-    {"case": 2, "basis": "distance-tie", "expectedVolume": "high-tie"},
-    {"case": 3, "basis": "nearest-distance", "expectedVolume": "front"},
-    {"case": 4, "basis": "visible-surface", "expectedVolume": "front"},
+    {"case": 1, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+    {"case": 2, "basis": "distance-tie", "expectedVolume": "high-tie", "observedVolume": "high-tie", "pass": True},
+    {"case": 3, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+    {"case": 4, "basis": "visible-surface", "expectedVolume": "front", "observedVolume": "front", "pass": True},
 ]
 EXPECTED_SELECTION_VOLUME = {
     "chassis": "Chassis_Hit", "cab": "Cab_Hit", "boom": "Boom_Hit",
@@ -77,6 +77,71 @@ def digest(path: Path) -> str:
 
 def expected_selection_outcomes() -> list[dict]:
     return [dict(item) for item in EXPECTED_SELECTION_FIXTURES]
+
+
+def _validate_selection_fixtures(observed: list, dom_records: list) -> None:
+    if observed != dom_records:
+        raise RuntimeError("742 selection fixture observations do not exactly bind the captured DOM dataset")
+    if not isinstance(observed, list) or len(observed) != len(EXPECTED_SELECTION_FIXTURES):
+        raise RuntimeError("742 raw selection fixture count drift")
+    fixture_fields = {
+        "case", "hits", "visibleSurfaceComponent", "basis", "expectedComponent",
+        "observedComponent", "expectedVolume", "observedVolume", "pass",
+    }
+    hit_fields = {"volume", "component", "distanceM", "priority"}
+    projection = []
+    for index, fixture in enumerate(observed, start=1):
+        if set(fixture or {}) != fixture_fields or fixture["case"] != index:
+            raise RuntimeError("742 raw selection fixture schema/order drift")
+        hits = fixture["hits"]
+        if not isinstance(hits, list) or len(hits) < 2:
+            raise RuntimeError("742 raw selection fixture hit set is incomplete")
+        for hit in hits:
+            if set(hit or {}) != hit_fields:
+                raise RuntimeError("742 raw selection fixture hit schema drift")
+            if not all(isinstance(hit[name], str) and hit[name] for name in ("volume", "component")):
+                raise RuntimeError("742 raw selection fixture hit identity drift")
+            if (
+                isinstance(hit["distanceM"], bool)
+                or not isinstance(hit["distanceM"], (int, float))
+                or not math.isfinite(hit["distanceM"])
+                or hit["distanceM"] < 0
+                or isinstance(hit["priority"], bool)
+                or not isinstance(hit["priority"], int)
+                or hit["priority"] < 0
+            ):
+                raise RuntimeError("742 raw selection fixture hit distance/priority drift")
+        surface = fixture["visibleSurfaceComponent"]
+        if surface is not None and (not isinstance(surface, str) or not surface):
+            raise RuntimeError("742 raw selection fixture visible-surface identity drift")
+        surface_hits = [hit for hit in hits if hit["component"] == surface] if surface is not None else []
+        if surface is not None and not surface_hits:
+            raise RuntimeError("742 raw selection fixture visible surface has no corresponding hit")
+        if surface_hits:
+            expected = min(surface_hits, key=lambda hit: (hit["distanceM"], hit["volume"]))
+            basis = "visible-surface"
+        else:
+            minimum = min(hit["distanceM"] for hit in hits)
+            eligible = [hit for hit in hits if hit["distanceM"] <= minimum + 0.025]
+            highest_priority = max(hit["priority"] for hit in eligible)
+            winners = [hit for hit in eligible if hit["priority"] == highest_priority]
+            expected = min(winners, key=lambda hit: (hit["distanceM"], hit["volume"]))
+            basis = "distance-tie" if len(eligible) > 1 else "nearest-distance"
+        if (
+            fixture["basis"] != basis
+            or fixture["expectedComponent"] != expected["component"]
+            or fixture["observedComponent"] != expected["component"]
+            or fixture["expectedVolume"] != expected["volume"]
+            or fixture["observedVolume"] != expected["volume"]
+            or fixture["pass"] is not True
+        ):
+            raise RuntimeError("742 raw selection fixture outcome disagrees with independent recomputation")
+        projection.append({
+            field: fixture[field]
+            for field in ("case", "basis", "expectedVolume", "observedVolume", "pass")
+        })
+    if projection != expected_selection_outcomes():
+        raise RuntimeError("742 raw selection fixture projection disagrees with committed expectations")
 
 
 def _independent_selection_expected(ray: dict) -> str:
@@ -466,17 +531,7 @@ def validate_complete_browser_artifact(
             or body["attributes"].get("data-selection-policy") != "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie"
         ):
             raise RuntimeError("742 semantic-selection raw DOM self-test fields drift")
-        expected_fixtures = expected_selection_outcomes()
         observed_fixtures = observations["raw_fixture_outcomes"]
-        fixture_fields = {"case", "basis", "expectedVolume", "observedVolume", "pass"}
-        if not isinstance(observed_fixtures, list) or [
-            {field: item.get(field) for field in ("case", "basis", "expectedVolume")}
-            for item in observed_fixtures
-        ] != expected_fixtures or any(
-            set(item or {}) != fixture_fields or item["observedVolume"] != item["expectedVolume"] or item["pass"] is not True
-            for item in observed_fixtures
-        ):
-            raise RuntimeError("742 observed selection fixture outcomes disagree with independent expectations")
         rays = observations["raw_overlap_rays"]
         if not isinstance(rays, list) or len(rays) != 15:
             raise RuntimeError("742 raw selection overlap-ray count drift")
@@ -513,8 +568,9 @@ def validate_complete_browser_artifact(
             dom_fixtures = json.loads(body["attributes"]["data-selection-fixture-outcomes"])
         except (KeyError, json.JSONDecodeError) as error:
             raise RuntimeError("742 semantic-selection DOM lacks parseable raw outcomes") from error
-        if dom_rays != rays or dom_fixtures != observed_fixtures:
-            raise RuntimeError("742 semantic-selection observations do not match the captured DOM datasets")
+        if dom_rays != rays:
+            raise RuntimeError("742 semantic-selection ray observations do not match the captured DOM dataset")
+        _validate_selection_fixtures(observed_fixtures, dom_fixtures)
         _validate_transcript(observations["interaction_transcript"], ("select_each_component", "clear_selection", "pinch_suppression"))
     elif gate == "accessibility_semantics_and_keyboard":
         fields = {"dom_snapshot", "accessibility_tree_snapshot", "interaction_transcript", "physical_screen_reader_session_claimed"}
