@@ -5,10 +5,10 @@ body[data-machine="es1930m"][data-zone="outdoor-limit"] #lift-value { color: var
 body[data-machine="es1930m"][data-zone="indoor-only"] #lift-value { color: #ff8268; }
 body[data-machine="742"] { --accent: #ff9f1a; --accent-dark: #bd6100; }
 body[data-machine="742"] .identity-long h1 { font-size: clamp(88px, 12vw, 184px); }
-body[data-machine="742"] .control-panel { width: min(420px, calc(100vw - 56px)); }
 body[data-machine="742"].controls-panel-collapsed .control-panel { width: min(280px, calc(100vw - 56px)); }
+body[data-machine="742"] .telehandler-controls .autonomy-bar { border-left: 2px solid var(--accent); }
+body[data-machine="742"] .telehandler-controls .autonomy-summary small { max-width: 225px; }
 body[data-machine="742"] .telehandler-controls .control-row { padding-top: 9px; }
-body[data-machine="742"] .telehandler-controls .action-row { grid-template-columns: 1.2fr .8fr 1fr; }
 body[data-machine="742"][data-zone="extended"] #telescope-value { color: var(--accent); }
 body[data-machine="742"][data-motion-profile="reduced"] #showcase:disabled { border-color: var(--line); background: rgba(255,255,255,.04); color: var(--muted); cursor: not-allowed; }
 body[data-machine="742"] .component-nav button[data-focus][aria-pressed="true"] { padding-left: 6px; border-color: var(--accent); background: rgba(255,159,26,.12); color: var(--accent); }

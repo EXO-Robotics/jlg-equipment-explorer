@@ -47,6 +47,10 @@ requireTokens(runtime, [
   "sorted.filter((sample) => sample >= 250).length",
   'showcaseStarted !== null && !reducedMotion && presentation.status !== "Stowed"',
   '? "Positioning"',
+  'const ROUTE_RELEASE = "1.6.9"',
+  'showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Stop auto" : "Start auto"',
+  'autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual"',
+  'showcaseLoop.textContent = `${Math.round(loopProgress * 100)}%`',
 ], "runtime");
 requireTokens(index, [
   'id="motion-announcement" aria-live="polite" aria-atomic="true"',
@@ -59,6 +63,14 @@ requireTokens(index, [
   '<output id="tilt-value" aria-hidden="true">',
   '<output id="steer-value" aria-hidden="true">',
   '<output id="level-value" aria-hidden="true">',
+  'data-runtime-release="1.6.9"',
+  '../viewer/742-runtime.js?v=1.6.9',
+  '../viewer/742.css?v=1.6.9',
+  'class="autonomy-bar" aria-label="Automatic mechanism presentation"',
+  'id="autonomy-mode" aria-live="polite" aria-atomic="true"',
+  'id="showcase-phase"', 'id="showcase-loop"',
+  'class="autonomy-toggle" id="showcase"',
+  '<div class="action-row"><button class="primary-action" id="stow" type="button">Stow machine</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>',
 ]);
 requireTokens(machine, ['status: stowed ? "Stowed" : "Holding"'], "machine presentation");
 if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
@@ -68,7 +80,11 @@ requireTokens(style, [
   "viewer-terminal-error", "visibility: hidden", "pointer-events: none",
   "@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)",
   "max-width: calc(54vw - 24px)",
+  ".telehandler-controls .autonomy-bar", ".telehandler-controls .autonomy-summary small",
 ]);
+if (style.includes("width: min(420px") || style.includes("grid-template-columns: 1.2fr .8fr 1fr")) {
+  throw new Error("742 control panel must use the shared shell width and two-action footer");
+}
 requireTokens(articulation, [
   '"BoomAngleSensorCrank"', '"BoomAngleSensorFrameJoint"', '"BoomAngleSensorCrankJoint"',
   '...["L","R"].flatMap', "Array.from({length:8}", '"RetractChain_C_Moving"',

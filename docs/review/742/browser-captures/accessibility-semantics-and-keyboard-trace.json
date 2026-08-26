@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T15:28:23.315Z",
+  "captured_at_utc": "2026-08-26T15:45:44.348Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {

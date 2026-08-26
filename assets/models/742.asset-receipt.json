@@ -1443,7 +1443,7 @@
         "pose_aware_reset": true,
         "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.6.8",
+        "runtime_release": "1.6.9",
         "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "settled_motion_live_region": true,
@@ -1453,17 +1453,17 @@
         "terminal_accessible_failure_ui": true,
         "visible_stalls_included": true
       },
-      "result_sha256": "660f96cf2a7fedc83e2b0d613500d8466bb7450bb2651dfaba6efc18ab409189",
+      "result_sha256": "6a1eed44862da56bc96d9f72b1e0cebd51380250578387ddb0250410f10af593",
       "status": "pass",
       "validator": {
-        "bytes": 13095,
+        "bytes": 13283,
         "path": "scripts/validate_742_route.py",
-        "sha256": "b3613b324cacab780908f251abfe414cd813a760c4006bfe475b7b8d8464cb72"
+        "sha256": "30e6d58793057d70cd2f3bb00184ed24340d859910442fa8888a6ceaf8b18e9c"
       }
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "f47acd9917602e04b1324173695c0f6e697073218b38da85bc3bb3cf06f69d70",
+  "candidate_tree_sha256": "6802000b76e6219fa0c94f6b418f40affc5ef4776968bc00e43d64f1e4a7b081",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -2157,7 +2157,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "398bcf148dbc434419fe3ce9c22e68ed590c3de1b1662a25e8094f0e524fd56a"
+    "sha256": "5cc1acca42e9b7bc4122c17a45e1ad02e0efa155b6f5b42959009cbf11ceb0bb"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"

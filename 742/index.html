@@ -21,13 +21,13 @@
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="preload" href="../assets/models/742.glb?v=a6c75d61abd2" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="../viewer.css?v=1.1.6">
-  <link rel="stylesheet" href="../viewer/742.css?v=1.6.8">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.6.9">
   <link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">
   <script type="importmap">
     {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
   </script>
 </head>
-<body data-machine="742" data-runtime-release="1.6.8">
+<body data-machine="742" data-runtime-release="1.6.9">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
   <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
 
@@ -68,6 +68,18 @@
         <p class="sr-only" id="motion-announcement" aria-live="polite" aria-atomic="true"></p>
       </div>
       <div class="controls-body" id="machine-controls-body">
+        <div class="autonomy-bar" aria-label="Automatic mechanism presentation">
+          <div class="autonomy-summary">
+            <span>Showcase mode</span>
+            <output id="autonomy-mode" aria-live="polite" aria-atomic="true">Manual</output>
+            <small id="autonomy-note">Visualization only - mechanism motion is reconstructed; not a machine capability.</small>
+          </div>
+          <dl class="autonomy-readouts">
+            <div><dt>Phase</dt><dd id="showcase-phase">Stowed</dd></div>
+            <div><dt>Loop</dt><dd id="showcase-loop">0%</dd></div>
+          </dl>
+          <button class="autonomy-toggle" id="showcase" type="button" aria-pressed="false">Start auto</button>
+        </div>
         <label class="control-row"><span>Boom lift</span><output id="lift-value" aria-hidden="true">0°</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom lift" aria-describedby="motion-boundary"></label>
         <label class="control-row"><span>Telescope</span><output id="telescope-value" aria-hidden="true">0.00 m visual</output><input id="telescope-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom telescope" aria-describedby="motion-boundary"></label>
         <label class="control-row"><span>Carriage tilt</span><output id="tilt-value" aria-hidden="true">0°</output><input id="tilt-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Carriage tilt" aria-describedby="motion-boundary"></label>
@@ -79,8 +91,8 @@
           <button type="button" data-steer-mode="front" aria-pressed="false">Front</button>
         </div>
         <label class="control-row compact-control"><span>Frame level</span><output id="level-value" aria-hidden="true">Level</output><input id="level-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Frame level" aria-describedby="motion-boundary"></label>
-        <div class="action-row"><button class="primary-action" id="showcase" type="button">Run showcase</button><button class="secondary-action" id="stow" type="button">Stow machine</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
-        <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.</p>
+        <div class="action-row"><button class="primary-action" id="stow" type="button">Stow machine</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
+        <p class="motion-boundary" id="motion-boundary">Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.</p>
         <p class="sr-only" id="reduced-motion-note">The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.</p>
       </div>
     </section>
@@ -147,6 +159,6 @@
       window.__show742ModuleFailure("The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, bootTimeoutMs);
   </script>
-  <script type="module" src="../viewer/742-runtime.js?v=1.6.8" onerror="window.__show742ModuleFailure()"></script>
+  <script type="module" src="../viewer/742-runtime.js?v=1.6.9" onerror="window.__show742ModuleFailure()"></script>
 </body>
 </html>

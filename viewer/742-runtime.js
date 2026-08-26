@@ -3,7 +3,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.11";
 import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
 
-const ROUTE_RELEASE = "1.6.8";
+const ROUTE_RELEASE = "1.6.9";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -32,6 +32,11 @@ const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 const motionStatus = document.querySelector("#motion-status");
 const motionAnnouncement = document.querySelector("#motion-announcement");
+const autonomyMode = document.querySelector("#autonomy-mode");
+const autonomyNote = document.querySelector("#autonomy-note");
+const showcasePhase = document.querySelector("#showcase-phase");
+const showcaseLoop = document.querySelector("#showcase-loop");
+const showcaseButton = document.querySelector("#showcase");
 
 const state = { ...machine.stowState };
 const runtime = { errors: 0, fps: "sampling", frameP95Ms: "sampling", frameWorstMs: "sampling", visibleStalls: 0, loadMs: "pending", selection: "pending" };
@@ -637,6 +642,7 @@ function setControlOutputs(solved = machine.solveState(state)) {
     ? "Positioning"
     : presentation.status;
   motionStatus.value = status;
+  showcasePhase.textContent = status;
   return Object.freeze({ ...presentation, status });
 }
 function applyControls() {
@@ -724,6 +730,7 @@ function updateFollowView(controlId) {
 }
 for (const control of machine.controls) {
   document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
+    stopShowcase();
     state[control.id] = Number(event.currentTarget.value) / control.inputDivisor;
     const presentation = applyControls();
     if (machine.followView && (control.id === "lift" || control.id === "telescope")) updateFollowView(control.id);
@@ -731,8 +738,7 @@ for (const control of machine.controls) {
   });
 }
 document.querySelector("#stow").addEventListener("click", () => {
-  showcaseStarted = null;
-  document.body.dataset.showcaseActive = "false";
+  stopShowcase();
   Object.assign(state, machine.stowState);
   for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
   document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
@@ -742,6 +748,7 @@ document.querySelector("#stow").addEventListener("click", () => {
 });
 
 document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEventListener("click", () => {
+  stopShowcase();
   if (Math.abs(state.steer) > 0.01) {
     document.body.dataset.steerModeAlignment = "center-required";
     document.querySelectorAll("[data-steer-mode]").forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate.dataset.steerMode === state.steerMode)));
@@ -756,32 +763,49 @@ document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEve
 }));
 
 let lastShowcaseFrameAt = 0;
-const showcaseButton = document.querySelector("#showcase");
+function syncShowcaseControls() {
+  const active = showcaseStarted !== null && !reducedMotion;
+  document.body.dataset.showcaseActive = String(active);
+  showcaseButton.setAttribute("aria-pressed", String(active));
+  showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Stop auto" : "Start auto";
+  autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual";
+  autonomyNote.textContent = active
+    ? "Move a mechanism control to return to manual."
+    : "Visualization only - mechanism motion is reconstructed; not a machine capability.";
+  if (!active) showcaseLoop.textContent = "0%";
+}
+function stopShowcase() {
+  showcaseStarted = null;
+  syncShowcaseControls();
+}
 function syncReducedMotion(announce = false) {
   const nextReducedMotion = forceReducedMotion || motionPreference.matches;
   const changed = nextReducedMotion !== reducedMotion;
   reducedMotion = nextReducedMotion;
   document.body.dataset.motionProfile = reducedMotion ? "reduced" : "full";
   showcaseButton.disabled = terminalFailure || reducedMotion;
-  showcaseButton.textContent = reducedMotion ? "Showcase off" : "Run showcase";
   if (reducedMotion) {
     showcaseStarted = null;
-    document.body.dataset.showcaseActive = "false";
     orbit.velocityAzimuth = 0;
     orbit.velocityPolar = 0;
     showcaseButton.setAttribute("aria-describedby", "motion-boundary reduced-motion-note");
   } else {
     showcaseButton.removeAttribute("aria-describedby");
   }
+  syncShowcaseControls();
   if (announce && changed) announceMotion(reducedMotion ? "Reduced motion enabled. Automatic showcase stopped; manual controls remain available." : "Reduced motion disabled. Automatic showcase is available.");
   updateDiagnostics();
 }
 showcaseButton?.addEventListener("click", () => {
-  if (!reducedMotion) {
-    showcaseStarted = performance.now();
-    document.body.dataset.showcaseActive = "true";
-    announceMotion("Automatic 742 mechanism showcase started.");
+  if (reducedMotion) return;
+  if (showcaseStarted !== null) {
+    stopShowcase();
+    announceMotion("Automatic 742 mechanism showcase stopped. Manual controls remain available.");
+    return;
   }
+  showcaseStarted = performance.now();
+  syncShowcaseControls();
+  announceMotion("Automatic 742 mechanism showcase started.");
 });
 const handleMotionPreferenceChange = () => syncReducedMotion(true);
 if (motionPreference.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
@@ -1035,7 +1059,9 @@ function animate(now) {
   if (showcaseStarted !== null && machine.showcase && !reducedMotion) {
     const elapsed = (now - showcaseStarted) / (machine.showcaseDurationMs ?? 14000);
     if (elapsed >= 1) showcaseStarted = now;
-    const showcaseState = { ...machine.showcase(elapsed % 1) };
+    const loopProgress = elapsed % 1;
+    const showcaseState = { ...machine.showcase(loopProgress) };
+    showcaseLoop.textContent = `${Math.round(loopProgress * 100)}%`;
     if (showcaseState.steerMode !== state.steerMode && Math.abs(showcaseState.steer) > 0.01) showcaseState.steerMode = state.steerMode;
     Object.assign(state, showcaseState);
     for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
