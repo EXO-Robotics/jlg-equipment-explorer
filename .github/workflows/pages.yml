@@ -24,26 +24,56 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Validate model and runtime contracts
+      - name: Validate repository contracts
         run: |
           npm run check
-          node --check viewer/runtime.js
-          node --check machines/es1930m/articulation.js
-          node --check machines/es1930m/machine.js
-          python3 -B scripts/validate_es1930m_evidence.py
-          python3 -B scripts/validate_es1930m_kinematics.py
-          python3 -B scripts/validate_es1930m_glb.py
-          python3 -B scripts/validate_es1930m_receipt.py
+
+      - name: Declare offline frozen-source boundary
+        run: |
+          python3 -B scripts/validate_742_evidence.py --manifest-only
+          echo "The 11 frozen manufacturer binaries are intentionally absent from GitHub."
+          echo "This job validates their canonical ledger but does not claim to reverify their bytes."
 
       - name: Assemble static site
         run: |
-          mkdir -p _site/assets/models _site/vendor
+          mkdir -p _site/assets/models _site/vendor _site/docs/research _attestation
           cp index.html viewer.css viewer.js _site/
-          cp -R 600s es1930m machines viewer _site/
+          cp -R 600s es1930m 742 machines viewer _site/
           cp assets/models/600s.glb assets/models/600s.version.js assets/models/600s.configuration.json _site/assets/models/
           cp assets/models/es1930m.glb assets/models/es1930m.asset-receipt.json _site/assets/models/
+          cp assets/models/742.glb _site/assets/models/
+          mkdir -p _site/docs/research/742/reference-board
+          cp docs/research/742/README.md docs/research/742/REFERENCES.md docs/research/742/CONFIGURATION.md docs/research/742/DIMENSIONS.md docs/research/742/ARTICULATION.md docs/research/742/SOURCE_RECONCILIATION.md docs/research/742/DETAILED_RECONSTRUCTION.md docs/research/742/COMPARISON_MATRIX.md docs/research/742/RIGHTS_AND_BIM_BOUNDARY.md docs/research/742/SOURCE_MANIFEST.json docs/research/742/MECHANISM_EVIDENCE.json _site/docs/research/742/
+          cp docs/research/742/reference-board/README.md _site/docs/research/742/reference-board/
           cp -R vendor/three-r160 _site/vendor/
           touch _site/.nojekyll
+          test ! -e _site/assets/models/742.asset-receipt.json
+          if find _site/docs/research/742 -type f \( -iname '*.pdf' -o -iname '*.ifc' -o -iname '*.zip' -o -iname '*.obj' -o -iname '*.stl' -o -iname '*.fbx' -o -iname '*.step' -o -iname '*.gltf' -o -iname '*.glb' -o -iname '*.blend' -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.tif' -o -iname '*.tiff' \) | grep -q .; then
+            echo "Manufacturer source binary leaked into the Pages artifact" >&2
+            exit 1
+          fi
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          site = Path("_site")
+          files = {}
+          for path in sorted(value for value in site.rglob("*") if value.is_file()):
+              relative = str(path.relative_to(site))
+              body = path.read_bytes()
+              files[relative] = {"sha256": hashlib.sha256(body).hexdigest(), "bytes": len(body)}
+          manifest = {
+              "schema_version": "1.0.0",
+              "kind": "github-pages-build-manifest",
+              "source_commit": os.environ["GITHUB_SHA"],
+              "files": files,
+          }
+          Path("_attestation/pages-build-manifest.json").write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+          )
+          PY
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
@@ -56,3 +86,75 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Create external HTTP deployment attestation
+        env:
+          ROUTE_URL: https://exo-robotics.github.io/jlg-equipment-explorer/742/
+          ASSET_URL: https://exo-robotics.github.io/jlg-equipment-explorer/assets/models/742.glb
+          SOURCE_COMMIT: ${{ github.sha }}
+          WORKFLOW_RUN_URL: https://github.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p _attestation
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import time
+          import urllib.request
+          from pathlib import Path
+
+          def fetch(url, expected_sha256):
+              last_error = None
+              for attempt in range(12):
+                  try:
+                      request = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                      with urllib.request.urlopen(request, timeout=30) as response:
+                          body = response.read()
+                          if response.status != 200:
+                              raise RuntimeError(f"HTTP {response.status}: {url}")
+                          observed = hashlib.sha256(body).hexdigest()
+                          if observed != expected_sha256:
+                              raise RuntimeError(f"stale or mismatched body {observed}: {url}")
+                          return response.status, body
+                  except Exception as error:
+                      last_error = error
+                      if attempt < 11:
+                          time.sleep(5)
+              raise RuntimeError(f"Deployment probe failed: {last_error}")
+
+          expected_route_sha = hashlib.sha256(Path("742/index.html").read_bytes()).hexdigest()
+          expected_asset_sha = hashlib.sha256(Path("assets/models/742.glb").read_bytes()).hexdigest()
+          route_status, route = fetch(os.environ["ROUTE_URL"], expected_route_sha)
+          asset_status, asset = fetch(os.environ["ASSET_URL"], expected_asset_sha)
+          build_manifest_path = Path("_attestation/pages-build-manifest.json")
+          build_manifest = build_manifest_path.read_bytes()
+          candidate_receipt = Path("assets/models/742.asset-receipt.json").read_bytes()
+          attestation = {
+              "schema_version": "1.0.0",
+              "kind": "github-pages-http-attestation",
+              "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+              "source_commit": os.environ["SOURCE_COMMIT"],
+              "workflow_run_url": os.environ["WORKFLOW_RUN_URL"],
+              "route_url": os.environ["ROUTE_URL"],
+              "route_http_status": route_status,
+              "route_sha256": hashlib.sha256(route).hexdigest(),
+              "asset_url": os.environ["ASSET_URL"],
+              "asset_http_status": asset_status,
+              "asset_sha256": hashlib.sha256(asset).hexdigest(),
+              "asset_bytes": len(asset),
+              "pages_build_manifest_sha256": hashlib.sha256(build_manifest).hexdigest(),
+              "candidate_receipt_sha256": hashlib.sha256(candidate_receipt).hexdigest(),
+          }
+          output = Path("_attestation/742-pages-attestation.json")
+          output.write_text(json.dumps(attestation, indent=2, sort_keys=True) + "\n")
+          PY
+          python3 -B scripts/validate_742_receipt.py --deployment-attestation _attestation/742-pages-attestation.json --require-deployed
+
+      - name: Upload deployment attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: 742-pages-attestation-${{ github.run_id }}
+          path: |
+            _attestation/742-pages-attestation.json
+            _attestation/pages-build-manifest.json
+          if-no-files-found: error

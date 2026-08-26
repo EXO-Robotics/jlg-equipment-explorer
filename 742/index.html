@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG 742 telehandler.">
+  <title>742 Interactive Telehandler Study</title>
+  <link rel="preload" href="../assets/models/742.glb?v=82093658a6d7" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="../viewer.css?v=1.1.5">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.5.0">
+  <script type="importmap">
+    {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
+  </script>
+</head>
+<body data-machine="742" data-runtime-release="1.5.0">
+  <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
+  <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
+
+  <div class="loader" id="loader" role="status"><span class="loader-mark"></span><span id="loader-status">Loading 742</span><small id="loader-detail">Validating the PVC 2411 reconstruction</small></div>
+  <div class="error" id="error" role="alert" aria-live="assertive" hidden><div><strong>Viewer unavailable.</strong><p id="error-copy">This interactive study needs WebGL and a valid owned 742 asset.</p></div></div>
+
+  <main class="interface">
+    <header class="topbar">
+      <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
+      <div class="prototype-label">PVC 2411 accuracy reconstruction / 1.0</div>
+      <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
+    </header>
+
+    <section class="identity identity-long" aria-labelledby="machine-title">
+      <div class="status"><i></i>Flagship telehandler study</div>
+      <h1 id="machine-title">742</h1>
+      <p>All-wheel-steer telehandler <span class="evidence-chip">PVC 2411</span></p>
+    </section>
+
+    <section class="specs" aria-label="Published product specifications">
+      <div><strong>7,000 lb</strong><span>Rated capacity</span></div>
+      <div><strong>42 ft</strong><span>Maximum lift height</span></div>
+      <div><strong>29 ft 1 in</strong><span>Maximum forward reach</span></div>
+      <p>Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.</p>
+    </section>
+
+    <section class="control-panel telehandler-controls" aria-labelledby="operate-title">
+      <div class="panel-heading">
+        <div><span>Operate</span><h2 id="operate-title">Presentation controls</h2></div>
+        <div class="panel-state"><output id="motion-status" aria-live="polite" aria-atomic="true">Stowed study</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button></div>
+      </div>
+      <div class="controls-body" id="machine-controls-body">
+        <label class="control-row"><span>Boom lift</span><output id="lift-value">3°</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom lift" aria-describedby="motion-boundary"></label>
+        <label class="control-row"><span>Telescope</span><output id="telescope-value">0.00 m visual</output><input id="telescope-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom telescope" aria-describedby="motion-boundary"></label>
+        <label class="control-row"><span>Carriage tilt</span><output id="tilt-value">0°</output><input id="tilt-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Carriage tilt" aria-describedby="motion-boundary"></label>
+        <label class="control-row compact-control"><span>Steering</span><output id="steer-value">Center</output><input id="steer-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Steering angle" aria-describedby="motion-boundary"></label>
+        <div class="mode-row" role="group" aria-label="Steering mode">
+          <span>Steer mode</span>
+          <button type="button" data-steer-mode="circle" aria-pressed="true">Circle</button>
+          <button type="button" data-steer-mode="crab" aria-pressed="false">Crab</button>
+          <button type="button" data-steer-mode="front" aria-pressed="false">Front</button>
+        </div>
+        <label class="control-row compact-control"><span>Frame level</span><output id="level-value">Level</output><input id="level-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Frame level" aria-describedby="motion-boundary"></label>
+        <div class="action-row"><button class="primary-action" id="showcase" type="button">Run showcase</button><button class="secondary-action" id="stow" type="button">Stow</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
+        <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Not operational, load, stability, service, or safety data.</p>
+      </div>
+    </section>
+
+    <nav class="component-nav component-nav-seven" aria-label="Explore components">
+      <span>Explore</span>
+      <button type="button" data-focus="chassis" aria-pressed="false"><i>01</i>Chassis</button>
+      <button type="button" data-focus="cab" aria-pressed="false"><i>02</i>Cab</button>
+      <button type="button" data-focus="boom" aria-pressed="false"><i>03</i>Boom</button>
+      <button type="button" data-focus="carriage" aria-pressed="false"><i>04</i>Carriage</button>
+      <button type="button" data-focus="steering" aria-pressed="false"><i>05</i>Steering</button>
+      <button type="button" data-focus="hydraulics" aria-pressed="false"><i>06</i>Hydraulics</button>
+      <button type="button" data-focus="frame" aria-pressed="false"><i>07</i>Frame level</button>
+      <span class="nav-overflow-cue" id="nav-overflow-cue" aria-hidden="true">More →</span>
+    </nav>
+    <div class="interaction-hint">Drag to orbit <span>/</span> Pinch or scroll to zoom <span>/</span> Select a component</div>
+    <output class="diagnostics" id="diagnostics" hidden aria-live="polite"></output>
+  </main>
+
+  <div class="scrim" id="scrim" aria-hidden="true"></div>
+  <aside class="inspector" id="inspector" role="dialog" aria-modal="true" aria-labelledby="inspector-title" aria-describedby="inspector-copy" inert>
+    <button class="inspector-close" id="inspector-close" type="button" aria-label="Close inspector">×</button>
+    <div class="inspector-kicker" id="inspector-kicker">Evidence boundary</div>
+    <h2 id="inspector-title">Owned 742,<br>documented honestly.</h2>
+    <p id="inspector-copy">The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.</p>
+    <dl id="inspector-facts"><div><dt>Configuration</dt><dd>72 hp · open cab · standard 370/75-28 tires</dd></div><div><dt>Attachment</dt><dd>50 in floating carriage · 48 in pallet forks</dd></div><div><dt>Primary set</dt><dd>3122332100 · 3122331300 · 3122329900</dd></div><div><dt>Boundary</dt><dd>Visual reconstruction only</dd></div></dl>
+    <a href="../docs/research/742/README.md">Read the evidence boundary</a>
+  </aside>
+
+  <script type="module" src="../viewer/742-runtime.js?v=1.5.0"></script>
+</body>
+</html>

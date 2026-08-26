@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "coordinate_system": {"longitudinal": "+X toward attachment", "vertical": "+Y", "lateral": "+Z machine right"},
+  "boom": {
+    "sections": 3,
+    "pivot_m": [-2.158, 1.838, 0.0],
+    "stowed_angle_degrees": 3,
+    "maximum_visual_angle_degrees": 69,
+    "mid_authored_origin_m": 0.12,
+    "fly_authored_origin_m": 0.12,
+    "carriage_authored_origin_m": [5.296, -0.8, 0.0],
+    "mid_visual_travel_m": 3.604,
+    "fly_visual_travel_m": 3.604,
+    "level_fork_surface_height_at_max_pose_m": 12.8,
+    "travel_authority": "3.604 m telescope-cylinder stroke is evidence-derived; second-section +3.604 m and chained third-section additional +3.604 m are the visual chain relationship; authored origins remain reconstructed"
+  },
+  "frame_level": {
+    "axis": "X",
+    "visual_limit_degrees": 10,
+    "authority": "published function and limit; pivot coordinates reconstructed"
+  },
+  "steering": {
+    "modes": ["circle", "crab", "front"],
+    "visual_inner_limit_degrees": 55,
+    "wheelbase_m": 3.42,
+    "wheel_center_track_m": 2.1005,
+    "outside_turning_radius_crosscheck_m": 3.66,
+    "authority": "published modes/wheelbase/turning radius plus service-manual 55 degree limit; wheel-center track is a temporary-reference measurement, with geometric Ackermann angles computed from wheelbase and track"
+  },
+  "carriage": {
+    "type": "standard floating 50 inch",
+    "visual_tilt_degrees": [-5, 12],
+    "fork_blade_dimensions_m": [1.2192, 0.06, 0.102],
+    "minimum_flat-floor_clearance_m": 0.08,
+    "authority": "published attachment topology and 60 x 102 x 1200 mm fork size; displayed pivot travel is reconstructed and down-tilt is limited to preserve flat-floor clearance at maximum frame-level presentation"
+  },
+  "hydraulic_cylinder_strokes_m": {
+    "lift": 1.07,
+    "telescope": 3.604,
+    "head_tilt_slave": 0.388,
+    "compensation_master": 0.278,
+    "frame_sway": 0.168,
+    "rear_axle_stabilization": 0.2
+  },
+  "reach_pose": {
+    "boom_angle_degrees": 3.0,
+    "telescope_fraction": 1.0,
+    "load_center_m": 0.6096,
+    "front_tire_plane_x_m": 2.35,
+    "published_forward_reach_m": 8.86,
+    "authority": "published reach and 24 inch load center; selected visual pose is reconstructed"
+  },
+  "collision_proxies": {
+    "ground_y_m": 0.0,
+    "minimum_fork_y_m": 0.08,
+    "minimum_boom_overlap_m": 0.18,
+    "base_machine_lateral_bounds_m": [-1.23025, 1.23025],
+    "visual_bounds_including_mirrors_m": [-1.35, 1.23025]
+  }
+}

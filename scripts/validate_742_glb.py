@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""Validate the owned 742 GLB identity, hierarchy, geometry budget, and envelope."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+from pathlib import Path
+
+from validate_es1930m_glb import index_nodes, load_glb, positions, qrot, visible_bounds, world_trs
+
+
+ROOT = Path(__file__).resolve().parents[1]
+GLB = ROOT / "assets/models/742.glb"
+BLEND = ROOT / "source/blender/742-showcase-v1.0.blend"
+CONFIG_PATH = ROOT / "machines/742/742.configuration.json"
+MECHANISM_PATH = ROOT / "machines/742/mechanism.json"
+VERSION = ROOT / "machines/742/version.js"
+EXPECTED_ID = "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"
+TRIANGLE_BUDGET = 60000
+REQUIRED_EDGES = {
+    "GroundRunningGear":"742_ROOT", "FrameLevelPivot":"742_ROOT", "Chassis":"FrameLevelPivot",
+    "OpenCab":"Chassis", "BoomLiftPivot":"FrameLevelPivot", "BoomBase":"BoomLiftPivot",
+    "BoomMid":"BoomBase", "BoomFly":"BoomMid", "CarriageTiltPivot":"BoomFly", "Carriage":"CarriageTiltPivot",
+    "SteerPivot_FL":"GroundRunningGear", "SteerPivot_FR":"GroundRunningGear", "SteerPivot_RL":"GroundRunningGear", "SteerPivot_RR":"GroundRunningGear",
+    "Chassis_Hit":"FrameLevelPivot", "Cab_Hit":"FrameLevelPivot", "Boom_Hit":"BoomBase", "Carriage_Hit":"Carriage",
+    "Steering_Hit":"GroundRunningGear", "Hydraulics_Hit":"FrameLevelPivot"
+}
+REQUIRED_MECHANICAL_DETAIL = {
+    "LiftCylinderBarrel", "LiftCylinderRod", "LiftCylinderBasePin", "LiftCylinderRodPin",
+    "TelescopeCylinderBarrel", "TelescopeCylinderRod", "CompensationCylinderBarrel", "CompensationCylinderRod",
+    "CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod", "CarriageTiltLink",
+    "FrameLevelCylinderBarrel", "FrameLevelCylinderRod", "RearAxleStabilizerBarrel", "RearAxleStabilizerRod",
+    "FrontSteerCylinder", "FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
+    "RearSteerCylinder", "RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight",
+    "ExtendChain_L", "ExtendChain_R", "RetractChain_C",
+    "BoomSheave_L", "BoomSheave_R", "RetractSheave_C",
+    "BoomAngleSensorBracket", "BoomAngleSensorBody", "BoomAngleSensorLink", "BoomAngleSensorFrameJoint", "BoomAngleSensorBoomJoint",
+    "BoomRigidTube_0", "BoomRigidTube_1", "BoomRigidTube_2", "ForkL", "ForkR",
+}
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main():
+    config = json.loads(CONFIG_PATH.read_text())
+    mechanism = json.loads(MECHANISM_PATH.read_text())
+    if config.get("configuration_id") != EXPECTED_ID:
+        raise RuntimeError("742 configuration identity drift")
+    document, blob = load_glb(GLB)
+    glb_hash = digest(GLB)
+    match = re.search(r'JLG742_ASSET_SHA256\s*=\s*"([0-9a-f]{64})"', VERSION.read_text())
+    if not match or match.group(1) != glb_hash:
+        raise RuntimeError("742 cache identity does not match GLB")
+    nodes = document.get("nodes") or []
+    by_name, parents = index_nodes(nodes)
+    root_index = by_name.get("742_ROOT")
+    if root_index is None or root_index in parents:
+        raise RuntimeError("742_ROOT is missing or parented")
+    extras = nodes[root_index].get("extras") or {}
+    if extras.get("configuration_id") != EXPECTED_ID or extras.get("ownership") != "owned_reconstruction_no_manufacturer_geometry":
+        raise RuntimeError("742 GLB identity/ownership metadata drift")
+    for child, expected_parent in REQUIRED_EDGES.items():
+        if child not in by_name:
+            raise RuntimeError(f"Missing required node: {child}")
+        parent_index = parents.get(by_name[child])
+        actual = nodes[parent_index].get("name") if parent_index is not None else None
+        if actual != expected_parent:
+            raise RuntimeError(f"Parent mismatch for {child}: {actual} != {expected_parent}")
+    for hit in config["interaction_volumes"]:
+        if not (nodes[by_name[hit]].get("extras") or {}).get("is_hit_volume"):
+            raise RuntimeError(f"Interaction volume metadata missing: {hit}")
+    missing_detail = sorted(REQUIRED_MECHANICAL_DETAIL - set(by_name))
+    if missing_detail:
+        raise RuntimeError(f"Missing mechanical detail contracts: {missing_detail}")
+    triangles = 0
+    for mesh in document.get("meshes", []):
+        for primitive in mesh.get("primitives", []):
+            if primitive.get("mode", 4) != 4 or "indices" not in primitive:
+                raise RuntimeError("742 asset must use indexed triangle primitives")
+            triangles += document["accessors"][primitive["indices"]]["count"] // 3
+    if triangles > TRIANGLE_BUDGET:
+        raise RuntimeError(f"Triangle budget exceeded: {triangles}")
+    # Detail is admitted by named, hierarchical mechanisms above rather than by
+    # a mesh/node-count floor, which would reward arbitrary object splitting.
+    fork_extents = []
+    for fork_name in ("ForkL", "ForkR"):
+        node = nodes[by_name[fork_name]]
+        raw = []
+        for primitive in document["meshes"][node["mesh"]]["primitives"]:
+            raw.extend(positions(document, blob, primitive["attributes"]["POSITION"]))
+        fork_extents.append([max(point[axis] for point in raw) - min(point[axis] for point in raw) for axis in range(3)])
+        extras = node.get("extras") or {}
+        published = [extras.get("published_fork_length_m"), extras.get("published_fork_width_m"), extras.get("published_fork_thickness_m")]
+        for axis, (actual, target) in enumerate(zip(fork_extents[-1], published)):
+            if target is None or abs(actual - target) > 0.002:
+                raise RuntimeError(f"{fork_name} axis {axis} is {actual:.4f} m, expected {target}")
+    minimum, maximum = visible_bounds(document, blob, nodes, parents)
+    envelope = [maximum[i] - minimum[i] for i in range(3)]
+    if minimum[1] < -0.005:
+        raise RuntimeError(f"Ground-running geometry penetrates the floor: {minimum[1]:.4f} m")
+    if not 2.34 <= envelope[1] <= 2.55:
+        raise RuntimeError(f"Stowed height drift: {envelope[1]}")
+    if not 2.35 <= envelope[2] <= 2.70:
+        raise RuntimeError(f"Stowed width drift: {envelope[2]}")
+    base_lateral_min, base_lateral_max = float("inf"), float("-inf")
+    for node_index, node in enumerate(nodes):
+        name = node.get("name", "")
+        if "mesh" not in node or name.startswith("Mirror") or (node.get("extras") or {}).get("is_hit_volume"):
+            continue
+        translation, rotation, scale = world_trs(nodes, parents, node_index)
+        for primitive in document["meshes"][node["mesh"]]["primitives"]:
+            for raw in positions(document, blob, primitive["attributes"]["POSITION"]):
+                transformed = qrot(rotation, tuple(raw[axis] * scale[axis] for axis in range(3)))
+                lateral = translation[2] + transformed[2]
+                base_lateral_min = min(base_lateral_min, lateral)
+                base_lateral_max = max(base_lateral_max, lateral)
+    base_width = base_lateral_max - base_lateral_min
+    if abs(base_width - config["published_dimensions_m"]["width"]) > 0.012:
+        raise RuntimeError(f"Base-machine width drift: {base_width:.4f} m")
+    visual_lateral_bounds = mechanism["collision_proxies"]["visual_bounds_including_mirrors_m"]
+    reconstructed_overall_width = visual_lateral_bounds[1] - visual_lateral_bounds[0]
+    if abs(envelope[2] - reconstructed_overall_width) > 0.012:
+        raise RuntimeError(f"Mirror-inclusive visual width drift: {envelope[2]:.4f} m")
+    less_forks_min, less_forks_max = float("inf"), float("-inf")
+    for node_index, node in enumerate(nodes):
+        name = node.get("name", "")
+        if "mesh" not in node or name.startswith("Fork") or (node.get("extras") or {}).get("is_hit_volume"):
+            continue
+        translation, rotation, scale = world_trs(nodes, parents, node_index)
+        for primitive in document["meshes"][node["mesh"]]["primitives"]:
+            for raw in positions(document, blob, primitive["attributes"]["POSITION"]):
+                transformed = qrot(rotation, tuple(raw[axis] * scale[axis] for axis in range(3)))
+                longitudinal = translation[0] + transformed[0]
+                less_forks_min = min(less_forks_min, longitudinal)
+                less_forks_max = max(less_forks_max, longitudinal)
+    length_less_forks = less_forks_max - less_forks_min
+    if abs(length_less_forks - config["published_dimensions_m"]["length_less_forks"]) > 0.02:
+        raise RuntimeError(f"Length-less-forks drift: {length_less_forks:.4f} m")
+    if GLB.stat().st_size > 4_000_000:
+        raise RuntimeError("742 GLB exceeds four-megabyte delivery ceiling")
+    print(json.dumps({
+        "status":"PASS", "configuration_id":EXPECTED_ID, "asset":str(GLB.relative_to(ROOT)), "sha256":glb_hash,
+        "source_blend_sha256":digest(BLEND), "bytes":GLB.stat().st_size, "nodes":len(nodes),
+        "meshes":len(document.get("meshes", [])), "triangles":triangles, "triangle_budget":TRIANGLE_BUDGET,
+        "interaction_volumes":sorted(config["interaction_volumes"]), "visible_bounds_min_m":minimum,
+        "visible_bounds_max_m":maximum, "visible_envelope_xyz_m":envelope,
+        "base_machine_width_excluding_mirrors_m": base_width,
+        "mirror_inclusive_visual_width_m": envelope[2],
+        "length_less_forks_m": length_less_forks,
+        "fork_mesh_extents_length_width_thickness_m": fork_extents,
+        "mechanical_detail_contracts": sorted(REQUIRED_MECHANICAL_DETAIL),
+        "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor"
+    }, indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
