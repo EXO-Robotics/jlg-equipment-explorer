@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.4.0",
   "kind": "742-review-recapture-requirements",
   "freeze_prerequisites": [
     "Final 742 GLB, runtime, CSS, machine modules, configuration, and mechanism bytes are committed.",
@@ -11,15 +11,17 @@
     "browser_metadata": ["name", "full version", "user agent"],
     "os_metadata": ["name", "version", "build"],
     "gpu_metadata": "Record WebGL API plus unmasked vendor/renderer when WEBGL_debug_renderer_info is observable; otherwise record unavailable and the exact reason.",
-    "accessibility_tree_slider_contract": "Normalize raw Chromium CDP Accessibility.getFullAXTree nodes without inventing display units. Every expected slider name must match exactly; each slider must be enabled, focusable, settable, and retain its finite native numeric value plus equivalent numeric AX valuetext. Unit-suffixed or semantic presentation text is verified separately from the DOM aria-valuetext attribute.",
-    "automation": "Run npm ci, npm run capture:742:install, then npm run capture:742 from the committed candidate. The exact Playwright version is pinned in package-lock.json and the default executable is its bundled Chromium revision. Record and validate the lockfile hash/size, Playwright version, bundled revision, executable basename/SHA-256/byte count, committed runner hash/size, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json. Explicit absolute tool/browser overrides remain rehearsal-only and cannot satisfy a completed review gate. Each trace outcomes object must byte-canonically hash and exactly equal the gate artifact observations.assertions object; free-form transcripts are non-authoritative and prohibited.",
+    "accessibility_tree_slider_contract": "Capture every unignored raw Chromium CDP Accessibility.getFullAXTree node for controls-open and modal-open states, including status/live regions. Every expected slider must reconcile to the exact DOM aria-valuetext engineering string with units/state, a dedicated non-live aria-details target containing that exact string, and the raw AX details relation to that target (or an exact direct AX text exposure). Native numeric AX range value remains separately required; numeric fallback alone cannot satisfy engineering-value exposure.",
+    "automation": "Run npm ci, npm run capture:742:install, then npm run capture:742 from the committed candidate. The exact Playwright version is pinned in package-lock.json and the default executable is its bundled Chromium revision. Record and validate the lockfile hash/size, Playwright version, bundled revision, executable identity, and a canonical manifest/root digest covering every regular file and symlink in the Chromium application/resource bundle. Also bind the committed runner hash/size, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json. Explicit absolute tool/browser overrides remain rehearsal-only and cannot satisfy a completed review gate. Each trace outcomes object must byte-canonically hash and exactly equal the gate artifact observations.assertions object; free-form transcripts are non-authoritative and prohibited.",
     "repo_owned_replay_command": "npm ci && npm run capture:742:install && npm run capture:742 -- --port=8092",
+    "upstream_identity_rule": "Bind upstream route, configuration, release, asset SHA-256, and runtime SHA-256. Do not embed a mutable receipt-file SHA/byte count in the browser artifact: ES predeploy review is later written into that receipt, so such a field would be stale or cyclic. Pages separately hash-binds the final receipt through its build manifest and deployment attestation.",
     "boundaries": ["local browser or responsive emulation only", "no physical-device claim", "no VoiceOver or NVDA session claim", "no deployment claim"]
   },
   "extended_visual_fidelity": {
     "artifact_schema_version": "2.0.0",
     "binding_rule": "Each named semantic observation must embed the exact path, SHA-256, and byte count of its distinct OWNED_RENDER_ALLOWLIST artifact. Counts, unreferenced allowlist entries, separate boolean maps, and path-only lists cannot satisfy this gate.",
     "boundary_rule": "The observation must state that it contains no manufacturer geometry and is not factory steering or crab calibration.",
+    "forbidden_render_paths": ["docs/review/742/front-steering-limited-plan.png"],
     "render_observations": [
       {
         "semantic_id": "maximum_lift_level_attachment",
@@ -42,29 +44,29 @@
         "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible."
       },
       {
-        "semantic_id": "rigid_double_ended_steering_rack_and_bars",
+        "semantic_id": "through_rod_two_tie_bars_four_pivots",
         "path": "docs/review/742/steering-linkage-cutaway.png",
-        "claim": "Rigid double-ended steering racks, rods, bars, and wheel pivots are visible."
+        "claim": "One through-rod steering cylinder with two visible rod ends, two rigid tie bars, and four highlighted pivots is visible."
       },
       {
-        "semantic_id": "rear_steering_rack_bar_topology",
+        "semantic_id": "rear_through_rod_two_tie_bars_four_joints",
         "path": "docs/review/742/rear-steering-linkage.png",
-        "claim": "Rear axle rack, opposed rods, steering bars, and wheel pivots are visible."
+        "claim": "The visible REAR AXLE / FIXED THROUGH-ROD RACK label identifies the rear state; the through-rod rack, two rigid tie bars, and four highlighted joints are visible."
       },
       {
-        "semantic_id": "circle_four_wheel_icr_topology",
+        "semantic_id": "circle_headings_two_actual_icrs_scrub",
         "path": "docs/review/742/circle-steering-plan.png",
-        "claim": "Reconstructed four-wheel circle-steering topology and common-ICR evidence are visible."
+        "claim": "The visible CIRCLE label reports reconstructed headings FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg, TWO ACTUAL ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 93.466% — NOT FACTORY ACKERMANN; both ICR constructions are drawn."
       },
       {
-        "semantic_id": "crab_translated_rack_residual_toe_topology",
+        "semantic_id": "crab_headings_toe_diagnostics",
         "path": "docs/review/742/crab-steering-plan.png",
-        "claim": "Reconstructed translated-rack crab topology and measured residual-toe boundary are visible."
+        "claim": "The visible CRAB label reports reconstructed headings FL 55.000 / FR 54.914 / RL 54.914 / RR 55.000 deg, FULL-POSE TOE 0.086 deg, and DENSE MAX 0.753 deg."
       },
       {
-        "semantic_id": "front_only_limited_rack_neutral_rear_front_mode_icr",
-        "path": "docs/review/742/front-steering-limited-plan.png",
-        "claim": "Front-only limited-rack topology, neutral rear wheels, and reconstructed front-mode ICR spread are visible."
+        "semantic_id": "front_headings_rear_aligned_actual_icrs_scrub",
+        "path": "docs/review/742/front-steering-plan.png",
+        "claim": "The visible FRONT label reports reconstructed headings FL 55.000 / FR 54.914 deg, REAR HELD ALIGNED, ACTUAL FRONT ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 61.060% — NOT FACTORY ACKERMANN; the front ICR construction lines are drawn."
       },
       {
         "semantic_id": "rigid_boom_angle_sensor_crank_and_link",
@@ -78,9 +80,10 @@
       "viewports_css_px": [[1280, 720]],
       "screenshots_minimum": 1,
       "snapshots": ["stowed", "maximum_pose", "modal_open"],
-      "assertion_ids": ["load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "stalled_load_timeout"],
+      "assertion_ids": ["load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "terminal_failure_matrix"],
       "maximum_pose_reset_rule": "Press Reset View while the five controls remain at the recorded maximum pose; prove the pose-frame, desired, actual settled, base-max, and effective-max distances are coherent and that Reset View did not stow the mechanism.",
-      "stalled_load_rule": "Hold the exact 742 GLB request beyond the production 15-second timeout and prove terminal source load-timeout, focused assertive alert, inert app/interface, and disabled control-panel controls."
+      "steering_mode_rule": "With nonzero circle steering, request crab and prove the active mode remains circle with a visible center-required status. Center steering, then prove circle, crab, and limited front-only modes each activate before restoring the maximum-pose steering command.",
+      "terminal_failure_rule": "On loopback only, exercise the static bootstrap watchdog, accelerated production asset-timeout path, loader-start throw, unexpected runtime error, and unhandled rejection. Every case must record a non-null strictly changing boot/runtime RAF baseline, then exact terminal source, focused assertive alert, inert app/interface, disabled controls, and unchanged terminal/frame counters after 250 ms. Runtime-error and rejection cases must first prove changing showcase controls plus RAF count."
     },
     "mobile_browser_interaction": {
       "viewports_css_px": [[390, 844], [844, 390]],
@@ -109,7 +112,8 @@
         {"case": 1, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": true},
         {"case": 2, "basis": "distance-tie", "expectedVolume": "high-tie", "observedVolume": "high-tie", "pass": true},
         {"case": 3, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": true},
-        {"case": 4, "basis": "visible-surface", "expectedVolume": "front", "observedVolume": "front", "pass": true}
+        {"case": 4, "basis": "visible-surface", "expectedVolume": "front", "observedVolume": "front", "pass": true},
+        {"case": 5, "basis": "visible-surface", "expectedVolume": null, "observedVolume": null, "pass": true}
       ]
     },
     "performance_profile": {
@@ -117,25 +121,27 @@
       "screenshots_minimum": 3,
       "raw_visible_frame_intervals_minimum_per_viewport": 180,
       "local_thresholds": {"p95_ms_maximum": 50, "visible_stalls_gte_250ms": 0},
-      "summary_rule": "Nearest-rank p95 and worst value rounded to 0.001 ms must be recomputed from the committed raw interval arrays."
+      "summary_rule": "Nearest-rank p95 and worst value rounded to 0.001 ms must be recomputed from the committed raw interval arrays. Before each screenshot, expose a visible captured-window label whose profile, sample count, p95, worst, and >=250 ms stall count exactly equal that same structured summary; a separate rolling diagnostic cannot stand in for the bound window."
     },
     "600s_browser_regression": {
       "route": "/",
       "viewports_css_px": [[1280, 720], [390, 844]],
       "screenshots_minimum": 2,
-      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures"],
+      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures", "screenshot_framing"],
       "reduced_motion_rule": "Capture a live no-preference to reduce to no-preference media transition while autonomy is moving. Require motion to stop immediately, manual controls to remain enabled, and autonomy not to resume when the preference returns.",
-      "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and stable animation state."
+      "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must record a non-null changing boot/runtime RAF baseline, then reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and unchanged terminal/frame counters after 250 ms.",
+      "screenshot_framing_rule": "Retain raw interaction traces, then stow and Reset View before desktop/mobile screenshots; prove settled whole-machine camera distance and collapse mobile controls."
     },
     "es1930m_browser_regression": {
       "route": "/es1930m/",
       "required_release": "1.0.4",
       "viewports_css_px": [[1280, 720], [390, 844]],
-      "screenshots_minimum": 2,
-      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "maximum_pose_controls", "reduced_motion", "fatal_failures"],
+      "screenshots_minimum": 3,
+      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "maximum_pose_controls", "reduced_motion", "fatal_failures", "screenshot_framing"],
       "maximum_pose_rule": "Capture full lift, full deck extension, and both steering extrema with explicit DOM aria-valuetext for every ES slider and a dedicated maximum-pose screenshot.",
       "reduced_motion_rule": "Capture a live no-preference to reduce to no-preference media transition while autonomy is moving. Require motion to stop immediately, manual controls to remain enabled, and autonomy not to resume when the preference returns.",
-      "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and stable animation state."
+      "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must record a non-null changing boot/runtime RAF baseline, then reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and unchanged terminal/frame counters after 250 ms.",
+      "screenshot_framing_rule": "Keep the dedicated ES maximum-pose screenshot, but retain raw interaction traces and stow/Reset View before desktop/mobile overview screenshots; prove settled whole-machine camera distance and collapse mobile controls."
     }
   }
 }

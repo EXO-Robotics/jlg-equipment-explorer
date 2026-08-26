@@ -74,29 +74,29 @@ EXTENDED_VISUAL_RENDER_CONTRACT = (
         "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible.",
     },
     {
-        "semantic_id": "rigid_double_ended_steering_rack_and_bars",
+        "semantic_id": "through_rod_two_tie_bars_four_pivots",
         "path": "docs/review/742/steering-linkage-cutaway.png",
-        "claim": "Rigid double-ended steering racks, rods, bars, and wheel pivots are visible.",
+        "claim": "One through-rod steering cylinder with two visible rod ends, two rigid tie bars, and four highlighted pivots is visible.",
     },
     {
-        "semantic_id": "rear_steering_rack_bar_topology",
+        "semantic_id": "rear_through_rod_two_tie_bars_four_joints",
         "path": "docs/review/742/rear-steering-linkage.png",
-        "claim": "Rear axle rack, opposed rods, steering bars, and wheel pivots are visible.",
+        "claim": "The visible REAR AXLE / FIXED THROUGH-ROD RACK label identifies the rear state; the through-rod rack, two rigid tie bars, and four highlighted joints are visible.",
     },
     {
-        "semantic_id": "circle_four_wheel_icr_topology",
+        "semantic_id": "circle_headings_two_actual_icrs_scrub",
         "path": "docs/review/742/circle-steering-plan.png",
-        "claim": "Reconstructed four-wheel circle-steering topology and common-ICR evidence are visible.",
+        "claim": "The visible CIRCLE label reports reconstructed headings FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg, TWO ACTUAL ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 93.466% — NOT FACTORY ACKERMANN; both ICR constructions are drawn.",
     },
     {
-        "semantic_id": "crab_translated_rack_residual_toe_topology",
+        "semantic_id": "crab_headings_toe_diagnostics",
         "path": "docs/review/742/crab-steering-plan.png",
-        "claim": "Reconstructed translated-rack crab topology and measured residual-toe boundary are visible.",
+        "claim": "The visible CRAB label reports reconstructed headings FL 55.000 / FR 54.914 / RL 54.914 / RR 55.000 deg, FULL-POSE TOE 0.086 deg, and DENSE MAX 0.753 deg.",
     },
     {
-        "semantic_id": "front_only_limited_rack_neutral_rear_front_mode_icr",
-        "path": "docs/review/742/front-steering-limited-plan.png",
-        "claim": "Front-only limited-rack topology, neutral rear wheels, and reconstructed front-mode ICR spread are visible.",
+        "semantic_id": "front_headings_rear_aligned_actual_icrs_scrub",
+        "path": "docs/review/742/front-steering-plan.png",
+        "claim": "The visible FRONT label reports reconstructed headings FL 55.000 / FR 54.914 deg, REAR HELD ALIGNED, ACTUAL FRONT ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 61.060% — NOT FACTORY ACKERMANN; the front ICR construction lines are drawn.",
     },
     {
         "semantic_id": "rigid_boom_angle_sensor_crank_and_link",
@@ -104,6 +104,9 @@ EXTENDED_VISUAL_RENDER_CONTRACT = (
         "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
     },
 )
+FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS = {
+    "docs/review/742/front-steering-limited-plan.png",
+}
 SEPARATE_VISUAL_GATE_PATHS = {
     "docs/review/742/stowed-front-left.png",
     "docs/review/742/cab-close.png",
@@ -139,11 +142,22 @@ def read_owned_render_allowlist_records() -> dict[str, dict]:
         render_path = record.get("path")
         if not isinstance(render_path, str) or render_path in records:
             raise RuntimeError("742 owned-render allowlist path identity drift")
+        if render_path in FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS:
+            raise RuntimeError(f"742 forbidden superseded render is allowlisted: {render_path}")
         records[render_path] = record
     return records
 
 
 def validate_owned_render_semantic_coverage(allowed_png: dict[str, dict]) -> None:
+    present_forbidden = sorted(FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS & set(allowed_png))
+    existing_forbidden = sorted(
+        path for path in FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS if (ROOT / path).exists()
+    )
+    if present_forbidden or existing_forbidden:
+        raise RuntimeError(
+            "742 superseded front-steering render is forbidden: "
+            f"allowlisted={present_forbidden}, present={existing_forbidden}"
+        )
     expected_paths = SEPARATE_VISUAL_GATE_PATHS | {
         contract["path"] for contract in EXTENDED_VISUAL_RENDER_CONTRACT
     }
@@ -180,7 +194,9 @@ def _expected_upstream_identity(model: str) -> dict:
     }
 
 
-def _validate_extended_visual_semantics(artifact: dict, allowed_png: dict) -> None:
+def _validate_extended_visual_semantics(
+    artifact: dict, allowed_png: dict, *, expected_observed: bool = True
+) -> None:
     fields = {
         "schema_version", "kind", "gate", "configuration_id", "candidate_tree_sha256",
         "reviewed_source_commit", "environment", "render_observations", "boundary",
@@ -202,9 +218,14 @@ def _validate_extended_visual_semantics(artifact: dict, allowed_png: dict) -> No
             raise RuntimeError(f"742 extended visual semantic record schema drift at index {index}")
         if observation["semantic_id"] != expected["semantic_id"] or observation["claim"] != expected["claim"]:
             raise RuntimeError(f"742 extended visual semantic claim drift: {expected['semantic_id']}")
-        if observation["observed"] is not True:
-            raise RuntimeError(f"742 extended visual semantic claim is not observed: {expected['semantic_id']}")
+        if observation["observed"] is not expected_observed:
+            state = "observed" if expected_observed else "pending"
+            raise RuntimeError(
+                f"742 extended visual semantic claim has wrong {state} state: {expected['semantic_id']}"
+            )
         render_path = expected["path"]
+        if render_path in FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS:
+            raise RuntimeError(f"742 superseded front-steering render is forbidden: {render_path}")
         if render_path in seen_paths or expected["semantic_id"] in seen_ids:
             raise RuntimeError("742 extended visual semantic records must use distinct IDs and artifacts")
         seen_ids.add(expected["semantic_id"])
@@ -241,7 +262,7 @@ def _validate_extended_visual_observation(
 
 def validate_pending_extended_visual_observation(path: Path, allowed_png: dict) -> None:
     artifact = json.loads(path.read_text(encoding="utf-8"))
-    _validate_extended_visual_semantics(artifact, allowed_png)
+    _validate_extended_visual_semantics(artifact, allowed_png, expected_observed=False)
     if artifact.get("candidate_tree_sha256") != "PENDING" or artifact.get("reviewed_source_commit") != "PENDING":
         raise RuntimeError("742 pending extended-visual record is already bound")
     if artifact["environment"]["os"] is not None:

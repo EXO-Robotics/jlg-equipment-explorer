@@ -11,9 +11,12 @@ import unittest
 from validate_742_review import (
     EXPECTED_ID,
     EXTENDED_VISUAL_RENDER_CONTRACT,
+    FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS,
     ROOT,
     SEPARATE_VISUAL_GATE_PATHS,
     _validate_extended_visual_semantics,
+    read_owned_render_allowlist_records,
+    validate_pending_extended_visual_observation,
     validate_owned_render_semantic_coverage,
 )
 
@@ -80,6 +83,37 @@ class ExtendedVisualSemanticsTests(unittest.TestCase):
             requirements["extended_visual_fidelity"]["render_observations"],
             list(EXTENDED_VISUAL_RENDER_CONTRACT),
         )
+        self.assertEqual(
+            set(requirements["extended_visual_fidelity"]["forbidden_render_paths"]),
+            FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS,
+        )
+
+    def test_source_correct_front_plan_is_required_and_limited_plan_is_forbidden(self) -> None:
+        contract_paths = {item["path"] for item in EXTENDED_VISUAL_RENDER_CONTRACT}
+        self.assertIn("docs/review/742/front-steering-plan.png", contract_paths)
+        self.assertTrue(FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS.isdisjoint(contract_paths))
+        self.assertFalse(any((ROOT / path).exists() for path in FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS))
+
+    def test_superseded_front_plan_allowlist_entry_is_rejected(self) -> None:
+        _, allowed = fixture()
+        for index, path in enumerate(sorted(SEPARATE_VISUAL_GATE_PATHS), start=20):
+            allowed[path] = {"path": path, "sha256": f"{index:02x}" * 32, "bytes": index}
+        forbidden = next(iter(FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS))
+        allowed[forbidden] = {"path": forbidden, "sha256": "ff" * 32, "bytes": 1}
+        with self.assertRaises(RuntimeError):
+            validate_owned_render_semantic_coverage(allowed)
+
+    def test_committed_pending_template_is_structural_not_observed_evidence(self) -> None:
+        allowed = read_owned_render_allowlist_records()
+        validate_owned_render_semantic_coverage(allowed)
+        validate_pending_extended_visual_observation(
+            ROOT / "docs/review/742/extended-visual-fidelity.json", allowed
+        )
+
+    def test_pending_state_rejects_an_observed_true_claim(self) -> None:
+        record, allowed = fixture()
+        with self.assertRaises(RuntimeError):
+            _validate_extended_visual_semantics(record, allowed, expected_observed=False)
 
     def test_missing_circle_render_is_rejected(self) -> None:
         record, allowed = fixture()
@@ -99,6 +133,18 @@ class ExtendedVisualSemanticsTests(unittest.TestCase):
     def test_front_only_render_must_be_observed(self) -> None:
         record, allowed = fixture()
         record["render_observations"][8]["observed"] = False
+        self.assert_rejected(record, allowed)
+
+    def test_front_claim_cannot_omit_alignment_or_scrub_diagnostics(self) -> None:
+        record, allowed = fixture()
+        record["render_observations"][8]["claim"] = (
+            "The visible FRONT label reports reconstructed front steering."
+        )
+        self.assert_rejected(record, allowed)
+
+    def test_crab_claim_cannot_invent_an_icr_construction(self) -> None:
+        record, allowed = fixture()
+        record["render_observations"][7]["claim"] += " An actual ICR construction is visible."
         self.assert_rejected(record, allowed)
 
     def test_circle_claim_cannot_be_replaced_by_generic_visibility(self) -> None:
