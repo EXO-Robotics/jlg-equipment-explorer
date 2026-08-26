@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.5";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.5";
-import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.5";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.6";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.6";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.6";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -89,6 +89,7 @@ function showTerminalError(error, message, source = "runtime-failed") {
 
 addEventListener("error", (event) => showTerminalError(event.error, "The ES1930M viewer stopped after an unexpected runtime error. No substitute was shown."));
 addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The ES1930M viewer stopped after an unexpected runtime error. No substitute was shown."));
+document.body.dataset.viewerRuntimeActive = "true";
 
 function rendererOrNull() {
   try {
@@ -141,6 +142,8 @@ function updateCamera(delta = 1) {
   const ease = reducedMotion ? 1 : Math.min(1, delta * 7);
   orbit.target.lerp(orbit.desiredTarget, ease);
   orbit.distance = THREE.MathUtils.lerp(orbit.distance, orbit.desiredDistance, ease);
+  document.body.dataset.orbitCameraDistanceM = orbit.distance.toFixed(3);
+  document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(3);
   const sinPolar = Math.sin(orbit.polar);
   camera.position.set(
     orbit.target.x + orbit.distance * sinPolar * Math.cos(orbit.azimuth),
@@ -513,6 +516,7 @@ try {
     clearTimeout(assetLoadTimeout);
     if (terminalFailure) return;
     try {
+      if (globalThis.__EQUIPMENT_EXPLORER_TEST_FAULT__ === "asset-contract") throw new Error("Injected ES1930M asset-contract failure");
       const validation = machine.validateAsset(gltf.scene);
       if (!validation.ok) throw new Error(`${machine.identity.model} asset validation failed: ${validation.missing.join(", ")}`);
       model = gltf.scene;

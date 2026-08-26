@@ -11,6 +11,7 @@ from datetime import date
 from pathlib import Path
 
 from validate_es1930m_glb import index_nodes, load_glb, visible_bounds
+from es1930m_review_binding import PREDEPLOY_GATES, validate_review_binding
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,15 +79,29 @@ def main():
     reviews = json.loads(FILES["review_evidence"].read_text(encoding="utf-8"))
     current_runtime = runtime_digest()
     current_asset = digest(FILES["asset"])
+    receipt_identity = {
+        "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+        "release": "1.0.4",
+        "files": {"asset": {"sha256": current_asset}},
+        "runtime": {"sha256": current_runtime},
+    }
+    receipt_600s = json.loads((ROOT / "assets/models/600s.asset-receipt.json").read_text(encoding="utf-8"))
+    binding_error = None
+    try:
+        binding_report = validate_review_binding(reviews, receipt=receipt_identity, receipt_600s=receipt_600s)
+    except (KeyError, TypeError, ValueError, RuntimeError) as error:
+        binding_report = None
+        binding_error = str(error)
     review_flags = {}
     for gate, record in reviews.get("gates", {}).items():
-        review_flags[gate] = bool(
+        exact_record = bool(
             record.get("status") == "pass"
             and record.get("reviewed_runtime_sha256") == current_runtime
             and record.get("reviewed_asset_sha256") == current_asset
             and str(record.get("method", "")).strip()
             and str(record.get("evidence", "")).strip()
         )
+        review_flags[gate] = exact_record and (gate == "deployed_pages_reviewed" or binding_report is not None)
     release_ready = bool(review_flags) and all(review_flags.values())
     receipt = {
         "schema_version": "1.0.0",
@@ -124,6 +139,11 @@ def main():
             "collision_proxy_status": kinematics["collision_proxy_status"],
         },
         "review_flags": review_flags,
+        "review_binding": {
+            "status": "exact_executable_predeploy_evidence" if binding_report is not None else "pending_or_stale",
+            "predeploy_gates": binding_report["predeploy_gates"] if binding_report is not None else 0,
+            "error": binding_error,
+        },
         "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority."
     }
     RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")

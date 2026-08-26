@@ -52,7 +52,7 @@ def main():
         'controlsBody.inert = !expanded', 'query.get("reduce") === "1"',
         'event.key === "Escape"', 'event.key !== "Tab"', 'modalBackground.forEach',
         'setInert(element, true)', 'setInert(inspector, false)', 'restoreTarget.focus',
-        'setAttribute("aria-valuetext", value)', 'runSelectionVolumeSelfTest()',
+        'setAttribute("aria-valuetext", ariaValue)', 'runSelectionVolumeSelfTest()',
         'raycaster.intersectObjects(selectionVolumes, false)', 'hit.castShadow = false',
         'SELECTION_TIE_DISTANCE_M', 'nearestHitPerVolume', 'orderedSelectionIntersections',
         'nearestVisibleComponentIntersection', 'resolveSelectionIntersection', 'frontmost-rendered-component-then-nearest-proxy',

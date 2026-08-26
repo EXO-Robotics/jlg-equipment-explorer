@@ -7,8 +7,8 @@
   <title>ES1930M Interactive Equipment Study</title>
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="preload" href="../assets/models/es1930m.glb?v=c128b99ceb3a" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.0.5">
-  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.5">
+  <link rel="stylesheet" href="../viewer.css?v=1.0.6">
+  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.6">
   <script type="importmap">
     {
       "imports": {
@@ -32,7 +32,7 @@
   <main class="interface">
     <header class="topbar">
       <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
-      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.5</div>
+      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.6</div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 
@@ -98,7 +98,28 @@
     <dl id="inspector-facts"><div><dt>Model</dt><dd>ES1930M standard ANSI/US configuration</dd></div><div><dt>Primary set</dt><dd>Parts 3122602400 · Service 3122602300 · Operation 3122602200</dd></div><div><dt>Boundary</dt><dd>Not a service, training, fabrication, stability, or safety reference</dd></div></dl>
   </aside>
 
-  <script>window.__showcaseBootAt = performance.now();</script>
-  <script type="module" src="../viewer/runtime.js?v=1.0.5"></script>
+  <script>
+    window.__showcaseBootAt = performance.now();
+    window.__showES1930MBootstrapFailure = function (message, source = "module-load-failed") {
+      if (document.body.dataset.viewerTerminal === "true") return;
+      const failure = document.querySelector("#error");
+      document.body.classList.add("viewer-terminal-error");
+      document.body.dataset.viewerTerminal = "true";
+      document.body.dataset.machineSource = source;
+      document.body.dataset.runtimeErrorCount = "1";
+      document.querySelector("#loader").hidden = true;
+      document.querySelector("#error-copy").textContent = message;
+      failure.hidden = false;
+      for (const selector of ["#app", ".interface", "#inspector", "#machine-controls-body"]) document.querySelector(selector)?.setAttribute("inert", "");
+      document.querySelector(".control-panel")?.setAttribute("aria-disabled", "true");
+      document.querySelectorAll(".interface button, .interface input").forEach((control) => { control.disabled = true; });
+      failure.focus({ preventScroll: true });
+    };
+    window.setTimeout(() => {
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      window.__showES1930MBootstrapFailure("The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
+    }, 8000);
+  </script>
+  <script type="module" src="../viewer/runtime.js?v=1.0.6" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__showES1930MBootstrapFailure('The ES1930M rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

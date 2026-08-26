@@ -6,14 +6,14 @@
   <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG 742 telehandler.">
   <title>742 Interactive Telehandler Study</title>
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
-  <link rel="preload" href="../assets/models/742.glb?v=4ac5a372af14" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="preload" href="../assets/models/742.glb?v=fefe033189b9" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="../viewer.css?v=1.1.5">
-  <link rel="stylesheet" href="../viewer/742.css?v=1.6.1">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.6.2">
   <script type="importmap">
     {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
   </script>
 </head>
-<body data-machine="742" data-runtime-release="1.6.1">
+<body data-machine="742" data-runtime-release="1.6.2">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
   <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
 
@@ -59,7 +59,7 @@
         </div>
         <label class="control-row compact-control"><span>Frame level</span><output id="level-value">Level</output><input id="level-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Frame level" aria-describedby="motion-boundary"></label>
         <div class="action-row"><button class="primary-action" id="showcase" type="button">Run showcase</button><button class="secondary-action" id="stow" type="button">Stow</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
-        <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Not operational, load, stability, service, or safety data.</p>
+        <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Crab/front are reconstructed 15% rack studies; displayed wheel headings and crab residual are not factory controller calibration. Not operational, load, stability, service, or safety data.</p>
         <p class="sr-only" id="reduced-motion-note">The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.</p>
       </div>
     </section>
@@ -107,6 +107,6 @@
       failure.focus({ preventScroll: true });
     };
   </script>
-  <script type="module" src="../viewer/742-runtime.js?v=1.6.1" onerror="window.__show742ModuleFailure()"></script>
+  <script type="module" src="../viewer/742-runtime.js?v=1.6.2" onerror="window.__show742ModuleFailure()"></script>
 </body>
 </html>

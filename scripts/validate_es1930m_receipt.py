@@ -8,6 +8,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from es1930m_review_binding import PREDEPLOY_GATES, validate_review_binding
+
 
 ROOT = Path(__file__).resolve().parents[1]
 RECEIPT_PATH = ROOT / "assets/models/es1930m.asset-receipt.json"
@@ -45,8 +47,24 @@ def main():
     if runtime_digest(runtime_paths) != receipt["runtime"]["sha256"]:
         raise RuntimeError("Receipt runtime drift")
     flags = receipt.get("review_flags") or {}
+    review = json.loads((ROOT / "docs/research/es1930m/REVIEW_EVIDENCE.json").read_text(encoding="utf-8"))
+    receipt_600s = json.loads((ROOT / "assets/models/600s.asset-receipt.json").read_text(encoding="utf-8"))
+    binding_report = None
+    binding_error = None
+    try:
+        binding_report = validate_review_binding(review, receipt=receipt, receipt_600s=receipt_600s)
+    except (KeyError, TypeError, ValueError, RuntimeError) as error:
+        binding_error = str(error)
+    claimed_binding = receipt.get("review_binding") or {}
+    expected_binding_status = "exact_executable_predeploy_evidence" if binding_report is not None else "pending_or_stale"
+    if claimed_binding.get("status") != expected_binding_status:
+        raise RuntimeError("Receipt executable review-binding status drift")
+    if binding_report is not None and set(PREDEPLOY_GATES) - {name for name, value in flags.items() if value is True}:
+        raise RuntimeError("Exact executable binding did not propagate to every predeploy receipt gate")
     incomplete = sorted(name for name, value in flags.items() if value is not True)
     if args.require_predeploy:
+        if binding_report is None:
+            raise RuntimeError(f"Exact executable predeployment binding is unavailable: {binding_error}")
         predeploy_incomplete = sorted(name for name in incomplete if name != "deployed_pages_reviewed")
         if predeploy_incomplete:
             raise RuntimeError(f"Predeployment review gates incomplete: {predeploy_incomplete}")

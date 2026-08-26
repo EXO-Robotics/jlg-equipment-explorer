@@ -18,6 +18,10 @@ requireTokens(runtime, [
   "nearestVisibleComponentIntersection", "resolveSelectionIntersection(semanticHits, visibleSurfaceHit)",
   "frontmost-rendered-component-then-nearest-proxy", "selectionOverlapOutcomes", "selectionFixtureOutcomes",
   "setProgrammaticViewDistance", "orbitEffectiveMaxDistanceM", "effectiveMaxDistance",
+  "const interactionMinDistance = Math.max(distanceLimits.minDistance, 4.4)",
+  "__EQUIPMENT_EXPLORER_EVIDENCE__", "frameComponent(component)",
+  "return ordered.find((hit) => hit.object.userData.component === visibleSurfaceHit.semanticComponent) || null",
+  "solved.wheelAngles", "crabResidualDeg", "15 percent reconstructed rack command",
   "showTerminalError", "identity-failed", "contract-failed", "load-failed", "loader-start-failed",
   "const ASSET_LOAD_TIMEOUT_MS = 15000", "load-timeout", "clearTimeout(loadTimeout)",
   "controlPanel.querySelectorAll(\"button, input\")", "if (terminalFailure) return;",
@@ -54,8 +58,8 @@ const dataset = {};
 const runProductionFixtures = new Function("document", `${runtime.slice(selectionStart, selectionEnd)}\n${runtime.slice(fixturesStart, fixturesEnd)}\nreturn runSelectionOrderingFixtures();`);
 if (!runProductionFixtures({ body: { dataset } })) throw new Error("Production selection fixtures failed");
 const fixtureOutcomes = JSON.parse(dataset.selectionFixtureOutcomes);
-const expectedVolumes = ["front", "high-tie", "front", "front"];
-if (dataset.selectionFixtureCases !== "4/4" || fixtureOutcomes.length !== expectedVolumes.length) {
+const expectedVolumes = ["front", "high-tie", "front", "front", null];
+if (dataset.selectionFixtureCases !== "5/5" || fixtureOutcomes.length !== expectedVolumes.length) {
   throw new Error("Selection fixture result count drifted");
 }
 fixtureOutcomes.forEach((outcome, index) => {
@@ -67,7 +71,7 @@ fixtureOutcomes.forEach((outcome, index) => {
 const baseMax = 24;
 const absoluteMax = 72;
 const poseDistance = 37.73;
-const safeDistance = Math.min(Math.max(poseDistance, 2.2), absoluteMax / 1.05);
+const safeDistance = Math.min(Math.max(poseDistance, 4.4), absoluteMax / 1.05);
 const effectiveMax = Math.min(absoluteMax, Math.max(baseMax, safeDistance * 1.05));
 const nextZoomOut = Math.min(effectiveMax, safeDistance * 1.1);
 if (effectiveMax < safeDistance || nextZoomOut < safeDistance) throw new Error("Next zoom gesture would snap inside the posed reset distance");

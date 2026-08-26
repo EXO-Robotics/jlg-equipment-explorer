@@ -7,7 +7,7 @@
   <title>600S Interactive Equipment Study</title>
   <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="preload" href="assets/models/600s.glb?v=64b969d1b24f" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="viewer.css?v=1.1.10">
+  <link rel="stylesheet" href="viewer.css?v=1.1.11">
   <style>
     @media (max-height: 670px) and (max-width: 800px) {
       .compact-control { display: grid; }
@@ -34,10 +34,10 @@
     <small id="loader-detail">Preparing the interactive viewer</small>
   </div>
 
-  <div class="error" id="error" hidden>
+  <div class="error" id="error" role="alert" aria-live="assertive" tabindex="-1" hidden>
     <div>
-      <strong>WebGL is unavailable.</strong>
-      <p>This interactive study needs a browser with WebGL enabled.</p>
+      <strong>Viewer unavailable.</strong>
+      <p id="error-copy">This interactive study needs a browser with WebGL enabled.</p>
     </div>
   </div>
 
@@ -138,14 +138,26 @@
 
   <script>
     window.__showcaseBootAt = performance.now();
+    window.__show600BootstrapFailure = function (message, source = "module-load-failed") {
+      if (document.body.dataset.viewerTerminal === "true") return;
+      const failure = document.querySelector("#error");
+      document.body.classList.add("viewer-terminal-error");
+      document.body.dataset.viewerTerminal = "true";
+      document.body.dataset.machineSource = source;
+      document.body.dataset.runtimeErrorCount = "1";
+      document.querySelector("#loader").hidden = true;
+      document.querySelector("#error-copy").textContent = message;
+      failure.hidden = false;
+      for (const selector of ["#app", ".interface", "#inspector", "#machine-controls-body"]) document.querySelector(selector)?.setAttribute("inert", "");
+      document.querySelector(".control-panel")?.setAttribute("aria-disabled", "true");
+      document.querySelectorAll(".interface button, .interface input").forEach((control) => { control.disabled = true; });
+      failure.focus({ preventScroll: true });
+    };
     window.setTimeout(() => {
-      if (document.body.dataset.viewerStarted) return;
-      const status = document.querySelector("#loader-status");
-      const detail = document.querySelector("#loader-detail");
-      if (status) status.textContent = "Rendering runtime delayed";
-      if (detail) detail.textContent = "The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.";
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      window.__show600BootstrapFailure("The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, 8000);
   </script>
-  <script type="module" src="viewer.js?v=1.1.10"></script>
+  <script type="module" src="viewer.js?v=1.1.11" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__show600BootstrapFailure('The 600S rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.6";
 
-const ROUTE_RELEASE = "1.6.1";
+const ROUTE_RELEASE = "1.6.2";
 const ASSET_LOAD_TIMEOUT_MS = 15000;
 const machine = JLG742_MACHINE;
 const query = new URLSearchParams(location.search);
@@ -183,6 +183,7 @@ function adaptView(view, name = "default") {
 }
 const defaultView = adaptView(machine.componentView("default", state, compact), "default");
 const distanceLimits = machine.orbitLimits || { minDistance: 1.6, maxDistance: 11 };
+const interactionMinDistance = Math.max(distanceLimits.minDistance, 4.4);
 const absoluteMaxDistance = 72;
 let effectiveMaxDistance = Math.min(absoluteMaxDistance, Math.max(distanceLimits.maxDistance, defaultView.distance * 1.05));
 const orbit = {
@@ -196,10 +197,11 @@ const orbit = {
   velocityPolar: 0,
 };
 function setProgrammaticViewDistance(distance) {
-  const safeDistance = THREE.MathUtils.clamp(distance, distanceLimits.minDistance, absoluteMaxDistance / 1.05);
+  const safeDistance = THREE.MathUtils.clamp(distance, interactionMinDistance, absoluteMaxDistance / 1.05);
   effectiveMaxDistance = Math.min(absoluteMaxDistance, Math.max(distanceLimits.maxDistance, safeDistance * 1.05));
   orbit.desiredDistance = safeDistance;
   document.body.dataset.orbitBaseMaxDistanceM = distanceLimits.maxDistance.toFixed(2);
+  document.body.dataset.orbitMinDistanceM = interactionMinDistance.toFixed(2);
   document.body.dataset.orbitEffectiveMaxDistanceM = effectiveMaxDistance.toFixed(2);
   document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
 }
@@ -223,7 +225,7 @@ updateCamera();
 
 renderer.domElement.addEventListener("wheel", (event) => {
   event.preventDefault();
-  orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), distanceLimits.minDistance, effectiveMaxDistance);
+  orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), interactionMinDistance, effectiveMaxDistance);
   document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
 }, { passive: false });
 
@@ -259,7 +261,7 @@ renderer.domElement.addEventListener("pointermove", (event) => {
   if (pointers.size >= 2) {
     const [a, b] = [...pointers.values()];
     const distance = Math.hypot(a.x - b.x, a.y - b.y) || 1;
-    orbit.desiredDistance = THREE.MathUtils.clamp(pinchStartOrbitDistance * pinchStartDistance / distance, distanceLimits.minDistance, effectiveMaxDistance);
+    orbit.desiredDistance = THREE.MathUtils.clamp(pinchStartOrbitDistance * pinchStartDistance / distance, interactionMinDistance, effectiveMaxDistance);
     document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
     return;
   }
@@ -333,7 +335,7 @@ function nearestVisibleComponentIntersection(activeRaycaster) {
 function resolveSelectionIntersection(intersections, visibleSurfaceHit = null) {
   const ordered = orderedSelectionIntersections(intersections);
   if (!visibleSurfaceHit) return ordered[0] || null;
-  return ordered.find((hit) => hit.object.userData.component === visibleSurfaceHit.semanticComponent) || ordered[0] || null;
+  return ordered.find((hit) => hit.object.userData.component === visibleSurfaceHit.semanticComponent) || null;
 }
 function prepareInteractionVolumes(root) {
   if (new Set(machine.interactionVolumes).size !== machine.interactionVolumes.length) throw new Error("Duplicate semantic selection-volume name");
@@ -368,12 +370,13 @@ function runSelectionOrderingFixtures() {
     { intersections: [{ object: lowTie, distance: 1 }, { object: highTie, distance: 1.01 }], visible: null, expected: "high-tie" },
     { intersections: [{ object: front, distance: 1 }, { object: front, distance: 1.8 }, { object: rear, distance: 2 }], visible: null, expected: "front" },
     { intersections: [{ object: rear, distance: 0.8 }, { object: front, distance: 1 }], visible: { semanticComponent: "front" }, expected: "front" },
+    { intersections: [{ object: rear, distance: 0.8 }], visible: { semanticComponent: "front" }, expected: null },
   ];
   const outcomes = fixtures.map((fixture, index) => {
     const observed = resolveSelectionIntersection(fixture.intersections, fixture.visible);
     const minimumDistance = Math.min(...fixture.intersections.map((candidate) => candidate.distance));
     const tieCandidateCount = fixture.intersections.filter((hit) => hit.distance <= minimumDistance + SELECTION_TIE_DISTANCE_M).length;
-    const expectedObject = fixture.intersections.find((hit) => hit.object.name === fixture.expected)?.object;
+    const expectedObject = fixture.expected ? fixture.intersections.find((hit) => hit.object.name === fixture.expected)?.object : null;
     return Object.freeze({
       case: index + 1,
       hits: fixture.intersections.map((hit) => Object.freeze({ volume: hit.object.name, component: hit.object.userData.component, distanceM: hit.distance, priority: hit.object.userData.selectionPriority })),
@@ -383,7 +386,7 @@ function runSelectionOrderingFixtures() {
       observedComponent: observed?.object?.userData.component || null,
       expectedVolume: fixture.expected,
       observedVolume: observed?.object?.name || null,
-      pass: observed?.object?.name === fixture.expected,
+      pass: (observed?.object?.name || null) === fixture.expected,
     });
   });
   const passed = outcomes.filter((outcome) => outcome.pass).length;
@@ -535,20 +538,47 @@ function scheduleMotionAnnouncement(message) {
   clearTimeout(motionAnnouncementTimer);
   motionAnnouncementTimer = setTimeout(() => announceMotion(message), 350);
 }
-function setControlOutputs() {
+function setControlOutputs(solved = machine.solveState(state)) {
   const presentation = machine.presentState(state);
   for (const control of machine.controls) {
-    const value = presentation.outputs[control.id];
+    let value = presentation.outputs[control.id];
+    let ariaValue = value;
+    if (control.id === "steer") {
+      const degrees = Object.fromEntries(Object.entries(solved.wheelAngles).map(([wheel, radians]) => [wheel, THREE.MathUtils.radToDeg(radians)]));
+      const magnitudes = Object.values(degrees).map(Math.abs);
+      const maximum = Math.max(...magnitudes);
+      const residual = Math.max(...magnitudes) - Math.min(...magnitudes);
+      const direction = state.steer < 0 ? "left" : "right";
+      const shortDirection = state.steer < 0 ? "L" : "R";
+      if (Math.abs(state.steer) < 0.01) {
+        value = "Center";
+        ariaValue = "All wheel headings centered";
+      } else if (state.steerMode === "circle") {
+        value = `${maximum.toFixed(1)}° ${shortDirection} inner`;
+        ariaValue = `Circle steer ${direction}; actual wheel headings FL ${degrees.FL.toFixed(1)} degrees, FR ${degrees.FR.toFixed(1)} degrees, RL ${degrees.RL.toFixed(1)} degrees, RR ${degrees.RR.toFixed(1)} degrees; published service steering limit 55 degrees`;
+      } else if (state.steerMode === "crab") {
+        value = `${maximum.toFixed(1)}° ${shortDirection} · crab approx`;
+        ariaValue = `Reconstructed crab steer ${direction}; maximum actual wheel heading ${maximum.toFixed(1)} degrees with ${residual.toFixed(1)} degree wheel-heading residual; 15 percent reconstructed rack command, not factory controller calibration`;
+      } else {
+        value = `${maximum.toFixed(1)}° ${shortDirection} front · approx`;
+        ariaValue = `Reconstructed front steer ${direction}; maximum actual front wheel heading ${maximum.toFixed(1)} degrees and rear wheels centered; 15 percent reconstructed rack command, not factory controller calibration`;
+      }
+      document.body.dataset.wheelAnglesDeg = Object.entries(degrees).map(([wheel, angle]) => `${wheel}:${angle.toFixed(3)}`).join(",");
+      document.body.dataset.crabResidualDeg = residual.toFixed(3);
+    }
     document.querySelector(`#${control.outputId}`).value = value;
-    document.querySelector(`#${control.inputId}`).setAttribute("aria-valuetext", value);
+    document.querySelector(`#${control.inputId}`).setAttribute("aria-valuetext", ariaValue);
   }
   document.body.dataset.zone = presentation.zone;
-  motionStatus.value = presentation.status;
+  motionStatus.value = state.steerMode === "crab" && Math.abs(state.steer) >= 0.01
+    ? `${presentation.status} · reconstructed wheel spread ${document.body.dataset.crabResidualDeg}°`
+    : presentation.status;
   return presentation;
 }
 function applyControls() {
-  if (rig) machine.applyState(rig, machine.solveState(state));
-  return setControlOutputs();
+  const solved = machine.solveState(state);
+  if (rig) machine.applyState(rig, solved);
+  return setControlOutputs(solved);
 }
 const posedBounds = new THREE.Box3();
 const meshBounds = new THREE.Box3();
@@ -586,7 +616,7 @@ function framedPosedModelView(component = null) {
   viewUp.crossVectors(viewDirection, viewRight).normalize();
   const tanHalfY = Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
   const tanHalfX = tanHalfY * camera.aspect;
-  let requiredDistance = distanceLimits.minDistance;
+  let requiredDistance = interactionMinDistance;
   for (const x of [posedBounds.min.x, posedBounds.max.x]) for (const y of [posedBounds.min.y, posedBounds.max.y]) for (const z of [posedBounds.min.z, posedBounds.max.z]) {
     corner.set(x, y, z);
     relativeCorner.copy(corner).sub(posedCenter);
@@ -700,6 +730,21 @@ function resetView() {
   focusCamera("default");
   announceMotion("View reset to frame the current machine pose.");
 }
+globalThis.__EQUIPMENT_EXPLORER_EVIDENCE__ = Object.freeze({
+  frameComponent(component) {
+    if (!machine.components[component]) return false;
+    clearComponentSelection();
+    focusCamera(component);
+    updateCamera(1);
+    renderer.render(scene, camera);
+    return true;
+  },
+  resetView() {
+    resetView();
+    updateCamera(1);
+    renderer.render(scene, camera);
+  },
+});
 document.querySelector("#reset-view").addEventListener("click", resetView);
 document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => {
   setComponentSelection(button.dataset.focus);
@@ -822,7 +867,7 @@ app.addEventListener("keydown", (event) => {
   else if (event.key === "ArrowRight") orbit.azimuth -= 0.12;
   else if (event.key === "ArrowUp") orbit.polar = Math.max(0.25, orbit.polar - 0.08);
   else if (event.key === "ArrowDown") orbit.polar = Math.min(1.52, orbit.polar + 0.08);
-  else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(distanceLimits.minDistance, orbit.desiredDistance * 0.9);
+  else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(interactionMinDistance, orbit.desiredDistance * 0.9);
   else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(effectiveMaxDistance, orbit.desiredDistance * 1.1);
   else if (event.key === "0") resetView();
   else if (/^[1-7]$/.test(event.key)) document.querySelectorAll("[data-focus]")[Number(event.key) - 1]?.click();

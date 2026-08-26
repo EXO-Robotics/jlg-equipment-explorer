@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.10";
+} from "./assets/models/600s.version.js?v=1.1.11";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -20,6 +20,7 @@ const renderProfile = lowMemoryDevice ? "economy" : compactRender ? "mobile" : "
 const maximumPixelRatio = lowMemoryDevice ? 1.15 : compactRender ? 1.35 : 1.75;
 const shadowMapSize = lowMemoryDevice || compactRender ? 1024 : 2048;
 const minimumFrameInterval = lowMemoryDevice ? 1000 / 30 : compactRender ? 1000 / 45 : 0;
+const ASSET_LOAD_TIMEOUT_MS = 15000;
 const app = document.querySelector("#app");
 const loader = document.querySelector("#loader");
 const loaderStatus = document.querySelector("#loader-status");
@@ -37,6 +38,8 @@ const runtimeDiagnostics = {
   frameRate: "sampling",
   loadMs: "pending",
 };
+let terminalFailure = false;
+let animationFrameId = null;
 document.body.dataset.renderProfile = renderProfile;
 document.body.dataset.reducedMotion = String(reducedMotion);
 
@@ -69,13 +72,36 @@ if (mobileControlsQuery.addEventListener) mobileControlsQuery.addEventListener("
 else mobileControlsQuery.addListener(handleMobileControlsChange);
 setMobileControls(false);
 
-function recordRuntimeError() {
+function recordRuntimeError(error) {
   runtimeDiagnostics.errors += 1;
   document.body.dataset.runtimeErrorCount = String(runtimeDiagnostics.errors);
+  if (error) console.error(error);
   updateDiagnostics();
 }
-window.addEventListener("error", recordRuntimeError);
-window.addEventListener("unhandledrejection", recordRuntimeError);
+
+function showTerminalError(error, message, source = "runtime-failed") {
+  if (terminalFailure) return;
+  terminalFailure = true;
+  if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+  document.body.classList.remove("inspector-open", "mobile-controls-open");
+  document.body.classList.add("viewer-terminal-error");
+  document.body.dataset.viewerTerminal = "true";
+  document.body.dataset.machineSource = source;
+  recordRuntimeError(error);
+  loader.hidden = true;
+  document.querySelector("#error-copy").textContent = message;
+  errorPanel.hidden = false;
+  app.setAttribute("inert", "");
+  document.querySelector(".interface")?.setAttribute("inert", "");
+  document.querySelector("#inspector")?.setAttribute("inert", "");
+  controlsBody.inert = true;
+  controlPanel.setAttribute("aria-disabled", "true");
+  controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
+  requestAnimationFrame(() => errorPanel.focus({ preventScroll: true }));
+}
+window.addEventListener("error", (event) => showTerminalError(event.error, "The 600S viewer stopped after an unexpected runtime error. No substitute was shown."));
+window.addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The 600S viewer stopped after an unexpected runtime error. No substitute was shown."));
+document.body.dataset.viewerRuntimeActive = "true";
 
 function updateDiagnostics() {
   if (!diagnosticsOutput) return;
@@ -109,8 +135,7 @@ function createRenderer() {
 
 const renderer = createRenderer();
 if (!renderer) {
-  loader.hidden = true;
-  errorPanel.hidden = false;
+  showTerminalError(new Error("WebGL unavailable"), "This interactive study needs a browser with WebGL enabled.", "webgl-unavailable");
 } else {
 renderer.setPixelRatio(pixelRatio());
 renderer.setSize(innerWidth, innerHeight);
@@ -738,10 +763,18 @@ prepareHitVolumes(rig.hitVolumes);
 
 function loadBlockoutRig() {
   return new Promise((resolve) => {
+    const loadTimeout = setTimeout(() => {
+      showTerminalError(new Error(`600S asset load exceeded ${ASSET_LOAD_TIMEOUT_MS} ms`), "The evidence-bound 600S asset did not finish loading in time. No substitute was shown.", "load-timeout");
+      resolve();
+    }, ASSET_LOAD_TIMEOUT_MS);
     loaderStatus.textContent = "Loading equipment model";
     loaderDetail.textContent = "Fetching the optimized 600S detailed reconstruction";
-    new GLTFLoader().load(GLB_URL, (gltf) => {
+    try {
+      new GLTFLoader().load(GLB_URL, (gltf) => {
+      clearTimeout(loadTimeout);
+      if (terminalFailure) { resolve(); return; }
       try {
+        if (globalThis.__EQUIPMENT_EXPLORER_TEST_FAULT__ === "asset-contract") throw new Error("Injected 600S asset-contract failure");
         loaderStatus.textContent = "Preparing materials and shadows";
         loaderDetail.textContent = `Applying the ${renderProfile} render profile`;
         const loadedRig = configureBlockoutRig(gltf);
@@ -757,9 +790,7 @@ function loadBlockoutRig() {
         updateDiagnostics();
         projectOverview.facts[0] = ["Model", `Blender Showcase reconstruction v${SHOWCASE_RELEASE} · ${loadedRig.visibleMeshCount} runtime meshes`];
       } catch (error) {
-        console.warn("600S GLB contract validation failed; retaining procedural degraded fixture.", error);
-        document.body.dataset.machineSource = "procedural-contract-fallback";
-        projectOverview.facts[0] = ["Model", "Procedural degraded fixture"];
+        showTerminalError(error, "The evidence-bound 600S asset failed its hierarchy or motion contract. No substitute was shown.", "contract-failed");
       }
       resolve();
     }, (event) => {
@@ -770,13 +801,15 @@ function loadBlockoutRig() {
         loaderDetail.textContent = `${(event.loaded / 1024).toFixed(0)} KB received`;
       }
     }, (error) => {
-      console.warn("600S GLB failed to load; retaining procedural degraded fixture.", error);
-      document.body.dataset.machineSource = "procedural-load-fallback";
-      projectOverview.facts[0] = ["Model", "Procedural degraded fixture"];
-      loaderStatus.textContent = "Using simplified fallback";
-      loaderDetail.textContent = "The Blender model could not be loaded";
+      clearTimeout(loadTimeout);
+      showTerminalError(error, "The evidence-bound 600S asset could not be loaded. No procedural substitute was used.", "load-failed");
       resolve();
-    });
+      });
+    } catch (error) {
+      clearTimeout(loadTimeout);
+      showTerminalError(error, "The evidence-bound 600S asset loader could not start. No procedural substitute was used.", "loader-start-failed");
+      resolve();
+    }
   });
 }
 
@@ -1507,7 +1540,8 @@ let lastRenderedAt = 0;
 let collectFrameSamples = false;
 const frameSamples = [];
 function animate(now = 0) {
-  requestAnimationFrame(animate);
+  if (terminalFailure) return;
+  animationFrameId = requestAnimationFrame(animate);
   if (document.hidden) {
     clock.getDelta();
     return;
@@ -1540,10 +1574,12 @@ function animate(now = 0) {
 resetView();
 updateCamera(0.016);
 renderer.render(scene, camera);
-animate();
+animationFrameId = requestAnimationFrame(animate);
 setTimeout(() => document.querySelector("#interaction-hint").classList.add("fade"), 6500);
 loadBlockoutRig().finally(() => {
+  if (terminalFailure) return;
   requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (terminalFailure) return;
     const loadMs = Math.round(performance.now() - (window.__showcaseBootAt || 0));
     document.body.dataset.loadMs = String(loadMs);
     runtimeDiagnostics.loadMs = `${loadMs} ms`;
