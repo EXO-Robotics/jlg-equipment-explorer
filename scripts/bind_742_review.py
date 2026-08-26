@@ -20,6 +20,9 @@ from validate_742_review import (
     EXPECTED_ARTIFACT_PATHS,
     HUMAN_GATES,
     ROOT,
+    read_owned_render_allowlist_records,
+    validate_pending_extended_visual_observation,
+    validate_owned_render_semantic_coverage,
     validate_review_manifest,
 )
 
@@ -78,6 +81,12 @@ def main() -> None:
         raise RuntimeError("742 rebind requires an unbound pending review manifest")
     if any(gate.get("status") != "pending" or gate.get("artifact") is not None for gate in manifest["gates"].values()):
         raise RuntimeError("742 rebind requires every review gate to remain pending")
+    allowed_png = read_owned_render_allowlist_records()
+    validate_owned_render_semantic_coverage(allowed_png)
+    validate_pending_extended_visual_observation(
+        ROOT / EXPECTED_ARTIFACT_PATHS["extended_visual_fidelity"],
+        allowed_png,
+    )
 
     browser_environments = []
     for gate in BROWSER_GATES:

@@ -256,9 +256,9 @@ def main():
 
     output = {
         "status": "PASS" if not failures else "FAIL",
-        "asset": str(GLB),
+        "asset": str(GLB.relative_to(ROOT)),
         "production_solver_bridge": "scripts/solve_742_pose.mjs",
-        "named_presets_posed": ["stow_0deg", "maximum_lift_69deg", "maximum_reach_selected_3deg", "maximum_circle_steer", "maximum_crab_steer", "frame_level_dense_41"],
+        "named_presets_posed": ["stow_0deg", "maximum_lift_69deg", "maximum_reach_selected_3deg", "maximum_circle_steer", "maximum_crab_steer", "maximum_limited_front_steer", "frame_level_dense_41"],
         "front_tire_tread_plane_x_m": front_tire_plane,
         "minimum_named_rigid_underbody_clearance_m": underbody_clearance,
         "neutral_clearance_limiting_node": underbody_node,

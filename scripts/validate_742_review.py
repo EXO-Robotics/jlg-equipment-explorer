@@ -48,6 +48,67 @@ EXPECTED_ARTIFACT_PATHS = {
 }
 BROWSER_CAPTURE_ALLOWLIST_PATH = "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json"
 
+# Every mechanically material owned render must prove one named observation.
+# Keeping the semantic claim, canonical path, and allowlisted file identity in
+# one record prevents an otherwise unused allowlist entry from satisfying this
+# gate by count alone.
+EXTENDED_VISUAL_RENDER_CONTRACT = (
+    {
+        "semantic_id": "maximum_lift_level_attachment",
+        "path": "docs/review/742/maximum-lift-level-forks.png",
+        "claim": "Level fork load surface is visible at the selected reconstructed maximum-lift pose.",
+    },
+    {
+        "semantic_id": "maximum_lift_fork_closeup",
+        "path": "docs/review/742/maximum-lift-forks-close.png",
+        "claim": "Fork heels, blades, attachment, and level relationship are visible at maximum lift.",
+    },
+    {
+        "semantic_id": "maximum_reach_load_center_pose",
+        "path": "docs/review/742/maximum-reach-24in-load-center.png",
+        "claim": "The selected 3 degree maximum-reach pose and 24 inch load-center reference are visible.",
+    },
+    {
+        "semantic_id": "retract_chain_tangent_sheave_routing",
+        "path": "docs/review/742/retract-chain-routing-cutaway.png",
+        "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible.",
+    },
+    {
+        "semantic_id": "rigid_double_ended_steering_rack_and_bars",
+        "path": "docs/review/742/steering-linkage-cutaway.png",
+        "claim": "Rigid double-ended steering racks, rods, bars, and wheel pivots are visible.",
+    },
+    {
+        "semantic_id": "rear_steering_rack_bar_topology",
+        "path": "docs/review/742/rear-steering-linkage.png",
+        "claim": "Rear axle rack, opposed rods, steering bars, and wheel pivots are visible.",
+    },
+    {
+        "semantic_id": "circle_four_wheel_icr_topology",
+        "path": "docs/review/742/circle-steering-plan.png",
+        "claim": "Reconstructed four-wheel circle-steering topology and common-ICR evidence are visible.",
+    },
+    {
+        "semantic_id": "crab_translated_rack_residual_toe_topology",
+        "path": "docs/review/742/crab-steering-plan.png",
+        "claim": "Reconstructed translated-rack crab topology and measured residual-toe boundary are visible.",
+    },
+    {
+        "semantic_id": "front_only_limited_rack_neutral_rear_front_mode_icr",
+        "path": "docs/review/742/front-steering-limited-plan.png",
+        "claim": "Front-only limited-rack topology, neutral rear wheels, and reconstructed front-mode ICR spread are visible.",
+    },
+    {
+        "semantic_id": "rigid_boom_angle_sensor_crank_and_link",
+        "path": "docs/review/742/boom-pivot-angle-sensor.png",
+        "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
+    },
+)
+SEPARATE_VISUAL_GATE_PATHS = {
+    "docs/review/742/stowed-front-left.png",
+    "docs/review/742/cab-close.png",
+}
+
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -64,9 +125,36 @@ def relative_record(path: Path) -> dict:
     return {"path": str(relative), "sha256": digest(resolved), "bytes": resolved.stat().st_size}
 
 
-def _require_exact_true(record: dict, names: set[str], gate: str) -> None:
-    if set(record) != names or any(record[name] is not True for name in names):
-        raise RuntimeError(f"742 {gate} observation fields/status drift")
+def read_owned_render_allowlist_records() -> dict[str, dict]:
+    allowlist = json.loads((ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json").read_text(encoding="utf-8"))
+    if set(allowlist) != {"schema_version", "kind", "artifacts"}:
+        raise RuntimeError("742 owned-render allowlist schema drift")
+    if allowlist["schema_version"] != "1.0.0" or allowlist["kind"] != "owned-742-review-render-allowlist":
+        raise RuntimeError("742 owned-render allowlist identity drift")
+    records: dict[str, dict] = {}
+    expected_fields = {"path", "sha256", "bytes", "width_px", "height_px", "provenance"}
+    for record in allowlist.get("artifacts") or []:
+        if not isinstance(record, dict) or set(record) != expected_fields:
+            raise RuntimeError("742 owned-render allowlist artifact schema drift")
+        render_path = record.get("path")
+        if not isinstance(render_path, str) or render_path in records:
+            raise RuntimeError("742 owned-render allowlist path identity drift")
+        records[render_path] = record
+    return records
+
+
+def validate_owned_render_semantic_coverage(allowed_png: dict[str, dict]) -> None:
+    expected_paths = SEPARATE_VISUAL_GATE_PATHS | {
+        contract["path"] for contract in EXTENDED_VISUAL_RENDER_CONTRACT
+    }
+    actual_paths = set(allowed_png)
+    if actual_paths != expected_paths:
+        missing = sorted(expected_paths - actual_paths)
+        unreferenced = sorted(actual_paths - expected_paths)
+        raise RuntimeError(
+            "742 owned-render semantic coverage drift: "
+            f"missing={missing}, unreferenced={unreferenced}"
+        )
 
 
 def _expected_upstream_identity(model: str) -> dict:
@@ -96,44 +184,72 @@ def _expected_upstream_identity(model: str) -> dict:
     }
 
 
+def _validate_extended_visual_semantics(artifact: dict, allowed_png: dict) -> None:
+    fields = {
+        "schema_version", "kind", "gate", "configuration_id", "candidate_tree_sha256",
+        "reviewed_source_commit", "environment", "render_observations", "boundary",
+    }
+    if set(artifact) != fields or artifact["schema_version"] != "2.0.0" or artifact["kind"] != "742-visual-gate-observation":
+        raise RuntimeError("742 extended visual observation schema drift")
+    if artifact.get("gate") != "extended_visual_fidelity" or artifact.get("configuration_id") != EXPECTED_ID:
+        raise RuntimeError("742 extended visual observation identity drift")
+    environment = artifact.get("environment") or {}
+    if set(environment) != {"renderer", "os"} or not isinstance(environment["renderer"], str) or "Blender" not in environment["renderer"]:
+        raise RuntimeError("742 extended visual renderer environment drift")
+    observations = artifact.get("render_observations")
+    if not isinstance(observations, list) or len(observations) != len(EXTENDED_VISUAL_RENDER_CONTRACT):
+        raise RuntimeError("742 extended visual observation does not cover the exact mechanical render set")
+    seen_ids: set[str] = set()
+    seen_paths: set[str] = set()
+    for index, (observation, expected) in enumerate(zip(observations, EXTENDED_VISUAL_RENDER_CONTRACT)):
+        if not isinstance(observation, dict) or set(observation) != {"semantic_id", "claim", "observed", "artifact"}:
+            raise RuntimeError(f"742 extended visual semantic record schema drift at index {index}")
+        if observation["semantic_id"] != expected["semantic_id"] or observation["claim"] != expected["claim"]:
+            raise RuntimeError(f"742 extended visual semantic claim drift: {expected['semantic_id']}")
+        if observation["observed"] is not True:
+            raise RuntimeError(f"742 extended visual semantic claim is not observed: {expected['semantic_id']}")
+        render_path = expected["path"]
+        if render_path in seen_paths or expected["semantic_id"] in seen_ids:
+            raise RuntimeError("742 extended visual semantic records must use distinct IDs and artifacts")
+        seen_ids.add(expected["semantic_id"])
+        seen_paths.add(render_path)
+        allowed = allowed_png.get(render_path)
+        if not allowed:
+            raise RuntimeError(f"742 extended visual render is not allowlisted: {render_path}")
+        expected_artifact = {key: allowed[key] for key in ("path", "sha256", "bytes")}
+        if observation["artifact"] != expected_artifact:
+            raise RuntimeError(f"742 extended visual render hash/size binding drift: {render_path}")
+    boundary = artifact.get("boundary")
+    if (
+        not isinstance(boundary, str)
+        or "no manufacturer geometry" not in boundary
+        or "not factory steering or crab calibration" not in boundary
+    ):
+        raise RuntimeError("742 extended visual evidence boundary is incomplete")
+
+
 def _validate_extended_visual_observation(
     path: Path, candidate_tree_sha256: str, reviewed_commit: str, manifest_environment: dict, allowed_png: dict
 ) -> None:
     artifact = json.loads(path.read_text(encoding="utf-8"))
-    fields = {
-        "schema_version", "kind", "gate", "configuration_id", "candidate_tree_sha256",
-        "reviewed_source_commit", "environment", "render_artifacts", "observations", "boundary",
-    }
-    if set(artifact) != fields or artifact["schema_version"] != "1.0.0" or artifact["kind"] != "742-visual-gate-observation":
-        raise RuntimeError("742 extended visual observation schema drift")
+    _validate_extended_visual_semantics(artifact, allowed_png)
     expected_identity = {
-        "gate": "extended_visual_fidelity", "configuration_id": EXPECTED_ID,
-        "candidate_tree_sha256": candidate_tree_sha256, "reviewed_source_commit": reviewed_commit,
+        "candidate_tree_sha256": candidate_tree_sha256,
+        "reviewed_source_commit": reviewed_commit,
     }
     if any(artifact.get(key) != value for key, value in expected_identity.items()):
         raise RuntimeError("742 extended visual observation candidate binding drift")
-    environment = artifact.get("environment") or {}
-    if set(environment) != {"renderer", "os"} or environment["os"] != manifest_environment["os"] or "Blender" not in environment["renderer"]:
-        raise RuntimeError("742 extended visual renderer environment drift")
-    expected_renders = [
-        "docs/review/742/maximum-lift-level-forks.png",
-        "docs/review/742/maximum-lift-forks-close.png",
-        "docs/review/742/maximum-reach-24in-load-center.png",
-        "docs/review/742/retract-chain-routing-cutaway.png",
-        "docs/review/742/steering-linkage-cutaway.png",
-        "docs/review/742/boom-pivot-angle-sensor.png",
-    ]
-    if artifact.get("render_artifacts") != expected_renders or any(path not in allowed_png for path in expected_renders):
-        raise RuntimeError("742 extended visual observation does not bind the required owned render set")
-    expected_observations = {
-        "maximum_lift_level_attachment_visible", "maximum_lift_fork_closeup_visible",
-        "maximum_reach_load_center_pose_visible", "retract_chain_tangent_sheave_routing_visible",
-        "rigid_double_ended_steering_rack_and_bars_visible",
-        "rigid_boom_angle_sensor_crank_and_link_visible",
-    }
-    _require_exact_true(artifact.get("observations") or {}, expected_observations, "extended visual")
-    if not isinstance(artifact.get("boundary"), str) or "no manufacturer geometry" not in artifact["boundary"]:
-        raise RuntimeError("742 extended visual evidence boundary is incomplete")
+    if artifact["environment"]["os"] != manifest_environment["os"]:
+        raise RuntimeError("742 extended visual renderer OS identity drift")
+
+
+def validate_pending_extended_visual_observation(path: Path, allowed_png: dict) -> None:
+    artifact = json.loads(path.read_text(encoding="utf-8"))
+    _validate_extended_visual_semantics(artifact, allowed_png)
+    if artifact.get("candidate_tree_sha256") != "PENDING" or artifact.get("reviewed_source_commit") != "PENDING":
+        raise RuntimeError("742 pending extended-visual record is already bound")
+    if artifact["environment"]["os"] is not None:
+        raise RuntimeError("742 pending extended-visual record has a captured OS identity")
 
 
 def _verify_commit_paths(commit: str, paths: list[Path]) -> None:
@@ -185,8 +301,8 @@ def validate_review_manifest(path: Path, candidate_tree_sha256: str, canonical_p
     reviewed: dict[str, dict] = {}
     seen_artifacts: set[str] = set()
     referenced_browser_captures: list[str] = []
-    allowlist = json.loads((ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json").read_text(encoding="utf-8"))
-    allowed_png = {item["path"]: item for item in allowlist["artifacts"]}
+    allowed_png = read_owned_render_allowlist_records()
+    validate_owned_render_semantic_coverage(allowed_png)
     for gate in HUMAN_GATES:
         entry = manifest["gates"][gate]
         if set(entry) != {"status", "artifact", "notes"} or entry["status"] != "pass" or not isinstance(entry["notes"], str) or not entry["notes"].strip():
@@ -268,9 +384,12 @@ def validate_pending_review_manifest(path: Path) -> None:
             raise RuntimeError(f"742 pending review gate state drift: {gate}")
     for gate in BROWSER_GATES:
         validate_pending_template(ROOT / EXPECTED_ARTIFACT_PATHS[gate], gate)
-    extended = json.loads((ROOT / EXPECTED_ARTIFACT_PATHS["extended_visual_fidelity"]).read_text(encoding="utf-8"))
-    if extended.get("candidate_tree_sha256") != "PENDING" or extended.get("reviewed_source_commit") != "PENDING":
-        raise RuntimeError("742 pending extended-visual record is already bound")
+    allowed_png = read_owned_render_allowlist_records()
+    validate_owned_render_semantic_coverage(allowed_png)
+    validate_pending_extended_visual_observation(
+        ROOT / EXPECTED_ARTIFACT_PATHS["extended_visual_fidelity"],
+        allowed_png,
+    )
 
 
 def main() -> None:

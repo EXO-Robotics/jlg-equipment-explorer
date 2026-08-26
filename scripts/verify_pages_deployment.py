@@ -50,6 +50,14 @@ def fetch(url: str, expected: dict | None = None, expected_bytes: bytes | None =
     return last_status, last_payload
 
 
+def copy_if_distinct(source: Path, destination: Path) -> bool:
+    """Copy an attestation companion unless the workflow already wrote it there."""
+    if source.resolve() == destination.resolve():
+        return False
+    shutil.copy2(source, destination)
+    return True
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", required=True)
@@ -150,9 +158,9 @@ def main() -> None:
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     manifest_copy = args.output.parent / "pages-build-manifest.json"
-    shutil.copy2(args.build_manifest, manifest_copy)
+    copy_if_distinct(args.build_manifest, manifest_copy)
     rebuild_copy = args.output.parent / "742-deterministic-rebuild-attestation.json"
-    shutil.copy2(args.rebuild_attestation, rebuild_copy)
+    copy_if_distinct(args.rebuild_attestation, rebuild_copy)
     record = {
         "schema_version": "3.0.0",
         "kind": "github-pages-http-attestation",
@@ -177,8 +185,9 @@ def main() -> None:
         "deterministic_rebuild_attestation": {
             "sha256": hashlib.sha256(rebuild_bytes).hexdigest(),
             "bytes": len(rebuild_bytes),
-            "artifact_name": SOURCE_EVIDENCE_ARTIFACT,
-            "artifact_run_url": args.source_evidence_run_url,
+            "authority": "generated_in_deployment_workflow",
+            "workflow_run_url": args.workflow_run_url,
+            "source_commit": manifest["source_commit"],
         },
         "verified_files": verified_files,
     }

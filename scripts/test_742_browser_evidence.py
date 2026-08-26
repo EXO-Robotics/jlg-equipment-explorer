@@ -8,10 +8,13 @@ import json
 
 from validate_742_browser_evidence import (
     CAPTURE_RUNNER_PATH,
+    EXPECTED_PLAYWRIGHT_VERSION,
     EXPECTED_SCREENSHOT_DIMENSIONS,
     _validate_accessibility_tree,
     _independent_selection_expected,
     _validate_environment,
+    _validate_fatal_failures,
+    _validate_live_reduced_motion,
     _validate_capture_runner,
     _validate_structured_trace_outcomes,
     _validate_frame_capture,
@@ -28,10 +31,15 @@ from validate_742_receipt import (
 )
 
 
+NEGATIVE_CASES = 0
+
+
 def expect_failure(callable_value, message: str) -> None:
+    global NEGATIVE_CASES
     try:
         callable_value()
     except RuntimeError:
+        NEGATIVE_CASES += 1
         return
     raise RuntimeError(message)
 
@@ -107,14 +115,27 @@ def main() -> None:
     free_form_trace = {"outcomes": {"first": "looked good", "second": "pass", "third": "worked"}, "outcomes_sha256": "0" * 64}
     expect_failure(lambda: _validate_structured_trace_outcomes(free_form_trace, "test_gate"), "free-form transcript was accepted as trace authority")
 
+    lock_path = ROOT / "package-lock.json"
     environment = {
-        "browser": {"name": "Chromium", "version": "140.0.0.0", "user_agent": "test user agent"},
+        "browser": {"name": "Chromium", "version": "151.0.7922.34", "user_agent": "test user agent"},
         "os": {"name": "macOS", "version": "26.5.2", "build": "25F84"},
         "gpu": {
             "status": "observed", "vendor": "test vendor", "renderer": "test renderer",
             "api": "WebGL 2", "collection_method": "WEBGL_debug_renderer_info", "reason": None,
         },
-        "automation": {"tool": "test tool", "version": "1.0.0"},
+        "automation": {
+            "tool": "Playwright", "version": EXPECTED_PLAYWRIGHT_VERSION,
+            "source": "repo-locked-default",
+            "lockfile": {
+                "path": "package-lock.json",
+                "sha256": hashlib.sha256(lock_path.read_bytes()).hexdigest(),
+                "bytes": lock_path.stat().st_size,
+            },
+            "browser_executable": {
+                "product": "chromium", "revision": "1234", "browser_version": "151.0.7922.34",
+                "executable_basename": "Chromium", "sha256": "1" * 64, "bytes": 1000000,
+            },
+        },
         "captured_at_utc": "2026-08-25T12:00:00Z",
         "physical_device_session": False,
         "assistive_technology_session": False,
@@ -123,6 +144,64 @@ def main() -> None:
     overstated = json.loads(json.dumps(environment))
     overstated["assistive_technology_session"] = True
     expect_failure(lambda: _validate_environment(overstated), "unsupported assistive-technology claim was accepted")
+    external_toolchain = json.loads(json.dumps(environment))
+    external_toolchain["automation"]["source"] = "explicit-override"
+    expect_failure(lambda: _validate_environment(external_toolchain), "external-only browser toolchain was accepted")
+    wrong_browser_hash = json.loads(json.dumps(environment))
+    wrong_browser_hash["automation"]["browser_executable"]["sha256"] = "not-a-digest"
+    expect_failure(lambda: _validate_environment(wrong_browser_hash), "malformed browser executable digest was accepted")
+    wrong_revision = json.loads(json.dumps(environment))
+    wrong_revision["automation"]["browser_executable"]["revision"] = "9999"
+    expect_failure(lambda: _validate_environment(wrong_revision), "wrong bundled Chromium revision was accepted")
+    wrong_lock = json.loads(json.dumps(environment))
+    wrong_lock["automation"]["lockfile"]["sha256"] = "0" * 64
+    expect_failure(lambda: _validate_environment(wrong_lock), "wrong Playwright lockfile digest was accepted")
+
+    terminal = {
+        "source": "module-load-failed", "viewer_terminal": True,
+        "error_role": "alert", "error_aria_live": "assertive", "error_visible": True,
+        "error_focused": True, "app_inert": True, "interface_inert": True,
+        "disabled_control_count": 4, "total_control_count": 4,
+        "drive_x": "1.000", "drive_z": "2.000",
+    }
+    fatal_cases = {}
+    for fault, source in {
+        "module": "module-load-failed", "webgl": "webgl-unavailable",
+        "network": "load-failed", "contract": "contract-failed",
+    }.items():
+        first = {**terminal, "source": source}
+        fatal_cases[fault] = {
+            "outcome": "pass", "fault": fault, "expected_source": source,
+            "terminal_first": first, "terminal_after_250ms": dict(first),
+            "animation_state_stable_250ms": True,
+        }
+    _validate_fatal_failures(fatal_cases)
+    moving_terminal = json.loads(json.dumps(fatal_cases))
+    moving_terminal["network"]["terminal_after_250ms"]["drive_x"] = "1.001"
+    expect_failure(lambda: _validate_fatal_failures(moving_terminal), "animating fatal terminal state was accepted")
+    inaccessible_terminal = json.loads(json.dumps(fatal_cases))
+    inaccessible_terminal["webgl"]["terminal_first"]["error_focused"] = False
+    expect_failure(lambda: _validate_fatal_failures(inaccessible_terminal), "unfocused fatal alert was accepted")
+
+    reduced = {
+        "transition": "no-preference->reduce->no-preference",
+        "raw_samples": {
+            "moving_start": {"x": "0.0", "z": "0.0"},
+            "before_reduce": {"x": "0.1", "z": "0.0"},
+            "reduced_start": {"x": "0.1", "z": "0.0"},
+            "reduced_end": {"x": "0.1", "z": "0.0"},
+            "relaxed": {"x": "0.1", "z": "0.0", "autonomyPressed": "false", "manual": True},
+        },
+        "moving_before": True, "frozen_while_reduced": True,
+        "did_not_auto_resume": True, "manual_controls_enabled": True,
+    }
+    _validate_live_reduced_motion(reduced, "fixture")
+    auto_resumed = json.loads(json.dumps(reduced))
+    auto_resumed["raw_samples"]["relaxed"]["x"] = "0.2"
+    expect_failure(lambda: _validate_live_reduced_motion(auto_resumed, "fixture"), "auto-resumed reduced-motion sample was accepted")
+    trusted_boolean = json.loads(json.dumps(reduced))
+    trusted_boolean["raw_samples"]["reduced_end"]["x"] = "0.2"
+    expect_failure(lambda: _validate_live_reduced_motion(trusted_boolean, "fixture"), "forged reduced-motion boolean overrode raw samples")
 
     slider_names = {"Boom lift", "Boom telescope"}
     ax_tree = {
@@ -155,13 +234,14 @@ def main() -> None:
         raise RuntimeError("mobile screenshot viewport contract drift")
 
     fixtures = expected_selection_outcomes()
-    if len(fixtures) != 4 or [item["expectedVolume"] for item in fixtures] != ["front", "high-tie", "front", "front"]:
+    if len(fixtures) != 5 or [item["expectedVolume"] for item in fixtures] != ["front", "high-tie", "front", "front", None]:
         raise RuntimeError("independent selection fixture set drift")
     raw_fixtures = [
         {"case": 1, "hits": [{"volume": "rear", "component": "rear", "distanceM": 2, "priority": 5}, {"volume": "front", "component": "front", "distanceM": 1, "priority": 0}], "visibleSurfaceComponent": None, "basis": "nearest-distance", "expectedComponent": "front", "observedComponent": "front", "expectedVolume": "front", "observedVolume": "front", "pass": True},
         {"case": 2, "hits": [{"volume": "low-tie", "component": "low-tie", "distanceM": 1, "priority": 1}, {"volume": "high-tie", "component": "high-tie", "distanceM": 1.01, "priority": 4}], "visibleSurfaceComponent": None, "basis": "distance-tie", "expectedComponent": "high-tie", "observedComponent": "high-tie", "expectedVolume": "high-tie", "observedVolume": "high-tie", "pass": True},
         {"case": 3, "hits": [{"volume": "front", "component": "front", "distanceM": 1, "priority": 0}, {"volume": "front", "component": "front", "distanceM": 1.8, "priority": 0}, {"volume": "rear", "component": "rear", "distanceM": 2, "priority": 5}], "visibleSurfaceComponent": None, "basis": "nearest-distance", "expectedComponent": "front", "observedComponent": "front", "expectedVolume": "front", "observedVolume": "front", "pass": True},
         {"case": 4, "hits": [{"volume": "rear", "component": "rear", "distanceM": 0.8, "priority": 5}, {"volume": "front", "component": "front", "distanceM": 1, "priority": 0}], "visibleSurfaceComponent": "front", "basis": "visible-surface", "expectedComponent": "front", "observedComponent": "front", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+        {"case": 5, "hits": [{"volume": "rear", "component": "rear", "distanceM": 0.8, "priority": 5}], "visibleSurfaceComponent": "front", "basis": "visible-surface", "expectedComponent": None, "observedComponent": None, "expectedVolume": None, "observedVolume": None, "pass": True},
     ]
     _validate_selection_fixtures(raw_fixtures, json.loads(json.dumps(raw_fixtures)))
     stripped_fixture = json.loads(json.dumps(raw_fixtures))
@@ -222,7 +302,7 @@ def main() -> None:
         lambda: verify_browser_capture_allowlist_binding(wrong_size),
         "mutated browser allowlist binding size was accepted",
     )
-    print(json.dumps({"status": "PASS", "negative_cases": 22, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
+    print(json.dumps({"status": "PASS", "negative_cases": NEGATIVE_CASES, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

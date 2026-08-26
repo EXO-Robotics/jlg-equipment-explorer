@@ -48,6 +48,7 @@ EXPECTED_SELECTION_FIXTURES = [
     {"case": 2, "basis": "distance-tie", "expectedVolume": "high-tie", "observedVolume": "high-tie", "pass": True},
     {"case": 3, "basis": "nearest-distance", "expectedVolume": "front", "observedVolume": "front", "pass": True},
     {"case": 4, "basis": "visible-surface", "expectedVolume": "front", "observedVolume": "front", "pass": True},
+    {"case": 5, "basis": "visible-surface", "expectedVolume": None, "observedVolume": None, "pass": True},
 ]
 EXPECTED_SELECTION_VOLUME = {
     "chassis": "Chassis_Hit", "cab": "Cab_Hit", "boom": "Boom_Hit",
@@ -61,6 +62,12 @@ EXPECTED_STOW_SLIDER_VALUES = {
     "Frame level": "Level",
 }
 CAPTURE_RUNNER_PATH = "scripts/capture_742_browser_evidence.mjs"
+PLAYWRIGHT_LOCK_PATH = "package-lock.json"
+EXPECTED_PLAYWRIGHT_VERSION = "1.62.1"
+EXPECTED_PLAYWRIGHT_BROWSER_REVISIONS = {
+    "chromium": {"revision": "1234", "browser_version": "151.0.7922.34"},
+    "chromium-headless-shell": {"revision": "1234", "browser_version": "151.0.7922.34"},
+}
 EXPECTED_SCREENSHOT_DIMENSIONS = {
     "desktop_browser_interaction": {(1280, 720)},
     "mobile_browser_interaction": {(390, 844), (844, 390)},
@@ -82,6 +89,60 @@ def _validate_capture_runner(record: dict) -> None:
     runner = ROOT / CAPTURE_RUNNER_PATH
     if not runner.is_file() or digest(runner) != record["sha256"] or runner.stat().st_size != record["bytes"]:
         raise RuntimeError("742 committed capture-runner hash/size binding drift")
+
+
+def _validate_repo_owned_toolchain(record: dict, browser_identity: dict) -> None:
+    fields = {"tool", "version", "source", "lockfile", "browser_executable"}
+    if set(record or {}) != fields:
+        raise RuntimeError("742 browser automation toolchain schema drift")
+    if (
+        record["tool"] != "Playwright"
+        or record["version"] != EXPECTED_PLAYWRIGHT_VERSION
+        or record["source"] != "repo-locked-default"
+    ):
+        raise RuntimeError("742 completed evidence did not use the repository-owned Playwright default")
+    lock_record = record["lockfile"]
+    if set(lock_record or {}) != {"path", "sha256", "bytes"} or lock_record["path"] != PLAYWRIGHT_LOCK_PATH:
+        raise RuntimeError("742 Playwright lockfile record schema/path drift")
+    lock_path = ROOT / PLAYWRIGHT_LOCK_PATH
+    expected_lock = {
+        "path": PLAYWRIGHT_LOCK_PATH,
+        "sha256": digest(lock_path) if lock_path.is_file() else None,
+        "bytes": lock_path.stat().st_size if lock_path.is_file() else None,
+    }
+    if lock_record != expected_lock:
+        raise RuntimeError("742 Playwright lockfile hash/size binding drift")
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    packages = lock.get("packages") or {}
+    if (
+        lock.get("lockfileVersion") != 3
+        or (packages.get("") or {}).get("devDependencies", {}).get("playwright") != EXPECTED_PLAYWRIGHT_VERSION
+        or (packages.get("node_modules/playwright") or {}).get("version") != EXPECTED_PLAYWRIGHT_VERSION
+        or (packages.get("node_modules/playwright-core") or {}).get("version") != EXPECTED_PLAYWRIGHT_VERSION
+    ):
+        raise RuntimeError("742 repository lockfile does not exactly pin Playwright and playwright-core")
+    executable = record["browser_executable"]
+    executable_fields = {
+        "product", "revision", "browser_version", "executable_basename", "sha256", "bytes",
+    }
+    if set(executable or {}) != executable_fields:
+        raise RuntimeError("742 Playwright browser executable record schema drift")
+    product = executable["product"]
+    if (
+        product not in EXPECTED_PLAYWRIGHT_BROWSER_REVISIONS
+        or executable["revision"] != EXPECTED_PLAYWRIGHT_BROWSER_REVISIONS[product]["revision"]
+        or executable["browser_version"] != EXPECTED_PLAYWRIGHT_BROWSER_REVISIONS[product]["browser_version"]
+        or executable["browser_version"] != browser_identity.get("version")
+        or not isinstance(executable["executable_basename"], str)
+        or not executable["executable_basename"]
+        or "/" in executable["executable_basename"]
+        or "\\" in executable["executable_basename"]
+        or not re.fullmatch(r"[0-9a-f]{64}", executable["sha256"] or "")
+        or isinstance(executable["bytes"], bool)
+        or not isinstance(executable["bytes"], int)
+        or executable["bytes"] <= 0
+    ):
+        raise RuntimeError("742 Playwright bundled Chromium identity/digest drift")
 
 
 def _validate_structured_trace_outcomes(trace: dict, gate: str) -> None:
@@ -114,7 +175,8 @@ def _validate_selection_fixtures(observed: list, dom_records: list) -> None:
         if set(fixture or {}) != fixture_fields or fixture["case"] != index:
             raise RuntimeError("742 raw selection fixture schema/order drift")
         hits = fixture["hits"]
-        if not isinstance(hits, list) or len(hits) < 2:
+        minimum_hits = 1 if index == 5 else 2
+        if not isinstance(hits, list) or len(hits) < minimum_hits:
             raise RuntimeError("742 raw selection fixture hit set is incomplete")
         for hit in hits:
             if set(hit or {}) != hit_fields:
@@ -135,10 +197,11 @@ def _validate_selection_fixtures(observed: list, dom_records: list) -> None:
         if surface is not None and (not isinstance(surface, str) or not surface):
             raise RuntimeError("742 raw selection fixture visible-surface identity drift")
         surface_hits = [hit for hit in hits if hit["component"] == surface] if surface is not None else []
-        if surface is not None and not surface_hits:
-            raise RuntimeError("742 raw selection fixture visible surface has no corresponding hit")
         if surface_hits:
             expected = min(surface_hits, key=lambda hit: (hit["distanceM"], hit["volume"]))
+            basis = "visible-surface"
+        elif surface is not None:
+            expected = None
             basis = "visible-surface"
         else:
             minimum = min(hit["distanceM"] for hit in hits)
@@ -149,10 +212,10 @@ def _validate_selection_fixtures(observed: list, dom_records: list) -> None:
             basis = "distance-tie" if len(eligible) > 1 else "nearest-distance"
         if (
             fixture["basis"] != basis
-            or fixture["expectedComponent"] != expected["component"]
-            or fixture["observedComponent"] != expected["component"]
-            or fixture["expectedVolume"] != expected["volume"]
-            or fixture["observedVolume"] != expected["volume"]
+            or fixture["expectedComponent"] != (expected["component"] if expected else None)
+            or fixture["observedComponent"] != (expected["component"] if expected else None)
+            or fixture["expectedVolume"] != (expected["volume"] if expected else None)
+            or fixture["observedVolume"] != (expected["volume"] if expected else None)
             or fixture["pass"] is not True
         ):
             raise RuntimeError("742 raw selection fixture outcome disagrees with independent recomputation")
@@ -260,11 +323,7 @@ def _validate_environment(environment: dict) -> None:
             raise RuntimeError("742 unavailable GPU metadata lacks an honest reason")
     else:
         raise RuntimeError("742 GPU observation status drift")
-    automation = environment["automation"]
-    if set(automation or {}) != {"tool", "version"} or not all(
-        isinstance(automation[name], str) and automation[name].strip() for name in automation
-    ):
-        raise RuntimeError("742 browser automation identity is incomplete")
+    _validate_repo_owned_toolchain(environment["automation"], browser)
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z", environment["captured_at_utc"] or ""):
         raise RuntimeError("742 browser capture UTC timestamp is malformed")
     if environment["physical_device_session"] is not False or environment["assistive_technology_session"] is not False:
@@ -291,13 +350,18 @@ def _validate_capture_artifacts(
     trace_record = capture["automation_trace"]
     _verify_capture_record(trace_record, "automation_trace", allowlist)
     trace = json.loads((ROOT / trace_record["path"]).read_text(encoding="utf-8"))
-    fields = {"schema_version", "kind", "gate", "captured_at_utc", "tool", "tool_version", "runner", "outcomes_sha256", "outcomes"}
+    fields = {
+        "schema_version", "kind", "gate", "captured_at_utc", "tool", "tool_version",
+        "toolchain", "runner", "outcomes_sha256", "outcomes",
+    }
     if set(trace or {}) != fields or trace["schema_version"] != "2.0.0" or trace["kind"] != "browser-automation-trace":
         raise RuntimeError(f"742 browser automation trace schema drift: {gate}")
     if trace["gate"] != gate or trace["captured_at_utc"] != environment["captured_at_utc"]:
         raise RuntimeError(f"742 browser automation trace identity/time drift: {gate}")
     if trace["tool"] != environment["automation"]["tool"] or trace["tool_version"] != environment["automation"]["version"]:
         raise RuntimeError(f"742 browser automation trace tool identity drift: {gate}")
+    if trace["toolchain"] != environment["automation"]:
+        raise RuntimeError(f"742 browser automation trace toolchain binding drift: {gate}")
     if trace["runner"] != runner:
         raise RuntimeError(f"742 browser automation trace runner binding drift: {gate}")
     _validate_structured_trace_outcomes(trace, gate)
@@ -513,8 +577,134 @@ def _validate_accessibility_tree(snapshot: dict, slider_names: set[str]) -> None
         raise RuntimeError("742 accessibility-tree snapshot omits required semantics")
 
 
+def _validate_terminal_state(state: dict, expected_source: str) -> None:
+    fields = {
+        "source", "viewer_terminal", "error_role", "error_aria_live", "error_visible",
+        "error_focused", "app_inert", "interface_inert", "disabled_control_count",
+        "total_control_count", "drive_x", "drive_z",
+    }
+    if set(state or {}) != fields:
+        raise RuntimeError("742 upstream terminal-state raw record schema drift")
+    if (
+        state["source"] != expected_source
+        or state["viewer_terminal"] is not True
+        or state["error_role"] != "alert"
+        or state["error_aria_live"] != "assertive"
+        or state["error_visible"] is not True
+        or state["error_focused"] is not True
+        or state["app_inert"] is not True
+        or state["interface_inert"] is not True
+        or isinstance(state["total_control_count"], bool)
+        or not isinstance(state["total_control_count"], int)
+        or state["total_control_count"] <= 0
+        or state["disabled_control_count"] != state["total_control_count"]
+    ):
+        raise RuntimeError(f"742 upstream accessible terminal contract failed: {expected_source}")
+
+
+def _validate_fatal_failures(failures: dict) -> None:
+    expected_sources = {
+        "module": "module-load-failed",
+        "webgl": "webgl-unavailable",
+        "network": "load-failed",
+        "contract": "contract-failed",
+    }
+    if set(failures or {}) != set(expected_sources):
+        raise RuntimeError("742 upstream fatal-injection case set drift")
+    fields = {
+        "outcome", "fault", "expected_source", "terminal_first",
+        "terminal_after_250ms", "animation_state_stable_250ms",
+    }
+    for fault, expected_source in expected_sources.items():
+        case = failures[fault]
+        if (
+            set(case or {}) != fields
+            or case["outcome"] != "pass"
+            or case["fault"] != fault
+            or case["expected_source"] != expected_source
+            or case["animation_state_stable_250ms"] is not True
+        ):
+            raise RuntimeError(f"742 upstream fatal-injection result drift: {fault}")
+        first = case["terminal_first"]
+        after = case["terminal_after_250ms"]
+        _validate_terminal_state(first, expected_source)
+        _validate_terminal_state(after, expected_source)
+        if first["drive_x"] != after["drive_x"] or first["drive_z"] != after["drive_z"]:
+            raise RuntimeError(f"742 upstream fatal state continued animating: {fault}")
+
+
+def _validate_live_reduced_motion(record: dict, gate: str) -> None:
+    fields = {
+        "transition", "raw_samples", "moving_before", "frozen_while_reduced",
+        "did_not_auto_resume", "manual_controls_enabled",
+    }
+    if set(record or {}) != fields or record["transition"] != "no-preference->reduce->no-preference":
+        raise RuntimeError(f"742 upstream live reduced-motion schema/transition drift: {gate}")
+    raw = record["raw_samples"]
+    raw_fields = {"moving_start", "before_reduce", "reduced_start", "reduced_end", "relaxed"}
+    if set(raw or {}) != raw_fields:
+        raise RuntimeError(f"742 upstream live reduced-motion raw sample set drift: {gate}")
+    for name in ("moving_start", "before_reduce", "reduced_start", "reduced_end"):
+        if set(raw[name] or {}) != {"x", "z"}:
+            raise RuntimeError(f"742 upstream live reduced-motion raw position schema drift: {gate}:{name}")
+    if set(raw["relaxed"] or {}) != {"x", "z", "autonomyPressed", "manual"}:
+        raise RuntimeError(f"742 upstream live reduced-motion relaxed-state schema drift: {gate}")
+    moving = raw["moving_start"] != raw["before_reduce"]
+    frozen = raw["reduced_start"] == raw["reduced_end"]
+    no_resume = (
+        raw["relaxed"]["autonomyPressed"] == "false"
+        and raw["reduced_end"]["x"] == raw["relaxed"]["x"]
+        and raw["reduced_end"]["z"] == raw["relaxed"]["z"]
+    )
+    if (
+        record["moving_before"] is not moving
+        or record["frozen_while_reduced"] is not frozen
+        or record["did_not_auto_resume"] is not no_resume
+        or record["manual_controls_enabled"] is not raw["relaxed"]["manual"]
+        or not all((moving, frozen, no_resume, raw["relaxed"]["manual"] is True))
+    ):
+        raise RuntimeError(f"742 upstream live reduced-motion outcome disagrees with raw samples: {gate}")
+
+
+def _validate_es_maximum_pose_controls(assertion: dict) -> None:
+    if set(assertion or {}) != {"outcome", "values", "dom_snapshot"} or assertion["outcome"] != "pass":
+        raise RuntimeError("742 ES maximum-pose control assertion schema drift")
+    values = assertion["values"]
+    expected = {
+        "#lift-control": ("100", "5.64 metres platform height"),
+        "#deck-control": ("100", "0.55 m extension"),
+        "#steer-control:left": ("-100", "80 mm L cylinder displacement"),
+        "#steer-control:right": ("100", "80 mm R cylinder displacement"),
+    }
+    if set(values or {}) != set(expected):
+        raise RuntimeError("742 ES maximum-pose/full-steering control set drift")
+    for selector, (expected_value, text) in expected.items():
+        observed = values[selector]
+        if (
+            set(observed or {}) != {"value", "ariaValueText", "disabled"}
+            or observed["value"] != expected_value
+            or observed["disabled"] is not False
+            or not isinstance(observed["ariaValueText"], str)
+            or text not in observed["ariaValueText"]
+        ):
+            raise RuntimeError(f"742 ES engineering aria/extreme control proof drift: {selector}")
+    snapshot = assertion["dom_snapshot"]
+    _validate_dom_snapshot(snapshot, [1280, 720])
+    for selector, text in {
+        "#lift-control": "5.64 metres platform height",
+        "#deck-control": "0.55 m extension",
+        "#steer-control": "80 mm R cylinder displacement",
+    }.items():
+        node = _snapshot_node(snapshot, selector)
+        if text not in node["attributes"].get("aria-valuetext", ""):
+            raise RuntimeError(f"742 ES maximum-pose DOM aria value drift: {selector}")
+
+
 def _validate_regression(gate: str, observations: dict) -> None:
-    fields = {"page", "dom_snapshots", "accessibility_tree_snapshot", "assertions", "reduced_motion"}
+    fields = {
+        "page", "dom_snapshots", "accessibility_tree_snapshot", "assertions",
+        "reduced_motion", "fatal_failures",
+    }
     if set(observations or {}) != fields:
         raise RuntimeError(f"742 upstream regression observation schema drift: {gate}")
     page = observations["page"]
@@ -537,14 +727,15 @@ def _validate_regression(gate: str, observations: dict) -> None:
     if "inert" in modal["attributes"] or "inspector-open" not in modal_body["attributes"].get("class", ""):
         raise RuntimeError(f"742 upstream regression modal-open DOM state drift: {gate}")
     reduced = observations["reduced_motion"]
-    if set(reduced or {}) != {"query", "body_dataset", "autonomy_disabled", "manual_controls_enabled"}:
-        raise RuntimeError(f"742 upstream regression reduced-motion schema drift: {gate}")
-    if reduced["query"] != "reduce=1" or reduced["body_dataset"] != "true" or reduced["autonomy_disabled"] is not True or reduced["manual_controls_enabled"] is not True:
-        raise RuntimeError(f"742 upstream regression reduced-motion contract failed: {gate}")
+    _validate_live_reduced_motion(reduced, gate)
+    _validate_fatal_failures(observations["fatal_failures"])
     if gate == "600s_browser_regression":
         if page["route"] != "/" or page["title"] != "600S Interactive Equipment Study":
             raise RuntimeError("742 600S regression route/title drift")
-        required = {"load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion"}
+        required = {
+            "load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard",
+            "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures",
+        }
         slider_names = {"Boom lift", "Extend", "Rotate", "Steering"}
         parsed = page["parsed_status"]
         fields = {"source", "meshes", "selection", "errors", "load_ms", "render_profile", "fps", "p95_ms", "reduced_motion"}
@@ -560,7 +751,11 @@ def _validate_regression(gate: str, observations: dict) -> None:
     else:
         if page["route"] != "/es1930m/" or page["title"] != "ES1930M Interactive Equipment Study":
             raise RuntimeError("742 ES1930M regression route/title drift")
-        required = {"load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "reduced_motion"}
+        required = {
+            "load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard",
+            "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "maximum_pose_controls",
+            "reduced_motion", "fatal_failures",
+        }
         slider_names = {"Platform lift", "Extension deck", "Steering actuator; wheel angles deferred"}
         parsed = page["parsed_status"]
         fields = {"machine", "configuration_id", "source", "selection", "errors", "load_ms", "fps", "p95_ms"}
@@ -573,11 +768,16 @@ def _validate_regression(gate: str, observations: dict) -> None:
             not isinstance(parsed["p95_ms"], (int, float)) or not 0 < parsed["p95_ms"] <= 50,
         )) or "selection self-test-pass" not in page["status_text"] or "errors 0" not in page["status_text"]:
             raise RuntimeError("742 ES1930M regression status dataset did not pass")
+        _validate_es_maximum_pose_controls(observations["assertions"]["maximum_pose_controls"])
     if set(observations["assertions"] or {}) != required:
         raise RuntimeError(f"742 upstream regression structured outcome set drift: {gate}")
     pinch = observations["assertions"]["pinch_zoom"]
     if pinch.get("hit_test_targets") != ["CANVAS"] * 4 or pinch.get("observable_render_or_distance_change") is not True or pinch.get("before_canvas_sha256") == pinch.get("after_canvas_sha256"):
         raise RuntimeError(f"742 upstream regression pinch outcome is not independently observable: {gate}")
+    if observations["assertions"]["reduced_motion"] != {"outcome": "pass", **reduced}:
+        raise RuntimeError(f"742 upstream reduced-motion assertion does not bind the raw transition: {gate}")
+    if observations["assertions"]["fatal_failures"] != {"outcome": "pass", "cases": observations["fatal_failures"]}:
+        raise RuntimeError(f"742 upstream fatal assertion does not bind the raw cases: {gate}")
     _validate_accessibility_tree(observations["accessibility_tree_snapshot"], slider_names)
 
 
@@ -636,7 +836,7 @@ def validate_complete_browser_artifact(
             body["attributes"].get("data-selection-selftest") != "pass"
             or body["attributes"].get("data-selection-overlap-rays") != "15"
             or body["attributes"].get("data-selection-nearest-rays") != "15"
-            or body["attributes"].get("data-selection-fixture-cases") != "4/4"
+            or body["attributes"].get("data-selection-fixture-cases") != "5/5"
             or body["attributes"].get("data-selection-policy") != "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie"
         ):
             raise RuntimeError("742 semantic-selection raw DOM self-test fields drift")
@@ -680,12 +880,19 @@ def validate_complete_browser_artifact(
         if dom_rays != rays:
             raise RuntimeError("742 semantic-selection ray observations do not match the captured DOM dataset")
         _validate_selection_fixtures(observed_fixtures, dom_fixtures)
-        if set(assertions) != {"visible_canvas_selection", "clear_selection", "pinch_suppression", "overlap_self_test"}:
+        if set(assertions) != {
+            "visible_canvas_selection", "clear_selection", "pinch_suppression",
+            "overlap_self_test", "screenshot_framing",
+        }:
             raise RuntimeError("742 semantic-selection structured outcome set drift")
         probes = assertions["visible_canvas_selection"].get("independently_labeled_probes")
         expected_probes = {
-            "boom-upper-visible-surface": "boom", "cab-front-visible-surface": "cab",
-            "chassis-center-visible-surface": "chassis", "steering-front-wheel-visible-surface": "steering",
+            "chassis-framed-visible-surface": "chassis",
+            "cab-framed-visible-surface": "cab",
+            "boom-framed-visible-surface": "boom",
+            "carriage-framed-visible-surface": "carriage",
+            "steering-framed-visible-surface": "steering",
+            "hydraulics-framed-visible-surface": "hydraulics",
         }
         if not isinstance(probes, list) or len(probes) != len(expected_probes):
             raise RuntimeError("742 semantic visible-canvas probe count drift")
@@ -695,11 +902,34 @@ def validate_complete_browser_artifact(
                 or probe.get("hit_test_target") != "CANVAS" or probe.get("selected_component") != probe.get("expected_component")
                 or probe.get("rendered_surface_component") != probe.get("expected_component")
                 or probe.get("resolution_basis") != "visible-surface" or not probe.get("rendered_surface_mesh")
-                or not all(isinstance(probe.get(axis), int) for axis in ("x", "y"))
+                or probe.get("x") != 640 or probe.get("y") != 360
             ):
                 raise RuntimeError("742 semantic visible-canvas frontmost-surface outcome failed")
+        if {probe["expected_component"] for probe in probes} != set(EXPECTED_SELECTION_PRIORITY):
+            raise RuntimeError("742 semantic visible-canvas probes do not cover all six selectable components")
         if assertions["clear_selection"].get("selected_component_after_reset") is not None:
             raise RuntimeError("742 semantic Reset View did not clear selection")
+        framing = assertions["screenshot_framing"]
+        framing_fields = {
+            "outcome", "reset_pressed", "selected_component", "camera_distance_m",
+            "desired_distance_m", "pose_min_distance_m",
+        }
+        if (
+            set(framing or {}) != framing_fields
+            or framing.get("outcome") != "pass"
+            or framing.get("reset_pressed") is not True
+            or framing.get("selected_component") is not None
+            or any(
+                isinstance(framing.get(name), bool)
+                or not isinstance(framing.get(name), (int, float))
+                or not math.isfinite(framing[name])
+                for name in ("camera_distance_m", "desired_distance_m", "pose_min_distance_m")
+            )
+            or framing["camera_distance_m"] < framing["pose_min_distance_m"]
+            or framing["desired_distance_m"] < framing["pose_min_distance_m"]
+            or abs(framing["camera_distance_m"] - framing["desired_distance_m"]) > 0.03
+        ):
+            raise RuntimeError("742 semantic-selection screenshot reset/framing proof failed")
         _validate_742_pinch_zoom(assertions["pinch_suppression"].get("pinch_zoom"), [1280, 720])
     elif gate == "accessibility_semantics_and_keyboard":
         fields = {"dom_snapshot", "accessibility_tree_snapshot", "assertions", "physical_screen_reader_session_claimed"}

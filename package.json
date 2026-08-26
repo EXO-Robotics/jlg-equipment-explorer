@@ -1,6 +1,6 @@
 {
   "name": "jlg-equipment-explorer",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "type": "module",
   "private": true,
   "license": "UNLICENSED",
@@ -16,7 +16,13 @@
     "check:es1930m": "node --check viewer/runtime.js && node --check machines/es1930m/articulation.js && node --check machines/es1930m/machine.js && node scripts/validate_es1930m_gestures.mjs && node scripts/validate_es1930m_figure_eight.mjs && python3 -B scripts/validate_es1930m_evidence.py && python3 -B scripts/validate_es1930m_runtime_contract.py && python3 -B scripts/validate_es1930m_kinematics.py && python3 -B scripts/validate_es1930m_glb.py && python3 -B scripts/validate_es1930m_receipt.py",
     "check:742": "node --check viewer/742-runtime.js && node --check machines/742/articulation.js && node --check machines/742/machine.js && node --check machines/742/inspector.js && node --check machines/742/cameras.js && node --check machines/742/version.js && node --check machines/742/solver.js && node --check scripts/solve_742_pose.mjs && node --check scripts/validate_742_solver.mjs && node scripts/validate_742_runtime_contract.mjs && python3 -B scripts/validate_742_review.py --help && python3 -B scripts/bind_742_review.py --help && python3 -B scripts/verify_742_deterministic_rebuild.py --help && python3 -B scripts/verify_pages_deployment.py --help && python3 -B scripts/validate_742_evidence.py --manifest-only && python3 -B scripts/validate_742_kinematics.py && python3 -B scripts/validate_742_glb.py && python3 -B scripts/run_742_posed_glb_gate.py && python3 -B scripts/validate_742_route.py && python3 -B scripts/validate_742_receipt.py",
     "check:pages": "python3 -B scripts/validate_pages_bundle.py _site",
+    "check:capture:742-toolchain": "node scripts/capture_742_browser_evidence.mjs --verify-toolchain-only=1",
+    "capture:742:install": "playwright install chromium",
+    "capture:742": "node scripts/capture_742_browser_evidence.mjs",
     "receipt": "python3 -B scripts/write_600s_receipt.py",
     "receipt:742": "python3 -B scripts/write_742_receipt.py"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

@@ -10,11 +10,11 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=1.1.9`.
+Then open `http://localhost:8080/?v=1.1.11`.
 
 The telehandler showcase is available at `http://localhost:8080/742/?diagnostics=1`.
 
-The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
+The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model. The separate browser-evidence runner does use the exact Playwright development dependency pinned in `package-lock.json`.
 
 Validate the current GLBs, source ledgers, route contracts, and receipts with `npm run check`. For the 742, `npm run receipt:742` independently replays the automated validators and writes a hash-bound candidate receipt. It deliberately leaves browser, visual, accessibility-semantics-and-keyboard, performance, cross-route regression, deterministic rebuild, and deployment gates pending unless their separate evidence is supplied.
 
@@ -26,9 +26,17 @@ python3 -B scripts/validate_742_evidence.py \
   --require-source-binaries
 ```
 
-The candidate receipt and manufacturer source binaries are not included in the Pages site. Before an authorized deployment, CI downloads the private `742-frozen-source-evidence` artifact from the exact Actions run named by `JLG742_SOURCE_EVIDENCE_RUN_ID`, replays all 11 source hashes, and verifies the retained deterministic GLB rebuild attestation. After deployment it retrieves the public build manifest and verifies every listed public response—not only the 742 subset—at HTTP 200 with the exact manifest SHA-256 and byte count. The external schema-3 attestation binds the source-replay result, rebuild attestation, complete deployed manifest, candidate receipt, producer workflow run, and deployment workflow run without packaging private source binaries.
+The candidate receipt and manufacturer source binaries are not included in the Pages site. Before an authorized deployment, CI downloads the private `742-frozen-source-evidence` artifact from the exact Actions run named by `JLG742_SOURCE_EVIDENCE_RUN_ID` and replays all 11 source hashes. The deployment workflow itself then performs the pinned-Blender deterministic rebuild against its exact source commit. After deployment it retrieves the public build manifest and verifies every listed public response—not only the 742 subset—at HTTP 200 with the exact manifest SHA-256 and byte count. The external schema-3 attestation binds the private source replay, current-workflow rebuild, complete deployed manifest, candidate receipt, exact source commit, and deployment workflow run without packaging private source binaries.
 
-To close the human gates, first write a pending receipt, commit the exact candidate, and take its `candidate_tree_sha256`. Repeat the checklist in `docs/review/742/CAPTURE_REQUIREMENTS.json` against that frozen candidate. Each browser gate requires schema-2 raw evidence: exact browser/OS/GPU metadata, DOM and applicable accessibility-tree snapshots, ordered interaction transcripts, exact screenshot and automation-trace records, and raw frame-interval arrays for the performance gate. One generic boolean report cannot satisfy multiple gates. The eight Blender PNGs and browser-capture artifacts use separate exact allowlists, while the source-binary hash scan still rejects any manufacturer file with an admitted hash. The browser-capture allowlist remains empty in the pending candidate and is excluded from its candidate-tree digest; after capture, the completed human-review binding records that populated allowlist by exact path, hash, and byte count and requires every admitted capture to be consumed by a semantically validated gate. The accessibility gate proves browser semantics and keyboard behavior only—it does not claim VoiceOver, NVDA, or physical assistive-technology testing. The regression artifacts must exercise interaction, responsive layout, modal focus, drag, pinch, and reduced motion while binding the exact current 600S and ES1930M 1.0.4 configuration, release, asset, runtime, and receipt identities.
+To close the human gates, first write a pending receipt, commit the exact candidate, and take its `candidate_tree_sha256`. Repeat the checklist in `docs/review/742/CAPTURE_REQUIREMENTS.json` against that frozen candidate. Each browser gate requires schema-2 raw evidence: exact browser/OS/GPU metadata, the repository lockfile plus bundled Chromium revision/executable digest, DOM and applicable accessibility-tree snapshots, exact screenshot and automation-trace records, and raw frame-interval arrays for the performance gate. One generic boolean report cannot satisfy multiple gates. The twelve Blender PNGs and browser-capture artifacts use separate exact allowlists. Ten mechanism renders are individually tied to named semantic claims; stowed and cab renders remain distinct gates. The browser-capture allowlist remains empty in the pending candidate and is excluded from its candidate-tree digest; after capture, the completed human-review binding records that populated allowlist by exact path, hash, and byte count and requires every admitted capture to be consumed by a semantically validated gate. The accessibility gate proves browser semantics and keyboard behavior only—it does not claim VoiceOver, NVDA, or physical assistive-technology testing. Regression evidence binds the current 600S release and the ES1930M 1.0.4 asset with its separately qualified 1.0.5 runtime.
+
+The repository-owned browser replay is:
+
+```sh
+npm ci
+npm run capture:742:install
+npm run capture:742 -- --port=8092
+```
 
 After the observations and final visual comparisons have actually been repeated, the explicit command below updates only candidate/commit bindings and manifest records, then semantically parses every gate. It rolls back all writes on failure; binding cannot create observations by itself.
 
@@ -57,7 +65,7 @@ python3 -B scripts/validate_742_receipt.py \
   --require-release
 ```
 
-`--require-deployed` also requires the frozen-source directory, a fresh replay, and all review gates. `--require-release` additionally requires the deterministic rebuild proof copied from the same private producer artifact and the schema-3 deployment attestation. If the producer variable, retained source set, rebuild proof, review binding, public manifest, or any public response is absent or inconsistent, deployment/release qualification fails closed. Manufacturer binaries are never placed in the Pages bundle.
+`--require-deployed` also requires the frozen-source directory, a fresh replay, and all review gates. `--require-release` additionally requires the deterministic rebuild proof generated in the current deployment workflow and the schema-3 deployment attestation. If the retained source set, current-run rebuild proof, source commit, review binding, public manifest, or any public response is absent or inconsistent, deployment/release qualification fails closed. Manufacturer binaries are never placed in the Pages bundle.
 
 ## What is ready
 
@@ -127,4 +135,4 @@ Three.js runtime and third-party ownership boundaries.
 
 The v1.1 mechanical, hierarchy, provenance, and static viewer contracts pass. A fresh local desktop and mobile browser run loaded the exact v1.1 GLB, exercised all four motion controls, passed the five-volume self-test, and recorded zero runtime errors. Fixed-camera paired source overlays remain a separate visual gate. Fabrication dimensions and safety/service simulation remain out of scope.
 
-The 742 receipt is a local candidate record, not deployment proof. Automated checks may pass while its human review gates remain explicitly pending. Public availability requires a separate post-deployment HTTP attestation; the repository never self-certifies an unpublished candidate as deployed.
+The 742 receipt is a local candidate record, not deployment proof. Its human-review state is valid only for the exact candidate tree and reviewed source commit recorded in the receipt; any source change requires a new pending transition and fresh binding. Public availability requires a separate post-deployment HTTP attestation, and the repository never self-certifies an unpublished candidate as deployed.

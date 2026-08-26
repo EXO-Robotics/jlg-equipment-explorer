@@ -1,6 +1,7 @@
 .DS_Store
 *.log
 __pycache__/
+node_modules/
 *.py[cod]
 *.blend1
 .blender-mcp/

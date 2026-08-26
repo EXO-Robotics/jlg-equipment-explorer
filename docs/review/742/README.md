@@ -6,15 +6,19 @@ committed, every required observation is repeated, and the binder semantically
 validates the captured evidence against that exact commit and candidate-tree
 digest.
 
-The eleven allowlisted Blender PNGs represent eleven distinct views: stowed,
+The twelve allowlisted Blender PNGs represent twelve distinct views: stowed,
 cab close-up, maximum lift, maximum-lift fork close-up, maximum reach,
 retract-chain cutaway, front steering-linkage cutaway, rear steering-linkage
-cutaway, circle-steering plan, crab-steering plan, and boom-angle-sensor
-close-up. The extended visual gate uses six mechanism-specific views—both
-maximum-lift views, maximum reach, retract-chain cutaway, front steering
-cutaway, and sensor close-up. Stowed and cab close-up remain separate gates.
-Each render is independently authored and bound
-by exact path, SHA-256, byte count, and PNG dimensions in
+cutaway, circle-steering plan, crab-steering plan, limited front-only steering
+plan, and boom-angle-sensor close-up. The schema-2 extended visual gate uses all
+ten mechanism-specific views. Each view has one required semantic ID and exact
+claim, including circle-mode common-ICR topology, crab translated-rack topology
+and residual-toe boundary, rear rack/bar topology, and the limited front-only
+mode with neutral rear wheels and reconstructed ICR spread. Each observation
+embeds its distinct allowlisted artifact's exact path, SHA-256, and byte count;
+an allowlist count or an unreferenced render cannot satisfy the gate. Stowed and
+cab close-up remain separate gates. Every render is independently authored and
+also bound by exact path, SHA-256, byte count, and PNG dimensions in
 `OWNED_RENDER_ALLOWLIST.json`.
 
 Browser proof uses a separate `BROWSER_CAPTURE_ALLOWLIST.json`. The pending
@@ -29,6 +33,14 @@ traces by exact path, hash, size, kind, MIME type, dimensions, and provenance.
 It does not weaken the manufacturer-binary hash rejection or reuse the
 Blender-render provenance contract.
 
+The authoritative recapture uses the exact Playwright 1.62.1 dependency in
+`package-lock.json` and its bundled Chromium revision 1234. Run `npm ci`,
+`npm run capture:742:install`, and then `npm run capture:742 -- --port=8092`.
+Completed evidence records the exact lockfile identity plus browser executable
+revision, version, basename, SHA-256, and byte count in every gate and trace.
+Absolute module/browser overrides remain available for rehearsal, but the
+review validator rejects override-backed output as final evidence.
+
 `CAPTURE_REQUIREMENTS.json` is the recapture checklist. Completed schema-2 gate
 records must contain:
 
@@ -40,7 +52,8 @@ records must contain:
 - at least 180 raw visible-tab frame intervals at desktop, portrait, and short
   landscape, with p95 and worst values recomputed from those arrays;
 - independent expected semantic-selection winners for all 15 component pairs,
-  compared with 15 separately observed winners;
+  compared with 15 separately observed winners, five fixed policy fixtures,
+  and six direct visible-canvas component selections;
 - interaction, responsive layout, modal keyboard/focus, drag, pinch, and
   reduced-motion regression checks for the exact current 600S release and exact
   ES1930M runtime release 1.0.5 (with its separately receipted 1.0.4 asset).

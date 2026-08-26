@@ -13,6 +13,7 @@ from pathlib import Path
 
 from validate_742_review import BROWSER_CAPTURE_ALLOWLIST_PATH, HUMAN_GATES, validate_review_manifest
 from verify_pages_deployment import REQUIRED_742_PUBLIC_FILES
+from run_742_posed_glb_gate import EXPECTED_ASSET_PATH
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +31,7 @@ CANONICAL_FILES = {
     "receipt_validator": "scripts/validate_742_receipt.py",
     "project_readme": "README.md",
     "package_manifest": "package.json",
+    "package_lock": "package-lock.json",
     "pages_workflow": ".github/workflows/pages.yml",
     "pages_assembler": "scripts/assemble_pages.py",
     "pages_bundle_validator": "scripts/validate_pages_bundle.py",
@@ -86,6 +88,9 @@ AUTOMATED_CHECKS = {
     "actual_posed_glb": ("scripts/run_742_posed_glb_gate.py", []),
     "route_contract": ("scripts/validate_742_route.py", []),
     "review_evidence_parser": ("scripts/test_742_browser_evidence.py", []),
+    "review_visual_semantics_parser": ("scripts/test_742_review_semantics.py", []),
+    "posed_glb_portability_parser": ("scripts/test_742_posed_glb_portability.py", []),
+    "deployment_proof_parser": ("scripts/test_742_deployment_proof.py", []),
 }
 TOP_LEVEL_FIELDS = {
     "schema_version", "release", "release_status", "written", "configuration_id",
@@ -176,6 +181,11 @@ def replay_check(name: str, record: dict) -> Path:
     except json.JSONDecodeError as error:
         raise RuntimeError(f"742 automated check replay emitted invalid JSON: {name}") from error
     canonical = json.dumps(result, sort_keys=True, separators=(",", ":")).encode()
+    if name == "actual_posed_glb" and (
+        result.get("asset") != EXPECTED_ASSET_PATH
+        or record.get("result", {}).get("asset") != EXPECTED_ASSET_PATH
+    ):
+        raise RuntimeError("742 posed-GLB replay contains a checkout-specific asset path")
     if result.get("status") != "PASS" or result != record["result"] or hashlib.sha256(canonical).hexdigest() != record["result_sha256"]:
         raise RuntimeError(f"742 automated check result drift: {name}")
     return validator

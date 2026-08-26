@@ -13,6 +13,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/validate_742_posed_glb.py"
 MARKER = "742_POSED_GLB_JSON="
+EXPECTED_ASSET_PATH = "assets/models/742.glb"
+
+
+def canonical_posed_glb_asset_path(value: str, repository_root: Path = ROOT) -> str:
+    if not isinstance(value, str) or not value:
+        raise RuntimeError("742 posed-GLB result asset path is missing")
+    candidate = Path(value)
+    if candidate.is_absolute():
+        try:
+            candidate = candidate.resolve().relative_to(repository_root.resolve())
+        except ValueError as error:
+            raise RuntimeError("742 posed-GLB result asset path escapes its checkout") from error
+    if candidate.is_absolute() or ".." in candidate.parts or candidate.as_posix() != EXPECTED_ASSET_PATH:
+        raise RuntimeError(f"742 posed-GLB result asset path is not canonical: {value}")
+    return EXPECTED_ASSET_PATH
+
+
+def canonicalize_posed_glb_result(result: dict, repository_root: Path = ROOT) -> dict:
+    canonical = dict(result)
+    canonical["asset"] = canonical_posed_glb_asset_path(canonical.get("asset"), repository_root)
+    return canonical
 
 
 def blender_binary() -> str:
@@ -36,7 +57,7 @@ def main() -> None:
                     if line.startswith(MARKER)]
     if not marker_lines:
         raise RuntimeError(f"742 posed-GLB gate emitted no result\n{completed.stdout}{completed.stderr}")
-    result = json.loads(marker_lines[-1])
+    result = canonicalize_posed_glb_result(json.loads(marker_lines[-1]))
     if completed.returncode or result.get("status") != "PASS":
         raise RuntimeError(f"742 posed-GLB gate failed\n{json.dumps(result, indent=2, sort_keys=True)}\n{completed.stderr}")
     print(json.dumps(result, indent=2, sort_keys=True))

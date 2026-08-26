@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.1.0",
-  "kind": "742-browser-recapture-requirements",
+  "schema_version": "1.2.0",
+  "kind": "742-review-recapture-requirements",
   "freeze_prerequisites": [
     "Final 742 GLB, runtime, CSS, machine modules, configuration, and mechanism bytes are committed.",
     "A pending candidate receipt has been regenerated from that exact tree with frozen-source verification.",
@@ -12,8 +12,66 @@
     "os_metadata": ["name", "version", "build"],
     "gpu_metadata": "Record WebGL API plus unmasked vendor/renderer when WEBGL_debug_renderer_info is observable; otherwise record unavailable and the exact reason.",
     "accessibility_tree_slider_contract": "Normalize raw Chromium CDP Accessibility.getFullAXTree nodes without inventing display units. Every expected slider name must match exactly; each slider must be enabled, focusable, settable, and retain its finite native numeric value plus equivalent numeric AX valuetext. Unit-suffixed or semantic presentation text is verified separately from the DOM aria-valuetext attribute.",
-    "automation": "Execute scripts/capture_742_browser_evidence.mjs from the committed candidate with explicit isolated Playwright node_modules and Chromium executable paths. Record exact tool/version and committed runner hash/size, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json. Each trace outcomes object must byte-canonically hash and exactly equal the gate artifact observations.assertions object; free-form transcripts are non-authoritative and prohibited.",
+    "automation": "Run npm ci, npm run capture:742:install, then npm run capture:742 from the committed candidate. The exact Playwright version is pinned in package-lock.json and the default executable is its bundled Chromium revision. Record and validate the lockfile hash/size, Playwright version, bundled revision, executable basename/SHA-256/byte count, committed runner hash/size, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json. Explicit absolute tool/browser overrides remain rehearsal-only and cannot satisfy a completed review gate. Each trace outcomes object must byte-canonically hash and exactly equal the gate artifact observations.assertions object; free-form transcripts are non-authoritative and prohibited.",
+    "repo_owned_replay_command": "npm ci && npm run capture:742:install && npm run capture:742 -- --port=8092",
     "boundaries": ["local browser or responsive emulation only", "no physical-device claim", "no VoiceOver or NVDA session claim", "no deployment claim"]
+  },
+  "extended_visual_fidelity": {
+    "artifact_schema_version": "2.0.0",
+    "binding_rule": "Each named semantic observation must embed the exact path, SHA-256, and byte count of its distinct OWNED_RENDER_ALLOWLIST artifact. Counts, unreferenced allowlist entries, separate boolean maps, and path-only lists cannot satisfy this gate.",
+    "boundary_rule": "The observation must state that it contains no manufacturer geometry and is not factory steering or crab calibration.",
+    "render_observations": [
+      {
+        "semantic_id": "maximum_lift_level_attachment",
+        "path": "docs/review/742/maximum-lift-level-forks.png",
+        "claim": "Level fork load surface is visible at the selected reconstructed maximum-lift pose."
+      },
+      {
+        "semantic_id": "maximum_lift_fork_closeup",
+        "path": "docs/review/742/maximum-lift-forks-close.png",
+        "claim": "Fork heels, blades, attachment, and level relationship are visible at maximum lift."
+      },
+      {
+        "semantic_id": "maximum_reach_load_center_pose",
+        "path": "docs/review/742/maximum-reach-24in-load-center.png",
+        "claim": "The selected 3 degree maximum-reach pose and 24 inch load-center reference are visible."
+      },
+      {
+        "semantic_id": "retract_chain_tangent_sheave_routing",
+        "path": "docs/review/742/retract-chain-routing-cutaway.png",
+        "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible."
+      },
+      {
+        "semantic_id": "rigid_double_ended_steering_rack_and_bars",
+        "path": "docs/review/742/steering-linkage-cutaway.png",
+        "claim": "Rigid double-ended steering racks, rods, bars, and wheel pivots are visible."
+      },
+      {
+        "semantic_id": "rear_steering_rack_bar_topology",
+        "path": "docs/review/742/rear-steering-linkage.png",
+        "claim": "Rear axle rack, opposed rods, steering bars, and wheel pivots are visible."
+      },
+      {
+        "semantic_id": "circle_four_wheel_icr_topology",
+        "path": "docs/review/742/circle-steering-plan.png",
+        "claim": "Reconstructed four-wheel circle-steering topology and common-ICR evidence are visible."
+      },
+      {
+        "semantic_id": "crab_translated_rack_residual_toe_topology",
+        "path": "docs/review/742/crab-steering-plan.png",
+        "claim": "Reconstructed translated-rack crab topology and measured residual-toe boundary are visible."
+      },
+      {
+        "semantic_id": "front_only_limited_rack_neutral_rear_front_mode_icr",
+        "path": "docs/review/742/front-steering-limited-plan.png",
+        "claim": "Front-only limited-rack topology, neutral rear wheels, and reconstructed front-mode ICR spread are visible."
+      },
+      {
+        "semantic_id": "rigid_boom_angle_sensor_crank_and_link",
+        "path": "docs/review/742/boom-pivot-angle-sensor.png",
+        "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible."
+      }
+    ]
   },
   "gates": {
     "desktop_browser_interaction": {
@@ -42,8 +100,8 @@
     "semantic_selection": {
       "viewports_css_px": [[1280, 720]],
       "screenshots_minimum": 1,
-      "assertion_ids": ["visible_canvas_selection", "clear_selection", "pinch_suppression", "overlap_self_test"],
-      "visible_canvas_rule": "Click the four independently labeled committed viewport coordinates directly on unobstructed canvas pixels. Require selected component and the runtime's actual frontmost rendered surface component to both equal the independently declared expected component, with resolution basis visible-surface and a nonempty rendered mesh name.",
+      "assertion_ids": ["visible_canvas_selection", "clear_selection", "pinch_suppression", "overlap_self_test", "screenshot_framing"],
+      "visible_canvas_rule": "From one deterministic reset/framing sequence, click six independently labeled committed viewport coordinates directly on unobstructed canvas pixels without using component-focus controls to discover or prepare the click. Cover chassis, steering, boom, hydraulics, cab, and carriage exactly once. Require selected component and the runtime's actual frontmost rendered surface component to both equal the independently declared expected component, with resolution basis visible-surface and a nonempty rendered mesh name. Restore/reset framing before the screenshot and prove its settled camera distance is not clipped inside the machine.",
       "independent_priority": {"chassis": 0, "steering": 1, "boom": 2, "hydraulics": 3, "cab": 4, "carriage": 5},
       "raw_ray_rule": "Copy and parse data-selection-overlap-outcomes for all 15 rays. The validator independently recomputes the expected component from hit components/distances, visible-surface component, the fixed 0.025 m tie rule, and its own priority map.",
       "raw_fixture_rule": "Copy every full 9-field data-selection-fixture-outcomes record without stripping hits or semantic fields. The validator independently recomputes basis, component, and volume from raw hit distances/priorities plus visibleSurfaceComponent, checks the committed 5-field projection, and requires exact equality with the DOM-parsed records.",
@@ -65,14 +123,19 @@
       "route": "/",
       "viewports_css_px": [[1280, 720], [390, 844]],
       "screenshots_minimum": 2,
-      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion"]
+      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures"],
+      "reduced_motion_rule": "Capture a live no-preference to reduce to no-preference media transition while autonomy is moving. Require motion to stop immediately, manual controls to remain enabled, and autonomy not to resume when the preference returns.",
+      "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and stable animation state."
     },
     "es1930m_browser_regression": {
       "route": "/es1930m/",
       "required_release": "1.0.4",
       "viewports_css_px": [[1280, 720], [390, 844]],
       "screenshots_minimum": 2,
-      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "reduced_motion"]
+      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "maximum_pose_controls", "reduced_motion", "fatal_failures"],
+      "maximum_pose_rule": "Capture full lift, full deck extension, and both steering extrema with explicit DOM aria-valuetext for every ES slider and a dedicated maximum-pose screenshot.",
+      "reduced_motion_rule": "Capture a live no-preference to reduce to no-preference media transition while autonomy is moving. Require motion to stop immediately, manual controls to remain enabled, and autonomy not to resume when the preference returns.",
+      "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and stable animation state."
     }
   }
 }

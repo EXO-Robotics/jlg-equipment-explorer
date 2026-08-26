@@ -18,6 +18,7 @@ from datetime import date
 from pathlib import Path
 
 from validate_742_review import HUMAN_GATES, validate_review_manifest
+from run_742_posed_glb_gate import EXPECTED_ASSET_PATH
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +37,7 @@ FILES = {
     "receipt_validator": ROOT / "scripts/validate_742_receipt.py",
     "project_readme": ROOT / "README.md",
     "package_manifest": ROOT / "package.json",
+    "package_lock": ROOT / "package-lock.json",
     "pages_workflow": ROOT / ".github/workflows/pages.yml",
     "pages_assembler": ROOT / "scripts/assemble_pages.py",
     "pages_bundle_validator": ROOT / "scripts/validate_pages_bundle.py",
@@ -92,6 +94,9 @@ AUTOMATED_CHECKS = {
     "actual_posed_glb": ("run_742_posed_glb_gate.py", []),
     "route_contract": ("validate_742_route.py", []),
     "review_evidence_parser": ("test_742_browser_evidence.py", []),
+    "review_visual_semantics_parser": ("test_742_review_semantics.py", []),
+    "posed_glb_portability_parser": ("test_742_posed_glb_portability.py", []),
+    "deployment_proof_parser": ("test_742_deployment_proof.py", []),
 }
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -144,6 +149,8 @@ def run_check(script: str, extra_args: list[str]) -> dict:
         raise RuntimeError(f"Automated check did not emit one JSON result: {script}") from error
     if result.get("status") != "PASS":
         raise RuntimeError(f"Automated check did not pass: {script}")
+    if script == "run_742_posed_glb_gate.py" and result.get("asset") != EXPECTED_ASSET_PATH:
+        raise RuntimeError("742 posed-GLB check emitted a checkout-specific asset path")
     canonical_result = json.dumps(result, sort_keys=True, separators=(",", ":")).encode()
     return {
         "status": "pass",
