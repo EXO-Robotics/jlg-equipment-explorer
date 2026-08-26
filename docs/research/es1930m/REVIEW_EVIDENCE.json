@@ -2,15 +2,15 @@
   "binding": {
     "600s_browser_artifact": "docs/review/742/600s-browser-regression.json",
     "600s_browser_evidence": {
-      "assertions_sha256": "203574d1d69c7341158bbd69a44ecabdc9c2000a62337fbca0c4dab5df7c1fe7",
+      "assertions_sha256": "c5acf6f6685ded9628d352f1c741a986c01c945a3dbc14c614a65d26cccc0dbd",
       "automation_trace": {
-        "bytes": 117718,
+        "bytes": 117465,
         "height_px": null,
         "path": "docs/review/742/browser-captures/600s-browser-regression-trace.json",
-        "sha256": "a9684534d39cdce7deacbb4380e40c6918bd935ed38ded61b9c7db38d53c0edd",
+        "sha256": "7a784d86729ca5be80f2430265f95ef044be9053e9f134cea2ac6d2329782755",
         "width_px": null
       },
-      "normalized_artifact_sha256": "86722b94c9d8ebf8540dd6cf53d089e810fc69b50383c7d58cd35399814a1571",
+      "normalized_artifact_sha256": "9c8ead0d21a53dd0ddbcc60d7fc901c431b471f51d1f01d5b8c673369108cd90",
       "runner": {
         "bytes": 88402,
         "path": "scripts/capture_742_browser_evidence.mjs",
@@ -18,17 +18,17 @@
       },
       "screenshots": [
         {
-          "bytes": 119838,
+          "bytes": 119860,
           "height_px": 720,
           "path": "docs/review/742/browser-captures/600s-regression-desktop.png",
-          "sha256": "0f3f638b93b1fb17400e3f242de4a15ce2dd30c9b446cb2390d7b267cfd8eb7c",
+          "sha256": "a12565d68e8cd582366de707ac193832c7a170d884cccec614d2ba9cc4a0b5ad",
           "width_px": 1280
         },
         {
-          "bytes": 76436,
+          "bytes": 76369,
           "height_px": 844,
           "path": "docs/review/742/browser-captures/600s-regression-mobile.png",
-          "sha256": "d1f8735e72398c20bab335278c54ead4e0383e71390946a732c120590589a715",
+          "sha256": "ecd13ac48f38a856ca826ebfb88d3b1c48e482b5e2f6c00a7dfd5f37ed81ba00",
           "width_px": 390
         }
       ],
@@ -2048,15 +2048,15 @@
     "deployment_claimed": false,
     "es_browser_artifact": "docs/review/742/es1930m-browser-regression.json",
     "es_browser_evidence": {
-      "assertions_sha256": "c30bc58f000ed9457bfcccf5d34a98621eed27d53053d38f550207c05ffab13f",
+      "assertions_sha256": "5884a883038a942e3192d8c798c98020a46d74f326f3f785c6d32b58d9f18519",
       "automation_trace": {
-        "bytes": 127816,
+        "bytes": 127818,
         "height_px": null,
         "path": "docs/review/742/browser-captures/es1930m-browser-regression-trace.json",
-        "sha256": "f42a65d9dd9e80e862304ade57ebff444c621daf1e7d6473db4468f1c8dfbf91",
+        "sha256": "66554165479fb3a5a239ee08150dce1ec36031d46a377afeb4bdfbdc951710b9",
         "width_px": null
       },
-      "normalized_artifact_sha256": "cc3139222fd5e3c5a0da9cb05b3e214ae2259ddd020463f0c8cb48a7d78f8100",
+      "normalized_artifact_sha256": "2b4836d6eee9ee9b1b1dd82dbd2c831c5d5301f5aed767e692e1cc4c019031ac",
       "runner": {
         "bytes": 88402,
         "path": "scripts/capture_742_browser_evidence.mjs",
@@ -2064,24 +2064,24 @@
       },
       "screenshots": [
         {
-          "bytes": 176739,
+          "bytes": 177230,
           "height_px": 720,
           "path": "docs/review/742/browser-captures/es1930m-regression-maximum-pose.png",
-          "sha256": "2d618ceb6f42a2227b17ecb133073fbcc457173fe2fe9f38ade5709490448398",
+          "sha256": "9035cd383564eea13bb9f491d69dbdb427c4b17af788bbeea70f150bb00431eb",
           "width_px": 1280
         },
         {
-          "bytes": 212011,
+          "bytes": 212098,
           "height_px": 720,
           "path": "docs/review/742/browser-captures/es1930m-regression-desktop.png",
-          "sha256": "2cc483f76088cf8671aae0e2fea4f3c0d4870063a2525721c3964e13af2902e4",
+          "sha256": "8df9826f0b3be9fd3e2ccba580e66e4693c63ea60967804e789de9824b5ab850",
           "width_px": 1280
         },
         {
-          "bytes": 100993,
+          "bytes": 100973,
           "height_px": 844,
           "path": "docs/review/742/browser-captures/es1930m-regression-mobile.png",
-          "sha256": "6a76788ec5d09d8daf8249812c9f4089aab2bc273eb4f8a1df9a2a623ae85994",
+          "sha256": "604aa171df55325ee8a671509778c28b048edc2f6702a0fba24d7e97b0c4f994",
           "width_px": 390
         }
       ],
@@ -4149,7 +4149,7 @@
   },
   "gates": {
     "600s_regression_suite_pass": {
-      "browser_evidence_sha256": "64d3d532f09dd7a85d28408882643121c2d4a30feab24ca107dd232f2acbcf38",
+      "browser_evidence_sha256": "d197105a1b5abf4eae2e68294945af00a316332828671f0bcb6378176a7788c4",
       "evidence": "Exact current 600S browser regression, fatal-path suite, live reduced-motion transition and repository validators passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4157,7 +4157,7 @@
       "status": "pass"
     },
     "accessibility_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "CDP accessibility tree, engineering slider values, modal focus trap, Escape restoration, live reduced-motion transition and all terminal alerts passed; no AT session is claimed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4173,7 +4173,7 @@
       "status": "pending"
     },
     "desktop_browser_zero_errors": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Exact current runtime loaded with zero runtime and console errors before browser interactions.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4181,7 +4181,7 @@
       "status": "pass"
     },
     "extension_browser_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Executable controls reached the verified 0.55 m deck extension and the kinematic/GLB gates passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4189,7 +4189,7 @@
       "status": "pass"
     },
     "figure_eight_presentation_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Executable auto start, pause and resume passed with the 2400-sample route validator.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4197,7 +4197,7 @@
       "status": "pass"
     },
     "mobile_and_pinch_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "390x844 controls and numeric camera-distance pinch proof passed in emulated Chromium; no physical touchscreen is claimed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4205,7 +4205,7 @@
       "status": "pass"
     },
     "mobile_drag_direction_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Current mobile browser capture plus deterministic touch-direction and camera-basis tests passed; no physical device is claimed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4213,7 +4213,7 @@
       "status": "pass"
     },
     "performance_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Exact current runtime reported a finite local Chromium FPS and p95 sample; no physical low-end device claim is made.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4221,7 +4221,7 @@
       "status": "pass"
     },
     "platform_controls_visual_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "The exact current maximum-pose browser capture and GLB contract include the authored platform-control hierarchy.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4229,7 +4229,7 @@
       "status": "pass"
     },
     "raised_pose_browser_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Executable controls reached 5.64 m platform height and captured the exact raised pose.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4237,7 +4237,7 @@
       "status": "pass"
     },
     "selection_and_focus_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "The exported selection self-test and platform modal focus/restore browser assertions passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4245,7 +4245,7 @@
       "status": "pass"
     },
     "steering_boundary_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Executable steering reached 80 mm right cylinder displacement and the route solver gate passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -4253,7 +4253,7 @@
       "status": "pass"
     },
     "stowed_silhouette_reviewed": {
-      "browser_evidence_sha256": "d0e377c1aaa9b61375c5a1fc91fdcd5da1bf963615e01e55eec2859967c75a1f",
+      "browser_evidence_sha256": "814be575484082a3b6c9ab32e7777c03422d910abc44591ab5377445dfee6e33",
       "evidence": "Exact current GLB loaded at desktop and mobile with bound screenshots, selection self-test pass and zero runtime errors.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
