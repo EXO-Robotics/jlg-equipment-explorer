@@ -11,7 +11,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import math
 import re
 import subprocess
 import sys
@@ -57,8 +56,13 @@ FILES = {
     "review_renderer": ROOT / "scripts/render_742_preview.py",
     "review_validator": ROOT / "scripts/validate_742_review.py",
     "review_binder": ROOT / "scripts/bind_742_review.py",
+    "browser_capture_validator": ROOT / "scripts/validate_742_browser_evidence.py",
+    "browser_capture_probe": ROOT / "scripts/742_browser_capture_probe.js",
+    "browser_capture_parser_tests": ROOT / "scripts/test_742_browser_evidence.py",
     "deterministic_rebuild_verifier": ROOT / "scripts/verify_742_deterministic_rebuild.py",
     "owned_review_render_allowlist": ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
+    "browser_capture_allowlist": ROOT / "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
+    "browser_capture_requirements": ROOT / "docs/review/742/CAPTURE_REQUIREMENTS.json",
 }
 RUNTIME_FILES = [
     ROOT / "742/index.html",
@@ -83,6 +87,7 @@ AUTOMATED_CHECKS = {
     "asset_contract": ("validate_742_glb.py", []),
     "mechanical_kinematics": ("validate_742_kinematics.py", []),
     "route_contract": ("validate_742_route.py", []),
+    "review_evidence_parser": ("test_742_browser_evidence.py", []),
 }
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -107,15 +112,6 @@ def aggregate_digest(paths: list[Path]) -> str:
         hasher.update(path.read_bytes())
         hasher.update(b"\0")
     return hasher.hexdigest()
-
-
-def solver_circle_inner_degrees(result: dict, mechanism: dict) -> float:
-    steering = mechanism["steering"]
-    half_wheelbase = steering["wheelbase_m"] / 2
-    track = steering["wheel_center_track_m"]
-    outside_center_path = result["visual_circle_outside_wheel_center_radius_m"]
-    projected_outside = math.sqrt(outside_center_path ** 2 - half_wheelbase ** 2)
-    return math.degrees(math.atan2(half_wheelbase, projected_outside - track))
 
 
 def solver_stroke_usage(result: dict) -> dict:
@@ -183,7 +179,7 @@ def main() -> None:
     asset_result = checks["asset_contract"]["result"]
     kinematic_result = checks["mechanical_kinematics"]["result"]
     mechanism = json.loads(FILES["mechanism"].read_text(encoding="utf-8"))
-    circle_inner_degrees = solver_circle_inner_degrees(kinematic_result, mechanism)
+    steering_linkage = kinematic_result["steering_linkage"]
     mechanical_proof = {
         "asset_sha256": asset_result["sha256"],
         "source_blend_sha256": asset_result["source_blend_sha256"],
@@ -193,9 +189,24 @@ def main() -> None:
         "posed_level_fork_surface_height_m": kinematic_result["maximum_level_fork_surface_y_m"],
         "published_maximum_forward_reach_m": configuration["published_performance"]["maximum_forward_reach_m"],
         "posed_24in_load_center_forward_reach_m": kinematic_result["maximum_reach_pose"]["forward_reach_m"],
+        "posed_reach_fork_heel_world_x_m": kinematic_result["maximum_reach_pose"]["fork_heel_x_m"],
+        "posed_reach_24in_load_center_world_x_m": kinematic_result["maximum_reach_pose"]["load_center_world_x_m"],
+        "actual_glb_front_tire_tread_plane_x_m": kinematic_result["actual_glb_front_tire_tread_plane_x_m"],
         "evidence_steering_inner_limit_degrees": mechanism["steering"]["visual_inner_limit_degrees"],
-        "solver_circle_maximum_inner_wheel_degrees": circle_inner_degrees,
-        "solver_maximum_ackermann_center_error_m": kinematic_result["maximum_ackermann_center_error_m"],
+        "solver_circle_maximum_inner_wheel_degrees": steering_linkage["maximum_inner_wheel_angle_degrees"],
+        "solver_maximum_steering_bar_length_drift_m": steering_linkage["maximum_steering_bar_length_drift_m"],
+        "solver_maximum_opposed_rod_joint_span_drift_m": steering_linkage["maximum_opposed_rod_joint_span_drift_m"],
+        "solver_maximum_rod_bar_closure_error_m": steering_linkage["maximum_rod_bar_closure_error_m"],
+        "solver_maximum_ackermann_fit_error_m": steering_linkage["maximum_ackermann_fit_error_m"],
+        "solver_maximum_ackermann_relative_error": steering_linkage["maximum_ackermann_relative_error"],
+        "solver_ackermann_authority": steering_linkage["ackermann_authority"],
+        "solver_maximum_reconstructed_circle_center_spread_m": kinematic_result["maximum_reconstructed_circle_center_spread_m"],
+        "solver_rigid_link_ranges_m": kinematic_result["rigid_link_ranges_m"],
+        "solver_chain_paths": kinematic_result["chain_paths"],
+        "solver_maximum_chain_tangent_dot_error": kinematic_result["maximum_chain_tangent_dot_error"],
+        "solver_minimum_chain_to_sheave_surface_clearance_m": kinematic_result["minimum_chain_to_sheave_surface_clearance_m"],
+        "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
+        "approximate_published_rigid_underbody_clearance_m": mechanism["collision_proxies"]["minimum_rigid_underbody_clearance_m"],
         "published_hydraulic_cylinder_strokes_m": mechanism["hydraulic_cylinder_strokes_m"],
         "solver_evidence_stroke_usage_m": solver_stroke_usage(kinematic_result),
         "solver_fixed_barrel_length_ranges_m": {
@@ -203,6 +214,7 @@ def main() -> None:
         },
         "rear_axle_stabilization_usage_boundary": kinematic_result["rear_axle_stabilization_usage_boundary"],
         "continuous_retract_chain_samples": kinematic_result["continuous_retract_chain_samples"],
+        "continuous_all_chain_samples": kinematic_result["continuous_all_chain_samples"],
         "minimum_retract_chain_segment_m": kinematic_result["minimum_retract_chain_segment_m"],
         "stowed_fork_bottom_m": kinematic_result["stow"]["fork_bottom_m"],
         "canonical_solver": kinematic_result["canonical_solver"],
@@ -216,8 +228,20 @@ def main() -> None:
         raise RuntimeError("742 receipt maximum-reach pose proof drift")
     if mechanical_proof["evidence_steering_inner_limit_degrees"] != 55 or abs(mechanical_proof["solver_circle_maximum_inner_wheel_degrees"] - 55.0) > 1e-9:
         raise RuntimeError("742 receipt 55-degree steering proof drift")
-    if mechanical_proof["solver_maximum_ackermann_center_error_m"] > 1e-9:
-        raise RuntimeError("742 receipt Ackermann closure proof drift")
+    if mechanical_proof["solver_maximum_steering_bar_length_drift_m"] > 1e-12 or mechanical_proof["solver_maximum_opposed_rod_joint_span_drift_m"] > 1e-12 or mechanical_proof["solver_maximum_rod_bar_closure_error_m"] > 1e-12:
+        raise RuntimeError("742 receipt rigid steering-linkage proof drift")
+    if mechanical_proof["solver_maximum_ackermann_relative_error"] > 0.11 or "not factory steering calibration" not in mechanical_proof["solver_ackermann_authority"]:
+        raise RuntimeError("742 receipt reconstructed Ackermann-fit boundary drift")
+    if mechanical_proof["solver_maximum_reconstructed_circle_center_spread_m"] > 1e-12:
+        raise RuntimeError("742 receipt reconstructed circle symmetry proof drift")
+    if any(max(values) - min(values) > 1e-12 for values in mechanical_proof["solver_rigid_link_ranges_m"].values()):
+        raise RuntimeError("742 receipt rigid-link invariant proof drift")
+    if any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.04 or path["wrap_degrees"] != 180 for path in mechanical_proof["solver_chain_paths"].values()):
+        raise RuntimeError("742 receipt invariant chain-route proof drift")
+    if mechanical_proof["solver_maximum_chain_tangent_dot_error"] > 1e-12 or mechanical_proof["solver_minimum_chain_to_sheave_surface_clearance_m"] <= 0 or mechanical_proof["continuous_all_chain_samples"] < 2001:
+        raise RuntimeError("742 receipt chain tangency/clearance/continuity proof drift")
+    if mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
+        raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")
     if any(max(values) - min(values) > 1e-12 for values in mechanical_proof["solver_fixed_barrel_length_ranges_m"].values()):
         raise RuntimeError("742 receipt fixed-barrel proof drift")
     usage = mechanical_proof["solver_evidence_stroke_usage_m"]
@@ -227,7 +251,7 @@ def main() -> None:
             raise RuntimeError(f"742 receipt evidence-stroke proof drift: {name}")
     if not 0 < usage["rear_axle_stabilization_visible_subset"] <= published["rear_axle_stabilization"]:
         raise RuntimeError("742 receipt RAS visible-subset proof drift")
-    if mechanical_proof["minimum_retract_chain_segment_m"] < 0.15 or mechanical_proof["continuous_retract_chain_samples"] < 2001:
+    if mechanical_proof["minimum_retract_chain_segment_m"] < 0.04 or mechanical_proof["continuous_retract_chain_samples"] < 2001:
         raise RuntimeError("742 receipt continuous retract-chain proof drift")
     if not 0.1 <= mechanical_proof["stowed_fork_bottom_m"] <= 0.4:
         raise RuntimeError("742 receipt stowed-fork height proof drift")

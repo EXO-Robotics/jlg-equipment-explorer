@@ -1,6 +1,6 @@
 {
   "boundary": "Owned rendered presentation geometry only; no manufacturer geometry, load, stability, hydraulic response, service, or safety claim.",
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
+  "candidate_tree_sha256": "PENDING",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
     "os": "macOS 26.5.2 build 25F84",
@@ -9,17 +9,21 @@
   "gate": "extended_visual_fidelity",
   "kind": "742-visual-gate-observation",
   "observations": {
-    "double_ended_steering_ram_and_bars_visible": true,
+    "maximum_lift_fork_closeup_visible": true,
     "maximum_lift_level_attachment_visible": true,
     "maximum_reach_load_center_pose_visible": true,
-    "retract_chain_sheave_routing_visible": true
+    "retract_chain_tangent_sheave_routing_visible": true,
+    "rigid_boom_angle_sensor_crank_and_link_visible": true,
+    "rigid_double_ended_steering_rack_and_bars_visible": true
   },
   "render_artifacts": [
     "docs/review/742/maximum-lift-level-forks.png",
+    "docs/review/742/maximum-lift-forks-close.png",
     "docs/review/742/maximum-reach-24in-load-center.png",
     "docs/review/742/retract-chain-routing-cutaway.png",
-    "docs/review/742/steering-linkage-cutaway.png"
+    "docs/review/742/steering-linkage-cutaway.png",
+    "docs/review/742/boom-pivot-angle-sensor.png"
   ],
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
+  "reviewed_source_commit": "PENDING",
   "schema_version": "1.0.0"
 }

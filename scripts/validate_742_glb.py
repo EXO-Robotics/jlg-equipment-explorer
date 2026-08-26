@@ -36,9 +36,11 @@ REQUIRED_MECHANICAL_DETAIL = {
     "FrontSteerCylinder", "FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
     "RearSteerCylinder", "RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight",
     "FrontSteerBarLeft", "FrontSteerBarRight", "RearSteerBarLeft", "RearSteerBarRight",
-    "ExtendChain_L", "ExtendChain_R", "RetractChain_C", "RetractChain_C_Wrap", "RetractChain_C_Moving",
+    *{name for prefix in ("ExtendChain_L", "ExtendChain_R", "RetractChain_C")
+      for name in ([prefix, f"{prefix}_Wrap"] + [f"{prefix}_Wrap_{index}" for index in range(1, 8)] + [f"{prefix}_Moving"])},
     "BoomSheave_L", "BoomSheave_R", "RetractSheave_C",
-    "BoomAngleSensorBracket", "BoomAngleSensorBody", "BoomAngleSensorLink", "BoomAngleSensorFrameJoint", "BoomAngleSensorBoomJoint",
+    "BoomAngleSensorBracket", "BoomAngleSensorBody", "BoomAngleSensorCrank", "BoomAngleSensorLink",
+    "BoomAngleSensorFrameJoint", "BoomAngleSensorCrankJoint", "BoomAngleSensorBoomJoint",
     "BoomRigidTube_0", "BoomRigidTube_1", "BoomRigidTube_2", "ForkL", "ForkR",
 }
 
@@ -68,8 +70,17 @@ def main():
     if extras.get("solver_contract") != "machines/742/solver.js":
         raise RuntimeError("742 GLB is not bound to the executable production solver")
     aliases = json.loads(extras.get("mechanism_aliases") or "{}")
-    if aliases.get("retract_chain") != ["RetractChain_C", "RetractChain_C_Wrap", "RetractChain_C_Moving"]:
-        raise RuntimeError("742 retract-chain canonical aliases drifted")
+    for alias, prefix in (("extend_chain_left", "ExtendChain_L"),
+                          ("extend_chain_right", "ExtendChain_R"),
+                          ("retract_chain", "RetractChain_C")):
+        expected = sorted(name for name in REQUIRED_MECHANICAL_DETAIL if name.startswith(prefix))
+        if aliases.get(alias) != expected:
+            raise RuntimeError(f"742 {alias} canonical aliases drifted")
+    if extras.get("release") != config.get("target_release"):
+        raise RuntimeError("742 GLB release metadata does not match configuration target")
+    boom_angles = (nodes[by_name["BoomLiftPivot"]].get("extras") or {}).get("visual_angle_degrees")
+    if boom_angles != config["visual_motion_limits"]["boom_angle_degrees"]:
+        raise RuntimeError(f"742 boom-angle metadata drift: {boom_angles}")
     for child, expected_parent in REQUIRED_EDGES.items():
         if child not in by_name:
             raise RuntimeError(f"Missing required node: {child}")

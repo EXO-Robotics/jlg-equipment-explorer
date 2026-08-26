@@ -28,6 +28,24 @@ def set_beam(name, start, end):
     obj.scale = (1, 1, direction.length / float(obj.get("authored_length_m", direction.length)))
 
 
+def proof_beam(name, start, end, radius, material):
+    a, b = Vector(start), Vector(end)
+    direction = b - a
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=radius, depth=direction.length,
+                                       location=(a + b) / 2)
+    target = bpy.context.object
+    target.name = name
+    target.rotation_mode = "QUATERNION"
+    target.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(direction.normalized())
+    target.data.materials.append(material)
+    return target
+
+
+def mesh_world_points(names):
+    return [target.matrix_world @ vertex.co for name in names
+            for target in [bpy.data.objects[name]] for vertex in target.data.vertices]
+
+
 def solved_pose(lift, telescope, tilt=0.0, steer=0.0, level=0.0, steer_mode="circle"):
     request = {"lift": lift, "telescope": telescope, "tilt": tilt / 12 if tilt >= 0 else tilt / 5,
                "steer": steer, "level": level / 10, "steerMode": steer_mode}
@@ -49,6 +67,7 @@ def apply_solved_pose(pose):
         set_beam(name, endpoints[0], endpoints[1])
     for name, point in pose["geometry"]["points"].items():
         bpy.data.objects[name].location = point
+    bpy.context.view_layer.update()
 
 
 def pose_circle_steering(amount=1.0):
@@ -122,12 +141,17 @@ for obj in steer_cutaway:
 steer_names = {"FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
                "FrontSteerBarLeft", "FrontSteerBarRight"}
 steer_occluders = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURVE", "FONT"}
-                   and obj.get("component") == "steering" and obj.name not in steer_names]
+                   and obj.get("component") == "steering"
+                   and (obj.name.startswith(("Tire_", "Tread_", "WheelRim", "WheelHub", "PlanetaryCap", "Lug_"))
+                        or obj.name.startswith(("Rear", "SteerPivot_RL", "SteerPivot_RR"))
+                        or obj.name in {"FrontAxle", "FrontDifferential", "FrontAxleTubeLeft",
+                                            "FrontAxleTubeRight", "FrontPinionFlange"})]
 for obj in steer_occluders:
     obj.hide_render = True
 bpy.context.view_layer.update()
 steer_center = sum((bpy.data.objects[name].matrix_world.translation for name in steer_names), Vector()) / len(steer_names)
-camera.location = (4.5, 0.0, 1.55)
+camera.data.lens = 55
+camera.location = (6.5, 0.0, 2.2)
 point_at(camera, steer_center)
 scene.render.filepath = str(OUTPUT_DIR / "742-front-double-ended-steer-cylinder-cutaway.png")
 bpy.ops.render.render(write_still=True)
@@ -166,13 +190,74 @@ bpy.ops.render.render(write_still=True)
 for obj in chain_cutaway:
     obj.hide_render = False
 pose_mechanisms(1.0, 1.0)
-camera.location = (27.0, 30.0, 21.0)
-point_at(camera, (3.0, 0, 8.0))
+datum_mat = bpy.data.materials.new("ProofDatumOrange")
+datum_mat.diffuse_color = (1.0, 0.12, 0.015, 1.0)
+datum_mat.use_nodes = True
+datum_bsdf = datum_mat.node_tree.nodes.get("Principled BSDF")
+datum_bsdf.inputs["Base Color"].default_value = (1.0, 0.015, 0.004, 1.0)
+datum_bsdf.inputs["Roughness"].default_value = 0.24
+if "Emission Color" in datum_bsdf.inputs:
+    datum_bsdf.inputs["Emission Color"].default_value = (1.0, 0.008, 0.002, 1.0)
+    datum_bsdf.inputs["Emission Strength"].default_value = 2.0
+max_lift_forks = mesh_world_points(("ForkL", "ForkR"))
+max_lift_surface = max(point.z for point in max_lift_forks)
+level_datum = proof_beam("Proof_MaxLiftForkLevel", (2.2, -1.1, max_lift_surface + .08),
+                         (5.2, -1.1, max_lift_surface + .08), .022, datum_mat)
+bpy.ops.object.light_add(type="AREA", location=(8.0, -5.0, 16.0))
+max_lift_key = bpy.context.object
+max_lift_key.name = "MaxLiftKey"
+max_lift_key.data.energy = 1700
+max_lift_key.data.size = 5.0
+point_at(max_lift_key, (3.3, 0, 12.5))
+scene.render.resolution_x = 1000
+scene.render.resolution_y = 1200
+camera.data.lens = 52
+camera.location = (2.0, -28.0, 13.5)
+point_at(camera, (2.0, 0, 7.0))
 scene.render.filepath = str(OUTPUT_DIR / "742-maximum-lift-level-forks.png")
 bpy.ops.render.render(write_still=True)
-pose_mechanisms(0.0, 1.0)
-camera.location = (15.0, -23.0, 7.5)
-point_at(camera, (3.6, 0, 1.7))
+fork_cutaway = [target for target in bpy.data.objects
+                if target.type in {"MESH", "CURVE", "FONT"} and target.get("component") == "carriage"
+                and not target.name.startswith(("Fork",))]
+for target in fork_cutaway:
+    target.hide_render = True
+fork_center = sum(max_lift_forks, Vector()) / len(max_lift_forks)
+scene.render.resolution_x = 1200
+scene.render.resolution_y = 900
+camera.data.lens = 68
+camera.location = fork_center + Vector((3.2, -4.6, 1.8))
+point_at(camera, fork_center)
+scene.render.filepath = str(OUTPUT_DIR / "742-maximum-lift-forks-close.png")
+bpy.ops.render.render(write_still=True)
+for target in fork_cutaway:
+    target.hide_render = False
+level_datum.hide_render = True
+max_lift_key.hide_render = True
+pose_mechanisms(3 / 69, 1.0)
+bpy.context.view_layer.update()
+front_tire_names = [target.name for target in bpy.data.objects
+                    if target.type == "MESH" and target.name.startswith(("Tire_FL", "Tire_FR", "Tread_FL_", "Tread_FR_"))]
+front_tire_plane = max(point.x for point in mesh_world_points(front_tire_names))
+reach_forks = mesh_world_points(("ForkL", "ForkR"))
+fork_heel = min(point.x for point in reach_forks)
+load_center = fork_heel + .6096
+datum_objects = [
+    proof_beam("Proof_FrontTirePlane", (front_tire_plane, -1.45, 0),
+               (front_tire_plane, -1.45, 2.45), .018, datum_mat),
+    proof_beam("Proof_LoadCenterPlane", (load_center, -1.45, 0),
+               (load_center, -1.45, 2.45), .018, datum_mat),
+    proof_beam("Proof_ReachDimension", (front_tire_plane, -1.45, 2.25),
+               (load_center, -1.45, 2.25), .018, datum_mat),
+    proof_beam("Proof_LoadCenterCross", (load_center - .18, -1.45, 1.04),
+               (load_center + .18, -1.45, 1.04), .024, datum_mat),
+]
+scene.render.resolution_x = 1400
+scene.render.resolution_y = 800
+camera.data.lens = 52
+camera.location = (4.8, -30.0, 5.6)
+point_at(camera, (4.8, 0, 1.45))
 scene.render.filepath = str(OUTPUT_DIR / "742-maximum-reach-24in-load-center.png")
 bpy.ops.render.render(write_still=True)
+for target in datum_objects:
+    target.hide_render = True
 print(OUTPUT_DIR)

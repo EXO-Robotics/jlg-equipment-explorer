@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "target_release": "1.2.0",
+  "target_release": "1.3.0",
   "model": "742",
   "pvc": "2411",
   "market": "ANSI_US",

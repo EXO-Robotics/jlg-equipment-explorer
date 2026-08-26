@@ -3,49 +3,65 @@
   "kind": "owned-742-review-render-allowlist",
   "artifacts": [
     {
-      "path": "docs/review/742/cab-close.png",
-      "sha256": "e58ea2c1ec347dbdec6da123c5eef1209b0390a7adddf73ebe2083cfc78cb68b",
-      "bytes": 1507158,
+      "path": "docs/review/742/boom-pivot-angle-sensor.png",
+      "sha256": "a29afb08a7428a2ca50b32ced0272719ef462f4f7a918e0001c17a1a1941f0da",
+      "bytes": 1249929,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
-      "path": "docs/review/742/steering-linkage-cutaway.png",
-      "sha256": "a282c3d4acdb46fb998eb1d9f79d60924a1243c5c8a7cf9333a1fcd003aa3cec",
-      "bytes": 986972,
+      "path": "docs/review/742/cab-close.png",
+      "sha256": "9e5b2bf74b7f2cac6841021a73fe555d9cac4998c56d72124a2efd2c0877de69",
+      "bytes": 1505832,
+      "width_px": 1200,
+      "height_px": 900,
+      "provenance": "Deterministic render of the independently authored 742 Blender source."
+    },
+    {
+      "path": "docs/review/742/maximum-lift-forks-close.png",
+      "sha256": "e3b161120f3fbcaef548e03e26d73c4eeb2d3babd55231002097a0f65bbb2e42",
+      "bytes": 850684,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
       "path": "docs/review/742/maximum-lift-level-forks.png",
-      "sha256": "982d57aa57d22bd4ee57dfa54a606741993332e13542bf55cbbb03014f626bea",
-      "bytes": 813965,
-      "width_px": 1200,
-      "height_px": 900,
+      "sha256": "c117e2439b107bf9d4b4292f46c95c202c8976a38ac4d46c22eb62934a875321",
+      "bytes": 909261,
+      "width_px": 1000,
+      "height_px": 1200,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
       "path": "docs/review/742/maximum-reach-24in-load-center.png",
-      "sha256": "97938b4e83e546616051862b6037d40aeeb3660363da660fd247d468beedd0dc",
-      "bytes": 892832,
+      "sha256": "376e0099fac1ca735c2472017c30f2b3a8c71bc8968c6010500980a3e13c8195",
+      "bytes": 873307,
+      "width_px": 1400,
+      "height_px": 800,
+      "provenance": "Deterministic render of the independently authored 742 Blender source."
+    },
+    {
+      "path": "docs/review/742/retract-chain-routing-cutaway.png",
+      "sha256": "4b7dabbc8d8615966c323e4010147cceec3fe9163141c84439c203ca603062ff",
+      "bytes": 646860,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
-      "path": "docs/review/742/retract-chain-routing-cutaway.png",
-      "sha256": "b017a0064ac0560d5e3270af241bbaab8260a0765cc643f0a3b1549f95497816",
-      "bytes": 649177,
+      "path": "docs/review/742/steering-linkage-cutaway.png",
+      "sha256": "65184c67f9ae67eeaa272e983b5c4166b05ea7493ad2ac69bfbfe8c66cf26cf8",
+      "bytes": 957681,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
       "path": "docs/review/742/stowed-front-left.png",
-      "sha256": "084641898da3cfcb795276401b1ddb70ba305b2b1d7d93bc0e44cc798d2be89d",
-      "bytes": 1276685,
+      "sha256": "9685042f41b8ad146df51078402f2d53b097037377442753ba84cc1c17803e98",
+      "bytes": 1278204,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."

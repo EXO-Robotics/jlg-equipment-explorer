@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX = (ROOT / "742/index.html").read_text()
 RUNTIME = (ROOT / "viewer/742-runtime.js").read_text()
 MACHINE = (ROOT / "machines/742/machine.js").read_text()
+ARTICULATION = (ROOT / "machines/742/articulation.js").read_text()
 STYLE = (ROOT / "viewer/742.css").read_text()
 SHARED_RUNTIME = (ROOT / "viewer/runtime.js").read_text()
 SHARED_STYLE = (ROOT / "viewer/multi-machine.css").read_text()
@@ -28,18 +29,21 @@ def require(source, tokens, label):
 def main():
     require(INDEX, [
         'body data-machine="742"', 'id="app" role="application" tabindex="0"', 'aria-describedby="viewer-instructions"',
-        'id="motion-status" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'id="machine-controls-body"',
+        'id="motion-status"', 'id="motion-announcement" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'id="machine-controls-body"',
         'id="lift-control"', 'id="telescope-control"', 'id="tilt-control"', 'id="steer-control"', 'id="level-control"',
         'data-steer-mode="circle"', 'data-steer-mode="crab"', 'data-steer-mode="front"', 'id="showcase"', 'id="stow"',
         'id="inspector" role="dialog" aria-modal="true"', 'aria-describedby="inspector-copy" inert',
         'href="../viewer/742.css?', 'src="../viewer/742-runtime.js?',
         f'PVC 2411 accuracy reconstruction / {CONFIG["target_release"]}', 'id="reduced-motion-note"',
+        'window.__show742ModuleFailure', 'module-load-failed', 'onerror="window.__show742ModuleFailure()"',
         'Presentation-only mechanism limits.', 'No load, stability, service, training, or safety behavior is simulated.',
     ], "742 HTML")
     if INDEX.count('aria-describedby="motion-boundary"') != 5:
         raise RuntimeError("Every 742 range must reference the safety boundary")
     if INDEX.count('data-focus=') != 7:
         raise RuntimeError("742 component navigation must expose seven focus targets")
+    if re.search(r'id="motion-status"[^>]+aria-live', INDEX) or re.search(r'id="diagnostics"[^>]+aria-live', INDEX):
+        raise RuntimeError("Per-frame status and diagnostics must not be live regions")
     require(RUNTIME, [
         'import JLG742_MACHINE from "../machines/742/machine.js?v=', 'const pointers = new Map()',
         'gestureUsedPinch', '!gestureUsedPinch', 'pinchStartDistance', 'pointercancel',
@@ -49,18 +53,59 @@ def main():
         'setInert(element, true)', 'setInert(inspector, false)', 'restoreTarget.focus',
         'setAttribute("aria-valuetext", value)', 'runSelectionVolumeSelfTest()',
         'raycaster.intersectObjects(selectionVolumes, false)', 'hit.castShadow = false',
-        'orderedSelectionIntersections', 'selectionOverlapRays', 'selectionPriorityRays',
-        'overlappingRayCount > 0', 'priorityRayCount === overlappingRayCount',
+        'SELECTION_TIE_DISTANCE_M', 'nearestHitPerVolume', 'orderedSelectionIntersections',
+        'nearestVisibleComponentIntersection', 'resolveSelectionIntersection', 'frontmost-rendered-component-then-nearest-proxy',
+        'material?.visible !== false', 'material.opacity > 0.01',
+        'selectionOverlapRays', 'selectionNearestRays', 'selectionFixtureCases',
+        'selectionOverlapOutcomes', 'selectionFixtureOutcomes', 'expectedComponent', 'resolvedComponent', 'expectedBasis',
+        'overlappingRayCount > 0', 'nearestRayCount === overlappingRayCount', 'runSelectionOrderingFixtures()',
         'function clearComponentSelection()', 'function resetView()', 'framedPosedModelView()',
-        'showcaseButton.disabled = true', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
-        'if (!skipNextVisibleFrame && renderedInterval >= 4)', 'runtime.visibleStalls += 1',
+        'setProgrammaticViewDistance', 'effectiveMaxDistance', 'orbitEffectiveMaxDistanceM',
+        'function showTerminalError(', 'viewer-terminal-error', 'identity-failed', 'contract-failed', 'load-failed', 'loader-start-failed',
+        'controlPanel.querySelectorAll("button, input")', 'document.body.dataset.viewerTerminal = "true"',
+        'handleMotionPreferenceChange', 'motionPreference.addEventListener("change"', 'motionPreference.addListener?.(', 'syncReducedMotion(true)', 'showcaseStarted = null',
+        'scheduleMotionAnnouncement', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
+        'if (!skipNextVisibleFrame && renderedInterval > 0)', 'sorted.filter((sample) => sample >= 250).length',
+        'const windowMs = sorted.reduce((sum, sample) => sum + sample, 0)', 'frameTimes.length * 1000 / windowMs',
+        'Math.ceil(sorted.length * 0.95) - 1',
+        'resetPerformanceWindow(', 'visibility-hidden', 'visibility-visible', 'performanceWindowReason',
         'document.body.dataset.frameWorstMs', 'document.body.dataset.frameSampleCount',
         'document.body.dataset.viewportCssPx', 'document.body.dataset.renderProfile', 'document.body.dataset.pixelRatio',
         'function applyShadowProfile()', 'document.body.dataset.shadowProfile',
-        'document.body.dataset.selectionSelftest =', 'document.body.dataset.machineSource = "contract-failed"',
+        'document.body.dataset.selectionSelftest =',
     ], "dedicated 742 runtime")
     if re.search(r"renderedInterval\s*<\s*250", RUNTIME):
         raise RuntimeError("742 p95 must not discard visible stalls at or above 250 ms")
+    if 'return [...intersections].sort((a, b) => (b.object.userData.selectionPriority' in RUNTIME:
+        raise RuntimeError("742 selection must not rank semantic priority before material distance")
+    if 'orbit.desiredDistance = view.distance' in RUNTIME:
+        raise RuntimeError("Programmatic pose framing must update the effective zoom limit")
+    if 'resolveSelectionIntersection(semanticHits, visibleSurfaceHit)' not in RUNTIME:
+        raise RuntimeError("Pointer selection must resolve against the frontmost rendered component")
+    fixture_hits = [
+        ([('rear', 2.0, 5), ('front', 1.0, 0)], 'front'),
+        ([('low-tie', 1.0, 1), ('high-tie', 1.01, 4)], 'high-tie'),
+    ]
+    for hits, expected in fixture_hits:
+        nearest = min(distance for _, distance, _ in hits)
+        eligible = [hit for hit in hits if hit[1] <= nearest + 0.025]
+        resolved = sorted(eligible, key=lambda hit: (-hit[2], hit[1], hit[0]))[0][0]
+        if resolved != expected:
+            raise RuntimeError("Independent nearest-visible selection fixture failed")
+    surface_hits = [('rear', 0.8, 5, 'rear'), ('front', 1.0, 0, 'front')]
+    visible_component = 'front'
+    matching_surface = sorted((hit for hit in surface_hits if hit[3] == visible_component), key=lambda hit: (hit[1], hit[0]))
+    if not matching_surface or matching_surface[0][0] != 'front':
+        raise RuntimeError("Frontmost rendered component must override an oversized nearer proxy")
+    base_max, absolute_max, pose_distance = 24.0, 72.0, 37.73
+    safe_distance = min(max(pose_distance, 2.2), absolute_max / 1.05)
+    effective_max = min(absolute_max, max(base_max, safe_distance * 1.05))
+    next_zoom_out = min(effective_max, safe_distance * 1.1)
+    if effective_max < safe_distance or next_zoom_out < safe_distance:
+        raise RuntimeError("Pose-aware reset distance would snap on the next zoom gesture")
+    visible_samples = [16.7, 271.0, 17.1]
+    if sum(sample >= 250 for sample in visible_samples) != 1 or max(visible_samples) != 271.0:
+        raise RuntimeError("Visible stall accounting must share the frame sample window")
     if 'const posedComponent = name === "default" ? framedPosedModelView()' not in RUNTIME:
         raise RuntimeError("742 reset view must frame the current posed machine")
     if "const touches = new Map()" in RUNTIME:
@@ -71,6 +116,12 @@ def main():
         '742-PVC2411-US-STD-OC-D36-FF370-C50-PF481', 'interactionVolumes', 'showcase(t)',
         'steerMode: "circle"', 'JLG742_GLB_URL',
     ], "742 machine module")
+    require(ARTICULATION, [
+        '"BoomAngleSensorCrank"', '"BoomAngleSensorLink"', '"BoomAngleSensorFrameJoint"',
+        '"BoomAngleSensorCrankJoint"', '"BoomAngleSensorBoomJoint"',
+        '...["L","R"].flatMap', 'Array.from({length:8}', '"RetractChain_C"', '"RetractChain_C_Moving"',
+        'Object.entries(geometry.beams)', 'Object.entries(geometry.points)',
+    ], "742 articulation consumer")
     require(STYLE, ['body[data-machine="742"]', '.mode-row', '.component-nav-seven', '.nav-overflow-cue', 'button[data-focus][aria-pressed="true"]'], "742 style")
     if not ASSET.is_file():
         raise RuntimeError("742 route asset is missing")
@@ -92,9 +143,12 @@ def main():
         "motion_ranges":5, "steering_modes":3, "component_focus_targets":7,
         "pinch_zoom":True, "pinch_click_suppression":True, "inertia":True,
         "modal_focus_contract":True, "engineering_aria_value_text":True,
-        "semantic_volume_self_test":True, "overlapping_priority_ray_test":True,
+        "semantic_volume_self_test":True, "nearest_visible_overlap_test":True, "independent_selection_fixtures":True,
+        "frontmost_rendered_surface_selection":True, "dynamic_chain_and_sensor_consumers":True,
         "selection_reset_contract":True, "pose_aware_reset":True, "reduced_motion_showcase_disabled":True,
-        "asset_failure_ui":True, "performance_p95_diagnostic":True, "visible_stalls_included":True,
+        "dynamic_pose_zoom_limit":True, "terminal_accessible_failure_ui":True,
+        "settled_motion_live_region":True, "dynamic_reduced_motion":True,
+        "performance_p95_diagnostic":True, "coherent_performance_window":True, "visible_stalls_included":True,
         "adaptive_shadow_profile":True, "performance_sample_metadata":True,
         "asset_sha256":asset_sha,
         "candidate_release":CONFIG["target_release"], "runtime_release":runtime_release.group(1),

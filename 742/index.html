@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG 742 telehandler.">
   <title>742 Interactive Telehandler Study</title>
-  <link rel="preload" href="../assets/models/742.glb?v=3165b65d6563" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="preload" href="../assets/models/742.glb?v=a82347d1eba4" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="../viewer.css?v=1.1.5">
-  <link rel="stylesheet" href="../viewer/742.css?v=1.5.5">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.6.0">
   <script type="importmap">
     {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
   </script>
 </head>
-<body data-machine="742" data-runtime-release="1.5.5">
+<body data-machine="742" data-runtime-release="1.6.0">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
   <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
 
@@ -22,7 +22,7 @@
   <main class="interface">
     <header class="topbar">
       <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
-      <div class="prototype-label">PVC 2411 accuracy reconstruction / 1.2.0</div>
+      <div class="prototype-label">PVC 2411 accuracy reconstruction / 1.3.0</div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 
@@ -42,7 +42,8 @@
     <section class="control-panel telehandler-controls" aria-labelledby="operate-title">
       <div class="panel-heading">
         <div><span>Operate</span><h2 id="operate-title">Presentation controls</h2></div>
-        <div class="panel-state"><output id="motion-status" aria-live="polite" aria-atomic="true">Stowed study</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button></div>
+        <div class="panel-state"><output id="motion-status">Stowed study</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button></div>
+        <p class="sr-only" id="motion-announcement" aria-live="polite" aria-atomic="true"></p>
       </div>
       <div class="controls-body" id="machine-controls-body">
         <label class="control-row"><span>Boom lift</span><output id="lift-value">0°</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom lift" aria-describedby="motion-boundary"></label>
@@ -74,7 +75,7 @@
       <span class="nav-overflow-cue" id="nav-overflow-cue" aria-hidden="true">More →</span>
     </nav>
     <div class="interaction-hint">Drag to orbit <span>/</span> Pinch or scroll to zoom <span>/</span> Select a component</div>
-    <output class="diagnostics" id="diagnostics" hidden aria-live="polite"></output>
+    <output class="diagnostics" id="diagnostics" hidden></output>
   </main>
 
   <div class="scrim" id="scrim" aria-hidden="true"></div>
@@ -87,6 +88,24 @@
     <a href="../docs/research/742/README.md">Read the evidence boundary</a>
   </aside>
 
-  <script type="module" src="../viewer/742-runtime.js?v=1.5.5"></script>
+  <script>
+    window.__show742ModuleFailure = function () {
+      if (document.body.dataset.viewerStarted === "true" || document.body.dataset.viewerTerminal === "true") return;
+      const failure = document.querySelector("#error");
+      document.body.classList.add("viewer-terminal-error");
+      document.body.dataset.viewerTerminal = "true";
+      document.body.dataset.machineSource = "module-load-failed";
+      document.body.dataset.runtimeErrorCount = "1";
+      document.querySelector("#loader").hidden = true;
+      document.querySelector("#error-copy").textContent = "The dedicated 742 viewer runtime could not be loaded. No substitute was shown.";
+      failure.hidden = false;
+      for (const selector of ["#app", ".interface", "#inspector", "#machine-controls-body"]) document.querySelector(selector)?.setAttribute("inert", "");
+      document.querySelector(".control-panel")?.setAttribute("aria-disabled", "true");
+      document.querySelectorAll(".interface button, .interface input").forEach((control) => { control.disabled = true; });
+      failure.setAttribute("tabindex", "-1");
+      failure.focus({ preventScroll: true });
+    };
+  </script>
+  <script type="module" src="../viewer/742-runtime.js?v=1.6.0" onerror="window.__show742ModuleFailure()"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@ import math
 import subprocess
 from pathlib import Path
 
-from validate_es1930m_glb import index_nodes, load_glb
+from validate_es1930m_glb import index_nodes, load_glb, node_bounds
 
 ROOT = Path(__file__).resolve().parents[1]
 MECH = json.loads((ROOT / "machines/742/mechanism.json").read_text())
@@ -35,13 +35,25 @@ DYNAMIC_PARENT = {
     "FrontSteerBarRight": "FrontSteerCylinder", "RearSteerCylinderBarrel": "RearSteerCylinder",
     "RearSteerCylinderRodLeft": "RearSteerCylinder", "RearSteerCylinderRodRight": "RearSteerCylinder",
     "RearSteerBarLeft": "RearSteerCylinder", "RearSteerBarRight": "RearSteerCylinder",
-    "BoomAngleSensorLink": "LiftCylinder",
+    "BoomAngleSensorCrank": "LiftCylinder", "BoomAngleSensorLink": "LiftCylinder",
+    **{name: "BoomBase" for prefix in ("ExtendChain_L", "ExtendChain_R", "RetractChain_C")
+       for name in ([prefix, f"{prefix}_Wrap"] + [f"{prefix}_Wrap_{index}" for index in range(1, 8)] + [f"{prefix}_Moving"])},
 }
-POINT_PARENT = {"BoomAngleSensorBoomJoint": "LiftCylinder"}
+POINT_PARENT = {name: "LiftCylinder" for name in (
+    "BoomAngleSensorFrameJoint", "BoomAngleSensorCrankJoint", "BoomAngleSensorBoomJoint"
+)}
+
+UNDERBODY_NODES = (
+    "FrontDifferential", "RearDifferential", "FrontAxle", "RearAxle",
+    "FrontAxleTubeLeft", "FrontAxleTubeRight", "RearAxleTubeLeft", "RearAxleTubeRight",
+    "FrontPinionFlange", "RearPinionFlange", "BellyPan",
+    "FrontSteerCylinderBarrel", "RearSteerCylinderBarrel",
+    "FrontSteerBarLeft", "FrontSteerBarRight", "RearSteerBarLeft", "RearSteerBarRight",
+)
 
 
-def validate_glb_hierarchy(failures: list[str]) -> None:
-    document, _ = load_glb(GLB)
+def validate_glb_hierarchy(failures: list[str]) -> tuple[float, float]:
+    document, blob = load_glb(GLB)
     nodes = document.get("nodes") or []
     by_name, parents = index_nodes(nodes)
     for name, expected_parent in DYNAMIC_PARENT.items():
@@ -63,11 +75,21 @@ def validate_glb_hierarchy(failures: list[str]) -> None:
         actual_parent = nodes[parent_index].get("name") if parent_index is not None else None
         if actual_parent != expected_parent:
             failures.append(f"{name} parent is {actual_parent}, expected {expected_parent}")
+    front_tire_names = [name for name in by_name
+                        if name.startswith(("Tire_FL", "Tire_FR", "Tread_FL_", "Tread_FR_"))]
+    front_tire_plane = max(node_bounds(document, blob, nodes, parents, by_name[name])[1][0]
+                           for name in front_tire_names)
+    underbody_clearance = min(node_bounds(document, blob, nodes, parents, by_name[name])[0][1]
+                              for name in UNDERBODY_NODES)
+    boom_metadata = (nodes[by_name["BoomLiftPivot"]].get("extras") or {}).get("visual_angle_degrees")
+    if boom_metadata != [0, 69]:
+        failures.append(f"BoomLiftPivot GLB metadata is {boom_metadata}, expected [0, 69]")
+    return front_tire_plane, underbody_clearance
 
 
 def main() -> None:
     failures: list[str] = []
-    validate_glb_hierarchy(failures)
+    front_tire_plane, underbody_clearance = validate_glb_hierarchy(failures)
     completed = subprocess.run(
         ["node", str(ROOT / "scripts/validate_742_solver.mjs")],
         check=True, capture_output=True, text=True,
@@ -75,14 +97,19 @@ def main() -> None:
     result = json.loads(completed.stdout)
     if result["unique_multidimensional_state_samples"] != 416745:
         failures.append("dense multidimensional solver grid was not fully executed")
-    if result["continuous_retract_chain_samples"] < 2001:
-        failures.append("continuous retract-chain sweep is not dense enough")
-    if result["minimum_retract_chain_segment_m"] < 0.15:
-        failures.append("retract-chain route approached a collapsed segment")
-    if result["minimum_retract_leg_vertical_separation_m"] < 0.15:
-        failures.append("retract-chain legs approached a crossover")
-    if result["maximum_retract_endpoint_step_m"] > 0.004:
-        failures.append("retract-chain endpoint continuity exceeded the dense-step bound")
+    if result["continuous_all_chain_samples"] < 2001:
+        failures.append("continuous all-chain sweep is not dense enough")
+    for name, chain in result["chain_paths"].items():
+        if chain["maximum_total_length_drift_m"] > 1e-9:
+            failures.append(f"{name} total length is not invariant")
+        if chain["minimum_segment_length_m"] < 0.04 or chain["wrap_degrees"] != 180:
+            failures.append(f"{name} route collapsed or lost its U-wrap")
+    if result["maximum_chain_tangent_dot_error"] > 1e-12:
+        failures.append("chain straight legs are not tangent to their reconstructed sheaves")
+    if result["minimum_chain_to_sheave_surface_clearance_m"] <= 0:
+        failures.append("chain centerline/tube intersects a sheave surface")
+    if result["maximum_chain_endpoint_step_m"] > 0.004:
+        failures.append("chain endpoint continuity exceeded the dense-step bound")
     if result["minimum_fork_blade_y_m"] < MECH["collision_proxies"]["minimum_fork_y_m"] - 1e-6:
         failures.append("fork blade crossed the flat-floor proxy")
     target_height = CONFIG["published_performance"]["maximum_lift_height_m"]
@@ -95,15 +122,31 @@ def main() -> None:
     stow_contract = MECH["boom"]["runtime_stow"]
     if abs(stow["total_length_rear_plane_to_fork_tip_m"] - stow_contract["exact_total_length_with_48in_forks_m"]) > stow_contract["total_length_tolerance_m"]:
         failures.append("runtime stow misses its exact rear-plane-to-fork-tip length contract")
-    if abs(result["maximum_reach_pose"]["forward_reach_m"] - CONFIG["published_performance"]["maximum_forward_reach_m"]) > 0.02:
+    reach = result["maximum_reach_pose"]
+    reach["front_tire_tread_plane_x_m"] = front_tire_plane
+    reach["forward_reach_m"] = reach["load_center_world_x_m"] - front_tire_plane
+    if abs(reach["forward_reach_m"] - CONFIG["published_performance"]["maximum_forward_reach_m"]) > 0.02:
         failures.append("separate 3-degree maximum-reach pose misses the published reach")
-    if result["maximum_ackermann_center_error_m"] > 1e-9:
-        failures.append("reconstructed Ackermann axes do not share one center")
     steering = result["steering_linkage"]
-    if steering["minimum_straight_rod_length_m"] <= 0.10 or steering["minimum_steering_bar_length_m"] <= 0.10:
-        failures.append("steering rod/bar topology approached a collapsed link")
+    if steering["minimum_straight_rod_length_m"] <= 0.10:
+        failures.append("steering rod topology approached a collapsed link")
+    if steering["maximum_steering_bar_length_drift_m"] > 1e-12:
+        failures.append("steering bars are not invariant rigid links")
+    if steering["maximum_opposed_rod_joint_span_drift_m"] > 1e-12:
+        failures.append("double-ended steering rod joint span is not invariant")
     if steering["maximum_rod_bar_closure_error_m"] > 1e-12:
         failures.append("steering rod/bar joint lost endpoint closure")
+    if abs(steering["maximum_inner_wheel_angle_degrees"] - 55) > 1e-9:
+        failures.append("rigid steering linkage misses the published 55-degree inner-wheel limit")
+    if steering["maximum_ackermann_relative_error"] > 0.11:
+        failures.append("reconstructed rigid linkage exceeds its visual Ackermann-fit boundary")
+    if result["maximum_reconstructed_circle_center_spread_m"] > 1e-12:
+        failures.append("front/rear circle-steer linkage lost symmetric center placement")
+    for name, values in result["rigid_link_ranges_m"].items():
+        if values[1] - values[0] > 1e-12:
+            failures.append(f"{name} changes length")
+    if underbody_clearance + 1e-6 < MECH["collision_proxies"]["minimum_rigid_underbody_clearance_m"]:
+        failures.append("actual GLB named rigid-underbody proxy misses approximate published clearance")
     strokes = MECH["hydraulic_cylinder_strokes_m"]
     expected = {"lift": strokes["lift"], "telescope": strokes["telescope"],
                 "compensation": strokes["compensation_master"], "carriageTilt": strokes["head_tilt_slave"],
@@ -127,6 +170,9 @@ def main() -> None:
         "configuration_id": CONFIG["configuration_id"],
         "dynamic_hierarchy_nodes_checked": sorted(DYNAMIC_PARENT),
         "dynamic_point_nodes_checked": sorted(POINT_PARENT),
+        "actual_glb_front_tire_tread_plane_x_m": front_tire_plane,
+        "actual_glb_minimum_named_rigid_underbody_clearance_m": underbody_clearance,
+        "posed_glb_blender_gate": "scripts/validate_742_posed_glb.py",
         "rear_axle_stabilization_published_stroke_m": strokes["rear_axle_stabilization"],
         "rear_axle_stabilization_usage_boundary": "only frame-level-induced endpoint travel is shown; free/slow/locked RAS behavior is not simulated",
     })

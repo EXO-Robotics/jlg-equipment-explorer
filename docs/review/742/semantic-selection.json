@@ -1,41 +1,13 @@
 {
-  "boundary": "Production-volume overlap-ray dataset and local interaction transcript only.",
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
-  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": "Codex in-app Browser with Chromium engine",
-    "os": "macOS 26.5.2 build 25F84"
-  },
+  "schema_version": "2.0.0",
+  "kind": "742-browser-gate-capture",
   "gate": "semantic_selection",
-  "kind": "742-gate-observation",
-  "observations": {
-    "dom_dataset": {
-      "proxy_volume_shadows": "disabled",
-      "selection_overlap_rays": 15,
-      "selection_priority_rays": 15,
-      "selection_self_test": "pass",
-      "semantic_volume_count": 6,
-      "semantic_volume_ready_count": 6
-    },
-    "selection_transcript": [
-      {
-        "action": "run production multi-volume overlap ray set",
-        "observed": "15 of 15 priority rays resolved to the intended semantic component"
-      },
-      {
-        "action": "select Boom",
-        "observed": "Boom selected styling and aria-pressed changed together"
-      },
-      {
-        "action": "start follow then Reset View",
-        "observed": "selected styling and aria-pressed both cleared"
-      },
-      {
-        "action": "perform pinch",
-        "observed": "no component dialog opened and no semantic selection changed"
-      }
-    ]
-  },
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
-  "schema_version": "1.0.0"
+  "capture_status": "recapture-required",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "environment": null,
+  "capture_artifacts": {"screenshots": [], "automation_trace": null},
+  "observations": {},
+  "boundary": "Independent expected selection outcomes are compared with the frozen browser trace; no result is inferred from the runtime pass flag alone."
 }

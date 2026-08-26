@@ -19,12 +19,14 @@ if not re.fullmatch(r"[0-9a-f]{40}", source_commit or ""):
 files = {}
 for path in sorted(candidate for candidate in root.rglob("*") if candidate.is_file() and candidate != manifest_path):
     relative = str(path.relative_to(root))
-    if relative != ".nojekyll":
-        committed = subprocess.run(
-            ["git", "show", f"{source_commit}:{relative}"], capture_output=True, check=False,
-        )
-        if committed.returncode or committed.stdout != path.read_bytes():
-            raise RuntimeError(f"Pages bundle bytes are not present at source commit {source_commit}: {relative}")
+    # .nojekyll controls Pages processing but is not served as a public HTTP file.
+    if relative == ".nojekyll":
+        continue
+    committed = subprocess.run(
+        ["git", "show", f"{source_commit}:{relative}"], capture_output=True, check=False,
+    )
+    if committed.returncode or committed.stdout != path.read_bytes():
+        raise RuntimeError(f"Pages bundle bytes are not present at source commit {source_commit}: {relative}")
     files[relative] = {
         "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         "bytes": path.stat().st_size,

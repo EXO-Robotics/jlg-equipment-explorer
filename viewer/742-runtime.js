@@ -1,16 +1,13 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.5";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.6";
 
-const ROUTE_RELEASE = "1.5.5";
+const ROUTE_RELEASE = "1.6.0";
 const machine = JLG742_MACHINE;
-if (document.body.dataset.machine !== machine.id) throw new Error(`Equipment route identity mismatch: ${document.body.dataset.machine}`);
-if (document.body.dataset.runtimeRelease !== ROUTE_RELEASE) throw new Error(`742 runtime cache identity mismatch: expected ${ROUTE_RELEASE}`);
-
-document.body.dataset.viewerStarted = "true";
-document.body.dataset.configurationId = machine.configurationId;
 const query = new URLSearchParams(location.search);
-const reducedMotion = query.get("reduce") === "1" || matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+const forceReducedMotion = query.get("reduce") === "1";
+const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
+let reducedMotion = forceReducedMotion || motionPreference.matches;
 const mobileQuery = matchMedia("(max-width: 800px), (max-height: 500px) and (max-width: 1000px)");
 let compact = mobileQuery.matches;
 const app = document.querySelector("#app");
@@ -24,9 +21,11 @@ const controlsToggle = document.querySelector("#controls-toggle");
 const controlPanel = document.querySelector(".control-panel");
 const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
+const motionStatus = document.querySelector("#motion-status");
+const motionAnnouncement = document.querySelector("#motion-announcement");
 
 const state = { ...machine.stowState };
-const runtime = { errors: 0, frames: 0, fps: "sampling", frameP95Ms: "sampling", frameWorstMs: "sampling", visibleStalls: 0, loadMs: "pending", selection: "pending" };
+const runtime = { errors: 0, fps: "sampling", frameP95Ms: "sampling", frameWorstMs: "sampling", visibleStalls: 0, loadMs: "pending", selection: "pending" };
 const frameTimes = [];
 let model = null;
 let rig = null;
@@ -34,6 +33,10 @@ let selected = null;
 let selectionVolumes = [];
 let lastFrame = performance.now();
 let fpsStart = lastFrame;
+let showcaseStarted = null;
+let terminalFailure = false;
+let motionAnnouncementTimer = null;
+let skipNextVisibleFrame = true;
 
 function recordError(error) {
   runtime.errors += 1;
@@ -41,13 +44,61 @@ function recordError(error) {
   if (error) console.error(error);
   updateDiagnostics();
 }
-addEventListener("error", (event) => recordError(event.error));
-addEventListener("unhandledrejection", (event) => recordError(event.reason));
+function showTerminalError(error, message, source = "runtime-failed") {
+  if (terminalFailure) return;
+  terminalFailure = true;
+  showcaseStarted = null;
+  clearTimeout(motionAnnouncementTimer);
+  document.body.dataset.machineSource = source;
+  recordError(error);
+  document.body.classList.remove("inspector-open", "mobile-controls-open");
+  document.body.classList.add("viewer-terminal-error");
+  document.body.dataset.viewerTerminal = "true";
+  loader.hidden = true;
+  errorPanel.hidden = false;
+  errorCopy.textContent = message;
+  app.setAttribute("inert", "");
+  document.querySelector(".interface")?.setAttribute("inert", "");
+  document.querySelector("#inspector")?.setAttribute("inert", "");
+  controlsBody.inert = true;
+  controlPanel.setAttribute("aria-disabled", "true");
+  controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
+  errorPanel.setAttribute("tabindex", "-1");
+  requestAnimationFrame(() => errorPanel.focus({ preventScroll: true }));
+}
+addEventListener("error", (event) => showTerminalError(event.error, "The 742 viewer stopped after an unexpected runtime error. No substitute was shown."));
+addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The 742 viewer stopped after an unexpected runtime error. No substitute was shown."));
 document.body.dataset.runtimeErrorCount = "0";
+document.body.dataset.viewerStarted = "true";
+document.body.dataset.configurationId = machine.configurationId;
+
+try {
+  if (document.body.dataset.machine !== machine.id) throw new Error(`Equipment route identity mismatch: ${document.body.dataset.machine}`);
+  if (document.body.dataset.runtimeRelease !== ROUTE_RELEASE) throw new Error(`742 runtime cache identity mismatch: expected ${ROUTE_RELEASE}`);
+} catch (error) {
+  showTerminalError(error, "The 742 route and its dedicated runtime do not share the same cache identity. Reload the page to request one coherent release.", "identity-failed");
+}
 
 function updateDiagnostics() {
   diagnostics.hidden = !diagnosticsEnabled;
   diagnostics.value = `machine ${machine.id} · config ${machine.configurationId} · source ${document.body.dataset.machineSource || "loading"} · selection ${runtime.selection} · errors ${runtime.errors} · load ${runtime.loadMs} · ${runtime.fps} · samples ${frameTimes?.length ?? 0} · p95 ${runtime.frameP95Ms} · worst ${runtime.frameWorstMs} · visible stalls ${runtime.visibleStalls} · profile ${document.body.dataset.renderProfile || "pending"} · motion ${reducedMotion ? "reduced" : "full"}`;
+}
+function resetPerformanceWindow(reason, now = performance.now()) {
+  frameTimes.length = 0;
+  runtime.fps = "sampling";
+  runtime.frameP95Ms = "sampling";
+  runtime.frameWorstMs = "sampling";
+  runtime.visibleStalls = 0;
+  lastFrame = now;
+  fpsStart = now;
+  skipNextVisibleFrame = true;
+  document.body.dataset.frameP95Ms = "sampling";
+  document.body.dataset.frameWorstMs = "sampling";
+  document.body.dataset.visibleStallCount = "0";
+  document.body.dataset.frameSampleCount = "0";
+  document.body.dataset.performanceWindowMs = "0";
+  document.body.dataset.performanceWindowReason = reason;
+  updateDiagnostics();
 }
 
 function pixelRatio() {
@@ -67,8 +118,7 @@ function rendererOrNull() {
 
 const renderer = rendererOrNull();
 if (!renderer) {
-  loader.hidden = true;
-  errorPanel.hidden = false;
+  showTerminalError(new Error("WebGL unavailable"), "This interactive study needs WebGL and a valid owned 742 asset.", "webgl-failed");
   throw new Error("WebGL unavailable");
 }
 renderer.setPixelRatio(pixelRatio());
@@ -132,6 +182,8 @@ function adaptView(view, name = "default") {
 }
 const defaultView = adaptView(machine.componentView("default", state, compact), "default");
 const distanceLimits = machine.orbitLimits || { minDistance: 1.6, maxDistance: 11 };
+const absoluteMaxDistance = 72;
+let effectiveMaxDistance = Math.min(absoluteMaxDistance, Math.max(distanceLimits.maxDistance, defaultView.distance * 1.05));
 const orbit = {
   azimuth: defaultView.azimuth ?? -0.72,
   polar: defaultView.polar ?? 1.18,
@@ -142,6 +194,15 @@ const orbit = {
   velocityAzimuth: 0,
   velocityPolar: 0,
 };
+function setProgrammaticViewDistance(distance) {
+  const safeDistance = THREE.MathUtils.clamp(distance, distanceLimits.minDistance, absoluteMaxDistance / 1.05);
+  effectiveMaxDistance = Math.min(absoluteMaxDistance, Math.max(distanceLimits.maxDistance, safeDistance * 1.05));
+  orbit.desiredDistance = safeDistance;
+  document.body.dataset.orbitBaseMaxDistanceM = distanceLimits.maxDistance.toFixed(2);
+  document.body.dataset.orbitEffectiveMaxDistanceM = effectiveMaxDistance.toFixed(2);
+  document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
+}
+setProgrammaticViewDistance(defaultView.distance);
 function updateCamera(delta = 1) {
   const ease = reducedMotion ? 1 : Math.min(1, delta * 7);
   orbit.target.lerp(orbit.desiredTarget, ease);
@@ -160,7 +221,8 @@ updateCamera();
 
 renderer.domElement.addEventListener("wheel", (event) => {
   event.preventDefault();
-  orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), distanceLimits.minDistance, distanceLimits.maxDistance);
+  orbit.desiredDistance = THREE.MathUtils.clamp(orbit.desiredDistance * Math.exp(event.deltaY * 0.001), distanceLimits.minDistance, effectiveMaxDistance);
+  document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
 }, { passive: false });
 
 const pointers = new Map();
@@ -195,7 +257,8 @@ renderer.domElement.addEventListener("pointermove", (event) => {
   if (pointers.size >= 2) {
     const [a, b] = [...pointers.values()];
     const distance = Math.hypot(a.x - b.x, a.y - b.y) || 1;
-    orbit.desiredDistance = THREE.MathUtils.clamp(pinchStartOrbitDistance * pinchStartDistance / distance, distanceLimits.minDistance, distanceLimits.maxDistance);
+    orbit.desiredDistance = THREE.MathUtils.clamp(pinchStartOrbitDistance * pinchStartDistance / distance, distanceLimits.minDistance, effectiveMaxDistance);
+    document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
     return;
   }
   const dx = active.x - previousX;
@@ -223,8 +286,52 @@ renderer.domElement.addEventListener("pointercancel", (event) => endPointer(even
 const raycaster = new THREE.Raycaster();
 const pointerNdc = new THREE.Vector2();
 const selectionPriority = new Map(["chassis", "steering", "boom", "hydraulics", "cab", "carriage"].map((component, index) => [component, index]));
+const SELECTION_TIE_DISTANCE_M = 0.025;
+// The 25 mm tie band is smaller than a visible modeled part at this scale; it
+// only resolves coincident proxy skins and never lets a rear proxy beat a
+// frontmost rendered component.
+function isWorldVisible(object) {
+  let current = object;
+  while (current) {
+    if (!current.visible) return false;
+    current = current.parent;
+  }
+  return true;
+}
+function nearestHitPerVolume(intersections) {
+  const nearest = new Map();
+  for (const intersection of intersections) {
+    if (!isWorldVisible(intersection.object)) continue;
+    const previous = nearest.get(intersection.object);
+    if (!previous || intersection.distance < previous.distance) nearest.set(intersection.object, intersection);
+  }
+  return [...nearest.values()];
+}
 function orderedSelectionIntersections(intersections) {
-  return [...intersections].sort((a, b) => (b.object.userData.selectionPriority - a.object.userData.selectionPriority) || a.distance - b.distance);
+  const visible = nearestHitPerVolume(intersections).sort((a, b) => a.distance - b.distance || a.object.name.localeCompare(b.object.name));
+  if (visible.length < 2) return visible;
+  const nearestDistance = visible[0].distance;
+  const semanticTie = visible.filter((hit) => hit.distance <= nearestDistance + SELECTION_TIE_DISTANCE_M)
+    .sort((a, b) => (b.object.userData.selectionPriority - a.object.userData.selectionPriority) || a.distance - b.distance || a.object.name.localeCompare(b.object.name));
+  const tiedObjects = new Set(semanticTie.map((hit) => hit.object));
+  return [...semanticTie, ...visible.filter((hit) => !tiedObjects.has(hit.object))];
+}
+function nearestVisibleComponentIntersection(activeRaycaster) {
+  if (!model) return null;
+  return activeRaycaster.intersectObject(model, true).find((hit) => {
+    if (!hit.object.isMesh || hit.object.userData?.is_hit_volume || !isWorldVisible(hit.object)) return false;
+    const materials = Array.isArray(hit.object.material) ? hit.object.material : [hit.object.material];
+    if (!materials.some((material) => material?.visible !== false && (!material.transparent || material.opacity > 0.01))) return false;
+    const component = semanticComponentFor(hit.object);
+    if (!machine.components[component]) return false;
+    hit.semanticComponent = component;
+    return true;
+  }) || null;
+}
+function resolveSelectionIntersection(intersections, visibleSurfaceHit = null) {
+  const ordered = orderedSelectionIntersections(intersections);
+  if (!visibleSurfaceHit) return ordered[0] || null;
+  return ordered.find((hit) => hit.object.userData.component === visibleSurfaceHit.semanticComponent) || ordered[0] || null;
 }
 function prepareInteractionVolumes(root) {
   if (new Set(machine.interactionVolumes).size !== machine.interactionVolumes.length) throw new Error("Duplicate semantic selection-volume name");
@@ -245,7 +352,42 @@ function prepareInteractionVolumes(root) {
   });
   const priorities = volumes.map((hit) => hit.userData.selectionPriority);
   if (new Set(priorities).size !== priorities.length) throw new Error("Semantic selection priorities must be unique");
+  document.body.dataset.selectionPolicy = `frontmost-rendered-component-then-nearest-proxy-${SELECTION_TIE_DISTANCE_M}m-semantic-tie`;
   return volumes;
+}
+function runSelectionOrderingFixtures() {
+  const object = (name, priority, component = name) => ({ name, visible: true, parent: null, userData: { selectionPriority: priority, component } });
+  const front = object("front", 0);
+  const rear = object("rear", 5);
+  const lowTie = object("low-tie", 1);
+  const highTie = object("high-tie", 4);
+  const fixtures = [
+    { intersections: [{ object: rear, distance: 2 }, { object: front, distance: 1 }], visible: null, expected: "front" },
+    { intersections: [{ object: lowTie, distance: 1 }, { object: highTie, distance: 1.01 }], visible: null, expected: "high-tie" },
+    { intersections: [{ object: front, distance: 1 }, { object: front, distance: 1.8 }, { object: rear, distance: 2 }], visible: null, expected: "front" },
+    { intersections: [{ object: rear, distance: 0.8 }, { object: front, distance: 1 }], visible: { semanticComponent: "front" }, expected: "front" },
+  ];
+  const outcomes = fixtures.map((fixture, index) => {
+    const observed = resolveSelectionIntersection(fixture.intersections, fixture.visible);
+    const minimumDistance = Math.min(...fixture.intersections.map((candidate) => candidate.distance));
+    const tieCandidateCount = fixture.intersections.filter((hit) => hit.distance <= minimumDistance + SELECTION_TIE_DISTANCE_M).length;
+    const expectedObject = fixture.intersections.find((hit) => hit.object.name === fixture.expected)?.object;
+    return Object.freeze({
+      case: index + 1,
+      hits: fixture.intersections.map((hit) => Object.freeze({ volume: hit.object.name, component: hit.object.userData.component, distanceM: hit.distance, priority: hit.object.userData.selectionPriority })),
+      visibleSurfaceComponent: fixture.visible?.semanticComponent || null,
+      basis: fixture.visible ? "visible-surface" : tieCandidateCount > 1 ? "distance-tie" : "nearest-distance",
+      expectedComponent: expectedObject?.userData.component || null,
+      observedComponent: observed?.object?.userData.component || null,
+      expectedVolume: fixture.expected,
+      observedVolume: observed?.object?.name || null,
+      pass: observed?.object?.name === fixture.expected,
+    });
+  });
+  const passed = outcomes.filter((outcome) => outcome.pass).length;
+  document.body.dataset.selectionFixtureCases = `${passed}/${fixtures.length}`;
+  document.body.dataset.selectionFixtureOutcomes = JSON.stringify(outcomes);
+  return passed === fixtures.length;
 }
 function runSelectionVolumeSelfTest() {
   if (!model || selectionVolumes.length !== machine.interactionVolumes.length) return false;
@@ -262,7 +404,8 @@ function runSelectionVolumeSelfTest() {
     return probe.intersectObject(hit, false)[0]?.object === hit && Number.isInteger(hit.userData.selectionPriority);
   }).length;
   let overlappingRayCount = 0;
-  let priorityRayCount = 0;
+  let nearestRayCount = 0;
+  const overlapOutcomes = [];
   for (let firstIndex = 0; firstIndex < selectionVolumes.length; firstIndex += 1) {
     for (let secondIndex = firstIndex + 1; secondIndex < selectionVolumes.length; secondIndex += 1) {
       const first = selectionVolumes[firstIndex];
@@ -276,22 +419,67 @@ function runSelectionVolumeSelfTest() {
       probe.near = 0;
       probe.far = centerDistance + 100;
       const intersections = probe.intersectObjects(selectionVolumes, false);
-      const uniqueHits = [...new Set(intersections.map((intersection) => intersection.object))];
-      if (uniqueHits.length < 2) continue;
+      const independentNearest = new Map();
+      for (const intersection of intersections) {
+        if (!isWorldVisible(intersection.object)) continue;
+        const previous = independentNearest.get(intersection.object);
+        if (!previous || intersection.distance < previous.distance) independentNearest.set(intersection.object, intersection);
+      }
+      const independentHits = [...independentNearest.values()];
+      if (independentHits.length < 2) continue;
       overlappingRayCount += 1;
-      const resolved = orderedSelectionIntersections(intersections)[0];
-      const expected = uniqueHits.reduce((winner, candidate) => {
-        if (!winner || candidate.userData.selectionPriority > winner.userData.selectionPriority) return candidate;
-        return winner;
-      }, null);
-      if (resolved?.object === expected) priorityRayCount += 1;
+      const visibleSurfaceHit = nearestVisibleComponentIntersection(probe);
+      let independentSurfaceComponent = null;
+      for (const surfaceHit of probe.intersectObject(model, true)) {
+        if (!surfaceHit.object.isMesh || surfaceHit.object.userData?.is_hit_volume || !isWorldVisible(surfaceHit.object)) continue;
+        const materials = Array.isArray(surfaceHit.object.material) ? surfaceHit.object.material : [surfaceHit.object.material];
+        if (!materials.some((material) => material?.visible !== false && (!material.transparent || material.opacity > 0.01))) continue;
+        const component = semanticComponentFor(surfaceHit.object);
+        if (!machine.components[component]) continue;
+        independentSurfaceComponent = component;
+        break;
+      }
+      const surfaceComponentHits = independentSurfaceComponent
+        ? independentHits.filter((hit) => hit.object.userData.component === independentSurfaceComponent)
+        : [];
+      let independentlyExpected;
+      let expectedBasis;
+      if (surfaceComponentHits.length) {
+        independentlyExpected = surfaceComponentHits.sort((a, b) => a.distance - b.distance || a.object.name.localeCompare(b.object.name))[0];
+        expectedBasis = "visible-surface";
+      } else {
+        const minimumDistance = Math.min(...independentHits.map((hit) => hit.distance));
+        const eligibleTieHits = independentHits.filter((hit) => hit.distance <= minimumDistance + SELECTION_TIE_DISTANCE_M);
+        const expectedPriority = Math.max(...eligibleTieHits.map((hit) => hit.object.userData.selectionPriority));
+        independentlyExpected = eligibleTieHits
+          .filter((hit) => hit.object.userData.selectionPriority === expectedPriority)
+          .sort((a, b) => a.distance - b.distance || a.object.name.localeCompare(b.object.name))[0];
+        expectedBasis = eligibleTieHits.length > 1 ? "distance-tie" : "nearest-distance";
+      }
+      const resolved = resolveSelectionIntersection(intersections, visibleSurfaceHit);
+      if (resolved?.object === independentlyExpected.object) nearestRayCount += 1;
+      overlapOutcomes.push(Object.freeze({
+        ray: overlapOutcomes.length + 1,
+        pairComponents: [first.userData.component, second.userData.component],
+        hitComponents: independentHits.map((hit) => hit.object.userData.component),
+        hitDistancesM: independentHits.map((hit) => Number(hit.distance.toFixed(4))),
+        visibleSurfaceComponent: independentSurfaceComponent,
+        expectedComponent: independentlyExpected.object.userData.component,
+        resolvedComponent: resolved?.object.userData.component || null,
+        expectedVolume: independentlyExpected.object.name,
+        resolvedVolume: resolved?.object.name || null,
+        basis: expectedBasis,
+        pass: resolved?.object === independentlyExpected.object,
+      }));
     }
   }
-  const selfTestPassed = passed === selectionVolumes.length && overlappingRayCount > 0 && priorityRayCount === overlappingRayCount;
+  const fixturesPassed = runSelectionOrderingFixtures();
+  const selfTestPassed = passed === selectionVolumes.length && overlappingRayCount > 0 && nearestRayCount === overlappingRayCount && fixturesPassed;
   document.body.dataset.selectionSelftest = selfTestPassed ? "pass" : "fail";
   document.body.dataset.selectionVolumeCount = String(selectionVolumes.length);
   document.body.dataset.selectionOverlapRays = String(overlappingRayCount);
-  document.body.dataset.selectionPriorityRays = String(priorityRayCount);
+  document.body.dataset.selectionNearestRays = String(nearestRayCount);
+  document.body.dataset.selectionOverlapOutcomes = JSON.stringify(overlapOutcomes);
   return selfTestPassed;
 }
 function setComponentSelection(component) {
@@ -311,7 +499,9 @@ function selectAt(clientX, clientY) {
   const rect = renderer.domElement.getBoundingClientRect();
   pointerNdc.set((clientX - rect.left) / rect.width * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointerNdc, camera);
-  const hit = orderedSelectionIntersections(raycaster.intersectObjects(selectionVolumes, false))[0];
+  const semanticHits = raycaster.intersectObjects(selectionVolumes, false);
+  const visibleSurfaceHit = nearestVisibleComponentIntersection(raycaster);
+  const hit = resolveSelectionIntersection(semanticHits, visibleSurfaceHit);
   const component = hit?.object.userData.component || null;
   runtime.selection = component || "miss";
   if (component) {
@@ -324,6 +514,17 @@ function selectAt(clientX, clientY) {
   updateDiagnostics();
 }
 
+function announceMotion(message) {
+  if (!message || terminalFailure) return;
+  clearTimeout(motionAnnouncementTimer);
+  motionAnnouncementTimer = null;
+  motionAnnouncement.textContent = "";
+  requestAnimationFrame(() => { if (!terminalFailure) motionAnnouncement.textContent = message; });
+}
+function scheduleMotionAnnouncement(message) {
+  clearTimeout(motionAnnouncementTimer);
+  motionAnnouncementTimer = setTimeout(() => announceMotion(message), 350);
+}
 function setControlOutputs() {
   const presentation = machine.presentState(state);
   for (const control of machine.controls) {
@@ -332,11 +533,12 @@ function setControlOutputs() {
     document.querySelector(`#${control.inputId}`).setAttribute("aria-valuetext", value);
   }
   document.body.dataset.zone = presentation.zone;
-  document.querySelector("#motion-status").value = presentation.status;
+  motionStatus.value = presentation.status;
+  return presentation;
 }
 function applyControls() {
   if (rig) machine.applyState(rig, machine.solveState(state));
-  setControlOutputs();
+  return setControlOutputs();
 }
 const posedBounds = new THREE.Box3();
 const meshBounds = new THREE.Box3();
@@ -412,15 +614,16 @@ function updateFollowView(controlId) {
   const fallback = adaptView(machine.followView(state, compact, controlId), "follow");
   const view = framed || fallback;
   orbit.desiredTarget.set(...view.target);
-  orbit.desiredDistance = view.distance;
+  setProgrammaticViewDistance(view.distance);
   activeViewName = "follow";
   clearComponentSelection();
 }
 for (const control of machine.controls) {
   document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
     state[control.id] = Number(event.currentTarget.value) / control.inputDivisor;
-    applyControls();
+    const presentation = applyControls();
     if (machine.followView && (control.id === "lift" || control.id === "telescope")) updateFollowView(control.id);
+    scheduleMotionAnnouncement(`${control.label}: ${presentation.outputs[control.id]}. ${presentation.status}.`);
   });
 }
 document.querySelector("#stow").addEventListener("click", () => {
@@ -428,27 +631,48 @@ document.querySelector("#stow").addEventListener("click", () => {
   Object.assign(state, machine.stowState);
   for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
   document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
-  applyControls();
+  const presentation = applyControls();
   clearComponentSelection();
+  announceMotion(presentation.status);
 });
 
 document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEventListener("click", () => {
   state.steerMode = button.dataset.steerMode;
   document.querySelectorAll("[data-steer-mode]").forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate === button)));
-  applyControls();
+  const presentation = applyControls();
+  announceMotion(`${button.textContent.trim()} steering selected. ${presentation.status}.`);
 }));
 
-let showcaseStarted = null;
 let lastShowcaseFrameAt = 0;
 const showcaseButton = document.querySelector("#showcase");
-if (reducedMotion) {
-  showcaseButton.disabled = true;
-  showcaseButton.textContent = "Showcase off";
-  showcaseButton.setAttribute("aria-describedby", "motion-boundary reduced-motion-note");
+function syncReducedMotion(announce = false) {
+  const nextReducedMotion = forceReducedMotion || motionPreference.matches;
+  const changed = nextReducedMotion !== reducedMotion;
+  reducedMotion = nextReducedMotion;
+  document.body.dataset.motionProfile = reducedMotion ? "reduced" : "full";
+  showcaseButton.disabled = terminalFailure || reducedMotion;
+  showcaseButton.textContent = reducedMotion ? "Showcase off" : "Run showcase";
+  if (reducedMotion) {
+    showcaseStarted = null;
+    orbit.velocityAzimuth = 0;
+    orbit.velocityPolar = 0;
+    showcaseButton.setAttribute("aria-describedby", "motion-boundary reduced-motion-note");
+  } else {
+    showcaseButton.removeAttribute("aria-describedby");
+  }
+  if (announce && changed) announceMotion(reducedMotion ? "Reduced motion enabled. Automatic showcase stopped; manual controls remain available." : "Reduced motion disabled. Automatic showcase is available.");
+  updateDiagnostics();
 }
 showcaseButton?.addEventListener("click", () => {
-  if (!reducedMotion) showcaseStarted = performance.now();
+  if (!reducedMotion) {
+    showcaseStarted = performance.now();
+    announceMotion("Automatic 742 mechanism showcase started.");
+  }
 });
+const handleMotionPreferenceChange = () => syncReducedMotion(true);
+if (motionPreference.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
+else motionPreference.addListener?.(handleMotionPreferenceChange);
+syncReducedMotion(false);
 
 let activeViewName = "default";
 function focusCamera(name) {
@@ -456,13 +680,15 @@ function focusCamera(name) {
   orbit.azimuth = preset.azimuth;
   orbit.polar = preset.polar;
   const posedComponent = name === "default" ? framedPosedModelView() : framedPosedModelView(name);
-  orbit.desiredTarget.set(...(posedComponent || preset).target);
-  orbit.desiredDistance = (posedComponent || preset).distance;
+  const view = posedComponent || preset;
+  orbit.desiredTarget.set(...view.target);
+  setProgrammaticViewDistance(view.distance);
   activeViewName = name;
 }
 function resetView() {
   clearComponentSelection();
   focusCamera("default");
+  announceMotion("View reset to frame the current machine pose.");
 }
 document.querySelector("#reset-view").addEventListener("click", resetView);
 document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => {
@@ -543,6 +769,11 @@ document.addEventListener("keydown", (event) => {
 });
 
 function setMobileControls(open) {
+  if (terminalFailure) {
+    controlsBody.inert = true;
+    controlsToggle.hidden = true;
+    return;
+  }
   const expanded = mobileQuery.matches ? open : true;
   controlsBody.hidden = !expanded;
   controlsBody.inert = !expanded;
@@ -582,70 +813,65 @@ app.addEventListener("keydown", (event) => {
   else if (event.key === "ArrowUp") orbit.polar = Math.max(0.25, orbit.polar - 0.08);
   else if (event.key === "ArrowDown") orbit.polar = Math.min(1.52, orbit.polar + 0.08);
   else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(distanceLimits.minDistance, orbit.desiredDistance * 0.9);
-  else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(distanceLimits.maxDistance, orbit.desiredDistance * 1.1);
+  else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(effectiveMaxDistance, orbit.desiredDistance * 1.1);
   else if (event.key === "0") resetView();
   else if (/^[1-7]$/.test(event.key)) document.querySelectorAll("[data-focus]")[Number(event.key) - 1]?.click();
   else return;
+  document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
   event.preventDefault();
 });
 
-const loadStarted = performance.now();
-new GLTFLoader().load(machine.assetUrl, (gltf) => {
+function loadMachineAsset() {
+  const loadStarted = performance.now();
   try {
-    const validation = machine.validateAsset(gltf.scene);
-    if (!validation.ok) throw new Error(`${machine.identity.model} asset validation failed: ${validation.missing.join(", ")}`);
-    const candidateModel = gltf.scene;
-    const candidateVolumes = prepareInteractionVolumes(candidateModel);
-    let visibleMeshes = 0;
-    candidateModel.traverse((node) => {
-      if (!node.isMesh || node.userData?.is_hit_volume) return;
-      node.castShadow = true;
-      node.receiveShadow = true;
-      visibleMeshes += 1;
+    new GLTFLoader().load(machine.assetUrl, (gltf) => {
+      if (terminalFailure) return;
+      try {
+        const validation = machine.validateAsset(gltf.scene);
+        if (!validation.ok) throw new Error(`${machine.identity.model} asset validation failed: ${validation.missing.join(", ")}`);
+        const candidateModel = gltf.scene;
+        const candidateVolumes = prepareInteractionVolumes(candidateModel);
+        let visibleMeshes = 0;
+        candidateModel.traverse((node) => {
+          if (!node.isMesh || node.userData?.is_hit_volume) return;
+          node.castShadow = true;
+          node.receiveShadow = true;
+          visibleMeshes += 1;
+        });
+        const candidateRig = machine.createRig(candidateModel);
+        machine.applyState(candidateRig, machine.solveState(state));
+        model = candidateModel;
+        rig = candidateRig;
+        selectionVolumes = candidateVolumes;
+        scene.add(model);
+        applyControls();
+        if (!runSelectionVolumeSelfTest()) throw new Error(`${machine.identity.model} semantic selection self-test failed`);
+        runtime.loadMs = `${Math.round(performance.now() - loadStarted)} ms`;
+        runtime.selection = `${selectionVolumes.length}/${selectionVolumes.length} ready`;
+        document.body.dataset.machineSource = "glb-validated";
+        document.body.dataset.machineVisibleMeshes = String(visibleMeshes);
+        loaderStatus.textContent = `${machine.identity.model} ready`;
+        loaderDetail.textContent = `${machine.configurationId} validated`;
+        loader.classList.add("done");
+        updateDiagnostics();
+      } catch (error) {
+        if (model) scene.remove(model);
+        model = null;
+        rig = null;
+        selectionVolumes = [];
+        showTerminalError(error, `The ${machine.identity.model} asset failed its hierarchy or semantic-selection contract. No substitute was shown.`, "contract-failed");
+      }
+    }, undefined, (error) => {
+      showTerminalError(error, `The evidence-bound ${machine.identity.model} asset could not be loaded. No procedural substitute was used.`, "load-failed");
     });
-    const candidateRig = machine.createRig(candidateModel);
-    machine.applyState(candidateRig, machine.solveState(state));
-    model = candidateModel;
-    rig = candidateRig;
-    selectionVolumes = candidateVolumes;
-    scene.add(model);
-    applyControls();
-    if (!runSelectionVolumeSelfTest()) throw new Error(`${machine.identity.model} semantic selection self-test failed`);
-    runtime.loadMs = `${Math.round(performance.now() - loadStarted)} ms`;
-    runtime.selection = `${selectionVolumes.length}/${selectionVolumes.length} ready`;
-    document.body.dataset.machineSource = "glb-validated";
-    document.body.dataset.machineVisibleMeshes = String(visibleMeshes);
-    loaderStatus.textContent = `${machine.identity.model} ready`;
-    loaderDetail.textContent = `${machine.configurationId} validated`;
-    loader.classList.add("done");
-    updateDiagnostics();
   } catch (error) {
-    if (model) scene.remove(model);
-    model = null;
-    rig = null;
-    selectionVolumes = [];
-    recordError(error);
-    controlsBody.inert = true;
-    controlPanel.setAttribute("aria-disabled", "true");
-    loader.hidden = true;
-    errorPanel.hidden = false;
-    errorPanel.setAttribute("role", "alert");
-    errorCopy.textContent = `The ${machine.identity.model} asset failed its hierarchy or semantic-selection contract. No substitute was shown.`;
-    document.body.dataset.machineSource = "contract-failed";
+    showTerminalError(error, `The evidence-bound ${machine.identity.model} asset loader could not start. No procedural substitute was used.`, "loader-start-failed");
   }
-}, undefined, (error) => {
-  recordError(error);
-  controlsBody.inert = true;
-  controlPanel.setAttribute("aria-disabled", "true");
-  loader.hidden = true;
-  errorPanel.hidden = false;
-  errorPanel.setAttribute("role", "alert");
-  errorCopy.textContent = `The evidence-bound ${machine.identity.model} asset could not be loaded. No procedural substitute was used.`;
-  document.body.dataset.machineSource = "load-failed";
-});
+}
+if (!terminalFailure) loadMachineAsset();
 
-let skipNextVisibleFrame = false;
 function animate(now) {
+  if (terminalFailure) return;
   requestAnimationFrame(animate);
   if (document.hidden) {
     lastFrame = now;
@@ -654,10 +880,9 @@ function animate(now) {
   }
   const renderedInterval = now - lastFrame;
   const delta = Math.min(renderedInterval / 1000, 0.05);
-  if (!skipNextVisibleFrame && renderedInterval >= 4) {
+  if (!skipNextVisibleFrame && renderedInterval > 0) {
     frameTimes.push(renderedInterval);
     if (frameTimes.length > 180) frameTimes.shift();
-    if (renderedInterval >= 250) runtime.visibleStalls += 1;
   }
   skipNextVisibleFrame = false;
   lastFrame = now;
@@ -681,23 +906,26 @@ function animate(now) {
   }
   updateCamera(delta);
   renderer.render(scene, camera);
-  runtime.frames += 1;
   if (now - fpsStart > 1500) {
-    runtime.fps = `${Math.round(runtime.frames * 1000 / (now - fpsStart))} fps`;
     if (frameTimes.length) {
       const sorted = [...frameTimes].sort((a, b) => a - b);
-      runtime.frameP95Ms = `${sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))].toFixed(1)} ms`;
+      const windowMs = sorted.reduce((sum, sample) => sum + sample, 0);
+      runtime.fps = `${Math.round(frameTimes.length * 1000 / windowMs)} fps`;
+      const p95Index = Math.max(0, Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.95) - 1));
+      runtime.frameP95Ms = `${sorted[p95Index].toFixed(1)} ms`;
       runtime.frameWorstMs = `${sorted.at(-1).toFixed(1)} ms`;
+      runtime.visibleStalls = sorted.filter((sample) => sample >= 250).length;
       document.body.dataset.frameP95Ms = runtime.frameP95Ms;
       document.body.dataset.frameWorstMs = runtime.frameWorstMs;
       document.body.dataset.visibleStallCount = String(runtime.visibleStalls);
       document.body.dataset.frameSampleCount = String(frameTimes.length);
+      document.body.dataset.performanceWindowMs = String(Math.round(windowMs));
     }
-    runtime.frames = 0;
     fpsStart = now;
     updateDiagnostics();
   }
 }
+resetPerformanceWindow("startup");
 requestAnimationFrame(animate);
 addEventListener("resize", () => {
   compact = mobileQuery.matches;
@@ -714,15 +942,7 @@ addEventListener("resize", () => {
   syncMobileControlHeight();
 });
 document.addEventListener("visibilitychange", () => {
-  frameTimes.length = 0;
-  runtime.frames = 0;
-  lastFrame = performance.now();
-  fpsStart = lastFrame;
-  runtime.frameP95Ms = "sampling";
-  runtime.frameWorstMs = "sampling";
-  document.body.dataset.frameSampleCount = "0";
-  skipNextVisibleFrame = true;
-  updateDiagnostics();
+  resetPerformanceWindow(document.hidden ? "visibility-hidden" : "visibility-visible");
 });
 setControlOutputs();
 updateDiagnostics();

@@ -1,50 +1,13 @@
 {
-  "boundary": "Local Chromium interaction transcript and DOM dataset only; no deployment or physical-device claim.",
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
-  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": "Codex in-app Browser with Chromium engine",
-    "os": "macOS 26.5.2 build 25F84",
-    "viewport_css_px": [
-      1280,
-      720
-    ]
-  },
+  "schema_version": "2.0.0",
+  "kind": "742-browser-gate-capture",
   "gate": "desktop_browser_interaction",
-  "kind": "742-gate-observation",
-  "observations": {
-    "dom_dataset": {
-      "frame_p95_ms": 17.6,
-      "frame_sample_count": 180,
-      "frame_worst_ms": 33.3,
-      "machine_source": "glb-validated",
-      "pixel_ratio": 1.0,
-      "render_profile": "desktop",
-      "runtime_error_count": 0,
-      "selection_overlap_rays": 15,
-      "selection_priority_rays": 15,
-      "shadow_profile": "1024px-14m",
-      "visible_stall_count": 0
-    },
-    "interaction_transcript": [
-      {
-        "action": "load /742/",
-        "observed": "validated GLB source; complete stowed machine visible; zero runtime errors"
-      },
-      {
-        "action": "exercise five mechanism sliders and Circle, Crab, Front steering modes",
-        "observed": "all controls enabled and engineering outputs updated"
-      },
-      {
-        "action": "set maximum pose then invoke Reset View",
-        "observed": "6.83 x 14.07 x 2.58 m posed bounds framed at 37.73 m; complete machine visible after convergence"
-      },
-      {
-        "action": "select Boom then start follow and reset",
-        "observed": "Boom aria-pressed true on selection and false after follow/reset"
-      }
-    ]
-  },
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
-  "schema_version": "1.0.0"
+  "capture_status": "recapture-required",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "environment": null,
+  "capture_artifacts": {"screenshots": [], "automation_trace": null},
+  "observations": {},
+  "boundary": "Requires a fresh local browser recapture after the fourth-wave runtime and mechanics freeze; no deployment or physical-device claim."
 }

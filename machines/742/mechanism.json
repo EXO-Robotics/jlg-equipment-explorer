@@ -13,7 +13,7 @@
     "mid_visual_travel_m": 3.604,
     "fly_visual_travel_m": 3.604,
     "level_fork_surface_height_at_max_pose_m": 12.8,
-    "travel_authority": "3.604 m telescope-cylinder stroke is evidence-derived; second-section +3.604 m and chained third-section additional +3.604 m are the visual chain relationship; authored origins and the zero-degree ground-clear stow remain reconstructed",
+    "travel_authority": "3.604 m telescope-cylinder stroke is evidence-derived; second-section +3.604 m and chained third-section additional +3.604 m are the visual chain relationship. The parallel extend paths and center retract path use reconstructed sheave radii/anchors and invariant tangent U-routes; no manufacturer chain length is claimed. Authored origins and the zero-degree ground-clear stow remain reconstructed",
     "runtime_stow": {"boom_angle_degrees": 0, "neutral_fork_load_surface_target_m": 0.388, "neutral_fork_surface_acceptance_m": [0.32, 0.46], "exact_total_length_with_48in_forks_m": 6.9772, "total_length_tolerance_m": 0.005}
   },
   "frame_level": {
@@ -27,7 +27,8 @@
     "wheelbase_m": 3.42,
     "wheel_center_track_m": 2.1005,
     "published_outside_turning_radius_m": 3.66,
-    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit; wheel-center track is a temporary-reference measurement used only for reconstructed visual Ackermann closure. The published outside-radius reference locus and tire swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the solver wheel-center path"
+    "linkage": "one fixed double-ended cylinder barrel, one continuous translated opposed-rod rack, and two invariant steering bars per axle",
+    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit. Wheel-center track, rack stroke, steering-arm anchors, and the resulting linkage curve are reconstructed. The published outside-radius reference locus and tire/body swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the reconstructed swept envelope"
   },
   "carriage": {
     "type": "standard floating 50 inch",
@@ -48,14 +49,15 @@
     "boom_angle_degrees": 3.0,
     "telescope_fraction": 1.0,
     "load_center_m": 0.6096,
-    "front_tire_plane_x_m": 2.35,
     "published_forward_reach_m": 8.86,
-    "authority": "published reach and 24 inch load center; selected visual pose is reconstructed"
+    "authority": "published reach and 24 inch load center; selected 3 degree visual pose is reconstructed. Validation derives the front tire tread plane from the posed GLB geometry rather than a coordinate constant"
   },
   "collision_proxies": {
     "ground_y_m": 0.0,
     "minimum_fork_y_m": 0.08,
     "minimum_boom_overlap_m": 0.18,
+    "minimum_rigid_underbody_clearance_m": 0.432,
+    "ground_clearance_authority": "published approximate ground clearance; exact manufacturer component locus is unresolved, so validation uses the named reconstructed rigid-underbody proxy set with grounded tires",
     "base_machine_lateral_bounds_m": [-1.23025, 1.23025],
     "visual_bounds_including_mirrors_m": [-1.35, 1.23025]
   }

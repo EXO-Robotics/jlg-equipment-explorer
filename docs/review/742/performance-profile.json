@@ -1,78 +1,13 @@
 {
-  "boundary": "Local Chromium frame-time samples only; no physical low-end mobile GPU claim.",
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
-  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": "Codex in-app Browser with Chromium engine",
-    "os": "macOS 26.5.2 build 25F84",
-    "viewports_css_px": [
-      [
-        1280,
-        720
-      ],
-      [
-        390,
-        844
-      ],
-      [
-        844,
-        390
-      ]
-    ]
-  },
+  "schema_version": "2.0.0",
+  "kind": "742-browser-gate-capture",
   "gate": "performance_profile",
-  "kind": "742-gate-observation",
-  "observations": {
-    "artifact_safe_sample_metadata_exposed": true,
-    "background_samples_excluded": true,
-    "desktop": {
-      "machine_source": "glb-validated",
-      "p95_frame_time_ms": 17.6,
-      "pixel_ratio": 1.0,
-      "render_profile": "desktop",
-      "runtime_error_count": 0,
-      "sample_count": 180,
-      "shadow_profile": "1024px-14m",
-      "viewport_css_px": [
-        1280,
-        720
-      ],
-      "visible_stall_count_gte_250ms": 0,
-      "worst_frame_time_ms": 33.3
-    },
-    "physical_low_end_mobile_gpu_claimed": false,
-    "portrait": {
-      "machine_source": "glb-validated",
-      "p95_frame_time_ms": 17.7,
-      "pixel_ratio": 1.0,
-      "render_profile": "portrait",
-      "runtime_error_count": 0,
-      "sample_count": 180,
-      "shadow_profile": "512px-16m",
-      "viewport_css_px": [
-        390,
-        844
-      ],
-      "visible_stall_count_gte_250ms": 0,
-      "worst_frame_time_ms": 49.1
-    },
-    "short_landscape": {
-      "machine_source": "glb-validated",
-      "p95_frame_time_ms": 17.8,
-      "pixel_ratio": 1.0,
-      "render_profile": "short-landscape",
-      "runtime_error_count": 0,
-      "sample_count": 180,
-      "shadow_profile": "512px-14m",
-      "viewport_css_px": [
-        844,
-        390
-      ],
-      "visible_stall_count_gte_250ms": 0,
-      "worst_frame_time_ms": 33.4
-    },
-    "visible_stalls_included": true
-  },
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
-  "schema_version": "1.0.0"
+  "capture_status": "recapture-required",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "environment": null,
+  "capture_artifacts": {"screenshots": [], "automation_trace": null},
+  "observations": {},
+  "boundary": "Raw visible-tab requestAnimationFrame intervals in one identified local browser/GPU session only; no physical low-end mobile GPU claim."
 }

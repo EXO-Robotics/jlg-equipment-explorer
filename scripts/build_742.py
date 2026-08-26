@@ -251,7 +251,7 @@ def build():
     root["model"] = "JLG 742"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2411"
-    root["release"] = "1.2.0"
+    root["release"] = "1.3.0"
     root["units"] = "meters"
     root["ownership"] = "owned_reconstruction_no_manufacturer_geometry"
     root["disclaimer"] = "visual reconstruction; not load, stability, service, training, or safety authority"
@@ -259,16 +259,23 @@ def build():
     running = empty("GroundRunningGear", owner=root, component="steering")
     front_x, rear_x = 1.71, -1.71
     wheel_lateral = 1.05025
-    box("FrontAxle", (0.52, 0.28, 1.92), (front_x, 0.64, 0), MAT["black"], running, 0.05, "steering")
-    box("RearAxle", (0.52, 0.28, 1.92), (rear_x, 0.64, 0), MAT["black"], running, 0.05, "steering")
+    box("FrontAxle", (0.52, 0.26, 1.92), (front_x, 0.69, 0), MAT["black"], running, 0.05, "steering")
+    box("RearAxle", (0.52, 0.26, 1.92), (rear_x, 0.69, 0), MAT["black"], running, 0.05, "steering")
     for axle_name, x in (("Front", front_x), ("Rear", rear_x)):
-        cylinder(f"{axle_name}Differential", 0.25, 0.62, (x, 0.64, 0), MAT["black"], running, rotation=(math.pi / 2, 0, 0), component="steering")
+        # The axle/differential axis is lateral (logical Z). The short input
+        # flange points longitudinally and is only a topology cue; cast detail
+        # and exact housing dimensions remain reconstructed.
+        cylinder(f"{axle_name}Differential", 0.22, 0.72, (x, 0.68, 0), MAT["black"], running, component="steering")
+        cylinder(f"{axle_name}AxleTubeLeft", 0.11, 0.56, (x, 0.68, -0.62), MAT["black"], running, component="steering")
+        cylinder(f"{axle_name}AxleTubeRight", 0.11, 0.56, (x, 0.68, 0.62), MAT["black"], running, component="steering")
+        cylinder(f"{axle_name}PinionFlange", 0.10, 0.20, (x - 0.20, 0.68, 0), MAT["zinc"], running,
+                 rotation=(0, math.pi / 2, 0), component="steering")
         steering_cylinder = empty(f"{axle_name}SteerCylinder", owner=running, component="steering")
-        beam(f"{axle_name}SteerCylinderBarrel", (x, 0.76, -0.46), (x, 0.76, 0.46), 0.055, MAT["hydraulic"], steering_cylinder, "steering", 20)
-        beam(f"{axle_name}SteerCylinderRodLeft", (x, 0.76, -0.46), (x, 0.76, -0.72), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
-        beam(f"{axle_name}SteerCylinderRodRight", (x, 0.76, 0.46), (x, 0.76, 0.72), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
-        beam(f"{axle_name}SteerBarLeft", (x, 0.76, -0.72), (x - 0.12, 0.59, -0.89), 0.024, MAT["black"], steering_cylinder, "steering", 14)
-        beam(f"{axle_name}SteerBarRight", (x, 0.76, 0.72), (x - 0.12, 0.59, 0.89), 0.024, MAT["black"], steering_cylinder, "steering", 14)
+        beam(f"{axle_name}SteerCylinderBarrel", (x, 0.76, -0.34), (x, 0.76, 0.34), 0.055, MAT["hydraulic"], steering_cylinder, "steering", 20)
+        beam(f"{axle_name}SteerCylinderRodLeft", (x, 0.76, -0.34), (x, 0.76, -0.70), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
+        beam(f"{axle_name}SteerCylinderRodRight", (x, 0.76, 0.34), (x, 0.76, 0.70), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
+        beam(f"{axle_name}SteerBarLeft", (x, 0.76, -0.70), (x - 0.35, 0.59, -1.00025), 0.024, MAT["black"], steering_cylinder, "steering", 14)
+        beam(f"{axle_name}SteerBarRight", (x, 0.76, 0.70), (x - 0.35, 0.59, 1.00025), 0.024, MAT["black"], steering_cylinder, "steering", 14)
     wheels = {name: wheel(name, x, z, running) for name, x, z in (
         ("FL", front_x, -wheel_lateral), ("FR", front_x, wheel_lateral), ("RL", rear_x, -wheel_lateral), ("RR", rear_x, wheel_lateral)
     )}
@@ -342,7 +349,7 @@ def build():
     label("ModelMark_Right", "742", (-1.02,1.75,1.102), MAT["white"], chassis, 0.24, rotation=(math.pi/2,0,math.pi), component="chassis")
 
     boom_pivot = empty("BoomLiftPivot", (-2.158,1.018,0), frame, "ARROWS", 0.18, "boom")
-    boom_pivot["visual_angle_degrees"] = [3,69]
+    boom_pivot["visual_angle_degrees"] = [0,69]
     base = empty("BoomBase", owner=boom_pivot, component="boom")
     box("BaseBoomWeldment", (5.55,0.62,0.72), (2.75,0,0), MAT["cream"], base, 0.055, "boom")
     box("BaseBoomLowerWear", (5.20,0.08,0.58), (2.75,-0.32,0), MAT["cream_dark"], base, 0.025, "boom")
@@ -387,21 +394,24 @@ def build():
         for segment in range(3):
             beam(f"BoomHose_{lane}_{segment}", points[segment], points[segment+1], 0.014, MAT["hose"], base, "hydraulics", 10)
     for side, z in (("L",-0.24),("R",0.24)):
-        beam(f"ExtendChain_{side}", (0.40,-0.22,z), (4.95,-0.22,z), 0.012, MAT["black"], base, "boom", 10)
-        cylinder(f"BoomSheave_{side}", 0.105, 0.035, (5.02,-0.22,z), MAT["zinc"], base, component="boom")
-    beam("RetractChain_C", (5.10,-0.25,0), (0.27,-0.25,0), 0.012, MAT["black"], base, "boom", 10)
-    beam("RetractChain_C_Wrap", (0.27,-0.25,0), (0.27,-0.43,0), 0.012, MAT["black"], base, "boom", 10)
-    beam("RetractChain_C_Moving", (0.27,-0.43,0), (0.94,-0.43,0), 0.012, MAT["black"], base, "boom", 10)
-    for name, alias in (("RetractChain_C", "retract-chain-fixed-leg"),
-                        ("RetractChain_C_Wrap", "retract-chain-sheave-wrap"),
-                        ("RetractChain_C_Moving", "retract-chain-moving-leg")):
-        bpy.data.objects[name]["mechanism_alias"] = alias
-    cylinder("RetractSheave_C", 0.095, 0.035, (0.15,-0.29,0), MAT["zinc"], mid, component="boom")
-    box("BoomAngleSensorBracket", (0.18,0.14,0.05), (-2.20,1.64,-0.50), MAT["black"], lift_cyl, 0.012, "boom")
-    cylinder("BoomAngleSensorBody", 0.080, 0.070, (-2.20,1.64,-0.56), MAT["hydraulic"], lift_cyl, vertices=20, component="boom")
-    beam("BoomAngleSensorLink", (-2.15,1.64,-0.56), (-1.82,1.72,-0.56), 0.012, MAT["zinc"], lift_cyl, "boom", 10)
-    cylinder("BoomAngleSensorFrameJoint", 0.026, 0.090, (-2.15,1.64,-0.56), MAT["zinc"], lift_cyl, vertices=14, component="boom")
-    cylinder("BoomAngleSensorBoomJoint", 0.026, 0.090, (-1.82,1.72,-0.56), MAT["zinc"], lift_cyl, vertices=14, component="boom")
+        cylinder(f"BoomSheave_{side}", 0.105, 0.035, (4.80,-0.22,z), MAT["zinc"], mid, component="boom")
+    cylinder("RetractSheave_C", 0.095, 0.035, (0.15,-0.34,0), MAT["zinc"], mid, component="boom")
+    chain_stow = solved_pose({"lift": 0, "telescope": 0, "tilt": 0, "steer": 0,
+                              "level": 0, "steerMode": "circle"})["geometry"]["beams"]
+    for name, endpoints in chain_stow.items():
+        if "Chain" not in name:
+            continue
+        beam(name, endpoints[0], endpoints[1], 0.012, MAT["black"], base, "boom", 10)
+        bpy.data.objects[name]["mechanism_alias"] = (
+            "extend-chain-tangent-path" if name.startswith("ExtendChain") else "retract-chain-tangent-path"
+        )
+    box("BoomAngleSensorBracket", (0.18,0.14,0.05), (-2.25,1.72,-0.50), MAT["black"], lift_cyl, 0.012, "boom")
+    cylinder("BoomAngleSensorBody", 0.080, 0.070, (-2.25,1.72,-0.56), MAT["hydraulic"], lift_cyl, vertices=20, component="boom")
+    beam("BoomAngleSensorCrank", (-2.25,1.72,-0.56), (-2.20,1.63,-0.56), 0.014, MAT["zinc"], lift_cyl, "boom", 10)
+    beam("BoomAngleSensorLink", (-2.20,1.63,-0.56), (-1.808,1.838,-0.56), 0.012, MAT["zinc"], lift_cyl, "boom", 10)
+    cylinder("BoomAngleSensorFrameJoint", 0.026, 0.090, (-2.25,1.72,-0.56), MAT["zinc"], lift_cyl, vertices=14, component="boom")
+    cylinder("BoomAngleSensorCrankJoint", 0.026, 0.090, (-2.20,1.63,-0.56), MAT["zinc"], lift_cyl, vertices=14, component="boom")
+    cylinder("BoomAngleSensorBoomJoint", 0.026, 0.090, (-1.808,1.838,-0.56), MAT["zinc"], lift_cyl, vertices=14, component="boom")
 
     carriage_pivot = empty("CarriageTiltPivot", (5.296,-0.80,0), fly, "ARROWS", 0.15, "carriage")
     carriage = empty("Carriage", owner=carriage_pivot, component="carriage")
@@ -466,7 +476,9 @@ def build():
         bpy.data.objects[name].location = point
     root["solver_contract"] = "machines/742/solver.js"
     root["mechanism_aliases"] = json.dumps({
-        "retract_chain": ["RetractChain_C", "RetractChain_C_Wrap", "RetractChain_C_Moving"],
+        "extend_chain_left": sorted(name for name in chain_stow if name.startswith("ExtendChain_L")),
+        "extend_chain_right": sorted(name for name in chain_stow if name.startswith("ExtendChain_R")),
+        "retract_chain": sorted(name for name in chain_stow if name.startswith("RetractChain_C")),
         "front_steer_actuator": ["FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight", "FrontSteerBarLeft", "FrontSteerBarRight"],
         "rear_steer_actuator": ["RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight", "RearSteerBarLeft", "RearSteerBarRight"],
     }, sort_keys=True)

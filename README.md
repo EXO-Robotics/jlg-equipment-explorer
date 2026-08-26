@@ -26,11 +26,18 @@ python3 -B scripts/validate_742_evidence.py \
   --require-source-binaries
 ```
 
-The candidate receipt and manufacturer source binaries are not included in the Pages site. After an authorized deployment, CI retrieves the public build manifest plus the exact 742 HTML, GLB, CSS, runtime, machine modules, configuration, mechanism record, and public research files. Every response must be HTTP 200 and match the build manifest by SHA-256 and byte count before CI uploads a separate `742-pages-attestation` artifact. That external attestation does not convert pending review gates into passes and expressly does not claim a frozen-source replay.
+The candidate receipt and manufacturer source binaries are not included in the Pages site. Before an authorized deployment, CI downloads the private `742-frozen-source-evidence` artifact from the exact Actions run named by `JLG742_SOURCE_EVIDENCE_RUN_ID`, replays all 11 source hashes, and verifies the retained deterministic GLB rebuild attestation. After deployment it retrieves the public build manifest and verifies every listed public response—not only the 742 subset—at HTTP 200 with the exact manifest SHA-256 and byte count. The external schema-3 attestation binds the source-replay result, rebuild attestation, complete deployed manifest, candidate receipt, producer workflow run, and deployment workflow run without packaging private source binaries.
 
-To close the human gates, first write a pending receipt, commit the exact candidate, and take its `candidate_tree_sha256`. A review manifest supplied through `python3 -B scripts/write_742_receipt.py --review-manifest docs/review/742/review-manifest.json` must name that tree, the exact reviewed commit, browser and OS environment, and every canonical gate. Each gate has its own fixed artifact path and gate-specific schema; one generic boolean report cannot satisfy multiple gates. The six visual PNGs are accepted only through an exact path/hash/size/dimensions allowlist, and the source-binary hash scan still rejects any manufacturer file with an admitted hash. The accessibility gate proves browser semantics and keyboard behavior only—it does not claim VoiceOver, NVDA, or physical assistive-technology testing. The 600S and ES1930M regression artifacts bind the exact upstream configuration, release, asset, runtime, and receipt identities.
+To close the human gates, first write a pending receipt, commit the exact candidate, and take its `candidate_tree_sha256`. Repeat the checklist in `docs/review/742/CAPTURE_REQUIREMENTS.json` against that frozen candidate. Each browser gate requires schema-2 raw evidence: exact browser/OS/GPU metadata, DOM and applicable accessibility-tree snapshots, ordered interaction transcripts, exact screenshot and automation-trace records, and raw frame-interval arrays for the performance gate. One generic boolean report cannot satisfy multiple gates. The eight Blender PNGs and browser-capture artifacts use separate exact allowlists, while the source-binary hash scan still rejects any manufacturer file with an admitted hash. The accessibility gate proves browser semantics and keyboard behavior only—it does not claim VoiceOver, NVDA, or physical assistive-technology testing. The regression artifacts must exercise interaction, responsive layout, modal focus, drag, pinch, and reduced motion while binding the exact current 600S and ES1930M 1.0.4 configuration, release, asset, runtime, and receipt identities.
 
-After the observations have actually been repeated against that commit, `scripts/bind_742_review.py --reviewed-source-commit <40-character-commit>` updates only their candidate/commit bindings and manifest file records, then parses every gate. Its output warns that binding is not observation; running it cannot create review proof by itself.
+After the observations and final visual comparisons have actually been repeated, the explicit command below updates only candidate/commit bindings and manifest records, then semantically parses every gate. It rolls back all writes on failure; binding cannot create observations by itself.
+
+```sh
+python3 -B scripts/bind_742_review.py \
+  --reviewed-source-commit <40-character-commit> \
+  --confirm-browser-observations-reviewed \
+  --confirm-visual-observations-reviewed
+```
 
 Before release qualification, generate a byte-identical rebuild attestation with the retained Blender version:
 
@@ -50,7 +57,7 @@ python3 -B scripts/validate_742_receipt.py \
   --require-release
 ```
 
-`--require-deployed` also requires the frozen-source directory, a fresh replay, and all review gates. The Pages workflow therefore requires a private Actions artifact named `742-frozen-source-evidence` from the exact run named by repository variable `JLG742_SOURCE_EVIDENCE_RUN_ID`; it downloads that non-public artifact, replays all 11 hashes before deployment, and repeats the complete deployed-candidate gate before uploading the public HTTP attestation. If the variable or retained artifact is absent, deployment fails closed. Manufacturer binaries are never placed in the Pages bundle.
+`--require-deployed` also requires the frozen-source directory, a fresh replay, and all review gates. `--require-release` additionally requires the deterministic rebuild proof copied from the same private producer artifact and the schema-3 deployment attestation. If the producer variable, retained source set, rebuild proof, review binding, public manifest, or any public response is absent or inconsistent, deployment/release qualification fails closed. Manufacturer binaries are never placed in the Pages bundle.
 
 ## What is ready
 

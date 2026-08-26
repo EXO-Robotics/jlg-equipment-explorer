@@ -1,42 +1,14 @@
 {
-  "boundary": "Exact local upstream release identity and browser DOM transcript; no new ES1930M visual acceptance claim.",
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
-  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": "Codex in-app Browser with Chromium engine",
-    "os": "macOS 26.5.2 build 25F84"
-  },
+  "schema_version": "2.0.0",
+  "kind": "742-upstream-regression-capture",
   "gate": "es1930m_browser_regression",
-  "kind": "742-upstream-regression-observation",
-  "observations": {
-    "interaction_transcript": [
-      {
-        "action": "load /es1930m/ against exact upstream receipt identity",
-        "observed": "title and status DOM matched; selection self-test passed; errors 0"
-      }
-    ],
-    "parsed_status": {
-      "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
-      "errors": 0,
-      "fps": 61,
-      "load_ms": 26,
-      "machine": "es1930m",
-      "p95_ms": 17.1,
-      "selection": "self-test-pass",
-      "source": "glb"
-    },
-    "status_text": "machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 26 ms \u00b7 61 fps \u00b7 p95 17.1 ms",
-    "title": "ES1930M Interactive Equipment Study"
-  },
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
-  "schema_version": "1.0.0",
-  "upstream_identity": {
-    "asset_sha256": "9eaae3b614f8067c1e451e9e2a1c0fc1fb1d9bd49b22ed93dc9f4972eea70977",
-    "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
-    "receipt_bytes": 3808,
-    "receipt_sha256": "697ed2c30e998afa87a8682dfb6f8bfe92f54d4fbd5d7be1476108b834b9ce48",
-    "release": "1.0.3",
-    "route": "/es1930m/",
-    "runtime_sha256": "3052909b4fe5bbb56f8c9f2e42edaf2b7d95d6202e0a6b818f705e3d30d89130"
-  }
+  "capture_status": "recapture-required",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "upstream_identity": "REFRESH_FROM_CURRENT_RECEIPT_AT_CAPTURE",
+  "environment": null,
+  "capture_artifacts": {"screenshots": [], "automation_trace": null},
+  "observations": {},
+  "boundary": "Fresh exact ES1930M 1.0.4 interaction, responsive, modal, gesture, auto-route, and reduced-motion regression capture; no new ES visual acceptance claim."
 }

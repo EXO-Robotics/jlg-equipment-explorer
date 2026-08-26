@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { JLG742_CAMERAS, jlg742ComponentView, jlg742FollowView } from "./cameras.js?v=1.1.3";
 import { JLG742_COMPONENTS } from "./inspector.js?v=1.1.3";
-import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.4";
+import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.5";
 import { JLG742_GLB_URL, JLG742_RELEASE } from "./version.js?v=1.1.4";
 
 export const JLG742_MACHINE = Object.freeze({

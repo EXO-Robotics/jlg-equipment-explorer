@@ -1,83 +1,13 @@
 {
-  "boundary": "Viewport and pointer-gesture transcript only; no physical mobile device or mobile GPU claim.",
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
-  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": "Codex in-app Browser with Chromium engine",
-    "os": "macOS 26.5.2 build 25F84",
-    "viewports_css_px": [
-      [
-        390,
-        844
-      ],
-      [
-        844,
-        390
-      ]
-    ]
-  },
+  "schema_version": "2.0.0",
+  "kind": "742-browser-gate-capture",
   "gate": "mobile_browser_interaction",
-  "kind": "742-gate-observation",
-  "observations": {
-    "dom_datasets": {
-      "portrait": {
-        "p95_ms": 17.7,
-        "pixel_ratio": 1.0,
-        "render_profile": "portrait",
-        "runtime_errors": 0,
-        "sample_count": 180,
-        "shadow_profile": "512px-16m",
-        "source": "glb-validated",
-        "visible_stalls": 0,
-        "worst_ms": 49.1
-      },
-      "short_landscape": {
-        "p95_ms": 17.8,
-        "pixel_ratio": 1.0,
-        "render_profile": "short-landscape",
-        "runtime_errors": 0,
-        "sample_count": 180,
-        "shadow_profile": "512px-14m",
-        "source": "glb-validated",
-        "visible_stalls": 0,
-        "worst_ms": 33.4
-      }
-    },
-    "interaction_transcript": [
-      {
-        "action": "load stowed route and expand Adjust",
-        "observed": "complete machine visible; five enabled manual sliders reachable",
-        "viewport_css_px": [
-          390,
-          844
-        ]
-      },
-      {
-        "action": "enable reduced motion",
-        "observed": "Showcase disabled while five manual sliders remained enabled",
-        "viewport_css_px": [
-          390,
-          844
-        ]
-      },
-      {
-        "action": "load route and expand Adjust",
-        "observed": "five sliders present and reachable in short landscape",
-        "viewport_css_px": [
-          844,
-          390
-        ]
-      },
-      {
-        "action": "perform pinch gesture",
-        "observed": "zoom changed without an accidental component selection",
-        "viewport_css_px": [
-          390,
-          844
-        ]
-      }
-    ]
-  },
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
-  "schema_version": "1.0.0"
+  "capture_status": "recapture-required",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "environment": null,
+  "capture_artifacts": {"screenshots": [], "automation_trace": null},
+  "observations": {},
+  "boundary": "Responsive Chromium emulation only; no physical touchscreen, mobile device, or mobile GPU claim."
 }

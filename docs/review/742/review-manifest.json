@@ -1,102 +1,19 @@
 {
-  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
+  "schema_version": "3.0.0",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": "Codex in-app Browser with Chromium engine",
-    "os": "macOS 26.5.2 build 25F84"
-  },
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "environment": null,
   "gates": {
-    "600s_browser_regression": {
-      "artifact": {
-        "bytes": 1779,
-        "path": "docs/review/742/600s-browser-regression.json",
-        "sha256": "7e95fd0cb7851a70e07d025c74cb6db7b1ce21b8832347c4b8548c148ad7f12e"
-      },
-      "notes": "600S route loaded its exact machine identity with zero runtime errors on the isolated static server.",
-      "status": "pass"
-    },
-    "accessibility_semantics_and_keyboard": {
-      "artifact": {
-        "bytes": 1557,
-        "path": "docs/review/742/accessibility-semantics-keyboard.json",
-        "sha256": "a90bb24eaab26a686e607da9d41462b824abec9cf32177959aa7e28107c4974b"
-      },
-      "notes": "Browser accessibility tree, engineering aria values, keyboard modal, focus trap contract, Escape, inert background, and focus restoration reviewed. Physical screen-reader hardware is explicitly not claimed.",
-      "status": "pass"
-    },
-    "cab_closeup_fidelity": {
-      "artifact": {
-        "bytes": 1507158,
-        "path": "docs/review/742/cab-close.png",
-        "sha256": "e58ea2c1ec347dbdec6da123c5eef1209b0390a7adddf73ebe2083cfc78cb68b"
-      },
-      "notes": "Cab close-up reviewed for open-cab configuration, structure, controls, glazing, and owned-detail consistency.",
-      "status": "pass"
-    },
-    "desktop_browser_interaction": {
-      "artifact": {
-        "bytes": 1782,
-        "path": "docs/review/742/desktop-browser-interaction.json",
-        "sha256": "74ede22da42d4ef8f90c3453bb5e0807538dc06638bb8aa57a2f5af258841558"
-      },
-      "notes": "Desktop stow, maximum lift, maximum reach, steering modes, controls, and zero-error diagnostics reviewed.",
-      "status": "pass"
-    },
-    "es1930m_browser_regression": {
-      "artifact": {
-        "bytes": 1798,
-        "path": "docs/review/742/es1930m-browser-regression.json",
-        "sha256": "e53d90a4c01f27e8f606f07a0c99633b49c39e389e5564de606c03bafce59b2d"
-      },
-      "notes": "ES1930M route loaded its GLB and exact machine identity with zero runtime errors on the isolated static server.",
-      "status": "pass"
-    },
-    "extended_visual_fidelity": {
-      "artifact": {
-        "bytes": 1098,
-        "path": "docs/review/742/extended-visual-fidelity.json",
-        "sha256": "f5e740622b08e427fd1f14746e779f40a312d67ae521df87c5f8249b4be2ae5e"
-      },
-      "notes": "Four owned renders separately expose maximum lift, maximum reach, retract-chain sheave routing, and the double-ended steering ram/bars.",
-      "status": "pass"
-    },
-    "mobile_browser_interaction": {
-      "artifact": {
-        "bytes": 2260,
-        "path": "docs/review/742/mobile-browser-interaction.json",
-        "sha256": "2469cbf47ba3c650a845c811c1a95320c3de49ba9e23d25d4d8c85411b08bd0a"
-      },
-      "notes": "390 by 844 portrait and 844 by 390 short-landscape layouts reviewed with all five controls reachable.",
-      "status": "pass"
-    },
-    "performance_profile": {
-      "artifact": {
-        "bytes": 2107,
-        "path": "docs/review/742/performance-profile.json",
-        "sha256": "f1d5d63de4fbfbbdd074bfc8788606cfe20a39e1c6a975ec0c410e61afb9ea07"
-      },
-      "notes": "Observed local p95 frame times remained from 16.8 to 18.6 ms; physical low-end mobile GPU performance is not claimed.",
-      "status": "pass"
-    },
-    "semantic_selection": {
-      "artifact": {
-        "bytes": 1430,
-        "path": "docs/review/742/semantic-selection.json",
-        "sha256": "8ee0a1e80019f802d46d331f85aae113c65991758072397a8c40269bdcecdcaf"
-      },
-      "notes": "Runtime semantic hit-volume self-test reported 6 of 6 ready and component dialogs restored focus to their opener.",
-      "status": "pass"
-    },
-    "stowed_visual_fidelity": {
-      "artifact": {
-        "bytes": 1276685,
-        "path": "docs/review/742/stowed-front-left.png",
-        "sha256": "084641898da3cfcb795276401b1ddb70ba305b2b1d7d93bc0e44cc798d2be89d"
-      },
-      "notes": "Owned stowed render reviewed for silhouette, tire contact, fork scale, and base-machine proportions.",
-      "status": "pass"
-    }
-  },
-  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
-  "schema_version": "2.0.0"
+    "stowed_visual_fidelity": {"status": "pending", "artifact": null, "notes": "Repeat against the final fourth-wave mechanical render."},
+    "extended_visual_fidelity": {"status": "pending", "artifact": null, "notes": "Repeat all six mechanism-specific view reviews against the frozen renders."},
+    "cab_closeup_fidelity": {"status": "pending", "artifact": null, "notes": "Repeat the final cab close-up review after the mechanical freeze."},
+    "desktop_browser_interaction": {"status": "pending", "artifact": null, "notes": "Fresh schema-2 browser capture required."},
+    "mobile_browser_interaction": {"status": "pending", "artifact": null, "notes": "Fresh portrait and short-landscape captures required."},
+    "accessibility_semantics_and_keyboard": {"status": "pending", "artifact": null, "notes": "Fresh DOM/accessibility-tree and keyboard capture required; no AT session claimed."},
+    "semantic_selection": {"status": "pending", "artifact": null, "notes": "Fresh independent expected-versus-observed selection trace required."},
+    "performance_profile": {"status": "pending", "artifact": null, "notes": "Fresh raw visible-frame interval arrays required."},
+    "600s_browser_regression": {"status": "pending", "artifact": null, "notes": "Fresh interaction, responsive, modal, gesture, and reduced-motion capture required."},
+    "es1930m_browser_regression": {"status": "pending", "artifact": null, "notes": "Fresh exact ES1930M 1.0.4 interaction, responsive, modal, gesture, auto-route, and reduced-motion capture required."}
+  }
 }

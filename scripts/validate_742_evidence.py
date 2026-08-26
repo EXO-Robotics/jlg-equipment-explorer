@@ -20,6 +20,7 @@ CONFIG = ROOT / "machines/742/742.configuration.json"
 MECHANISM = ROOT / "machines/742/mechanism.json"
 REFERENCES = RESEARCH / "REFERENCES.md"
 OWNED_RENDER_ALLOWLIST = ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json"
+BROWSER_CAPTURE_ALLOWLIST = ROOT / "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json"
 EXPECTED_ID = "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"
 PRIMARY_PUBLICATIONS = {"3132247", "3132245", "3122332100", "3122331300", "3122329900", "3122333200", "3122333100"}
 ADMITTED = {"primary", "visual-only", "visual-envelope-only"}
@@ -78,6 +79,48 @@ def read_owned_render_allowlist() -> dict[Path, dict]:
     return allowed
 
 
+def read_browser_capture_allowlist() -> dict[Path, dict]:
+    record = json.loads(BROWSER_CAPTURE_ALLOWLIST.read_text(encoding="utf-8"))
+    if set(record) != {"schema_version", "kind", "artifacts"}:
+        raise RuntimeError("742 browser-capture allowlist schema drift")
+    if record["schema_version"] != "1.0.0" or record["kind"] != "742-browser-capture-allowlist":
+        raise RuntimeError("742 browser-capture allowlist identity drift")
+    allowed: dict[Path, dict] = {}
+    fields = {"path", "sha256", "bytes", "kind", "mime_type", "width_px", "height_px", "provenance"}
+    for artifact in record.get("artifacts") or []:
+        if set(artifact) != fields:
+            raise RuntimeError("742 browser-capture record schema drift")
+        relative = Path(artifact["path"])
+        if relative.is_absolute() or ".." in relative.parts or not str(relative).startswith("docs/review/742/browser-captures/"):
+            raise RuntimeError(f"Unsafe 742 browser-capture path: {relative}")
+        if relative in allowed:
+            raise RuntimeError(f"Duplicate 742 browser-capture path: {relative}")
+        if artifact["kind"] == "screenshot":
+            if relative.suffix.lower() != ".png" or artifact["mime_type"] != "image/png":
+                raise RuntimeError(f"742 browser screenshot identity drift: {relative}")
+        elif artifact["kind"] == "automation_trace":
+            if relative.suffix.lower() != ".json" or artifact["mime_type"] != "application/json":
+                raise RuntimeError(f"742 automation trace identity drift: {relative}")
+        else:
+            raise RuntimeError(f"742 browser-capture kind drift: {relative}")
+        path = ROOT / relative
+        if not path.is_file() or digest(path) != artifact["sha256"] or path.stat().st_size != artifact["bytes"]:
+            raise RuntimeError(f"742 browser-capture artifact drift: {relative}")
+        if artifact["kind"] == "screenshot":
+            data = path.read_bytes()
+            if data[:8] != b"\x89PNG\r\n\x1a\n" or len(data) < 24:
+                raise RuntimeError(f"742 browser screenshot is not a valid PNG: {relative}")
+            width, height = struct.unpack(">II", data[16:24])
+            if (width, height) != (artifact["width_px"], artifact["height_px"]):
+                raise RuntimeError(f"742 browser screenshot dimensions drift: {relative}")
+        elif artifact["width_px"] is not None or artifact["height_px"] is not None:
+            raise RuntimeError(f"742 automation trace cannot claim image dimensions: {relative}")
+        if not isinstance(artifact["provenance"], str) or "local browser capture" not in artifact["provenance"].lower():
+            raise RuntimeError(f"742 browser-capture provenance is not explicit: {relative}")
+        allowed[relative] = artifact
+    return allowed
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--sources-dir", type=Path)
@@ -117,7 +160,7 @@ def main():
     }
     if identities != {EXPECTED_ID} or config.get("pvc") != "2411":
         raise RuntimeError(f"742 configuration identity drift: {identities}")
-    if config.get("target_release") != "1.2.0":
+    if config.get("target_release") != "1.3.0":
         raise RuntimeError("742 target release drift")
     choices = config.get("choices") or {}
     for key in ("engine", "drive", "steer", "tires", "cab", "carriage", "forks"):
@@ -258,6 +301,7 @@ def main():
             raise RuntimeError(f"Evidence-derived mechanical binding drift: {claim_id}: {observed}")
 
     owned_review_renders = read_owned_render_allowlist()
+    browser_captures = read_browser_capture_allowlist()
     tracked_output = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
     tracked = [Path(value.decode()) for value in tracked_output.split(b"\0") if value]
     allowed_binary_artifacts = {
@@ -266,7 +310,7 @@ def main():
         Path("source/blender/600s-blockout-v0.2.blend"), Path("source/blender/600s-detailed-v0.3.blend"),
         Path("source/blender/600s-showcase-v1.0.blend"), Path("source/blender/600s-showcase-v1.1.blend"),
         Path("source/blender/es1930m-showcase-v1.0.blend"), Path("source/blender/742-showcase-v1.0.blend"),
-        *owned_review_renders,
+        *owned_review_renders, *browser_captures,
     }
     leaked = sorted(
         str(path) for path in tracked
@@ -277,6 +321,14 @@ def main():
     manufacturer_hashes_by_size: dict[int, set[str]] = {}
     for source in admitted_sources:
         manufacturer_hashes_by_size.setdefault(source["bytes"], set()).add(source["sha256"])
+    # Review captures may be created after the first candidate commit and before
+    # the reviewed receipt/second commit. Scan every exact allowlisted artifact
+    # now, not only the current Git index, so an untracked manufacturer image
+    # cannot be laundered through a browser-screenshot or owned-render record.
+    for relative in {*owned_review_renders, *browser_captures}:
+        path = ROOT / relative
+        if path.stat().st_size in manufacturer_hashes_by_size and digest(path) in manufacturer_hashes_by_size[path.stat().st_size]:
+            leaked.append(str(relative))
     for relative in tracked:
         path = ROOT / relative
         if path.is_file() and path.stat().st_size in manufacturer_hashes_by_size:
@@ -316,6 +368,7 @@ def main():
         "frozen_source_binary_status":binary_status,
         "committed_source_binaries":0,
         "owned_review_renders_verified":len(owned_review_renders),
+        "browser_captures_verified":len(browser_captures),
     }, indent=2, sort_keys=True))
 
 

@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import math
 import re
 import subprocess
 import sys
@@ -51,8 +50,13 @@ CANONICAL_FILES = {
     "review_renderer": "scripts/render_742_preview.py",
     "review_validator": "scripts/validate_742_review.py",
     "review_binder": "scripts/bind_742_review.py",
+    "browser_capture_validator": "scripts/validate_742_browser_evidence.py",
+    "browser_capture_probe": "scripts/742_browser_capture_probe.js",
+    "browser_capture_parser_tests": "scripts/test_742_browser_evidence.py",
     "deterministic_rebuild_verifier": "scripts/verify_742_deterministic_rebuild.py",
     "owned_review_render_allowlist": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
+    "browser_capture_allowlist": "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
+    "browser_capture_requirements": "docs/review/742/CAPTURE_REQUIREMENTS.json",
 }
 CANONICAL_RUNTIME = [
     "742/index.html",
@@ -77,6 +81,7 @@ AUTOMATED_CHECKS = {
     "asset_contract": ("scripts/validate_742_glb.py", []),
     "mechanical_kinematics": ("scripts/validate_742_kinematics.py", []),
     "route_contract": ("scripts/validate_742_route.py", []),
+    "review_evidence_parser": ("scripts/test_742_browser_evidence.py", []),
 }
 TOP_LEVEL_FIELDS = {
     "schema_version", "release", "release_status", "written", "configuration_id",
@@ -111,15 +116,6 @@ def aggregate_digest(paths: list[Path]) -> str:
         hasher.update(path.read_bytes())
         hasher.update(b"\0")
     return hasher.hexdigest()
-
-
-def solver_circle_inner_degrees(result: dict, mechanism: dict) -> float:
-    steering = mechanism["steering"]
-    half_wheelbase = steering["wheelbase_m"] / 2
-    track = steering["wheel_center_track_m"]
-    outside_center_path = result["visual_circle_outside_wheel_center_radius_m"]
-    projected_outside = math.sqrt(outside_center_path ** 2 - half_wheelbase ** 2)
-    return math.degrees(math.atan2(half_wheelbase, projected_outside - track))
 
 
 def solver_stroke_usage(result: dict) -> dict:
@@ -208,9 +204,10 @@ def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path)
     fields = {
         "schema_version", "kind", "configuration_id", "source_commit", "workflow_run_url", "base_url",
         "pages_build_manifest_url", "pages_build_manifest_http_status", "pages_build_manifest_sha256",
-        "pages_build_manifest_bytes", "candidate_receipt_sha256", "frozen_source_replay", "verified_files",
+        "pages_build_manifest_bytes", "candidate_receipt_sha256", "frozen_source_replay",
+        "deterministic_rebuild_attestation", "verified_files",
     }
-    if set(attestation) != fields or attestation["schema_version"] != "2.0.0" or attestation["kind"] != "github-pages-http-attestation":
+    if set(attestation) != fields or attestation["schema_version"] != "3.0.0" or attestation["kind"] != "github-pages-http-attestation":
         raise RuntimeError("742 deployment attestation schema drift")
     if attestation["configuration_id"] != EXPECTED_ID:
         raise RuntimeError("742 deployment attestation identity drift")
@@ -219,12 +216,70 @@ def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path)
         raise RuntimeError("742 deployment attestation URL identity drift")
     if attestation["pages_build_manifest_http_status"] != 200:
         raise RuntimeError("742 deployment attestation did not retrieve the public build manifest")
-    if attestation["frozen_source_replay"] != "not_performed_in_deployment_workflow":
-        raise RuntimeError("742 deployment attestation must not claim frozen-source replay")
     if not re.fullmatch(r"[0-9a-f]{40}", attestation["source_commit"]):
         raise RuntimeError("742 deployment attestation source commit is malformed")
     if not re.fullmatch(r"https://github\.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/\d+", attestation["workflow_run_url"]):
         raise RuntimeError("742 deployment attestation workflow run is malformed")
+    replay = attestation["frozen_source_replay"]
+    replay_fields = {
+        "status", "configuration_id", "verified_count", "result_sha256", "result_bytes",
+        "artifact_name", "artifact_run_url",
+    }
+    if set(replay or {}) != replay_fields or replay.get("status") != "verified_before_deployment":
+        raise RuntimeError("742 deployment frozen-source replay schema/status drift")
+    if replay["configuration_id"] != EXPECTED_ID or replay["verified_count"] != 11:
+        raise RuntimeError("742 deployment frozen-source replay identity/count drift")
+    artifact_run_url = replay["artifact_run_url"]
+    if replay["artifact_name"] != "742-frozen-source-evidence" or not re.fullmatch(
+        r"https://github\.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/\d+", artifact_run_url or ""
+    ):
+        raise RuntimeError("742 deployment frozen-source replay artifact identity drift")
+    source_result_path = path.parent / "742-source-replay-result.json"
+    if (
+        not source_result_path.is_file()
+        or replay["result_sha256"] != digest(source_result_path)
+        or replay["result_bytes"] != source_result_path.stat().st_size
+    ):
+        raise RuntimeError("742 deployment frozen-source replay result record drift")
+    source_result = json.loads(source_result_path.read_text(encoding="utf-8"))
+    source_result_fields = {
+        "admitted_source_binaries", "browser_captures_verified", "claims", "committed_source_binaries",
+        "configuration_id", "frozen_source_binary_status", "local_binaries_missing",
+        "local_binaries_verified", "local_binaries_verified_count", "owned_review_renders_verified",
+        "primary_publications", "source_expressions_resolved", "status",
+    }
+    source_manifest = json.loads((ROOT / "docs/research/742/SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
+    browser_allowlist = json.loads((ROOT / "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json").read_text(encoding="utf-8"))
+    owned_render_allowlist = json.loads((ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json").read_text(encoding="utf-8"))
+    expected_source_names = sorted(
+        source["local_filename"] for source in source_manifest["sources"]
+        if source.get("local_filename") and source.get("sha256") and source.get("bytes")
+    )
+    if (
+        set(source_result) != source_result_fields
+        or source_result.get("status") != "PASS"
+        or source_result.get("configuration_id") != EXPECTED_ID
+        or source_result.get("frozen_source_binary_status") != "VERIFIED"
+        or source_result.get("local_binaries_verified_count") != 11
+        or source_result.get("admitted_source_binaries") != 11
+        or source_result.get("browser_captures_verified") != len(browser_allowlist.get("artifacts") or [])
+        or source_result.get("owned_review_renders_verified") != len(owned_render_allowlist.get("artifacts") or [])
+        or source_result.get("local_binaries_verified") != expected_source_names
+        or source_result.get("local_binaries_missing") != []
+    ):
+        raise RuntimeError("742 deployment frozen-source replay result did not verify all 11 sources")
+    rebuild_record = attestation["deterministic_rebuild_attestation"]
+    if set(rebuild_record or {}) != {"sha256", "bytes", "artifact_name", "artifact_run_url"}:
+        raise RuntimeError("742 deployment deterministic-rebuild record schema drift")
+    rebuild_path = path.parent / "742-deterministic-rebuild-attestation.json"
+    if (
+        rebuild_record["artifact_name"] != "742-frozen-source-evidence"
+        or rebuild_record["artifact_run_url"] != artifact_run_url
+        or not rebuild_path.is_file()
+        or rebuild_record["sha256"] != digest(rebuild_path)
+        or rebuild_record["bytes"] != rebuild_path.stat().st_size
+    ):
+        raise RuntimeError("742 deployment deterministic-rebuild artifact record drift")
     if attestation["candidate_receipt_sha256"] != digest(receipt_path):
         raise RuntimeError("742 deployment attestation does not bind the canonical candidate receipt")
     build_manifest_path = path.parent / "pages-build-manifest.json"
@@ -240,6 +295,21 @@ def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path)
     site_files = build_manifest.get("files") or {}
     if "assets/models/742.asset-receipt.json" in site_files:
         raise RuntimeError("Non-release 742 receipt was packaged into Pages")
+    for site_path, manifest_record in site_files.items():
+        relative = Path(site_path)
+        if relative.is_absolute() or ".." in relative.parts or "\\" in site_path or str(relative) != site_path:
+            raise RuntimeError(f"742 Pages build manifest contains an unsafe path: {site_path}")
+        if set(manifest_record or {}) != {"sha256", "bytes"}:
+            raise RuntimeError(f"742 Pages build-manifest file record schema drift: {site_path}")
+        local = ROOT / relative
+        if not local.is_file() or manifest_record != {"sha256": digest(local), "bytes": local.stat().st_size}:
+            raise RuntimeError(f"742 Pages build manifest does not match local bytes: {site_path}")
+        committed = subprocess.run(
+            ["git", "show", f"{attestation['source_commit']}:{site_path}"], cwd=ROOT,
+            capture_output=True, check=False,
+        )
+        if committed.returncode or committed.stdout != local.read_bytes():
+            raise RuntimeError(f"742 deployed source commit does not contain the attested public bytes: {site_path}")
     expected_site_files = {}
     for site_path in REQUIRED_742_PUBLIC_FILES:
         local = ROOT / site_path
@@ -247,16 +317,12 @@ def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path)
     for site_path, expected in expected_site_files.items():
         if site_files.get(site_path) != expected:
             raise RuntimeError(f"742 Pages build manifest drift: {site_path}")
-        committed = subprocess.run(
-            ["git", "show", f"{attestation['source_commit']}:{site_path}"], cwd=ROOT,
-            capture_output=True, check=False,
-        )
-        if committed.returncode or committed.stdout != (ROOT / site_path).read_bytes():
-            raise RuntimeError(f"742 deployed source commit does not contain the attested public bytes: {site_path}")
     verified_files = attestation.get("verified_files") or {}
-    if set(verified_files) != REQUIRED_742_PUBLIC_FILES:
-        raise RuntimeError("742 deployment attestation did not verify the exact required public file set")
-    for site_path, expected in expected_site_files.items():
+    if not REQUIRED_742_PUBLIC_FILES.issubset(site_files) or set(verified_files) != set(site_files):
+        raise RuntimeError("742 deployment attestation did not verify the complete public build manifest")
+    for site_path, expected in site_files.items():
+        if set(expected or {}) != {"sha256", "bytes"}:
+            raise RuntimeError(f"742 Pages build-manifest file record schema drift: {site_path}")
         observed = verified_files[site_path]
         if set(observed) != {"url", "http_status", "sha256", "bytes"}:
             raise RuntimeError(f"742 deployed-file attestation schema drift: {site_path}")
@@ -368,7 +434,7 @@ def main() -> None:
     asset_result = checks["asset_contract"]["result"]
     kinematic_result = checks["mechanical_kinematics"]["result"]
     mechanism = json.loads((ROOT / CANONICAL_FILES["mechanism"]).read_text(encoding="utf-8"))
-    circle_inner_degrees = solver_circle_inner_degrees(kinematic_result, mechanism)
+    steering_linkage = kinematic_result["steering_linkage"]
     expected_mechanical_proof = {
         "asset_sha256": asset_result["sha256"],
         "source_blend_sha256": asset_result["source_blend_sha256"],
@@ -378,9 +444,24 @@ def main() -> None:
         "posed_level_fork_surface_height_m": kinematic_result["maximum_level_fork_surface_y_m"],
         "published_maximum_forward_reach_m": configuration["published_performance"]["maximum_forward_reach_m"],
         "posed_24in_load_center_forward_reach_m": kinematic_result["maximum_reach_pose"]["forward_reach_m"],
+        "posed_reach_fork_heel_world_x_m": kinematic_result["maximum_reach_pose"]["fork_heel_x_m"],
+        "posed_reach_24in_load_center_world_x_m": kinematic_result["maximum_reach_pose"]["load_center_world_x_m"],
+        "actual_glb_front_tire_tread_plane_x_m": kinematic_result["actual_glb_front_tire_tread_plane_x_m"],
         "evidence_steering_inner_limit_degrees": mechanism["steering"]["visual_inner_limit_degrees"],
-        "solver_circle_maximum_inner_wheel_degrees": circle_inner_degrees,
-        "solver_maximum_ackermann_center_error_m": kinematic_result["maximum_ackermann_center_error_m"],
+        "solver_circle_maximum_inner_wheel_degrees": steering_linkage["maximum_inner_wheel_angle_degrees"],
+        "solver_maximum_steering_bar_length_drift_m": steering_linkage["maximum_steering_bar_length_drift_m"],
+        "solver_maximum_opposed_rod_joint_span_drift_m": steering_linkage["maximum_opposed_rod_joint_span_drift_m"],
+        "solver_maximum_rod_bar_closure_error_m": steering_linkage["maximum_rod_bar_closure_error_m"],
+        "solver_maximum_ackermann_fit_error_m": steering_linkage["maximum_ackermann_fit_error_m"],
+        "solver_maximum_ackermann_relative_error": steering_linkage["maximum_ackermann_relative_error"],
+        "solver_ackermann_authority": steering_linkage["ackermann_authority"],
+        "solver_maximum_reconstructed_circle_center_spread_m": kinematic_result["maximum_reconstructed_circle_center_spread_m"],
+        "solver_rigid_link_ranges_m": kinematic_result["rigid_link_ranges_m"],
+        "solver_chain_paths": kinematic_result["chain_paths"],
+        "solver_maximum_chain_tangent_dot_error": kinematic_result["maximum_chain_tangent_dot_error"],
+        "solver_minimum_chain_to_sheave_surface_clearance_m": kinematic_result["minimum_chain_to_sheave_surface_clearance_m"],
+        "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
+        "approximate_published_rigid_underbody_clearance_m": mechanism["collision_proxies"]["minimum_rigid_underbody_clearance_m"],
         "published_hydraulic_cylinder_strokes_m": mechanism["hydraulic_cylinder_strokes_m"],
         "solver_evidence_stroke_usage_m": solver_stroke_usage(kinematic_result),
         "solver_fixed_barrel_length_ranges_m": {
@@ -388,6 +469,7 @@ def main() -> None:
         },
         "rear_axle_stabilization_usage_boundary": kinematic_result["rear_axle_stabilization_usage_boundary"],
         "continuous_retract_chain_samples": kinematic_result["continuous_retract_chain_samples"],
+        "continuous_all_chain_samples": kinematic_result["continuous_all_chain_samples"],
         "minimum_retract_chain_segment_m": kinematic_result["minimum_retract_chain_segment_m"],
         "stowed_fork_bottom_m": kinematic_result["stow"]["fork_bottom_m"],
         "canonical_solver": kinematic_result["canonical_solver"],
@@ -403,8 +485,20 @@ def main() -> None:
         raise RuntimeError("742 receipt maximum-reach pose proof drift")
     if expected_mechanical_proof["evidence_steering_inner_limit_degrees"] != 55 or abs(expected_mechanical_proof["solver_circle_maximum_inner_wheel_degrees"] - 55.0) > 1e-9:
         raise RuntimeError("742 receipt 55-degree steering proof drift")
-    if expected_mechanical_proof["solver_maximum_ackermann_center_error_m"] > 1e-9:
-        raise RuntimeError("742 receipt Ackermann closure proof drift")
+    if expected_mechanical_proof["solver_maximum_steering_bar_length_drift_m"] > 1e-12 or expected_mechanical_proof["solver_maximum_opposed_rod_joint_span_drift_m"] > 1e-12 or expected_mechanical_proof["solver_maximum_rod_bar_closure_error_m"] > 1e-12:
+        raise RuntimeError("742 receipt rigid steering-linkage proof drift")
+    if expected_mechanical_proof["solver_maximum_ackermann_relative_error"] > 0.11 or "not factory steering calibration" not in expected_mechanical_proof["solver_ackermann_authority"]:
+        raise RuntimeError("742 receipt reconstructed Ackermann-fit boundary drift")
+    if expected_mechanical_proof["solver_maximum_reconstructed_circle_center_spread_m"] > 1e-12:
+        raise RuntimeError("742 receipt reconstructed circle symmetry proof drift")
+    if any(max(values) - min(values) > 1e-12 for values in expected_mechanical_proof["solver_rigid_link_ranges_m"].values()):
+        raise RuntimeError("742 receipt rigid-link invariant proof drift")
+    if any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.04 or path["wrap_degrees"] != 180 for path in expected_mechanical_proof["solver_chain_paths"].values()):
+        raise RuntimeError("742 receipt invariant chain-route proof drift")
+    if expected_mechanical_proof["solver_maximum_chain_tangent_dot_error"] > 1e-12 or expected_mechanical_proof["solver_minimum_chain_to_sheave_surface_clearance_m"] <= 0 or expected_mechanical_proof["continuous_all_chain_samples"] < 2001:
+        raise RuntimeError("742 receipt chain tangency/clearance/continuity proof drift")
+    if expected_mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < expected_mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
+        raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")
     if any(max(values) - min(values) > 1e-12 for values in expected_mechanical_proof["solver_fixed_barrel_length_ranges_m"].values()):
         raise RuntimeError("742 receipt fixed-barrel proof drift")
     usage = expected_mechanical_proof["solver_evidence_stroke_usage_m"]
@@ -414,7 +508,7 @@ def main() -> None:
             raise RuntimeError(f"742 receipt evidence-stroke proof drift: {name}")
     if not 0 < usage["rear_axle_stabilization_visible_subset"] <= published["rear_axle_stabilization"]:
         raise RuntimeError("742 receipt RAS visible-subset proof drift")
-    if expected_mechanical_proof["minimum_retract_chain_segment_m"] < 0.15 or expected_mechanical_proof["continuous_retract_chain_samples"] < 2001:
+    if expected_mechanical_proof["minimum_retract_chain_segment_m"] < 0.04 or expected_mechanical_proof["continuous_retract_chain_samples"] < 2001:
         raise RuntimeError("742 receipt continuous retract-chain proof drift")
     if not 0.1 <= expected_mechanical_proof["stowed_fork_bottom_m"] <= 0.4:
         raise RuntimeError("742 receipt stowed-fork height proof drift")
@@ -463,6 +557,10 @@ def main() -> None:
         deployed = True
     rebuild_verified = False
     if args.rebuild_attestation:
+        if args.deployment_attestation and args.rebuild_attestation.resolve() != (
+            args.deployment_attestation.parent / "742-deterministic-rebuild-attestation.json"
+        ).resolve():
+            raise RuntimeError("742 release rebuild proof must be the deployment workflow's copied companion")
         verify_rebuild_attestation(args.rebuild_attestation, receipt)
         rebuild_verified = True
     if (args.require_deployed or args.require_release) and not source_replayed:
