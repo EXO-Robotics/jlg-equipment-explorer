@@ -1302,7 +1302,7 @@ def validate_complete_browser_artifact(
             "boom-base-visible-surface": ("boom", 820, 240),
             "carriage-coupler-visible-surface": ("carriage", 680, 280),
             "steering-front-tire-visible-surface": ("steering", 900, 440),
-            "hydraulics-engine-hood-visible-surface": ("hydraulics", 540, 280),
+            "hydraulics-engine-hood-visible-surface": ("hydraulics", 540, 360),
         }
         if not isinstance(probes, list) or len(probes) != len(expected_probes):
             raise RuntimeError("742 semantic visible-canvas probe count drift")
