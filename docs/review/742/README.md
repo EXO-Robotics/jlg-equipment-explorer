@@ -16,11 +16,17 @@ independently authored and bound
 by exact path, SHA-256, byte count, and PNG dimensions in
 `OWNED_RENDER_ALLOWLIST.json`.
 
-Browser proof uses a separate `BROWSER_CAPTURE_ALLOWLIST.json`. It admits only
-fresh local browser screenshots and JSON automation traces by exact path, hash,
-size, kind, MIME type, dimensions, and provenance. It does not weaken the
-manufacturer-binary hash rejection or reuse the Blender-render provenance
-contract.
+Browser proof uses a separate `BROWSER_CAPTURE_ALLOWLIST.json`. The pending
+candidate commits an empty allowlist, and the allowlist is deliberately excluded
+from the candidate-tree digest and reviewed-commit path set because it is
+populated only after capture against that immutable candidate. A completed
+human-review binding records the populated allowlist's exact path, SHA-256, and
+byte count. Every admitted screenshot and trace must also be referenced and
+semantically validated by exactly one of the completed browser gate artifacts.
+The allowlist admits only fresh local browser screenshots and JSON automation
+traces by exact path, hash, size, kind, MIME type, dimensions, and provenance.
+It does not weaken the manufacturer-binary hash rejection or reuse the
+Blender-render provenance contract.
 
 `CAPTURE_REQUIREMENTS.json` is the recapture checklist. Completed schema-2 gate
 records must contain:

@@ -805,17 +805,17 @@
     "review_evidence_parser": {
       "arguments": [],
       "result": {
-        "negative_cases": 10,
+        "negative_cases": 15,
         "screenshot_viewport_contracts": 7,
         "selection_fixtures": 4,
         "status": "PASS"
       },
-      "result_sha256": "6e305507bdb045b29928bf8868d917d3fa1106ce699f25dfe3eee4895724f45a",
+      "result_sha256": "4a76b828ea935074556fc60472061b6cedbc748e317451d7265e40cf3883cee0",
       "status": "pass",
       "validator": {
-        "bytes": 7723,
+        "bytes": 9626,
         "path": "scripts/test_742_browser_evidence.py",
-        "sha256": "8488e42397b1cdce0d86e914fa70934ca97c223ac5db21668d1ebf2f5c34aa52"
+        "sha256": "ac51959fcfce325675ddb429a26c05fe3d0b7fae38c7e751f3d78a93b0dbf3a2"
       }
     },
     "route_contract": {
@@ -865,7 +865,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "204d5add69454d760de9db86775bfae938fd88206886abcdb7a79f8b139b6dc5",
+  "candidate_tree_sha256": "7a55c8691511cebc5b4f4923ff6bd3cf271279dbf82a65e407100925dc2b61c1",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -882,15 +882,10 @@
       "path": "assets/models/742.glb",
       "sha256": "a82347d1eba48845e39a7fea281e7d172c018a692afc4af94dbf17b63932a019"
     },
-    "browser_capture_allowlist": {
-      "bytes": 94,
-      "path": "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
-      "sha256": "169ad3cabfc7f4a7d5ee6165c93c3d048da858d829efd03f856c366c92a60323"
-    },
     "browser_capture_parser_tests": {
-      "bytes": 7723,
+      "bytes": 9626,
       "path": "scripts/test_742_browser_evidence.py",
-      "sha256": "8488e42397b1cdce0d86e914fa70934ca97c223ac5db21668d1ebf2f5c34aa52"
+      "sha256": "ac51959fcfce325675ddb429a26c05fe3d0b7fae38c7e751f3d78a93b0dbf3a2"
     },
     "browser_capture_probe": {
       "bytes": 3749,
@@ -988,19 +983,19 @@
       "sha256": "fd906d6e944ec00814d513c89999be721ee81f7c75768e2c7a11b453c9f0c5ea"
     },
     "project_readme": {
-      "bytes": 10163,
+      "bytes": 10484,
       "path": "README.md",
-      "sha256": "9ef2402f5158b3fef5f4328eadeb4fe6c95986f2b46a458d1912f5f177102387"
+      "sha256": "fd91bde449e6d6bbdadf93ed8dd39eb16e7265452dd4d947dbf485d2f8e4e5d0"
     },
     "receipt_validator": {
-      "bytes": 38334,
+      "bytes": 38678,
       "path": "scripts/validate_742_receipt.py",
-      "sha256": "9736726858f4e4eb3b7076f205912d1a6cd45d7a0ad595738df84c89ab2b7d7d"
+      "sha256": "01a2a9748904faa3b9f20a3868756a98af7d6257c383be8e03afc3e84b1b2fd6"
     },
     "receipt_writer": {
-      "bytes": 18807,
+      "bytes": 18717,
       "path": "scripts/write_742_receipt.py",
-      "sha256": "409daae2a57d74d27758fb318f45fb026ccea8b0d8b4d4bd3dd6ff4028c735f5"
+      "sha256": "b406264d647eb6dc58a57e31df785d0a8ee2624d1721d2e84eda69fca7a8a617"
     },
     "reference_board_boundary": {
       "bytes": 481,
@@ -1018,9 +1013,9 @@
       "sha256": "824797ad1707de4f12928b32669d705767b61303e486a82a37e130a135bb3812"
     },
     "review_binder": {
-      "bytes": 6312,
+      "bytes": 6748,
       "path": "scripts/bind_742_review.py",
-      "sha256": "c9a926e6df204f9a8915b5cbea083dabd33e67cb208d2ff6330d23ae8d0ec52b"
+      "sha256": "e7c41bcfb164e0f3976a419257338b8620dfb6f6ce162a6c59fee34077c9fd1a"
     },
     "review_renderer": {
       "bytes": 11249,
@@ -1028,9 +1023,9 @@
       "sha256": "f495da2c59111f8e145a305866e16a5886dd27af3be3cf2ce8f0c770f7a3a079"
     },
     "review_validator": {
-      "bytes": 15117,
+      "bytes": 17070,
       "path": "scripts/validate_742_review.py",
-      "sha256": "2d02559b0125e2f28b10707da47c288d60a1ec3164be9f1c6480b9f008e54eb7"
+      "sha256": "541daa4367c8d831b4d4e5066460688f698a3a27fe3d83ec436c07fdc11f50c8"
     },
     "rights_boundary": {
       "bytes": 2159,

@@ -61,7 +61,6 @@ FILES = {
     "browser_capture_parser_tests": ROOT / "scripts/test_742_browser_evidence.py",
     "deterministic_rebuild_verifier": ROOT / "scripts/verify_742_deterministic_rebuild.py",
     "owned_review_render_allowlist": ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
-    "browser_capture_allowlist": ROOT / "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
     "browser_capture_requirements": ROOT / "docs/review/742/CAPTURE_REQUIREMENTS.json",
 }
 RUNTIME_FILES = [

@@ -3,7 +3,8 @@
 
 This validator does not perform a visual or browser review. It verifies that a
 review manifest binds ten distinct, semantically parsed visual/raw-browser
-artifacts to one exact candidate tree and one Git commit.
+artifacts to one exact candidate tree and one Git commit, plus the populated
+post-capture browser allowlist as review-support evidence.
 """
 
 from __future__ import annotations
@@ -45,6 +46,9 @@ EXPECTED_ARTIFACT_PATHS = {
     "600s_browser_regression": "docs/review/742/600s-browser-regression.json",
     "es1930m_browser_regression": "docs/review/742/es1930m-browser-regression.json",
 }
+BROWSER_CAPTURE_ALLOWLIST_PATH = "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json"
+
+
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -171,10 +175,16 @@ def validate_review_manifest(path: Path, candidate_tree_sha256: str, canonical_p
         raise RuntimeError("742 review manifest browser/OS identity is incomplete")
     if set(manifest.get("gates") or {}) != set(HUMAN_GATES):
         raise RuntimeError("742 review manifest must address every canonical review gate")
+    canonical_relatives = {
+        str(candidate.resolve().relative_to(ROOT.resolve())) for candidate in canonical_paths
+    }
+    if BROWSER_CAPTURE_ALLOWLIST_PATH in canonical_relatives:
+        raise RuntimeError("742 browser-capture allowlist is post-candidate review evidence, not a canonical candidate path")
     _verify_commit_paths(commit, canonical_paths)
 
     reviewed: dict[str, dict] = {}
     seen_artifacts: set[str] = set()
+    referenced_browser_captures: list[str] = []
     allowlist = json.loads((ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json").read_text(encoding="utf-8"))
     allowed_png = {item["path"]: item for item in allowlist["artifacts"]}
     for gate in HUMAN_GATES:
@@ -207,14 +217,37 @@ def validate_review_manifest(path: Path, candidate_tree_sha256: str, canonical_p
             artifact_environment = validate_complete_browser_artifact(
                 artifact_path, gate, candidate_tree_sha256, commit, upstream
             )
+            browser_artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+            capture_artifacts = browser_artifact["capture_artifacts"]
+            referenced_browser_captures.extend(
+                item["path"] for item in capture_artifacts["screenshots"]
+            )
+            referenced_browser_captures.append(capture_artifacts["automation_trace"]["path"])
             for group in ("browser", "os"):
                 if artifact_environment[group] != environment[group]:
                     raise RuntimeError(f"742 {gate} capture environment disagrees with review manifest")
         else:
             raise RuntimeError(f"742 review gate has no semantic parser: {gate}")
         reviewed[gate] = {"status": "pass", "artifact": actual}
+    browser_allowlist_path = ROOT / BROWSER_CAPTURE_ALLOWLIST_PATH
+    browser_allowlist = json.loads(browser_allowlist_path.read_text(encoding="utf-8"))
+    allowlisted_browser_captures = {
+        item["path"] for item in browser_allowlist.get("artifacts") or []
+    }
+    referenced_browser_capture_set = set(referenced_browser_captures)
+    duplicate_references = sorted({
+        item for item in referenced_browser_captures if referenced_browser_captures.count(item) != 1
+    })
+    if duplicate_references or referenced_browser_capture_set != allowlisted_browser_captures:
+        missing = sorted(allowlisted_browser_captures - referenced_browser_capture_set)
+        unallowlisted = sorted(referenced_browser_capture_set - allowlisted_browser_captures)
+        raise RuntimeError(
+            "742 browser capture allowlist/gate coverage drift: "
+            f"unused={missing}, unallowlisted={unallowlisted}, duplicates={duplicate_references}"
+        )
     return reviewed, {
         "manifest": manifest_record,
+        "browser_capture_allowlist": relative_record(browser_allowlist_path),
         "candidate_tree_sha256": candidate_tree_sha256,
         "reviewed_source_commit": commit,
         "environment": environment,

@@ -15,7 +15,13 @@ import re
 from pathlib import Path
 
 from validate_742_browser_evidence import BROWSER_GATES
-from validate_742_review import EXPECTED_ARTIFACT_PATHS, HUMAN_GATES, ROOT, validate_review_manifest
+from validate_742_review import (
+    BROWSER_CAPTURE_ALLOWLIST_PATH,
+    EXPECTED_ARTIFACT_PATHS,
+    HUMAN_GATES,
+    ROOT,
+    validate_review_manifest,
+)
 
 
 def record(path: Path) -> dict:
@@ -28,6 +34,15 @@ def record(path: Path) -> dict:
 
 def _write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _candidate_canonical_paths(receipt: dict) -> list[Path]:
+    paths = [ROOT / item["path"] for item in receipt["files"].values()]
+    paths.extend(ROOT / path for path in receipt["runtime"]["files"])
+    paths.extend(ROOT / check["validator"]["path"] for check in receipt["automated_checks"].values())
+    if any(str(path.relative_to(ROOT)) == BROWSER_CAPTURE_ALLOWLIST_PATH for path in paths):
+        raise RuntimeError("742 pending receipt incorrectly treats the post-capture allowlist as candidate input")
+    return paths
 
 
 def main() -> None:
@@ -54,6 +69,7 @@ def main() -> None:
     candidate_hash = receipt.get("candidate_tree_sha256", "")
     if not re.fullmatch(r"[0-9a-f]{64}", candidate_hash):
         raise RuntimeError("742 pending receipt candidate tree hash is malformed")
+    canonical_paths = _candidate_canonical_paths(receipt)
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     if manifest.get("schema_version") != "3.0.0" or set(manifest.get("gates") or {}) != set(HUMAN_GATES):
@@ -95,9 +111,6 @@ def main() -> None:
             manifest["gates"][gate]["artifact"] = record(artifact_path)
         _write_json(args.manifest, manifest)
 
-        canonical_paths = [ROOT / item["path"] for item in receipt["files"].values()]
-        canonical_paths.extend(ROOT / path for path in receipt["runtime"]["files"])
-        canonical_paths.extend(ROOT / check["validator"]["path"] for check in receipt["automated_checks"].values())
         reviewed, binding = validate_review_manifest(args.manifest, candidate_hash, canonical_paths)
     except Exception:
         for path, contents in originals.items():
@@ -107,6 +120,7 @@ def main() -> None:
         "status": "PASS",
         "candidate_tree_sha256": candidate_hash,
         "reviewed_source_commit": binding["reviewed_source_commit"],
+        "browser_capture_allowlist": binding["browser_capture_allowlist"],
         "gates_bound": len(reviewed),
         "warning": "Binding updated only after explicit confirmations; this tool did not perform the recorded observations.",
     }, indent=2, sort_keys=True))

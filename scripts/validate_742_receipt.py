@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from validate_742_review import HUMAN_GATES, validate_review_manifest
+from validate_742_review import BROWSER_CAPTURE_ALLOWLIST_PATH, HUMAN_GATES, validate_review_manifest
 from verify_pages_deployment import REQUIRED_742_PUBLIC_FILES
 
 
@@ -55,7 +55,6 @@ CANONICAL_FILES = {
     "browser_capture_parser_tests": "scripts/test_742_browser_evidence.py",
     "deterministic_rebuild_verifier": "scripts/verify_742_deterministic_rebuild.py",
     "owned_review_render_allowlist": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
-    "browser_capture_allowlist": "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
     "browser_capture_requirements": "docs/review/742/CAPTURE_REQUIREMENTS.json",
 }
 CANONICAL_RUNTIME = [
@@ -96,7 +95,7 @@ def digest(path: Path) -> str:
 
 
 def verify_record(record: dict, expected_path: str | None = None) -> Path:
-    if set(record) != {"path", "sha256", "bytes"}:
+    if not isinstance(record, dict) or set(record) != {"path", "sha256", "bytes"}:
         raise RuntimeError("742 receipt file record schema drift")
     if expected_path is not None and record["path"] != expected_path:
         raise RuntimeError(f"742 receipt path drift: expected {expected_path}, found {record['path']}")
@@ -107,6 +106,11 @@ def verify_record(record: dict, expected_path: str | None = None) -> Path:
     if not path.is_file() or digest(path) != record["sha256"] or path.stat().st_size != record["bytes"]:
         raise RuntimeError(f"742 receipt file drift: {candidate}")
     return path
+
+
+def verify_browser_capture_allowlist_binding(record: dict) -> Path:
+    """Verify the post-candidate browser allowlist bound by human review."""
+    return verify_record(record, BROWSER_CAPTURE_ALLOWLIST_PATH)
 
 
 def aggregate_digest(paths: list[Path]) -> str:
@@ -178,9 +182,13 @@ def verify_human_review(
         if review["status"] != "pass" or not isinstance(review["binding"], dict):
             raise RuntimeError("742 completed human review lacks a binding")
         binding = review["binding"]
-        if set(binding) != {"manifest", "candidate_tree_sha256", "reviewed_source_commit", "environment"}:
+        if set(binding) != {
+            "manifest", "browser_capture_allowlist", "candidate_tree_sha256",
+            "reviewed_source_commit", "environment",
+        }:
             raise RuntimeError("742 human review binding schema drift")
         verify_record(binding["manifest"])
+        verify_browser_capture_allowlist_binding(binding["browser_capture_allowlist"])
         if not re.fullmatch(r"[0-9a-f]{64}", binding["candidate_tree_sha256"]):
             raise RuntimeError("742 human review candidate tree binding is malformed")
         if binding["candidate_tree_sha256"] != candidate_tree_sha256:

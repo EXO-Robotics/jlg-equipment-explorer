@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 
 from validate_742_browser_evidence import (
@@ -13,6 +14,13 @@ from validate_742_browser_evidence import (
     _validate_frame_capture,
     _validate_selection_fixtures,
     expected_selection_outcomes,
+)
+from bind_742_review import _candidate_canonical_paths
+from validate_742_receipt import (
+    BROWSER_CAPTURE_ALLOWLIST_PATH,
+    CANONICAL_FILES,
+    ROOT,
+    verify_browser_capture_allowlist_binding,
 )
 
 
@@ -124,7 +132,47 @@ def main() -> None:
     }
     if _independent_selection_expected(ray) != "cab":
         raise RuntimeError("independent distance-tie priority recomputation drift")
-    print(json.dumps({"status": "PASS", "negative_cases": 10, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
+
+    if BROWSER_CAPTURE_ALLOWLIST_PATH in CANONICAL_FILES.values():
+        raise RuntimeError("post-capture browser allowlist re-entered the candidate canonical file set")
+    expect_failure(
+        lambda: _candidate_canonical_paths({
+            "files": {"bad": {"path": BROWSER_CAPTURE_ALLOWLIST_PATH}},
+            "runtime": {"files": []},
+            "automated_checks": {},
+        }),
+        "binder accepted browser allowlist as a candidate canonical path",
+    )
+    allowlist_path = ROOT / BROWSER_CAPTURE_ALLOWLIST_PATH
+    allowlist_record = {
+        "path": BROWSER_CAPTURE_ALLOWLIST_PATH,
+        "sha256": hashlib.sha256(allowlist_path.read_bytes()).hexdigest(),
+        "bytes": allowlist_path.stat().st_size,
+    }
+    verify_browser_capture_allowlist_binding(allowlist_record)
+    expect_failure(
+        lambda: verify_browser_capture_allowlist_binding(None),
+        "missing browser allowlist binding was accepted",
+    )
+    wrong_path = dict(allowlist_record)
+    wrong_path["path"] = "docs/review/742/not-the-browser-allowlist.json"
+    expect_failure(
+        lambda: verify_browser_capture_allowlist_binding(wrong_path),
+        "wrong browser allowlist binding path was accepted",
+    )
+    wrong_hash = dict(allowlist_record)
+    wrong_hash["sha256"] = "0" * 64
+    expect_failure(
+        lambda: verify_browser_capture_allowlist_binding(wrong_hash),
+        "mutated browser allowlist binding hash was accepted",
+    )
+    wrong_size = dict(allowlist_record)
+    wrong_size["bytes"] += 1
+    expect_failure(
+        lambda: verify_browser_capture_allowlist_binding(wrong_size),
+        "mutated browser allowlist binding size was accepted",
+    )
+    print(json.dumps({"status": "PASS", "negative_cases": 15, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
