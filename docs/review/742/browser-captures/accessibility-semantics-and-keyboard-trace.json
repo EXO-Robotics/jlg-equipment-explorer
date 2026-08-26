@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T18:29:50.324Z",
+  "captured_at_utc": "2026-08-26T18:46:21.692Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2021,7 +2021,7 @@
     "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e",
     "bytes": 93062
   },
-  "outcomes_sha256": "3ef96974bf7f550481fd80dfe0a65bacfc3d211e62e2179b46486e84896ce67f",
+  "outcomes_sha256": "5376b272d5ce30f78ed250b18a4a9d65eee12a879cb8af9ac5d88d5165aa43a9",
   "outcomes": {
     "application_instructions": {
       "outcome": "pass",
@@ -2062,10 +2062,10 @@
             "steer-control": "0",
             "level-control": "1"
           },
-          "drive_x": "0.29",
+          "drive_x": "0.30",
           "drive_z": "0.19",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.540,-0.542,-0.540,-0.542"
+          "wheel_rotations_rad": "-0.559,-0.561,-0.559,-0.561"
         },
         "before_reduce": {
           "controls": {
@@ -2075,10 +2075,10 @@
             "steer-control": "1",
             "level-control": "3"
           },
-          "drive_x": "0.48",
-          "drive_z": "0.30",
+          "drive_x": "0.49",
+          "drive_z": "0.31",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.875,-0.879,-0.875,-0.879"
+          "wheel_rotations_rad": "-0.894,-0.898,-0.894,-0.898"
         },
         "reduced_start": {
           "controls": {
@@ -2088,10 +2088,10 @@
             "steer-control": "1",
             "level-control": "3"
           },
-          "drive_x": "0.49",
-          "drive_z": "0.31",
+          "drive_x": "0.50",
+          "drive_z": "0.32",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.894,-0.897,-0.894,-0.897"
+          "wheel_rotations_rad": "-0.913,-0.916,-0.913,-0.916"
         },
         "reduced_end": {
           "controls": {
@@ -2101,10 +2101,10 @@
             "steer-control": "1",
             "level-control": "3"
           },
-          "drive_x": "0.49",
-          "drive_z": "0.31",
+          "drive_x": "0.50",
+          "drive_z": "0.32",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.894,-0.897,-0.894,-0.897"
+          "wheel_rotations_rad": "-0.913,-0.916,-0.913,-0.916"
         },
         "relaxed": {
           "controls": {
@@ -2114,10 +2114,10 @@
             "steer-control": "1",
             "level-control": "3"
           },
-          "drive_x": "0.49",
-          "drive_z": "0.31",
+          "drive_x": "0.50",
+          "drive_z": "0.32",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.894,-0.897,-0.894,-0.897",
+          "wheel_rotations_rad": "-0.913,-0.916,-0.913,-0.916",
           "control_pressed": "false",
           "manual": true
         }
