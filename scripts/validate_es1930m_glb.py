@@ -25,6 +25,10 @@ REQUIRED_MECHANISM_NODES = {
     "UpperSlideBlock_RIGHT_PLANE", "UpperSlideBlock_LEFT_PLANE",
     "KickerArmWeb_SCISSOR_CYLINDER", "KickerArmWeb_CYLINDER_ROLLER", "KickerArmWeb_ROLLER_SCISSOR",
     "PIVOT_KICKER_TO_SCISSOR", "PIVOT_KICKER_ROLLER", "PIVOT_LIFT_CYLINDER_UPPER",
+    "TopRail_-1", "TopRail_1", "MidRail_-1", "MidRail_1",
+    "ExtensionTopRail_-1", "ExtensionTopRail_1", "ExtensionMidRail_-1", "ExtensionMidRail_1",
+    "MainToeBoard_-1", "MainToeBoard_1", "ExtensionToeBoard_-1", "ExtensionToeBoard_1",
+    "ExtensionFrontToeBoard",
 }
 REQUIRED_EDGES = {
     "Chassis": "ES1930M_ROOT",
@@ -151,6 +155,23 @@ def visible_bounds(document, blob, nodes, parents):
     return minimum, maximum
 
 
+def node_bounds(document, blob, nodes, parents, index):
+    node = nodes[index]
+    if "mesh" not in node:
+        raise RuntimeError(f"Node has no mesh: {node.get('name')}")
+    minimum = [float("inf")] * 3
+    maximum = [float("-inf")] * 3
+    translation, rotation, scale = world_trs(nodes, parents, index)
+    for primitive in document["meshes"][node["mesh"]]["primitives"]:
+        for raw in positions(document, blob, primitive["attributes"]["POSITION"]):
+            transformed = qrot(rotation, tuple(raw[axis] * scale[axis] for axis in range(3)))
+            point = tuple(translation[axis] + transformed[axis] for axis in range(3))
+            for axis in range(3):
+                minimum[axis] = min(minimum[axis], point[axis])
+                maximum[axis] = max(maximum[axis], point[axis])
+    return minimum, maximum
+
+
 def descends_from(index, ancestor, parents):
     current = index
     while current in parents:
@@ -205,6 +226,30 @@ def main():
         if name not in by_name or not (nodes[by_name[name]].get("extras") or {}).get("is_hit_volume"):
             raise RuntimeError(f"Missing declared interaction volume: {name}")
 
+    rail_contract = mechanism["deck_extension"]
+    travel = rail_contract["travel_m"]
+    minimum_required_overlap = rail_contract["minimum_deployed_overlap_m"]
+    continuity_samples = (0.0, 0.5, 1.0)
+    guard_pairs = []
+    for side in (-1, 1):
+        for fixed_name, moving_name in (
+            (f"TopRail_{side}", f"ExtensionTopRail_{side}"),
+            (f"MidRail_{side}", f"ExtensionMidRail_{side}"),
+            (f"MainToeBoard_{side}", f"ExtensionToeBoard_{side}"),
+        ):
+            fixed_bounds = node_bounds(document, blob, nodes, parents, by_name[fixed_name])
+            moving_bounds = node_bounds(document, blob, nodes, parents, by_name[moving_name])
+            fixed_front = fixed_bounds[1][0]
+            moving_rear = moving_bounds[0][0]
+            fixed_lateral = abs((fixed_bounds[0][2] + fixed_bounds[1][2]) / 2)
+            moving_lateral = abs((moving_bounds[0][2] + moving_bounds[1][2]) / 2)
+            if moving_lateral >= fixed_lateral - 0.010:
+                raise RuntimeError(f"Moving guard is not nested inboard: {moving_name}")
+            overlaps = [fixed_front - (moving_rear + travel * sample) for sample in continuity_samples]
+            if min(overlaps) + 1e-6 < minimum_required_overlap:
+                raise RuntimeError(f"Guard continuity opens at extension: {fixed_name}/{moving_name} overlaps={overlaps}")
+            guard_pairs.append({"fixed": fixed_name, "moving": moving_name, "overlap_m": overlaps})
+
     triangles = 0
     for mesh in document.get("meshes", []):
         for primitive in mesh.get("primitives", []):
@@ -251,6 +296,7 @@ def main():
         "visible_bounds_max_m": maximum,
         "visible_envelope_xyz_m": envelope,
         "deployed_extension_envelope_m": deployed_length,
+        "guard_continuity_pairs": guard_pairs,
     }, indent=2, sort_keys=True))
 
 

@@ -9,6 +9,9 @@ export const ES1930M_MECHANISM = Object.freeze({
   indoorDeckY: 5.64,
   outdoorDeckY: 4.57,
   extensionTravel: 0.55,
+  railFixedFrontX: 0.718,
+  railMovingRearX: 0.15,
+  railMinimumOverlap: 0.018,
   cylinderStroke: 0.6855,
   cylinderClosedPins: 0.43,
   steeringCylinderStrokeEachDirection: 0.08,
@@ -157,6 +160,9 @@ export function selfTestES1930MRig(rig, restoreState) {
       if (Math.abs(slide.position.x - solved.boundaries.at(-1).front.x) > 1e-6 || Math.abs(slide.position.y - solved.boundaries.at(-1).front.y) > 1e-6) failures.push("upper slide track mismatch");
     }
     if (Math.abs(rig.hitVolumes.Platform_Hit.position.y - (1.44 + rig.platform.position.y)) > 1e-6) failures.push("platform hit-volume drift");
+    if (Math.abs(rig.extension.position.x - solved.deckTranslation) > 1e-6) failures.push("extension translation drift");
+    const railOverlap = ES1930M_MECHANISM.railFixedFrontX - (ES1930M_MECHANISM.railMovingRearX + solved.deckTranslation);
+    if (railOverlap + 1e-6 < ES1930M_MECHANISM.railMinimumOverlap) failures.push("extension guard opening");
     if (Math.abs(rig.cylinderUpperMarker.position.x - solved.cylinderUpper.x) > 1e-6 || Math.abs(rig.cylinderUpperMarker.position.y - solved.cylinderUpper.y) > 1e-6) failures.push("cylinder attachment drift");
   }
   applyES1930MState(rig, restoreState);

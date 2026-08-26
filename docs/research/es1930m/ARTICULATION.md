@@ -72,7 +72,7 @@ The viewer may reproduce the physical relationship and measured cylinder stroke 
 
 ## Extension deck
 
-The frozen standard platform uses a foot-actuated extension with published 0.55 m travel. Parts Figure 4-3 establishes two front rollers, two rear rollers, bumpers, pads, supports, spring/rod/bracket and platform-extension weldment `1001324255`. The extension deck translates relative to the main platform. Rails and gate must follow their actual attachment branch rather than being globally translated without evidence.
+The frozen standard platform uses a foot-actuated extension with published 0.55 m travel. Parts Figure 4-3 establishes two front rollers, two rear rollers, bumpers, pads, supports, spring/rod/bracket and platform-extension weldment `1001324255`. Parts Figure 4-7 separates the full-length fixed outer side rails from the front-extension rail assembly, while the service cable route identifies adjacent platform and extension vertical-rail branches. The authored moving rails and toe boards are therefore nested slightly inboard of the fixed outer rails and retain at least 18 mm of reconstructed longitudinal overlap at full travel. That offset and overlap are presentation coordinates constrained to the published envelope, not measured tube sections or fabrication clearances.
 
 R05 warns that the platform extension must be completely retracted before lowering. The showcase should expose this as product context, not enforce or advertise a safety simulation.
 

@@ -171,7 +171,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.1"
+    root["release"] = "1.0.2"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
@@ -297,8 +297,20 @@ def build():
     extension["component"] = "extension_deck"
     extension["travel_m"] = 0.55
     bevelled_box("ExtensionDeckWeldment", (0.568, 0.67, 0.06), (0.434, 0, deck_y + 0.008), MAT["deck"], extension, 0.015, "extension_deck")
+    rail_contract = SPEC["deck_extension"]
+    fixed_lateral = rail_contract["fixed_outer_rail_lateral_m"]
+    moving_lateral = rail_contract["moving_inner_rail_lateral_m"]
+    x_min = rail_contract["fixed_outer_rail_rear_x_m"]
+    x_max = rail_contract["fixed_outer_rail_front_x_m"]
+    moving_rear = rail_contract["moving_inner_rail_rear_x_m"]
+    moving_front = rail_contract["moving_inner_rail_front_x_m"]
+    moving_length = moving_front - moving_rear
+    moving_center = (moving_front + moving_rear) / 2
     for side in (-1, 1):
-        bevelled_box(f"ExtensionToeBoard_{side}", (0.568, 0.035, 0.25), (0.434, side * 0.332, deck_y + 0.125), MAT["jlg_orange"], extension, 0.012, "extension_deck")
+        toe = bevelled_box(f"ExtensionToeBoard_{side}", (moving_length, 0.035, 0.25), (moving_center, side * moving_lateral, deck_y + 0.125), MAT["jlg_orange"], extension, 0.012, "extension_deck")
+        toe["guard_branch"] = "moving_inner"
+        toe["authored_rear_x_m"] = moving_rear
+    bevelled_box("ExtensionFrontToeBoard", (0.035, moving_lateral * 2, 0.25), (moving_front, 0, deck_y + 0.125), MAT["jlg_orange"], extension, 0.012, "extension_deck")
     for side in (-1, 1):
         for x in (0.18, 0.56):
             cylinder(f"ExtensionRoller_{side}_{x}", 0.025, 0.036, (x, side * 0.315, deck_y - 0.035), MAT["zinc"], extension, rotation=(math.pi / 2, 0, 0), component="extension_deck")
@@ -306,31 +318,39 @@ def build():
     rails = empty("FixedRails", parent=platform)
     top = 1.962
     rail_size = 0.034
-    x_min, x_max = -0.65, 0.718
-    fixed_end = 0.15
+    fixed_length = x_max - x_min
+    fixed_center = (x_max + x_min) / 2
     for side in (-1, 1):
-        bevelled_box(f"MainToeBoard_{side}", (0.80, 0.035, 0.25), (-0.25, side * 0.332, deck_y + 0.125), MAT["jlg_orange"], rails, 0.012, "platform")
+        toe = bevelled_box(f"MainToeBoard_{side}", (fixed_length, 0.035, 0.25), (fixed_center, side * fixed_lateral, deck_y + 0.125), MAT["jlg_orange"], rails, 0.012, "platform")
+        toe["guard_branch"] = "fixed_outer"
+        toe["authored_front_x_m"] = x_max
     bevelled_box("RearToeBoard", (0.035, 0.67, 0.25), (x_min, 0, deck_y + 0.125), MAT["jlg_orange"], rails, 0.012, "platform")
     for side in (-1, 1):
-        y = side * 0.332
-        square_beam_between(f"TopRail_{side}", (x_min, y, top), (fixed_end, y, top), rail_size, MAT["jlg_orange"], rails, "platform")
-        square_beam_between(f"MidRail_{side}", (x_min, y, 1.48), (fixed_end, y, 1.48), rail_size, MAT["jlg_orange"], rails, "platform")
-        for index, x in enumerate((x_min, -0.20, fixed_end)):
+        y = side * fixed_lateral
+        top_rail = square_beam_between(f"TopRail_{side}", (x_min, y, top), (x_max, y, top), rail_size, MAT["jlg_orange"], rails, "platform")
+        mid_rail = square_beam_between(f"MidRail_{side}", (x_min, y, 1.48), (x_max, y, 1.48), rail_size, MAT["jlg_orange"], rails, "platform")
+        for rail in (top_rail, mid_rail):
+            rail["guard_branch"] = "fixed_outer"
+            rail["authored_front_x_m"] = x_max
+        for index, x in enumerate((x_min, -0.20, moving_rear)):
             square_beam_between(f"RailPost_{side}_{index}", (x, y, deck_y + 0.02), (x, y, top), rail_size, MAT["jlg_orange"], rails, "platform")
     for height in (1.48, top):
         square_beam_between(f"RearRail_{height}", (x_min, -0.332, height), (x_min, 0.332, height), rail_size, MAT["jlg_orange"], rails, "platform")
 
     extension_rails = empty("ExtensionRails", parent=extension)
     for side in (-1, 1):
-        y = side * 0.332
-        square_beam_between(f"ExtensionTopRail_{side}", (fixed_end, y, top), (x_max, y, top), rail_size, MAT["jlg_orange"], extension_rails, "extension_deck")
-        square_beam_between(f"ExtensionMidRail_{side}", (fixed_end, y, 1.48), (x_max, y, 1.48), rail_size, MAT["jlg_orange"], extension_rails, "extension_deck")
+        y = side * moving_lateral
+        top_rail = square_beam_between(f"ExtensionTopRail_{side}", (moving_rear, y, top), (moving_front, y, top), rail_size, MAT["jlg_orange"], extension_rails, "extension_deck")
+        mid_rail = square_beam_between(f"ExtensionMidRail_{side}", (moving_rear, y, 1.48), (moving_front, y, 1.48), rail_size, MAT["jlg_orange"], extension_rails, "extension_deck")
+        for rail in (top_rail, mid_rail):
+            rail["guard_branch"] = "moving_inner"
+            rail["authored_rear_x_m"] = moving_rear
         for index, x in enumerate((0.42, x_max)):
             square_beam_between(f"ExtensionRailPost_{side}_{index}", (x, y, deck_y + 0.02), (x, y, top), rail_size, MAT["jlg_orange"], extension_rails, "extension_deck")
     gate = empty("SelfClosingGate", parent=extension)
     for height in (1.48, top):
-        square_beam_between(f"GateRail_{height}", (x_max, -0.332, height), (x_max, 0.332, height), rail_size, MAT["jlg_orange"], gate, "platform")
-    gate_hinge = empty("PIVOT_GATE_HINGE", (x_max, -0.332, top), gate, "SPHERE", 0.025)
+        square_beam_between(f"GateRail_{height}", (x_max, -moving_lateral, height), (x_max, moving_lateral, height), rail_size, MAT["jlg_orange"], gate, "platform")
+    gate_hinge = empty("PIVOT_GATE_HINGE", (x_max, -moving_lateral, top), gate, "SPHERE", 0.025)
     gate_hinge["is_pivot_marker"] = True
 
     controls = empty("PlatformControls", parent=platform)

@@ -18,6 +18,9 @@ expected = {
     "indoorDeckY": spec["solver"]["indoor_deck_floor_height_m"],
     "outdoorDeckY": spec["solver"]["outdoor_deck_floor_height_m"],
     "extensionTravel": spec["deck_extension"]["travel_m"],
+    "railFixedFrontX": spec["deck_extension"]["fixed_outer_rail_front_x_m"],
+    "railMovingRearX": spec["deck_extension"]["moving_inner_rail_rear_x_m"],
+    "railMinimumOverlap": spec["deck_extension"]["minimum_deployed_overlap_m"],
     "cylinderStroke": spec["lift_cylinder"]["published_stroke_m"],
     "steeringCylinderStrokeEachDirection": spec["steering"]["cylinder_stroke_each_direction_m"],
     "rearFixedX": spec["slides"]["rear_fixed_x_m"],
@@ -33,6 +36,7 @@ required_motion = [
     "selfTestES1930MRig",
     "cylinderUpperOffset",
     "kickerRollerOffset",
+    "extension guard opening",
 ]
 for snippet in required_motion:
     if snippet not in source:

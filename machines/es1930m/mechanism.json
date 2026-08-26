@@ -56,7 +56,14 @@
   "deck_extension": {
     "travel_m": 0.55,
     "axis": [1, 0, 0],
-    "authority": "published_travel_reconstructed_local_zero"
+    "fixed_outer_rail_rear_x_m": -0.65,
+    "fixed_outer_rail_front_x_m": 0.718,
+    "moving_inner_rail_rear_x_m": 0.15,
+    "moving_inner_rail_front_x_m": 0.718,
+    "fixed_outer_rail_lateral_m": 0.332,
+    "moving_inner_rail_lateral_m": 0.315,
+    "minimum_deployed_overlap_m": 0.018,
+    "authority": "published_travel; pvc2404_parts_figures_4_3_and_4_7_nested_fixed_outer_and_moving_inner_rail_topology; coordinates_reconstructed_to_published_envelope"
   },
   "steering": {
     "cylinder_stroke_each_direction_m": 0.08,
@@ -70,6 +77,7 @@
     "Arm pin-center length and all attachment coordinates are reconstructed, not published JLG fabrication dimensions.",
     "The rear fixed/front sliding lower topology is verified; the matching upper fore/aft assignment is reconstructed.",
     "The cylinder-to-kicker-to-scissor graph is verified. Hypothesis H1 places its markers on Level01 so cylinder extension emerges from the scissor pose and matches the published endpoint stroke within tolerance.",
+    "The fixed outer and moving inner platform rail topology is verified. Rail section dimensions, lateral nesting offset and longitudinal endpoints are reconstructed to maintain overlap through the published extension travel.",
     "This contract is for visual mechanism closure only and is not a stability, load, safety, or service simulation."
   ]
 }
