@@ -1217,6 +1217,13 @@ def validate_complete_browser_artifact(
                 raise RuntimeError(f"742 accessibility DOM slider value text drift: {selector}")
         if set(assertions) != {"application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"}:
             raise RuntimeError("742 accessibility structured outcome set drift")
+        reduced_assertion = assertions["reduced_motion"]
+        if reduced_assertion.get("outcome") != "pass":
+            raise RuntimeError("742 accessibility live reduced-motion assertion did not pass")
+        _validate_live_reduced_motion(
+            {key: value for key, value in reduced_assertion.items() if key != "outcome"},
+            "742 accessibility",
+        )
     elif gate == "desktop_browser_interaction":
         if set(observations or {}) != {"dom_snapshots", "assertions"} or set(observations["dom_snapshots"] or {}) != {"stowed", "maximum_pose", "modal_open"}:
             raise RuntimeError("742 desktop browser evidence schema drift")
@@ -1258,6 +1265,13 @@ def validate_complete_browser_artifact(
         if set(assertions) != {"portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"}:
             raise RuntimeError("742 mobile structured outcome set drift")
         _validate_742_pinch_zoom(assertions["pinch_zoom"], [390, 844])
+        reduced_assertion = assertions["reduced_motion"]
+        if reduced_assertion.get("outcome") != "pass":
+            raise RuntimeError("742 mobile live reduced-motion assertion did not pass")
+        _validate_live_reduced_motion(
+            {key: value for key, value in reduced_assertion.items() if key != "outcome"},
+            "742 mobile",
+        )
     else:
         raise RuntimeError(f"Unsupported 742 browser gate: {gate}")
     return artifact["environment"]
