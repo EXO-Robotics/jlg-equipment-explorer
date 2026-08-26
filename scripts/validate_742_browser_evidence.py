@@ -1387,7 +1387,7 @@ def validate_complete_browser_artifact(
             or set(rejection) != {"requested_mode", "active_mode", "alignment", "visible_status"}
             or rejection["requested_mode"] != "crab" or rejection["active_mode"] != "circle"
             or rejection["alignment"] != "center-required"
-            or not isinstance(rejection["visible_status"], str) or "center steering" not in rejection["visible_status"]
+            or not isinstance(rejection["visible_status"], str) or "center steering" not in rejection["visible_status"].lower()
         ):
             raise RuntimeError("742 centered-steering mode-change boundary proof failed")
         _validate_742_terminal_failure_matrix(assertions["terminal_failure_matrix"])
