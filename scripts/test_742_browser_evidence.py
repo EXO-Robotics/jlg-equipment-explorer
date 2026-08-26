@@ -7,11 +7,15 @@ import hashlib
 import json
 
 from validate_742_browser_evidence import (
+    CAPTURE_RUNNER_PATH,
     EXPECTED_SCREENSHOT_DIMENSIONS,
     _validate_accessibility_tree,
     _independent_selection_expected,
     _validate_environment,
+    _validate_capture_runner,
+    _validate_structured_trace_outcomes,
     _validate_frame_capture,
+    _validate_742_pinch_zoom,
     _validate_selection_fixtures,
     expected_selection_outcomes,
 )
@@ -56,6 +60,52 @@ def main() -> None:
         "visible_stall_count_gte_250ms": 1,
     }
     expect_failure(lambda: _validate_frame_capture(stalled, [1280, 720]), "visible 250 ms stall was accepted")
+
+    pinch = {
+        "schema_version": "1.0.0", "gesture": "pinch-out", "target_selector": "#app canvas",
+        "viewport_css_px": [390, 844], "canvas_rect_css_px": {"x": 0, "y": 0, "width": 390, "height": 844},
+        "start_points_css_px": [[155, 300], [235, 300]], "end_points_css_px": [[90, 300], [300, 300]],
+        "hit_test_targets": ["CANVAS"] * 4, "all_points_on_canvas": True,
+        "baseline": {"camera_distance_m": 30.8, "desired_distance_m": 30.8, "stable_frames": 6, "samples_camera_distance_m": [30.8] * 6},
+        "after": {"camera_distance_m": 10.267, "desired_distance_m": 10.267, "stable_frames": 6, "samples_camera_distance_m": [30.0, 25.0, 20.0, 15.0, 11.0, 10.27, 10.267, 10.267, 10.267, 10.267, 10.267, 10.267]},
+        "intermediate_desired_distance_m": 15.4, "final_gesture_desired_distance_m": 10.267,
+        "camera_distance_delta_m": -20.533, "desired_distance_delta_m": -20.533,
+        "absolute_camera_distance_delta_m": 20.533, "minimum_required_delta_m": 0.616,
+        "expected_direction": "decrease", "actual_direction": "decrease", "monotonic_camera_change": True,
+        "settled_before": True, "settled_after": True, "outcome": "pass",
+    }
+    _validate_742_pinch_zoom(pinch, [390, 844])
+    unchanged_pinch = json.loads(json.dumps(pinch))
+    unchanged_pinch["after"]["camera_distance_m"] = 30.8
+    unchanged_pinch["after"]["desired_distance_m"] = 30.8
+    unchanged_pinch["camera_distance_delta_m"] = 0
+    unchanged_pinch["desired_distance_delta_m"] = 0
+    unchanged_pinch["absolute_camera_distance_delta_m"] = 0
+    expect_failure(lambda: _validate_742_pinch_zoom(unchanged_pinch, [390, 844]), "zero-distance pinch was accepted")
+    obstructed_pinch = json.loads(json.dumps(pinch))
+    obstructed_pinch["hit_test_targets"][0] = "SECTION"
+    expect_failure(lambda: _validate_742_pinch_zoom(obstructed_pinch, [390, 844]), "pinch behind controls was accepted")
+    wrong_direction_pinch = json.loads(json.dumps(pinch))
+    wrong_direction_pinch["actual_direction"] = "increase"
+    expect_failure(lambda: _validate_742_pinch_zoom(wrong_direction_pinch, [390, 844]), "wrong-direction pinch was accepted")
+    nonmonotonic_pinch = json.loads(json.dumps(pinch))
+    nonmonotonic_pinch["after"]["samples_camera_distance_m"][3] = 26.0
+    expect_failure(lambda: _validate_742_pinch_zoom(nonmonotonic_pinch, [390, 844]), "nonmonotonic pinch was accepted")
+
+    runner_path = ROOT / CAPTURE_RUNNER_PATH
+    runner_record = {"path": CAPTURE_RUNNER_PATH, "sha256": hashlib.sha256(runner_path.read_bytes()).hexdigest(), "bytes": runner_path.stat().st_size}
+    _validate_capture_runner(runner_record)
+    wrong_runner = dict(runner_record)
+    wrong_runner["sha256"] = "0" * 64
+    expect_failure(lambda: _validate_capture_runner(wrong_runner), "mutated committed capture-runner binding was accepted")
+    outcomes = {"first": {"outcome": "pass", "value": 1}, "second": {"outcome": "pass", "value": 2}, "third": {"outcome": "pass", "value": 3}}
+    trace = {"outcomes": outcomes, "outcomes_sha256": hashlib.sha256(json.dumps(outcomes, separators=(",", ":")).encode()).hexdigest()}
+    _validate_structured_trace_outcomes(trace, "test_gate")
+    forged_trace = json.loads(json.dumps(trace))
+    forged_trace["outcomes"]["first"]["value"] = 99
+    expect_failure(lambda: _validate_structured_trace_outcomes(forged_trace, "test_gate"), "forged structured trace outcome was accepted")
+    free_form_trace = {"outcomes": {"first": "looked good", "second": "pass", "third": "worked"}, "outcomes_sha256": "0" * 64}
+    expect_failure(lambda: _validate_structured_trace_outcomes(free_form_trace, "test_gate"), "free-form transcript was accepted as trace authority")
 
     environment = {
         "browser": {"name": "Chromium", "version": "140.0.0.0", "user_agent": "test user agent"},
@@ -172,7 +222,7 @@ def main() -> None:
         lambda: verify_browser_capture_allowlist_binding(wrong_size),
         "mutated browser allowlist binding size was accepted",
     )
-    print(json.dumps({"status": "PASS", "negative_cases": 15, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
+    print(json.dumps({"status": "PASS", "negative_cases": 22, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

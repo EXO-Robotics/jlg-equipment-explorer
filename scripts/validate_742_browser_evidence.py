@@ -33,7 +33,7 @@ BROWSER_GATES = (
 COMMON_FIELDS = {
     "schema_version", "kind", "gate", "capture_status", "configuration_id",
     "candidate_tree_sha256", "reviewed_source_commit", "environment",
-    "capture_artifacts", "observations", "boundary",
+    "capture_runner", "capture_artifacts", "observations", "boundary",
 }
 EXPECTED_SELECTION_PRIORITY = {
     "chassis": 0,
@@ -60,6 +60,7 @@ EXPECTED_STOW_SLIDER_VALUES = {
     "Steering angle": "Center",
     "Frame level": "Level",
 }
+CAPTURE_RUNNER_PATH = "scripts/capture_742_browser_evidence.mjs"
 EXPECTED_SCREENSHOT_DIMENSIONS = {
     "desktop_browser_interaction": {(1280, 720)},
     "mobile_browser_interaction": {(390, 844), (844, 390)},
@@ -73,6 +74,25 @@ EXPECTED_SCREENSHOT_DIMENSIONS = {
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _validate_capture_runner(record: dict) -> None:
+    if set(record or {}) != {"path", "sha256", "bytes"} or record.get("path") != CAPTURE_RUNNER_PATH:
+        raise RuntimeError("742 committed capture-runner identity drift")
+    runner = ROOT / CAPTURE_RUNNER_PATH
+    if not runner.is_file() or digest(runner) != record["sha256"] or runner.stat().st_size != record["bytes"]:
+        raise RuntimeError("742 committed capture-runner hash/size binding drift")
+
+
+def _validate_structured_trace_outcomes(trace: dict, gate: str) -> None:
+    outcomes = trace.get("outcomes")
+    if not isinstance(outcomes, dict) or len(outcomes) < 3 or any(
+        not isinstance(value, dict) or value.get("outcome") != "pass" for value in outcomes.values()
+    ):
+        raise RuntimeError(f"742 browser automation trace structured outcomes are incomplete: {gate}")
+    encoded = json.dumps(outcomes, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if hashlib.sha256(encoded).hexdigest() != trace.get("outcomes_sha256"):
+        raise RuntimeError(f"742 browser automation trace outcome hash drift: {gate}")
 
 
 def expected_selection_outcomes() -> list[dict]:
@@ -252,8 +272,8 @@ def _validate_environment(environment: dict) -> None:
 
 
 def _validate_capture_artifacts(
-    capture: dict, allowlist: dict[str, dict], minimum_screenshots: int, gate: str, environment: dict
-) -> None:
+    capture: dict, allowlist: dict[str, dict], minimum_screenshots: int, gate: str, environment: dict, runner: dict
+) -> dict:
     if set(capture or {}) != {"screenshots", "automation_trace"}:
         raise RuntimeError("742 browser capture-artifact schema drift")
     screenshots = capture["screenshots"]
@@ -271,21 +291,17 @@ def _validate_capture_artifacts(
     trace_record = capture["automation_trace"]
     _verify_capture_record(trace_record, "automation_trace", allowlist)
     trace = json.loads((ROOT / trace_record["path"]).read_text(encoding="utf-8"))
-    fields = {"schema_version", "kind", "gate", "captured_at_utc", "tool", "tool_version", "events"}
-    if set(trace or {}) != fields or trace["schema_version"] != "1.0.0" or trace["kind"] != "browser-automation-trace":
+    fields = {"schema_version", "kind", "gate", "captured_at_utc", "tool", "tool_version", "runner", "outcomes_sha256", "outcomes"}
+    if set(trace or {}) != fields or trace["schema_version"] != "2.0.0" or trace["kind"] != "browser-automation-trace":
         raise RuntimeError(f"742 browser automation trace schema drift: {gate}")
     if trace["gate"] != gate or trace["captured_at_utc"] != environment["captured_at_utc"]:
         raise RuntimeError(f"742 browser automation trace identity/time drift: {gate}")
     if trace["tool"] != environment["automation"]["tool"] or trace["tool_version"] != environment["automation"]["version"]:
         raise RuntimeError(f"742 browser automation trace tool identity drift: {gate}")
-    events = trace["events"]
-    if not isinstance(events, list) or len(events) < 3:
-        raise RuntimeError(f"742 browser automation trace is incomplete: {gate}")
-    for index, event in enumerate(events, start=1):
-        if set(event or {}) != {"sequence", "event", "selector", "result"} or event["sequence"] != index:
-            raise RuntimeError(f"742 browser automation trace event schema drift: {gate}")
-        if not all(isinstance(event[name], str) and event[name].strip() for name in ("event", "selector", "result")):
-            raise RuntimeError(f"742 browser automation trace event value drift: {gate}")
+    if trace["runner"] != runner:
+        raise RuntimeError(f"742 browser automation trace runner binding drift: {gate}")
+    _validate_structured_trace_outcomes(trace, gate)
+    return trace
 
 
 def _validate_dom_snapshot(snapshot: dict, expected_viewport: list[int] | None = None) -> None:
@@ -333,6 +349,89 @@ def _validate_transcript(transcript: list, required_ids: tuple[str, ...]) -> Non
             raise RuntimeError(f"742 browser transcript step identity drift: {expected_id}")
         if step["outcome"] != "pass" or not all(isinstance(step[name], str) and step[name].strip() for name in ("action", "target", "expected", "observed")):
             raise RuntimeError(f"742 browser transcript step did not pass: {expected_id}")
+
+
+def _validate_742_pinch_zoom(observed: dict, expected_viewport: list[int]) -> None:
+    fields = {
+        "schema_version", "gesture", "target_selector", "viewport_css_px", "canvas_rect_css_px",
+        "start_points_css_px", "end_points_css_px", "hit_test_targets", "all_points_on_canvas",
+        "baseline", "after", "intermediate_desired_distance_m", "final_gesture_desired_distance_m",
+        "camera_distance_delta_m", "desired_distance_delta_m", "absolute_camera_distance_delta_m",
+        "minimum_required_delta_m", "expected_direction", "actual_direction", "monotonic_camera_change",
+        "settled_before", "settled_after", "outcome",
+    }
+    if set(observed or {}) != fields:
+        raise RuntimeError("742 pinch raw-observation schema drift")
+    if (
+        observed["schema_version"] != "1.0.0"
+        or observed["gesture"] != "pinch-out"
+        or observed["target_selector"] != "#app canvas"
+        or observed["viewport_css_px"] != expected_viewport
+        or observed["all_points_on_canvas"] is not True
+        or observed["hit_test_targets"] != ["CANVAS"] * 4
+        or observed["expected_direction"] != "decrease"
+        or observed["actual_direction"] != "decrease"
+        or observed["monotonic_camera_change"] is not True
+        or observed["settled_before"] is not True
+        or observed["settled_after"] is not True
+        or observed["outcome"] != "pass"
+    ):
+        raise RuntimeError("742 pinch identity/direction/settle contract failed")
+    rect = observed["canvas_rect_css_px"]
+    if set(rect or {}) != {"x", "y", "width", "height"} or any(
+        isinstance(rect[name], bool) or not isinstance(rect[name], (int, float)) or not math.isfinite(rect[name])
+        for name in rect
+    ) or rect["width"] < 180 or rect["height"] < 180:
+        raise RuntimeError("742 pinch canvas rectangle is malformed")
+    points = [*observed["start_points_css_px"], *observed["end_points_css_px"]]
+    if len(observed["start_points_css_px"]) != 2 or len(observed["end_points_css_px"]) != 2 or any(
+        not isinstance(point, list) or len(point) != 2 or any(
+            isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) for value in point
+        ) for point in points
+    ):
+        raise RuntimeError("742 pinch touch coordinates are malformed")
+    if any(
+        not (rect["x"] <= point[0] <= rect["x"] + rect["width"] and rect["y"] <= point[1] <= rect["y"] + rect["height"])
+        for point in points
+    ):
+        raise RuntimeError("742 pinch touch coordinate is outside the canvas")
+    start_span = abs(observed["start_points_css_px"][1][0] - observed["start_points_css_px"][0][0])
+    end_span = abs(observed["end_points_css_px"][1][0] - observed["end_points_css_px"][0][0])
+    if end_span <= start_span + 40:
+        raise RuntimeError("742 pinch-out contact separation did not materially increase")
+    settle_fields = {"camera_distance_m", "desired_distance_m", "stable_frames", "samples_camera_distance_m"}
+    for label in ("baseline", "after"):
+        record = observed[label]
+        if set(record or {}) != settle_fields or not isinstance(record["stable_frames"], int) or record["stable_frames"] < 6:
+            raise RuntimeError(f"742 pinch {label} settle record drift")
+        samples = record["samples_camera_distance_m"]
+        if not isinstance(samples, list) or len(samples) < record["stable_frames"] or any(
+            isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0 for value in samples
+        ):
+            raise RuntimeError(f"742 pinch {label} camera samples are malformed")
+        if not math.isclose(record["camera_distance_m"], record["desired_distance_m"], rel_tol=0, abs_tol=0.03):
+            raise RuntimeError(f"742 pinch {label} camera did not settle to desired distance")
+    baseline, after = observed["baseline"], observed["after"]
+    camera_delta = round(after["camera_distance_m"] - baseline["camera_distance_m"], 3)
+    desired_delta = round(after["desired_distance_m"] - baseline["desired_distance_m"], 3)
+    required = observed["minimum_required_delta_m"]
+    if any(isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) for value in (
+        camera_delta, desired_delta, required, observed["intermediate_desired_distance_m"], observed["final_gesture_desired_distance_m"]
+    )) or required < 0.5:
+        raise RuntimeError("742 pinch distance values are malformed")
+    if (
+        not math.isclose(observed["camera_distance_delta_m"], camera_delta, rel_tol=0, abs_tol=0.001)
+        or not math.isclose(observed["desired_distance_delta_m"], desired_delta, rel_tol=0, abs_tol=0.001)
+        or not math.isclose(observed["absolute_camera_distance_delta_m"], abs(camera_delta), rel_tol=0, abs_tol=0.001)
+        or camera_delta > -required
+        or desired_delta > -required
+        or observed["intermediate_desired_distance_m"] >= baseline["desired_distance_m"]
+        or observed["final_gesture_desired_distance_m"] > observed["intermediate_desired_distance_m"]
+    ):
+        raise RuntimeError("742 pinch did not prove a meaningful zoom-in distance change")
+    samples = after["samples_camera_distance_m"]
+    if any(sample > samples[index - 1] + 0.011 for index, sample in enumerate(samples) if index):
+        raise RuntimeError("742 pinch camera trajectory is not monotonic toward zoom-in")
 
 
 def _p95(samples: list[float]) -> float:
@@ -415,7 +514,7 @@ def _validate_accessibility_tree(snapshot: dict, slider_names: set[str]) -> None
 
 
 def _validate_regression(gate: str, observations: dict) -> None:
-    fields = {"page", "dom_snapshots", "accessibility_tree_snapshot", "interaction_transcript", "reduced_motion"}
+    fields = {"page", "dom_snapshots", "accessibility_tree_snapshot", "assertions", "reduced_motion"}
     if set(observations or {}) != fields:
         raise RuntimeError(f"742 upstream regression observation schema drift: {gate}")
     page = observations["page"]
@@ -445,7 +544,7 @@ def _validate_regression(gate: str, observations: dict) -> None:
     if gate == "600s_browser_regression":
         if page["route"] != "/" or page["title"] != "600S Interactive Equipment Study":
             raise RuntimeError("742 600S regression route/title drift")
-        required = ("load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion")
+        required = {"load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion"}
         slider_names = {"Boom lift", "Extend", "Rotate", "Steering"}
         parsed = page["parsed_status"]
         fields = {"source", "meshes", "selection", "errors", "load_ms", "render_profile", "fps", "p95_ms", "reduced_motion"}
@@ -461,7 +560,7 @@ def _validate_regression(gate: str, observations: dict) -> None:
     else:
         if page["route"] != "/es1930m/" or page["title"] != "ES1930M Interactive Equipment Study":
             raise RuntimeError("742 ES1930M regression route/title drift")
-        required = ("load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "reduced_motion")
+        required = {"load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "reduced_motion"}
         slider_names = {"Platform lift", "Extension deck", "Steering actuator; wheel angles deferred"}
         parsed = page["parsed_status"]
         fields = {"machine", "configuration_id", "source", "selection", "errors", "load_ms", "fps", "p95_ms"}
@@ -474,7 +573,11 @@ def _validate_regression(gate: str, observations: dict) -> None:
             not isinstance(parsed["p95_ms"], (int, float)) or not 0 < parsed["p95_ms"] <= 50,
         )) or "selection self-test-pass" not in page["status_text"] or "errors 0" not in page["status_text"]:
             raise RuntimeError("742 ES1930M regression status dataset did not pass")
-    _validate_transcript(observations["interaction_transcript"], required)
+    if set(observations["assertions"] or {}) != required:
+        raise RuntimeError(f"742 upstream regression structured outcome set drift: {gate}")
+    pinch = observations["assertions"]["pinch_zoom"]
+    if pinch.get("hit_test_targets") != ["CANVAS"] * 4 or pinch.get("observable_render_or_distance_change") is not True or pinch.get("before_canvas_sha256") == pinch.get("after_canvas_sha256"):
+        raise RuntimeError(f"742 upstream regression pinch outcome is not independently observable: {gate}")
     _validate_accessibility_tree(observations["accessibility_tree_snapshot"], slider_names)
 
 
@@ -500,24 +603,30 @@ def validate_complete_browser_artifact(
         raise RuntimeError(f"742 upstream regression exact-release binding drift: {gate}")
     if not isinstance(artifact.get("boundary"), str) or not artifact["boundary"].strip():
         raise RuntimeError(f"742 browser evidence boundary missing: {gate}")
+    _validate_capture_runner(artifact["capture_runner"])
     _validate_environment(artifact["environment"])
     allowlist = _capture_allowlist()
     minimum_screenshots = 3 if gate == "performance_profile" else 2 if "regression" in gate or gate == "mobile_browser_interaction" else 1
-    _validate_capture_artifacts(
+    trace = _validate_capture_artifacts(
         artifact["capture_artifacts"], allowlist, minimum_screenshots,
-        gate, artifact["environment"],
+        gate, artifact["environment"], artifact["capture_runner"],
     )
     observations = artifact["observations"]
+    assertions = observations.get("assertions") if isinstance(observations, dict) else None
+    if not isinstance(assertions, dict) or assertions != trace["outcomes"]:
+        raise RuntimeError(f"742 structured browser outcomes do not exactly cross-bind trace and gate artifact: {gate}")
     if gate in {"600s_browser_regression", "es1930m_browser_regression"}:
         _validate_regression(gate, observations)
     elif gate == "performance_profile":
-        if set(observations or {}) != {"desktop", "portrait", "short_landscape", "physical_low_end_mobile_gpu_claimed"} or observations["physical_low_end_mobile_gpu_claimed"] is not False:
+        if set(observations or {}) != {"desktop", "portrait", "short_landscape", "assertions", "physical_low_end_mobile_gpu_claimed"} or observations["physical_low_end_mobile_gpu_claimed"] is not False:
             raise RuntimeError("742 performance raw-capture schema/boundary drift")
         _validate_frame_capture(observations["desktop"], [1280, 720])
         _validate_frame_capture(observations["portrait"], [390, 844])
         _validate_frame_capture(observations["short_landscape"], [844, 390])
+        if set(assertions) != {"desktop", "portrait", "short_landscape"} or any(assertions[name].get("summary") != observations[name]["summary"] for name in assertions):
+            raise RuntimeError("742 performance structured summaries do not bind raw frame captures")
     elif gate == "semantic_selection":
-        fields = {"dom_snapshot", "raw_overlap_rays", "raw_fixture_outcomes", "interaction_transcript"}
+        fields = {"dom_snapshot", "raw_overlap_rays", "raw_fixture_outcomes", "assertions"}
         if set(observations or {}) != fields:
             raise RuntimeError("742 semantic-selection evidence schema drift")
         _validate_dom_snapshot(observations["dom_snapshot"], [1280, 720])
@@ -571,9 +680,29 @@ def validate_complete_browser_artifact(
         if dom_rays != rays:
             raise RuntimeError("742 semantic-selection ray observations do not match the captured DOM dataset")
         _validate_selection_fixtures(observed_fixtures, dom_fixtures)
-        _validate_transcript(observations["interaction_transcript"], ("select_each_component", "clear_selection", "pinch_suppression"))
+        if set(assertions) != {"visible_canvas_selection", "clear_selection", "pinch_suppression", "overlap_self_test"}:
+            raise RuntimeError("742 semantic-selection structured outcome set drift")
+        probes = assertions["visible_canvas_selection"].get("independently_labeled_probes")
+        expected_probes = {
+            "boom-upper-visible-surface": "boom", "cab-front-visible-surface": "cab",
+            "chassis-center-visible-surface": "chassis", "steering-front-wheel-visible-surface": "steering",
+        }
+        if not isinstance(probes, list) or len(probes) != len(expected_probes):
+            raise RuntimeError("742 semantic visible-canvas probe count drift")
+        for probe in probes:
+            if (
+                probe.get("outcome") != "pass" or expected_probes.get(probe.get("id")) != probe.get("expected_component")
+                or probe.get("hit_test_target") != "CANVAS" or probe.get("selected_component") != probe.get("expected_component")
+                or probe.get("rendered_surface_component") != probe.get("expected_component")
+                or probe.get("resolution_basis") != "visible-surface" or not probe.get("rendered_surface_mesh")
+                or not all(isinstance(probe.get(axis), int) for axis in ("x", "y"))
+            ):
+                raise RuntimeError("742 semantic visible-canvas frontmost-surface outcome failed")
+        if assertions["clear_selection"].get("selected_component_after_reset") is not None:
+            raise RuntimeError("742 semantic Reset View did not clear selection")
+        _validate_742_pinch_zoom(assertions["pinch_suppression"].get("pinch_zoom"), [1280, 720])
     elif gate == "accessibility_semantics_and_keyboard":
-        fields = {"dom_snapshot", "accessibility_tree_snapshot", "interaction_transcript", "physical_screen_reader_session_claimed"}
+        fields = {"dom_snapshot", "accessibility_tree_snapshot", "assertions", "physical_screen_reader_session_claimed"}
         if set(observations or {}) != fields or observations["physical_screen_reader_session_claimed"] is not False:
             raise RuntimeError("742 accessibility evidence schema/boundary drift")
         _validate_dom_snapshot(observations["dom_snapshot"], [1280, 720])
@@ -585,22 +714,41 @@ def validate_complete_browser_artifact(
         }.items():
             if _snapshot_node(observations["dom_snapshot"], selector)["attributes"].get("aria-valuetext") != expected:
                 raise RuntimeError(f"742 accessibility DOM slider value text drift: {selector}")
-        _validate_transcript(observations["interaction_transcript"], ("application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"))
+        if set(assertions) != {"application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"}:
+            raise RuntimeError("742 accessibility structured outcome set drift")
     elif gate == "desktop_browser_interaction":
-        if set(observations or {}) != {"dom_snapshots", "interaction_transcript"} or set(observations["dom_snapshots"] or {}) != {"stowed", "maximum_pose", "modal_open"}:
+        if set(observations or {}) != {"dom_snapshots", "assertions"} or set(observations["dom_snapshots"] or {}) != {"stowed", "maximum_pose", "modal_open"}:
             raise RuntimeError("742 desktop browser evidence schema drift")
         for snapshot in observations["dom_snapshots"].values():
             _validate_dom_snapshot(snapshot, [1280, 720])
             _require_loaded_zero_error_snapshot(snapshot)
-        _validate_transcript(observations["interaction_transcript"], ("load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal"))
+        if set(assertions) != {"load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "stalled_load_timeout"}:
+            raise RuntimeError("742 desktop structured outcome set drift")
+        reset = assertions["maximum_pose_reset"]
+        before, after = reset.get("before_reset", {}), reset.get("after_reset", {})
+        if (
+            reset.get("reset_pressed_while_pose") != "maximum" or before.get("slider_values") != after.get("slider_values")
+            or not isinstance(after.get("desired_distance_m"), (int, float))
+            or not isinstance(after.get("camera_distance_m"), (int, float))
+            or not isinstance(after.get("effective_max_distance_m"), (int, float))
+            or after["desired_distance_m"] > after["effective_max_distance_m"]
+            or abs(after["camera_distance_m"] - after["desired_distance_m"]) > 0.03
+            or after.get("selected_component") is not None
+        ):
+            raise RuntimeError("742 maximum-pose Reset View distance/limit proof failed")
+        timeout = assertions["stalled_load_timeout"]
+        if any((timeout.get("source") != "load-timeout", timeout.get("viewer_terminal") is not True, timeout.get("error_role") != "alert", timeout.get("error_aria_live") != "assertive", timeout.get("error_visible") is not True, timeout.get("error_focused") is not True, timeout.get("app_inert") is not True, timeout.get("interface_inert") is not True, timeout.get("disabled_control_count") != timeout.get("total_control_count"))):
+            raise RuntimeError("742 stalled-load accessible terminal proof failed")
     elif gate == "mobile_browser_interaction":
-        if set(observations or {}) != {"dom_snapshots", "interaction_transcript"} or set(observations["dom_snapshots"] or {}) != {"portrait", "short_landscape"}:
+        if set(observations or {}) != {"dom_snapshots", "assertions"} or set(observations["dom_snapshots"] or {}) != {"portrait", "short_landscape"}:
             raise RuntimeError("742 mobile browser evidence schema drift")
         _validate_dom_snapshot(observations["dom_snapshots"]["portrait"], [390, 844])
         _validate_dom_snapshot(observations["dom_snapshots"]["short_landscape"], [844, 390])
         _require_loaded_zero_error_snapshot(observations["dom_snapshots"]["portrait"])
         _require_loaded_zero_error_snapshot(observations["dom_snapshots"]["short_landscape"])
-        _validate_transcript(observations["interaction_transcript"], ("portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"))
+        if set(assertions) != {"portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"}:
+            raise RuntimeError("742 mobile structured outcome set drift")
+        _validate_742_pinch_zoom(assertions["pinch_zoom"], [390, 844])
     else:
         raise RuntimeError(f"Unsupported 742 browser gate: {gate}")
     return artifact["environment"]

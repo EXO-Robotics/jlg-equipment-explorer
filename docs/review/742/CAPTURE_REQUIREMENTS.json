@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "kind": "742-browser-recapture-requirements",
   "freeze_prerequisites": [
     "Final 742 GLB, runtime, CSS, machine modules, configuration, and mechanism bytes are committed.",
@@ -12,7 +12,7 @@
     "os_metadata": ["name", "version", "build"],
     "gpu_metadata": "Record WebGL API plus unmasked vendor/renderer when WEBGL_debug_renderer_info is observable; otherwise record unavailable and the exact reason.",
     "accessibility_tree_slider_contract": "Normalize raw Chromium CDP Accessibility.getFullAXTree nodes without inventing display units. Every expected slider name must match exactly; each slider must be enabled, focusable, settable, and retain its finite native numeric value plus equivalent numeric AX valuetext. Unit-suffixed or semantic presentation text is verified separately from the DOM aria-valuetext attribute.",
-    "automation": "Record tool and version, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json.",
+    "automation": "Execute scripts/capture_742_browser_evidence.mjs from the committed candidate with explicit isolated Playwright node_modules and Chromium executable paths. Record exact tool/version and committed runner hash/size, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json. Each trace outcomes object must byte-canonically hash and exactly equal the gate artifact observations.assertions object; free-form transcripts are non-authoritative and prohibited.",
     "boundaries": ["local browser or responsive emulation only", "no physical-device claim", "no VoiceOver or NVDA session claim", "no deployment claim"]
   },
   "gates": {
@@ -20,13 +20,16 @@
       "viewports_css_px": [[1280, 720]],
       "screenshots_minimum": 1,
       "snapshots": ["stowed", "maximum_pose", "modal_open"],
-      "transcript_ids": ["load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal"]
+      "assertion_ids": ["load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "stalled_load_timeout"],
+      "maximum_pose_reset_rule": "Press Reset View while the five controls remain at the recorded maximum pose; prove the pose-frame, desired, actual settled, base-max, and effective-max distances are coherent and that Reset View did not stow the mechanism.",
+      "stalled_load_rule": "Hold the exact 742 GLB request beyond the production 15-second timeout and prove terminal source load-timeout, focused assertive alert, inert app/interface, and disabled control-panel controls."
     },
     "mobile_browser_interaction": {
       "viewports_css_px": [[390, 844], [844, 390]],
       "screenshots_minimum": 2,
       "snapshots": ["portrait", "short_landscape"],
-      "transcript_ids": ["portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"]
+      "assertion_ids": ["portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"],
+      "pinch_rule": "All four start/end touch coordinates must independently hit the canvas. Wait for actual camera/desired-distance settle before baseline and after the gesture; require a monotonic zoom-in and an actual camera-distance decrease of at least 0.5 m or 2 percent of baseline, whichever is greater. Canvas hash alone cannot pass."
     },
     "accessibility_semantics_and_keyboard": {
       "viewports_css_px": [[1280, 720]],
@@ -34,12 +37,13 @@
       "accessibility_tree_states": ["controls_open", "modal_open"],
       "required_slider_names": ["Boom lift", "Boom telescope", "Carriage tilt", "Steering angle", "Frame level"],
       "required_dom_stowed_aria_valuetext": {"Boom lift": "0°", "Boom telescope": "0.00 m visual", "Carriage tilt": "0°", "Steering angle": "Center", "Frame level": "Level"},
-      "transcript_ids": ["application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"]
+      "assertion_ids": ["application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"]
     },
     "semantic_selection": {
       "viewports_css_px": [[1280, 720]],
       "screenshots_minimum": 1,
-      "transcript_ids": ["select_each_component", "clear_selection", "pinch_suppression"],
+      "assertion_ids": ["visible_canvas_selection", "clear_selection", "pinch_suppression", "overlap_self_test"],
+      "visible_canvas_rule": "Click the four independently labeled committed viewport coordinates directly on unobstructed canvas pixels. Require selected component and the runtime's actual frontmost rendered surface component to both equal the independently declared expected component, with resolution basis visible-surface and a nonempty rendered mesh name.",
       "independent_priority": {"chassis": 0, "steering": 1, "boom": 2, "hydraulics": 3, "cab": 4, "carriage": 5},
       "raw_ray_rule": "Copy and parse data-selection-overlap-outcomes for all 15 rays. The validator independently recomputes the expected component from hit components/distances, visible-surface component, the fixed 0.025 m tie rule, and its own priority map.",
       "raw_fixture_rule": "Copy every full 9-field data-selection-fixture-outcomes record without stripping hits or semantic fields. The validator independently recomputes basis, component, and volume from raw hit distances/priorities plus visibleSurfaceComponent, checks the committed 5-field projection, and requires exact equality with the DOM-parsed records.",
@@ -61,14 +65,14 @@
       "route": "/",
       "viewports_css_px": [[1280, 720], [390, 844]],
       "screenshots_minimum": 2,
-      "transcript_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion"]
+      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion"]
     },
     "es1930m_browser_regression": {
       "route": "/es1930m/",
       "required_release": "1.0.4",
       "viewports_css_px": [[1280, 720], [390, 844]],
       "screenshots_minimum": 2,
-      "transcript_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "reduced_motion"]
+      "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "reduced_motion"]
     }
   }
 }

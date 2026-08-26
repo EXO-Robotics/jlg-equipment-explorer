@@ -58,6 +58,7 @@ FILES = {
     "review_binder": ROOT / "scripts/bind_742_review.py",
     "browser_capture_validator": ROOT / "scripts/validate_742_browser_evidence.py",
     "browser_capture_probe": ROOT / "scripts/742_browser_capture_probe.js",
+    "browser_capture_runner": ROOT / "scripts/capture_742_browser_evidence.mjs",
     "browser_capture_parser_tests": ROOT / "scripts/test_742_browser_evidence.py",
     "deterministic_rebuild_verifier": ROOT / "scripts/verify_742_deterministic_rebuild.py",
     "owned_review_render_allowlist": ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
