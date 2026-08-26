@@ -6,6 +6,7 @@ from __future__ import annotations
 import copy
 import io
 import json
+import re
 import unittest
 
 from bind_742_review import mark_extended_visual_observations_reviewed
@@ -17,7 +18,6 @@ from validate_742_review import (
     SEPARATE_VISUAL_GATE_PATHS,
     _validate_extended_visual_semantics,
     read_owned_render_allowlist_records,
-    validate_pending_extended_visual_observation,
     validate_owned_render_semantic_coverage,
 )
 
@@ -56,6 +56,27 @@ def fixture() -> tuple[dict, dict[str, dict]]:
         ),
     }
     return record, allowed
+
+
+def validate_canonical_transition_state(record: dict, allowed: dict[str, dict]) -> str:
+    """Accept one complete pending or reviewed state, never a mixed transition."""
+    candidate = record.get("candidate_tree_sha256")
+    commit = record.get("reviewed_source_commit")
+    os_record = (record.get("environment") or {}).get("os")
+    if candidate == "PENDING" and commit == "PENDING":
+        if os_record is not None:
+            raise RuntimeError("742 pending visual transition unexpectedly has an OS identity")
+        _validate_extended_visual_semantics(record, allowed, expected_observed=False)
+        return "pending"
+    if re.fullmatch(r"[0-9a-f]{64}", str(candidate)) and re.fullmatch(r"[0-9a-f]{40}", str(commit)):
+        if (
+            set(os_record or {}) != {"name", "version", "build"}
+            or not all(isinstance(value, str) and value.strip() for value in os_record.values())
+        ):
+            raise RuntimeError("742 reviewed visual transition lacks an exact OS identity")
+        _validate_extended_visual_semantics(record, allowed, expected_observed=True)
+        return "reviewed"
+    raise RuntimeError("742 visual transition mixes pending and reviewed identity")
 
 
 class ExtendedVisualSemanticsTests(unittest.TestCase):
@@ -107,9 +128,8 @@ class ExtendedVisualSemanticsTests(unittest.TestCase):
     def test_committed_pending_template_is_structural_not_observed_evidence(self) -> None:
         allowed = read_owned_render_allowlist_records()
         validate_owned_render_semantic_coverage(allowed)
-        validate_pending_extended_visual_observation(
-            ROOT / "docs/review/742/extended-visual-fidelity.json", allowed
-        )
+        record = json.loads((ROOT / "docs/review/742/extended-visual-fidelity.json").read_text(encoding="utf-8"))
+        self.assertIn(validate_canonical_transition_state(record, allowed), {"pending", "reviewed"})
 
     def test_pending_state_rejects_an_observed_true_claim(self) -> None:
         record, allowed = fixture()
@@ -132,6 +152,44 @@ class ExtendedVisualSemanticsTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "entirely pending"):
             mark_extended_visual_observations_reviewed(record)
         self.assertEqual(before, [observation["observed"] for observation in record["render_observations"]])
+
+    def test_transition_accepts_one_complete_reviewed_state(self) -> None:
+        record, allowed = fixture()
+        record["candidate_tree_sha256"] = "a" * 64
+        record["reviewed_source_commit"] = "b" * 40
+        record["environment"]["os"] = {"name": "macOS", "version": "26.5.2", "build": "25F84"}
+        self.assertEqual(validate_canonical_transition_state(record, allowed), "reviewed")
+
+    def test_transition_rejects_mixed_identity(self) -> None:
+        record, allowed = fixture()
+        for observation in record["render_observations"]:
+            observation["observed"] = False
+        record["reviewed_source_commit"] = "b" * 40
+        with self.assertRaisesRegex(RuntimeError, "mixes pending and reviewed"):
+            validate_canonical_transition_state(record, allowed)
+
+    def test_transition_rejects_partial_observation_in_each_identity_state(self) -> None:
+        pending, allowed = fixture()
+        for observation in pending["render_observations"]:
+            observation["observed"] = False
+        pending["render_observations"][2]["observed"] = True
+        with self.assertRaises(RuntimeError):
+            validate_canonical_transition_state(pending, allowed)
+
+        reviewed, allowed = fixture()
+        reviewed["candidate_tree_sha256"] = "a" * 64
+        reviewed["reviewed_source_commit"] = "b" * 40
+        reviewed["environment"]["os"] = {"name": "macOS", "version": "26.5.2", "build": "25F84"}
+        reviewed["render_observations"][2]["observed"] = False
+        with self.assertRaises(RuntimeError):
+            validate_canonical_transition_state(reviewed, allowed)
+
+    def test_transition_rejects_reviewed_state_without_exact_os_identity(self) -> None:
+        record, allowed = fixture()
+        record["candidate_tree_sha256"] = "a" * 64
+        record["reviewed_source_commit"] = "b" * 40
+        with self.assertRaisesRegex(RuntimeError, "exact OS identity"):
+            validate_canonical_transition_state(record, allowed)
 
     def test_missing_circle_render_is_rejected(self) -> None:
         record, allowed = fixture()
