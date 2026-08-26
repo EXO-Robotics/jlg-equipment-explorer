@@ -10,6 +10,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = PROJECT_ROOT / "index.html"
+REDIRECT_PATH = PROJECT_ROOT / "600s/index.html"
 STYLE_PATH = PROJECT_ROOT / "viewer.css"
 VIEWER_PATH = PROJECT_ROOT / "viewer.js"
 VERSION_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
@@ -24,6 +25,7 @@ def require_tokens(source: str, tokens: list[str], contract: str) -> None:
 
 def main() -> None:
     index = INDEX_PATH.read_text(encoding="utf-8")
+    redirect = REDIRECT_PATH.read_text(encoding="utf-8")
     style = STYLE_PATH.read_text(encoding="utf-8")
     viewer = VIEWER_PATH.read_text(encoding="utf-8")
     version_source = VERSION_PATH.read_text(encoding="utf-8")
@@ -36,6 +38,7 @@ def main() -> None:
         raise RuntimeError("Cannot read runtime release from package.json")
 
     require_tokens(index, [
+        '<link rel="icon" href="./favicon.ico" type="image/x-icon">',
         'id="app" role="application" tabindex="0"',
         'aria-describedby="viewer-instructions"',
         'id="motion-status" aria-live="polite" aria-atomic="true"',
@@ -57,6 +60,10 @@ def main() -> None:
         "Presentation-only motion limits. Not operational data.",
         ".compact-control { display: grid; }",
     ], "HTML accessibility/safety")
+    require_tokens(redirect, [
+        '<link rel="icon" href="../favicon.ico" type="image/x-icon">',
+        'location.replace(`../${location.search}${location.hash}`)',
+    ], "600S redirect routing")
 
     if index.count('aria-describedby="motion-boundary"') != 4:
         raise RuntimeError("Every motion range must reference the presentation-only boundary")

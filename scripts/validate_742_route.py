@@ -28,6 +28,7 @@ def require(source, tokens, label):
 
 def main():
     require(INDEX, [
+        '<link rel="icon" href="../favicon.ico" type="image/x-icon">',
         'body data-machine="742"', 'id="app" role="application" tabindex="0"', 'aria-describedby="viewer-instructions"',
         'id="motion-status"', 'id="motion-announcement" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'id="machine-controls-body"',
         'id="lift-control"', 'id="telescope-control"', 'id="tilt-control"', 'id="steer-control"', 'id="level-control"',

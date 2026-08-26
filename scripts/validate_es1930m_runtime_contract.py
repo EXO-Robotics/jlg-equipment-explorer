@@ -66,6 +66,8 @@ for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "const curvature = 
 for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto"):
     if snippet not in html_source:
         raise RuntimeError(f"600S-aligned control-board naming missing: {snippet}")
+if '<link rel="icon" href="../favicon.ico" type="image/x-icon">' not in html_source:
+    raise RuntimeError("ES1930M project-Pages favicon route drift")
 for snippet in ('"Auto loop"', '"Pause auto"', '"Resume auto"', 'dataset.autonomyMode'):
     if snippet not in viewer_source:
         raise RuntimeError(f"600S-aligned runtime naming missing: {snippet}")

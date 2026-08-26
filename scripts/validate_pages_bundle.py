@@ -3,6 +3,7 @@
 
 import hashlib
 import json
+import posixpath
 import re
 import sys
 from pathlib import Path
@@ -26,6 +27,23 @@ required = {
     "assets/models/es1930m.asset-receipt.json", "pages-build-manifest.json",
 } | {f"docs/research/742/{path}" for path in research}
 missing = sorted(path for path in required if not (site / path).is_file())
+favicon = site / "favicon.ico"
+favicon_routes = {
+    "index.html": "./favicon.ico",
+    "600s/index.html": "../favicon.ico",
+    "742/index.html": "../favicon.ico",
+    "es1930m/index.html": "../favicon.ico",
+}
+favicon_route_errors = []
+for entry, expected_href in favicon_routes.items():
+    html_path = site / entry
+    source = html_path.read_text(encoding="utf-8") if html_path.is_file() else ""
+    exact_link = f'<link rel="icon" href="{expected_href}" type="image/x-icon">'
+    resolved = posixpath.normpath(posixpath.join(posixpath.dirname(entry), expected_href))
+    if source.count(exact_link) != 1 or resolved != "favicon.ico":
+        favicon_route_errors.append({"entry": entry, "href": expected_href, "resolved": resolved})
+if not favicon.is_file() or favicon.stat().st_size <= 0 or favicon.read_bytes()[:4] != b"\x00\x00\x01\x00":
+    favicon_route_errors.append({"target": "favicon.ico", "error": "missing-or-invalid-ico"})
 forbidden_paths = {
     "assets/models/742.asset-receipt.json", "docs/review/742", "_private-evidence", "_attestations",
 }
@@ -72,14 +90,14 @@ for path in sorted(
     }
 if manifest.get("files") != expected_records:
     raise RuntimeError("Pages build manifest does not exactly describe the assembled bundle")
-if missing or present_forbidden or source_leaks or manufacturer_leaks or private_evidence_leaks:
+if missing or favicon_route_errors or present_forbidden or source_leaks or manufacturer_leaks or private_evidence_leaks:
     raise RuntimeError(
-        f"Pages bundle invalid; missing={missing}; forbidden={present_forbidden}; "
+        f"Pages bundle invalid; missing={missing}; favicon_routes={favicon_route_errors}; forbidden={present_forbidden}; "
         f"source_leaks={source_leaks}; manufacturer_leaks={sorted(set(manufacturer_leaks))}; "
         f"private_evidence_leaks={sorted(set(private_evidence_leaks))}"
     )
 print(json.dumps({
     "status": "PASS", "required_files": len(required), "manifest_files": len(expected_records),
     "candidate_receipt_packaged": False, "review_evidence_packaged": False,
-    "manufacturer_source_binaries": [],
+    "manufacturer_source_binaries": [], "favicon_routes_verified": len(favicon_routes),
 }, indent=2, sort_keys=True))
