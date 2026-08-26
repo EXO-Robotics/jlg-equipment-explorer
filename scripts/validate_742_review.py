@@ -61,7 +61,7 @@ EXTENDED_VISUAL_RENDER_CONTRACT = (
     {
         "semantic_id": "maximum_lift_fork_closeup",
         "path": "docs/review/742/maximum-lift-forks-close.png",
-        "claim": "Fork heels, blades, attachment, and level relationship are visible at maximum lift.",
+        "claim": "Fork heels, blades, and the red validated posed-GLB fork-top/load-surface datum with exact contact markers are fully framed at maximum lift.",
     },
     {
         "semantic_id": "maximum_reach_load_center_pose",
@@ -81,7 +81,7 @@ EXTENDED_VISUAL_RENDER_CONTRACT = (
     {
         "semantic_id": "rear_through_rod_two_tie_bars_four_joints",
         "path": "docs/review/742/rear-steering-linkage.png",
-        "claim": "The visible REAR AXLE / FIXED THROUGH-ROD RACK label identifies the rear state; the through-rod rack, two rigid tie bars, and four highlighted joints are visible.",
+        "claim": "The unobstructed REAR AXLE / FIXED THROUGH-ROD RACK caption identifies the rear state; the through-rod rack, two rigid tie bars, and all four highlighted joints are visible without label overlap.",
     },
     {
         "semantic_id": "circle_headings_two_actual_icrs_scrub",

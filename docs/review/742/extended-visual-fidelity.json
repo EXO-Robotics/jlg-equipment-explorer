@@ -11,9 +11,9 @@
   "render_observations": [
     {
       "artifact": {
-        "bytes": 931511,
+        "bytes": 930991,
         "path": "docs/review/742/maximum-lift-level-forks.png",
-        "sha256": "ac1d426d3ba2e9d97636f634e281382d83b5fa473faac11c81ca971b5ffcedf4"
+        "sha256": "ad6277ce08f09364fe65690731f122a4373e027470345e5557bfda0c67533495"
       },
       "claim": "Level fork load surface is visible at the selected reconstructed maximum-lift pose.",
       "observed": false,
@@ -21,19 +21,19 @@
     },
     {
       "artifact": {
-        "bytes": 872292,
+        "bytes": 737150,
         "path": "docs/review/742/maximum-lift-forks-close.png",
-        "sha256": "f51e39c48587db1d204f5e85869ef652b4b89f8ff0cae8f80c5f3fa0a52e7d9c"
+        "sha256": "75e03a987d26b844d77f2a14e3ab79a4813cbba927bf2be14b0cf980f8486e72"
       },
-      "claim": "Fork heels, blades, attachment, and level relationship are visible at maximum lift.",
+      "claim": "Fork heels, blades, and the red validated posed-GLB fork-top/load-surface datum with exact contact markers are fully framed at maximum lift.",
       "observed": false,
       "semantic_id": "maximum_lift_fork_closeup"
     },
     {
       "artifact": {
-        "bytes": 895098,
+        "bytes": 894604,
         "path": "docs/review/742/maximum-reach-24in-load-center.png",
-        "sha256": "00ecf6f5a737e2229f291e634c9321dbf3b4d4ae4640d78455141d3c9b5ce635"
+        "sha256": "7822a60d3fc5f7df544e7f53e3c7dcbada6f4ac6b14d9ef5458bbc6c9311c8cd"
       },
       "claim": "The selected 3 degree maximum-reach pose and 24 inch load-center reference are visible.",
       "observed": false,
@@ -41,9 +41,9 @@
     },
     {
       "artifact": {
-        "bytes": 708904,
+        "bytes": 708552,
         "path": "docs/review/742/retract-chain-routing-cutaway.png",
-        "sha256": "1788b4360fadee434e9fecc023b181f702d17de920b08849aa7f650bbe9a6597"
+        "sha256": "22ea2d8573a2790f2465eb57c11827636fa86b75cfafa3864d2f5603d815da25"
       },
       "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible.",
       "observed": false,
@@ -51,9 +51,9 @@
     },
     {
       "artifact": {
-        "bytes": 954610,
+        "bytes": 954078,
         "path": "docs/review/742/steering-linkage-cutaway.png",
-        "sha256": "96436fb2addcf8b4dbfc81ece0545eeb91e9cef5bb7a7915701628a94cbf376d"
+        "sha256": "11f7d5aa1ac87984f9e1f84a0c3811f2f3e568c48dd14648e33e44b6a7b5764d"
       },
       "claim": "One through-rod steering cylinder with two visible rod ends, two rigid tie bars, and four highlighted pivots is visible.",
       "observed": false,
@@ -61,19 +61,19 @@
     },
     {
       "artifact": {
-        "bytes": 1072577,
+        "bytes": 1055535,
         "path": "docs/review/742/rear-steering-linkage.png",
-        "sha256": "cb065aaee6ac3187ec601743cfcc8e9db442bd4c46df5265dc0565ad81653025"
+        "sha256": "2deabde9d3a4f50344a783905d72357f527f9cc9ca31c8d15d872794806e1baf"
       },
-      "claim": "The visible REAR AXLE / FIXED THROUGH-ROD RACK label identifies the rear state; the through-rod rack, two rigid tie bars, and four highlighted joints are visible.",
+      "claim": "The unobstructed REAR AXLE / FIXED THROUGH-ROD RACK caption identifies the rear state; the through-rod rack, two rigid tie bars, and all four highlighted joints are visible without label overlap.",
       "observed": false,
       "semantic_id": "rear_through_rod_two_tie_bars_four_joints"
     },
     {
       "artifact": {
-        "bytes": 1290026,
+        "bytes": 1289242,
         "path": "docs/review/742/circle-steering-plan.png",
-        "sha256": "4c82ccd1959a7a04373e45ef4ddad6ba7784732fa2e2fbf786e00d8f1ddedd39"
+        "sha256": "df69a12331d5cb0d084b80357d90f8991c199d557649db5bea4c50e033895fb8"
       },
       "claim": "The visible CIRCLE label reports reconstructed headings FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg, TWO ACTUAL ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 93.466% — NOT FACTORY ACKERMANN; both ICR constructions are drawn.",
       "observed": false,
@@ -81,9 +81,9 @@
     },
     {
       "artifact": {
-        "bytes": 1239949,
+        "bytes": 1239201,
         "path": "docs/review/742/crab-steering-plan.png",
-        "sha256": "8a618d0d7929149aaaf626e370f2997a836f22375de7465dfbf5e117ef60b615"
+        "sha256": "dd982b0bde645a355a56347cfdc4af340f76fde69b4c6c8e65d42d9f8e915380"
       },
       "claim": "The visible CRAB label reports reconstructed headings FL 55.000 / FR 54.914 / RL 54.914 / RR 55.000 deg, FULL-POSE TOE 0.086 deg, and DENSE MAX 0.753 deg.",
       "observed": false,
@@ -91,9 +91,9 @@
     },
     {
       "artifact": {
-        "bytes": 1244874,
+        "bytes": 1244126,
         "path": "docs/review/742/front-steering-plan.png",
-        "sha256": "d8284578fb9ff6537ae93de583c1e7307f83ec74b006dbf2b678551dd5f13174"
+        "sha256": "e9cf940c2983c9aec1a183e920f1dc9a833d9e18858d93d3b017a4fac631fee0"
       },
       "claim": "The visible FRONT label reports reconstructed headings FL 55.000 / FR 54.914 deg, REAR HELD ALIGNED, ACTUAL FRONT ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 61.060% — NOT FACTORY ACKERMANN; the front ICR construction lines are drawn.",
       "observed": false,
@@ -101,9 +101,9 @@
     },
     {
       "artifact": {
-        "bytes": 1238524,
+        "bytes": 1237788,
         "path": "docs/review/742/boom-pivot-angle-sensor.png",
-        "sha256": "016e24e0b7ce6321919bbdc0807da661924a04bdfc6ba512d3e7aafdc2e6f396"
+        "sha256": "4c16a1828f3e07d5d65bb81582acae16a820c21631f09a964019c43811bbb055"
       },
       "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
       "observed": false,

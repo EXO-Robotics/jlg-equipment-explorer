@@ -146,6 +146,7 @@ for name, location, energy, size, color in (
 
 scene = bpy.context.scene
 scene.render.engine = "BLENDER_EEVEE"
+scene.eevee.use_taa_reprojection = False
 scene.render.resolution_x = 1200
 scene.render.resolution_y = 900
 scene.render.resolution_percentage = 100
@@ -306,11 +307,11 @@ for marker_name, beam_name, endpoint_index in (
 rear_center = (bpy.data.objects["SteerPivot_RL"].matrix_world.translation +
                bpy.data.objects["SteerPivot_RR"].matrix_world.translation) / 2
 camera.data.lens = 58
-camera.location = rear_center + Vector((0.0, 0.0, 6.4))
-point_at(camera, rear_center)
+camera.location = rear_center + Vector((0.0, -.45, 7.2))
+point_at(camera, rear_center + Vector((0, -.45, 0)))
 rear_label = proof_label("Proof_RearSteering",
-                         "REAR AXLE / FIXED THROUGH-ROD RACK\nTWO RIGID TIE BARS / FOUR VISIBLE JOINTS",
-                         rear_center + Vector((0, -.80, 1.55)), .072, steering_label_mat)
+                         "REAR AXLE / FIXED THROUGH-ROD RACK\nTWO RIGID TIE BARS\nFOUR VISIBLE JOINTS",
+                         rear_center + Vector((0, -1.30, 1.55)), .050, steering_label_mat)
 rear_label.rotation_mode = "XYZ"; rear_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-rear-steering-linkage.png")
 bpy.ops.render.render(write_still=True)
@@ -424,26 +425,51 @@ point_at(camera, (2.0, 0, 7.0))
 face_labels(lift_labels, camera)
 scene.render.filepath = str(OUTPUT_DIR / "742-maximum-lift-level-forks.png")
 bpy.ops.render.render(write_still=True)
+level_datum.hide_render = True
+lift_ground_datum.hide_render = True
+lift_dimension.hide_render = True
+for target in lift_labels:
+    target.hide_render = True
 fork_cutaway = [target for target in bpy.data.objects
                 if target.type in {"MESH", "CURVE", "FONT"} and target.get("component") == "carriage"
                 and not target.name.startswith(("Fork",))]
 for target in fork_cutaway:
     target.hide_render = True
 fork_center = sum(max_lift_forks, Vector()) / len(max_lift_forks)
+fork_x_min = min(point.x for point in max_lift_forks)
+fork_x_max = max(point.x for point in max_lift_forks)
+fork_y_camera_side = min(point.y for point in max_lift_forks)
+close_datum = [
+    proof_beam("Proof_MaxLiftCloseSurface",
+               (fork_x_min, fork_y_camera_side, max_lift_surface),
+               (fork_x_max, fork_y_camera_side, max_lift_surface), .018, datum_mat),
+    proof_beam("Proof_MaxLiftCloseHeelTick",
+               (fork_x_min, fork_y_camera_side, max_lift_surface - .12),
+               (fork_x_min, fork_y_camera_side, max_lift_surface + .12), .018, datum_mat),
+    proof_beam("Proof_MaxLiftCloseTipTick",
+               (fork_x_max, fork_y_camera_side, max_lift_surface - .12),
+               (fork_x_max, fork_y_camera_side, max_lift_surface + .12), .018, datum_mat),
+    proof_sphere("Proof_MaxLiftCloseHeelContact",
+                 (fork_x_min, fork_y_camera_side, max_lift_surface), .035, datum_mat),
+    proof_sphere("Proof_MaxLiftCloseTipContact",
+                 (fork_x_max, fork_y_camera_side, max_lift_surface), .035, datum_mat),
+    proof_label("Proof_MaxLiftCloseLabel",
+                f"RED LINE = VALIDATED POSED-GLB FORK TOP / LOAD SURFACE\n{max_lift_surface:.6f} m ABOVE GROUND DATUM",
+                ((fork_x_min + fork_x_max) / 2, fork_y_camera_side - .05,
+                 max_lift_surface + .42), .105, label_mat),
+]
 scene.render.resolution_x = 1200
 scene.render.resolution_y = 900
-camera.data.lens = 68
-camera.location = fork_center + Vector((3.2, -4.6, 1.8))
-point_at(camera, fork_center)
+camera.data.lens = 72
+camera.location = fork_center + Vector((4.4, -7.2, 2.7))
+point_at(camera, fork_center + Vector((0, 0, .16)))
+face_labels([target for target in close_datum if target.type == "FONT"], camera)
 scene.render.filepath = str(OUTPUT_DIR / "742-maximum-lift-forks-close.png")
 bpy.ops.render.render(write_still=True)
+for target in close_datum:
+    bpy.data.objects.remove(target, do_unlink=True)
 for target in fork_cutaway:
     target.hide_render = False
-level_datum.hide_render = True
-lift_ground_datum.hide_render = True
-lift_dimension.hide_render = True
-for target in lift_labels:
-    target.hide_render = True
 max_lift_key.hide_render = True
 pose_mechanisms(3 / 69, 1.0)
 bpy.context.view_layer.update()
@@ -481,4 +507,30 @@ scene.render.filepath = str(OUTPUT_DIR / "742-maximum-reach-24in-load-center.png
 bpy.ops.render.render(write_still=True)
 for target in datum_objects:
     target.hide_render = True
+
+# Blender 5.1 produces byte-variable PNG containers for identical Eevee pixels.
+# macOS ImageIO's decode/re-encode removes that container-only variance while
+# preserving the rendered RGBA pixels, so the review allowlist can bind stable
+# bytes rather than a single-session encoder artifact.
+owned_render_names = (
+    "742-boom-pivot-angle-sensor.png",
+    "742-cab-close.png",
+    "742-circle-steering-plan.png",
+    "742-crab-steering-plan.png",
+    "742-front-steering-plan.png",
+    "742-maximum-lift-forks-close.png",
+    "742-maximum-lift-level-forks.png",
+    "742-maximum-reach-24in-load-center.png",
+    "742-rear-steering-linkage.png",
+    "742-retract-chain-routing-cutaway.png",
+    "742-front-double-ended-steer-cylinder-cutaway.png",
+    "742-stowed-front-left.png",
+)
+for render_name in owned_render_names:
+    render_path = OUTPUT_DIR / render_name
+    normalized_path = render_path.with_name(f"{render_path.stem}.normalized.png")
+    subprocess.run(("sips", "-s", "format", "png", str(render_path),
+                    "--out", str(normalized_path)), check=True,
+                   capture_output=True, text=True)
+    normalized_path.replace(render_path)
 print(OUTPUT_DIR)
