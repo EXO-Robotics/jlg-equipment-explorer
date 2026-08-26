@@ -6,7 +6,7 @@
   <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG 742 telehandler.">
   <title>742 Interactive Telehandler Study</title>
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
-  <link rel="preload" href="../assets/models/742.glb?v=763c0da0289a" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="preload" href="../assets/models/742.glb?v=c1995375e202" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="../viewer.css?v=1.1.5">
   <link rel="stylesheet" href="../viewer/742.css?v=1.6.4">
   <script type="importmap">
@@ -42,8 +42,8 @@
 
     <section class="control-panel telehandler-controls" aria-labelledby="operate-title">
       <div class="panel-heading">
-        <div><span>Operate</span><h2 id="operate-title">Presentation controls</h2></div>
-        <div class="panel-state"><output id="motion-status">Stowed study</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button></div>
+        <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
+        <div class="panel-state"><output id="motion-status">Stowed</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button></div>
         <p class="sr-only" id="motion-announcement" aria-live="polite" aria-atomic="true"></p>
       </div>
       <div class="controls-body" id="machine-controls-body">
@@ -58,7 +58,7 @@
           <button type="button" data-steer-mode="front" aria-pressed="false">Front</button>
         </div>
         <label class="control-row compact-control"><span>Frame level</span><output id="level-value">Level</output><input id="level-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Frame level" aria-describedby="motion-boundary"></label>
-        <div class="action-row"><button class="primary-action" id="showcase" type="button">Run showcase</button><button class="secondary-action" id="stow" type="button">Stow</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
+        <div class="action-row"><button class="primary-action" id="showcase" type="button">Run showcase</button><button class="secondary-action" id="stow" type="button">Stow machine</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
         <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.</p>
         <p class="sr-only" id="reduced-motion-note">The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.</p>
       </div>
@@ -75,7 +75,7 @@
       <button type="button" data-focus="frame" aria-pressed="false"><i>07</i>Frame level</button>
       <span class="nav-overflow-cue" id="nav-overflow-cue" aria-hidden="true">More →</span>
     </nav>
-    <div class="interaction-hint">Drag to orbit <span>/</span> Pinch or scroll to zoom <span>/</span> Select a component</div>
+    <div class="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details</div>
     <output class="diagnostics" id="diagnostics" hidden></output>
   </main>
 

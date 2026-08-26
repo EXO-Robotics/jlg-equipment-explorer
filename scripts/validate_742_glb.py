@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 
@@ -43,10 +44,51 @@ REQUIRED_MECHANICAL_DETAIL = {
     "BoomAngleSensorFrameJoint", "BoomAngleSensorCrankJoint", "BoomAngleSensorBoomJoint",
     "BoomRigidTube_0", "BoomRigidTube_1", "BoomRigidTube_2", "ForkL", "ForkR",
 }
+STOWED_BOOM_ENVELOPE_NODES = {
+    "BaseBoomWeldment", "BaseBoomLowerWear", "MidBoomWeldment",
+    "MidBoomTopPlate", "FlyBoomWeldment",
+}
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def node_world_bounds(document, blob, nodes, parents, node_index):
+    node = nodes[node_index]
+    if "mesh" not in node:
+        raise RuntimeError(f"Cannot measure non-mesh node: {node.get('name')}")
+    minimum = [float("inf")] * 3
+    maximum = [float("-inf")] * 3
+    translation, rotation, scale = world_trs(nodes, parents, node_index)
+    for primitive in document["meshes"][node["mesh"]]["primitives"]:
+        for raw in positions(document, blob, primitive["attributes"]["POSITION"]):
+            transformed = qrot(rotation, tuple(raw[axis] * scale[axis] for axis in range(3)))
+            point = [translation[axis] + transformed[axis] for axis in range(3)]
+            for axis in range(3):
+                minimum[axis] = min(minimum[axis], point[axis])
+                maximum[axis] = max(maximum[axis], point[axis])
+    return minimum, maximum
+
+
+def aabb_clearance(first, second):
+    first_min, first_max = first
+    second_min, second_max = second
+    gaps = [max(second_min[axis] - first_max[axis], first_min[axis] - second_max[axis], 0.0)
+            for axis in range(3)]
+    return math.sqrt(sum(gap * gap for gap in gaps))
+
+
+def descendants(nodes, parents, ancestor_index):
+    result = []
+    for node_index in range(len(nodes)):
+        current = node_index
+        while current in parents:
+            current = parents[current]
+            if current == ancestor_index:
+                result.append(node_index)
+                break
+    return result
 
 
 def main():
@@ -80,6 +122,10 @@ def main():
             raise RuntimeError(f"742 {alias} ordered path aliases drifted")
     if extras.get("release") != config.get("target_release"):
         raise RuntimeError("742 GLB release metadata does not match configuration target")
+    boom_pivot_translation, _, _ = world_trs(nodes, parents, by_name["BoomLiftPivot"])
+    mechanism_pivot = mechanism["boom"]["pivot_m"]
+    if any(abs(actual - expected) > 1e-6 for actual, expected in zip(boom_pivot_translation, mechanism_pivot)):
+        raise RuntimeError(f"742 boom pivot drift: {boom_pivot_translation} != {mechanism_pivot}")
     boom_angles = (nodes[by_name["BoomLiftPivot"]].get("extras") or {}).get("visual_angle_degrees")
     if boom_angles != config["visual_motion_limits"]["boom_angle_degrees"]:
         raise RuntimeError(f"742 boom-angle metadata drift: {boom_angles}")
@@ -135,6 +181,35 @@ def main():
         raise RuntimeError(f"Stowed height drift: {envelope[1]}")
     if not 2.35 <= envelope[2] <= 2.70:
         raise RuntimeError(f"Stowed width drift: {envelope[2]}")
+    boom_bounds = {name: node_world_bounds(document, blob, nodes, parents, by_name[name])
+                   for name in STOWED_BOOM_ENVELOPE_NODES}
+    clearance_results = {}
+    for group_name, ancestor_name, contract_key in (
+        ("cab", "OpenCab", "minimum_stowed_boom_to_cab_clearance_m"),
+        ("engine_hood", "EngineCompartment", "minimum_stowed_boom_to_engine_hood_clearance_m"),
+    ):
+        target_nodes = [node_index for node_index in descendants(nodes, parents, by_name[ancestor_name])
+                        if "mesh" in nodes[node_index]
+                        and not (nodes[node_index].get("extras") or {}).get("is_hit_volume")]
+        candidates = []
+        for boom_name, bounds in boom_bounds.items():
+            for target_index in target_nodes:
+                candidates.append((
+                    aabb_clearance(bounds, node_world_bounds(document, blob, nodes, parents, target_index)),
+                    boom_name,
+                    nodes[target_index].get("name", ""),
+                ))
+        measured, boom_node, target_node = min(candidates)
+        required = mechanism["collision_proxies"][contract_key]
+        if measured + 1e-6 < required:
+            raise RuntimeError(
+                f"Stowed boom/{group_name} clearance {measured:.4f} m misses {required:.4f} m "
+                f"between {boom_node} and {target_node}"
+            )
+        clearance_results[group_name] = {
+            "clearance_m": measured, "minimum_m": required,
+            "boom_node": boom_node, "target_node": target_node,
+        }
     base_lateral_min, base_lateral_max = float("inf"), float("-inf")
     for node_index, node in enumerate(nodes):
         name = node.get("name", "")
@@ -182,6 +257,8 @@ def main():
         "length_less_forks_m": length_less_forks,
         "fork_mesh_extents_length_width_thickness_m": fork_extents,
         "exact_runtime_stow_total_length_with_forks_m": envelope[0],
+        "boom_pivot_world_m": boom_pivot_translation,
+        "stowed_boom_clearance": clearance_results,
         "mechanical_detail_contracts": sorted(REQUIRED_MECHANICAL_DETAIL),
         "evidence_components_resolved_to_exact_nodes": sorted(evidence_components),
         "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor"

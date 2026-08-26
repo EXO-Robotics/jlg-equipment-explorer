@@ -38,6 +38,9 @@ def main():
         f'PVC 2411 accuracy reconstruction / {CONFIG["target_release"]}', 'id="reduced-motion-note"',
         'window.__show742ModuleFailure', 'module-load-failed', 'onerror="window.__show742ModuleFailure()"',
         'Presentation-only mechanism limits.', 'No load, stability, service, training, or safety behavior is simulated.',
+        '<h2 id="operate-title">Machine controls</h2>', '<output id="motion-status">Stowed</output>',
+        'id="stow" type="button">Stow machine</button>',
+        'Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details',
     ], "742 HTML")
     if INDEX.count('aria-describedby="motion-boundary"') != 5:
         raise RuntimeError("Every 742 range must reference the safety boundary")

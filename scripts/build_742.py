@@ -17,6 +17,7 @@ CONFIG = json.loads((ROOT / "machines/742/742.configuration.json").read_text())
 BLEND_PATH = ROOT / "source/blender/742-showcase-v1.0.blend"
 GLB_PATH = ROOT / "assets/models/742.glb"
 MAT = {}
+BOOM_LATERAL_OFFSET_M = 0.30
 
 
 def solved_pose(state):
@@ -299,20 +300,23 @@ def build():
         cylinder(f"TowPin_{z:+.0f}", 0.045, 0.20, (-2.27, 0.63, z), MAT["black"], chassis, component="chassis")
 
     engine = empty("EngineCompartment", owner=chassis, component="hydraulics")
-    wedge("EngineHoodLower", 2.35, 0.72, 0.95, 0.92, (-0.55, 1.42, 0.63), MAT["orange"], engine, "hydraulics")
-    wedge("EngineHoodUpper", 1.72, 0.45, 0.62, 0.88, (-0.83, 2.00, 0.63), MAT["orange"], engine, "hydraulics")
-    box("EngineHoodSpine", (1.42, 0.10, 0.93), (-0.88, 2.25, 0.63), MAT["orange_dark"], engine, 0.04, "hydraulics")
+    # The stowed boom runs beside the open cab, over a low service hood. Keep
+    # the center portion below the boom and the raised cover entirely outboard;
+    # the validator measures both clearances from the exported GLB.
+    wedge("EngineHoodLower", 2.35, 0.50, 0.54, 0.92, (-0.55, 1.10, 0.63), MAT["orange"], engine, "hydraulics")
+    wedge("EngineHoodUpper", 1.50, 0.18, 0.24, 0.50, (-0.83, 1.36, 0.96), MAT["orange"], engine, "hydraulics")
+    box("EngineHoodSpine", (1.34, 0.06, 0.50), (-0.86, 1.52, 0.96), MAT["orange_dark"], engine, 0.025, "hydraulics")
     for slot in range(9):
-        box(f"EngineGrilleSlot_{slot:02d}", (0.035, 0.33, 0.012), (-1.48 + slot * 0.13, 1.78, 1.096), MAT["black"], engine, 0.008, "hydraulics", rotation=(0.14, 0, 0))
-    box("RadiatorGrille", (0.72, 0.46, 0.025), (-2.02, 1.57, 1.105), MAT["black"], engine, 0.025, "hydraulics")
+        box(f"EngineGrilleSlot_{slot:02d}", (0.035, 0.24, 0.012), (-1.48 + slot * 0.13, 1.39, 1.216), MAT["black"], engine, 0.008, "hydraulics", rotation=(0.14, 0, 0))
+    box("RadiatorGrille", (0.72, 0.38, 0.025), (-2.02, 1.40, 1.105), MAT["black"], engine, 0.025, "hydraulics")
     for row in range(4):
         for col in range(7):
-            cylinder(f"GrilleHole_{row}_{col}", 0.016, 0.032, (-2.29 + col * 0.09, 1.43 + row * 0.09, 1.12), MAT["black_soft"], engine, rotation=(math.pi / 2, 0, 0), vertices=8, component="hydraulics")
+            cylinder(f"GrilleHole_{row}_{col}", 0.014, 0.032, (-2.29 + col * 0.09, 1.29 + row * 0.075, 1.12), MAT["black_soft"], engine, rotation=(math.pi / 2, 0, 0), vertices=8, component="hydraulics")
     box("FuelTankCue", (0.64, 0.42, 0.48), (-0.45, 1.03, 0.54), MAT["black_soft"], engine, 0.05, "hydraulics")
     box("HydraulicTankCue", (0.58, 0.48, 0.46), (0.28, 1.02, 0.55), MAT["hydraulic"], engine, 0.04, "hydraulics")
-    box("MainValveBank", (0.38, 0.28, 0.32), (0.18, 1.34, 0.56), MAT["zinc"], engine, 0.025, "hydraulics")
+    box("MainValveBank", (0.38, 0.28, 0.32), (0.18, 1.25, 0.56), MAT["zinc"], engine, 0.025, "hydraulics")
     for index in range(6):
-        cylinder(f"ValveSolenoid_{index}", 0.026, 0.16, (0.02 + index * 0.065, 1.47, 0.56), MAT["black"], engine, rotation=(math.pi / 2, 0, 0), vertices=12, component="hydraulics")
+        cylinder(f"ValveSolenoid_{index}", 0.026, 0.16, (0.02 + index * 0.065, 1.34, 0.56), MAT["black"], engine, rotation=(math.pi / 2, 0, 0), vertices=12, component="hydraulics")
 
     cab = empty("OpenCab", owner=chassis, component="cab")
     cab_center_x, cab_center_z = 0.82, -0.64
@@ -337,7 +341,7 @@ def build():
     box("AcceleratorPedal", (0.16, 0.035, 0.10), (1.25, 1.18, -0.52), MAT["zinc"], cab, 0.012, "cab", rotation=(0,0,0.25))
     for side, z in (("outer",-1.17),("inner",-0.13)):
         beam(f"CabHandrail_{side}", (0.25,1.18,z), (1.48,2.30,z), 0.025, MAT["black"], cab, "cab")
-    for side, z in (("L",-1.28),("R",0.02)):
+    for side, z in (("L",-1.28),("R",-0.18)):
         beam(f"MirrorArm_{side}", (1.34,2.16,z), (1.50,2.22,z), 0.018, MAT["black"], cab, "cab")
         box(f"Mirror_{side}", (0.05,0.18,0.14), (1.55,2.22,z), MAT["glass"], cab, 0.025, "cab")
     for step in range(2):
@@ -348,7 +352,7 @@ def build():
     label("ModelMark_Left", "742", (-1.02,1.75,-1.102), MAT["white"], chassis, 0.24, rotation=(math.pi/2,0,0), component="chassis")
     label("ModelMark_Right", "742", (-1.02,1.75,1.102), MAT["white"], chassis, 0.24, rotation=(math.pi/2,0,math.pi), component="chassis")
 
-    boom_pivot = empty("BoomLiftPivot", (-2.158,1.018,0), frame, "ARROWS", 0.18, "boom")
+    boom_pivot = empty("BoomLiftPivot", (-2.158,1.018,BOOM_LATERAL_OFFSET_M), frame, "ARROWS", 0.18, "boom")
     boom_pivot["visual_angle_degrees"] = [0,69]
     base = empty("BoomBase", owner=boom_pivot, component="boom")
     box("BaseBoomWeldment", (5.55,0.62,0.72), (2.75,0,0), MAT["cream"], base, 0.055, "boom")
@@ -368,7 +372,7 @@ def build():
     label("BoomMark_Left", "JLG  742", (1.75,0.02,-0.366), MAT["black"], base, 0.17, rotation=(math.pi/2,0,0), component="boom")
     label("BoomMark_Right", "JLG  742", (1.75,0.02,0.366), MAT["black"], base, 0.17, rotation=(math.pi/2,0,math.pi), component="boom")
 
-    lift_cyl = empty("LiftCylinder", (0,-0.82,0), frame, component="hydraulics")
+    lift_cyl = empty("LiftCylinder", (0,-0.82,BOOM_LATERAL_OFFSET_M), frame, component="hydraulics")
     beam("LiftCylinderBarrel", (-1.80,0.70,0), (-0.45,1.35,0), 0.150, MAT["hydraulic"], lift_cyl, "hydraulics", 28)
     beam("LiftCylinderRod", (-0.65,1.27,0), (0.25,1.76,0), 0.090, MAT["zinc"], lift_cyl, "hydraulics", 24)
     cylinder("LiftCylinderBasePin", 0.12, 0.58, (-1.80,0.70,0), MAT["zinc"], lift_cyl, component="hydraulics")

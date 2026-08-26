@@ -234,6 +234,8 @@ def main() -> None:
         "solver_maximum_boom_hose_adjacent_direction_change_degrees": kinematic_result["maximum_boom_hose_adjacent_direction_change_degrees"],
         "solver_boom_hose_nominal_centerline_length_m": kinematic_result["boom_hose_nominal_centerline_length_m"],
         "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
+        "actual_glb_stowed_boom_to_cab_clearance_m": asset_result["stowed_boom_clearance"]["cab"]["clearance_m"],
+        "actual_glb_stowed_boom_to_engine_hood_clearance_m": asset_result["stowed_boom_clearance"]["engine_hood"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_m": posed_glb_result["minimum_frame_level_clearance"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_node": posed_glb_result["minimum_frame_level_clearance"]["limiting_node"],
         "actual_posed_glb_named_presets": posed_glb_result["named_presets_posed"],
@@ -325,6 +327,13 @@ def main() -> None:
         raise RuntimeError("742 receipt analytic boom-hose route proof drift")
     if mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
         raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")
+    if (
+        mechanical_proof["actual_glb_stowed_boom_to_cab_clearance_m"] + 1e-6
+        < mechanism["collision_proxies"]["minimum_stowed_boom_to_cab_clearance_m"]
+        or mechanical_proof["actual_glb_stowed_boom_to_engine_hood_clearance_m"] + 1e-6
+        < mechanism["collision_proxies"]["minimum_stowed_boom_to_engine_hood_clearance_m"]
+    ):
+        raise RuntimeError("742 receipt stowed boom cab/hood clearance proof drift")
     neutral_binary = mechanical_proof["actual_posed_glb_neutral_binary_contract"]
     expected_blender_companion = {
         "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",

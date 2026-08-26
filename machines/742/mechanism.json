@@ -4,7 +4,7 @@
   "coordinate_system": {"longitudinal": "+X toward attachment", "vertical": "+Y", "lateral": "+Z machine right"},
   "boom": {
     "sections": 3,
-    "pivot_m": [-2.158, 1.838, 0.0],
+    "pivot_m": [-2.158, 1.838, 0.3],
     "stowed_angle_degrees": 0,
     "maximum_visual_angle_degrees": 69,
     "mid_authored_origin_m": 0.12,
@@ -76,6 +76,9 @@
     "minimum_fork_y_m": 0.08,
     "minimum_boom_overlap_m": 0.18,
     "minimum_rigid_underbody_clearance_m": 0.432,
+    "minimum_stowed_boom_to_cab_clearance_m": 0.04,
+    "minimum_stowed_boom_to_engine_hood_clearance_m": 0.04,
+    "stowed_clearance_authority": "owned reconstructed presentation boundary measured from the exported GLB; not a manufacturer clearance specification",
     "ground_clearance_authority": "published approximate ground clearance; exact manufacturer component locus is unresolved, so validation uses the named reconstructed rigid-underbody proxy set with grounded tires and sweeps the complete displayed frame-level range",
     "base_machine_lateral_bounds_m": [-1.23025, 1.23025],
     "visual_bounds_including_mirrors_m": [-1.35, 1.23025]
