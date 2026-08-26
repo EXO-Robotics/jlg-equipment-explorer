@@ -1,0 +1,31 @@
+.topbar { grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr); }
+.topbar-center { min-width: 0; display: grid; justify-items: center; gap: 6px; }
+.machine-tabs { display: flex; align-items: stretch; border: 1px solid var(--line); background: rgba(16, 18, 17, .58); }
+.machine-tabs a { min-width: 58px; min-height: 26px; display: flex; align-items: center; justify-content: center; padding: 0 10px; color: var(--muted); text-decoration: none; font: 700 8px/1 "Courier New", monospace; letter-spacing: .1em; text-transform: uppercase; transition: background-color .18s, color .18s; }
+.machine-tabs a + a { border-left: 1px solid var(--line); }
+.machine-tabs a:hover { color: var(--paper); background: rgba(255, 255, 255, .06); }
+.machine-tabs a[aria-current="page"] { color: var(--ink); background: var(--accent); }
+
+@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
+  :root { --header: 100px; }
+  .topbar { height: calc(var(--header) + env(safe-area-inset-top)); grid-template-columns: 1fr auto; grid-template-rows: 58px 42px; align-items: center; padding: env(safe-area-inset-top) 16px 0; }
+  .wordmark { grid-column: 1; grid-row: 1; }
+  .icon-button { grid-column: 2; grid-row: 1; }
+  .topbar-center { grid-column: 1 / -1; grid-row: 2; align-self: stretch; width: calc(100% + 32px); margin-left: -16px; gap: 0; }
+  .topbar-center .prototype-label { display: none; }
+  .machine-tabs { width: 100%; height: 42px; border-width: 1px 0 0; background: rgba(16, 18, 17, .88); }
+  .machine-tabs a { flex: 1 1 0; min-width: 0; min-height: 42px; padding: 0 8px; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
+  :root { --header: 58px; }
+  .topbar { height: var(--header); grid-template-columns: 1fr auto 1fr; grid-template-rows: 1fr; padding: 0 16px; }
+  .wordmark { display: none; }
+  .topbar-center { grid-column: 2; grid-row: 1; align-self: center; width: auto; margin: 0; }
+  .machine-tabs { width: auto; height: 42px; border: 1px solid var(--line); }
+  .machine-tabs a { flex: 0 0 auto; min-width: 58px; min-height: 40px; }
+  .icon-button { grid-column: 3; grid-row: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) { .machine-tabs a { transition: none; } }
+@media (forced-colors: active) { .machine-tabs a[aria-current="page"] { color: HighlightText; background: Highlight; } }

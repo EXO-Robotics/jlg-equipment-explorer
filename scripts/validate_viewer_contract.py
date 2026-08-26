@@ -12,6 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = PROJECT_ROOT / "index.html"
 REDIRECT_PATH = PROJECT_ROOT / "600s/index.html"
 STYLE_PATH = PROJECT_ROOT / "viewer.css"
+MACHINE_TABS_STYLE_PATH = PROJECT_ROOT / "viewer/machine-tabs.css"
 VIEWER_PATH = PROJECT_ROOT / "viewer.js"
 VERSION_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
 PACKAGE_PATH = PROJECT_ROOT / "package.json"
@@ -32,6 +33,7 @@ def main() -> None:
     index = INDEX_PATH.read_text(encoding="utf-8")
     redirect = REDIRECT_PATH.read_text(encoding="utf-8")
     style = STYLE_PATH.read_text(encoding="utf-8")
+    machine_tabs_style = MACHINE_TABS_STYLE_PATH.read_text(encoding="utf-8")
     viewer = VIEWER_PATH.read_text(encoding="utf-8")
     version_source = VERSION_PATH.read_text(encoding="utf-8")
     version_match = re.search(r"SHOWCASE_RELEASE\s*=\s*['\"]([^'\"]+)", version_source)
@@ -72,6 +74,11 @@ def main() -> None:
         "Not an engineering or service reference.",
         "Presentation-only motion limits. Not operational data.",
         ".compact-control { display: grid; }",
+        '<link rel="stylesheet" href="viewer/machine-tabs.css?v=1.0.0">',
+        '<nav class="machine-tabs" aria-label="Machine showcases">',
+        '<a href="./" aria-current="page" aria-label="JLG 600S boom lift showcase">600S</a>',
+        '<a href="./742/" aria-label="JLG 742 telehandler showcase">742</a>',
+        '<a href="./es1930m/" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>',
     ], "HTML accessibility/safety")
     require_tokens(redirect, [
         '<link rel="icon" href="../favicon.ico" type="image/x-icon">',
@@ -99,6 +106,12 @@ def main() -> None:
         ".autonomy-bar",
         f"@media {COMPACT_VIEWPORT_QUERY}",
     ], "CSS accessibility")
+    require_tokens(machine_tabs_style, [
+        ".machine-tabs", 'a[aria-current="page"]', "min-height: 42px",
+        "@media (prefers-reduced-motion: reduce)", "@media (forced-colors: active)",
+    ], "shared machine navigation")
+    if index.count('aria-current="page"') != 1:
+        raise RuntimeError("600S route must expose exactly one current machine link")
 
     require_tokens(viewer, [
         f'const COMPACT_VIEWPORT_QUERY = "{COMPACT_VIEWPORT_QUERY}"',

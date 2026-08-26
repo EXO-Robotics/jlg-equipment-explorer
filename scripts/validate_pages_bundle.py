@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 site = Path(sys.argv[1] if len(sys.argv) > 1 else "_site").resolve()
-workflow_source = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
+workflow_source = (ROOT / ".github/workflows/742-release-certification.yml").read_text(encoding="utf-8")
 package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
 receipt = json.loads((ROOT / "assets/models/742.asset-receipt.json").read_text(encoding="utf-8"))
 posed_runner_source = (ROOT / "scripts/run_742_posed_glb_gate.py").read_text(encoding="utf-8")

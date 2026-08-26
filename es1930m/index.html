@@ -9,6 +9,7 @@
   <link rel="preload" href="../assets/models/es1930m.glb?v=c128b99ceb3a" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="../viewer.css?v=1.0.8">
   <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.8">
+  <link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">
   <script type="importmap">
     {
       "imports": {
@@ -32,7 +33,14 @@
   <main class="interface">
     <header class="topbar">
       <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
-      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.8</div>
+      <div class="topbar-center">
+        <nav class="machine-tabs" aria-label="Machine showcases">
+          <a href="../" aria-label="JLG 600S boom lift showcase">600S</a>
+          <a href="../742/" aria-label="JLG 742 telehandler showcase">742</a>
+          <a href="../es1930m/" aria-current="page" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>
+        </nav>
+        <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.8</div>
+      </div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 

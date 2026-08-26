@@ -8,6 +8,7 @@
   <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="preload" href="assets/models/600s.glb?v=13292e6d742a" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="viewer.css?v=1.1.14">
+  <link rel="stylesheet" href="viewer/machine-tabs.css?v=1.0.0">
   <style>
     @media (max-height: 670px) and (max-width: 800px) {
       .compact-control { display: grid; }
@@ -46,7 +47,14 @@
       <a class="wordmark" href="./" aria-label="Equipment Explorer home">
         <span>Equipment</span><b>Explorer</b>
       </a>
-      <div class="prototype-label">Accuracy reconstruction / 1.1</div>
+      <div class="topbar-center">
+        <nav class="machine-tabs" aria-label="Machine showcases">
+          <a href="./" aria-current="page" aria-label="JLG 600S boom lift showcase">600S</a>
+          <a href="./742/" aria-label="JLG 742 telehandler showcase">742</a>
+          <a href="./es1930m/" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>
+        </nav>
+        <div class="prototype-label">Accuracy reconstruction / 1.1</div>
+      </div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 

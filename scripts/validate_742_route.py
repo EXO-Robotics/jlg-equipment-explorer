@@ -15,6 +15,7 @@ ARTICULATION = (ROOT / "machines/742/articulation.js").read_text()
 STYLE = (ROOT / "viewer/742.css").read_text()
 SHARED_RUNTIME = (ROOT / "viewer/runtime.js").read_text()
 SHARED_STYLE = (ROOT / "viewer/multi-machine.css").read_text()
+MACHINE_TABS_STYLE = (ROOT / "viewer/machine-tabs.css").read_text()
 VERSION = (ROOT / "machines/742/version.js").read_text()
 ASSET = ROOT / "assets/models/742.glb"
 CONFIG = json.loads((ROOT / "machines/742/742.configuration.json").read_text())
@@ -41,7 +42,15 @@ def main():
         '<h2 id="operate-title">Machine controls</h2>', '<output id="motion-status" aria-hidden="true">Stowed</output>',
         'id="stow" type="button">Stow machine</button>',
         'Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details',
+        '<link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">',
+        '<nav class="machine-tabs" aria-label="Machine showcases">',
+        '<a href="../" aria-label="JLG 600S boom lift showcase">600S</a>',
+        '<a href="../742/" aria-current="page" aria-label="JLG 742 telehandler showcase">742</a>',
+        '<a href="../es1930m/" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>',
     ], "742 HTML")
+    require(MACHINE_TABS_STYLE, ['.machine-tabs', 'a[aria-current="page"]', 'min-height: 42px'], "shared machine navigation")
+    if INDEX.count('aria-current="page"') != 1:
+        raise RuntimeError("742 route must expose exactly one current machine link")
     if INDEX.count('aria-describedby="motion-boundary"') != 5:
         raise RuntimeError("Every 742 range must reference the safety boundary")
     if INDEX.count('data-focus=') != 7:
