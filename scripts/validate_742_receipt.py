@@ -40,6 +40,8 @@ CANONICAL_FILES = {
     "pages_deployment_verifier": "scripts/verify_pages_deployment.py",
     "configuration": "machines/742/742.configuration.json",
     "mechanism": "machines/742/mechanism.json",
+    "clearance_obstacles": "machines/742/clearance-obstacles.json",
+    "actual_glb_clearance_validator": "scripts/validate_742_actual_glb_clearance_sweep.py",
     "source_manifest": "docs/research/742/SOURCE_MANIFEST.json",
     "mechanism_evidence": "docs/research/742/MECHANISM_EVIDENCE.json",
     "research_readme": "docs/research/742/README.md",
@@ -85,6 +87,7 @@ AUTOMATED_CHECKS = {
     "es1930m_asset_contract": ("scripts/validate_es1930m_glb.py", []),
     "evidence_ledger": ("scripts/validate_742_evidence.py", ["--manifest-only"]),
     "asset_contract": ("scripts/validate_742_glb.py", []),
+    "actual_glb_clearance_sweep": ("scripts/validate_742_actual_glb_clearance_sweep.py", []),
     "mechanical_kinematics": ("scripts/validate_742_kinematics.py", []),
     "actual_posed_glb": ("scripts/validate_742_portable_posed_glb.py", []),
     "route_contract": ("scripts/validate_742_route.py", []),
@@ -468,6 +471,7 @@ def main() -> None:
     asset_result = checks["asset_contract"]["result"]
     kinematic_result = checks["mechanical_kinematics"]["result"]
     posed_glb_result = checks["actual_posed_glb"]["result"]
+    actual_clearance_result = checks["actual_glb_clearance_sweep"]["result"]
     mechanism = json.loads((ROOT / CANONICAL_FILES["mechanism"]).read_text(encoding="utf-8"))
     steering_linkage = kinematic_result["steering_linkage"]
     expected_mechanical_proof = {
@@ -511,6 +515,7 @@ def main() -> None:
         "solver_maximum_boom_hose_adjacent_direction_change_degrees": kinematic_result["maximum_boom_hose_adjacent_direction_change_degrees"],
         "solver_boom_hose_nominal_centerline_length_m": kinematic_result["boom_hose_nominal_centerline_length_m"],
         "solver_service_line_chassis_clearance_sweep": kinematic_result["service_line_chassis_clearance_sweep"],
+        "actual_glb_rigid_boom_clearance_sweep": actual_clearance_result,
         "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
         "actual_glb_stowed_boom_to_cab_clearance_m": asset_result["stowed_boom_clearance"]["cab"]["clearance_m"],
         "actual_glb_stowed_boom_to_engine_hood_clearance_m": asset_result["stowed_boom_clearance"]["engine_hood"]["clearance_m"],
@@ -627,8 +632,19 @@ def main() -> None:
         service_sweep["samples"] != service_contract["lift_samples"] * service_contract["telescope_samples"]
         or min(service_sweep["minimum_cab_surface_clearance_m"], service_sweep["minimum_engine_proxy_surface_clearance_m"])
         < service_contract["minimum_clearance_m"]
+        or service_sweep["obstacle_fixture_path"] != "machines/742/clearance-obstacles.json"
+        or service_sweep["obstacle_fixture_sha256"] != digest(ROOT / CANONICAL_FILES["clearance_obstacles"])
+        or service_sweep["obstacle_asset_sha256"] != expected_mechanical_proof["asset_sha256"]
     ):
         raise RuntimeError("742 receipt dense service-line/chassis clearance sweep drift")
+    actual_sweep = expected_mechanical_proof["actual_glb_rigid_boom_clearance_sweep"]
+    if (
+        actual_sweep["gate_kind"] != "actual_exported_glb_dense_rigid_boom_clearance_sweep"
+        or actual_sweep["samples"] != service_contract["lift_samples"] * service_contract["telescope_samples"]
+        or actual_sweep["minimum_cab_surface_clearance_m"] + 1e-6 < mechanism["collision_proxies"]["minimum_stowed_boom_to_cab_clearance_m"]
+        or actual_sweep["minimum_engine_surface_clearance_m"] + 1e-6 < mechanism["collision_proxies"]["minimum_stowed_boom_to_engine_hood_clearance_m"]
+    ):
+        raise RuntimeError("742 receipt actual exported-GLB rigid-boom clearance sweep drift")
     neutral_binary = expected_mechanical_proof["actual_posed_glb_neutral_binary_contract"]
     expected_blender_companion = {
         "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",

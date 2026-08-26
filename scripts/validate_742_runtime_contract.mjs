@@ -8,6 +8,7 @@ const runtime = fs.readFileSync(path.join(root, "viewer/742-runtime.js"), "utf8"
 const index = fs.readFileSync(path.join(root, "742/index.html"), "utf8");
 const style = fs.readFileSync(path.join(root, "viewer/742.css"), "utf8");
 const articulation = fs.readFileSync(path.join(root, "machines/742/articulation.js"), "utf8");
+const machine = fs.readFileSync(path.join(root, "machines/742/machine.js"), "utf8");
 
 function requireTokens(source, tokens, label) {
   const missing = tokens.filter((token) => !source.includes(token));
@@ -38,13 +39,22 @@ requireTokens(runtime, [
   "resetPerformanceWindow", "visibility-hidden", "visibility-visible",
   "const windowMs = sorted.reduce((sum, sample) => sum + sample, 0)",
   "sorted.filter((sample) => sample >= 250).length",
+  'showcaseStarted !== null && !reducedMotion && presentation.status !== "Stowed"',
+  '? "Positioning"',
 ], "runtime");
 requireTokens(index, [
   'id="motion-announcement" aria-live="polite" aria-atomic="true"',
   'id="error" role="alert" aria-live="assertive" tabindex="-1"',
   "window.__show742ModuleFailure", "module-load-failed", 'onerror="window.__show742ModuleFailure()"',
   "countBootFrame", "bootTimeoutMs", '"bootstrap-timeout"', "dataset.terminalFrameCount", "dataset.terminalFrameSource",
+  '<output id="motion-status" aria-hidden="true">',
+  '<output id="lift-value" aria-hidden="true">',
+  '<output id="telescope-value" aria-hidden="true">',
+  '<output id="tilt-value" aria-hidden="true">',
+  '<output id="steer-value" aria-hidden="true">',
+  '<output id="level-value" aria-hidden="true">',
 ]);
+requireTokens(machine, ['status: stowed ? "Stowed" : "Holding"'], "machine presentation");
 if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
   throw new Error("Per-frame outputs must not be live regions");
 }

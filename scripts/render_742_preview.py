@@ -167,6 +167,60 @@ for name, (location, target) in views.items():
     scene.render.filepath = str(OUTPUT_DIR / f"742-{name}.png")
     bpy.ops.render.render(write_still=True)
 
+# Exact exported-GLB clearance datums requested by the mechanical review. The
+# endpoints use the limiting AABB faces reported by validate_742_glb.py.
+clearance_mat = bpy.data.materials.new("ClearanceDatumMaterial")
+clearance_mat.diffuse_color = (1.0, 0.03, 0.01, 1.0)
+clearance_mat.use_nodes = True
+clearance_mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (1.0, 0.03, 0.01, 1.0)
+clearance_mat.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = (1.0, 0.01, 0.0, 1.0)
+clearance_mat.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 2.5
+clearance_label_mat = bpy.data.materials.new("ClearanceDatumLabelMaterial")
+clearance_label_mat.diffuse_color = (1.0, 0.72, 0.08, 1.0)
+clearance_label_mat.use_nodes = True
+clearance_label_mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (1.0, 0.72, 0.08, 1.0)
+clearance_label_mat.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = (1.0, 0.45, 0.02, 1.0)
+clearance_label_mat.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 1.8
+
+cab_datum = [
+    proof_beam("BoomCabClearanceDatum", (0.82, 0.1050270915, 1.80), (0.82, 0.0599998349, 1.80), .006, clearance_mat),
+    proof_beam("BoomCabClearanceCabTick", (0.70, 0.1050270915, 1.80), (0.94, 0.1050270915, 1.80), .006, clearance_mat),
+    proof_beam("BoomCabClearanceBoomTick", (0.70, 0.0599998349, 1.80), (0.94, 0.0599998349, 1.80), .006, clearance_mat),
+    proof_sphere("BoomCabClearanceCabFace", (0.82, 0.1050270915, 1.80), .010, clearance_mat),
+    proof_sphere("BoomCabClearanceBoomFace", (0.82, 0.0599998349, 1.80), .010, clearance_mat),
+]
+cab_label = proof_label("BoomCabClearanceLabel", "45.027 mm\nBOOM / CAB HANDRAIL", (1.736, 0.532, 2.261), .027, clearance_label_mat)
+camera.data.lens = 62
+camera.location = (3.2, 2.4, 2.45)
+point_at(camera, (0.82, 0.08, 1.80))
+face_labels([cab_label], camera)
+scene.render.filepath = str(OUTPUT_DIR / "742-boom-cab-clearance-datum.png")
+bpy.ops.render.render(write_still=True)
+for obj in [*cab_datum, cab_label]:
+    obj.hide_render = True
+
+hood_cutaway = [bpy.data.objects[name] for name in ("EngineHoodLower", "EngineHoodUpper", "EngineHoodSpine")]
+for obj in hood_cutaway:
+    obj.hide_render = True
+hose_datum = [
+    proof_beam("HoseValveClearanceDatum", (0.20, -0.48, 1.3900001336), (0.20, -0.48, 1.4240000354), .005, clearance_mat),
+    proof_beam("HoseValveClearanceValveTick", (0.10, -0.48, 1.3900001336), (0.30, -0.48, 1.3900001336), .005, clearance_mat),
+    proof_beam("HoseValveClearanceHoseTick", (0.10, -0.48, 1.4240000354), (0.30, -0.48, 1.4240000354), .005, clearance_mat),
+    proof_sphere("HoseValveClearanceValveFace", (0.20, -0.48, 1.3900001336), .009, clearance_mat),
+    proof_sphere("HoseValveClearanceHoseFace", (0.20, -0.48, 1.4240000354), .009, clearance_mat),
+]
+hose_label = proof_label("HoseValveClearanceLabel", "34.000 mm\nHOSE TO MAIN VALVE BANK", (0.70, -1.35, 1.67), .043, clearance_label_mat)
+camera.data.lens = 64
+camera.location = (1.8, -3.0, 2.05)
+point_at(camera, (0.20, -0.48, 1.405))
+face_labels([hose_label], camera)
+scene.render.filepath = str(OUTPUT_DIR / "742-hose-valve-clearance-datum.png")
+bpy.ops.render.render(write_still=True)
+for obj in [*hose_datum, hose_label]:
+    obj.hide_render = True
+for obj in hood_cutaway:
+    obj.hide_render = False
+
 pose_circle_steering(1.0)
 steering_label_mat = bpy.data.materials.new("SteeringProofLabel")
 steering_label_mat.use_nodes = True
@@ -514,6 +568,7 @@ for target in datum_objects:
 # bytes rather than a single-session encoder artifact.
 owned_render_names = (
     "742-boom-pivot-angle-sensor.png",
+    "742-boom-cab-clearance-datum.png",
     "742-cab-close.png",
     "742-circle-steering-plan.png",
     "742-crab-steering-plan.png",
@@ -521,6 +576,7 @@ owned_render_names = (
     "742-maximum-lift-forks-close.png",
     "742-maximum-lift-level-forks.png",
     "742-maximum-reach-24in-load-center.png",
+    "742-hose-valve-clearance-datum.png",
     "742-rear-steering-linkage.png",
     "742-retract-chain-routing-cutaway.png",
     "742-front-double-ended-steer-cylinder-cutaway.png",

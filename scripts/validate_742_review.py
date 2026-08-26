@@ -103,6 +103,16 @@ EXTENDED_VISUAL_RENDER_CONTRACT = (
         "path": "docs/review/742/boom-pivot-angle-sensor.png",
         "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
     },
+    {
+        "semantic_id": "rigid_boom_cab_clearance_datum",
+        "path": "docs/review/742/boom-cab-clearance-datum.png",
+        "claim": "The exact exported-GLB limiting boom-to-inner-cab-handrail clearance datum is visible and labeled 45.027 mm.",
+    },
+    {
+        "semantic_id": "boom_hose_valve_bank_clearance_datum",
+        "path": "docs/review/742/hose-valve-clearance-datum.png",
+        "claim": "The exact exported-GLB boom-hose-to-main-valve-bank clearance datum is visible and labeled 34.000 mm.",
+    },
 )
 FORBIDDEN_EXTENDED_VISUAL_RENDER_PATHS = {
     "docs/review/742/front-steering-limited-plan.png",
@@ -324,6 +334,8 @@ def validate_review_manifest(path: Path, candidate_tree_sha256: str, canonical_p
         entry = manifest["gates"][gate]
         if set(entry) != {"status", "artifact", "notes"} or entry["status"] != "pass" or not isinstance(entry["notes"], str) or not entry["notes"].strip():
             raise RuntimeError(f"742 review gate is not explicitly passed: {gate}")
+        if re.search(r"\b(?:pending|recapture-required|not reviewed|awaiting review)\b", entry["notes"], re.IGNORECASE):
+            raise RuntimeError(f"742 passed review gate contains unresolved review language: {gate}")
         expected_path = EXPECTED_ARTIFACT_PATHS[gate]
         if entry.get("artifact", {}).get("path") != expected_path or expected_path in seen_artifacts:
             raise RuntimeError(f"742 review gate must use its distinct canonical artifact: {gate}")

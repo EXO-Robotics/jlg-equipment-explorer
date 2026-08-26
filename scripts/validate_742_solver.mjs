@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 import { JLG742_MECHANISM, solve742ForkVertices, solve742RigGeometry, solve742State } from "../machines/742/solver.js";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+
+const clearanceFixtureBytes=readFileSync(new URL("../machines/742/clearance-obstacles.json",import.meta.url));
+const clearanceObstacles=JSON.parse(clearanceFixtureBytes);
+if(clearanceObstacles.configuration_id!=="742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"||clearanceObstacles.asset_sha256!=="a4c7617fa880117a25fc65ee186ccb5081b65a631dbeacfdf8e22afd0e797eb8")throw new Error("GLB-derived clearance obstacle fixture identity drift");
 
 const dist=([a,b,c],[x,y,z])=>Math.hypot(a-x,b-y,c-z);
 const sub=([a,b,c],[x,y,z])=>[a-x,b-y,c-z];
@@ -28,21 +34,14 @@ let minimumServiceCabClearance=Infinity,minimumServiceEngineClearance=Infinity,s
 let maxEndpointStep=0,priorGrid=new Map();
 const liftValues=Array.from({length:21},(_,i)=>i/20),telescopeValues=Array.from({length:21},(_,i)=>i/20);
 const tiltValues=[-1,-.5,0,.25,.5,.75,1],levelValues=Array.from({length:9},(_,i)=>-1+i/4),steerValues=[-1,-.5,0,.5,1],modes=["circle","crab","front"];
-const cabInnerHandrail=[[.25,1.18,-.13],[1.48,2.30,-.13]],cabHandrailRadius=.025;
-const engineObstacleAabbs=[
-  {name:"EngineHoodLower",bounds:[[-1.725,.77,.17],[.625,1.31,1.09]]},
-  {name:"EngineHoodUpper",bounds:[[-1.58,1.27,.71],[-.08,1.51,1.21]]},
-  {name:"EngineHoodSpine",bounds:[[-1.53,1.49,.71],[-.19,1.55,1.21]]},
-  {name:"MainValveBank",bounds:[[-.01,1.11,.40],[.37,1.39,.72]]},
-  {name:"ValveSolenoids",bounds:[[-.006,1.26,.534],[.371,1.42,.586]]},
-];
+const cabObstacleAabbs=clearanceObstacles.cab,engineObstacleAabbs=clearanceObstacles.engine;
 
 for(let liftIndex=0;liftIndex<=200;liftIndex+=1)for(let telescopeIndex=0;telescopeIndex<=200;telescopeIndex+=1){
   const state=solve742State({lift:liftIndex/200,telescope:telescopeIndex/200,tilt:0,steer:0,level:0,steerMode:"circle"}),geometry=solve742RigGeometry(state);serviceClearanceSamples+=1;
   for(const[name,localSegment]of Object.entries(geometry.beams)){
     if(!name.startsWith("BoomHose_")&&!name.startsWith("RetractChain_")&&!name.startsWith("ExtendChain_"))continue;
-    const radius=name.startsWith("BoomHose_")?.014:.012,worldSegment=boomWorldSegment(localSegment,state.boomAngle),cabClearance=segmentDistance(worldSegment,cabInnerHandrail)-radius-cabHandrailRadius;
-    if(cabClearance<minimumServiceCabClearance){minimumServiceCabClearance=cabClearance;serviceCabLimiter={node:name,lift:state.lift,telescope:state.telescope};}
+    const radius=name.startsWith("BoomHose_")?.014:.012,worldSegment=boomWorldSegment(localSegment,state.boomAngle);
+    for(const obstacle of cabObstacleAabbs){const cabClearance=segmentAabbSurfaceClearance(worldSegment,obstacle.bounds,radius);if(cabClearance<minimumServiceCabClearance){minimumServiceCabClearance=cabClearance;serviceCabLimiter={node:name,obstacle:obstacle.name,lift:state.lift,telescope:state.telescope};}}
     for(const obstacle of engineObstacleAabbs){const engineClearance=segmentAabbSurfaceClearance(worldSegment,obstacle.bounds,radius);if(engineClearance<minimumServiceEngineClearance){minimumServiceEngineClearance=engineClearance;serviceEngineLimiter={node:name,obstacle:obstacle.name,lift:state.lift,telescope:state.telescope};}}
   }
 }
@@ -118,5 +117,5 @@ output.steering_linkage.crab_parallelism_boundary="maximum dense-sweep within-ax
 output.minimum_boom_hose_to_rigid_tube_surface_clearance_m=minimumBoomHoseTubeClearance;
 output.maximum_boom_hose_adjacent_direction_change_degrees=maximumBoomHoseDirectionChange*180/Math.PI;
 output.boom_hose_nominal_centerline_length_m=JLG742_MECHANISM.boomHoseTotalLength;
-output.service_line_chassis_clearance_sweep={samples:serviceClearanceSamples,lift_samples:201,telescope_samples:201,minimum_cab_surface_clearance_m:minimumServiceCabClearance,minimum_engine_proxy_surface_clearance_m:minimumServiceEngineClearance,cab_limiting_pair:serviceCabLimiter,engine_limiting_pair:serviceEngineLimiter,segments:"every BoomHose, ExtendChain, and RetractChain segment",authority:"owned reconstructed chassis proxies; not manufacturer clearance authority"};
+output.service_line_chassis_clearance_sweep={samples:serviceClearanceSamples,lift_samples:201,telescope_samples:201,minimum_cab_surface_clearance_m:minimumServiceCabClearance,minimum_engine_proxy_surface_clearance_m:minimumServiceEngineClearance,cab_limiting_pair:serviceCabLimiter,engine_limiting_pair:serviceEngineLimiter,segments:"every BoomHose, ExtendChain, and RetractChain segment",obstacle_fixture_path:"machines/742/clearance-obstacles.json",obstacle_fixture_sha256:createHash("sha256").update(clearanceFixtureBytes).digest("hex"),obstacle_asset_sha256:clearanceObstacles.asset_sha256,obstacle_nodes:[...cabObstacleAabbs,...engineObstacleAabbs].map(({name})=>name),authority:"dense sweep against exact named obstacle AABBs measured from the bound exported GLB; owned reconstruction, not manufacturer clearance authority"};
 process.stdout.write(JSON.stringify(output));

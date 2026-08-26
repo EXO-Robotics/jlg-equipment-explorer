@@ -17,6 +17,7 @@ GLB = ROOT / "assets/models/742.glb"
 BLEND = ROOT / "source/blender/742-showcase-v1.0.blend"
 CONFIG_PATH = ROOT / "machines/742/742.configuration.json"
 MECHANISM_PATH = ROOT / "machines/742/mechanism.json"
+CLEARANCE_OBSTACLES_PATH = ROOT / "machines/742/clearance-obstacles.json"
 EVIDENCE_PATH = ROOT / "docs/research/742/MECHANISM_EVIDENCE.json"
 VERSION = ROOT / "machines/742/version.js"
 EXPECTED_ID = "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"
@@ -99,11 +100,28 @@ def main():
         raise RuntimeError("742 configuration identity drift")
     document, blob = load_glb(GLB)
     glb_hash = digest(GLB)
+    clearance_obstacles = json.loads(CLEARANCE_OBSTACLES_PATH.read_text(encoding="utf-8"))
+    if (
+        clearance_obstacles.get("schema_version") != "1.0.0"
+        or clearance_obstacles.get("configuration_id") != EXPECTED_ID
+        or clearance_obstacles.get("asset_sha256") != glb_hash
+    ):
+        raise RuntimeError("742 GLB-derived clearance obstacle fixture identity drift")
     match = re.search(r'JLG742_ASSET_SHA256\s*=\s*"([0-9a-f]{64})"', VERSION.read_text())
     if not match or match.group(1) != glb_hash:
         raise RuntimeError("742 cache identity does not match GLB")
     nodes = document.get("nodes") or []
     by_name, parents = index_nodes(nodes)
+    fixture_obstacles = [*clearance_obstacles.get("cab", []), *clearance_obstacles.get("engine", [])]
+    if not fixture_obstacles or len({record.get("name") for record in fixture_obstacles}) != len(fixture_obstacles):
+        raise RuntimeError("742 GLB-derived clearance obstacle fixture set drift")
+    for record in fixture_obstacles:
+        name, expected_bounds = record.get("name"), record.get("bounds")
+        if name not in by_name or not isinstance(expected_bounds, list) or len(expected_bounds) != 2:
+            raise RuntimeError(f"742 clearance obstacle fixture node drift: {name}")
+        actual_bounds = node_world_bounds(document, blob, nodes, parents, by_name[name])
+        if any(abs(actual_bounds[edge][axis] - expected_bounds[edge][axis]) > 1e-6 for edge in range(2) for axis in range(3)):
+            raise RuntimeError(f"742 clearance obstacle fixture no longer matches exported GLB node: {name}")
     root_index = by_name.get("742_ROOT")
     if root_index is None or root_index in parents:
         raise RuntimeError("742_ROOT is missing or parented")
@@ -278,6 +296,7 @@ def main():
         raise RuntimeError("742 GLB exceeds four-megabyte delivery ceiling")
     print(json.dumps({
         "status":"PASS", "configuration_id":EXPECTED_ID, "asset":str(GLB.relative_to(ROOT)), "sha256":glb_hash,
+        "clearance_obstacle_fixture": {"path": str(CLEARANCE_OBSTACLES_PATH.relative_to(ROOT)), "sha256": digest(CLEARANCE_OBSTACLES_PATH), "nodes": [record["name"] for record in fixture_obstacles]},
         "source_blend_sha256":digest(BLEND), "bytes":GLB.stat().st_size, "nodes":len(nodes),
         "meshes":len(document.get("meshes", [])), "triangles":triangles, "triangle_budget":TRIANGLE_BUDGET,
         "interaction_volumes":sorted(config["interaction_volumes"]), "visible_bounds_min_m":minimum,

@@ -72,6 +72,16 @@
         "semantic_id": "rigid_boom_angle_sensor_crank_and_link",
         "path": "docs/review/742/boom-pivot-angle-sensor.png",
         "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible."
+      },
+      {
+        "semantic_id": "rigid_boom_cab_clearance_datum",
+        "path": "docs/review/742/boom-cab-clearance-datum.png",
+        "claim": "The exact exported-GLB limiting boom-to-inner-cab-handrail clearance datum is visible and labeled 45.027 mm."
+      },
+      {
+        "semantic_id": "boom_hose_valve_bank_clearance_datum",
+        "path": "docs/review/742/hose-valve-clearance-datum.png",
+        "claim": "The exact exported-GLB boom-hose-to-main-valve-bank clearance datum is visible and labeled 34.000 mm."
       }
     ]
   },

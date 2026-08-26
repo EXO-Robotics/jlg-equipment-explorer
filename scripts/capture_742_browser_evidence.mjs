@@ -400,7 +400,7 @@ async function projectedStowMachineBounds(page, model, minimumEdgeMarginCssPx, {
     const definitions = {
       "742": {
         asset: "/assets/models/742.glb",
-        machineModule: "/machines/742/machine.js?v=1.1.7",
+        machineModule: "/machines/742/machine.js?v=1.1.8",
         cameraKind: "azimuth-polar",
       },
       es1930m: {

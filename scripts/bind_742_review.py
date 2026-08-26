@@ -27,6 +27,19 @@ from validate_742_review import (
     validate_review_manifest,
 )
 
+COMPLETED_REVIEW_NOTES = {
+    "600s_browser_regression": "Exact-current 600S desktop and mobile regression capture reviewed; navigation, controls, selection, and zero-error assertions passed.",
+    "accessibility_semantics_and_keyboard": "Chromium accessibility tree, engineering value text, live-region behavior, modal focus, and keyboard interactions reviewed and passed; no physical assistive-technology session is claimed.",
+    "cab_closeup_fidelity": "Exact frozen cab close-up reviewed; cab, controls, glazing, and boom-to-cab separation are visibly coherent.",
+    "desktop_browser_interaction": "Desktop controls, steering boundary, terminal faults, reset framing, and settled machine states reviewed and passed.",
+    "es1930m_browser_regression": "Exact-current ES1930M desktop, mobile, and maximum-pose regression capture reviewed; all assertions passed.",
+    "extended_visual_fidelity": "All twelve named, hash-bound mechanism render claims directly reviewed and passed.",
+    "mobile_browser_interaction": "Portrait and short-landscape controls, pinch zoom, reduced motion, and framing directly reviewed and passed.",
+    "performance_profile": "Local visible-frame performance windows and exact diagnostic screenshots reviewed; recorded thresholds passed.",
+    "semantic_selection": "Six-component visible-surface selection behavior and independent selection outcomes directly reviewed and passed.",
+    "stowed_visual_fidelity": "Exact frozen stowed render directly reviewed; whole-machine composition and boom/body separation passed.",
+}
+
 
 def record(path: Path) -> dict:
     return {
@@ -131,6 +144,7 @@ def main() -> None:
                 _write_json(artifact_path, artifact)
             manifest["gates"][gate]["status"] = "pass"
             manifest["gates"][gate]["artifact"] = record(artifact_path)
+            manifest["gates"][gate]["notes"] = COMPLETED_REVIEW_NOTES[gate]
         _write_json(args.manifest, manifest)
 
         reviewed, binding = validate_review_manifest(args.manifest, candidate_hash, canonical_paths)

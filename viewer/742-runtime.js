@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.7";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.8";
 
-const ROUTE_RELEASE = "1.6.4";
+const ROUTE_RELEASE = "1.6.5";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -628,8 +628,11 @@ function setControlOutputs(solved = machine.solveState(state)) {
   document.body.dataset.zone = presentation.zone;
   const centered = Math.abs(state.steer) <= 0.01;
   document.body.dataset.steerModeAlignment = centered ? "centered" : "center-required";
-  motionStatus.value = presentation.status;
-  return presentation;
+  const status = showcaseStarted !== null && !reducedMotion && presentation.status !== "Stowed"
+    ? "Positioning"
+    : presentation.status;
+  motionStatus.value = status;
+  return Object.freeze({ ...presentation, status });
 }
 function applyControls() {
   const solved = machine.solveState(state);
