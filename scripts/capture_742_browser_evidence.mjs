@@ -555,16 +555,19 @@ async function captureSelection742() {
   await settle742Camera(page);
   assert((await page.locator("body").getAttribute("data-selected-component")) === null, "reset did not clear selection");
   const selectionAfterReset = await page.locator("body").getAttribute("data-selected-component");
+  const pinch = await pinch742Canvas(page);
+  assert((await page.locator("body").getAttribute("data-selected-component")) === null && !(await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))), "pinch triggered an unintended selection/modal");
+  await page.locator("#reset-view").click();
+  await settle742Camera(page);
   const screenshotFraming = await page.locator("body").evaluate((node) => ({
     reset_pressed: true,
+    reset_after_pinch: true,
     selected_component: node.dataset.selectedComponent || null,
     camera_distance_m: Number(node.dataset.orbitCameraDistanceM),
     desired_distance_m: Number(node.dataset.orbitDesiredDistanceM),
     pose_min_distance_m: Number(node.dataset.orbitMinDistanceM),
   }));
   assert(screenshotFraming.selected_component === null && Number.isFinite(screenshotFraming.camera_distance_m) && Number.isFinite(screenshotFraming.desired_distance_m) && Number.isFinite(screenshotFraming.pose_min_distance_m) && screenshotFraming.camera_distance_m >= screenshotFraming.pose_min_distance_m && screenshotFraming.desired_distance_m >= screenshotFraming.pose_min_distance_m && Math.abs(screenshotFraming.camera_distance_m - screenshotFraming.desired_distance_m) <= 0.03, `semantic screenshot reset framing failed: ${JSON.stringify(screenshotFraming)}`);
-  const pinch = await pinch742Canvas(page);
-  assert((await page.locator("body").getAttribute("data-selected-component")) === null && !(await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))), "pinch triggered an unintended selection/modal");
   const dom = await snapshot(page);
   const body = Object.fromEntries((await page.locator("body").evaluate((node) => Object.entries(node.dataset))));
   const rays = JSON.parse(body.selectionOverlapOutcomes);

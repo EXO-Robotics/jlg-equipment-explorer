@@ -912,13 +912,14 @@ def validate_complete_browser_artifact(
             raise RuntimeError("742 semantic Reset View did not clear selection")
         framing = assertions["screenshot_framing"]
         framing_fields = {
-            "outcome", "reset_pressed", "selected_component", "camera_distance_m",
+            "outcome", "reset_pressed", "reset_after_pinch", "selected_component", "camera_distance_m",
             "desired_distance_m", "pose_min_distance_m",
         }
         if (
             set(framing or {}) != framing_fields
             or framing.get("outcome") != "pass"
             or framing.get("reset_pressed") is not True
+            or framing.get("reset_after_pinch") is not True
             or framing.get("selected_component") is not None
             or any(
                 isinstance(framing.get(name), bool)
