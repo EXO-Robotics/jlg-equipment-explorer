@@ -19,8 +19,10 @@ REQUIRED = {
     "index.html", "600s/index.html", "742/index.html", "es1930m/index.html",
     "viewer.css", "viewer/machine-tabs.css", "viewer.js", "viewer/runtime.js",
     "viewer/742.css", "viewer/742-runtime.js", "assets/models/600s.glb",
-    "assets/models/es1930m.glb", "assets/models/742.glb", "pages-build-manifest.json",
+    "assets/models/es1930m.glb", "assets/models/742.glb",
+    "assets/social/equipment-explorer-pages-thumbnail.png", "pages-build-manifest.json",
 }
+SOCIAL_IMAGE = "https://exo-robotics.github.io/jlg-equipment-explorer/assets/social/equipment-explorer-pages-thumbnail.png"
 
 
 missing = sorted(path for path in REQUIRED if not (SITE / path).is_file())
@@ -36,6 +38,10 @@ for path, (boom, telehandler, scissor, current) in ROUTES.items():
             raise RuntimeError(f"Machine navigation target missing from {path}: {href}")
     if f'href="{current}" aria-current="page"' not in source:
         raise RuntimeError(f"Current machine marker drift: {path}")
+    if source.count(f'<meta property="og:image" content="{SOCIAL_IMAGE}">') != 1:
+        raise RuntimeError(f"Open Graph thumbnail drift: {path}")
+    if source.count(f'<meta name="twitter:image" content="{SOCIAL_IMAGE}">') != 1:
+        raise RuntimeError(f"Large-card thumbnail drift: {path}")
 
 for forbidden in ("assets/models/742.asset-receipt.json", "docs/review/742", "_private-evidence", "_attestations"):
     if (SITE / forbidden).exists():
