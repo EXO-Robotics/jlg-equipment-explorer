@@ -510,7 +510,12 @@ def main() -> None:
         "solver_minimum_boom_hose_to_rigid_tube_surface_clearance_m": kinematic_result["minimum_boom_hose_to_rigid_tube_surface_clearance_m"],
         "solver_maximum_boom_hose_adjacent_direction_change_degrees": kinematic_result["maximum_boom_hose_adjacent_direction_change_degrees"],
         "solver_boom_hose_nominal_centerline_length_m": kinematic_result["boom_hose_nominal_centerline_length_m"],
+        "solver_service_line_chassis_clearance_sweep": kinematic_result["service_line_chassis_clearance_sweep"],
         "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
+        "actual_glb_stowed_boom_to_cab_clearance_m": asset_result["stowed_boom_clearance"]["cab"]["clearance_m"],
+        "actual_glb_stowed_boom_to_engine_hood_clearance_m": asset_result["stowed_boom_clearance"]["engine_hood"]["clearance_m"],
+        "actual_glb_stowed_service_line_to_cab_clearance_m": asset_result["stowed_service_line_clearance"]["cab"]["clearance_m"],
+        "actual_glb_stowed_service_line_to_engine_clearance_m": asset_result["stowed_service_line_clearance"]["engine"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_m": posed_glb_result["minimum_frame_level_clearance"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_node": posed_glb_result["minimum_frame_level_clearance"]["limiting_node"],
         "actual_posed_glb_named_presets": posed_glb_result["named_presets_posed"],
@@ -604,6 +609,26 @@ def main() -> None:
         raise RuntimeError("742 receipt analytic boom-hose route proof drift")
     if expected_mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < expected_mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
         raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")
+    if (
+        expected_mechanical_proof["actual_glb_stowed_boom_to_cab_clearance_m"] + 1e-6
+        < mechanism["collision_proxies"]["minimum_stowed_boom_to_cab_clearance_m"]
+        or expected_mechanical_proof["actual_glb_stowed_boom_to_engine_hood_clearance_m"] + 1e-6
+        < mechanism["collision_proxies"]["minimum_stowed_boom_to_engine_hood_clearance_m"]
+    ):
+        raise RuntimeError("742 receipt stowed boom cab/hood clearance proof drift")
+    if min(
+        expected_mechanical_proof["actual_glb_stowed_service_line_to_cab_clearance_m"],
+        expected_mechanical_proof["actual_glb_stowed_service_line_to_engine_clearance_m"],
+    ) + 1e-6 < mechanism["collision_proxies"]["minimum_stowed_service_line_to_cab_or_engine_clearance_m"]:
+        raise RuntimeError("742 receipt stowed service-line cab/engine clearance proof drift")
+    service_sweep = expected_mechanical_proof["solver_service_line_chassis_clearance_sweep"]
+    service_contract = mechanism["collision_proxies"]["service_line_clearance_sweep"]
+    if (
+        service_sweep["samples"] != service_contract["lift_samples"] * service_contract["telescope_samples"]
+        or min(service_sweep["minimum_cab_surface_clearance_m"], service_sweep["minimum_engine_proxy_surface_clearance_m"])
+        < service_contract["minimum_clearance_m"]
+    ):
+        raise RuntimeError("742 receipt dense service-line/chassis clearance sweep drift")
     neutral_binary = expected_mechanical_proof["actual_posed_glb_neutral_binary_contract"]
     expected_blender_companion = {
         "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",
