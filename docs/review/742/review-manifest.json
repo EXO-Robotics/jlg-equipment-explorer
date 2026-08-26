@@ -1,110 +1,19 @@
 {
-  "candidate_tree_sha256": "7a55c8691511cebc5b4f4923ff6bd3cf271279dbf82a65e407100925dc2b61c1",
+  "schema_version": "3.0.0",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": {
-      "name": "Chromium",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
-      "version": "151.0.7922.34"
-    },
-    "os": {
-      "build": "25F84",
-      "name": "macOS",
-      "version": "26.5.2"
-    }
-  },
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
+  "environment": null,
   "gates": {
-    "600s_browser_regression": {
-      "artifact": {
-        "bytes": 30445,
-        "path": "docs/review/742/600s-browser-regression.json",
-        "sha256": "d94c50d378d2341a4f04ab97b293adbf88b3707a2497f6e21c30d28ce7400b30"
-      },
-      "notes": "Fresh interaction, responsive, modal, gesture, and reduced-motion capture required.",
-      "status": "pass"
-    },
-    "accessibility_semantics_and_keyboard": {
-      "artifact": {
-        "bytes": 26099,
-        "path": "docs/review/742/accessibility-semantics-keyboard.json",
-        "sha256": "9517d5b9673b4bb05222ff19322932f287b8736c631a89961970de4c6d54c691"
-      },
-      "notes": "Fresh DOM/accessibility-tree and keyboard capture required; no AT session claimed.",
-      "status": "pass"
-    },
-    "cab_closeup_fidelity": {
-      "artifact": {
-        "bytes": 1505832,
-        "path": "docs/review/742/cab-close.png",
-        "sha256": "9e5b2bf74b7f2cac6841021a73fe555d9cac4998c56d72124a2efd2c0877de69"
-      },
-      "notes": "Repeat the final cab close-up review after the mechanical freeze.",
-      "status": "pass"
-    },
-    "desktop_browser_interaction": {
-      "artifact": {
-        "bytes": 49560,
-        "path": "docs/review/742/desktop-browser-interaction.json",
-        "sha256": "2d01a237138e36d26a6a06b5c953acca5752f43c2fc1638e3f51499f4fd8bf16"
-      },
-      "notes": "Fresh schema-2 browser capture required.",
-      "status": "pass"
-    },
-    "es1930m_browser_regression": {
-      "artifact": {
-        "bytes": 27059,
-        "path": "docs/review/742/es1930m-browser-regression.json",
-        "sha256": "0e0c28fcc0b2643434f07f903771537834257e2279352b9a3471536344218d99"
-      },
-      "notes": "Fresh exact ES1930M 1.0.4 interaction, responsive, modal, gesture, auto-route, and reduced-motion capture required.",
-      "status": "pass"
-    },
-    "extended_visual_fidelity": {
-      "artifact": {
-        "bytes": 1377,
-        "path": "docs/review/742/extended-visual-fidelity.json",
-        "sha256": "d7c31a405c972d53fb5a7beb95c7246ab34c38f864ee48f2d5f1f77389e40af3"
-      },
-      "notes": "Repeat all six mechanism-specific view reviews against the frozen renders.",
-      "status": "pass"
-    },
-    "mobile_browser_interaction": {
-      "artifact": {
-        "bytes": 33663,
-        "path": "docs/review/742/mobile-browser-interaction.json",
-        "sha256": "c649b75bd93f3ae96380342b683a28e0216a81729b4b9b212c56a97cacedee47"
-      },
-      "notes": "Fresh portrait and short-landscape captures required.",
-      "status": "pass"
-    },
-    "performance_profile": {
-      "artifact": {
-        "bytes": 11039,
-        "path": "docs/review/742/performance-profile.json",
-        "sha256": "cb5f1c047f264bd2adf2bdcb80f8669713cf976ec046d88ca707f79db36e9b59"
-      },
-      "notes": "Fresh raw visible-frame interval arrays required.",
-      "status": "pass"
-    },
-    "semantic_selection": {
-      "artifact": {
-        "bytes": 29598,
-        "path": "docs/review/742/semantic-selection.json",
-        "sha256": "5f0abac08b48e518553f384d0de9b1336f331273760074a257fb60597fff49b1"
-      },
-      "notes": "Fresh independent expected-versus-observed selection trace required.",
-      "status": "pass"
-    },
-    "stowed_visual_fidelity": {
-      "artifact": {
-        "bytes": 1278204,
-        "path": "docs/review/742/stowed-front-left.png",
-        "sha256": "9685042f41b8ad146df51078402f2d53b097037377442753ba84cc1c17803e98"
-      },
-      "notes": "Repeat against the final fourth-wave mechanical render.",
-      "status": "pass"
-    }
-  },
-  "reviewed_source_commit": "dff15ef16e49741ad1cc379d247f0c96166b37fc",
-  "schema_version": "3.0.0"
+    "stowed_visual_fidelity": {"status": "pending", "artifact": null, "notes": "Repeat against the final Wave 5 stowed render."},
+    "extended_visual_fidelity": {"status": "pending", "artifact": null, "notes": "Repeat all six mechanism-specific view reviews against the final Wave 5 renders."},
+    "cab_closeup_fidelity": {"status": "pending", "artifact": null, "notes": "Repeat the final cab close-up review after the Wave 5 freeze."},
+    "desktop_browser_interaction": {"status": "pending", "artifact": null, "notes": "Fresh committed-runner schema-2 browser capture required."},
+    "mobile_browser_interaction": {"status": "pending", "artifact": null, "notes": "Fresh portrait and short-landscape capture with actual camera-distance pinch proof required."},
+    "accessibility_semantics_and_keyboard": {"status": "pending", "artifact": null, "notes": "Fresh DOM/accessibility-tree and keyboard capture required; no physical AT session claimed."},
+    "semantic_selection": {"status": "pending", "artifact": null, "notes": "Fresh visible-canvas frontmost-surface and independent ray outcomes required."},
+    "performance_profile": {"status": "pending", "artifact": null, "notes": "Fresh coherent raw visible-frame interval arrays required."},
+    "600s_browser_regression": {"status": "pending", "artifact": null, "notes": "Fresh exact 600S 1.1.10 interaction, responsive, modal, gesture, and reduced-motion capture required."},
+    "es1930m_browser_regression": {"status": "pending", "artifact": null, "notes": "Fresh exact ES1930M runtime 1.0.5 interaction, responsive, modal, gesture, auto-route, and reduced-motion capture required."}
+  }
 }

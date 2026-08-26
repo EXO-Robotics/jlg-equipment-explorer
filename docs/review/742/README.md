@@ -1,18 +1,19 @@
 # 742 local review evidence
 
-This directory is intentionally pending during the fourth-wave mechanical and
-runtime repair. `review-manifest.json` does not pass a human gate until the final
-candidate is committed, every required observation is repeated, and the binder
-semantically validates the captured evidence against that exact commit and
-candidate-tree digest.
+This directory is prepared for the final Wave 5 candidate review.
+`review-manifest.json` does not pass a human gate until the pending candidate is
+committed, every required observation is repeated, and the binder semantically
+validates the captured evidence against that exact commit and candidate-tree
+digest.
 
-The eight allowlisted Blender PNGs represent eight distinct views: stowed, cab
-close-up, maximum lift, maximum-lift fork close-up, maximum reach,
-retract-chain cutaway, rigid steering-linkage cutaway, and boom-angle-sensor
-close-up. The extended visual gate uses six of those views—both maximum-lift
-views, maximum reach, retract-chain cutaway, steering cutaway, and sensor
-close-up. Stowed and cab close-up remain separate gates. Each render is
-independently authored and bound
+The eleven allowlisted Blender PNGs represent eleven distinct views: stowed,
+cab close-up, maximum lift, maximum-lift fork close-up, maximum reach,
+retract-chain cutaway, front steering-linkage cutaway, rear steering-linkage
+cutaway, circle-steering plan, crab-steering plan, and boom-angle-sensor
+close-up. The extended visual gate uses six mechanism-specific views—both
+maximum-lift views, maximum reach, retract-chain cutaway, front steering
+cutaway, and sensor close-up. Stowed and cab close-up remain separate gates.
+Each render is independently authored and bound
 by exact path, SHA-256, byte count, and PNG dimensions in
 `OWNED_RENDER_ALLOWLIST.json`.
 
@@ -34,14 +35,15 @@ records must contain:
 - exact browser version, user agent, OS version/build, and actually observable
   WebGL GPU metadata (or an explicit unavailable reason);
 - DOM snapshots, browser accessibility-tree snapshots where applicable,
-  ordered interaction transcripts, exact screenshots, and an automation trace;
+  structured assertion outcomes, exact screenshots, and a hash-bound automation
+  trace produced by the committed capture runner;
 - at least 180 raw visible-tab frame intervals at desktop, portrait, and short
   landscape, with p95 and worst values recomputed from those arrays;
 - independent expected semantic-selection winners for all 15 component pairs,
   compared with 15 separately observed winners;
 - interaction, responsive layout, modal keyboard/focus, drag, pinch, and
   reduced-motion regression checks for the exact current 600S release and exact
-  ES1930M 1.0.4 release.
+  ES1930M runtime release 1.0.5 (with its separately receipted 1.0.4 asset).
 
 The local performance gate is deliberately bounded: each identified local
 browser profile must have at least 180 raw samples, p95 no greater than 50 ms,
