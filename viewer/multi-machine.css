@@ -3,6 +3,9 @@
 .evidence-chip { display: inline-flex; padding: 5px 7px; border: 1px solid rgba(243,165,31,.45); color: var(--accent); font-size: 7px; letter-spacing: .12em; }
 body[data-machine="es1930m"][data-zone="outdoor-limit"] #lift-value { color: var(--accent); }
 body[data-machine="es1930m"][data-zone="indoor-only"] #lift-value { color: #ff8268; }
+body[data-machine="es1930m"][data-presentation-mode="running"] .status i { box-shadow: 0 0 0 5px rgba(243,165,31,.12), 0 0 18px rgba(243,165,31,.8); }
+body[data-machine="es1930m"] .autonomy-bar { border-left: 2px solid var(--accent); }
+body[data-machine="es1930m"] .autonomy-summary small { max-width: 225px; }
 @media (max-width: 800px) {
   .identity-long h1 { font-size: clamp(44px, 13vw, 67px); letter-spacing: -.065em; }
   .evidence-chip { display: none; }

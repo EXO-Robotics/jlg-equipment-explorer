@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import argparse
 import hashlib
 import json
 import subprocess
@@ -25,12 +24,15 @@ FILES = {
     "mechanism_evidence": ROOT / "docs/research/es1930m/MECHANISM_EVIDENCE.json",
     "visual_comparison": ROOT / "docs/research/es1930m/VISUAL_COMPARISON.md",
     "review_renderer": ROOT / "scripts/render_es1930m_preview.py",
+    "review_evidence": ROOT / "docs/research/es1930m/REVIEW_EVIDENCE.json",
 }
 RUNTIME_FILES = [
     ROOT / "es1930m/index.html",
     ROOT / "viewer.css",
     ROOT / "viewer/multi-machine.css",
     ROOT / "viewer/runtime.js",
+    ROOT / "viewer/pointer-gestures.mjs",
+    ROOT / "viewer/presentation-route.mjs",
     ROOT / "machines/es1930m/machine.js",
     ROOT / "machines/es1930m/articulation.js",
     ROOT / "machines/es1930m/inspector.js",
@@ -54,15 +56,6 @@ def runtime_digest() -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--deployment-url")
-    parser.add_argument("--deployment-run")
-    parser.add_argument("--reviewed-source-commit")
-    args = parser.parse_args()
-    deployment_values = [args.deployment_url, args.deployment_run, args.reviewed_source_commit]
-    if any(deployment_values) and not all(deployment_values):
-        raise RuntimeError("Deployment URL, run, and reviewed source commit must be supplied together")
-    deployed = all(deployment_values)
     for label, path in FILES.items():
         if not path.is_file():
             raise RuntimeError(f"Missing {label}: {path}")
@@ -82,10 +75,25 @@ def main():
     ))
     if kinematics.get("status") != "PASS":
         raise RuntimeError("ES1930M kinematic validator did not pass")
+    reviews = json.loads(FILES["review_evidence"].read_text(encoding="utf-8"))
+    current_runtime = runtime_digest()
+    current_asset = digest(FILES["asset"])
+    review_flags = {}
+    for gate, record in reviews.get("gates", {}).items():
+        review_flags[gate] = bool(
+            record.get("status") == "pass"
+            and record.get("reviewed_runtime_sha256") == current_runtime
+            and record.get("reviewed_asset_sha256") == current_asset
+            and str(record.get("method", "")).strip()
+            and str(record.get("evidence", "")).strip()
+        )
+    release_ready = bool(review_flags) and all(review_flags.values())
     receipt = {
         "schema_version": "1.0.0",
-        "release": "1.0.0" if deployed else "1.0.0-candidate",
-        "release_status": "release" if deployed else "candidate_not_deployable",
+        # Artifact identity is stable across deployment review; release_status
+        # alone records whether the exact public bytes have been approved.
+        "release": "1.0.3",
+        "release_status": "release" if release_ready else "candidate_not_deployable",
         "written": str(date.today()),
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
         "files": {
@@ -94,7 +102,7 @@ def main():
         },
         "runtime": {
             "files": [str(path.relative_to(ROOT)) for path in RUNTIME_FILES],
-            "sha256": runtime_digest(),
+            "sha256": current_runtime,
         },
         "asset_metrics": {
             "nodes": len(nodes),
@@ -109,38 +117,15 @@ def main():
             "levels": kinematics["levels"],
             "maximum_link_length_error_m": kinematics["maximum_link_length_error_m"],
             "maximum_shared_pivot_error_m": kinematics["maximum_shared_pivot_error_m"],
-            "maximum_symmetry_error_m": kinematics["maximum_symmetry_error_m"],
+            "maximum_rear_fixed_anchor_error_m": kinematics["maximum_rear_fixed_anchor_error_m"],
             "maximum_translation_per_0_01_sample_m": kinematics["maximum_translation_per_0_01_sample_m"],
             "cylinder_observed_stroke_m": kinematics["cylinder_observed_stroke_m"],
             "collision_proxy_assertions": kinematics["collision_proxy_assertions"],
             "collision_proxy_status": kinematics["collision_proxy_status"],
         },
-        "review_flags": {
-            "evidence_hashes_pass": True,
-            "cross_pvc_quarantine_pass": True,
-            "asset_contract_pass": True,
-            "kinematic_samples_pass": True,
-            "stowed_silhouette_reviewed": True,
-            "raised_pose_browser_reviewed": True,
-            "extension_browser_reviewed": True,
-            "steering_closeup_reviewed": True,
-            "accessible_control_names_pass": True,
-            "desktop_browser_zero_errors": True,
-            "mobile_view_reviewed": True,
-            "selection_and_focus_reviewed": True,
-            "performance_reviewed": True,
-            "deployed_pages_reviewed": deployed,
-            "600s_regression_suite_pass": True
-        },
+        "review_flags": review_flags,
         "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority."
     }
-    if deployed:
-        receipt["deployment_review"] = {
-            "url": args.deployment_url,
-            "run": args.deployment_run,
-            "reviewed_source_commit": args.reviewed_source_commit,
-            "reviewed": str(date.today()),
-        }
     RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"status": "PASS", "receipt": str(RECEIPT.relative_to(ROOT)), "sha256": digest(RECEIPT)}, indent=2))
 

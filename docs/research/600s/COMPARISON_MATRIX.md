@@ -38,7 +38,9 @@ The query poses are presentation controls, not manufacturer operating positions.
 - Most important remaining visual gaps: the viewer's evidence-safe 0.90 m telescope cap cannot reproduce full outreach; the official molded covers are smoother and more compound-curved; the current tire chevron and sidewall are richer; the boom head/pivot package, exact label fields, and hose loops remain simplified.
 - The v1.0 additions improve recognition without crossing authority boundaries: independently typeset nominative marks, a generic independently authored hazard-band cue, restrained per-part finish variation, and visible moving hit-volume outlines.
 
-Because the fixed-camera paired overlay and full-reach reconstruction are not complete, the receipt remains a mechanical pass rather than full visual acceptance.
+The receipt may record showcase runtime acceptance when its mechanical and browser gates pass, but
+it does not establish factory-exact visual equivalence. Fixed-camera paired overlays and a
+manufacturer-authoritative full-reach reconstruction remain open evidence gates.
 
 ## v1.1 mechanism-authority pass — 2026-08-25
 

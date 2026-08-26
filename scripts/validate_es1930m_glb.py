@@ -20,6 +20,35 @@ VERSION_PATH = ROOT / "machines/es1930m/version.js"
 CONFIGURATION_ID = "ES1930M-PVC2404-US-STD-FR-FLA130-NM"
 TRIANGLE_BUDGET = 60_000
 HIT_VOLUMES = {"Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"}
+REQUIRED_MECHANISM_NODES = {
+    "LowerSlideBlock_RIGHT_PLANE", "LowerSlideBlock_LEFT_PLANE",
+    "UpperSlideBlock_RIGHT_PLANE", "UpperSlideBlock_LEFT_PLANE",
+    "KickerArmWeb_SCISSOR_CYLINDER", "KickerArmWeb_CYLINDER_ROLLER", "KickerArmWeb_ROLLER_SCISSOR",
+    "PIVOT_KICKER_TO_SCISSOR", "PIVOT_KICKER_ROLLER", "PIVOT_LIFT_CYLINDER_UPPER",
+    "TopRail_-1", "TopRail_1", "MidRail_-1", "MidRail_1",
+    "ExtensionTopRail_-1", "ExtensionTopRail_1", "ExtensionMidRail_-1", "ExtensionMidRail_1",
+    "MainToeBoard_-1", "MainToeBoard_1", "ExtensionToeBoard_-1", "ExtensionToeBoard_1",
+    "ExtensionFrontToeBoard",
+    "FrontWheelRoll_R", "FrontWheelRoll_L", "RearWheelRoll_R", "RearWheelRoll_L",
+}
+REQUIRED_CONTROL_NODES = {
+    "PlatformControlCarrier", "PlatformControlCarrierBack", "PlatformControlCarrierLeftGuard",
+    "PlatformControlCarrierRightGuard", "PlatformControlCarrierFloor", "PlatformControlCarrierTopLip",
+    "PlatformControlCarrierRailHook", "PlatformControlModule", "PlatformControlHousing",
+    "PlatformControlFaceBezel", "PlatformControlFace", "PlatformIndicatorLegendPanel", "PlatformBatteryBarField",
+    "PlatformIndoorCapacityIndicator", "PlatformOutdoorCapacityIndicator", "PlatformSystemFaultIndicator",
+    "PlatformBatteryDischargeIndicatorRed", "PlatformBatteryDischargeIndicatorGreen1",
+    "PlatformBatteryDischargeIndicatorGreen2", "PlatformTiltIndicator", "PlatformOverloadIndicator",
+    "PlatformEmergencyStop", "PlatformEmergencyStopBase", "PlatformEmergencyStopMushroom",
+    "PlatformEmergencyStopCollar", "PlatformLiftDriveSelector", "PlatformHornButton",
+    "PlatformIndoorOutdoorSelector", "PlatformDriveSpeedSelector", "PlatformUSBPort",
+    "PlatformAlarm", "PlatformAlarmBody", "PlatformAlarmGrille", "PlatformJoystick",
+    "PlatformJoystickMountPlate", "PlatformJoystickBootRing_1", "PlatformJoystickBootRing_2",
+    "PlatformJoystickBootRing_3", "PlatformJoystickGrip", "PlatformJoystickTopRocker",
+    "PlatformJoystickTrigger", "PlatformControlCable", "PlatformControlCableConnector",
+    "PlatformControlCableLead", "PlatformControlCableDrop", "PlatformPhoneCradle",
+    "PlatformPhoneCradleBack", "PlatformPhoneCradleBottom", "PlatformPhoneCradleLipLeft", "PlatformPhoneCradleLipRight",
+}
 REQUIRED_EDGES = {
     "Chassis": "ES1930M_ROOT",
     "ScissorAssembly": "ES1930M_ROOT",
@@ -34,6 +63,30 @@ REQUIRED_EDGES = {
     "ExtensionRails": "ExtensionDeck",
     "SelfClosingGate": "ExtensionDeck",
     "PlatformControls": "PlatformAssembly",
+    "PlatformControlCarrier": "PlatformControls",
+    "PlatformControlModule": "PlatformControls",
+    "PlatformEmergencyStop": "PlatformControlModule",
+    "PlatformAlarm": "PlatformControlModule",
+    "PlatformJoystick": "PlatformControlModule",
+    "PlatformControlCable": "PlatformControls",
+    "PlatformPhoneCradle": "PlatformControlCarrier",
+    "FrontWheelRoll_R": "SteerSpindle_R",
+    "FrontWheelRoll_L": "SteerSpindle_L",
+    "RearWheelRoll_R": "Chassis",
+    "RearWheelRoll_L": "Chassis",
+    "TopRail_-1": "FixedRails",
+    "TopRail_1": "FixedRails",
+    "MidRail_-1": "FixedRails",
+    "MidRail_1": "FixedRails",
+    "MainToeBoard_-1": "FixedRails",
+    "MainToeBoard_1": "FixedRails",
+    "ExtensionTopRail_-1": "ExtensionRails",
+    "ExtensionTopRail_1": "ExtensionRails",
+    "ExtensionMidRail_-1": "ExtensionRails",
+    "ExtensionMidRail_1": "ExtensionRails",
+    "ExtensionToeBoard_-1": "ExtensionDeck",
+    "ExtensionToeBoard_1": "ExtensionDeck",
+    "ExtensionFrontToeBoard": "ExtensionDeck",
     **{f"Level{index:02d}": "ScissorAssembly" for index in range(1, 6)},
 }
 
@@ -145,6 +198,23 @@ def visible_bounds(document, blob, nodes, parents):
     return minimum, maximum
 
 
+def node_bounds(document, blob, nodes, parents, index):
+    node = nodes[index]
+    if "mesh" not in node:
+        raise RuntimeError(f"Node has no mesh: {node.get('name')}")
+    minimum = [float("inf")] * 3
+    maximum = [float("-inf")] * 3
+    translation, rotation, scale = world_trs(nodes, parents, index)
+    for primitive in document["meshes"][node["mesh"]]["primitives"]:
+        for raw in positions(document, blob, primitive["attributes"]["POSITION"]):
+            transformed = qrot(rotation, tuple(raw[axis] * scale[axis] for axis in range(3)))
+            point = tuple(translation[axis] + transformed[axis] for axis in range(3))
+            for axis in range(3):
+                minimum[axis] = min(minimum[axis], point[axis])
+                maximum[axis] = max(maximum[axis], point[axis])
+    return minimum, maximum
+
+
 def descends_from(index, ancestor, parents):
     current = index
     while current in parents:
@@ -170,8 +240,16 @@ def main():
     if "ES1930M_ROOT" not in by_name or by_name["ES1930M_ROOT"] in parents:
         raise RuntimeError("Missing or parented ES1930M_ROOT")
     root_extras = nodes[by_name["ES1930M_ROOT"]].get("extras") or {}
-    if root_extras.get("configuration_id") != CONFIGURATION_ID or root_extras.get("pvc") != "2404":
+    if (
+        root_extras.get("configuration_id") != CONFIGURATION_ID
+        or root_extras.get("pvc") != "2404"
+        or root_extras.get("release") != "1.0.3"
+    ):
         raise RuntimeError("GLB root evidence identity mismatch")
+    if missing := sorted(REQUIRED_MECHANISM_NODES - by_name.keys()):
+        raise RuntimeError(f"Missing mechanism nodes: {missing}")
+    if missing := sorted(REQUIRED_CONTROL_NODES - by_name.keys()):
+        raise RuntimeError(f"Missing platform control nodes: {missing}")
     for child, expected_parent in REQUIRED_EDGES.items():
         if child not in by_name:
             raise RuntimeError(f"Missing required node: {child}")
@@ -193,9 +271,52 @@ def main():
         raise RuntimeError(f"Expected 20 explicit scissor link groups, found {len(link_groups)}")
     if len(pivot_markers) < 68:
         raise RuntimeError(f"Expected at least 68 pivot markers, found {len(pivot_markers)}")
+    controls_root = by_name["PlatformControls"]
+    control_meshes = [
+        name for name, index in by_name.items()
+        if "mesh" in nodes[index]
+        and descends_from(index, controls_root, parents)
+        and (nodes[index].get("extras") or {}).get("component") == "controls"
+    ]
+    if len(control_meshes) < 62:
+        raise RuntimeError(f"Platform control detail regression: expected at least 62 tagged meshes, found {len(control_meshes)}")
+    if any(name.startswith("PlatformControlCableCoil") for name in by_name):
+        raise RuntimeError("Standard frozen configuration must not include the optional coiled control cable")
     for name in HIT_VOLUMES:
         if name not in by_name or not (nodes[by_name[name]].get("extras") or {}).get("is_hit_volume"):
             raise RuntimeError(f"Missing declared interaction volume: {name}")
+
+    rail_contract = mechanism["deck_extension"]
+    travel = rail_contract["travel_m"]
+    minimum_required_overlap = rail_contract["minimum_deployed_overlap_m"]
+    minimum_lateral_clearance = rail_contract["minimum_nested_lateral_clearance_m"]
+    continuity_samples = (0.0, 0.5, 1.0)
+    guard_pairs = []
+    for side in (-1, 1):
+        for fixed_name, moving_name in (
+            (f"TopRail_{side}", f"ExtensionTopRail_{side}"),
+            (f"MidRail_{side}", f"ExtensionMidRail_{side}"),
+            (f"MainToeBoard_{side}", f"ExtensionToeBoard_{side}"),
+        ):
+            fixed_bounds = node_bounds(document, blob, nodes, parents, by_name[fixed_name])
+            moving_bounds = node_bounds(document, blob, nodes, parents, by_name[moving_name])
+            fixed_front = fixed_bounds[1][0]
+            moving_rear = moving_bounds[0][0]
+            fixed_lateral = abs((fixed_bounds[0][2] + fixed_bounds[1][2]) / 2)
+            moving_lateral = abs((moving_bounds[0][2] + moving_bounds[1][2]) / 2)
+            if moving_lateral >= fixed_lateral - 0.010:
+                raise RuntimeError(f"Moving guard is not nested inboard: {moving_name}")
+            lateral_clearance = max(
+                fixed_bounds[0][2] - moving_bounds[1][2],
+                moving_bounds[0][2] - fixed_bounds[1][2],
+                0.0,
+            )
+            if lateral_clearance + 1e-6 < minimum_lateral_clearance:
+                raise RuntimeError(f"Guard solids intersect laterally: {fixed_name}/{moving_name} clearance={lateral_clearance}")
+            overlaps = [fixed_front - (moving_rear + travel * sample) for sample in continuity_samples]
+            if min(overlaps) + 1e-6 < minimum_required_overlap:
+                raise RuntimeError(f"Guard continuity opens at extension: {fixed_name}/{moving_name} overlaps={overlaps}")
+            guard_pairs.append({"fixed": fixed_name, "moving": moving_name, "overlap_m": overlaps, "lateral_clearance_m": lateral_clearance})
 
     triangles = 0
     for mesh in document.get("meshes", []):
@@ -243,6 +364,7 @@ def main():
         "visible_bounds_max_m": maximum,
         "visible_envelope_xyz_m": envelope,
         "deployed_extension_envelope_m": deployed_length,
+        "guard_continuity_pairs": guard_pairs,
     }, indent=2, sort_keys=True))
 
 

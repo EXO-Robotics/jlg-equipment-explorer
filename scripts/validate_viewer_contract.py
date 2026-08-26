@@ -51,6 +51,7 @@ def main() -> None:
         'aria-describedby="inspector-copy" inert',
         "Not an engineering or service reference.",
         "Presentation-only motion limits. Not operational data.",
+        ".compact-control { display: grid; }",
     ], "HTML accessibility/safety")
 
     if index.count('aria-describedby="motion-boundary"') != 4:
@@ -79,7 +80,8 @@ def main() -> None:
         'window.addEventListener("unhandledrejection", recordRuntimeError)',
         "runSelectionVolumeSelfTest",
         'dataset.selectionSelftest = result',
-        'dataset.lastSelectionVolume = hit.object.name',
+        'dataset.canvasInteraction = "navigation-only"',
+        'function focusComponent(component)',
         "prepareHitVolumes",
         "updateHitVolumeEmphasis",
         'focusKeys = { "1": "chassis", "2": "turntable", "3": "boom", "4": "platform" }',
@@ -107,7 +109,30 @@ def main() -> None:
         'AUTONOMY_OVERRIDE_MS = 6000',
         'setAutonomyEnabled(false)',
         'rig.rollingWheels?.forEach',
+        '"Wheel_FL_Roll"',
+        "rig.visualHoses?.forEach",
+        "function ackermannSteeringAngles",
+        "function updatePresentationLighting",
+        "lightTarget.position.copy(lightingAnchor)",
+        "activeOverrideKeys(now)",
+        'document.body.dataset.autonomyOverrides = overrideKeys.join(",") || "none"',
+        "autonomy.wheelRotation = 0",
+        "node.localToWorld(new THREE.Vector3(2.2, 0, 0))",
+        "innerWidth <= 800 ? 24 : 18",
+        'dataset.wheelRollHierarchy',
+        'dataset.hoseSolverCount',
+        'dataset.steerLeftDeg',
+        'dataset.steerRightDeg',
+        'const visualLimit = THREE.MathUtils.degToRad(28)',
     ], "viewer runtime")
+
+    for forbidden in (
+        "focusComponent(hit.component",
+        "dataset.lastSelectionVolume",
+        'canvas.style.cursor = hit ? "pointer"',
+    ):
+        if forbidden in viewer:
+            raise RuntimeError(f"Canvas must remain navigation-only; found {forbidden!r}")
 
     print(json.dumps({
         "status": "PASS",

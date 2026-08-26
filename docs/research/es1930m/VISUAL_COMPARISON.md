@@ -35,7 +35,7 @@ The render hashes identify one local review run, not release artifacts. Regenera
 - Platform rails are square-profile presentation geometry and do not claim measured tube section, weld geometry or exact gate hardware.
 - The lift-cylinder/kicker installation follows verified topology and published cylinder stroke, but its anchor coordinates and leverage are reconstructed.
 - Blind-side compartment interiors lack enough first-party photography for photogrammetric acceptance. Their system identity is sourced from manuals; their exact spatial placement is not.
-- Steering spindle response is a visually reconstructed unequal-angle curve. Published steering-cylinder stroke and turning envelope are authoritative; rendered wheel angles are not.
+- Steering spindle angles are deliberately held neutral. Only the published 80 mm-per-direction actuator presentation is active until a PVC 2404 spindle/link graph supports a defensible wheel-angle curve.
 
 ## Acceptance boundary
 

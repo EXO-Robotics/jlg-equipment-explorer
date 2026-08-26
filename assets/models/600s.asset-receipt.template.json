@@ -23,7 +23,7 @@
   "telescope_overlap_at_100_m": 1.207,
   "triangle_count": null,
   "node_count": null,
-  "required_parent_edges": 100,
+  "required_parent_edges": 112,
   "interaction_volumes": [
     "Chassis_Hit",
     "Turntable_Hit",
@@ -37,7 +37,9 @@
     "mesh_count": null,
     "visible_bounds_min_m": null,
     "visible_bounds_max_m": null,
-    "telescope_overlap_stowed_m": null
+    "telescope_overlap_stowed_m": null,
+    "powertrack_push_tube_stowed_min_overlap_m": null,
+    "powertrack_push_tube_full_travel_min_overlap_m": null
   },
   "review": {
     "loads_without_console_error": false,
@@ -54,5 +56,5 @@
       "silhouette_scope": null
     }
   },
-  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Lift, steering, tower/tension, and platform-level linkages use two-anchor visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
+  "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Wheel roll is separated from steer/axle transforms, while the inner/outer visual steering split remains reconstructed. Lift, steering, tower/tension, platform-level, and steering-hose endpoint linkages use visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
 }

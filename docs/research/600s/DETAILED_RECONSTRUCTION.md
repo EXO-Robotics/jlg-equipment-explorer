@@ -101,7 +101,7 @@ hit volumes, identity export scale, configuration/provenance extras, published s
 platform size, wheelbase, clearance, tailswing, triangle budget, and telescope overlap. Safari proof
 has covered real-GLB load, lift, extension, stow, platform leveling, mobile controls, and the component
 inspector. The authored GLB contains 408 mesh records for traceable detail, then the viewer merges only
-same-material geometry inside rigid motion groups. The observed v1.1 runtime contains 82 visible meshes
+same-material geometry inside rigid motion groups. The current v1.1 runtime contains 92 visible meshes
 (including independently authored model/product marks and generic hazard-band cues),
 while front steering, boom lift, telescope extension, platform leveling, lift-cylinder solving, and all
 five hit volumes remain separate.
@@ -133,6 +133,18 @@ These pitch and sample-count values are presentation geometry only; they are not
 link dimensions or physical link count. Fresh desktop stowed, 20-degree raised-boom, and full-
 extension views loaded the real GLB with 82 optimized visible meshes, five-of-five selection tests,
 and zero instrumented runtime errors. Mobile remains unreviewed for this exact hash.
+
+Runtime 1.1.6 realism proof covers exact GLB `e830ae3a5504` and source blend
+`1cb3a5d7df4e`. Four explicit tire-roll transforms keep the steer knuckles, rear axle ends,
+cylinder anchors, tie-rod anchors, and fixed hose legs from tumbling with the wheels. The visual
+front-steer presentation now derives bounded inner/outer angles from the 2.50 m wheelbase and
+authored wheel-center spacing; those angles remain reconstructed, not operating data. Both steer
+hoses use endpoint-follow visual legs, the moving powertrack run and bend inherit the same MidBoom
+stage, and the platform-up check is now enforced at 0, 36, and 72 degrees. Fresh local browser
+review loaded 92 optimized visible meshes with zero instrumented errors, passed all five selection
+tests, exercised autonomous drive, simultaneous Boom + Steer override reporting, origin-reset stow,
+full visual telescope travel, and reviewed collapsed/expanded 390 × 844 plus expanded 390 × 650
+mobile layouts with Steering still reachable. This is local acceptance, not deployed Pages proof.
 
 Remaining acceptance work is narrower: a captured Chrome performance trace and fixed-camera paired
 source overlays. The source comparison also confirms that the 0.90 m evidence-safe telescope cap cannot

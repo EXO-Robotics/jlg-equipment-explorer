@@ -56,6 +56,9 @@ def main() -> None:
         fail("Frozen PVC or five-level scissor topology drift")
 
     sources = manifest.get("sources") or []
+    publications = [source.get("publication") for source in sources if source.get("publication")]
+    if len(publications) != len(set(publications)):
+        fail("Source manifest contains duplicate publication identifiers")
     by_publication = {source.get("publication"): source for source in sources if source.get("publication")}
     if missing := sorted(EXPECTED_PRIMARY - by_publication.keys()):
         fail(f"Missing PVC 2404 primary sources: {missing}")
@@ -92,6 +95,16 @@ def main() -> None:
             fail(f"Cross-PVC claim {claim['id']} escaped geometry quarantine")
         if not claim["pages"] or not claim["components"]:
             fail(f"Evidence claim {claim['id']} lacks page/component binding")
+        cited = str(claim["source"]).split("+")
+        if unresolved := sorted(set(cited) - by_publication.keys()):
+            fail(f"Evidence claim {claim['id']} cites unknown publications: {unresolved}")
+        for page in claim["pages"]:
+            if not isinstance(page, int) or page < 1:
+                fail(f"Evidence claim {claim['id']} has invalid page {page!r}")
+            if not any(page <= int(by_publication[publication].get("pages", 0)) for publication in cited):
+                fail(f"Evidence claim {claim['id']} page {page} exceeds every cited publication")
+        if any(by_publication[publication].get("admission") == "quarantined" for publication in cited) and "prohibited" not in claim["geometry_use"]:
+            fail(f"Evidence claim {claim['id']} uses a quarantined publication for geometry")
 
     local_checks = []
     if args.sources_dir:
@@ -103,10 +116,13 @@ def main() -> None:
                 continue
             local_path = source_root / filename
             if not local_path.is_file():
-                continue
+                fail(f"Required local source is missing: {filename}")
             if sha256_file(local_path) != checksum:
                 fail(f"Local source checksum drift: {filename}")
             local_checks.append(filename)
+        expected_local = sorted(source["local_filename"] for source in sources if source.get("local_filename"))
+        if sorted(local_checks) != expected_local:
+            fail("Full local source verification did not cover every declared binary")
 
     print(json.dumps({
         "status": "PASS",

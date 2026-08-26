@@ -64,7 +64,7 @@ Stowed envelope, hierarchy, selection, and transform integration accepted; worki
 
 - [x] Remove the third-party CDN startup dependency with a hash-pinned local Three.js runtime
 - [x] Add adaptive pixel-ratio, shadow, and frame-rate profiles for desktop and mobile
-- [x] Consolidate 345 authored detail meshes into 80 observed runtime meshes without collapsing articulation or hit volumes
+- [x] Consolidate 408 authored detail meshes into 92 observed runtime meshes without collapsing articulation, wheel-roll/hose solvers, or hit volumes
 - [x] Establish neutral product lighting, a lower three-quarter camera, and display-only material tuning
 - [x] Replace blockout wheels with modeled foam-filled tire, tread, rim, drive-hub, lug, and front-steer geometry
 - [x] Replace boxy exterior covers with evidence-bounded B3 profiled shells, panel seams, latches, service labels, and rear cooling grille

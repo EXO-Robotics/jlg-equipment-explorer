@@ -9,14 +9,18 @@ export const ES1930M_MECHANISM = Object.freeze({
   indoorDeckY: 5.64,
   outdoorDeckY: 4.57,
   extensionTravel: 0.55,
+  railFixedFrontX: 0.718,
+  railMovingRearX: 0.15,
+  railMinimumOverlap: 0.018,
+  railMinimumLateralClearance: 0.003,
   cylinderStroke: 0.6855,
   cylinderClosedPins: 0.43,
   steeringCylinderStrokeEachDirection: 0.08,
-  cylinderLower: Object.freeze(new THREE.Vector3(-0.31, 0.29, 0)),
-  kickerPivot: Object.freeze(new THREE.Vector3(0.27, 0.31, 0)),
-  kickerRadius: 0.56,
-  reconstructedMaximumSteerRadians: THREE.MathUtils.degToRad(38),
-  reconstructedOuterSteerFactor: 31 / 38,
+  rearFixedX: -0.552743210183,
+  cylinderLower: Object.freeze(new THREE.Vector3(0.082863611531, 0.134320145689, 0)),
+  kickerPivotFraction: 0.5,
+  cylinderUpperOffset: Object.freeze(new THREE.Vector2(0.26, 0.16)),
+  kickerRollerOffset: Object.freeze(new THREE.Vector2(-0.12, 0.18)),
 });
 
 const X_AXIS = new THREE.Vector3(1, 0, 0);
@@ -26,20 +30,14 @@ function clampUnit(value) {
   return Math.max(0, Math.min(1, Number(value) || 0));
 }
 
-function circleIntersectionPositiveY(anchor, center, anchorRadius, centerRadius) {
-  const dx = center.x - anchor.x;
-  const dy = center.y - anchor.y;
-  const separation = Math.hypot(dx, dy);
-  if (!separation || separation > anchorRadius + centerRadius || separation < Math.abs(anchorRadius - centerRadius)) {
-    throw new Error("ES1930M reconstructed cylinder and kicker circles do not intersect");
-  }
-  const along = (anchorRadius ** 2 - centerRadius ** 2 + separation ** 2) / (2 * separation);
-  const height = Math.sqrt(Math.max(anchorRadius ** 2 - along ** 2, 0));
-  const baseX = anchor.x + along * dx / separation;
-  const baseY = anchor.y + along * dy / separation;
-  const a = new THREE.Vector3(baseX - height * dy / separation, baseY + height * dx / separation, 0);
-  const b = new THREE.Vector3(baseX + height * dy / separation, baseY - height * dx / separation, 0);
-  return a.y >= b.y ? a : b;
+function pointAlong(start, end, fraction) {
+  return start.clone().lerp(end, fraction);
+}
+
+function pointInLinkFrame(pivot, direction, offset) {
+  return pivot.clone()
+    .addScaledVector(direction, offset.x)
+    .addScaledVector(new THREE.Vector3(-direction.y, direction.x, 0), offset.y);
 }
 
 export function solveES1930MState(liftInput, deckInput = 0, steerInput = 0) {
@@ -50,16 +48,18 @@ export function solveES1930MState(liftInput, deckInput = 0, steerInput = 0) {
   const rise = (floorY - ES1930M_MECHANISM.basePivotY - ES1930M_MECHANISM.deckOffsetY) / ES1930M_MECHANISM.levels;
   const span = Math.sqrt(ES1930M_MECHANISM.armLength ** 2 - rise ** 2);
   const boundaries = Array.from({ length: ES1930M_MECHANISM.levels + 1 }, (_, index) => ({
-    left: new THREE.Vector3(-span / 2, ES1930M_MECHANISM.basePivotY + index * rise, 0),
-    right: new THREE.Vector3(span / 2, ES1930M_MECHANISM.basePivotY + index * rise, 0),
+    rear: new THREE.Vector3(ES1930M_MECHANISM.rearFixedX, ES1930M_MECHANISM.basePivotY + index * rise, 0),
+    front: new THREE.Vector3(ES1930M_MECHANISM.rearFixedX + span, ES1930M_MECHANISM.basePivotY + index * rise, 0),
   }));
-  const cylinderPinDistance = ES1930M_MECHANISM.cylinderClosedPins + lift * ES1930M_MECHANISM.cylinderStroke;
-  const cylinderUpper = circleIntersectionPositiveY(
-    ES1930M_MECHANISM.cylinderLower,
-    ES1930M_MECHANISM.kickerPivot,
-    cylinderPinDistance,
-    ES1930M_MECHANISM.kickerRadius,
-  );
+  const levelOne = boundaries[0];
+  const levelTwo = boundaries[1];
+  const levelOneAStart = levelOne.rear;
+  const levelOneAEnd = levelTwo.front;
+  const kickerPivot = pointAlong(levelOneAStart, levelOneAEnd, ES1930M_MECHANISM.kickerPivotFraction);
+  const armDirection = levelOneAEnd.clone().sub(levelOneAStart).normalize();
+  const cylinderUpper = pointInLinkFrame(kickerPivot, armDirection, ES1930M_MECHANISM.cylinderUpperOffset);
+  const kickerRoller = pointInLinkFrame(kickerPivot, armDirection, ES1930M_MECHANISM.kickerRollerOffset);
+  const cylinderPinDistance = cylinderUpper.distanceTo(ES1930M_MECHANISM.cylinderLower);
   return Object.freeze({
     lift,
     deck,
@@ -70,6 +70,8 @@ export function solveES1930MState(liftInput, deckInput = 0, steerInput = 0) {
     boundaries,
     cylinderPinDistance,
     cylinderUpper,
+    kickerPivot,
+    kickerRoller,
     deckTranslation: deck * ES1930M_MECHANISM.extensionTravel,
     potholeDeployment: THREE.MathUtils.smoothstep(lift, 0.015, 0.10),
   });
@@ -101,6 +103,10 @@ function alignCylinderY(node, start, end, authoredLength) {
   node.scale.set(1, direction.length() / authoredLength, 1);
 }
 
+function intervalClearance(aMin, aMax, bMin, bMax) {
+  return Math.max(aMin - bMax, bMin - aMax, 0);
+}
+
 export function createES1930MRig(root) {
   const links = [];
   const pins = [];
@@ -127,17 +133,59 @@ export function createES1930MRig(root) {
     pins,
     platform: required(root, "PlatformAssembly"),
     extension: required(root, "ExtensionDeck"),
-    lowerSlides: [required(root, "LowerSlideBlock_LEFT"), required(root, "LowerSlideBlock_RIGHT")],
+    lowerSlides: [required(root, "LowerSlideBlock_RIGHT_PLANE"), required(root, "LowerSlideBlock_LEFT_PLANE")],
+    upperSlides: [required(root, "UpperSlideBlock_RIGHT_PLANE"), required(root, "UpperSlideBlock_LEFT_PLANE")],
+    rearAnchors: [required(root, "PIVOT_STACK_LOWER_REAR_RIGHT_PLANE"), required(root, "PIVOT_STACK_LOWER_REAR_LEFT_PLANE")],
     cylinderBarrel: required(root, "LiftCylinderBarrel"),
     cylinderRod: required(root, "LiftCylinderRod"),
-    kicker: required(root, "KickerArm"),
+    kickerWebs: [required(root, "KickerArmWeb_SCISSOR_CYLINDER"), required(root, "KickerArmWeb_CYLINDER_ROLLER"), required(root, "KickerArmWeb_ROLLER_SCISSOR")],
+    kickerPivotMarker: required(root, "PIVOT_KICKER_TO_SCISSOR"),
+    kickerRollerMarker: required(root, "PIVOT_KICKER_ROLLER"),
     cylinderUpperMarker: required(root, "PIVOT_LIFT_CYLINDER_UPPER"),
     steerBarrel: required(root, "SteerCylinderBarrel"),
     steerSpindles: [required(root, "SteerSpindle_R"), required(root, "SteerSpindle_L")],
+    wheelRollPivots: [required(root, "FrontWheelRoll_R"), required(root, "FrontWheelRoll_L"), required(root, "RearWheelRoll_R"), required(root, "RearWheelRoll_L")],
     potholeBars,
     potholeInitialY: potholeBars.map((node) => node.position.y),
+    guardPairs: [-1, 1].flatMap((side) => [
+      { fixed: required(root, `TopRail_${side}`), moving: required(root, `ExtensionTopRail_${side}`), fixedParent: "FixedRails", movingParent: "ExtensionRails" },
+      { fixed: required(root, `MidRail_${side}`), moving: required(root, `ExtensionMidRail_${side}`), fixedParent: "FixedRails", movingParent: "ExtensionRails" },
+      { fixed: required(root, `MainToeBoard_${side}`), moving: required(root, `ExtensionToeBoard_${side}`), fixedParent: "FixedRails", movingParent: "ExtensionDeck" },
+    ]),
+    hitVolumes: Object.fromEntries(["Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"].map((name) => [name, required(root, name)])),
   };
   return rig;
+}
+
+export function selfTestES1930MRig(rig, restoreState) {
+  const failures = [];
+  for (const sample of [[0, 0, -1], [0.5, 1, 0], [1, 1, 1]]) {
+    const solved = solveES1930MState(...sample);
+    applyES1930MState(rig, solved);
+    for (const marker of rig.rearAnchors) {
+      if (Math.abs(marker.position.x - ES1930M_MECHANISM.rearFixedX) > 1e-6) failures.push("rear anchor drift");
+    }
+    if (Math.abs(rig.lowerSlides[0].position.x - rig.lowerSlides[1].position.x) > 1e-6) failures.push("lower slide pair split");
+    if (Math.abs(rig.lowerSlides[0].position.x - solved.boundaries[0].front.x) > 1e-6) failures.push("front track mismatch");
+    for (const slide of rig.upperSlides) {
+      if (Math.abs(slide.position.x - solved.boundaries.at(-1).front.x) > 1e-6 || Math.abs(slide.position.y - solved.boundaries.at(-1).front.y) > 1e-6) failures.push("upper slide track mismatch");
+    }
+    if (Math.abs(rig.hitVolumes.Platform_Hit.position.y - (1.44 + rig.platform.position.y)) > 1e-6) failures.push("platform hit-volume drift");
+    if (Math.abs(rig.extension.position.x - solved.deckTranslation) > 1e-6) failures.push("extension translation drift");
+    rig.root.updateMatrixWorld(true);
+    for (const pair of rig.guardPairs) {
+      if (pair.fixed.parent?.name !== pair.fixedParent || pair.moving.parent?.name !== pair.movingParent) failures.push("extension guard parent drift");
+      const fixedBounds = new THREE.Box3().setFromObject(pair.fixed);
+      const movingBounds = new THREE.Box3().setFromObject(pair.moving);
+      const railOverlap = fixedBounds.max.x - movingBounds.min.x;
+      if (railOverlap + 1e-6 < ES1930M_MECHANISM.railMinimumOverlap) failures.push("extension guard opening");
+      const lateralClearance = intervalClearance(fixedBounds.min.z, fixedBounds.max.z, movingBounds.min.z, movingBounds.max.z);
+      if (lateralClearance + 1e-6 < ES1930M_MECHANISM.railMinimumLateralClearance) failures.push("extension guard solid intersection");
+    }
+    if (Math.abs(rig.cylinderUpperMarker.position.x - solved.cylinderUpper.x) > 1e-6 || Math.abs(rig.cylinderUpperMarker.position.y - solved.cylinderUpper.y) > 1e-6) failures.push("cylinder attachment drift");
+  }
+  applyES1930MState(rig, restoreState);
+  return Object.freeze({ ok: failures.length === 0, failures: Object.freeze([...new Set(failures)]) });
 }
 
 export function applyES1930MState(rig, state) {
@@ -145,24 +193,27 @@ export function applyES1930MState(rig, state) {
     const lower = state.boundaries[index];
     const upper = state.boundaries[index + 1];
     for (const plane of ["Right", "Left"]) {
-      alignLocalX(rig.links[index][`A_${plane}`], lower.left, upper.right);
-      alignLocalX(rig.links[index][`B_${plane}`], lower.right, upper.left);
+      alignLocalX(rig.links[index][`A_${plane}`], lower.rear, upper.front);
+      alignLocalX(rig.links[index][`B_${plane}`], lower.front, upper.rear);
     }
-    const center = new THREE.Vector3(0, (lower.left.y + upper.right.y) / 2, 0);
+    const center = lower.rear.clone().lerp(upper.front, 0.5);
     const lateralStart = new THREE.Vector3(0, 0, -0.31);
     const lateralEnd = new THREE.Vector3(0, 0, 0.31);
     for (const [node, point] of [
-      [rig.pins[index].lowerLeft, lower.left],
-      [rig.pins[index].lowerRight, lower.right],
-      [rig.pins[index].upperLeft, upper.left],
-      [rig.pins[index].upperRight, upper.right],
+      [rig.pins[index].lowerLeft, lower.rear],
+      [rig.pins[index].lowerRight, lower.front],
+      [rig.pins[index].upperLeft, upper.rear],
+      [rig.pins[index].upperRight, upper.front],
       [rig.pins[index].center, center],
     ]) {
       alignCylinderY(node, lateralStart.clone().add(point), lateralEnd.clone().add(point), 0.62);
     }
   }
-  rig.lowerSlides[0].position.x = state.boundaries[0].left.x;
-  rig.lowerSlides[1].position.x = state.boundaries[0].right.x;
+  for (const slide of rig.lowerSlides) slide.position.x = state.boundaries[0].front.x;
+  for (const slide of rig.upperSlides) {
+    slide.position.x = state.boundaries.at(-1).front.x;
+    slide.position.y = state.boundaries.at(-1).front.y;
+  }
   rig.platform.position.y = state.floorY - ES1930M_MECHANISM.stowedDeckY;
   rig.extension.position.x = state.deckTranslation;
 
@@ -172,15 +223,26 @@ export function applyES1930MState(rig, state) {
   const rodStart = lower.clone().lerp(upper, 0.48);
   alignCylinderY(rig.cylinderBarrel, lower, barrelEnd, ES1930M_MECHANISM.cylinderClosedPins * 0.72);
   alignCylinderY(rig.cylinderRod, rodStart, upper, ES1930M_MECHANISM.cylinderClosedPins * 0.52);
-  alignCylinderY(rig.kicker, ES1930M_MECHANISM.kickerPivot, upper, ES1930M_MECHANISM.kickerRadius);
+  alignLocalX(rig.kickerWebs[0], state.kickerPivot, upper);
+  alignLocalX(rig.kickerWebs[1], upper, state.kickerRoller);
+  alignLocalX(rig.kickerWebs[2], state.kickerRoller, state.kickerPivot);
+  rig.kickerPivotMarker.position.copy(state.kickerPivot);
+  rig.kickerRollerMarker.position.copy(state.kickerRoller);
   rig.cylinderUpperMarker.position.copy(upper);
 
   rig.steerBarrel.position.z = state.steer * ES1930M_MECHANISM.steeringCylinderStrokeEachDirection;
-  const direction = Math.sign(state.steer) || 1;
-  const magnitude = Math.abs(state.steer) * ES1930M_MECHANISM.reconstructedMaximumSteerRadians;
-  const rightIsInner = direction > 0;
-  rig.steerSpindles[0].rotation.y = direction * magnitude * (rightIsInner ? 1 : ES1930M_MECHANISM.reconstructedOuterSteerFactor);
-  rig.steerSpindles[1].rotation.y = direction * magnitude * (rightIsInner ? ES1930M_MECHANISM.reconstructedOuterSteerFactor : 1);
+  for (const spindle of rig.steerSpindles) spindle.rotation.y = 0;
+
+  const scissorHit = rig.hitVolumes.Scissor_Hit;
+  const scissorTop = state.floorY - ES1930M_MECHANISM.deckOffsetY;
+  scissorHit.position.x = ES1930M_MECHANISM.rearFixedX + state.span / 2;
+  scissorHit.position.y = (ES1930M_MECHANISM.basePivotY + scissorTop) / 2;
+  scissorHit.scale.x = Math.max(state.span / 1.12, 0.34);
+  scissorHit.scale.y = Math.max((scissorTop - ES1930M_MECHANISM.basePivotY) / 0.55, 1);
+  const platformHit = rig.hitVolumes.Platform_Hit;
+  platformHit.position.x = 0.02 + state.deckTranslation / 2;
+  platformHit.position.y = 1.44 + rig.platform.position.y;
+  platformHit.scale.x = (1.38 + state.deckTranslation) / 1.38;
 
   rig.potholeBars.forEach((node, index) => {
     node.position.y = rig.potholeInitialY[index] - 0.035 * state.potholeDeployment;

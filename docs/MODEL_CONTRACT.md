@@ -11,9 +11,13 @@ The web viewer should depend on a small, stable node hierarchy rather than Blend
 │   ├── AxleFront
 │   ├── AxleRear
 │   ├── Wheel_FL
+│   │   └── Wheel_FL_Roll
 │   ├── Wheel_FR
+│   │   └── Wheel_FR_Roll
 │   ├── Wheel_RL
+│   │   └── Wheel_RL_Roll
 │   └── Wheel_RR
+│       └── Wheel_RR_Roll
 └── TurntablePivot
     └── Turntable
         ├── EngineCover
@@ -50,7 +54,9 @@ Optional visible nodes may be added freely. Animation code must only require the
 - `Telescope`: stable UI/controller boundary. `MidBoom` and `FlyBoom` each translate
   in positive local X under one evidence-bounded coupled visual control. The
   exported split is presentation-only and must not be labeled as a factory ratio.
-- Front wheel nodes: local Y is the steering axis.
+- Front wheel nodes: local Y is the steering axis. Their `*_Roll` children own only
+  the tire, rim, drive hub, lugs, and tread meshes; knuckles and steering anchors
+  remain on the yaw-only parent so they cannot tumble with tire rotation.
 - `PlatformPivot`: local origin is the reconstructed platform-leveling/rotation
   center; the viewer preserves the operator-set starting angle and solves a
   visible `PlatformLevelCylinder`. This is not gravity auto-leveling.
@@ -115,3 +121,14 @@ the furthest independently translating telescope stage.
     powertrack carrier resolve as distinct material identities.
 18. Any displayed powertrack link count is presentation sampling, not a physical
     link-count claim.
+19. All four `Wheel_*_Roll` transforms remain distinct from steering/axle transforms;
+    steer knuckles, rear axle ends, cylinder anchors, and tie-rod anchors must not
+    inherit tire roll.
+20. Both reconstructed steering hoses retain a fixed chassis leg and a two-anchor
+    moving visual leg whose wheel-side endpoint follows the steering pivot.
+21. `PowertrackBend` and `PowertrackMovingRun` inherit the same telescope stage so
+    their relative spacing cannot open during FlyBoom travel.
+22. The fly-attached `PowertrackPushTube` retains at least 0.004 m of three-axis
+    AABB engagement with the mid-stage carrier bend in both stowed and full
+    evidence-bounded telescope poses; the engagement check is topological and
+    does not promote reconstructed bracket coordinates to fabrication data.

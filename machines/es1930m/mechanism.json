@@ -8,7 +8,7 @@
     "z": "machine_lateral_positive_left"
   },
   "solver": {
-    "branch": "positive_vertical_five_level_pantograph",
+    "branch": "rear_fixed_front_track_five_level_pantograph",
     "level_count": 5,
     "arm_pin_center_length_m": 1.11,
     "base_pivot_height_m": 0.30,
@@ -21,16 +21,16 @@
     "continuity_max_translation_per_0_01_sample_m": 0.07,
     "closure_epsilon_m": 0.000001,
     "link_length_epsilon_m": 0.000001,
-    "symmetry_epsilon_m": 0.000001,
+    "parallel_plane_epsilon_m": 0.000001,
     "platform_level_epsilon_rad": 0.000001
   },
   "slides": {
-    "lower_left": "fixed",
-    "lower_right": "longitudinal_track",
-    "upper_left": "fixed_to_platform_reference",
-    "upper_right": "longitudinal_track",
-    "track_center_x_m": 0.0,
-    "authority": "reconstructed_geometry_from_verified_slide_topology"
+    "lower_rear": "fixed_frame_pivot_pair",
+    "lower_front": "two_lateral_blocks_in_one_longitudinal_track",
+    "upper_rear": "fixed_platform_pivot_pair",
+    "upper_front": "two_lateral_blocks_in_one_longitudinal_track",
+    "rear_fixed_x_m": -0.552743210183,
+    "authority": "lower_arrangement_verified_pvc2404_service_196_197; upper_fore_aft_assignment_reconstructed_from_verified_pin_and_slide_topology"
   },
   "collision_proxies": {
     "arm_section_height_m": 0.105,
@@ -47,16 +47,24 @@
     "stroke_tolerance_m": 0.0015,
     "reconstructed_closed_pin_distance_m": 0.43,
     "reconstructed_open_pin_distance_m": 1.1155,
-    "lower_pin_m": [-0.31, 0.29, 0.0],
-    "kicker_pivot_m": [0.27, 0.31, 0.0],
-    "kicker_pin_radius_m": 0.56,
-    "intersection_branch": "positive_y",
-    "authority": "published_cylinder_dimensions_reconstructed_installation_coordinates"
+    "reconstructed_lower_frame_pin_m": [0.082863611531, 0.134320145689, 0.0],
+    "reconstructed_kicker_pivot_fraction_on_level01_a": 0.5,
+    "reconstructed_cylinder_pin_offset_link_frame_m": [0.26, 0.16, 0.0],
+    "reconstructed_kicker_roller_offset_link_frame_m": [-0.12, 0.18, 0.0],
+    "authority": "published_stroke_and_verified_cylinder_to_kicker_to_scissor_graph; attachment_coordinates_are_reconstruction_hypothesis_h1"
   },
   "deck_extension": {
     "travel_m": 0.55,
     "axis": [1, 0, 0],
-    "authority": "published_travel_reconstructed_local_zero"
+    "fixed_outer_rail_rear_x_m": -0.65,
+    "fixed_outer_rail_front_x_m": 0.718,
+    "moving_inner_rail_rear_x_m": 0.15,
+    "moving_inner_rail_front_x_m": 0.718,
+    "fixed_outer_rail_lateral_m": 0.332,
+    "moving_inner_rail_lateral_m": 0.294,
+    "minimum_nested_lateral_clearance_m": 0.003,
+    "minimum_deployed_overlap_m": 0.018,
+    "authority": "published_travel; pvc2404_parts_figures_4_3_and_4_7_nested_fixed_outer_and_moving_inner_rail_topology; coordinates_reconstructed_to_published_envelope"
   },
   "steering": {
     "cylinder_stroke_each_direction_m": 0.08,
@@ -67,8 +75,10 @@
     "authority": "published_stroke_and_envelope_topology_verified_angles_deferred"
   },
   "authority_notes": [
-    "Arm pin-center length and all pivot coordinates are reconstructed, not published JLG fabrication dimensions.",
-    "The solver uses the verified five-level topology, published platform-height envelope, and published cylinder stroke.",
+    "Arm pin-center length and all attachment coordinates are reconstructed, not published JLG fabrication dimensions.",
+    "The rear fixed/front sliding lower topology is verified; the matching upper fore/aft assignment is reconstructed.",
+    "The cylinder-to-kicker-to-scissor graph is verified. Hypothesis H1 places its markers on Level01 so cylinder extension emerges from the scissor pose and matches the published endpoint stroke within tolerance.",
+    "The fixed outer and moving inner platform rail topology is verified. Rail section dimensions, lateral nesting offset and longitudinal endpoints are reconstructed to maintain overlap through the published extension travel.",
     "This contract is for visual mechanism closure only and is not a stability, load, safety, or service simulation."
   ]
 }

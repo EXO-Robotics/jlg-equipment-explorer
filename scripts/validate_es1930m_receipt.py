@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
 from pathlib import Path
 
 
@@ -31,6 +30,7 @@ def runtime_digest(paths: list[Path]) -> str:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-release", action="store_true", help="Fail unless every human/browser/deployment gate is true.")
+    parser.add_argument("--require-predeploy", action="store_true", help="Fail unless every gate except exact public deployment review is true.")
     args = parser.parse_args()
     receipt = json.loads(RECEIPT_PATH.read_text())
     if receipt.get("configuration_id") != "ES1930M-PVC2404-US-STD-FR-FLA130-NM":
@@ -46,18 +46,16 @@ def main():
         raise RuntimeError("Receipt runtime drift")
     flags = receipt.get("review_flags") or {}
     incomplete = sorted(name for name, value in flags.items() if value is not True)
+    if args.require_predeploy:
+        predeploy_incomplete = sorted(name for name in incomplete if name != "deployed_pages_reviewed")
+        if predeploy_incomplete:
+            raise RuntimeError(f"Predeployment review gates incomplete: {predeploy_incomplete}")
+        if receipt.get("release_status") not in {"candidate_not_deployable", "release"}:
+            raise RuntimeError("Receipt has an unknown predeployment status")
     if args.require_release and incomplete:
         raise RuntimeError(f"Release review gates incomplete: {incomplete}")
     if args.require_release and receipt.get("release_status") != "release":
         raise RuntimeError("Receipt is not marked release")
-    if args.require_release:
-        deployment = receipt.get("deployment_review") or {}
-        if deployment.get("url") != "https://exo-robotics.github.io/jlg-equipment-explorer/es1930m/":
-            raise RuntimeError("Receipt deployment URL is not the canonical ES1930M route")
-        if not re.fullmatch(r"https://github\.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/\d+", deployment.get("run", "")):
-            raise RuntimeError("Receipt deployment run is missing or malformed")
-        if not re.fullmatch(r"[0-9a-f]{40}", deployment.get("reviewed_source_commit", "")):
-            raise RuntimeError("Receipt reviewed source commit is missing or malformed")
     print(json.dumps({
         "status": "PASS",
         "configuration_id": receipt["configuration_id"],
