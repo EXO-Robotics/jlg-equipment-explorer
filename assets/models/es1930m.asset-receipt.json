@@ -74,25 +74,25 @@
   "release": "1.0.4",
   "release_status": "candidate_not_deployable",
   "review_binding": {
-    "error": null,
-    "predeploy_gates": 13,
-    "status": "exact_executable_predeploy_evidence"
+    "error": "es1930m browser capture is incomplete",
+    "predeploy_gates": 0,
+    "status": "pending_or_stale"
   },
   "review_flags": {
-    "600s_regression_suite_pass": true,
-    "accessibility_reviewed": true,
+    "600s_regression_suite_pass": false,
+    "accessibility_reviewed": false,
     "deployed_pages_reviewed": false,
-    "desktop_browser_zero_errors": true,
-    "extension_browser_reviewed": true,
-    "figure_eight_presentation_reviewed": true,
-    "mobile_and_pinch_reviewed": true,
-    "mobile_drag_direction_reviewed": true,
-    "performance_reviewed": true,
-    "platform_controls_visual_reviewed": true,
-    "raised_pose_browser_reviewed": true,
-    "selection_and_focus_reviewed": true,
-    "steering_boundary_reviewed": true,
-    "stowed_silhouette_reviewed": true
+    "desktop_browser_zero_errors": false,
+    "extension_browser_reviewed": false,
+    "figure_eight_presentation_reviewed": false,
+    "mobile_and_pinch_reviewed": false,
+    "mobile_drag_direction_reviewed": false,
+    "performance_reviewed": false,
+    "platform_controls_visual_reviewed": false,
+    "raised_pose_browser_reviewed": false,
+    "selection_and_focus_reviewed": false,
+    "steering_boundary_reviewed": false,
+    "stowed_silhouette_reviewed": false
   },
   "runtime": {
     "files": [
@@ -108,7 +108,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "1cabcf3d0806cc95c89f8c90813276ac42229f42b3a9919fbbf93baf0151c969"
+    "sha256": "73494edd732160c3fad5111696a2d1f3b0842358ac9549648792bd5d82f56f91"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"

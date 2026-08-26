@@ -1298,7 +1298,14 @@ def main() -> None:
     parser.add_argument("--allow-pending", action="store_true")
     parser.add_argument("paths", nargs="*", type=Path)
     args = parser.parse_args()
-    paths = args.paths or [ROOT / f"docs/review/742/{gate.replace('_', '-')}.json" for gate in BROWSER_GATES]
+    paths = args.paths or [
+        ROOT / "docs/review/742" / (
+            "accessibility-semantics-keyboard.json"
+            if gate == "accessibility_semantics_and_keyboard"
+            else f"{gate.replace('_', '-')}.json"
+        )
+        for gate in BROWSER_GATES
+    ]
     if not args.allow_pending:
         raise RuntimeError("Use validate_742_review.py for completed and commit-bound browser evidence")
     for path in paths:

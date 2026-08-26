@@ -15,6 +15,7 @@ from es1930m_review_binding import (
     validate_artifact,
     validate_review_binding,
 )
+from validate_742_browser_evidence import validate_pending_template
 
 
 def load(path: Path) -> dict:
@@ -37,8 +38,28 @@ def main() -> None:
     es_receipt = load(ROOT / "assets/models/es1930m.asset-receipt.json")
     receipt_600s = load(ROOT / "assets/models/600s.asset-receipt.json")
     review = load(ROOT / "docs/research/es1930m/REVIEW_EVIDENCE.json")
+    artifact = load(ES_ARTIFACT)
+    if artifact.get("capture_status") == "recapture-required":
+        validate_pending_template(ES_ARTIFACT, "es1930m_browser_regression")
+        validate_pending_template(UPSTREAM_600S_ARTIFACT, "600s_browser_regression")
+        if es_receipt.get("review_binding", {}).get("status") != "pending_or_stale":
+            raise RuntimeError("pending ES browser capture must keep the receipt review binding pending")
+        if any(es_receipt.get("review_flags", {}).values()):
+            raise RuntimeError("pending ES browser capture cannot preserve a positive review flag")
+        print(json.dumps({
+            "status": "PASS",
+            "pending_transition": True,
+            "pending_templates": 2,
+            "negative_fixtures": 0,
+        }, indent=2, sort_keys=True))
+        return
+
     baseline = validate_artifact(ES_ARTIFACT, receipt=es_receipt, model="es1930m")
-    validate_review_binding(review, receipt=es_receipt, receipt_600s=receipt_600s)
+    binding_exact = es_receipt.get("review_binding", {}).get("status") == "exact_executable_predeploy_evidence"
+    if binding_exact:
+        validate_review_binding(review, receipt=es_receipt, receipt_600s=receipt_600s)
+    elif es_receipt.get("review_binding", {}).get("status") != "pending_or_stale" or any(es_receipt.get("review_flags", {}).values()):
+        raise RuntimeError("unbound fresh ES browser capture must remain explicitly pending")
 
     negatives = 0
     with tempfile.TemporaryDirectory(prefix="es1930m-review-binding-") as directory:
@@ -99,16 +120,18 @@ def main() -> None:
         expect_failure("runtime identity mutation", lambda: validate_artifact(ES_ARTIFACT, receipt=runtime, model="es1930m"))
         negatives += 1
 
-        contradiction = copy.deepcopy(review)
-        contradiction["binding"]["es_browser_evidence"]["assertions_sha256"] = "0" * 64
-        expect_failure(
-            "review evidence contradiction",
-            lambda: validate_review_binding(contradiction, receipt=es_receipt, receipt_600s=receipt_600s),
-        )
-        negatives += 1
+        if binding_exact:
+            contradiction = copy.deepcopy(review)
+            contradiction["binding"]["es_browser_evidence"]["assertions_sha256"] = "0" * 64
+            expect_failure(
+                "review evidence contradiction",
+                lambda: validate_review_binding(contradiction, receipt=es_receipt, receipt_600s=receipt_600s),
+            )
+            negatives += 1
 
     print(json.dumps({
         "status": "PASS",
+        "binding_status": "exact" if binding_exact else "pending",
         "envelope_exclusions": ["candidate_tree_sha256", "reviewed_source_commit"],
         "negative_fixtures": negatives,
     }, indent=2, sort_keys=True))
