@@ -86,7 +86,7 @@ def main():
         'controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls")',
         'scheduleMotionAnnouncement', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
         'advanceFigureEight(showcaseRoute.phase, delta, JLG742_FIGURE_EIGHT)', 'showcaseState.steerMode = "circle"',
-        'rig.root.position.set(route.sample.x, 0, route.sample.z)', 'rig.root.rotation.y = route.sample.heading',
+        'rig.driveCarrier.position.set(route.sample.x, 0, route.sample.z)', 'rig.driveCarrier.rotation.set(0, route.sample.heading, 0)',
         'const routeWheelCorners = Object.freeze(["FR", "FL", "RR", "RL"])',
         'rig.wheelRollPivots[corner].rotation.y = showcaseRoute.wheelRotations[corner]',
         'if (!skipNextVisibleFrame && renderedInterval > 0)', 'sorted.filter((sample) => sample >= 250).length',
@@ -100,6 +100,8 @@ def main():
     ], "dedicated 742 runtime")
     if re.search(r"renderedInterval\s*<\s*250", RUNTIME):
         raise RuntimeError("742 p95 must not discard visible stalls at or above 250 ms")
+    if "rig.root.rotation.y" in RUNTIME or "rig.root.position.set" in RUNTIME:
+        raise RuntimeError("742 route motion must not overwrite the authored GLB root transform")
     if 'motionStatus.value = !centered' in RUNTIME or 'axle heading spread F ${document.body.dataset.frontToeDeg}' in RUNTIME:
         raise RuntimeError("742 visible status must remain concise like the 600S control panel")
     if 'return [...intersections].sort((a, b) => (b.object.userData.selectionPriority' in RUNTIME:
@@ -148,6 +150,7 @@ def main():
         '...["L","R"].flatMap', 'Array.from({length:8}', '"RetractChain_C"', '"RetractChain_C_Moving"',
         'Object.entries(geometry.beams)', 'Object.entries(geometry.points)',
         'wheelRollPivots', '`WheelRoll_${corner}`',
+        'driveCarrier', 'driveCarrier.name="742_DriveCarrier"', 'driveCarrier.add(machineRoot)',
     ], "742 articulation consumer")
     require(STYLE, ['body[data-machine="742"]', '.mode-row', '.component-nav-seven', '.nav-overflow-cue', 'button[data-focus][aria-pressed="true"]'], "742 style")
     if not ASSET.is_file():

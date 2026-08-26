@@ -34,8 +34,8 @@ requireTokens(runtime, [
   'dataset.steerModeAlignment', 'Center all wheel headings before changing steering mode.',
   'advanceFigureEight(showcaseRoute.phase, delta, JLG742_FIGURE_EIGHT)',
   'showcaseState.steerMode = "circle"',
-  'rig.root.position.set(route.sample.x, 0, route.sample.z)',
-  'rig.root.rotation.y = route.sample.heading',
+  'rig.driveCarrier.position.set(route.sample.x, 0, route.sample.z)',
+  'rig.driveCarrier.rotation.set(0, route.sample.heading, 0)',
   'const routeWheelCorners = Object.freeze(["FR", "FL", "RR", "RL"])',
   'rig.wheelRollPivots[corner].rotation.y = showcaseRoute.wheelRotations[corner]',
   "showTerminalError", "identity-failed", "contract-failed", "load-failed", "loader-start-failed",
@@ -52,7 +52,7 @@ requireTokens(runtime, [
   "sorted.filter((sample) => sample >= 250).length",
   'showcaseStarted !== null && !reducedMotion',
   '? "Autonomous"',
-  'const ROUTE_RELEASE = "1.7.0"',
+  'const ROUTE_RELEASE = "1.7.1"',
   'showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Stop auto" : "Start auto"',
   'autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual"',
   'showcaseLoop.textContent = `${Math.round((route.phase / (Math.PI * 2)) * 100)}%`',
@@ -68,9 +68,9 @@ requireTokens(index, [
   '<output id="tilt-value" aria-hidden="true">',
   '<output id="steer-value" aria-hidden="true">',
   '<output id="level-value" aria-hidden="true">',
-  'data-runtime-release="1.7.0"',
-  '../viewer/742-runtime.js?v=1.7.0',
-  '../viewer/742.css?v=1.7.0',
+  'data-runtime-release="1.7.1"',
+  '../viewer/742-runtime.js?v=1.7.1',
+  '../viewer/742.css?v=1.7.1',
   'class="autonomy-bar" aria-label="Automatic mechanism presentation"',
   'id="autonomy-mode" aria-live="polite" aria-atomic="true"',
   'id="showcase-phase"', 'id="showcase-loop"',
@@ -96,8 +96,10 @@ requireTokens(articulation, [
   "Object.entries(geometry.beams)", "Object.entries(geometry.points)",
   'presentation_visibility!=="visible_schematic_actuator_reconstructed_anchors"', "node.visible=true",
   'wheelRollPivots', '`WheelRoll_${corner}`',
+  'driveCarrier', 'driveCarrier.name="742_DriveCarrier"', 'driveCarrier.add(machineRoot)',
 ]);
 if (/renderedInterval\s*<\s*250/.test(runtime)) throw new Error("Visible stalls are excluded from the performance window");
+if (runtime.includes("rig.root.rotation.y") || runtime.includes("rig.root.position.set")) throw new Error("Route motion overwrites the authored 742 GLB root transform");
 if (runtime.includes("orbit.desiredDistance = view.distance")) throw new Error("Pose framing bypasses the dynamic zoom cap");
 
 const selectionStart = runtime.indexOf("const SELECTION_TIE_DISTANCE_M");

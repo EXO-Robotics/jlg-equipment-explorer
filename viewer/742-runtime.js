@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.11";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.12";
 import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
 import { advanceFigureEight, JLG742_FIGURE_EIGHT, sampleFigureEight } from "./presentation-route.mjs?v=1.0.10";
 
-const ROUTE_RELEASE = "1.7.0";
+const ROUTE_RELEASE = "1.7.1";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -787,8 +787,8 @@ function resetShowcaseRoute() {
   showcaseRoute.distanceM = 0;
   for (const corner of Object.keys(showcaseRoute.wheelRotations)) showcaseRoute.wheelRotations[corner] = 0;
   if (!rig) return;
-  rig.root.position.set(0, 0, 0);
-  rig.root.rotation.y = 0;
+  rig.driveCarrier.position.set(0, 0, 0);
+  rig.driveCarrier.rotation.set(0, 0, 0);
   for (const pivot of Object.values(rig.wheelRollPivots)) pivot.rotation.y = 0;
   document.body.dataset.driveX = "0.00";
   document.body.dataset.driveZ = "0.00";
@@ -826,8 +826,8 @@ showcaseButton?.addEventListener("click", () => {
   }
   showcaseStarted = performance.now();
   const sample = sampleFigureEight(showcaseRoute.phase, JLG742_FIGURE_EIGHT);
-  rig.root.position.set(sample.x, 0, sample.z);
-  rig.root.rotation.y = sample.heading;
+  rig.driveCarrier.position.set(sample.x, 0, sample.z);
+  rig.driveCarrier.rotation.set(0, sample.heading, 0);
   syncShowcaseControls();
   announceMotion("Automatic 742 figure-eight showcase started.");
 });
@@ -1094,8 +1094,8 @@ function animate(now) {
     for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
     document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
     applyControls();
-    rig.root.position.set(route.sample.x, 0, route.sample.z);
-    rig.root.rotation.y = route.sample.heading;
+    rig.driveCarrier.position.set(route.sample.x, 0, route.sample.z);
+    rig.driveCarrier.rotation.set(0, route.sample.heading, 0);
     routeWheelCorners.forEach((corner, index) => {
       showcaseRoute.wheelRotations[corner] -= JLG742_FIGURE_EIGHT.speedMps * route.sample.wheelSpeedScales[index] * delta / JLG742_FIGURE_EIGHT.wheelRadiusM;
       rig.wheelRollPivots[corner].rotation.y = showcaseRoute.wheelRotations[corner];
