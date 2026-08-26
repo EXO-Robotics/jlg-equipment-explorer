@@ -349,8 +349,11 @@ def build():
 
     for x, z in ((2.40,-0.82),(2.40,0.82),(-2.28,-0.82),(-2.28,0.82)):
         box(f"WorkLamp_{x}_{z}", (0.12,0.12,0.06), (x,1.44,z), MAT["lamp"], chassis, 0.025, "chassis")
-    label("ModelMark_Left", "742", (-1.02,1.75,-1.102), MAT["white"], chassis, 0.24, rotation=(math.pi/2,0,0), component="chassis")
-    label("ModelMark_Right", "742", (-1.02,1.75,1.102), MAT["white"], chassis, 0.24, rotation=(math.pi/2,0,math.pi), component="chassis")
+    # Mount the independently typeset model marks to the outer faces of the
+    # rear fenders. Text geometry is coplanar with the side panels (normal on
+    # logical Z), never laid horizontally above the machine.
+    label("ModelMark_Left", "742", (-1.69,1.22,-0.949), MAT["white"], chassis, 0.21, rotation=(0,math.pi,0), component="chassis")
+    label("ModelMark_Right", "742", (-1.69,1.22,0.949), MAT["white"], chassis, 0.21, rotation=(0,0,0), component="chassis")
 
     boom_pivot = empty("BoomLiftPivot", (-2.158,1.018,BOOM_LATERAL_OFFSET_M), frame, "ARROWS", 0.18, "boom")
     boom_pivot["visual_angle_degrees"] = [0,69]
@@ -369,8 +372,8 @@ def build():
     for section, owner, positions in (("Base",base,(0.08,5.30)),("Mid",mid,(0.05,5.08)),("Fly",fly,(0.05,5.12))):
         for idx, x in enumerate(positions):
             box(f"{section}WearBand_{idx}", (0.12,0.04,0.66 if section=="Base" else 0.50), (x,0.31 if section=="Base" else 0.25,0), MAT["black"], owner, 0.015, "boom")
-    label("BoomMark_Left", "JLG  742", (1.75,0.02,-0.366), MAT["black"], base, 0.17, rotation=(math.pi/2,0,0), component="boom")
-    label("BoomMark_Right", "JLG  742", (1.75,0.02,0.366), MAT["black"], base, 0.17, rotation=(math.pi/2,0,math.pi), component="boom")
+    label("BoomMark_Left", "JLG  742", (2.75,0.02,-0.366), MAT["black"], base, 0.17, rotation=(0,math.pi,0), component="boom")
+    label("BoomMark_Right", "JLG  742", (2.75,0.02,0.366), MAT["black"], base, 0.17, rotation=(0,0,0), component="boom")
 
     lift_cyl = empty("LiftCylinder", (0,-0.82,BOOM_LATERAL_OFFSET_M), frame, component="hydraulics")
     beam("LiftCylinderBarrel", (-1.80,0.70,0), (-0.45,1.35,0), 0.150, MAT["hydraulic"], lift_cyl, "hydraulics", 28)
@@ -434,17 +437,23 @@ def build():
         fork["published_fork_thickness_m"] = 0.060
         fork["published_fork_width_m"] = 0.102
         cylinder(f"ForkCollar_{side}", 0.058, 0.12, (0.0,0.28,z), MAT["zinc"], carriage, component="carriage")
-    # The supported tilt slave is tucked inside the boom-head silhouette. Its
-    # exact anchors are reconstructed presentation coordinates, so visible
-    # clevises and pins make that boundary legible without implying service data.
-    tilt_base = (4.216,-0.48,-0.12)
-    tilt_rod_pin = (5.116,-0.5699723455133307,-0.12)
-    tilt_link_pin = (5.216,-0.35,-0.12)
-    beam("CarriageTiltCylinderBarrel", tilt_base, (5.034,-0.455,-0.12), 0.120, MAT["hydraulic"], fly, "hydraulics", 20)
-    beam("CarriageTiltCylinderRod", (4.954,-0.458,-0.12), tilt_rod_pin, 0.060, MAT["zinc"], fly, "hydraulics", 18)
-    beam("CarriageTiltLink", tilt_rod_pin, tilt_link_pin, 0.028, MAT["zinc"], fly, "hydraulics", 14)
-    box("CarriageTiltBaseClevisInboard", (0.18,0.16,0.05), (tilt_base[0],tilt_base[1],-0.195), MAT["black"], fly, 0.012, "hydraulics")
-    box("CarriageTiltBaseClevisOutboard", (0.18,0.16,0.05), (tilt_base[0],tilt_base[1],-0.045), MAT["black"], fly, 0.012, "hydraulics")
+    # The supported tilt slave runs beneath the fly boom. Its exact anchors are
+    # reconstructed presentation coordinates: extended clevis plates connect
+    # the evidence-derived base pin to the lower fly-boom skin, while the
+    # rod/link pins terminate at the carriage head.
+    tilt_base = (4.216,-0.48,-0.30)
+    tilt_pose = solved_pose({"lift": 0, "telescope": 0, "tilt": 0, "steer": 0,
+                             "level": 0, "steerMode": "circle"})["geometry"]["beams"]
+    tilt_barrel = tilt_pose["CarriageTiltCylinderBarrel"]
+    tilt_rod = tilt_pose["CarriageTiltCylinderRod"]
+    tilt_link = tilt_pose["CarriageTiltLink"]
+    tilt_rod_pin = tilt_rod[1]
+    tilt_link_pin = tilt_link[1]
+    beam("CarriageTiltCylinderBarrel", tilt_barrel[0], tilt_barrel[1], 0.105, MAT["hydraulic"], fly, "hydraulics", 20)
+    beam("CarriageTiltCylinderRod", tilt_rod[0], tilt_rod[1], 0.052, MAT["zinc"], fly, "hydraulics", 18)
+    beam("CarriageTiltLink", tilt_link[0], tilt_link[1], 0.028, MAT["zinc"], fly, "hydraulics", 14)
+    box("CarriageTiltBaseClevisInboard", (0.18,0.34,0.05), (tilt_base[0],-0.335,-0.225), MAT["black"], fly, 0.012, "hydraulics")
+    box("CarriageTiltBaseClevisOutboard", (0.18,0.34,0.05), (tilt_base[0],-0.335,-0.375), MAT["black"], fly, 0.012, "hydraulics")
     cylinder("CarriageTiltCylinderBasePin", 0.038, 0.22, tilt_base, MAT["zinc"], fly, component="hydraulics")
     cylinder("CarriageTiltCylinderRodPin", 0.035, 0.20, tilt_rod_pin, MAT["zinc"], fly, component="hydraulics")
     cylinder("CarriageTiltLinkPin", 0.035, 0.20, tilt_link_pin, MAT["zinc"], fly, component="hydraulics")
@@ -456,7 +465,7 @@ def build():
         "CarriageTiltCylinderRod", "CarriageTiltCylinderRodPin",
         "CarriageTiltLink", "CarriageTiltLinkPin",
     ):
-        bpy.data.objects[node]["presentation_visibility"] = "concealed_inside_boom_head"
+        bpy.data.objects[node]["presentation_visibility"] = "visible_schematic_actuator_reconstructed_anchors"
 
     beam("FrameLevelCylinderBarrel", (-0.0133,0.6054,0.4865), (0.06,0.96,0.88), 0.120, MAT["hydraulic"], root, "frame", 20)
     beam("FrameLevelCylinderRod", (0.045,0.90,0.82), (0.1121,1.2428,1.1607), 0.055, MAT["zinc"], root, "frame", 18)

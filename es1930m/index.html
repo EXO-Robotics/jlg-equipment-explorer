@@ -20,7 +20,7 @@
   <meta name="twitter:image:alt" content="JLG 600S boom lift reconstruction shown in the 3D authoring workspace">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="preload" href="../assets/models/es1930m.glb?v=bd1322dec96a" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.0.9">
+  <link rel="stylesheet" href="../viewer.css?v=1.0.10">
   <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.9">
   <link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">
   <script type="importmap">
@@ -75,7 +75,7 @@
         <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
         <div class="panel-state">
           <output id="motion-status" aria-live="polite" aria-atomic="true">Stowed</output>
-          <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false">Adjust</button>
+          <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">Close</button>
         </div>
       </div>
       <div class="controls-body" id="machine-controls-body">
@@ -152,6 +152,6 @@
       window.__showES1930MBootstrapFailure("The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, 8000);
   </script>
-  <script type="module" src="../viewer/runtime.js?v=1.0.9" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__showES1930MBootstrapFailure('The ES1930M rendering runtime could not be loaded. No substitute was shown.')"></script>
+  <script type="module" src="../viewer/runtime.js?v=1.0.10" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__showES1930MBootstrapFailure('The ES1930M rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

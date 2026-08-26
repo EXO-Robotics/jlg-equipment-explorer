@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "600s_browser_regression",
-  "captured_at_utc": "2026-08-26T14:18:48.635Z",
+  "captured_at_utc": "2026-08-26T14:49:37.607Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "2ef1cc05948a5f57e656b278dce3896cc5a73c7f3fcf9131b75d3b068f840315",
+      "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
-    "bytes": 88402
+    "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4",
+    "bytes": 90441
   },
-  "outcomes_sha256": "e2b4845585e6a7f7a9317a64ccfea67194c48d85ac7c2793613c9fe9c47d24f7",
+  "outcomes_sha256": "264b894ef6fb72c7054eb095eb0fc6e2de1b61d11786f1c3fd6004f0dfc5e0b6",
   "outcomes": {
     "load_exact_release": {
       "outcome": "pass",
@@ -2031,7 +2031,7 @@
         "meshes": 98,
         "selection": "5/5 pass",
         "errors": 0,
-        "load_ms": 124,
+        "load_ms": 125,
         "render_profile": "desktop",
         "fps": 60,
         "p95_ms": 16.8,
@@ -2045,7 +2045,105 @@
         "value": "35",
         "ariaValueText": "35°",
         "disabled": false
-      }
+      },
+      "collapsed_snapshot": {
+        "viewport_css_px": [
+          1280,
+          720
+        ],
+        "url": "http://127.0.0.1:8092/?diagnostics=1",
+        "nodes": [
+          {
+            "selector": "body",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Autonomous\n          Open\n        \n      \n\n      \n        \n          \n            Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Pause auto\n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend65%\n          65%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "attributes": {
+              "data-boot-frame-count": "2",
+              "data-viewer-started": "true",
+              "data-render-profile": "desktop",
+              "data-reduced-motion": "false",
+              "data-viewer-runtime-active": "true",
+              "data-runtime-error-count": "0",
+              "data-machine-source": "blender-showcase-v1.1.0",
+              "data-autonomy-mode": "auto",
+              "data-autonomy-overrides": "none",
+              "data-drive-heading": "2",
+              "data-drive-loop": "1",
+              "data-drive-route-error-m": "0.00",
+              "data-canvas-interaction": "navigation-only",
+              "data-orbit-camera-distance-m": "18.684",
+              "data-orbit-desired-distance-m": "19.037",
+              "data-viewer-module-loaded": "true",
+              "data-runtime-frame-count": "32",
+              "data-runtime-last-frame-ms": "612.500",
+              "data-drive-x": "0.38",
+              "data-drive-z": "-0.00",
+              "data-steer-left-deg": "23.8",
+              "data-steer-right-deg": "17.9",
+              "data-machine-visible-meshes": "98",
+              "data-machine-merged-buckets": "40",
+              "data-wheel-roll-hierarchy": "separated",
+              "data-hose-solver-count": "2",
+              "data-telescope-layer-cue-count": "14",
+              "data-load-ms": "125",
+              "data-selection-selftest": "pass",
+              "class": "controls-panel-collapsed"
+            }
+          },
+          {
+            "selector": "#machine-title",
+            "text": "600S",
+            "attributes": {
+              "id": "machine-title"
+            }
+          },
+          {
+            "selector": "#diagnostics",
+            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / sampling · reduced motion off",
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics",
+              "aria-live": "polite"
+            }
+          },
+          {
+            "selector": "#controls-toggle",
+            "text": "Open",
+            "attributes": {
+              "class": "controls-toggle",
+              "id": "controls-toggle",
+              "type": "button",
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "false",
+              "aria-label": "Open machine controls"
+            }
+          },
+          {
+            "selector": "#inspector",
+            "text": "×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference",
+            "attributes": {
+              "class": "inspector",
+              "id": "inspector",
+              "role": "dialog",
+              "aria-modal": "true",
+              "aria-labelledby": "inspector-title",
+              "aria-describedby": "inspector-copy",
+              "inert": ""
+            }
+          },
+          {
+            "selector": "#machine-controls-body",
+            "text": "Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Pause auto\n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend65%\n          65%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.",
+            "attributes": {
+              "class": "controls-body",
+              "id": "machine-controls-body",
+              "hidden": "",
+              "inert": ""
+            }
+          }
+        ]
+      },
+      "reopen_available": true,
+      "reopened": true
     },
     "mobile_controls": {
       "outcome": "pass",
@@ -2063,8 +2161,8 @@
     },
     "drag_orbit": {
       "outcome": "pass",
-      "before_canvas_sha256": "1a27420ad08ca0e903d7df23214305bafe6ef270f1f89c2c512cd81c85f55cc8",
-      "after_canvas_sha256": "7005f2687051ac1a4ae4485433341d9c14f60f6bafda66ae1eca6b6af68ca34c"
+      "before_canvas_sha256": "c60307fa87dcc8ff06b55fd2250acc29633d322cd00a6d39662be4b4556531cb",
+      "after_canvas_sha256": "2e1647c93f559a121f6b73de07a61354f536b1d162ded7cb5426d0347cf9b3b1"
     },
     "pinch_zoom": {
       "outcome": "pass",
@@ -2094,10 +2192,10 @@
         "CANVAS",
         "CANVAS"
       ],
-      "before_canvas_sha256": "bbc61ae89fe0a713bdf44b534776f1fcdf633f681446737dd4e34ff2f047bfb9",
-      "after_canvas_sha256": "e7ee3c6a4c674f164cf25305f5237456945d628f147abd0a9b244bc82a417dcd",
-      "before_desired_distance_m": "29.880",
-      "after_desired_distance_m": "10.508",
+      "before_canvas_sha256": "0ea475c6f8c9dbe890efd75bc7727b63d1c32c2af389bf67ccc850bd4cbf0cee",
+      "after_canvas_sha256": "936ff501e282eafd263a829ae58ec08ea8d603bc85d5fab578fe64c63400e177",
+      "before_desired_distance_m": "30.052",
+      "after_desired_distance_m": "10.558",
       "observable_render_or_distance_change": true
     },
     "reduced_motion": {
@@ -2106,7 +2204,7 @@
       "controller": "autonomy",
       "raw_samples": {
         "moving_start": {
-          "x": "0.36",
+          "x": "0.35",
           "z": "-0.00"
         },
         "before_reduce": {
@@ -2146,62 +2244,52 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 41.6
+                "at_ms": 61.4
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 50.2
+                "at_ms": 80
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 64.1
+                "at_ms": 95.8
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 81
+                "at_ms": 113.6
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 97.4
+                "at_ms": 130.2
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 114.9
-              },
-              {
-                "counter": "boot",
-                "value": 7,
-                "at_ms": 131.7
-              },
-              {
-                "counter": "boot",
-                "value": 8,
                 "at_ms": 147
               },
               {
                 "counter": "boot",
+                "value": 7,
+                "at_ms": 163.6
+              },
+              {
+                "counter": "boot",
+                "value": 8,
+                "at_ms": 179.5
+              },
+              {
+                "counter": "boot",
                 "value": 9,
-                "at_ms": 164.3
+                "at_ms": 197.1
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 179.8
-              },
-              {
-                "counter": "boot",
-                "value": 11,
-                "at_ms": 196.5
-              },
-              {
-                "counter": "boot",
-                "value": 12,
-                "at_ms": 214.4
+                "at_ms": 213.6
               }
             ]
           },
@@ -2218,9 +2306,9 @@
             "total_control_count": 8,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "12",
+            "boot_frame_count": "10",
             "runtime_frame_count": null,
-            "terminal_frame_count": "12",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "boot"
           },
           "terminal_after_250ms": {
@@ -2236,9 +2324,9 @@
             "total_control_count": 8,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "12",
+            "boot_frame_count": "10",
             "runtime_frame_count": null,
-            "terminal_frame_count": "12",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "boot"
           },
           "animation_state_stable_250ms": true
@@ -2253,67 +2341,52 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 45.5
+                "at_ms": 61.2
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 54.2
+                "at_ms": 78.2
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 65.7
+                "at_ms": 94.9
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 83.2
+                "at_ms": 111.7
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 98.9
+                "at_ms": 128.5
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 115.7
+                "at_ms": 144
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 132
+                "at_ms": 161.7
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 148.6
+                "at_ms": 178.2
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 165.3
+                "at_ms": 196.9
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 182.1
-              },
-              {
-                "counter": "boot",
-                "value": 11,
-                "at_ms": 198.8
-              },
-              {
-                "counter": "boot",
-                "value": 12,
-                "at_ms": 215.5
-              },
-              {
-                "counter": "boot",
-                "value": 13,
-                "at_ms": 232.1
+                "at_ms": 210.3
               }
             ]
           },
@@ -2330,9 +2403,9 @@
             "total_control_count": 8,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "13",
+            "boot_frame_count": "10",
             "runtime_frame_count": null,
-            "terminal_frame_count": "13",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "boot"
           },
           "terminal_after_250ms": {
@@ -2348,9 +2421,9 @@
             "total_control_count": 8,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "13",
+            "boot_frame_count": "10",
             "runtime_frame_count": null,
-            "terminal_frame_count": "13",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "boot"
           },
           "animation_state_stable_250ms": true
@@ -2365,52 +2438,47 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 91.2
+                "at_ms": 99.2
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 92.7
+                "at_ms": 105.7
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 97.9
+                "at_ms": 110.8
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 110.1
+                "at_ms": 126.7
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 126.5
+                "at_ms": 143.3
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 143.1
-              },
-              {
-                "counter": "runtime",
-                "value": 7,
                 "at_ms": 160.1
               },
               {
                 "counter": "runtime",
+                "value": 7,
+                "at_ms": 177
+              },
+              {
+                "counter": "runtime",
                 "value": 8,
-                "at_ms": 177.2
+                "at_ms": 194.7
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 193.2
-              },
-              {
-                "counter": "runtime",
-                "value": 10,
-                "at_ms": 209.7
+                "at_ms": 211.5
               }
             ]
           },
@@ -2425,11 +2493,11 @@
             "interface_inert": true,
             "disabled_control_count": 8,
             "total_control_count": 8,
-            "drive_x": "0.09",
+            "drive_x": "0.08",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
-            "runtime_frame_count": "10",
-            "terminal_frame_count": "10",
+            "boot_frame_count": null,
+            "runtime_frame_count": "9",
+            "terminal_frame_count": "9",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2443,11 +2511,11 @@
             "interface_inert": true,
             "disabled_control_count": 8,
             "total_control_count": 8,
-            "drive_x": "0.09",
+            "drive_x": "0.08",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
-            "runtime_frame_count": "10",
-            "terminal_frame_count": "10",
+            "boot_frame_count": null,
+            "runtime_frame_count": "9",
+            "terminal_frame_count": "9",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2462,47 +2530,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 93.7
+                "at_ms": 98
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 99.7
+                "at_ms": 100.6
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 112.7
+                "at_ms": 111.4
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 129
+                "at_ms": 125.9
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 145.6
+                "at_ms": 143.4
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 162.9
+                "at_ms": 158.4
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 179.2
+                "at_ms": 174.9
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 196.2
+                "at_ms": 191.7
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 213.3
+                "at_ms": 209.3
+              },
+              {
+                "counter": "runtime",
+                "value": 10,
+                "at_ms": 227.8
               }
             ]
           },
@@ -2519,9 +2592,9 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
-            "runtime_frame_count": "9",
-            "terminal_frame_count": "9",
+            "boot_frame_count": null,
+            "runtime_frame_count": "10",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2537,9 +2610,9 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
-            "runtime_frame_count": "9",
-            "terminal_frame_count": "9",
+            "boot_frame_count": null,
+            "runtime_frame_count": "10",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2706,7 +2779,7 @@
               "selector": ".control-panel",
               "rect_css_px": {
                 "left": 12,
-                "right": 378,
+                "right": 292,
                 "top": 769,
                 "bottom": 832
               },
@@ -2717,8 +2790,8 @@
               "rect_css_px": {
                 "left": 12,
                 "right": 378,
-                "top": 716,
-                "bottom": 750
+                "top": 701,
+                "bottom": 735
               },
               "intersects_machine_bounds": false
             },

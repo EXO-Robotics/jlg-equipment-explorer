@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 
 const clearanceFixtureBytes=readFileSync(new URL("../machines/742/clearance-obstacles.json",import.meta.url));
 const clearanceObstacles=JSON.parse(clearanceFixtureBytes);
-if(clearanceObstacles.configuration_id!=="742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"||clearanceObstacles.asset_sha256!=="6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2")throw new Error("GLB-derived clearance obstacle fixture identity drift");
+if(clearanceObstacles.configuration_id!=="742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"||clearanceObstacles.asset_sha256!=="a6c75d61abd28e7b56df2af922cac29e93c75293f5ffe5310945fee4818ea8bd")throw new Error("GLB-derived clearance obstacle fixture identity drift");
 
 const dist=([a,b,c],[x,y,z])=>Math.hypot(a-x,b-y,c-z);
 const sub=([a,b,c],[x,y,z])=>[a-x,b-y,c-z];

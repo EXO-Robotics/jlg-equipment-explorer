@@ -31,7 +31,7 @@ def main():
     require(INDEX, [
         '<link rel="icon" href="../favicon.ico" type="image/x-icon">',
         'body data-machine="742"', 'id="app" role="application" tabindex="0"', 'aria-describedby="viewer-instructions"',
-        'id="motion-status"', 'id="motion-announcement" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'aria-label="Adjust machine controls"', 'id="machine-controls-body"',
+        'id="motion-status"', 'id="motion-announcement" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'aria-label="Close machine controls"', 'id="machine-controls-body"',
         'id="lift-control"', 'id="telescope-control"', 'id="tilt-control"', 'id="steer-control"', 'id="level-control"',
         'data-steer-mode="circle"', 'data-steer-mode="crab"', 'data-steer-mode="front"', 'id="showcase"', 'id="stow"',
         'id="inspector" role="dialog" aria-modal="true"', 'aria-describedby="inspector-copy" inert',
@@ -81,7 +81,7 @@ def main():
         'function showTerminalError(', 'viewer-terminal-error', 'identity-failed', 'contract-failed', 'load-failed', 'loader-start-failed',
         'controlPanel.querySelectorAll("button, input")', 'document.body.dataset.viewerTerminal = "true"',
         'handleMotionPreferenceChange', 'motionPreference.addEventListener("change"', 'motionPreference.addListener?.(', 'syncReducedMotion(true)', 'showcaseStarted = null',
-        'controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Adjust machine controls")',
+        'controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls")',
         'scheduleMotionAnnouncement', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
         'if (!skipNextVisibleFrame && renderedInterval > 0)', 'sorted.filter((sample) => sample >= 250).length',
         'const windowMs = sorted.reduce((sum, sample) => sum + sample, 0)', 'frameTimes.length * 1000 / windowMs',

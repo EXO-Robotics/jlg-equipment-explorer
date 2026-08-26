@@ -722,7 +722,14 @@ async function captureDesktop742() {
   const { page, errors } = opened;
   await waitLoaded(page, "glb-validated", "selection 6/6 ready");
   const stowed = await snapshot(page);
-  assert((await page.locator("#controls-toggle").getAttribute("aria-expanded")) === "true", "desktop controls not expanded");
+  const desktopControlsToggle = page.locator("#controls-toggle");
+  assert((await desktopControlsToggle.getAttribute("aria-expanded")) === "true", "desktop controls not expanded");
+  await desktopControlsToggle.click();
+  await page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "false" && document.body.classList.contains("controls-panel-collapsed") && document.querySelector("#machine-controls-body")?.hidden);
+  const desktopPanelCollapsed = await snapshot(page, [...BASE_SELECTORS, "#machine-controls-body"]);
+  assert(await desktopControlsToggle.isVisible(), "desktop controls cannot be reopened after close");
+  await desktopControlsToggle.click();
+  await page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "true" && !document.body.classList.contains("controls-panel-collapsed") && !document.querySelector("#machine-controls-body")?.hidden);
   const values = {};
   for (const [selector, value] of [["#lift-control", 100], ["#telescope-control", 100], ["#tilt-control", 25], ["#level-control", 50]]) values[selector] = await setRange(page, selector, value);
   await page.waitForTimeout(500);
@@ -776,6 +783,7 @@ async function captureDesktop742() {
   await opened.context.close();
   const assertions = {
     load_stowed: pass({ source: "glb-validated", selection: "6/6 ready", runtime_error_count: 0 }),
+    desktop_panel_close: pass({ collapsed_snapshot: desktopPanelCollapsed, reopen_available: true, reopened: true }),
     manual_controls: pass({ values }),
     steering_modes: pass({ pressed_modes: modes, center_required_rejection: centerRequiredRejection }),
     maximum_pose_reset: pass({ reset_pressed_while_pose: "maximum", before_reset: beforeReset, after_reset: resetView, settle: resetSettle }),
@@ -1211,6 +1219,14 @@ async function captureRegression(model) {
   const screenshots = [];
   const desktop = await openPage([1280, 720], route);
   await waitLoaded(desktop.page, expectedSource, selection);
+  const desktopControlsToggle = desktop.page.locator("#controls-toggle");
+  assert((await desktopControlsToggle.getAttribute("aria-expanded")) === "true", `${model} desktop controls not expanded`);
+  await desktopControlsToggle.click();
+  await desktop.page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "false" && document.body.classList.contains("controls-panel-collapsed") && document.querySelector("#machine-controls-body")?.hidden);
+  const desktopPanelCollapsed = await snapshot(desktop.page, [...BASE_SELECTORS, "#machine-controls-body"]);
+  assert(await desktopControlsToggle.isVisible(), `${model} desktop controls cannot be reopened after close`);
+  await desktopControlsToggle.click();
+  await desktop.page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "true" && !document.body.classList.contains("controls-panel-collapsed") && !document.querySelector("#machine-controls-body")?.hidden);
   await desktop.page.waitForFunction(() => {
     const diagnostics = document.querySelector("#diagnostics")?.value || "";
     return diagnostics.includes("p95 ") && !diagnostics.includes("sampling");
@@ -1310,7 +1326,7 @@ async function captureRegression(model) {
   assert(axModal.some((node) => node.role === "dialog"), `${model} AX modal missing dialog`);
   const assertions = {
     load_exact_release: pass({ route: model === "600s" ? "/" : "/es1930m/", parsed_status: parsed }),
-    desktop_controls: pass({ selector: sliderSelector, result: controlResult }),
+    desktop_controls: pass({ selector: sliderSelector, result: controlResult, collapsed_snapshot: desktopPanelCollapsed, reopen_available: true, reopened: true }),
     mobile_controls: pass({ viewport_css_px: [390, 844], aria_expanded: true }),
     modal_keyboard: pass({ initial_focus_id: activeOpen, tab_inside: tabInside, restored_focus_component: restored }),
     drag_orbit: pass({ before_canvas_sha256: drag.before, after_canvas_sha256: drag.after }),

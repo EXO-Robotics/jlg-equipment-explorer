@@ -31,7 +31,7 @@
       "source": "repo-locked-default",
       "lockfile": {
         "path": "package-lock.json",
-        "sha256": "2ef1cc05948a5f57e656b278dce3896cc5a73c7f3fcf9131b75d3b068f840315",
+        "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
         "bytes": 1786
       },
       "browser_executable": {
@@ -2036,28 +2036,28 @@
         ]
       }
     },
-    "captured_at_utc": "2026-08-26T14:18:29.141Z",
+    "captured_at_utc": "2026-08-26T14:49:18.336Z",
     "physical_device_session": false,
     "assistive_technology_session": false
   },
   "capture_runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
-    "bytes": 88402
+    "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4",
+    "bytes": 90441
   },
   "capture_artifacts": {
     "screenshots": [
       {
         "path": "docs/review/742/browser-captures/742-accessibility-modal.png",
-        "sha256": "042345fe88280b06c2457b642a1765f8427e55e9196048e1484e2ee91ea18fb7",
-        "bytes": 179454,
+        "sha256": "4baa9ee808be7f913fd9e7d075348fe0e333a120dba4ea2981e79f11e25610ce",
+        "bytes": 180681,
         "width_px": 1280,
         "height_px": 720
       }
     ],
     "automation_trace": {
       "path": "docs/review/742/browser-captures/accessibility-semantics-and-keyboard-trace.json",
-      "sha256": "23347aca145801e2d4e2940172a579f84e1c5371e0eb3c4058a909b45277d77f",
+      "sha256": "6387c2358ab01c530aa85bd79398d17484faf8c61bcfde30b431ffeaf7891b07",
       "bytes": 99878,
       "width_px": null,
       "height_px": null
@@ -2073,10 +2073,10 @@
       "nodes": [
         {
           "selector": "body",
-          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controls\n        StowedClose\n        \n      \n      \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Run showcaseStow machineReset view\n        Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More →\n    \n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 38 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
+          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controls\n        StowedClose\n        \n      \n      \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Run showcaseStow machineReset view\n        Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More →\n    \n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 39 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
           "attributes": {
             "data-machine": "742",
-            "data-runtime-release": "1.6.7",
+            "data-runtime-release": "1.6.8",
             "data-boot-frame-count": "2",
             "data-runtime-error-count": "0",
             "data-viewer-started": "true",
@@ -2109,7 +2109,7 @@
             "data-zone": "stowed",
             "data-steer-mode-alignment": "centered",
             "data-runtime-frame-count": "31",
-            "data-runtime-last-frame-ms": "583.500",
+            "data-runtime-last-frame-ms": "582.000",
             "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
             "data-selection-fixture-cases": "5/5",
             "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2131,7 +2131,7 @@
         },
         {
           "selector": "#diagnostics",
-          "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 38 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full",
+          "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 39 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full",
           "attributes": {
             "class": "diagnostics",
             "id": "diagnostics"
@@ -2146,8 +2146,7 @@
             "type": "button",
             "aria-controls": "machine-controls-body",
             "aria-expanded": "true",
-            "aria-label": "Close machine controls",
-            "hidden": ""
+            "aria-label": "Close machine controls"
           }
         },
         {
@@ -3146,6 +3145,66 @@
               ]
             },
             {
+              "node_id": "76",
+              "backend_dom_node_id": 76,
+              "role": "button",
+              "name": {
+                "type": "computedString",
+                "value": "Close machine controls",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false",
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true,
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "expanded",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true,
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "controls",
+                  "value": {
+                    "type": "idrefList",
+                    "value": "machine-controls-body",
+                    "related_nodes": [
+                      {
+                        "backend_dom_node_id": 78,
+                        "idref": "machine-controls-body",
+                        "text": null
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
               "node_id": "77",
               "backend_dom_node_id": 77,
               "role": "paragraph",
@@ -3666,7 +3725,7 @@
               "role": "StaticText",
               "name": {
                 "type": "computedString",
-                "value": "MACHINE 742 · CONFIG 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · SOURCE GLB-VALIDATED · SELECTION 6/6 READY · ERRORS 0 · LOAD 38 MS · SAMPLING · SAMPLES 1 · P95 SAMPLING · WORST SAMPLING · VISIBLE STALLS 0 · PROFILE DESKTOP · MOTION FULL",
+                "value": "MACHINE 742 · CONFIG 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · SOURCE GLB-VALIDATED · SELECTION 6/6 READY · ERRORS 0 · LOAD 39 MS · SAMPLING · SAMPLES 1 · P95 SAMPLING · WORST SAMPLING · VISIBLE STALLS 0 · PROFILE DESKTOP · MOTION FULL",
                 "related_nodes": []
               },
               "description": {
@@ -4153,6 +4212,27 @@
               "properties": []
             },
             {
+              "node_id": "200",
+              "backend_dom_node_id": 200,
+              "role": "StaticText",
+              "name": {
+                "type": "computedString",
+                "value": "CLOSE",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
               "node_id": "79",
               "backend_dom_node_id": 79,
               "role": "LabelText",
@@ -4455,7 +4535,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000047",
+              "node_id": "-1000000048",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4770,7 +4850,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000062",
+              "node_id": "-1000000063",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4791,33 +4871,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000063",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "/",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
               "node_id": "-1000000064",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": " SCROLL OR PINCH TO ZOOM ",
+                "value": "/",
                 "related_nodes": []
               },
               "description": {
@@ -4838,7 +4897,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "/",
+                "value": " SCROLL OR PINCH TO ZOOM ",
                 "related_nodes": []
               },
               "description": {
@@ -4859,7 +4918,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": " BUTTONS OPEN DETAILS",
+                "value": "/",
                 "related_nodes": []
               },
               "description": {
@@ -4880,7 +4939,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "MACHINE 742 · CONFIG 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · SOURCE GLB-VALIDATED · SELECTION 6/6 READY · ",
+                "value": " BUTTONS OPEN DETAILS",
                 "related_nodes": []
               },
               "description": {
@@ -4901,7 +4960,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "ERRORS 0 · LOAD 38 MS · SAMPLING · SAMPLES 1 · P95 SAMPLING · WORST SAMPLING · VISIBLE STALLS 0 · PROFILE DESKTOP ",
+                "value": "MACHINE 742 · CONFIG 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · SOURCE GLB-VALIDATED · SELECTION 6/6 READY · ",
                 "related_nodes": []
               },
               "description": {
@@ -4918,6 +4977,27 @@
             },
             {
               "node_id": "-1000000069",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "ERRORS 0 · LOAD 39 MS · SAMPLING · SAMPLES 1 · P95 SAMPLING · WORST SAMPLING · VISIBLE STALLS 0 · PROFILE DESKTOP ",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000070",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5238,6 +5318,27 @@
               "name": {
                 "type": "computedString",
                 "value": "Machine controls",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000025",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "CLOSE",
                 "related_nodes": []
               },
               "description": {
@@ -6278,7 +6379,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000049",
+              "node_id": "-1000000050",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6320,7 +6421,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000051",
+              "node_id": "-1000000052",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6362,7 +6463,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000053",
+              "node_id": "-1000000054",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6404,7 +6505,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000055",
+              "node_id": "-1000000056",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6446,7 +6547,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000057",
+              "node_id": "-1000000058",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6488,7 +6589,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000059",
+              "node_id": "-1000000060",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6530,7 +6631,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000061",
+              "node_id": "-1000000062",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6614,7 +6715,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000025",
+              "node_id": "-1000000026",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6656,7 +6757,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000027",
+              "node_id": "-1000000028",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6698,7 +6799,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000029",
+              "node_id": "-1000000030",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6740,7 +6841,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000031",
+              "node_id": "-1000000032",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6782,7 +6883,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000033",
+              "node_id": "-1000000034",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6866,7 +6967,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000037",
+              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6908,7 +7009,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000039",
+              "node_id": "-1000000040",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6929,7 +7030,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000040",
+              "node_id": "-1000000041",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6950,7 +7051,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000041",
+              "node_id": "-1000000042",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6971,7 +7072,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000042",
+              "node_id": "-1000000043",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6992,7 +7093,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000043",
+              "node_id": "-1000000044",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7013,7 +7114,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000044",
+              "node_id": "-1000000045",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7034,7 +7135,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000045",
+              "node_id": "-1000000046",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7055,7 +7156,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000046",
+              "node_id": "-1000000047",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7076,7 +7177,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000048",
+              "node_id": "-1000000049",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7097,7 +7198,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000050",
+              "node_id": "-1000000051",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7118,7 +7219,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000052",
+              "node_id": "-1000000053",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7139,7 +7240,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000054",
+              "node_id": "-1000000055",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7160,7 +7261,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000056",
+              "node_id": "-1000000057",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7181,7 +7282,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000058",
+              "node_id": "-1000000059",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7202,7 +7303,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000060",
+              "node_id": "-1000000061",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7223,7 +7324,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000026",
+              "node_id": "-1000000027",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7244,7 +7345,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000028",
+              "node_id": "-1000000029",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7265,7 +7366,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000030",
+              "node_id": "-1000000031",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7286,7 +7387,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000032",
+              "node_id": "-1000000033",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7307,7 +7408,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000034",
+              "node_id": "-1000000035",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7328,7 +7429,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000035",
+              "node_id": "-1000000036",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7349,7 +7450,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000036",
+              "node_id": "-1000000037",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7370,7 +7471,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000038",
+              "node_id": "-1000000039",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7992,7 +8093,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000070",
+              "node_id": "-1000000071",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8013,7 +8114,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000090",
+              "node_id": "-1000000091",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8034,7 +8135,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000091",
+              "node_id": "-1000000092",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8055,7 +8156,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000092",
+              "node_id": "-1000000093",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8076,7 +8177,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000093",
+              "node_id": "-1000000094",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8097,7 +8198,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000094",
+              "node_id": "-1000000095",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8118,7 +8219,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000095",
+              "node_id": "-1000000096",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8139,7 +8240,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000096",
+              "node_id": "-1000000097",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8286,7 +8387,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000085",
+              "node_id": "-1000000086",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8307,7 +8408,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000099",
+              "node_id": "-1000000100",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8328,7 +8429,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000098",
+              "node_id": "-1000000099",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8349,7 +8450,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000103",
+              "node_id": "-1000000104",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8370,7 +8471,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000101",
+              "node_id": "-1000000102",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8391,7 +8492,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000102",
+              "node_id": "-1000000103",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8412,7 +8513,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000106",
+              "node_id": "-1000000107",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8433,7 +8534,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000105",
+              "node_id": "-1000000106",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {

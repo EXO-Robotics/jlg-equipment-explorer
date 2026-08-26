@@ -19,15 +19,15 @@
   <meta name="twitter:image" content="https://exo-robotics.github.io/jlg-equipment-explorer/assets/social/equipment-explorer-pages-thumbnail.png">
   <meta name="twitter:image:alt" content="JLG 600S boom lift reconstruction shown in the 3D authoring workspace">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
-  <link rel="preload" href="../assets/models/742.glb?v=6cc1585b7ce3" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.1.5">
-  <link rel="stylesheet" href="../viewer/742.css?v=1.6.7">
+  <link rel="preload" href="../assets/models/742.glb?v=a6c75d61abd2" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="../viewer.css?v=1.1.6">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.6.8">
   <link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">
   <script type="importmap">
     {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
   </script>
 </head>
-<body data-machine="742" data-runtime-release="1.6.7">
+<body data-machine="742" data-runtime-release="1.6.8">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
   <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
 
@@ -64,7 +64,7 @@
     <section class="control-panel telehandler-controls" aria-labelledby="operate-title">
       <div class="panel-heading">
         <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
-        <div class="panel-state"><output id="motion-status" aria-hidden="true">Stowed</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="false" aria-label="Adjust machine controls">Adjust</button></div>
+        <div class="panel-state"><output id="motion-status" aria-hidden="true">Stowed</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">Close</button></div>
         <p class="sr-only" id="motion-announcement" aria-live="polite" aria-atomic="true"></p>
       </div>
       <div class="controls-body" id="machine-controls-body">
@@ -147,6 +147,6 @@
       window.__show742ModuleFailure("The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, bootTimeoutMs);
   </script>
-  <script type="module" src="../viewer/742-runtime.js?v=1.6.7" onerror="window.__show742ModuleFailure()"></script>
+  <script type="module" src="../viewer/742-runtime.js?v=1.6.8" onerror="window.__show742ModuleFailure()"></script>
 </body>
 </html>

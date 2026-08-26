@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.14";
+} from "./assets/models/600s.version.js?v=1.1.15";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -53,26 +53,27 @@ function updateMobileControlHeight() {
   document.documentElement.style.setProperty("--mobile-controls-height", `${Math.ceil(controlPanel.getBoundingClientRect().height)}px`);
 }
 
-function setMobileControls(open) {
+function setControlsPanel(open) {
   const isMobile = mobileControlsQuery.matches;
-  const expanded = isMobile ? open : true;
+  const expanded = Boolean(open);
   controlsBody.hidden = !expanded;
   controlsBody.inert = !expanded;
-  controlsToggle.hidden = !isMobile;
+  controlsToggle.hidden = false;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
-  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Adjust machine controls");
-  controlsToggle.textContent = expanded ? "Close" : "Adjust";
+  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls");
+  controlsToggle.textContent = expanded ? "Close" : (isMobile ? "Adjust" : "Open");
   document.body.classList.toggle("mobile-controls-open", isMobile && expanded);
+  document.body.classList.toggle("controls-panel-collapsed", !expanded);
   requestAnimationFrame(updateMobileControlHeight);
 }
 
 controlsToggle.addEventListener("click", () => {
-  setMobileControls(controlsToggle.getAttribute("aria-expanded") !== "true");
+  setControlsPanel(controlsToggle.getAttribute("aria-expanded") !== "true");
 });
-const handleMobileControlsChange = () => setMobileControls(false);
+const handleMobileControlsChange = () => setControlsPanel(!mobileControlsQuery.matches);
 if (mobileControlsQuery.addEventListener) mobileControlsQuery.addEventListener("change", handleMobileControlsChange);
 else mobileControlsQuery.addListener(handleMobileControlsChange);
-setMobileControls(false);
+setControlsPanel(mobileControlsQuery.matches ? query.get("controls") === "1" : true);
 
 function recordRuntimeError(error) {
   runtimeDiagnostics.errors += 1;

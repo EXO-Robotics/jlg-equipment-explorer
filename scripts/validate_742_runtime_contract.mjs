@@ -73,7 +73,7 @@ requireTokens(articulation, [
   '"BoomAngleSensorCrank"', '"BoomAngleSensorFrameJoint"', '"BoomAngleSensorCrankJoint"',
   '...["L","R"].flatMap', "Array.from({length:8}", '"RetractChain_C_Moving"',
   "Object.entries(geometry.beams)", "Object.entries(geometry.points)",
-  'presentation_visibility!=="concealed_inside_boom_head"', "node.visible=false",
+  'presentation_visibility!=="visible_schematic_actuator_reconstructed_anchors"', "node.visible=true",
 ]);
 if (/renderedInterval\s*<\s*250/.test(runtime)) throw new Error("Visible stalls are excluded from the performance window");
 if (runtime.includes("orbit.desiredDistance = view.distance")) throw new Error("Pose framing bypasses the dynamic zoom cap");

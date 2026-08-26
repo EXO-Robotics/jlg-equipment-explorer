@@ -31,7 +31,7 @@
       "source": "repo-locked-default",
       "lockfile": {
         "path": "package-lock.json",
-        "sha256": "2ef1cc05948a5f57e656b278dce3896cc5a73c7f3fcf9131b75d3b068f840315",
+        "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
         "bytes": 1786
       },
       "browser_executable": {
@@ -2036,36 +2036,36 @@
         ]
       }
     },
-    "captured_at_utc": "2026-08-26T14:18:48.635Z",
+    "captured_at_utc": "2026-08-26T14:49:37.607Z",
     "physical_device_session": false,
     "assistive_technology_session": false
   },
   "capture_runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
-    "bytes": 88402
+    "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4",
+    "bytes": 90441
   },
   "capture_artifacts": {
     "screenshots": [
       {
         "path": "docs/review/742/browser-captures/600s-regression-desktop.png",
-        "sha256": "2d97b9761f6be888105bb8720182533e988c5dc1312048f66096763750c3de80",
-        "bytes": 120961,
+        "sha256": "f0027f53dd0bd5ad8859adb5d3a85575fb9302b01b8c1941fab5d76e53c0d312",
+        "bytes": 121423,
         "width_px": 1280,
         "height_px": 720
       },
       {
         "path": "docs/review/742/browser-captures/600s-regression-mobile.png",
-        "sha256": "d320876c4e26cd2d26274907cbd3a8c3d2a17093b186cbf2f2eb41ff0f917a63",
-        "bytes": 68863,
+        "sha256": "5500e530961c33e80b44855604b69e599de5abe7923b8ad98a064b61e07f37f5",
+        "bytes": 68623,
         "width_px": 390,
         "height_px": 844
       }
     ],
     "automation_trace": {
       "path": "docs/review/742/browser-captures/600s-browser-regression-trace.json",
-      "sha256": "535a83c0c4cd142a0d756e3abfe8cac3cc9e97204648eff3c15f614ac4ff3a32",
-      "bytes": 117741,
+      "sha256": "ac2bec482bf66ecc37a763a4aeace48a6a2c74fe50ba6dd27e4bd2239be852ac",
+      "bytes": 125888,
       "width_px": null,
       "height_px": null
     }
@@ -2074,13 +2074,13 @@
     "page": {
       "route": "/",
       "title": "600S Interactive Equipment Study",
-      "status_text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 124 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
+      "status_text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
       "parsed_status": {
         "source": "blender-showcase-v1.1.0",
         "meshes": 98,
         "selection": "5/5 pass",
         "errors": 0,
-        "load_ms": 124,
+        "load_ms": 125,
         "render_profile": "desktop",
         "fps": 60,
         "p95_ms": 16.8,
@@ -2097,7 +2097,7 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading012°\n            Loop3%\n          \n          Start auto\n        \n\n        \n          Boom lift18°\n          18°\n        \n        \n          Extend89%\n          89%\n        \n        \n          Rotate33°\n          33°\n        \n        \n          Steering20°\n          20°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 124 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading012°\n            Loop3%\n          \n          Start auto\n        \n\n        \n          Boom lift18°\n          18°\n        \n        \n          Extend89%\n          89%\n        \n        \n          Rotate33°\n          33°\n        \n        \n          Steering20°\n          20°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
               "data-boot-frame-count": "2",
               "data-viewer-started": "true",
@@ -2112,12 +2112,12 @@
               "data-drive-loop": "3",
               "data-drive-route-error-m": "0.01",
               "data-canvas-interaction": "navigation-only",
-              "data-orbit-camera-distance-m": "19.741",
-              "data-orbit-desired-distance-m": "19.762",
+              "data-orbit-camera-distance-m": "19.739",
+              "data-orbit-desired-distance-m": "19.761",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "126",
-              "data-runtime-last-frame-ms": "2193.200",
-              "data-drive-x": "1.51",
+              "data-runtime-last-frame-ms": "2179.100",
+              "data-drive-x": "1.50",
               "data-drive-z": "-0.14",
               "data-steer-left-deg": "24.2",
               "data-steer-right-deg": "18.1",
@@ -2126,8 +2126,9 @@
               "data-wheel-roll-hierarchy": "separated",
               "data-hose-solver-count": "2",
               "data-telescope-layer-cue-count": "14",
-              "data-load-ms": "124",
+              "data-load-ms": "125",
               "data-selection-selftest": "pass",
+              "class": "",
               "data-sampled-fps": "60",
               "data-frame-p95-ms": "16.8"
             }
@@ -2141,7 +2142,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 124 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
+            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics",
@@ -2157,7 +2158,6 @@
               "type": "button",
               "aria-controls": "machine-controls-body",
               "aria-expanded": "true",
-              "hidden": "",
               "aria-label": "Close machine controls"
             }
           },
@@ -2185,12 +2185,13 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the mobile render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Start auto\n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend66%\n          66%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 122 ms · render mobile / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the mobile render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Start auto\n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend67%\n          67%\n        \n        \n          Rotate26°\n          26°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 120 ms · render mobile / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
               "data-boot-frame-count": "2",
               "data-viewer-started": "true",
               "data-render-profile": "mobile",
               "data-reduced-motion": "false",
+              "class": "mobile-controls-open",
               "data-viewer-runtime-active": "true",
               "data-runtime-error-count": "0",
               "data-machine-source": "blender-showcase-v1.1.0",
@@ -2200,23 +2201,22 @@
               "data-drive-loop": "1",
               "data-drive-route-error-m": "0.00",
               "data-canvas-interaction": "navigation-only",
-              "data-orbit-camera-distance-m": "27.810",
-              "data-orbit-desired-distance-m": "29.463",
+              "data-orbit-camera-distance-m": "27.931",
+              "data-orbit-desired-distance-m": "29.571",
               "data-viewer-module-loaded": "true",
-              "data-runtime-frame-count": "33",
-              "data-runtime-last-frame-ms": "637.300",
-              "data-drive-x": "0.40",
-              "data-drive-z": "-0.00",
-              "data-steer-left-deg": "24.4",
-              "data-steer-right-deg": "18.2",
+              "data-runtime-frame-count": "34",
+              "data-runtime-last-frame-ms": "644.200",
+              "data-drive-x": "0.41",
+              "data-drive-z": "-0.01",
+              "data-steer-left-deg": "24.6",
+              "data-steer-right-deg": "18.4",
               "data-machine-visible-meshes": "98",
               "data-machine-merged-buckets": "40",
               "data-wheel-roll-hierarchy": "separated",
               "data-hose-solver-count": "2",
               "data-telescope-layer-cue-count": "14",
-              "data-load-ms": "122",
-              "data-selection-selftest": "pass",
-              "class": "mobile-controls-open"
+              "data-load-ms": "120",
+              "data-selection-selftest": "pass"
             }
           },
           {
@@ -2228,7 +2228,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 122 ms · render mobile / sampling · reduced motion off",
+            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 120 ms · render mobile / sampling · reduced motion off",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics",
@@ -2271,7 +2271,7 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Positioning\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading000°\n            Loop0%\n          \n          Start auto\n        \n\n        \n          Boom lift0°\n          0°\n        \n        \n          Extend0%\n          0%\n        \n        \n          Rotate0°\n          0°\n        \n        \n          Steering0°\n          0°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 124 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off\n  \n\n  \n  \n    ×\n    Component view\n    Chassis\n    The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.\n    Visible systemFrame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deckConfiguration4WD hydrostatic with two-wheel front steerBoundarySteering anchors and angles remain visual reconstructions\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Positioning\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading000°\n            Loop0%\n          \n          Start auto\n        \n\n        \n          Boom lift0°\n          0°\n        \n        \n          Extend0%\n          0%\n        \n        \n          Rotate0°\n          0°\n        \n        \n          Steering0°\n          0°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off\n  \n\n  \n  \n    ×\n    Component view\n    Chassis\n    The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.\n    Visible systemFrame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deckConfiguration4WD hydrostatic with two-wheel front steerBoundarySteering anchors and angles remain visual reconstructions\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
               "data-boot-frame-count": "2",
               "data-viewer-started": "true",
@@ -2286,11 +2286,11 @@
               "data-drive-loop": "0",
               "data-drive-route-error-m": "0.00",
               "data-canvas-interaction": "navigation-only",
-              "data-orbit-camera-distance-m": "17.371",
+              "data-orbit-camera-distance-m": "17.426",
               "data-orbit-desired-distance-m": "8.500",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "172",
-              "data-runtime-last-frame-ms": "2959.900",
+              "data-runtime-last-frame-ms": "2945.700",
               "data-drive-x": "0.00",
               "data-drive-z": "0.00",
               "data-steer-left-deg": "0.3",
@@ -2300,11 +2300,11 @@
               "data-wheel-roll-hierarchy": "separated",
               "data-hose-solver-count": "2",
               "data-telescope-layer-cue-count": "14",
-              "data-load-ms": "124",
+              "data-load-ms": "125",
               "data-selection-selftest": "pass",
+              "class": "inspector-open",
               "data-sampled-fps": "60",
-              "data-frame-p95-ms": "16.8",
-              "class": "inspector-open"
+              "data-frame-p95-ms": "16.8"
             }
           },
           {
@@ -2316,7 +2316,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 124 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
+            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics",
@@ -2332,7 +2332,6 @@
               "type": "button",
               "aria-controls": "machine-controls-body",
               "aria-expanded": "true",
-              "hidden": "",
               "aria-label": "Close machine controls"
             }
           },
@@ -2462,8 +2461,8 @@
               ]
             },
             {
-              "node_id": "46",
-              "backend_dom_node_id": 46,
+              "node_id": "47",
+              "backend_dom_node_id": 47,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -2483,8 +2482,8 @@
               "properties": []
             },
             {
-              "node_id": "47",
-              "backend_dom_node_id": 47,
+              "node_id": "48",
+              "backend_dom_node_id": 48,
               "role": "application",
               "name": {
                 "type": "computedString",
@@ -2525,7 +2524,7 @@
                     "value": "viewer-instructions",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 48,
+                        "backend_dom_node_id": 49,
                         "idref": "viewer-instructions",
                         "text": null
                       }
@@ -2535,8 +2534,8 @@
               ]
             },
             {
-              "node_id": "48",
-              "backend_dom_node_id": 48,
+              "node_id": "49",
+              "backend_dom_node_id": 49,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -2556,8 +2555,8 @@
               "properties": []
             },
             {
-              "node_id": "54",
-              "backend_dom_node_id": 54,
+              "node_id": "55",
+              "backend_dom_node_id": 55,
               "role": "main",
               "name": {
                 "type": "computedString",
@@ -2598,8 +2597,8 @@
               "properties": []
             },
             {
-              "node_id": "55",
-              "backend_dom_node_id": 55,
+              "node_id": "56",
+              "backend_dom_node_id": 56,
               "role": "sectionheader",
               "name": {
                 "type": "computedString",
@@ -2619,8 +2618,8 @@
               "properties": []
             },
             {
-              "node_id": "65",
-              "backend_dom_node_id": 65,
+              "node_id": "67",
+              "backend_dom_node_id": 67,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -2645,7 +2644,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 11,
+                        "backend_dom_node_id": 10,
                         "idref": "machine-title",
                         "text": "600S"
                       }
@@ -2655,8 +2654,8 @@
               ]
             },
             {
-              "node_id": "69",
-              "backend_dom_node_id": 69,
+              "node_id": "71",
+              "backend_dom_node_id": 71,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -2676,8 +2675,8 @@
               "properties": []
             },
             {
-              "node_id": "80",
-              "backend_dom_node_id": 80,
+              "node_id": "12",
+              "backend_dom_node_id": 12,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -2702,7 +2701,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 84,
+                        "backend_dom_node_id": 85,
                         "idref": "operate-title",
                         "text": "Machine controls"
                       }
@@ -2754,8 +2753,8 @@
               "properties": []
             },
             {
-              "node_id": "15",
-              "backend_dom_node_id": 15,
+              "node_id": "16",
+              "backend_dom_node_id": 16,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -2829,8 +2828,8 @@
               "properties": []
             },
             {
-              "node_id": "56",
-              "backend_dom_node_id": 56,
+              "node_id": "57",
+              "backend_dom_node_id": 57,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -2867,8 +2866,8 @@
               ]
             },
             {
-              "node_id": "60",
-              "backend_dom_node_id": 60,
+              "node_id": "61",
+              "backend_dom_node_id": 61,
               "role": "navigation",
               "name": {
                 "type": "computedString",
@@ -2888,8 +2887,8 @@
               "properties": []
             },
             {
-              "node_id": "63",
-              "backend_dom_node_id": 63,
+              "node_id": "65",
+              "backend_dom_node_id": 65,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -2909,8 +2908,8 @@
               "properties": []
             },
             {
-              "node_id": "64",
-              "backend_dom_node_id": 64,
+              "node_id": "66",
+              "backend_dom_node_id": 66,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -2976,8 +2975,8 @@
               "properties": []
             },
             {
-              "node_id": "11",
-              "backend_dom_node_id": 11,
+              "node_id": "10",
+              "backend_dom_node_id": 10,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -3006,8 +3005,8 @@
               ]
             },
             {
-              "node_id": "68",
-              "backend_dom_node_id": 68,
+              "node_id": "70",
+              "backend_dom_node_id": 70,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -3027,8 +3026,8 @@
               "properties": []
             },
             {
-              "node_id": "71",
-              "backend_dom_node_id": 71,
+              "node_id": "73",
+              "backend_dom_node_id": 73,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3069,8 +3068,8 @@
               "properties": []
             },
             {
-              "node_id": "74",
-              "backend_dom_node_id": 74,
+              "node_id": "76",
+              "backend_dom_node_id": 76,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3111,8 +3110,8 @@
               "properties": []
             },
             {
-              "node_id": "77",
-              "backend_dom_node_id": 77,
+              "node_id": "79",
+              "backend_dom_node_id": 79,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3153,8 +3152,8 @@
               "properties": []
             },
             {
-              "node_id": "79",
-              "backend_dom_node_id": 79,
+              "node_id": "81",
+              "backend_dom_node_id": 81,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -3195,8 +3194,8 @@
               "properties": []
             },
             {
-              "node_id": "84",
-              "backend_dom_node_id": 84,
+              "node_id": "85",
+              "backend_dom_node_id": 85,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -3225,8 +3224,8 @@
               ]
             },
             {
-              "node_id": "85",
-              "backend_dom_node_id": 85,
+              "node_id": "86",
+              "backend_dom_node_id": 86,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -3274,6 +3273,66 @@
                     "type": "token",
                     "value": "false",
                     "related_nodes": []
+                  }
+                }
+              ]
+            },
+            {
+              "node_id": "11",
+              "backend_dom_node_id": 11,
+              "role": "button",
+              "name": {
+                "type": "computedString",
+                "value": "Close machine controls",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false",
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true,
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "expanded",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true,
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "controls",
+                  "value": {
+                    "type": "idrefList",
+                    "value": "machine-controls-body",
+                    "related_nodes": [
+                      {
+                        "backend_dom_node_id": 87,
+                        "idref": "machine-controls-body",
+                        "text": null
+                      }
+                    ]
                   }
                 }
               ]
@@ -3615,7 +3674,7 @@
               "role": "StaticText",
               "name": {
                 "type": "computedString",
-                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 124 MS · RENDER DESKTOP / 60 FPS / P95 16.8 MS · REDUCED MOTION OFF",
+                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 125 MS · RENDER DESKTOP / 60 FPS / P95 16.8 MS · REDUCED MOTION OFF",
                 "related_nodes": []
               },
               "description": {
@@ -3673,8 +3732,8 @@
               "properties": []
             },
             {
-              "node_id": "3",
-              "backend_dom_node_id": 3,
+              "node_id": "62",
+              "backend_dom_node_id": 62,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -3711,8 +3770,8 @@
               ]
             },
             {
-              "node_id": "61",
-              "backend_dom_node_id": 61,
+              "node_id": "63",
+              "backend_dom_node_id": 63,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -3749,8 +3808,8 @@
               ]
             },
             {
-              "node_id": "62",
-              "backend_dom_node_id": 62,
+              "node_id": "64",
+              "backend_dom_node_id": 64,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -4102,6 +4161,27 @@
               "properties": []
             },
             {
+              "node_id": "189",
+              "backend_dom_node_id": 189,
+              "role": "StaticText",
+              "name": {
+                "type": "computedString",
+                "value": "CLOSE",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
               "node_id": "88",
               "backend_dom_node_id": 88,
               "role": "generic",
@@ -4207,8 +4287,8 @@
               "properties": []
             },
             {
-              "node_id": "18",
-              "backend_dom_node_id": 18,
+              "node_id": "19",
+              "backend_dom_node_id": 19,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -4304,7 +4384,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000047",
+              "node_id": "-1000000048",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4493,7 +4573,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000056",
+              "node_id": "-1000000057",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4514,33 +4594,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000057",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "/",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
               "node_id": "-1000000058",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": " SCROLL OR PINCH TO ZOOM ",
+                "value": "/",
                 "related_nodes": []
               },
               "description": {
@@ -4561,7 +4620,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "/",
+                "value": " SCROLL OR PINCH TO ZOOM ",
                 "related_nodes": []
               },
               "description": {
@@ -4582,7 +4641,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": " BUTTONS OPEN DETAILS",
+                "value": "/",
                 "related_nodes": []
               },
               "description": {
@@ -4603,7 +4662,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 124 MS · RENDER DESKTOP / 60 FPS ",
+                "value": " BUTTONS OPEN DETAILS",
                 "related_nodes": []
               },
               "description": {
@@ -4620,6 +4679,27 @@
             },
             {
               "node_id": "-1000000062",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 125 MS · RENDER DESKTOP / 60 FPS ",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000063",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4976,6 +5056,27 @@
               "properties": []
             },
             {
+              "node_id": "-1000000024",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "CLOSE",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
               "node_id": "190",
               "backend_dom_node_id": 190,
               "role": "StaticText",
@@ -5093,8 +5194,8 @@
               "properties": []
             },
             {
-              "node_id": "13",
-              "backend_dom_node_id": 13,
+              "node_id": "15",
+              "backend_dom_node_id": 15,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -5160,8 +5261,8 @@
               "properties": []
             },
             {
-              "node_id": "10",
-              "backend_dom_node_id": 10,
+              "node_id": "9",
+              "backend_dom_node_id": 9,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -5228,8 +5329,8 @@
               ]
             },
             {
-              "node_id": "16",
-              "backend_dom_node_id": 16,
+              "node_id": "17",
+              "backend_dom_node_id": 17,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -5376,8 +5477,8 @@
               "properties": []
             },
             {
-              "node_id": "7",
-              "backend_dom_node_id": 7,
+              "node_id": "6",
+              "backend_dom_node_id": 6,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -5592,8 +5693,8 @@
               "properties": []
             },
             {
-              "node_id": "9",
-              "backend_dom_node_id": 9,
+              "node_id": "8",
+              "backend_dom_node_id": 8,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -5808,8 +5909,8 @@
               "properties": []
             },
             {
-              "node_id": "8",
-              "backend_dom_node_id": 8,
+              "node_id": "7",
+              "backend_dom_node_id": 7,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -6087,7 +6188,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000049",
+              "node_id": "-1000000050",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6129,7 +6230,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000051",
+              "node_id": "-1000000052",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6171,7 +6272,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000053",
+              "node_id": "-1000000054",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6213,7 +6314,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000055",
+              "node_id": "-1000000056",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6297,7 +6398,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000024",
+              "node_id": "-1000000025",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6465,7 +6566,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000032",
+              "node_id": "-1000000033",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6528,7 +6629,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000035",
+              "node_id": "-1000000036",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6591,7 +6692,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000038",
+              "node_id": "-1000000039",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6654,7 +6755,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000041",
+              "node_id": "-1000000042",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6717,7 +6818,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000044",
+              "node_id": "-1000000045",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6738,7 +6839,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000045",
+              "node_id": "-1000000046",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6759,7 +6860,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000046",
+              "node_id": "-1000000047",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6780,7 +6881,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000048",
+              "node_id": "-1000000049",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6801,7 +6902,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000050",
+              "node_id": "-1000000051",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6822,7 +6923,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000052",
+              "node_id": "-1000000053",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6843,7 +6944,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000054",
+              "node_id": "-1000000055",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6864,7 +6965,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000025",
+              "node_id": "-1000000026",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6885,7 +6986,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000026",
+              "node_id": "-1000000027",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7056,33 +7157,12 @@
               ]
             },
             {
-              "node_id": "-1000000031",
+              "node_id": "-1000000032",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
                 "value": "START AUTO",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000033",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "0°",
                 "related_nodes": []
               },
               "description": {
@@ -7119,12 +7199,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000036",
+              "node_id": "-1000000035",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "0%",
+                "value": "0°",
                 "related_nodes": []
               },
               "description": {
@@ -7161,12 +7241,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000039",
+              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "0°",
+                "value": "0%",
                 "related_nodes": []
               },
               "description": {
@@ -7203,7 +7283,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000042",
+              "node_id": "-1000000041",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7245,7 +7325,28 @@
               "properties": []
             },
             {
-              "node_id": "-1000000027",
+              "node_id": "-1000000044",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "0°",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000028",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7287,7 +7388,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000029",
+              "node_id": "-1000000030",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7329,7 +7430,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000028",
+              "node_id": "-1000000029",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7350,7 +7451,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000030",
+              "node_id": "-1000000031",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -7422,8 +7523,8 @@
               ]
             },
             {
-              "node_id": "46",
-              "backend_dom_node_id": 46,
+              "node_id": "47",
+              "backend_dom_node_id": 47,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -7443,8 +7544,8 @@
               "properties": []
             },
             {
-              "node_id": "47",
-              "backend_dom_node_id": 47,
+              "node_id": "48",
+              "backend_dom_node_id": 48,
               "role": "application",
               "name": {
                 "type": "computedString",
@@ -7477,7 +7578,7 @@
                     "value": "viewer-instructions",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 48,
+                        "backend_dom_node_id": 49,
                         "idref": "viewer-instructions",
                         "text": null
                       }
@@ -7487,8 +7588,8 @@
               ]
             },
             {
-              "node_id": "48",
-              "backend_dom_node_id": 48,
+              "node_id": "49",
+              "backend_dom_node_id": 49,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -7508,8 +7609,8 @@
               "properties": []
             },
             {
-              "node_id": "54",
-              "backend_dom_node_id": 54,
+              "node_id": "55",
+              "backend_dom_node_id": 55,
               "role": "main",
               "name": {
                 "type": "computedString",
@@ -7608,8 +7709,8 @@
               "properties": []
             },
             {
-              "node_id": "55",
-              "backend_dom_node_id": 55,
+              "node_id": "56",
+              "backend_dom_node_id": 56,
               "role": "sectionheader",
               "name": {
                 "type": "computedString",
@@ -7629,8 +7730,8 @@
               "properties": []
             },
             {
-              "node_id": "65",
-              "backend_dom_node_id": 65,
+              "node_id": "67",
+              "backend_dom_node_id": 67,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -7655,7 +7756,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 11,
+                        "backend_dom_node_id": 10,
                         "idref": "machine-title",
                         "text": "600S"
                       }
@@ -7665,8 +7766,8 @@
               ]
             },
             {
-              "node_id": "69",
-              "backend_dom_node_id": 69,
+              "node_id": "71",
+              "backend_dom_node_id": 71,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -7686,8 +7787,8 @@
               "properties": []
             },
             {
-              "node_id": "80",
-              "backend_dom_node_id": 80,
+              "node_id": "12",
+              "backend_dom_node_id": 12,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -7712,7 +7813,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 84,
+                        "backend_dom_node_id": 85,
                         "idref": "operate-title",
                         "text": "Machine controls"
                       }
@@ -7764,8 +7865,8 @@
               "properties": []
             },
             {
-              "node_id": "15",
-              "backend_dom_node_id": 15,
+              "node_id": "16",
+              "backend_dom_node_id": 16,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -7978,8 +8079,8 @@
               "properties": []
             },
             {
-              "node_id": "56",
-              "backend_dom_node_id": 56,
+              "node_id": "57",
+              "backend_dom_node_id": 57,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -8016,8 +8117,8 @@
               ]
             },
             {
-              "node_id": "60",
-              "backend_dom_node_id": 60,
+              "node_id": "61",
+              "backend_dom_node_id": 61,
               "role": "navigation",
               "name": {
                 "type": "computedString",
@@ -8037,8 +8138,8 @@
               "properties": []
             },
             {
-              "node_id": "63",
-              "backend_dom_node_id": 63,
+              "node_id": "65",
+              "backend_dom_node_id": 65,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -8058,8 +8159,8 @@
               "properties": []
             },
             {
-              "node_id": "64",
-              "backend_dom_node_id": 64,
+              "node_id": "66",
+              "backend_dom_node_id": 66,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -8139,8 +8240,8 @@
               "properties": []
             },
             {
-              "node_id": "11",
-              "backend_dom_node_id": 11,
+              "node_id": "10",
+              "backend_dom_node_id": 10,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -8169,8 +8270,8 @@
               ]
             },
             {
-              "node_id": "68",
-              "backend_dom_node_id": 68,
+              "node_id": "70",
+              "backend_dom_node_id": 70,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -8190,8 +8291,8 @@
               "properties": []
             },
             {
-              "node_id": "71",
-              "backend_dom_node_id": 71,
+              "node_id": "73",
+              "backend_dom_node_id": 73,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -8232,8 +8333,8 @@
               "properties": []
             },
             {
-              "node_id": "74",
-              "backend_dom_node_id": 74,
+              "node_id": "76",
+              "backend_dom_node_id": 76,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -8274,8 +8375,8 @@
               "properties": []
             },
             {
-              "node_id": "77",
-              "backend_dom_node_id": 77,
+              "node_id": "79",
+              "backend_dom_node_id": 79,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -8316,8 +8417,8 @@
               "properties": []
             },
             {
-              "node_id": "79",
-              "backend_dom_node_id": 79,
+              "node_id": "81",
+              "backend_dom_node_id": 81,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -8358,8 +8459,8 @@
               "properties": []
             },
             {
-              "node_id": "84",
-              "backend_dom_node_id": 84,
+              "node_id": "85",
+              "backend_dom_node_id": 85,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -8388,8 +8489,8 @@
               ]
             },
             {
-              "node_id": "85",
-              "backend_dom_node_id": 85,
+              "node_id": "86",
+              "backend_dom_node_id": 86,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -8437,6 +8538,66 @@
                     "type": "token",
                     "value": "false",
                     "related_nodes": []
+                  }
+                }
+              ]
+            },
+            {
+              "node_id": "11",
+              "backend_dom_node_id": 11,
+              "role": "button",
+              "name": {
+                "type": "computedString",
+                "value": "Close machine controls",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false",
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true,
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "expanded",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true,
+                    "related_nodes": []
+                  }
+                },
+                {
+                  "name": "controls",
+                  "value": {
+                    "type": "idrefList",
+                    "value": "machine-controls-body",
+                    "related_nodes": [
+                      {
+                        "backend_dom_node_id": 87,
+                        "idref": "machine-controls-body",
+                        "text": null
+                      }
+                    ]
                   }
                 }
               ]
@@ -8778,7 +8939,7 @@
               "role": "StaticText",
               "name": {
                 "type": "computedString",
-                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 124 MS · RENDER DESKTOP / 60 FPS / P95 16.8 MS · REDUCED MOTION OFF",
+                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 125 MS · RENDER DESKTOP / 60 FPS / P95 16.8 MS · REDUCED MOTION OFF",
                 "related_nodes": []
               },
               "description": {
@@ -9046,8 +9207,8 @@
               "properties": []
             },
             {
-              "node_id": "3",
-              "backend_dom_node_id": 3,
+              "node_id": "62",
+              "backend_dom_node_id": 62,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -9084,8 +9245,8 @@
               ]
             },
             {
-              "node_id": "61",
-              "backend_dom_node_id": 61,
+              "node_id": "63",
+              "backend_dom_node_id": 63,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -9122,8 +9283,8 @@
               ]
             },
             {
-              "node_id": "62",
-              "backend_dom_node_id": 62,
+              "node_id": "64",
+              "backend_dom_node_id": 64,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -9475,6 +9636,27 @@
               "properties": []
             },
             {
+              "node_id": "189",
+              "backend_dom_node_id": 189,
+              "role": "StaticText",
+              "name": {
+                "type": "computedString",
+                "value": "CLOSE",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
               "node_id": "88",
               "backend_dom_node_id": 88,
               "role": "generic",
@@ -9580,8 +9762,8 @@
               "properties": []
             },
             {
-              "node_id": "18",
-              "backend_dom_node_id": 18,
+              "node_id": "19",
+              "backend_dom_node_id": 19,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -9677,7 +9859,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000047",
+              "node_id": "-1000000048",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -9866,7 +10048,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000056",
+              "node_id": "-1000000057",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -9887,33 +10069,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000057",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "/",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
               "node_id": "-1000000058",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": " SCROLL OR PINCH TO ZOOM ",
+                "value": "/",
                 "related_nodes": []
               },
               "description": {
@@ -9934,7 +10095,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "/",
+                "value": " SCROLL OR PINCH TO ZOOM ",
                 "related_nodes": []
               },
               "description": {
@@ -9955,7 +10116,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": " BUTTONS OPEN DETAILS",
+                "value": "/",
                 "related_nodes": []
               },
               "description": {
@@ -9976,7 +10137,7 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 124 MS · RENDER DESKTOP / 60 FPS ",
+                "value": " BUTTONS OPEN DETAILS",
                 "related_nodes": []
               },
               "description": {
@@ -9997,6 +10158,27 @@
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
+                "value": "SOURCE BLENDER-SHOWCASE-V1.1.0 · MESHES 98 · SELECTION 5/5 PASS · ERRORS 0 · LOAD 125 MS · RENDER DESKTOP / 60 FPS ",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000063",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
                 "value": "/ P95 16.8 MS · REDUCED MOTION OFF",
                 "related_nodes": []
               },
@@ -10013,7 +10195,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000064",
+              "node_id": "-1000000065",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10034,7 +10216,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000081",
+              "node_id": "-1000000082",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10055,7 +10237,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000082",
+              "node_id": "-1000000083",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10076,7 +10258,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000083",
+              "node_id": "-1000000084",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10097,7 +10279,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000084",
+              "node_id": "-1000000085",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10559,12 +10741,33 @@
               "properties": []
             },
             {
-              "node_id": "-1000000097",
+              "node_id": "-1000000098",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
                 "value": "POSITIONING",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000024",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "CLOSE",
                 "related_nodes": []
               },
               "description": {
@@ -10697,8 +10900,8 @@
               "properties": []
             },
             {
-              "node_id": "13",
-              "backend_dom_node_id": 13,
+              "node_id": "15",
+              "backend_dom_node_id": 15,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -10764,8 +10967,8 @@
               "properties": []
             },
             {
-              "node_id": "10",
-              "backend_dom_node_id": 10,
+              "node_id": "9",
+              "backend_dom_node_id": 9,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -10832,8 +11035,8 @@
               ]
             },
             {
-              "node_id": "16",
-              "backend_dom_node_id": 16,
+              "node_id": "17",
+              "backend_dom_node_id": 17,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -10980,8 +11183,8 @@
               "properties": []
             },
             {
-              "node_id": "7",
-              "backend_dom_node_id": 7,
+              "node_id": "6",
+              "backend_dom_node_id": 6,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -11196,8 +11399,8 @@
               "properties": []
             },
             {
-              "node_id": "9",
-              "backend_dom_node_id": 9,
+              "node_id": "8",
+              "backend_dom_node_id": 8,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -11412,8 +11615,8 @@
               "properties": []
             },
             {
-              "node_id": "8",
-              "backend_dom_node_id": 8,
+              "node_id": "7",
+              "backend_dom_node_id": 7,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -11691,7 +11894,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000049",
+              "node_id": "-1000000050",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11733,7 +11936,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000051",
+              "node_id": "-1000000052",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11775,7 +11978,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000053",
+              "node_id": "-1000000054",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11817,7 +12020,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000055",
+              "node_id": "-1000000056",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11838,7 +12041,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000088",
+              "node_id": "-1000000089",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11859,7 +12062,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000086",
+              "node_id": "-1000000087",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11880,7 +12083,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000087",
+              "node_id": "-1000000088",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11901,7 +12104,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000091",
+              "node_id": "-1000000092",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11922,7 +12125,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000090",
+              "node_id": "-1000000091",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11943,7 +12146,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000095",
+              "node_id": "-1000000096",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11964,7 +12167,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000093",
+              "node_id": "-1000000094",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -11985,7 +12188,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000094",
+              "node_id": "-1000000095",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12069,7 +12272,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000024",
+              "node_id": "-1000000025",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12237,7 +12440,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000032",
+              "node_id": "-1000000033",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12300,7 +12503,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000035",
+              "node_id": "-1000000036",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12363,7 +12566,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000038",
+              "node_id": "-1000000039",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12426,7 +12629,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000041",
+              "node_id": "-1000000042",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12489,7 +12692,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000044",
+              "node_id": "-1000000045",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12510,7 +12713,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000045",
+              "node_id": "-1000000046",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12531,7 +12734,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000046",
+              "node_id": "-1000000047",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12552,7 +12755,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000048",
+              "node_id": "-1000000049",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12573,7 +12776,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000050",
+              "node_id": "-1000000051",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12594,7 +12797,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000052",
+              "node_id": "-1000000053",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12615,7 +12818,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000054",
+              "node_id": "-1000000055",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12636,7 +12839,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000025",
+              "node_id": "-1000000026",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12657,7 +12860,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000026",
+              "node_id": "-1000000027",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -12828,33 +13031,12 @@
               ]
             },
             {
-              "node_id": "-1000000031",
+              "node_id": "-1000000032",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
                 "value": "START AUTO",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000033",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "0°",
                 "related_nodes": []
               },
               "description": {
@@ -12891,12 +13073,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000036",
+              "node_id": "-1000000035",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "0%",
+                "value": "0°",
                 "related_nodes": []
               },
               "description": {
@@ -12933,12 +13115,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000039",
+              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "0°",
+                "value": "0%",
                 "related_nodes": []
               },
               "description": {
@@ -12975,7 +13157,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000042",
+              "node_id": "-1000000041",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -13017,7 +13199,28 @@
               "properties": []
             },
             {
-              "node_id": "-1000000027",
+              "node_id": "-1000000044",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "0°",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
+              "node_id": "-1000000028",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -13059,7 +13262,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000029",
+              "node_id": "-1000000030",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -13101,7 +13304,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000028",
+              "node_id": "-1000000029",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -13122,7 +13325,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000030",
+              "node_id": "-1000000031",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -13155,7 +13358,7 @@
           "meshes": 98,
           "selection": "5/5 pass",
           "errors": 0,
-          "load_ms": 124,
+          "load_ms": 125,
           "render_profile": "desktop",
           "fps": 60,
           "p95_ms": 16.8,
@@ -13169,7 +13372,105 @@
           "value": "35",
           "ariaValueText": "35°",
           "disabled": false
-        }
+        },
+        "collapsed_snapshot": {
+          "viewport_css_px": [
+            1280,
+            720
+          ],
+          "url": "http://127.0.0.1:8092/?diagnostics=1",
+          "nodes": [
+            {
+              "selector": "body",
+              "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Autonomous\n          Open\n        \n      \n\n      \n        \n          \n            Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Pause auto\n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend65%\n          65%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+              "attributes": {
+                "data-boot-frame-count": "2",
+                "data-viewer-started": "true",
+                "data-render-profile": "desktop",
+                "data-reduced-motion": "false",
+                "data-viewer-runtime-active": "true",
+                "data-runtime-error-count": "0",
+                "data-machine-source": "blender-showcase-v1.1.0",
+                "data-autonomy-mode": "auto",
+                "data-autonomy-overrides": "none",
+                "data-drive-heading": "2",
+                "data-drive-loop": "1",
+                "data-drive-route-error-m": "0.00",
+                "data-canvas-interaction": "navigation-only",
+                "data-orbit-camera-distance-m": "18.684",
+                "data-orbit-desired-distance-m": "19.037",
+                "data-viewer-module-loaded": "true",
+                "data-runtime-frame-count": "32",
+                "data-runtime-last-frame-ms": "612.500",
+                "data-drive-x": "0.38",
+                "data-drive-z": "-0.00",
+                "data-steer-left-deg": "23.8",
+                "data-steer-right-deg": "17.9",
+                "data-machine-visible-meshes": "98",
+                "data-machine-merged-buckets": "40",
+                "data-wheel-roll-hierarchy": "separated",
+                "data-hose-solver-count": "2",
+                "data-telescope-layer-cue-count": "14",
+                "data-load-ms": "125",
+                "data-selection-selftest": "pass",
+                "class": "controls-panel-collapsed"
+              }
+            },
+            {
+              "selector": "#machine-title",
+              "text": "600S",
+              "attributes": {
+                "id": "machine-title"
+              }
+            },
+            {
+              "selector": "#diagnostics",
+              "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 125 ms · render desktop / sampling · reduced motion off",
+              "attributes": {
+                "class": "diagnostics",
+                "id": "diagnostics",
+                "aria-live": "polite"
+              }
+            },
+            {
+              "selector": "#controls-toggle",
+              "text": "Open",
+              "attributes": {
+                "class": "controls-toggle",
+                "id": "controls-toggle",
+                "type": "button",
+                "aria-controls": "machine-controls-body",
+                "aria-expanded": "false",
+                "aria-label": "Open machine controls"
+              }
+            },
+            {
+              "selector": "#inspector",
+              "text": "×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference",
+              "attributes": {
+                "class": "inspector",
+                "id": "inspector",
+                "role": "dialog",
+                "aria-modal": "true",
+                "aria-labelledby": "inspector-title",
+                "aria-describedby": "inspector-copy",
+                "inert": ""
+              }
+            },
+            {
+              "selector": "#machine-controls-body",
+              "text": "Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Pause auto\n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend65%\n          65%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.",
+              "attributes": {
+                "class": "controls-body",
+                "id": "machine-controls-body",
+                "hidden": "",
+                "inert": ""
+              }
+            }
+          ]
+        },
+        "reopen_available": true,
+        "reopened": true
       },
       "mobile_controls": {
         "outcome": "pass",
@@ -13187,8 +13488,8 @@
       },
       "drag_orbit": {
         "outcome": "pass",
-        "before_canvas_sha256": "1a27420ad08ca0e903d7df23214305bafe6ef270f1f89c2c512cd81c85f55cc8",
-        "after_canvas_sha256": "7005f2687051ac1a4ae4485433341d9c14f60f6bafda66ae1eca6b6af68ca34c"
+        "before_canvas_sha256": "c60307fa87dcc8ff06b55fd2250acc29633d322cd00a6d39662be4b4556531cb",
+        "after_canvas_sha256": "2e1647c93f559a121f6b73de07a61354f536b1d162ded7cb5426d0347cf9b3b1"
       },
       "pinch_zoom": {
         "outcome": "pass",
@@ -13218,10 +13519,10 @@
           "CANVAS",
           "CANVAS"
         ],
-        "before_canvas_sha256": "bbc61ae89fe0a713bdf44b534776f1fcdf633f681446737dd4e34ff2f047bfb9",
-        "after_canvas_sha256": "e7ee3c6a4c674f164cf25305f5237456945d628f147abd0a9b244bc82a417dcd",
-        "before_desired_distance_m": "29.880",
-        "after_desired_distance_m": "10.508",
+        "before_canvas_sha256": "0ea475c6f8c9dbe890efd75bc7727b63d1c32c2af389bf67ccc850bd4cbf0cee",
+        "after_canvas_sha256": "936ff501e282eafd263a829ae58ec08ea8d603bc85d5fab578fe64c63400e177",
+        "before_desired_distance_m": "30.052",
+        "after_desired_distance_m": "10.558",
         "observable_render_or_distance_change": true
       },
       "reduced_motion": {
@@ -13230,7 +13531,7 @@
         "controller": "autonomy",
         "raw_samples": {
           "moving_start": {
-            "x": "0.36",
+            "x": "0.35",
             "z": "-0.00"
           },
           "before_reduce": {
@@ -13270,62 +13571,52 @@
                 {
                   "counter": "boot",
                   "value": 1,
-                  "at_ms": 41.6
+                  "at_ms": 61.4
                 },
                 {
                   "counter": "boot",
                   "value": 2,
-                  "at_ms": 50.2
+                  "at_ms": 80
                 },
                 {
                   "counter": "boot",
                   "value": 3,
-                  "at_ms": 64.1
+                  "at_ms": 95.8
                 },
                 {
                   "counter": "boot",
                   "value": 4,
-                  "at_ms": 81
+                  "at_ms": 113.6
                 },
                 {
                   "counter": "boot",
                   "value": 5,
-                  "at_ms": 97.4
+                  "at_ms": 130.2
                 },
                 {
                   "counter": "boot",
                   "value": 6,
-                  "at_ms": 114.9
-                },
-                {
-                  "counter": "boot",
-                  "value": 7,
-                  "at_ms": 131.7
-                },
-                {
-                  "counter": "boot",
-                  "value": 8,
                   "at_ms": 147
                 },
                 {
                   "counter": "boot",
+                  "value": 7,
+                  "at_ms": 163.6
+                },
+                {
+                  "counter": "boot",
+                  "value": 8,
+                  "at_ms": 179.5
+                },
+                {
+                  "counter": "boot",
                   "value": 9,
-                  "at_ms": 164.3
+                  "at_ms": 197.1
                 },
                 {
                   "counter": "boot",
                   "value": 10,
-                  "at_ms": 179.8
-                },
-                {
-                  "counter": "boot",
-                  "value": 11,
-                  "at_ms": 196.5
-                },
-                {
-                  "counter": "boot",
-                  "value": 12,
-                  "at_ms": 214.4
+                  "at_ms": 213.6
                 }
               ]
             },
@@ -13342,9 +13633,9 @@
               "total_control_count": 8,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "12",
+              "boot_frame_count": "10",
               "runtime_frame_count": null,
-              "terminal_frame_count": "12",
+              "terminal_frame_count": "10",
               "terminal_frame_source": "boot"
             },
             "terminal_after_250ms": {
@@ -13360,9 +13651,9 @@
               "total_control_count": 8,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "12",
+              "boot_frame_count": "10",
               "runtime_frame_count": null,
-              "terminal_frame_count": "12",
+              "terminal_frame_count": "10",
               "terminal_frame_source": "boot"
             },
             "animation_state_stable_250ms": true
@@ -13377,67 +13668,52 @@
                 {
                   "counter": "boot",
                   "value": 1,
-                  "at_ms": 45.5
+                  "at_ms": 61.2
                 },
                 {
                   "counter": "boot",
                   "value": 2,
-                  "at_ms": 54.2
+                  "at_ms": 78.2
                 },
                 {
                   "counter": "boot",
                   "value": 3,
-                  "at_ms": 65.7
+                  "at_ms": 94.9
                 },
                 {
                   "counter": "boot",
                   "value": 4,
-                  "at_ms": 83.2
+                  "at_ms": 111.7
                 },
                 {
                   "counter": "boot",
                   "value": 5,
-                  "at_ms": 98.9
+                  "at_ms": 128.5
                 },
                 {
                   "counter": "boot",
                   "value": 6,
-                  "at_ms": 115.7
+                  "at_ms": 144
                 },
                 {
                   "counter": "boot",
                   "value": 7,
-                  "at_ms": 132
+                  "at_ms": 161.7
                 },
                 {
                   "counter": "boot",
                   "value": 8,
-                  "at_ms": 148.6
+                  "at_ms": 178.2
                 },
                 {
                   "counter": "boot",
                   "value": 9,
-                  "at_ms": 165.3
+                  "at_ms": 196.9
                 },
                 {
                   "counter": "boot",
                   "value": 10,
-                  "at_ms": 182.1
-                },
-                {
-                  "counter": "boot",
-                  "value": 11,
-                  "at_ms": 198.8
-                },
-                {
-                  "counter": "boot",
-                  "value": 12,
-                  "at_ms": 215.5
-                },
-                {
-                  "counter": "boot",
-                  "value": 13,
-                  "at_ms": 232.1
+                  "at_ms": 210.3
                 }
               ]
             },
@@ -13454,9 +13730,9 @@
               "total_control_count": 8,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "13",
+              "boot_frame_count": "10",
               "runtime_frame_count": null,
-              "terminal_frame_count": "13",
+              "terminal_frame_count": "10",
               "terminal_frame_source": "boot"
             },
             "terminal_after_250ms": {
@@ -13472,9 +13748,9 @@
               "total_control_count": 8,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "13",
+              "boot_frame_count": "10",
               "runtime_frame_count": null,
-              "terminal_frame_count": "13",
+              "terminal_frame_count": "10",
               "terminal_frame_source": "boot"
             },
             "animation_state_stable_250ms": true
@@ -13489,52 +13765,47 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 91.2
+                  "at_ms": 99.2
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 92.7
+                  "at_ms": 105.7
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 97.9
+                  "at_ms": 110.8
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 110.1
+                  "at_ms": 126.7
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 126.5
+                  "at_ms": 143.3
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 143.1
-                },
-                {
-                  "counter": "runtime",
-                  "value": 7,
                   "at_ms": 160.1
                 },
                 {
                   "counter": "runtime",
+                  "value": 7,
+                  "at_ms": 177
+                },
+                {
+                  "counter": "runtime",
                   "value": 8,
-                  "at_ms": 177.2
+                  "at_ms": 194.7
                 },
                 {
                   "counter": "runtime",
                   "value": 9,
-                  "at_ms": 193.2
-                },
-                {
-                  "counter": "runtime",
-                  "value": 10,
-                  "at_ms": 209.7
+                  "at_ms": 211.5
                 }
               ]
             },
@@ -13549,11 +13820,11 @@
               "interface_inert": true,
               "disabled_control_count": 8,
               "total_control_count": 8,
-              "drive_x": "0.09",
+              "drive_x": "0.08",
               "drive_z": "-0.00",
-              "boot_frame_count": "2",
-              "runtime_frame_count": "10",
-              "terminal_frame_count": "10",
+              "boot_frame_count": null,
+              "runtime_frame_count": "9",
+              "terminal_frame_count": "9",
               "terminal_frame_source": "runtime"
             },
             "terminal_after_250ms": {
@@ -13567,11 +13838,11 @@
               "interface_inert": true,
               "disabled_control_count": 8,
               "total_control_count": 8,
-              "drive_x": "0.09",
+              "drive_x": "0.08",
               "drive_z": "-0.00",
-              "boot_frame_count": "2",
-              "runtime_frame_count": "10",
-              "terminal_frame_count": "10",
+              "boot_frame_count": null,
+              "runtime_frame_count": "9",
+              "terminal_frame_count": "9",
               "terminal_frame_source": "runtime"
             },
             "animation_state_stable_250ms": true
@@ -13586,47 +13857,52 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 93.7
+                  "at_ms": 98
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 99.7
+                  "at_ms": 100.6
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 112.7
+                  "at_ms": 111.4
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 129
+                  "at_ms": 125.9
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 145.6
+                  "at_ms": 143.4
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 162.9
+                  "at_ms": 158.4
                 },
                 {
                   "counter": "runtime",
                   "value": 7,
-                  "at_ms": 179.2
+                  "at_ms": 174.9
                 },
                 {
                   "counter": "runtime",
                   "value": 8,
-                  "at_ms": 196.2
+                  "at_ms": 191.7
                 },
                 {
                   "counter": "runtime",
                   "value": 9,
-                  "at_ms": 213.3
+                  "at_ms": 209.3
+                },
+                {
+                  "counter": "runtime",
+                  "value": 10,
+                  "at_ms": 227.8
                 }
               ]
             },
@@ -13643,9 +13919,9 @@
               "total_control_count": 8,
               "drive_x": "0.09",
               "drive_z": "-0.00",
-              "boot_frame_count": "2",
-              "runtime_frame_count": "9",
-              "terminal_frame_count": "9",
+              "boot_frame_count": null,
+              "runtime_frame_count": "10",
+              "terminal_frame_count": "10",
               "terminal_frame_source": "runtime"
             },
             "terminal_after_250ms": {
@@ -13661,9 +13937,9 @@
               "total_control_count": 8,
               "drive_x": "0.09",
               "drive_z": "-0.00",
-              "boot_frame_count": "2",
-              "runtime_frame_count": "9",
-              "terminal_frame_count": "9",
+              "boot_frame_count": null,
+              "runtime_frame_count": "10",
+              "terminal_frame_count": "10",
               "terminal_frame_source": "runtime"
             },
             "animation_state_stable_250ms": true
@@ -13830,7 +14106,7 @@
                 "selector": ".control-panel",
                 "rect_css_px": {
                   "left": 12,
-                  "right": 378,
+                  "right": 292,
                   "top": 769,
                   "bottom": 832
                 },
@@ -13841,8 +14117,8 @@
                 "rect_css_px": {
                   "left": 12,
                   "right": 378,
-                  "top": 716,
-                  "bottom": 750
+                  "top": 701,
+                  "bottom": 735
                 },
                 "intersects_machine_bounds": false
               },
@@ -13867,7 +14143,7 @@
       "controller": "autonomy",
       "raw_samples": {
         "moving_start": {
-          "x": "0.36",
+          "x": "0.35",
           "z": "-0.00"
         },
         "before_reduce": {
@@ -13905,62 +14181,52 @@
             {
               "counter": "boot",
               "value": 1,
-              "at_ms": 41.6
+              "at_ms": 61.4
             },
             {
               "counter": "boot",
               "value": 2,
-              "at_ms": 50.2
+              "at_ms": 80
             },
             {
               "counter": "boot",
               "value": 3,
-              "at_ms": 64.1
+              "at_ms": 95.8
             },
             {
               "counter": "boot",
               "value": 4,
-              "at_ms": 81
+              "at_ms": 113.6
             },
             {
               "counter": "boot",
               "value": 5,
-              "at_ms": 97.4
+              "at_ms": 130.2
             },
             {
               "counter": "boot",
               "value": 6,
-              "at_ms": 114.9
-            },
-            {
-              "counter": "boot",
-              "value": 7,
-              "at_ms": 131.7
-            },
-            {
-              "counter": "boot",
-              "value": 8,
               "at_ms": 147
             },
             {
               "counter": "boot",
+              "value": 7,
+              "at_ms": 163.6
+            },
+            {
+              "counter": "boot",
+              "value": 8,
+              "at_ms": 179.5
+            },
+            {
+              "counter": "boot",
               "value": 9,
-              "at_ms": 164.3
+              "at_ms": 197.1
             },
             {
               "counter": "boot",
               "value": 10,
-              "at_ms": 179.8
-            },
-            {
-              "counter": "boot",
-              "value": 11,
-              "at_ms": 196.5
-            },
-            {
-              "counter": "boot",
-              "value": 12,
-              "at_ms": 214.4
+              "at_ms": 213.6
             }
           ]
         },
@@ -13977,9 +14243,9 @@
           "total_control_count": 8,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "12",
+          "boot_frame_count": "10",
           "runtime_frame_count": null,
-          "terminal_frame_count": "12",
+          "terminal_frame_count": "10",
           "terminal_frame_source": "boot"
         },
         "terminal_after_250ms": {
@@ -13995,9 +14261,9 @@
           "total_control_count": 8,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "12",
+          "boot_frame_count": "10",
           "runtime_frame_count": null,
-          "terminal_frame_count": "12",
+          "terminal_frame_count": "10",
           "terminal_frame_source": "boot"
         },
         "animation_state_stable_250ms": true
@@ -14012,67 +14278,52 @@
             {
               "counter": "boot",
               "value": 1,
-              "at_ms": 45.5
+              "at_ms": 61.2
             },
             {
               "counter": "boot",
               "value": 2,
-              "at_ms": 54.2
+              "at_ms": 78.2
             },
             {
               "counter": "boot",
               "value": 3,
-              "at_ms": 65.7
+              "at_ms": 94.9
             },
             {
               "counter": "boot",
               "value": 4,
-              "at_ms": 83.2
+              "at_ms": 111.7
             },
             {
               "counter": "boot",
               "value": 5,
-              "at_ms": 98.9
+              "at_ms": 128.5
             },
             {
               "counter": "boot",
               "value": 6,
-              "at_ms": 115.7
+              "at_ms": 144
             },
             {
               "counter": "boot",
               "value": 7,
-              "at_ms": 132
+              "at_ms": 161.7
             },
             {
               "counter": "boot",
               "value": 8,
-              "at_ms": 148.6
+              "at_ms": 178.2
             },
             {
               "counter": "boot",
               "value": 9,
-              "at_ms": 165.3
+              "at_ms": 196.9
             },
             {
               "counter": "boot",
               "value": 10,
-              "at_ms": 182.1
-            },
-            {
-              "counter": "boot",
-              "value": 11,
-              "at_ms": 198.8
-            },
-            {
-              "counter": "boot",
-              "value": 12,
-              "at_ms": 215.5
-            },
-            {
-              "counter": "boot",
-              "value": 13,
-              "at_ms": 232.1
+              "at_ms": 210.3
             }
           ]
         },
@@ -14089,9 +14340,9 @@
           "total_control_count": 8,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "13",
+          "boot_frame_count": "10",
           "runtime_frame_count": null,
-          "terminal_frame_count": "13",
+          "terminal_frame_count": "10",
           "terminal_frame_source": "boot"
         },
         "terminal_after_250ms": {
@@ -14107,9 +14358,9 @@
           "total_control_count": 8,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "13",
+          "boot_frame_count": "10",
           "runtime_frame_count": null,
-          "terminal_frame_count": "13",
+          "terminal_frame_count": "10",
           "terminal_frame_source": "boot"
         },
         "animation_state_stable_250ms": true
@@ -14124,52 +14375,47 @@
             {
               "counter": "runtime",
               "value": 1,
-              "at_ms": 91.2
+              "at_ms": 99.2
             },
             {
               "counter": "runtime",
               "value": 2,
-              "at_ms": 92.7
+              "at_ms": 105.7
             },
             {
               "counter": "runtime",
               "value": 3,
-              "at_ms": 97.9
+              "at_ms": 110.8
             },
             {
               "counter": "runtime",
               "value": 4,
-              "at_ms": 110.1
+              "at_ms": 126.7
             },
             {
               "counter": "runtime",
               "value": 5,
-              "at_ms": 126.5
+              "at_ms": 143.3
             },
             {
               "counter": "runtime",
               "value": 6,
-              "at_ms": 143.1
-            },
-            {
-              "counter": "runtime",
-              "value": 7,
               "at_ms": 160.1
             },
             {
               "counter": "runtime",
+              "value": 7,
+              "at_ms": 177
+            },
+            {
+              "counter": "runtime",
               "value": 8,
-              "at_ms": 177.2
+              "at_ms": 194.7
             },
             {
               "counter": "runtime",
               "value": 9,
-              "at_ms": 193.2
-            },
-            {
-              "counter": "runtime",
-              "value": 10,
-              "at_ms": 209.7
+              "at_ms": 211.5
             }
           ]
         },
@@ -14184,11 +14430,11 @@
           "interface_inert": true,
           "disabled_control_count": 8,
           "total_control_count": 8,
-          "drive_x": "0.09",
+          "drive_x": "0.08",
           "drive_z": "-0.00",
-          "boot_frame_count": "2",
-          "runtime_frame_count": "10",
-          "terminal_frame_count": "10",
+          "boot_frame_count": null,
+          "runtime_frame_count": "9",
+          "terminal_frame_count": "9",
           "terminal_frame_source": "runtime"
         },
         "terminal_after_250ms": {
@@ -14202,11 +14448,11 @@
           "interface_inert": true,
           "disabled_control_count": 8,
           "total_control_count": 8,
-          "drive_x": "0.09",
+          "drive_x": "0.08",
           "drive_z": "-0.00",
-          "boot_frame_count": "2",
-          "runtime_frame_count": "10",
-          "terminal_frame_count": "10",
+          "boot_frame_count": null,
+          "runtime_frame_count": "9",
+          "terminal_frame_count": "9",
           "terminal_frame_source": "runtime"
         },
         "animation_state_stable_250ms": true
@@ -14221,47 +14467,52 @@
             {
               "counter": "runtime",
               "value": 1,
-              "at_ms": 93.7
+              "at_ms": 98
             },
             {
               "counter": "runtime",
               "value": 2,
-              "at_ms": 99.7
+              "at_ms": 100.6
             },
             {
               "counter": "runtime",
               "value": 3,
-              "at_ms": 112.7
+              "at_ms": 111.4
             },
             {
               "counter": "runtime",
               "value": 4,
-              "at_ms": 129
+              "at_ms": 125.9
             },
             {
               "counter": "runtime",
               "value": 5,
-              "at_ms": 145.6
+              "at_ms": 143.4
             },
             {
               "counter": "runtime",
               "value": 6,
-              "at_ms": 162.9
+              "at_ms": 158.4
             },
             {
               "counter": "runtime",
               "value": 7,
-              "at_ms": 179.2
+              "at_ms": 174.9
             },
             {
               "counter": "runtime",
               "value": 8,
-              "at_ms": 196.2
+              "at_ms": 191.7
             },
             {
               "counter": "runtime",
               "value": 9,
-              "at_ms": 213.3
+              "at_ms": 209.3
+            },
+            {
+              "counter": "runtime",
+              "value": 10,
+              "at_ms": 227.8
             }
           ]
         },
@@ -14278,9 +14529,9 @@
           "total_control_count": 8,
           "drive_x": "0.09",
           "drive_z": "-0.00",
-          "boot_frame_count": "2",
-          "runtime_frame_count": "9",
-          "terminal_frame_count": "9",
+          "boot_frame_count": null,
+          "runtime_frame_count": "10",
+          "terminal_frame_count": "10",
           "terminal_frame_source": "runtime"
         },
         "terminal_after_250ms": {
@@ -14296,9 +14547,9 @@
           "total_control_count": 8,
           "drive_x": "0.09",
           "drive_z": "-0.00",
-          "boot_frame_count": "2",
-          "runtime_frame_count": "9",
-          "terminal_frame_count": "9",
+          "boot_frame_count": null,
+          "runtime_frame_count": "10",
+          "terminal_frame_count": "10",
           "terminal_frame_source": "runtime"
         },
         "animation_state_stable_250ms": true
@@ -14311,6 +14562,6 @@
     "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
     "release": "1.1.0",
     "asset_sha256": "13292e6d742aef3483c3a8f7302b6bd54c7fcb35cb8181fbab76d4af133d99a4",
-    "runtime_sha256": "52a3c3f562d047f3db311f189c62666be0e90ed93f227106bbd298761cdc6da7"
+    "runtime_sha256": "75b6205536453a1a2e0cbaf07c8bbaccfd902aa7d46edda55fcb6fa3dcdb51df"
   }
 }

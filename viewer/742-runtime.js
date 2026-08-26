@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.10";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.11";
 import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
 
-const ROUTE_RELEASE = "1.6.7";
+const ROUTE_RELEASE = "1.6.8";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -897,20 +897,21 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-function setMobileControls(open) {
+function setControlsPanel(open) {
   if (terminalFailure) {
     controlsBody.inert = true;
     controlsToggle.hidden = true;
     return;
   }
-  const expanded = mobileQuery.matches ? open : true;
+  const expanded = Boolean(open);
   controlsBody.hidden = !expanded;
   controlsBody.inert = !expanded;
-  controlsToggle.hidden = !mobileQuery.matches;
+  controlsToggle.hidden = false;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
-  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Adjust machine controls");
-  controlsToggle.textContent = expanded ? "Close" : "Adjust";
+  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls");
+  controlsToggle.textContent = expanded ? "Close" : (mobileQuery.matches ? "Adjust" : "Open");
   document.body.classList.toggle("mobile-controls-open", mobileQuery.matches && expanded);
+  document.body.classList.toggle("controls-panel-collapsed", !expanded);
   requestAnimationFrame(syncMobileControlHeight);
 }
 function syncMobileControlHeight() {
@@ -918,12 +919,12 @@ function syncMobileControlHeight() {
   document.documentElement.style.setProperty("--mobile-controls-height", `${Math.ceil(controlPanel.getBoundingClientRect().height)}px`);
 }
 new ResizeObserver(syncMobileControlHeight).observe(controlPanel);
-controlsToggle.addEventListener("click", () => setMobileControls(controlsToggle.getAttribute("aria-expanded") !== "true"));
+controlsToggle.addEventListener("click", () => setControlsPanel(controlsToggle.getAttribute("aria-expanded") !== "true"));
 mobileQuery.addEventListener?.("change", () => {
   compact = mobileQuery.matches;
-  setMobileControls(false);
+  setControlsPanel(!mobileQuery.matches);
 });
-setMobileControls(query.get("controls") === "1");
+setControlsPanel(mobileQuery.matches ? query.get("controls") === "1" : true);
 
 const componentNav = document.querySelector(".component-nav");
 const navOverflowCue = document.querySelector("#nav-overflow-cue");

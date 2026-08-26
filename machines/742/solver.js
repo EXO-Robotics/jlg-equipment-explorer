@@ -11,7 +11,7 @@ export const JLG742_MECHANISM = Object.freeze({
   steeringRackMaximumShift: .15812269946250607, steeringBarLength: .5634413306323492,
   boomHoseLoopRadius: .14, boomHoseArcSegments: 8, boomHoseTotalLength: 5.00,
   liftHoseGuideOffset: Object.freeze([.15,-.08,0]), liftHoseLegLength: 1.52,
-  carriageTiltBase: Object.freeze([4.216,-.48,-.12]), carriageTiltLateral: -.12,
+  carriageTiltBase: Object.freeze([4.216,-.48,-.30]), carriageTiltLateral: -.30,
   barrelLengths: Object.freeze({ lift: 1.65, telescope: 2.10, compensation: 0.65,
     carriageTilt: 0.82, frameLevel: 0.60, rearAxleStabilizer: 0.34 }), rodOverlap: 0.08,
 });

@@ -6,6 +6,7 @@ body[data-machine="es1930m"][data-zone="indoor-only"] #lift-value { color: #ff82
 body[data-machine="742"] { --accent: #ff9f1a; --accent-dark: #bd6100; }
 body[data-machine="742"] .identity-long h1 { font-size: clamp(88px, 12vw, 184px); }
 body[data-machine="742"] .control-panel { width: min(420px, calc(100vw - 56px)); }
+body[data-machine="742"].controls-panel-collapsed .control-panel { width: min(280px, calc(100vw - 56px)); }
 body[data-machine="742"] .telehandler-controls .control-row { padding-top: 9px; }
 body[data-machine="742"] .telehandler-controls .action-row { grid-template-columns: 1.2fr .8fr 1fr; }
 body[data-machine="742"][data-zone="extended"] #telescope-value { color: var(--accent); }

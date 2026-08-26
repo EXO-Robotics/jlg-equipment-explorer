@@ -484,14 +484,16 @@ infoToggle.addEventListener("click", () => openInspector("about"));
 document.querySelector("#inspector-close").addEventListener("click", closeInspector);
 document.querySelector("#scrim").addEventListener("click", closeInspector);
 
-function setMobileControls(open) {
-  const expanded = mobileQuery.matches ? open : true;
+function setControlsPanel(open) {
+  const expanded = Boolean(open);
   controlsBody.hidden = !expanded;
   controlsBody.inert = !expanded;
-  controlsToggle.hidden = !mobileQuery.matches;
+  controlsToggle.hidden = false;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
-  controlsToggle.textContent = expanded ? "Close" : "Adjust";
+  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls");
+  controlsToggle.textContent = expanded ? "Close" : (mobileQuery.matches ? "Adjust" : "Open");
   document.body.classList.toggle("mobile-controls-open", mobileQuery.matches && expanded);
+  document.body.classList.toggle("controls-panel-collapsed", !expanded);
   requestAnimationFrame(syncMobileControlHeight);
   requestAnimationFrame(fitMachineBounds);
 }
@@ -500,9 +502,9 @@ function syncMobileControlHeight() {
   document.documentElement.style.setProperty("--mobile-controls-height", `${Math.ceil(controlPanel.getBoundingClientRect().height)}px`);
 }
 new ResizeObserver(syncMobileControlHeight).observe(controlPanel);
-controlsToggle.addEventListener("click", () => setMobileControls(controlsToggle.getAttribute("aria-expanded") !== "true"));
-mobileQuery.addEventListener?.("change", () => setMobileControls(false));
-setMobileControls(query.get("controls") === "1");
+controlsToggle.addEventListener("click", () => setControlsPanel(controlsToggle.getAttribute("aria-expanded") !== "true"));
+mobileQuery.addEventListener?.("change", () => setControlsPanel(!mobileQuery.matches));
+setControlsPanel(mobileQuery.matches ? query.get("controls") === "1" : true);
 
 document.addEventListener("keydown", (event) => {
   if (document.body.classList.contains("inspector-open")) {
