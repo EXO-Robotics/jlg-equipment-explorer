@@ -61,7 +61,8 @@
     "moving_inner_rail_rear_x_m": 0.15,
     "moving_inner_rail_front_x_m": 0.718,
     "fixed_outer_rail_lateral_m": 0.332,
-    "moving_inner_rail_lateral_m": 0.315,
+    "moving_inner_rail_lateral_m": 0.294,
+    "minimum_nested_lateral_clearance_m": 0.003,
     "minimum_deployed_overlap_m": 0.018,
     "authority": "published_travel; pvc2404_parts_figures_4_3_and_4_7_nested_fixed_outer_and_moving_inner_rail_topology; coordinates_reconstructed_to_published_envelope"
   },

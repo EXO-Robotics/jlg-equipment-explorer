@@ -17,7 +17,7 @@
     "asset": {
       "bytes": 983568,
       "path": "assets/models/es1930m.glb",
-      "sha256": "6e67d8cab78ca271085294c7dcd52bfb5d441ddbd591e8004dbc86815259b6cc"
+      "sha256": "9adc5f3ccbcb4c31e06aa1d900981cc8a4aed6a5a2bb8c9815a7a62504fd27d6"
     },
     "configuration": {
       "bytes": 2570,
@@ -25,9 +25,9 @@
       "sha256": "dd2b9d9c3f6d2ab8ca8dc031cee555bb54cd7e719e0d8e4d03e89b884206afa3"
     },
     "mechanism": {
-      "bytes": 4063,
+      "bytes": 4112,
       "path": "machines/es1930m/mechanism.json",
-      "sha256": "9013f56285eddf47b7d1cebd3b35a0d698bc04aeb1bcbb5366a711db4d2198d5"
+      "sha256": "5b7ea528503029eae38acac9c6689a00f889ab38446f81461b17c09ac1d09a3c"
     },
     "mechanism_evidence": {
       "bytes": 9629,
@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 5347,
+      "bytes": 5484,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "71a1e64b224e2372648cf15a3bdc57ede5cf4dd31d310267643da4d4f33e9c1d"
+      "sha256": "156fe0cdfe99b82931bc40627cc359a3915e231921430be70cd2e2259349b963"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -45,9 +45,9 @@
       "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
-      "bytes": 190024,
+      "bytes": 190029,
       "path": "source/blender/es1930m-showcase-v1.0.blend",
-      "sha256": "cebb1993eb9aa3de36f053cba4d1df3e68e7cbaa7347c898a156d8397aa5af3f"
+      "sha256": "d4cfb5c0a2c26654b810e39cfc1df01ff8e6896eb997683c62bc80dbd4a84612"
     },
     "source_manifest": {
       "bytes": 4860,
@@ -99,7 +99,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "b9bdc706f1b561017e311e4a9c35cf3e152e085b669272cd7a511ee5eac0554a"
+    "sha256": "343ad7fef1f2cef86a61c0e2034573f9df00e6e7ebdf7305b27b8713f301b815"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-25"

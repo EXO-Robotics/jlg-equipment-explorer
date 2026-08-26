@@ -17,7 +17,12 @@ export const ES1930M_MACHINE = Object.freeze({
   ]),
   components: ES1930M_COMPONENTS,
   cameras: ES1930M_CAMERAS,
-  requiredNodes: Object.freeze(["ES1930M_ROOT", "Chassis", "ScissorAssembly", "LiftCylinder", "PlatformAssembly", "ExtensionDeck", "FrontSteerAssembly", "PotholeProtection"]),
+  requiredNodes: Object.freeze([
+    "ES1930M_ROOT", "Chassis", "ScissorAssembly", "LiftCylinder", "PlatformAssembly", "ExtensionDeck", "FrontSteerAssembly", "PotholeProtection",
+    "FixedRails", "ExtensionRails", "SelfClosingGate", "ExtensionFrontToeBoard",
+    "TopRail_-1", "TopRail_1", "MidRail_-1", "MidRail_1", "ExtensionTopRail_-1", "ExtensionTopRail_1", "ExtensionMidRail_-1", "ExtensionMidRail_1",
+    "MainToeBoard_-1", "MainToeBoard_1", "ExtensionToeBoard_-1", "ExtensionToeBoard_1",
+  ]),
   interactionVolumes: Object.freeze(["Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"]),
   stowState: Object.freeze({ lift: 0, deck: 0, steer: 0 }),
   defaultCamera: "default",

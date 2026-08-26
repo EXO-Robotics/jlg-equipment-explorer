@@ -21,6 +21,7 @@ expected = {
     "railFixedFrontX": spec["deck_extension"]["fixed_outer_rail_front_x_m"],
     "railMovingRearX": spec["deck_extension"]["moving_inner_rail_rear_x_m"],
     "railMinimumOverlap": spec["deck_extension"]["minimum_deployed_overlap_m"],
+    "railMinimumLateralClearance": spec["deck_extension"]["minimum_nested_lateral_clearance_m"],
     "cylinderStroke": spec["lift_cylinder"]["published_stroke_m"],
     "steeringCylinderStrokeEachDirection": spec["steering"]["cylinder_stroke_each_direction_m"],
     "rearFixedX": spec["slides"]["rear_fixed_x_m"],
@@ -37,6 +38,9 @@ required_motion = [
     "cylinderUpperOffset",
     "kickerRollerOffset",
     "extension guard opening",
+    "extension guard parent drift",
+    "extension guard solid intersection",
+    "new THREE.Box3().setFromObject(pair.moving)",
 ]
 for snippet in required_motion:
     if snippet not in source:

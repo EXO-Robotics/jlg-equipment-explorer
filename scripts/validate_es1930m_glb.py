@@ -44,6 +44,19 @@ REQUIRED_EDGES = {
     "ExtensionRails": "ExtensionDeck",
     "SelfClosingGate": "ExtensionDeck",
     "PlatformControls": "PlatformAssembly",
+    "TopRail_-1": "FixedRails",
+    "TopRail_1": "FixedRails",
+    "MidRail_-1": "FixedRails",
+    "MidRail_1": "FixedRails",
+    "MainToeBoard_-1": "FixedRails",
+    "MainToeBoard_1": "FixedRails",
+    "ExtensionTopRail_-1": "ExtensionRails",
+    "ExtensionTopRail_1": "ExtensionRails",
+    "ExtensionMidRail_-1": "ExtensionRails",
+    "ExtensionMidRail_1": "ExtensionRails",
+    "ExtensionToeBoard_-1": "ExtensionDeck",
+    "ExtensionToeBoard_1": "ExtensionDeck",
+    "ExtensionFrontToeBoard": "ExtensionDeck",
     **{f"Level{index:02d}": "ScissorAssembly" for index in range(1, 6)},
 }
 
@@ -229,6 +242,7 @@ def main():
     rail_contract = mechanism["deck_extension"]
     travel = rail_contract["travel_m"]
     minimum_required_overlap = rail_contract["minimum_deployed_overlap_m"]
+    minimum_lateral_clearance = rail_contract["minimum_nested_lateral_clearance_m"]
     continuity_samples = (0.0, 0.5, 1.0)
     guard_pairs = []
     for side in (-1, 1):
@@ -245,10 +259,17 @@ def main():
             moving_lateral = abs((moving_bounds[0][2] + moving_bounds[1][2]) / 2)
             if moving_lateral >= fixed_lateral - 0.010:
                 raise RuntimeError(f"Moving guard is not nested inboard: {moving_name}")
+            lateral_clearance = max(
+                fixed_bounds[0][2] - moving_bounds[1][2],
+                moving_bounds[0][2] - fixed_bounds[1][2],
+                0.0,
+            )
+            if lateral_clearance + 1e-6 < minimum_lateral_clearance:
+                raise RuntimeError(f"Guard solids intersect laterally: {fixed_name}/{moving_name} clearance={lateral_clearance}")
             overlaps = [fixed_front - (moving_rear + travel * sample) for sample in continuity_samples]
             if min(overlaps) + 1e-6 < minimum_required_overlap:
                 raise RuntimeError(f"Guard continuity opens at extension: {fixed_name}/{moving_name} overlaps={overlaps}")
-            guard_pairs.append({"fixed": fixed_name, "moving": moving_name, "overlap_m": overlaps})
+            guard_pairs.append({"fixed": fixed_name, "moving": moving_name, "overlap_m": overlaps, "lateral_clearance_m": lateral_clearance})
 
     triangles = 0
     for mesh in document.get("meshes", []):

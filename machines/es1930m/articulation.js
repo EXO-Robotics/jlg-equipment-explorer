@@ -12,6 +12,7 @@ export const ES1930M_MECHANISM = Object.freeze({
   railFixedFrontX: 0.718,
   railMovingRearX: 0.15,
   railMinimumOverlap: 0.018,
+  railMinimumLateralClearance: 0.003,
   cylinderStroke: 0.6855,
   cylinderClosedPins: 0.43,
   steeringCylinderStrokeEachDirection: 0.08,
@@ -102,6 +103,10 @@ function alignCylinderY(node, start, end, authoredLength) {
   node.scale.set(1, direction.length() / authoredLength, 1);
 }
 
+function intervalClearance(aMin, aMax, bMin, bMax) {
+  return Math.max(aMin - bMax, bMin - aMax, 0);
+}
+
 export function createES1930MRig(root) {
   const links = [];
   const pins = [];
@@ -141,6 +146,11 @@ export function createES1930MRig(root) {
     steerSpindles: [required(root, "SteerSpindle_R"), required(root, "SteerSpindle_L")],
     potholeBars,
     potholeInitialY: potholeBars.map((node) => node.position.y),
+    guardPairs: [-1, 1].flatMap((side) => [
+      { fixed: required(root, `TopRail_${side}`), moving: required(root, `ExtensionTopRail_${side}`), fixedParent: "FixedRails", movingParent: "ExtensionRails" },
+      { fixed: required(root, `MidRail_${side}`), moving: required(root, `ExtensionMidRail_${side}`), fixedParent: "FixedRails", movingParent: "ExtensionRails" },
+      { fixed: required(root, `MainToeBoard_${side}`), moving: required(root, `ExtensionToeBoard_${side}`), fixedParent: "FixedRails", movingParent: "ExtensionDeck" },
+    ]),
     hitVolumes: Object.fromEntries(["Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"].map((name) => [name, required(root, name)])),
   };
   return rig;
@@ -161,8 +171,16 @@ export function selfTestES1930MRig(rig, restoreState) {
     }
     if (Math.abs(rig.hitVolumes.Platform_Hit.position.y - (1.44 + rig.platform.position.y)) > 1e-6) failures.push("platform hit-volume drift");
     if (Math.abs(rig.extension.position.x - solved.deckTranslation) > 1e-6) failures.push("extension translation drift");
-    const railOverlap = ES1930M_MECHANISM.railFixedFrontX - (ES1930M_MECHANISM.railMovingRearX + solved.deckTranslation);
-    if (railOverlap + 1e-6 < ES1930M_MECHANISM.railMinimumOverlap) failures.push("extension guard opening");
+    rig.root.updateMatrixWorld(true);
+    for (const pair of rig.guardPairs) {
+      if (pair.fixed.parent?.name !== pair.fixedParent || pair.moving.parent?.name !== pair.movingParent) failures.push("extension guard parent drift");
+      const fixedBounds = new THREE.Box3().setFromObject(pair.fixed);
+      const movingBounds = new THREE.Box3().setFromObject(pair.moving);
+      const railOverlap = fixedBounds.max.x - movingBounds.min.x;
+      if (railOverlap + 1e-6 < ES1930M_MECHANISM.railMinimumOverlap) failures.push("extension guard opening");
+      const lateralClearance = intervalClearance(fixedBounds.min.z, fixedBounds.max.z, movingBounds.min.z, movingBounds.max.z);
+      if (lateralClearance + 1e-6 < ES1930M_MECHANISM.railMinimumLateralClearance) failures.push("extension guard solid intersection");
+    }
     if (Math.abs(rig.cylinderUpperMarker.position.x - solved.cylinderUpper.x) > 1e-6 || Math.abs(rig.cylinderUpperMarker.position.y - solved.cylinderUpper.y) > 1e-6) failures.push("cylinder attachment drift");
   }
   applyES1930MState(rig, restoreState);
