@@ -1,12 +1,12 @@
 import * as THREE from "three";
-import { JLG742_MECHANISM, solve742RigGeometry, solve742State } from "./solver.js";
+import { JLG742_MECHANISM, solve742RigGeometry, solve742State } from "./solver.js?v=1.1.6";
 
 export { JLG742_MECHANISM, solve742RigGeometry, solve742State };
 
 function required(root,name){const node=root.getObjectByName(name);if(!node)throw new Error(`742 asset is missing ${name}`);return node;}
 const DYNAMIC_NAMES=["LiftCylinderBarrel","LiftCylinderRod","LiftCylinderRodPin","TelescopeCylinderBarrel","TelescopeCylinderRod","CompensationCylinderBarrel","CompensationCylinderRod","CarriageTiltCylinderBarrel","CarriageTiltCylinderRod","CarriageTiltLink","FrameLevelCylinderBarrel","FrameLevelCylinderRod","RearAxleStabilizerBarrel","RearAxleStabilizerRod","FrontSteerCylinderBarrel","FrontSteerCylinderRodLeft","FrontSteerCylinderRodRight","RearSteerCylinderBarrel","RearSteerCylinderRodLeft","RearSteerCylinderRodRight","BoomAngleSensorCrank","BoomAngleSensorLink","BoomAngleSensorFrameJoint","BoomAngleSensorCrankJoint","BoomAngleSensorBoomJoint",
   ...Array.from({length:2},(_,lane)=>Array.from({length:3},(_,segment)=>`LiftHose_${lane}_${segment}`)).flat(),
-  ...Array.from({length:4},(_,lane)=>Array.from({length:3},(_,segment)=>`BoomHose_${lane}_${segment}`)).flat(),
+  ...Array.from({length:4},(_,lane)=>Array.from({length:10},(_,segment)=>`BoomHose_${lane}_${segment}`)).flat(),
   "FrontSteerBarLeft","FrontSteerBarRight","RearSteerBarLeft","RearSteerBarRight",
   ...["L","R"].flatMap(side=>["", "_Moving", ...Array.from({length:8},(_,index)=>index===0?"_Wrap":`_Wrap_${index}`)].map(suffix=>`ExtendChain_${side}${suffix}`)),
   "RetractChain_C","RetractChain_C_Moving",...Array.from({length:8},(_,index)=>index===0?"RetractChain_C_Wrap":`RetractChain_C_Wrap_${index}`)];

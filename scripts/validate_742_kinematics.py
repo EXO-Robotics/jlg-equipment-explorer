@@ -115,7 +115,8 @@ def main() -> None:
     for name, hose in result["hose_paths"].items():
         if hose["maximum_total_length_drift_m"] > 1e-9:
             failures.append(f"{name} changes total hose length")
-        if hose["minimum_segment_length_m"] < 0.10:
+        minimum = 0.05 if name.startswith("BoomHose") else 0.10
+        if hose["minimum_segment_length_m"] < minimum:
             failures.append(f"{name} articulated route collapsed")
     if result["maximum_hose_endpoint_step_m"] > 0.002:
         failures.append("service-line endpoint continuity exceeded the dense-step bound")
@@ -153,6 +154,8 @@ def main() -> None:
         failures.append("four-wheel circle-steer linkage lost its reconstructed ICR closure")
     if steering["maximum_crab_heading_spread_degrees"] > 2.1 or steering["maximum_crab_corresponding_heading_error_degrees"] > 2.1:
         failures.append("continuous-rack crab presentation exceeded its explicit residual-toe boundary")
+    if steering["maximum_front_mode_icr_relative_spread"] > 0.05:
+        failures.append("limited-rack front-only presentation exceeded its reconstructed ICR-fit boundary")
     for name, values in result["rigid_link_ranges_m"].items():
         if values[1] - values[0] > 1e-12:
             failures.append(f"{name} changes length")

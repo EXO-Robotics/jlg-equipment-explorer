@@ -207,6 +207,7 @@ def main() -> None:
         "solver_maximum_four_wheel_icr_relative_spread": steering_linkage["maximum_four_wheel_icr_relative_spread"],
         "solver_maximum_crab_heading_spread_degrees": steering_linkage["maximum_crab_heading_spread_degrees"],
         "solver_maximum_crab_corresponding_heading_error_degrees": steering_linkage["maximum_crab_corresponding_heading_error_degrees"],
+        "solver_maximum_front_mode_icr_relative_spread": steering_linkage["maximum_front_mode_icr_relative_spread"],
         "solver_ackermann_authority": steering_linkage["ackermann_authority"],
         "solver_maximum_reconstructed_circle_center_spread_m": kinematic_result["maximum_reconstructed_circle_center_spread_m"],
         "solver_rigid_link_ranges_m": kinematic_result["rigid_link_ranges_m"],
@@ -252,13 +253,15 @@ def main() -> None:
         raise RuntimeError("742 receipt reconstructed four-wheel ICR proof drift")
     if mechanical_proof["solver_maximum_crab_heading_spread_degrees"] > 2.1 or mechanical_proof["solver_maximum_crab_corresponding_heading_error_degrees"] > 2.1:
         raise RuntimeError("742 receipt reconstructed crab residual-toe proof drift")
+    if mechanical_proof["solver_maximum_front_mode_icr_relative_spread"] > 0.05:
+        raise RuntimeError("742 receipt limited-rack front-mode ICR proof drift")
     if any(max(values) - min(values) > 1e-12 for values in mechanical_proof["solver_rigid_link_ranges_m"].values()):
         raise RuntimeError("742 receipt rigid-link invariant proof drift")
     if any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.04 or path["wrap_degrees"] != 180 for path in mechanical_proof["solver_chain_paths"].values()):
         raise RuntimeError("742 receipt invariant chain-route proof drift")
     if mechanical_proof["solver_maximum_chain_tangent_dot_error"] > 1e-12 or mechanical_proof["solver_minimum_chain_to_sheave_surface_clearance_m"] <= 0 or mechanical_proof["continuous_all_chain_samples"] < 2001:
         raise RuntimeError("742 receipt chain tangency/clearance/continuity proof drift")
-    if mechanical_proof["continuous_hose_samples"] < 2001 or any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.10 for path in mechanical_proof["solver_hose_paths"].values()):
+    if mechanical_proof["continuous_hose_samples"] < 2001 or any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < (0.05 if name.startswith("BoomHose") else 0.10) for name, path in mechanical_proof["solver_hose_paths"].items()):
         raise RuntimeError("742 receipt invariant articulated-hose proof drift")
     if mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
         raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")

@@ -389,10 +389,12 @@ def build():
     bpy.data.objects["CompensationCylinderRod"]["published_stroke_m"] = 0.278
     for lane, lateral in enumerate((-0.29,-0.24,0.24)):
         beam(f"BoomRigidTube_{lane}", (0.35,-0.34,lateral), (5.05,-0.34,lateral), 0.011, MAT["zinc"], base, "hydraulics", 10)
-    for lane, z in enumerate((-0.27,-0.20,0.20,0.27)):
-        points = [(0.15,-0.38,z),(1.55,-0.42,z),(3.45,-0.40,z),(5.15,-0.32,z)]
-        for segment in range(3):
-            beam(f"BoomHose_{lane}_{segment}", points[segment], points[segment+1], 0.014, MAT["hose"], base, "hydraulics", 10)
+    boom_hose_stow = solved_pose({"lift": 0, "telescope": 0, "tilt": 0, "steer": 0,
+                                  "level": 0, "steerMode": "circle"})["geometry"]["beams"]
+    for lane in range(4):
+        for segment in range(10):
+            points = boom_hose_stow[f"BoomHose_{lane}_{segment}"]
+            beam(f"BoomHose_{lane}_{segment}", points[0], points[1], 0.014, MAT["hose"], base, "hydraulics", 10)
     for side, z in (("L",-0.24),("R",0.24)):
         cylinder(f"BoomSheave_{side}", 0.105, 0.035, (4.80,-0.22,z), MAT["zinc"], mid, component="boom")
     cylinder("RetractSheave_C", 0.095, 0.035, (0.15,-0.34,0), MAT["zinc"], mid, component="boom")

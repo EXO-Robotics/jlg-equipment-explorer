@@ -102,18 +102,32 @@ def pose_contract_measurement(pose):
     hose_totals = {}
     for prefix in [*[f"LiftHose_{lane}" for lane in range(2)],
                    *[f"BoomHose_{lane}" for lane in range(4)]]:
+        count = 3 if prefix.startswith("Lift") else 10
         hose_totals[prefix] = sum(
             (posed_beam_endpoints(f"{prefix}_{segment}")[1] -
              posed_beam_endpoints(f"{prefix}_{segment}")[0]).length
-            for segment in range(3)
+            for segment in range(count)
         )
     steer_lengths = {name: (posed_beam_endpoints(name)[1] - posed_beam_endpoints(name)[0]).length
                      for name in ("FrontSteerBarLeft", "FrontSteerBarRight",
                                   "RearSteerBarLeft", "RearSteerBarRight")}
+    rigid_tubes = [posed_beam_endpoints(f"BoomRigidTube_{lane}") for lane in range(3)]
+    minimum_hose_tube_clearance = float("inf")
+    for lane in range(4):
+        for segment in range(10):
+            start, end = posed_beam_endpoints(f"BoomHose_{lane}_{segment}")
+            for sample in range(21):
+                point = start.lerp(end, sample / 20)
+                for tube_start, tube_end in rigid_tubes:
+                    axis = tube_end - tube_start
+                    amount = max(0.0, min(1.0, (point - tube_start).dot(axis) / axis.length_squared))
+                    minimum_hose_tube_clearance = min(minimum_hose_tube_clearance,
+                                                     (point - tube_start.lerp(tube_end, amount)).length - .025)
     return {"maximum_beam_endpoint_error_m": beam_error,
             "maximum_point_position_error_m": point_error,
             "hose_total_lengths_m": hose_totals,
-            "steering_bar_lengths_m": steer_lengths}
+            "steering_bar_lengths_m": steer_lengths,
+            "minimum_boom_hose_to_rigid_tube_surface_clearance_m": minimum_hose_tube_clearance}
 
 
 def fork_measurement():
@@ -185,12 +199,19 @@ def main():
         failures.append("actual posed GLB maximum-lift fork surface misses 12.80 m")
     if abs(max_lift["pitch_degrees"]) > 0.1:
         failures.append("actual posed GLB forks are not level at maximum lift")
+    proof_values = MECHANISM["validated_actual_glb_measurements"]
+    if abs(max_lift["load_surface_m"] - proof_values["maximum_lift_fork_load_surface_m"]) > 1e-6:
+        failures.append("maximum-lift render proof label drifted from actual posed GLB")
 
     max_reach_pose = solve({"lift": 3 / 69, "telescope": 1, "tilt": 0, "steer": 0,
                             "level": 0, "steerMode": "circle"})
     pose_contracts["maximum_reach"] = pose_contract_measurement(max_reach_pose)
     max_reach = fork_measurement()
     forward_reach = max_reach["heel_x_m"] + .6096 - front_tire_plane
+    if (abs(front_tire_plane - proof_values["maximum_reach_front_tire_tread_plane_x_m"]) > 1e-6
+            or abs(max_reach["heel_x_m"] + .6096 - proof_values["maximum_reach_24in_load_center_x_m"]) > 1e-6
+            or abs(forward_reach - proof_values["maximum_reach_m"]) > 1e-6):
+        failures.append("maximum-reach render proof labels drifted from actual posed GLB")
     if abs(forward_reach - CONFIG["published_performance"]["maximum_forward_reach_m"]) > 0.02:
         failures.append("actual posed GLB 24-inch load-center reach misses 8.86 m")
     if abs(max_reach["pitch_degrees"]) > 0.1:
@@ -217,11 +238,21 @@ def main():
     if crab_spread > 2.1:
         failures.append("actual GLB crab wheel headings exceed residual-toe boundary")
 
+    front_pose = solve({"lift": 0, "telescope": 0, "tilt": 0, "steer": 1,
+                        "level": 0, "steerMode": "front"})
+    pose_contracts["maximum_limited_front"] = pose_contract_measurement(front_pose)
+    front_inner = math.degrees(max(abs(front_pose["state"]["wheelAngles"][name]) for name in ("FL", "FR")))
+    rear_heading = math.degrees(max(abs(front_pose["state"]["wheelAngles"][name]) for name in ("RL", "RR")))
+    if front_inner > 5.181 or rear_heading > 1e-9:
+        failures.append("actual GLB limited front-only steering semantics drifted")
+
     for name, contract in pose_contracts.items():
         if contract["maximum_beam_endpoint_error_m"] > 2e-6 or contract["maximum_point_position_error_m"] > 1e-9:
             failures.append(f"actual GLB named endpoint contract drifted at {name}")
         if max(contract["steering_bar_lengths_m"].values()) - min(contract["steering_bar_lengths_m"].values()) > 2e-6:
             failures.append(f"actual GLB steering bars disagree in length at {name}")
+        if contract["minimum_boom_hose_to_rigid_tube_surface_clearance_m"] < .005:
+            failures.append(f"actual GLB boom hose intersects rigid tube at {name}")
 
     output = {
         "status": "PASS" if not failures else "FAIL",

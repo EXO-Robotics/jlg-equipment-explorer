@@ -12,6 +12,8 @@ from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / "tmp/742/review-renders"
+MECHANISM = json.loads((ROOT / "machines/742/mechanism.json").read_text())
+VALIDATED_GLB = MECHANISM["validated_actual_glb_measurements"]
 
 
 def point_at(obj, target):
@@ -156,6 +158,9 @@ for name, (location, target) in views.items():
     bpy.ops.render.render(write_still=True)
 
 pose_circle_steering(1.0)
+steering_label_mat = bpy.data.materials.new("SteeringProofLabel")
+steering_label_mat.use_nodes = True
+steering_label_mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (.05, .012, .006, 1.0)
 steer_cutaway = [
     obj for obj in bpy.data.objects
     if obj.type in {"MESH", "CURVE", "FONT"} and obj.get("component") not in {None, "steering"}
@@ -165,11 +170,34 @@ for obj in steer_cutaway:
 camera.data.lens = 58
 camera.location = (0.0, 0.0, 8.8)
 point_at(camera, (0.0, 0.0, 0.58))
+circle_label = proof_label("Proof_CircleMode",
+                           "CIRCLE / FL 27.477 / FR 55.000 / RL -27.477 / RR -55.000 deg\nFOUR-WHEEL ICR RELATIVE SPREAD 0.434%",
+                           (0, 0, 1.72), .105, steering_label_mat)
+circle_label.rotation_mode = "XYZ"; circle_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-circle-steering-plan.png")
 bpy.ops.render.render(write_still=True)
+bpy.data.objects.remove(circle_label, do_unlink=True)
 pose_steering("crab", 1.0)
+crab_label = proof_label("Proof_CrabMode",
+                         "CRAB / ACTUAL FL 4.677 / FR 5.181 / RL 5.181 / RR 4.677 deg\n15% RECONSTRUCTED RACK / RESIDUAL TOE 0.504 deg",
+                         (0, 0, 1.72), .105, steering_label_mat)
+crab_label.rotation_mode = "XYZ"; crab_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-crab-steering-plan.png")
 bpy.ops.render.render(write_still=True)
+bpy.data.objects.remove(crab_label, do_unlink=True)
+pose_steering("front", 1.0)
+front_label_mat = bpy.data.materials.new("FrontModeProofLabel")
+front_label_mat.diffuse_color = (.05, .012, .006, 1.0)
+front_label_mat.use_nodes = True
+front_label_mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (.05, .012, .006, 1.0)
+front_label = proof_label("Proof_FrontModeBoundary",
+                          "FRONT-ONLY / 15% RECONSTRUCTED RACK\nMAX INNER 5.181 deg / ICR FIT 4.869%",
+                          (0, 0, 1.72), .12, front_label_mat)
+front_label.rotation_mode = "XYZ"
+front_label.rotation_euler = (0, 0, 0)
+scene.render.filepath = str(OUTPUT_DIR / "742-front-steering-limited-plan.png")
+bpy.ops.render.render(write_still=True)
+bpy.data.objects.remove(front_label, do_unlink=True)
 pose_circle_steering(1.0)
 steer_names = {"FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
                "FrontSteerBarLeft", "FrontSteerBarRight"}
@@ -205,8 +233,13 @@ rear_center = sum((bpy.data.objects[name].matrix_world.translation for name in r
 camera.data.lens = 52
 camera.location = rear_center + Vector((0.0, 0.0, 8.8))
 point_at(camera, rear_center)
+rear_label = proof_label("Proof_RearSteering",
+                         "MIRRORED REAR RACK / INVARIANT BARS / ENDPOINT CLOSURE 0",
+                         rear_center + Vector((0, 0, 1.55)), .105, steering_label_mat)
+rear_label.rotation_mode = "XYZ"; rear_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-rear-steering-linkage.png")
 bpy.ops.render.render(write_still=True)
+bpy.data.objects.remove(rear_label, do_unlink=True)
 for obj in rear_occluders:
     obj.hide_render = False
 for obj in steer_cutaway:
@@ -287,7 +320,7 @@ if "Emission Color" in label_bsdf.inputs:
     label_bsdf.inputs["Emission Color"].default_value = (1.0, .78, .45, 1.0)
     label_bsdf.inputs["Emission Strength"].default_value = 2.0
 max_lift_forks = mesh_world_points(("ForkL", "ForkR"))
-max_lift_surface = max(point.z for point in max_lift_forks)
+max_lift_surface = VALIDATED_GLB["maximum_lift_fork_load_surface_m"]
 level_datum = proof_beam("Proof_MaxLiftForkLevel", (2.2, -1.1, max_lift_surface + .08),
                          (5.2, -1.1, max_lift_surface + .08), .022, datum_mat)
 lift_ground_datum = proof_beam("Proof_MaxLiftGround", (2.2, -1.1, .04),
@@ -295,7 +328,7 @@ lift_ground_datum = proof_beam("Proof_MaxLiftGround", (2.2, -1.1, .04),
 lift_dimension = proof_beam("Proof_MaxLiftDimension", (5.05, -1.1, .04),
                             (5.05, -1.1, max_lift_surface + .08), .018, datum_mat)
 lift_labels = [
-    proof_label("Proof_MaxLiftValue", "ACTUAL GLB FORK LOAD SURFACE  12.798856 m",
+    proof_label("Proof_MaxLiftValue", f"VALIDATED POSED-GLB FORK LOAD SURFACE  {max_lift_surface:.6f} m",
                 (3.55, -1.12, max_lift_surface + .38), .24, label_mat),
     proof_label("Proof_MaxLiftGroundLabel", "GROUND DATUM  0.000 m",
                 (4.25, -1.12, .68), .22, label_mat),
@@ -339,10 +372,10 @@ pose_mechanisms(3 / 69, 1.0)
 bpy.context.view_layer.update()
 front_tire_names = [target.name for target in bpy.data.objects
                     if target.type == "MESH" and target.name.startswith(("Tire_FL", "Tire_FR", "Tread_FL_", "Tread_FR_"))]
-front_tire_plane = max(point.x for point in mesh_world_points(front_tire_names))
+front_tire_plane = VALIDATED_GLB["maximum_reach_front_tire_tread_plane_x_m"]
 reach_forks = mesh_world_points(("ForkL", "ForkR"))
-fork_heel = min(point.x for point in reach_forks)
-load_center = fork_heel + .6096
+load_center = VALIDATED_GLB["maximum_reach_24in_load_center_x_m"]
+fork_heel = load_center - .6096
 datum_objects = [
     proof_beam("Proof_FrontTirePlane", (front_tire_plane, -1.45, 0),
                (front_tire_plane, -1.45, 2.45), .018, datum_mat),
@@ -358,7 +391,7 @@ datum_objects = [
                 (front_tire_plane, -1.47, .34), .20, label_mat),
     proof_label("Proof_LoadCenterLabel", "24 in / 0.6096 m LOAD CENTER",
                 ((fork_heel + load_center) / 2, -1.47, 1.46), .20, label_mat),
-    proof_label("Proof_ReachValue", "SELECTED RECONSTRUCTED 3 deg POSE   8.867096 m REACH",
+    proof_label("Proof_ReachValue", f"SELECTED RECONSTRUCTED 3 deg POSE   {VALIDATED_GLB['maximum_reach_m']:.6f} m REACH",
                 ((front_tire_plane + load_center) / 2, -1.47, 2.92), .24, label_mat),
 ]
 scene.render.resolution_x = 1400

@@ -28,14 +28,24 @@
     "wheel_center_track_m": 2.1005,
     "published_outside_turning_radius_m": 3.66,
     "linkage": "one fixed double-ended cylinder barrel, one continuous translated opposed-rod rack, and two invariant steering bars per axle",
-    "reconstructed_geometry": {"steering_bar_length_m": 0.3309588579567261, "rack_joint_span_m": 1.735341218434296, "rack_maximum_shift_m": 0.22052192595337095, "crab_rack_scale": 0.3},
-    "acceptance": {"maximum_circle_icr_relative_spread": 0.005, "maximum_crab_residual_toe_degrees": 2.1},
-    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit. Wheel-center track, rack stroke, steering-arm anchors, crab rack scale, and the resulting linkage curves are reconstructed. Exact nonzero crab parallelism is incompatible with this owned continuous-rack/fixed-bar Ackermann topology, so residual toe is measured rather than hidden. The published outside-radius reference locus and tire/body swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the reconstructed swept envelope"
+    "reconstructed_geometry": {"steering_bar_length_m": 0.3309588579567261, "rack_joint_span_m": 1.735341218434296, "rack_maximum_shift_m": 0.22052192595337095, "crab_rack_scale": 0.15, "front_mode_rack_scale": 0.15},
+    "acceptance": {"maximum_circle_icr_relative_spread": 0.005, "maximum_crab_residual_toe_degrees": 2.1, "maximum_front_mode_icr_relative_spread": 0.05},
+    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit. Wheel-center track, rack stroke, steering-arm anchors, crab/front-mode rack scales, and the resulting linkage curves are reconstructed. Front-only and crab presentations use conservative 15 percent rack commands; these are not claimed factory controller limits or calibrations. Exact nonzero crab parallelism is incompatible with this owned continuous-rack/fixed-bar Ackermann topology, so residual toe is measured rather than hidden. The published outside-radius reference locus and tire/body swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the reconstructed swept envelope"
   },
   "service_lines": {
     "lift_hose_total_length_m": 3.21,
-    "boom_intersection_hose_total_length_m": 4.65,
-    "authority": "parts/service sources establish flexible auxiliary lines inside or below the boom; exact hose lengths, bend guides and anchors are unresolved reconstructed presentation coordinates"
+    "boom_intersection_hose_total_length_m": 5.0,
+    "boom_loop_reconstructed_bend_radius_m": 0.14,
+    "boom_loop_arc_segments": 8,
+    "minimum_boom_hose_to_rigid_tube_surface_clearance_m": 0.005,
+    "authority": "parts/service sources establish flexible auxiliary lines inside or below the boom; exact hose lengths, bend guides and anchors are unresolved reconstructed presentation coordinates. The curved-loop radius and clearance are owned visual collision boundaries, not manufacturer hose specifications"
+  },
+  "validated_actual_glb_measurements": {
+    "maximum_lift_fork_load_surface_m": 12.798856,
+    "maximum_reach_front_tire_tread_plane_x_m": 2.352907,
+    "maximum_reach_24in_load_center_x_m": 11.220003,
+    "maximum_reach_m": 8.867096,
+    "authority": "rounded presentation labels cross-checked by scripts/validate_742_posed_glb.py against the actual posed GLB; not manufacturer measurement authority"
   },
   "carriage": {
     "type": "standard floating 50 inch",

@@ -117,6 +117,23 @@ def verify_browser_capture_allowlist_binding(record: dict) -> Path:
     return verify_record(record, BROWSER_CAPTURE_ALLOWLIST_PATH)
 
 
+def verify_deployment_rebuild_binding(
+    record: dict, rebuild_path: Path, workflow_run_url: str, source_commit: str
+) -> None:
+    expected_fields = {"sha256", "bytes", "authority", "workflow_run_url", "source_commit"}
+    if set(record or {}) != expected_fields:
+        raise RuntimeError("742 deployment deterministic-rebuild record schema drift")
+    if (
+        record["authority"] != "generated_in_deployment_workflow"
+        or record["workflow_run_url"] != workflow_run_url
+        or record["source_commit"] != source_commit
+        or not rebuild_path.is_file()
+        or record["sha256"] != digest(rebuild_path)
+        or record["bytes"] != rebuild_path.stat().st_size
+    ):
+        raise RuntimeError("742 deployment deterministic-rebuild current-run binding drift")
+
+
 def aggregate_digest(paths: list[Path]) -> str:
     hasher = hashlib.sha256()
     for path in paths:
@@ -282,17 +299,10 @@ def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path)
     ):
         raise RuntimeError("742 deployment frozen-source replay result did not verify all 11 sources")
     rebuild_record = attestation["deterministic_rebuild_attestation"]
-    if set(rebuild_record or {}) != {"sha256", "bytes", "artifact_name", "artifact_run_url"}:
-        raise RuntimeError("742 deployment deterministic-rebuild record schema drift")
     rebuild_path = path.parent / "742-deterministic-rebuild-attestation.json"
-    if (
-        rebuild_record["artifact_name"] != "742-frozen-source-evidence"
-        or rebuild_record["artifact_run_url"] != artifact_run_url
-        or not rebuild_path.is_file()
-        or rebuild_record["sha256"] != digest(rebuild_path)
-        or rebuild_record["bytes"] != rebuild_path.stat().st_size
-    ):
-        raise RuntimeError("742 deployment deterministic-rebuild artifact record drift")
+    verify_deployment_rebuild_binding(
+        rebuild_record, rebuild_path, attestation["workflow_run_url"], attestation["source_commit"]
+    )
     if attestation["candidate_receipt_sha256"] != digest(receipt_path):
         raise RuntimeError("742 deployment attestation does not bind the canonical candidate receipt")
     build_manifest_path = path.parent / "pages-build-manifest.json"
@@ -471,6 +481,7 @@ def main() -> None:
         "solver_maximum_four_wheel_icr_relative_spread": steering_linkage["maximum_four_wheel_icr_relative_spread"],
         "solver_maximum_crab_heading_spread_degrees": steering_linkage["maximum_crab_heading_spread_degrees"],
         "solver_maximum_crab_corresponding_heading_error_degrees": steering_linkage["maximum_crab_corresponding_heading_error_degrees"],
+        "solver_maximum_front_mode_icr_relative_spread": steering_linkage["maximum_front_mode_icr_relative_spread"],
         "solver_ackermann_authority": steering_linkage["ackermann_authority"],
         "solver_maximum_reconstructed_circle_center_spread_m": kinematic_result["maximum_reconstructed_circle_center_spread_m"],
         "solver_rigid_link_ranges_m": kinematic_result["rigid_link_ranges_m"],
@@ -518,13 +529,15 @@ def main() -> None:
         raise RuntimeError("742 receipt reconstructed four-wheel ICR proof drift")
     if expected_mechanical_proof["solver_maximum_crab_heading_spread_degrees"] > 2.1 or expected_mechanical_proof["solver_maximum_crab_corresponding_heading_error_degrees"] > 2.1:
         raise RuntimeError("742 receipt reconstructed crab residual-toe proof drift")
+    if expected_mechanical_proof["solver_maximum_front_mode_icr_relative_spread"] > 0.05:
+        raise RuntimeError("742 receipt limited-rack front-mode ICR proof drift")
     if any(max(values) - min(values) > 1e-12 for values in expected_mechanical_proof["solver_rigid_link_ranges_m"].values()):
         raise RuntimeError("742 receipt rigid-link invariant proof drift")
     if any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.04 or path["wrap_degrees"] != 180 for path in expected_mechanical_proof["solver_chain_paths"].values()):
         raise RuntimeError("742 receipt invariant chain-route proof drift")
     if expected_mechanical_proof["solver_maximum_chain_tangent_dot_error"] > 1e-12 or expected_mechanical_proof["solver_minimum_chain_to_sheave_surface_clearance_m"] <= 0 or expected_mechanical_proof["continuous_all_chain_samples"] < 2001:
         raise RuntimeError("742 receipt chain tangency/clearance/continuity proof drift")
-    if expected_mechanical_proof["continuous_hose_samples"] < 2001 or any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.10 for path in expected_mechanical_proof["solver_hose_paths"].values()):
+    if expected_mechanical_proof["continuous_hose_samples"] < 2001 or any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < (0.05 if name.startswith("BoomHose") else 0.10) for name, path in expected_mechanical_proof["solver_hose_paths"].items()):
         raise RuntimeError("742 receipt invariant articulated-hose proof drift")
     if expected_mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < expected_mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
         raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")

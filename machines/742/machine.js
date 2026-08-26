@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { JLG742_CAMERAS, jlg742ComponentView, jlg742FollowView } from "./cameras.js?v=1.1.3";
 import { JLG742_COMPONENTS } from "./inspector.js?v=1.1.3";
-import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.5";
+import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.6";
 import { JLG742_GLB_URL, JLG742_RELEASE } from "./version.js?v=1.1.4";
 
 export const JLG742_MACHINE = Object.freeze({
@@ -53,7 +53,9 @@ export const JLG742_MACHINE = Object.freeze({
         level: Math.abs(state.level) < 0.01 ? "Level" : `${Math.round(Math.abs(state.level) * degrees(JLG742_MECHANISM.frameLevelMaximum))}° ${state.level < 0 ? "L" : "R"}`,
       }),
       zone: stowed ? "stowed" : state.telescope > 0.75 ? "extended" : "active",
-      status: stowed ? "Stowed study" : `${state.steerMode} steer · visual mechanism active`,
+      status: stowed ? "Stowed study" : state.steerMode === "front"
+        ? "front steer · reconstructed limited-rack study"
+        : `${state.steerMode} steer · visual mechanism active`,
     });
   },
   showcase(t) {

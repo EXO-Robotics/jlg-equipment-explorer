@@ -20,19 +20,27 @@
     },
     {
       "path": "docs/review/742/circle-steering-plan.png",
-      "sha256": "1e189d2ef298076ed95413db0a3adfcbd037b6f3e34201864f6b41c3c086d414",
-      "bytes": 1249860,
+      "sha256": "c55c8081dfe556c0e4674215a8e3a6f9e5b00f26a9c8ec6af45336444e29c49c",
+      "bytes": 1276205,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic plan render of the independently authored rigid-bar circle-steering reconstruction."
     },
     {
       "path": "docs/review/742/crab-steering-plan.png",
-      "sha256": "07db1f20626422b3061aeba2d51810fa079f9d2f1d5b42899f483b54324759e0",
-      "bytes": 1217188,
+      "sha256": "ded9f2b52988b733050b51f5d89028f7d76c77a2a29a9bb80cf4914a12c2cd92",
+      "bytes": 1231421,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic plan render of the independently authored continuous-rack crab reconstruction."
+    },
+    {
+      "path": "docs/review/742/front-steering-limited-plan.png",
+      "sha256": "a8fae4608933bb69547d6e69db028e5b7e7f00172e7b4972493b342eb81c4a05",
+      "bytes": 1226419,
+      "width_px": 1200,
+      "height_px": 900,
+      "provenance": "Deterministic plan render of the independently authored limited-rack front-only steering reconstruction."
     },
     {
       "path": "docs/review/742/maximum-lift-forks-close.png",
@@ -44,32 +52,32 @@
     },
     {
       "path": "docs/review/742/maximum-lift-level-forks.png",
-      "sha256": "76b743b1cfce75f59c1b54a942b39e6e7e52def91a680d98c4425aa74df3ca44",
-      "bytes": 929363,
+      "sha256": "b8330d242ac2f389e92de732c773fce8e8c5a1e3b052d8f402c873945b645e87",
+      "bytes": 931798,
       "width_px": 1000,
       "height_px": 1200,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
       "path": "docs/review/742/maximum-reach-24in-load-center.png",
-      "sha256": "c1b0190d30c5bc4c0f15ca0040ae07899aad18048fe3892b10cd0dc6ef5ccdeb",
-      "bytes": 895255,
+      "sha256": "00c008dbb58d47aa9ea52af9b3777bd02c5d93a4e81110b7dd56c4f8bd2d2efb",
+      "bytes": 895098,
       "width_px": 1400,
       "height_px": 800,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
       "path": "docs/review/742/rear-steering-linkage.png",
-      "sha256": "18dfa0942134eb2bb12fea7252bcc5d83b8b13d136325a568960f5fc12bd7f86",
-      "bytes": 1117745,
+      "sha256": "3f607b8158140888fed2257d5d11bd8e2ec8caf9ba10895c7d8a4d339ff32093",
+      "bytes": 1135308,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic cutaway render of the independently authored rear axle steering reconstruction."
     },
     {
       "path": "docs/review/742/retract-chain-routing-cutaway.png",
-      "sha256": "ad0309b30b16eaffc293f127c3be07e565c776057f131b6012f234820cfd6002",
-      "bytes": 661797,
+      "sha256": "65050f1accbdeecfd4c00e635a777411a5fb4b65cf57a1d755b9bd569cda4462",
+      "bytes": 674756,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
