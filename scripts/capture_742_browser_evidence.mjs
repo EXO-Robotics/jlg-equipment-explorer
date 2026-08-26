@@ -735,7 +735,7 @@ async function captureDesktop742() {
     alignment: document.body.dataset.steerModeAlignment || null,
     visible_status: document.querySelector("#motion-status")?.value || "",
   }));
-  assert(centerRequiredRejection.active_mode === "circle" && centerRequiredRejection.alignment === "center-required" && centerRequiredRejection.visible_status.includes("center steering"), `steering mode changed without centering: ${JSON.stringify(centerRequiredRejection)}`);
+  assert(centerRequiredRejection.active_mode === "circle" && centerRequiredRejection.alignment === "center-required" && centerRequiredRejection.visible_status.toLowerCase().includes("center steering"), `steering mode changed without centering: ${JSON.stringify(centerRequiredRejection)}`);
   await setRange(page, "#steer-control", 0);
   const modes = [];
   for (const mode of ["circle", "crab", "front"]) {
