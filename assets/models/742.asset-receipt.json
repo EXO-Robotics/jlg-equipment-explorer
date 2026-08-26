@@ -29,7 +29,7 @@
         "release": "1.1.0",
         "required_parent_edges": 112,
         "root_node": "600S_ROOT",
-        "runtime_sha256": "b70c16c86ae507642e1f4acb7576233286e4b2e32ff98ea2c3252dc561eab8c5",
+        "runtime_sha256": "4aecdb2b7f5ab9ee9c0fa2b94237aff47b417a2c14c117831fcb94e47b708145",
         "sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
         "source_blend": "source/blender/600s-showcase-v1.1.blend",
         "source_blend_sha256": "a88fefb921a5a34d7c71cf76a67a045cf1c21e0b9d7db61d879d1a253825c34e",
@@ -62,7 +62,7 @@
         ],
         "wheelbase_m": 2.5
       },
-      "result_sha256": "d5ed10e631d04a30fe5e37ea5eedd61ea1d3646c4b642054f17ab1aaff1cf648",
+      "result_sha256": "31dc1b30dd8783d44aeaff76a854c4f0ba3df1a3f308eaaefb74a55b2bf1a42e",
       "status": "pass",
       "validator": {
         "bytes": 40159,
@@ -102,21 +102,29 @@
     "600s_viewer_contract": {
       "arguments": [],
       "result": {
+        "compact_short_landscape": [
+          844,
+          390
+        ],
+        "desktop_expanded": [
+          1280,
+          720
+        ],
         "keyboard_components": 4,
         "mobile_controls_default": "collapsed",
         "motion_ranges_described": 4,
         "release": "1.1.0",
         "remote_startup_assets": 0,
-        "runtime_release": "1.1.13",
+        "runtime_release": "1.1.14",
         "selection_volumes_self_tested": 5,
         "status": "PASS"
       },
-      "result_sha256": "c5b24a178762c8651d2456657dfafc95277d754c524106d55cfd20aab452ad13",
+      "result_sha256": "aed9d461ad19032175478171c277951cb836a9df23768cb0b41c937308d06b15",
       "status": "pass",
       "validator": {
-        "bytes": 8661,
+        "bytes": 9452,
         "path": "scripts/validate_viewer_contract.py",
-        "sha256": "d4296a400e9926fd0b4735e1a5f4331e5cef8cd0641af7a30fc3fc1dc70ca632"
+        "sha256": "d2af1af92dfc50295181737a9af84efa3a37274f2e1728325cc988808d4a78b0"
       }
     },
     "actual_posed_glb": {
@@ -1146,17 +1154,17 @@
     "review_evidence_parser": {
       "arguments": [],
       "result": {
-        "negative_cases": 45,
+        "negative_cases": 50,
         "screenshot_viewport_contracts": 7,
         "selection_fixtures": 5,
         "status": "PASS"
       },
-      "result_sha256": "f4f08701fd86141cd99523cf1d6053f9a8728a1cbf4220f481c97810e6a6bc5b",
+      "result_sha256": "3e021c8f6f6815a561994b4c8617e8d88e0e2a6cb2ac4f2b96e4801416a6c136",
       "status": "pass",
       "validator": {
-        "bytes": 27889,
+        "bytes": 32201,
         "path": "scripts/test_742_browser_evidence.py",
-        "sha256": "62e8e4f390b68b78a0850a1025ead16028f4c1507ce889ff9edbded75bbf3744"
+        "sha256": "71c80ed6770d22856589c4364cdcf356fef08571d3608956cf4aaa0867cee3f6"
       }
     },
     "review_visual_semantics_parser": {
@@ -1202,7 +1210,7 @@
         "pose_aware_reset": true,
         "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.6.3",
+        "runtime_release": "1.6.4",
         "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "settled_motion_live_region": true,
@@ -1212,7 +1220,7 @@
         "terminal_accessible_failure_ui": true,
         "visible_stalls_included": true
       },
-      "result_sha256": "e9e93a4d510a3594c01eb28c4570e3d06f71228501d034f93d4b17fa935b36e0",
+      "result_sha256": "087f4802a92bee14e637286fafb00d22eecf162cefc5b9e5a04fdc61ce228491",
       "status": "pass",
       "validator": {
         "bytes": 11658,
@@ -1222,7 +1230,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "8b33329369177e4db3f588295712d5f985b79cc056f46eea20b0c8c9c8f9c091",
+  "candidate_tree_sha256": "dc9be1a3ab547cdd5bd46e4738e2f71510df6c5590f6d578098f16cf7e33e58f",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1250,9 +1258,9 @@
       "sha256": "8abd00341089c7623b39e4a1a6f16c19d75567ac03f73fa9194f1e8998e89c4e"
     },
     "browser_capture_parser_tests": {
-      "bytes": 27889,
+      "bytes": 32201,
       "path": "scripts/test_742_browser_evidence.py",
-      "sha256": "62e8e4f390b68b78a0850a1025ead16028f4c1507ce889ff9edbded75bbf3744"
+      "sha256": "71c80ed6770d22856589c4364cdcf356fef08571d3608956cf4aaa0867cee3f6"
     },
     "browser_capture_probe": {
       "bytes": 10866,
@@ -1260,19 +1268,19 @@
       "sha256": "69a082d770a137ceec5058c4192bc7633330cc5bf83d5496e759cb88c52f438e"
     },
     "browser_capture_requirements": {
-      "bytes": 14714,
+      "bytes": 16000,
       "path": "docs/review/742/CAPTURE_REQUIREMENTS.json",
-      "sha256": "35c4585cda865782ab8568084931bfda287d88b01d9317c828c96dfd9d8e0042"
+      "sha256": "9392a8c7b6cebc91a202dea3eb8237cfc60b4d86a026e39dd833f9840d339984"
     },
     "browser_capture_runner": {
-      "bytes": 76136,
+      "bytes": 88387,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "715f6e9273d3b7be6ae1fb0a875a5d1b25a12fe44b4de7aa61709d2dbfbb75ba"
+      "sha256": "883add8cf3ba3108bcc8e568ba55288dd90217d7cf1bd7b681294f1bc1ea1fa4"
     },
     "browser_capture_validator": {
-      "bytes": 79491,
+      "bytes": 88452,
       "path": "scripts/validate_742_browser_evidence.py",
-      "sha256": "0ff2bf8fa691343f86126c532e1e2d737c9a9ce03a695d894e73bb416aa117ea"
+      "sha256": "7b13f60c5c8573d538feac744b7f4745d23ec5151863b02246be525d4bec871a"
     },
     "builder": {
       "bytes": 30119,
@@ -1320,19 +1328,19 @@
       "sha256": "a8aba239204fe6dc58b82e1593bb7aa7f09b361cf40eec2e29f7019ecd59ba7e"
     },
     "owned_review_render_allowlist": {
-      "bytes": 3965,
+      "bytes": 4115,
       "path": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
-      "sha256": "45af0663d662cabc85c16ee9b393a5dd34183c12f8c686eba5f5c1c7d6a30ac2"
+      "sha256": "a982442eb94766b60f5f9eb1dc9a874aa6c6392829cbd51d203898cad802c11d"
     },
     "package_lock": {
       "bytes": 1786,
       "path": "package-lock.json",
-      "sha256": "e02becec98e774705da08b22274efb9ecb8393a5f2150b289c5ea21b81b3e5fb"
+      "sha256": "2ef1cc05948a5f57e656b278dce3896cc5a73c7f3fcf9131b75d3b068f840315"
     },
     "package_manifest": {
       "bytes": 2712,
       "path": "package.json",
-      "sha256": "b2d498afbd978707bc18d678b67cf29faec42c1a4280bdcf65717f7b989044ae"
+      "sha256": "a6290bb23a4dcbd7ed27756ccab73309a0b4ee0e9e78e81f40cd98357a38da3d"
     },
     "pages_assembler": {
       "bytes": 1468,
@@ -1367,7 +1375,7 @@
     "project_readme": {
       "bytes": 12347,
       "path": "README.md",
-      "sha256": "8eeced174c0bb947f74020059dcdd9541e77c5550684c8aee1383281dd3dd3f9"
+      "sha256": "21bb076335e38fdbba655cad1bda7dcd93c9f70a7dbbb40c78658ed2091eed40"
     },
     "receipt_validator": {
       "bytes": 49580,
@@ -1400,14 +1408,14 @@
       "sha256": "397e3bceca5e1209d1264945f14ee1c416f1ab7e8abe0e54018843f48e19b08e"
     },
     "review_renderer": {
-      "bytes": 23528,
+      "bytes": 26320,
       "path": "scripts/render_742_preview.py",
-      "sha256": "95122ab85a6a84675aac1a01da9b39f79372d93d5911ba3c0b54e1039b1cb6c9"
+      "sha256": "393c0bbbc652bf2ed89d3f4e08ecbe7c7e9fd480b0b49c17851732ae387a1916"
     },
     "review_validator": {
-      "bytes": 24258,
+      "bytes": 24348,
       "path": "scripts/validate_742_review.py",
-      "sha256": "03386b3dc0b5a95349d1618b0dfaa7fefdd9c6f8680312bb84cb001d9336dfc4"
+      "sha256": "c302f9feacb518228e18d293a8888011b52ee9e2df31be5f8fe9d5fa7018a79c"
     },
     "rights_boundary": {
       "bytes": 2162,
@@ -1748,7 +1756,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "b531fb1ce245a15d880c3ed78aeb841724e729b26a9c16d70454667903c556c6"
+    "sha256": "34b48f521f2d281c28736a8c8166fa5f1b2a6e8871c8f84df809b0af26012279"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"

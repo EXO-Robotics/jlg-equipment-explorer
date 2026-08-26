@@ -89,8 +89,9 @@
       "viewports_css_px": [[390, 844], [844, 390]],
       "screenshots_minimum": 2,
       "snapshots": ["portrait", "short_landscape"],
-      "assertion_ids": ["portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"],
-      "pinch_rule": "All four start/end touch coordinates must independently hit the canvas. Wait for actual camera/desired-distance settle before baseline and after the gesture; require a monotonic zoom-in and an actual camera-distance decrease of at least 0.5 m or 2 percent of baseline, whichever is greater. Canvas hash alone cannot pass."
+      "assertion_ids": ["portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion", "screenshot_framing"],
+      "pinch_rule": "All four start/end touch coordinates must independently hit the canvas. Wait for actual camera/desired-distance settle before baseline and after the gesture; require a monotonic zoom-in and an actual camera-distance decrease of at least 0.5 m or 2 percent of baseline, whichever is greater. Canvas hash alone cannot pass.",
+      "screenshot_framing_rule": "Retain expanded-control DOM and raw pinch evidence, then stow while the control is reachable, collapse controls through the real responsive toggle, Reset View for the collapsed layout, apply a recorded runtime zoom-out, settle, and project all eight corners of the exact visible stowed GLB bounds through the capture camera. Both presentation screenshots must keep the full projected machine bounds inside the canvas with explicit edge margins and must not intersect the visible controls, component navigation, or diagnostics rectangles."
     },
     "accessibility_semantics_and_keyboard": {
       "viewports_css_px": [[1280, 720]],
@@ -104,7 +105,7 @@
       "viewports_css_px": [[1280, 720]],
       "screenshots_minimum": 1,
       "assertion_ids": ["visible_canvas_selection", "clear_selection", "pinch_suppression", "overlap_self_test", "screenshot_framing"],
-      "visible_canvas_rule": "From one deterministic reset/framing sequence, click six independently labeled committed viewport coordinates directly on unobstructed canvas pixels without using component-focus controls to discover or prepare the click. Cover chassis, steering, boom, hydraulics, cab, and carriage exactly once. Require selected component and the runtime's actual frontmost rendered surface component to both equal the independently declared expected component, with resolution basis visible-surface and a nonempty rendered mesh name. Restore/reset framing before the screenshot and prove its settled camera distance is not clipped inside the machine.",
+      "visible_canvas_rule": "From one deterministic reset/framing sequence, click six independently labeled committed viewport coordinates directly on unobstructed canvas pixels without using component-focus controls to discover or prepare the click. Cover chassis, steering, boom, hydraulics, cab, and carriage exactly once. Require selected component and the runtime's actual frontmost rendered surface component to both equal the independently declared expected component, with resolution basis visible-surface and a nonempty rendered mesh name. Restore/reset framing before the screenshot and prove its projected whole-machine bounds remain inside the canvas and outside the visible control, navigation, and diagnostics rectangles.",
       "independent_priority": {"chassis": 0, "steering": 1, "boom": 2, "hydraulics": 3, "cab": 4, "carriage": 5},
       "raw_ray_rule": "Copy and parse data-selection-overlap-outcomes for all 15 rays. The validator independently recomputes the expected component from hit components/distances, visible-surface component, the fixed 0.025 m tie rule, and its own priority map.",
       "raw_fixture_rule": "Copy every full 9-field data-selection-fixture-outcomes record without stripping hits or semantic fields. The validator independently recomputes basis, component, and volume from raw hit distances/priorities plus visibleSurfaceComponent, checks the committed 5-field projection, and requires exact equality with the DOM-parsed records.",
@@ -130,7 +131,7 @@
       "assertion_ids": ["load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures", "screenshot_framing"],
       "reduced_motion_rule": "Capture a live no-preference to reduce to no-preference media transition while autonomy is moving. Require motion to stop immediately, manual controls to remain enabled, and autonomy not to resume when the preference returns.",
       "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must record a non-null changing boot/runtime RAF baseline, then reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and unchanged terminal/frame counters after 250 ms.",
-      "screenshot_framing_rule": "Retain raw interaction traces, then stow and Reset View before desktop/mobile screenshots; prove settled whole-machine camera distance and collapse mobile controls."
+      "screenshot_framing_rule": "Retain raw interaction traces, then stow while the control is reachable, collapse mobile controls through the real responsive toggle, Reset View for the collapsed layout, apply the recorded presentation zoom-out and recorded production keyboard orbit adjustment, settle, and prove all eight corners of the exact visible stowed GLB bounds remain inside the canvas with explicit edge margins and outside visible control, navigation, and diagnostics rectangles."
     },
     "es1930m_browser_regression": {
       "route": "/es1930m/",
@@ -141,7 +142,7 @@
       "maximum_pose_rule": "Capture full lift, full deck extension, and both steering extrema with explicit DOM aria-valuetext for every ES slider and a dedicated maximum-pose screenshot.",
       "reduced_motion_rule": "Capture a live no-preference to reduce to no-preference media transition while autonomy is moving. Require motion to stop immediately, manual controls to remain enabled, and autonomy not to resume when the preference returns.",
       "fatal_failure_rule": "Inject module, WebGL, asset-network, and asset-contract failures independently. Each must record a non-null changing boot/runtime RAF baseline, then reach its exact terminal source with a focused assertive alert, inert app/interface, all controls disabled, and unchanged terminal/frame counters after 250 ms.",
-      "screenshot_framing_rule": "Keep the dedicated ES maximum-pose screenshot, but retain raw interaction traces and stow/Reset View before desktop/mobile overview screenshots; prove settled whole-machine camera distance and collapse mobile controls."
+      "screenshot_framing_rule": "Keep the dedicated ES maximum-pose screenshot, but retain raw interaction traces, stow while the control is reachable, collapse mobile controls through the real responsive toggle, Reset View for the collapsed layout, apply the recorded presentation zoom-out, settle, and prove all eight corners of the exact visible stowed GLB bounds remain inside the canvas with explicit edge margins and outside visible control, navigation, and diagnostics rectangles."
     }
   }
 }

@@ -229,8 +229,11 @@ async function openPage(viewport, route, { touch = false } = {}) {
 async function waitLoaded(page, source, selectionNeedle) {
   await page.waitForFunction(([expectedSource, selection]) => {
     const diagnostics = document.querySelector("#diagnostics")?.value || document.querySelector("#diagnostics")?.textContent || "";
+    const loader = document.querySelector("#loader");
+    const loaderClear = !loader || loader.hidden || getComputedStyle(loader).visibility === "hidden";
     return document.body.dataset.machineSource === expectedSource
       && document.body.dataset.runtimeErrorCount === "0"
+      && loaderClear
       && diagnostics.includes("errors 0")
       && diagnostics.includes(selection);
   }, [source, selectionNeedle], { timeout: 30000 });
@@ -375,6 +378,197 @@ async function pinchCanvasRegression(page) {
 
 async function settle742Camera(page) {
   return page.evaluate(async () => (await import("/scripts/742_browser_capture_probe.js")).waitForOrbitCameraSettle());
+}
+
+async function settleOrbitCamera(page, tolerance = 0.05) {
+  await page.waitForFunction((maximumDelta) => {
+    const actual = Number(document.body.dataset.orbitCameraDistanceM);
+    const desired = Number(document.body.dataset.orbitDesiredDistanceM);
+    return Number.isFinite(actual) && Number.isFinite(desired) && Math.abs(actual - desired) <= maximumDelta;
+  }, tolerance, { timeout: 8000 });
+}
+
+async function dispatchPresentationZoom(page, deltaY) {
+  if (!deltaY) return;
+  await page.locator("canvas").dispatchEvent("wheel", { deltaY, deltaMode: 0, bubbles: true, cancelable: true });
+}
+
+async function projectedStowMachineBounds(page, model, minimumEdgeMarginCssPx, { orbitRightSteps = 0 } = {}) {
+  const record = await page.evaluate(async ({ machineId, minimumMargin, appliedOrbitRightSteps }) => {
+    const THREE = await import("three");
+    const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
+    const definitions = {
+      "742": {
+        asset: "/assets/models/742.glb",
+        machineModule: "/machines/742/machine.js?v=1.1.7",
+        cameraKind: "azimuth-polar",
+      },
+      es1930m: {
+        asset: "/assets/models/es1930m.glb",
+        machineModule: "/machines/es1930m/machine.js?v=1.0.8",
+        cameraKind: "azimuth-polar",
+      },
+      "600s": {
+        asset: "/assets/models/600s.glb",
+        cameraKind: "theta-phi",
+        target: [0.8, 1.85, 0],
+        theta: 0.76,
+        phi: 1.44,
+      },
+    };
+    const definition = definitions[machineId];
+    if (!definition) throw new Error(`unknown projected-bounds machine: ${machineId}`);
+    const gltf = await new Promise((resolve, reject) => new GLTFLoader().load(definition.asset, resolve, undefined, reject));
+    const root = gltf.scene;
+    root.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3();
+    const meshBounds = new THREE.Box3();
+    const isInteractionVolume = (node) => {
+      let current = node;
+      while (current && current !== root) {
+        if (current.userData?.is_hit_volume || /_Hit$/i.test(current.name || "")) return true;
+        current = current.parent;
+      }
+      return false;
+    };
+    root.traverse((node) => {
+      if (!node.isMesh || !node.visible || isInteractionVolume(node)) return;
+      node.geometry.computeBoundingBox();
+      meshBounds.copy(node.geometry.boundingBox).applyMatrix4(node.matrixWorld);
+      bounds.union(meshBounds);
+    });
+    if (bounds.isEmpty()) throw new Error(`${machineId} projected-bounds GLB is empty`);
+    const size = bounds.getSize(new THREE.Vector3());
+    const center = bounds.getCenter(new THREE.Vector3());
+    let target;
+    let azimuth;
+    let polar;
+    let theta;
+    let phi;
+    if (definition.machineModule) {
+      const machine = (await import(definition.machineModule)).default;
+      const compactViewport = matchMedia("(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)").matches;
+      const view = machine.componentView("default", machine.stowState, compactViewport);
+      target = machineId === "742" ? center.clone() : new THREE.Vector3(...view.target);
+      azimuth = view.azimuth;
+      polar = view.polar;
+    } else {
+      target = new THREE.Vector3(...definition.target);
+      theta = definition.theta + appliedOrbitRightSteps * 0.12;
+      phi = definition.phi;
+    }
+    const distance = Number(document.body.dataset.orbitCameraDistanceM);
+    if (!Number.isFinite(distance) || distance <= 0) throw new Error(`${machineId} projected-bounds camera distance is unavailable`);
+    const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.04, 100);
+    if (definition.cameraKind === "azimuth-polar") {
+      const sinPolar = Math.sin(polar);
+      camera.position.set(
+        target.x + distance * sinPolar * Math.cos(azimuth),
+        target.y + distance * Math.cos(polar),
+        target.z + distance * sinPolar * Math.sin(azimuth),
+      );
+    } else {
+      const sinPhi = Math.sin(phi);
+      camera.position.set(
+        target.x + distance * sinPhi * Math.sin(theta),
+        target.y + distance * Math.cos(phi),
+        target.z + distance * sinPhi * Math.cos(theta),
+      );
+    }
+    camera.lookAt(target);
+    camera.updateMatrixWorld(true);
+    camera.updateProjectionMatrix();
+    const projected = [];
+    for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) {
+      const point = new THREE.Vector3(x, y, z).project(camera);
+      projected.push({ x: (point.x + 1) * innerWidth / 2, y: (1 - point.y) * innerHeight / 2, z: point.z });
+    }
+    const minX = Math.min(...projected.map((point) => point.x));
+    const maxX = Math.max(...projected.map((point) => point.x));
+    const minY = Math.min(...projected.map((point) => point.y));
+    const maxY = Math.max(...projected.map((point) => point.y));
+    const margins = { left: minX, right: innerWidth - maxX, top: minY, bottom: innerHeight - maxY };
+    const canvasRect = document.querySelector("canvas").getBoundingClientRect();
+    const machineRect = { left: minX, right: maxX, top: minY, bottom: maxY };
+    const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    const occludingSelectors = [".control-panel", ".component-nav", ".diagnostics"];
+    const occlusionChecks = occludingSelectors.flatMap((selector) => {
+      const element = document.querySelector(selector);
+      if (!element || element.hidden || getComputedStyle(element).display === "none" || getComputedStyle(element).visibility === "hidden") return [];
+      const rect = element.getBoundingClientRect();
+      const bounds = { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+      return [{
+        selector,
+        rect_css_px: Object.fromEntries(Object.entries(bounds).map(([key, value]) => [key, Number(value.toFixed(2))])),
+        intersects_machine_bounds: intersects(machineRect, bounds),
+      }];
+    });
+    const finite = [...Object.values(margins), ...projected.flatMap((point) => [point.x, point.y, point.z])].every(Number.isFinite);
+    const contained = finite && projected.every((point) => point.z >= -1 && point.z <= 1) && Object.values(margins).every((value) => value >= minimumMargin);
+    const clearOfInterface = occlusionChecks.every((check) => !check.intersects_machine_bounds);
+    return {
+      basis: "projected-stowed-visible-glb-aabb",
+      viewport_css_px: [innerWidth, innerHeight],
+      canvas_rect_css_px: { x: canvasRect.x, y: canvasRect.y, width: canvasRect.width, height: canvasRect.height },
+      asset_bounds_m: {
+        min: bounds.min.toArray().map((value) => Number(value.toFixed(4))),
+        max: bounds.max.toArray().map((value) => Number(value.toFixed(4))),
+        size: size.toArray().map((value) => Number(value.toFixed(4))),
+      },
+      projected_bounds_css_px: {
+        left: Number(minX.toFixed(2)), right: Number(maxX.toFixed(2)),
+        top: Number(minY.toFixed(2)), bottom: Number(maxY.toFixed(2)),
+      },
+      edge_margins_css_px: Object.fromEntries(Object.entries(margins).map(([key, value]) => [key, Number(value.toFixed(2))])),
+      minimum_edge_margin_css_px: minimumMargin,
+      camera_distance_m: distance,
+      camera_orientation: definition.cameraKind === "azimuth-polar"
+        ? { kind: "azimuth-polar", azimuth_rad: azimuth, polar_rad: polar }
+        : { kind: "theta-phi", theta_rad: theta, phi_rad: phi },
+      occlusion_checks: occlusionChecks,
+      whole_machine_contained: contained && clearOfInterface,
+    };
+  }, { machineId: model, minimumMargin: minimumEdgeMarginCssPx, appliedOrbitRightSteps: orbitRightSteps });
+  assert(record.whole_machine_contained, `${model} presentation frame clips the projected visible machine bounds: ${JSON.stringify(record)}`);
+  return record;
+}
+
+async function prepare742PresentationFrame(page, viewport, { zoomDeltaY = 180, minimumEdgeMarginCssPx = 18 } = {}) {
+  if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) await page.keyboard.press("Escape");
+  const controls = page.locator("#controls-toggle");
+  await page.locator("#stow").click();
+  await page.waitForTimeout(180);
+  const compactControls = await controls.evaluate((node) => !node.hidden && getComputedStyle(node).display !== "none");
+  if (compactControls && await controls.getAttribute("aria-expanded") === "true") {
+    await controls.click();
+    await page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "false" && !document.body.classList.contains("mobile-controls-open"));
+  }
+  const runtimeReset = await page.evaluate(() => {
+    const hook = globalThis.__EQUIPMENT_EXPLORER_EVIDENCE__;
+    if (typeof hook?.resetView !== "function") return false;
+    hook.resetView();
+    return true;
+  });
+  assert(runtimeReset, "742 presentation frame could not invoke the committed Reset View camera API");
+  await settle742Camera(page);
+  const resetDistance = Number(await page.locator("body").getAttribute("data-orbit-desired-distance-m"));
+  await dispatchPresentationZoom(page, zoomDeltaY);
+  await page.waitForFunction((before) => Number(document.body.dataset.orbitDesiredDistanceM) > before + 0.01, resetDistance);
+  await settle742Camera(page);
+  const machineBounds = await projectedStowMachineBounds(page, "742", minimumEdgeMarginCssPx);
+  const state = await page.locator("body").evaluate((node) => ({
+    reset_pressed: true,
+    stow_pressed: true,
+    controls_expanded: document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "true",
+    selected_component: node.dataset.selectedComponent || null,
+    camera_distance_m: Number(node.dataset.orbitCameraDistanceM),
+    desired_distance_m: Number(node.dataset.orbitDesiredDistanceM),
+    pose_frame_distance_m: Number(node.dataset.poseFrameDistanceM),
+    effective_max_distance_m: Number(node.dataset.orbitEffectiveMaxDistanceM),
+  }));
+  const presentation = { ...state, reset_distance_m: resetDistance, presentation_zoom_delta_y: zoomDeltaY, machine_bounds: machineBounds };
+  assert((!compactControls || !presentation.controls_expanded) && presentation.selected_component === null && presentation.desired_distance_m >= presentation.reset_distance_m && presentation.desired_distance_m <= presentation.effective_max_distance_m && Math.abs(presentation.camera_distance_m - presentation.desired_distance_m) <= 0.03, `742 clean presentation framing failed: ${JSON.stringify(presentation)}`);
+  return presentation;
 }
 
 async function pinch742Canvas(page) {
@@ -604,9 +798,10 @@ async function captureMobile742() {
   assert((await portrait.page.locator("#controls-toggle").getAttribute("aria-expanded")) === "true", "portrait controls not expanded");
   const portraitControls = await portrait.page.locator('input[type="range"]').evaluateAll((nodes) => nodes.map((node) => ({ id: node.id, disabled: node.disabled, box: node.getBoundingClientRect().toJSON() })));
   assert(portraitControls.length === 5 && portraitControls.every((record) => !record.disabled && record.box.width > 0 && record.box.height > 0), "portrait controls not reachable");
-  screenshots.push(await screenshot(portrait.page, "742-mobile-portrait.png"));
   const pinch = await pinch742Canvas(portrait.page);
   const portraitSnapshot = await snapshot(portrait.page);
+  const portraitFraming = await prepare742PresentationFrame(portrait.page, [390, 844]);
+  screenshots.push(await screenshot(portrait.page, "742-mobile-portrait.png"));
   assert(portrait.errors.length === 0, `742 portrait console errors: ${portrait.errors.join(" | ")}`);
   await portrait.context.close();
 
@@ -616,6 +811,7 @@ async function captureMobile742() {
   const landscapeControls = await landscape.page.locator('input[type="range"]').evaluateAll((nodes) => nodes.map((node) => ({ id: node.id, disabled: node.disabled, box: node.getBoundingClientRect().toJSON() })));
   assert(landscapeControls.length === 5 && landscapeControls.every((record) => !record.disabled && record.box.width > 0 && record.box.height > 0), "landscape controls not reachable");
   const landscapeSnapshot = await snapshot(landscape.page);
+  const landscapeFraming = await prepare742PresentationFrame(landscape.page, [844, 390], { zoomDeltaY: 320, minimumEdgeMarginCssPx: 18 });
   screenshots.push(await screenshot(landscape.page, "742-mobile-short-landscape.png"));
   assert(landscape.errors.length === 0, `742 landscape console errors: ${landscape.errors.join(" | ")}`);
   await landscape.context.close();
@@ -625,6 +821,7 @@ async function captureMobile742() {
     short_landscape_controls: pass({ viewport_css_px: [844, 390], controls: landscapeControls }),
     pinch_zoom: pinch,
     reduced_motion: pass(reduced),
+    screenshot_framing: pass({ portrait: portraitFraming, short_landscape: landscapeFraming }),
   };
   const tracePath = await writeTrace(gate, capturedAt, assertions);
   const artifact = baseArtifact(gate, capturedAt, {
@@ -711,16 +908,12 @@ async function captureSelection742() {
   const selectionAfterReset = await page.locator("body").getAttribute("data-selected-component");
   const pinch = await pinch742Canvas(page);
   assert((await page.locator("body").getAttribute("data-selected-component")) === null && !(await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))), "pinch triggered an unintended selection/modal");
-  await page.locator("#reset-view").click();
-  await settle742Camera(page);
-  const screenshotFraming = await page.locator("body").evaluate((node) => ({
-    reset_pressed: true,
+  const cleanFrame = await prepare742PresentationFrame(page, [1280, 720], { zoomDeltaY: 1000, minimumEdgeMarginCssPx: 28 });
+  const screenshotFraming = {
+    ...cleanFrame,
     reset_after_pinch: true,
-    selected_component: node.dataset.selectedComponent || null,
-    camera_distance_m: Number(node.dataset.orbitCameraDistanceM),
-    desired_distance_m: Number(node.dataset.orbitDesiredDistanceM),
-    pose_min_distance_m: Number(node.dataset.orbitMinDistanceM),
-  }));
+    pose_min_distance_m: Number(await page.locator("body").getAttribute("data-orbit-min-distance-m")),
+  };
   assert(screenshotFraming.selected_component === null && Number.isFinite(screenshotFraming.camera_distance_m) && Number.isFinite(screenshotFraming.desired_distance_m) && Number.isFinite(screenshotFraming.pose_min_distance_m) && screenshotFraming.camera_distance_m >= screenshotFraming.pose_min_distance_m && screenshotFraming.desired_distance_m >= screenshotFraming.pose_min_distance_m && Math.abs(screenshotFraming.camera_distance_m - screenshotFraming.desired_distance_m) <= 0.03, `semantic screenshot reset framing failed: ${JSON.stringify(screenshotFraming)}`);
   const dom = await snapshot(page);
   const body = Object.fromEntries((await page.locator("body").evaluate((node) => Object.entries(node.dataset))));
@@ -850,32 +1043,36 @@ async function captureReducedRegression(model) {
   return state;
 }
 
-async function resetRegressionScreenshotFraming(page, model, { collapseControls = false } = {}) {
+async function resetRegressionScreenshotFraming(page, model, { collapseControls = false, presentationZoomDeltaY = 0, presentationOrbitRightSteps = 0, minimumEdgeMarginCssPx = 16 } = {}) {
   if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) await page.keyboard.press("Escape");
   const autonomy = page.locator("#autonomy-toggle");
   if (await autonomy.count() && await autonomy.getAttribute("aria-pressed") === "true" && !(await autonomy.isDisabled())) await autonomy.click();
   const stow = page.locator("#stow");
   assert(await stow.count(), `${model} stow control is missing before screenshot reset`);
   await stow.click();
-  await page.waitForTimeout(150);
-  const reset = page.locator("#reset-view");
-  assert(await reset.count(), `${model} Reset View control is missing before screenshot reset`);
-  await reset.click();
-  await page.waitForFunction(() => {
-    const actual = Number(document.body.dataset.orbitCameraDistanceM);
-    const desired = Number(document.body.dataset.orbitDesiredDistanceM);
-    return Number.isFinite(actual) && Number.isFinite(desired) && Math.abs(actual - desired) <= 0.05;
-  }, null, { timeout: 8000 });
+  await page.waitForTimeout(model === "600s" ? 900 : 180);
   const controls = page.locator("#controls-toggle");
   if (collapseControls && await controls.getAttribute("aria-expanded") === "true") {
     await controls.click();
-    await page.waitForFunction(() => {
-      const actual = Number(document.body.dataset.orbitCameraDistanceM);
-      const desired = Number(document.body.dataset.orbitDesiredDistanceM);
-      return Number.isFinite(actual) && Number.isFinite(desired) && Math.abs(actual - desired) <= 0.05;
-    }, null, { timeout: 8000 });
+    await page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "false" && !document.body.classList.contains("mobile-controls-open"));
   }
-  return page.evaluate(() => ({
+  const reset = page.locator("#reset-view");
+  assert(await reset.count(), `${model} Reset View control is missing before screenshot reset`);
+  await reset.evaluate((node) => node.click());
+  await settleOrbitCamera(page);
+  const resetDistance = Number(await page.locator("body").getAttribute("data-orbit-desired-distance-m"));
+  if (presentationOrbitRightSteps > 0) {
+    await page.locator("#app").focus();
+    for (let step = 0; step < presentationOrbitRightSteps; step += 1) await page.keyboard.press("ArrowRight");
+    await page.evaluate(() => document.activeElement?.blur());
+  }
+  await dispatchPresentationZoom(page, presentationZoomDeltaY);
+  if (presentationZoomDeltaY > 0) {
+    await page.waitForFunction((before) => Number(document.body.dataset.orbitDesiredDistanceM) > before + 0.01, resetDistance);
+  }
+  await settleOrbitCamera(page);
+  const machineBounds = await projectedStowMachineBounds(page, model, minimumEdgeMarginCssPx, { orbitRightSteps: presentationOrbitRightSteps });
+  const state = await page.evaluate(() => ({
     reset_pressed: true,
     stow_pressed: true,
     controls_expanded: document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "true",
@@ -884,6 +1081,9 @@ async function resetRegressionScreenshotFraming(page, model, { collapseControls 
     viewer_terminal: document.body.dataset.viewerTerminal === "true",
     machine_source: document.body.dataset.machineSource || null,
   }));
+  const presentation = { ...state, reset_distance_m: resetDistance, presentation_zoom_delta_y: presentationZoomDeltaY, presentation_orbit_right_steps: presentationOrbitRightSteps, machine_bounds: machineBounds };
+  assert((!collapseControls || presentation.controls_expanded === false) && presentation.desired_distance_m >= presentation.reset_distance_m && Math.abs(presentation.camera_distance_m - presentation.desired_distance_m) <= 0.05, `${model} clean regression presentation framing failed: ${JSON.stringify(presentation)}`);
+  return presentation;
 }
 
 async function terminalState(page) {
@@ -1074,7 +1274,10 @@ async function captureRegression(model) {
     const resumed = await desktop.page.locator("body").getAttribute("data-presentation-mode");
     autoObserved = `${started}->${paused}->${resumed}`;
   }
-  const desktopScreenshotFraming = await resetRegressionScreenshotFraming(desktop.page, model);
+  const desktopScreenshotFraming = await resetRegressionScreenshotFraming(desktop.page, model, {
+    presentationZoomDeltaY: model === "600s" ? 520 : 360,
+    minimumEdgeMarginCssPx: 16,
+  });
   screenshots.push(await screenshot(desktop.page, `${model}-regression-desktop.png`));
   assert(desktop.errors.length === 0, `${model} desktop console errors: ${desktop.errors.join(" | ")}`);
   await desktop.context.close();
@@ -1090,7 +1293,12 @@ async function captureRegression(model) {
   }
   const mobileSnapshot = await snapshot(mobile.page);
   const pinch = await pinchCanvasRegression(mobile.page);
-  const mobileScreenshotFraming = await resetRegressionScreenshotFraming(mobile.page, model, { collapseControls: true });
+  const mobileScreenshotFraming = await resetRegressionScreenshotFraming(mobile.page, model, {
+    collapseControls: true,
+    presentationZoomDeltaY: model === "600s" ? 300 : 220,
+    presentationOrbitRightSteps: model === "600s" ? 3 : 0,
+    minimumEdgeMarginCssPx: 16,
+  });
   screenshots.push(await screenshot(mobile.page, `${model}-regression-mobile.png`));
   assert(mobile.errors.length === 0, `${model} mobile console errors: ${mobile.errors.join(" | ")}`);
   await mobile.context.close();

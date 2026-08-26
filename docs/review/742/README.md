@@ -71,7 +71,7 @@ records must contain:
   and six direct visible-canvas component selections;
 - interaction, responsive layout, modal keyboard/focus, drag, pinch, and
   reduced-motion regression checks for the exact current 600S release and exact
-  ES1930M runtime release 1.0.7 (with its separately receipted 1.0.4 asset).
+  ES1930M runtime release 1.0.8 (with its separately receipted 1.0.4 asset).
 
 The local performance gate is deliberately bounded: each identified local
 browser profile must have at least 180 raw samples, p95 no greater than 50 ms,

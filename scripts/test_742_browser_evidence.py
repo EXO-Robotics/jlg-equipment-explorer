@@ -23,6 +23,7 @@ from validate_742_browser_evidence import (
     _validate_742_pinch_zoom,
     _validate_selection_fixtures,
     _validate_upstream_screenshot_framing,
+    _validate_742_clean_presentation_frame,
     _validate_upstream_identity,
     expected_selection_outcomes,
 )
@@ -315,19 +316,79 @@ def main() -> None:
     }
     _validate_live_reduced_motion(showcase_reduced, "742 fixture")
 
+    def projected_bounds(viewport, camera_distance, margin=20):
+        width, height = viewport
+        return {
+            "basis": "projected-stowed-visible-glb-aabb",
+            "viewport_css_px": viewport,
+            "canvas_rect_css_px": {"x": 0, "y": 0, "width": width, "height": height},
+            "asset_bounds_m": {"min": [-1.0, 0.0, -0.5], "max": [2.0, 2.0, 0.5], "size": [3.0, 2.0, 1.0]},
+            "projected_bounds_css_px": {"left": margin, "right": width - margin, "top": margin, "bottom": height - margin},
+            "edge_margins_css_px": {"left": margin, "right": margin, "top": margin, "bottom": margin},
+            "minimum_edge_margin_css_px": 16,
+            "camera_distance_m": camera_distance,
+            "camera_orientation": {"kind": "azimuth-polar", "azimuth_rad": -0.72, "polar_rad": 1.18},
+            "occlusion_checks": [
+                {
+                    "selector": ".control-panel",
+                    "rect_css_px": {"left": 0, "right": width, "top": height - 10, "bottom": height},
+                    "intersects_machine_bounds": False,
+                },
+            ],
+            "whole_machine_contained": True,
+        }
+
     framing_state = {
         "reset_pressed": True, "stow_pressed": True, "controls_expanded": False,
         "camera_distance_m": 12.0, "desired_distance_m": 12.0,
-        "viewer_terminal": False, "machine_source": "glb",
+        "viewer_terminal": False, "machine_source": "glb", "reset_distance_m": 10.0,
+        "presentation_zoom_delta_y": 200, "presentation_orbit_right_steps": 0,
+        "machine_bounds": projected_bounds([390, 844], 12.0),
     }
-    screenshot_framing = {"outcome": "pass", "desktop": {**framing_state, "controls_expanded": True}, "mobile": framing_state}
+    desktop_framing = {
+        **framing_state, "controls_expanded": True,
+        "machine_bounds": projected_bounds([1280, 720], 12.0),
+    }
+    screenshot_framing = {"outcome": "pass", "desktop": desktop_framing, "mobile": framing_state}
     _validate_upstream_screenshot_framing(screenshot_framing, "glb")
     clipped_framing = json.loads(json.dumps(screenshot_framing))
-    clipped_framing["mobile"]["desired_distance_m"] = 5.0
-    expect_failure(lambda: _validate_upstream_screenshot_framing(clipped_framing, "glb"), "unsettled whole-machine screenshot framing was accepted")
+    clipped_framing["mobile"]["machine_bounds"]["edge_margins_css_px"]["right"] = 2.0
+    expect_failure(lambda: _validate_upstream_screenshot_framing(clipped_framing, "glb"), "clipped whole-machine projected bounds were accepted")
     expanded_mobile = json.loads(json.dumps(screenshot_framing))
     expanded_mobile["mobile"]["controls_expanded"] = True
     expect_failure(lambda: _validate_upstream_screenshot_framing(expanded_mobile, "glb"), "expanded mobile controls were accepted for overview screenshot")
+    boom_framing = json.loads(json.dumps(screenshot_framing))
+    boom_framing["desktop"]["machine_source"] = "blender-showcase-v1.1.0"
+    boom_framing["mobile"]["machine_source"] = "blender-showcase-v1.1.0"
+    boom_framing["mobile"]["presentation_orbit_right_steps"] = 3
+    boom_framing["mobile"]["machine_bounds"]["camera_orientation"] = {"kind": "theta-phi", "theta_rad": 1.12, "phi_rad": 1.44}
+    _validate_upstream_screenshot_framing(boom_framing, "blender-showcase-v1.1.0")
+    forged_boom_orbit = json.loads(json.dumps(boom_framing))
+    forged_boom_orbit["mobile"]["machine_bounds"]["camera_orientation"]["theta_rad"] = 0.76
+    expect_failure(lambda: _validate_upstream_screenshot_framing(forged_boom_orbit, "blender-showcase-v1.1.0"), "forged 600S mobile keyboard orbit was accepted")
+    clean_742_frame = {
+        "reset_pressed": True, "stow_pressed": True, "controls_expanded": False,
+        "selected_component": None, "camera_distance_m": 12.0, "desired_distance_m": 12.0,
+        "pose_frame_distance_m": 9.0, "effective_max_distance_m": 24.0,
+        "reset_distance_m": 9.0, "presentation_zoom_delta_y": 200,
+        "machine_bounds": projected_bounds([390, 844], 12.0),
+    }
+    _validate_742_clean_presentation_frame(clean_742_frame, [390, 844])
+    trusted_containment = json.loads(json.dumps(clean_742_frame))
+    trusted_containment["machine_bounds"]["projected_bounds_css_px"]["left"] = -1.0
+    expect_failure(lambda: _validate_742_clean_presentation_frame(trusted_containment, [390, 844]), "forged whole-machine containment boolean was accepted")
+    occluded_machine = json.loads(json.dumps(clean_742_frame))
+    occluded_machine["machine_bounds"]["occlusion_checks"][0]["intersects_machine_bounds"] = True
+    expect_failure(lambda: _validate_742_clean_presentation_frame(occluded_machine, [390, 844]), "machine bounds behind visible controls were accepted")
+    malformed_camera = json.loads(json.dumps(clean_742_frame))
+    malformed_camera["machine_bounds"]["camera_orientation"].pop("polar_rad")
+    expect_failure(lambda: _validate_742_clean_presentation_frame(malformed_camera, [390, 844]), "incomplete projected camera orientation was accepted")
+    expanded_short_landscape = json.loads(json.dumps(clean_742_frame))
+    expanded_short_landscape["machine_bounds"]["viewport_css_px"] = [844, 390]
+    expanded_short_landscape["machine_bounds"]["canvas_rect_css_px"].update({"width": 844, "height": 390})
+    expanded_short_landscape["machine_bounds"]["projected_bounds_css_px"].update({"right": 824, "bottom": 370})
+    expanded_short_landscape["controls_expanded"] = True
+    expect_failure(lambda: _validate_742_clean_presentation_frame(expanded_short_landscape, [844, 390]), "expanded compact short-landscape controls were accepted")
 
     def ax_value(value, value_type="string", related=None):
         return {"type": value_type, "value": value, "related_nodes": related or []}

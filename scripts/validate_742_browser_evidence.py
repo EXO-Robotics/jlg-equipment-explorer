@@ -936,12 +936,127 @@ def _validate_es_maximum_pose_controls(assertion: dict) -> None:
             raise RuntimeError(f"742 ES maximum-pose DOM aria value drift: {selector}")
 
 
+def _validate_projected_machine_bounds(record: dict, expected_viewport: list[int], camera_distance_m: float) -> None:
+    fields = {
+        "basis", "viewport_css_px", "canvas_rect_css_px", "asset_bounds_m",
+        "projected_bounds_css_px", "edge_margins_css_px", "minimum_edge_margin_css_px",
+        "camera_distance_m", "camera_orientation", "occlusion_checks", "whole_machine_contained",
+    }
+    if set(record or {}) != fields or record.get("basis") != "projected-stowed-visible-glb-aabb" or record.get("viewport_css_px") != expected_viewport or record.get("whole_machine_contained") is not True:
+        raise RuntimeError("742 projected whole-machine bounds schema/identity drift")
+    canvas = record["canvas_rect_css_px"]
+    if set(canvas or {}) != {"x", "y", "width", "height"} or any(
+        not isinstance(canvas.get(name), (int, float)) or isinstance(canvas.get(name), bool) or not math.isfinite(canvas[name])
+        for name in canvas
+    ) or abs(canvas["x"]) > 0.01 or abs(canvas["y"]) > 0.01 or abs(canvas["width"] - expected_viewport[0]) > 0.01 or abs(canvas["height"] - expected_viewport[1]) > 0.01:
+        raise RuntimeError("742 projected whole-machine canvas/viewport drift")
+    asset = record["asset_bounds_m"]
+    if set(asset or {}) != {"min", "max", "size"} or any(
+        not isinstance(asset.get(name), list) or len(asset[name]) != 3 or any(
+            isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value)
+            for value in asset[name]
+        ) for name in ("min", "max", "size")
+    ):
+        raise RuntimeError("742 projected whole-machine asset bounds drift")
+    if any(value <= 0 for value in asset["size"]) or any(
+        abs((asset["max"][index] - asset["min"][index]) - asset["size"][index]) > 0.001
+        for index in range(3)
+    ):
+        raise RuntimeError("742 projected whole-machine asset extent is invalid")
+    projected = record["projected_bounds_css_px"]
+    margins = record["edge_margins_css_px"]
+    if set(projected or {}) != {"left", "right", "top", "bottom"} or set(margins or {}) != {"left", "right", "top", "bottom"}:
+        raise RuntimeError("742 projected whole-machine screen bounds drift")
+    numeric_values = [*projected.values(), *margins.values(), record.get("minimum_edge_margin_css_px"), record.get("camera_distance_m")]
+    if any(isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) for value in numeric_values):
+        raise RuntimeError("742 projected whole-machine screen bounds are non-finite")
+    minimum = record["minimum_edge_margin_css_px"]
+    if minimum < 12 or any(value < minimum for value in margins.values()):
+        raise RuntimeError("742 projected whole-machine bounds touch or escape a screenshot edge")
+    if (
+        abs(projected["left"] - margins["left"]) > 0.02
+        or abs((expected_viewport[0] - projected["right"]) - margins["right"]) > 0.02
+        or abs(projected["top"] - margins["top"]) > 0.02
+        or abs((expected_viewport[1] - projected["bottom"]) - margins["bottom"]) > 0.02
+        or projected["left"] >= projected["right"] or projected["top"] >= projected["bottom"]
+        or abs(record["camera_distance_m"] - camera_distance_m) > 0.002
+    ):
+        raise RuntimeError("742 projected whole-machine bounds do not reconcile with the screenshot frame")
+    orientation = record["camera_orientation"]
+    if not isinstance(orientation, dict) or orientation.get("kind") not in {"azimuth-polar", "theta-phi"}:
+        raise RuntimeError("742 projected whole-machine camera orientation is missing")
+    expected_orientation_fields = {"kind", "azimuth_rad", "polar_rad"} if orientation["kind"] == "azimuth-polar" else {"kind", "theta_rad", "phi_rad"}
+    if set(orientation) != expected_orientation_fields or any(
+        isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value)
+        for key, value in orientation.items() if key != "kind"
+    ):
+        raise RuntimeError("742 projected whole-machine camera orientation drift")
+    occlusion_checks = record["occlusion_checks"]
+    if not isinstance(occlusion_checks, list) or not occlusion_checks:
+        raise RuntimeError("742 projected whole-machine proof omitted visible interface occlusion checks")
+    allowed_selectors = {".control-panel", ".component-nav", ".diagnostics"}
+    for check in occlusion_checks:
+        if (
+            set(check or {}) != {"selector", "rect_css_px", "intersects_machine_bounds"}
+            or check.get("selector") not in allowed_selectors
+            or check.get("intersects_machine_bounds") is not False
+        ):
+            raise RuntimeError("742 projected whole-machine bounds intersect a visible interface surface")
+        rect = check["rect_css_px"]
+        if set(rect or {}) != {"left", "right", "top", "bottom"} or any(
+            isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value)
+            for value in rect.values()
+        ) or rect["left"] >= rect["right"] or rect["top"] >= rect["bottom"]:
+            raise RuntimeError("742 projected whole-machine interface bounds are invalid")
+
+
+_742_CLEAN_FRAME_FIELDS = {
+    "reset_pressed", "stow_pressed", "controls_expanded", "selected_component",
+    "camera_distance_m", "desired_distance_m", "pose_frame_distance_m",
+    "effective_max_distance_m", "reset_distance_m", "presentation_zoom_delta_y",
+    "machine_bounds",
+}
+
+
+def _validate_742_clean_presentation_frame(record: dict, expected_viewport: list[int]) -> None:
+    if set(record or {}) != _742_CLEAN_FRAME_FIELDS:
+        raise RuntimeError("742 clean presentation framing schema drift")
+    numeric = (
+        "camera_distance_m", "desired_distance_m", "pose_frame_distance_m",
+        "effective_max_distance_m", "reset_distance_m", "presentation_zoom_delta_y",
+    )
+    if (
+        record["reset_pressed"] is not True or record["stow_pressed"] is not True
+        or record["selected_component"] is not None
+        or any(
+            isinstance(record.get(name), bool)
+            or not isinstance(record.get(name), (int, float))
+            or not math.isfinite(record[name])
+            for name in numeric
+        )
+        or record["camera_distance_m"] <= 0
+        or record["reset_distance_m"] <= 0
+        or record["presentation_zoom_delta_y"] <= 0
+        or record["desired_distance_m"] <= record["reset_distance_m"]
+        or record["desired_distance_m"] > record["effective_max_distance_m"]
+        or record["pose_frame_distance_m"] <= 0
+        or abs(record["camera_distance_m"] - record["desired_distance_m"]) > 0.03
+        or (
+            (expected_viewport[0] <= 800 or (expected_viewport[1] <= 500 and expected_viewport[0] <= 1000))
+            and record["controls_expanded"] is not False
+        )
+    ):
+        raise RuntimeError("742 clean presentation framing outcome failed")
+    _validate_projected_machine_bounds(record["machine_bounds"], expected_viewport, record["camera_distance_m"])
+
+
 def _validate_upstream_screenshot_framing(assertion: dict, expected_source: str) -> None:
     if set(assertion or {}) != {"outcome", "desktop", "mobile"} or assertion.get("outcome") != "pass":
         raise RuntimeError("742 upstream whole-machine screenshot framing assertion drift")
     fields = {
         "reset_pressed", "stow_pressed", "controls_expanded", "camera_distance_m",
-        "desired_distance_m", "viewer_terminal", "machine_source",
+        "desired_distance_m", "viewer_terminal", "machine_source", "reset_distance_m",
+        "presentation_zoom_delta_y", "presentation_orbit_right_steps", "machine_bounds",
     }
     for profile in ("desktop", "mobile"):
         record = assertion[profile]
@@ -960,9 +1075,35 @@ def _validate_upstream_screenshot_framing(assertion: dict, expected_source: str)
             or not math.isfinite(record["desired_distance_m"])
             or record["desired_distance_m"] <= 0
             or abs(record["camera_distance_m"] - record["desired_distance_m"]) > 0.05
+            or not isinstance(record["reset_distance_m"], (int, float))
+            or isinstance(record["reset_distance_m"], bool)
+            or not math.isfinite(record["reset_distance_m"])
+            or record["reset_distance_m"] <= 0
+            or not isinstance(record["presentation_zoom_delta_y"], (int, float))
+            or isinstance(record["presentation_zoom_delta_y"], bool)
+            or record["presentation_zoom_delta_y"] < 0
+            or not isinstance(record["presentation_orbit_right_steps"], int)
+            or isinstance(record["presentation_orbit_right_steps"], bool)
+            or record["presentation_orbit_right_steps"] < 0
+            or record["desired_distance_m"] < record["reset_distance_m"]
             or (profile == "mobile" and record["controls_expanded"] is not False)
         ):
             raise RuntimeError(f"742 upstream whole-machine screenshot framing failed: {profile}")
+        _validate_projected_machine_bounds(
+            record["machine_bounds"],
+            [1280, 720] if profile == "desktop" else [390, 844],
+            record["camera_distance_m"],
+        )
+        if profile == "mobile" and expected_source == "blender-showcase-v1.1.0":
+            orientation = record["machine_bounds"]["camera_orientation"]
+            expected_theta = 0.76 + record["presentation_orbit_right_steps"] * 0.12
+            if (
+                record["presentation_orbit_right_steps"] < 3
+                or orientation.get("kind") != "theta-phi"
+                or abs(orientation.get("theta_rad", float("nan")) - expected_theta) > 1e-9
+                or abs(orientation.get("phi_rad", float("nan")) - 1.44) > 1e-9
+            ):
+                raise RuntimeError("742 600S mobile framing omitted or forged its production keyboard orbit adjustment")
 
 
 def _validate_regression(gate: str, observations: dict) -> None:
@@ -1180,27 +1321,22 @@ def validate_complete_browser_artifact(
         if assertions["clear_selection"].get("selected_component_after_reset") is not None:
             raise RuntimeError("742 semantic Reset View did not clear selection")
         framing = assertions["screenshot_framing"]
-        framing_fields = {
-            "outcome", "reset_pressed", "reset_after_pinch", "selected_component", "camera_distance_m",
-            "desired_distance_m", "pose_min_distance_m",
-        }
+        framing_fields = {"outcome", "reset_after_pinch", "pose_min_distance_m", *_742_CLEAN_FRAME_FIELDS}
         if (
             set(framing or {}) != framing_fields
             or framing.get("outcome") != "pass"
-            or framing.get("reset_pressed") is not True
             or framing.get("reset_after_pinch") is not True
-            or framing.get("selected_component") is not None
-            or any(
-                isinstance(framing.get(name), bool)
-                or not isinstance(framing.get(name), (int, float))
-                or not math.isfinite(framing[name])
-                for name in ("camera_distance_m", "desired_distance_m", "pose_min_distance_m")
-            )
+            or isinstance(framing.get("pose_min_distance_m"), bool)
+            or not isinstance(framing.get("pose_min_distance_m"), (int, float))
+            or not math.isfinite(framing["pose_min_distance_m"])
             or framing["camera_distance_m"] < framing["pose_min_distance_m"]
             or framing["desired_distance_m"] < framing["pose_min_distance_m"]
-            or abs(framing["camera_distance_m"] - framing["desired_distance_m"]) > 0.03
         ):
             raise RuntimeError("742 semantic-selection screenshot reset/framing proof failed")
+        _validate_742_clean_presentation_frame(
+            {name: framing[name] for name in _742_CLEAN_FRAME_FIELDS},
+            [1280, 720],
+        )
         _validate_742_pinch_zoom(assertions["pinch_suppression"].get("pinch_zoom"), [1280, 720])
     elif gate == "accessibility_semantics_and_keyboard":
         fields = {"dom_snapshot", "accessibility_tree_snapshot", "assertions", "physical_screen_reader_session_claimed"}
@@ -1262,7 +1398,7 @@ def validate_complete_browser_artifact(
         _validate_dom_snapshot(observations["dom_snapshots"]["short_landscape"], [844, 390])
         _require_loaded_zero_error_snapshot(observations["dom_snapshots"]["portrait"])
         _require_loaded_zero_error_snapshot(observations["dom_snapshots"]["short_landscape"])
-        if set(assertions) != {"portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion"}:
+        if set(assertions) != {"portrait_controls", "short_landscape_controls", "pinch_zoom", "reduced_motion", "screenshot_framing"}:
             raise RuntimeError("742 mobile structured outcome set drift")
         _validate_742_pinch_zoom(assertions["pinch_zoom"], [390, 844])
         reduced_assertion = assertions["reduced_motion"]
@@ -1272,6 +1408,11 @@ def validate_complete_browser_artifact(
             {key: value for key, value in reduced_assertion.items() if key != "outcome"},
             "742 mobile",
         )
+        framing = assertions["screenshot_framing"]
+        if set(framing or {}) != {"outcome", "portrait", "short_landscape"} or framing.get("outcome") != "pass":
+            raise RuntimeError("742 mobile screenshot framing assertion drift")
+        _validate_742_clean_presentation_frame(framing["portrait"], [390, 844])
+        _validate_742_clean_presentation_frame(framing["short_landscape"], [844, 390])
     else:
         raise RuntimeError(f"Unsupported 742 browser gate: {gate}")
     return artifact["environment"]
