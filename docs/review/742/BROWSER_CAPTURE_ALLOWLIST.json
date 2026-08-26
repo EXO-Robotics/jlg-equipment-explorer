@@ -1,5 +1,196 @@
 {
   "schema_version": "1.0.0",
   "kind": "742-browser-capture-allowlist",
-  "artifacts": []
+  "artifacts": [
+    {
+      "path": "docs/review/742/browser-captures/600s-browser-regression-trace.json",
+      "sha256": "b82a476ab79fe125bbd82dd5270f66ee86821cac9cb80d58bf83003513ed2e91",
+      "bytes": 988,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/600s-regression-desktop.png",
+      "sha256": "855c4f2374b8dbbd7a888f5bcedcf59f16598b27566b89e9ffa323932a60b906",
+      "bytes": 142154,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 1280,
+      "height_px": 720,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/600s-regression-mobile.png",
+      "sha256": "aaab05e26be55b84ab9f374a4f6427973ab9e4cbb7369056d6ff9a7b52f67515",
+      "bytes": 92134,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 390,
+      "height_px": 844,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-accessibility-modal.png",
+      "sha256": "3beda273d2599012daeaa199bfb4682d8a06176446f4662f1baf31b1892b918a",
+      "bytes": 170640,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 1280,
+      "height_px": 720,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-desktop-stowed.png",
+      "sha256": "04b9c18aa96f61dd2ded8a0544a72c3bc7bb91ed8b26ec402258c0003f7d7ede",
+      "bytes": 205504,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 1280,
+      "height_px": 720,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-mobile-portrait.png",
+      "sha256": "f83d63b376c1709bdb16492e2da07eb542fc83e5e56cb58917363f1372edbf0e",
+      "bytes": 80855,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 390,
+      "height_px": 844,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-mobile-short-landscape.png",
+      "sha256": "d2ec2457ab5aff8202ce8f2d505e62325648b501a40fdec8ea58c168d5554099",
+      "bytes": 81732,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 844,
+      "height_px": 390,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-performance-desktop.png",
+      "sha256": "071ce82f290241bf7e0db65b4f0f2ff4d409b9ed45710ea71a38068600163ea4",
+      "bytes": 191059,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 1280,
+      "height_px": 720,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-performance-portrait.png",
+      "sha256": "c47aa1d807acf6916f9a4bb05131fb74f66e7144368f5afa3d6a8b580b7565b4",
+      "bytes": 78000,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 390,
+      "height_px": 844,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-performance-short-landscape.png",
+      "sha256": "93be6ac5b4adc9f457d805ee02a1bc785404fcc95d68f380813826bc5258ec95",
+      "bytes": 77511,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 844,
+      "height_px": 390,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/742-semantic-selection-boom.png",
+      "sha256": "baa57a26b02b67ae640cb268d2731b4b7e723e7682e26f7d3910789a29db93e0",
+      "bytes": 252900,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 1280,
+      "height_px": 720,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/accessibility-semantics-and-keyboard-trace.json",
+      "sha256": "9f16a602c70ce56dc48ff53c986ebe46302179b7de553389d8877a2296e3eba3",
+      "bytes": 1049,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/desktop-browser-interaction-trace.json",
+      "sha256": "1692cc0775a01f08017934edbfd690a737b2dcbafaa7263a5732c4355a3abd82",
+      "bytes": 1450,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/es1930m-browser-regression-trace.json",
+      "sha256": "7bc538aa2b22e3dbe3ba209fda65bd317afc53242f274d54bc91e5c7f34536e1",
+      "bytes": 1148,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/es1930m-regression-desktop.png",
+      "sha256": "7703cb80e68966df1692539d6fe81ea2b4bb13b4a1424d49f1713c7e38920ae4",
+      "bytes": 199630,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 1280,
+      "height_px": 720,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/es1930m-regression-mobile.png",
+      "sha256": "3e1d11fc4d30b9ceff3cf3e772a216b08432f0bb4dd87c20c8806cfe86f6e65d",
+      "bytes": 100960,
+      "kind": "screenshot",
+      "mime_type": "image/png",
+      "width_px": 390,
+      "height_px": 844,
+      "provenance": "Fresh local browser capture from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/mobile-browser-interaction-trace.json",
+      "sha256": "f062a2472478ec6a28161952ca447bd39cdd4521603583bfff100ab7c6ac922b",
+      "bytes": 763,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/performance-profile-trace.json",
+      "sha256": "5816bff54a517733148183cdc5652d4994789ef495bd85378dc2a65d65415618",
+      "bytes": 895,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    },
+    {
+      "path": "docs/review/742/browser-captures/semantic-selection-trace.json",
+      "sha256": "b8eb9872e9a383cacf6527243990170ed32d3f75f489bdc00652316028818863",
+      "bytes": 720,
+      "kind": "automation_trace",
+      "mime_type": "application/json",
+      "width_px": null,
+      "height_px": null,
+      "provenance": "Structured local browser capture automation trace from Playwright Chromium against the exact committed candidate."
+    }
+  ]
 }

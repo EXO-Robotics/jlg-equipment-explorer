@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "desktop_browser_interaction",
+  "captured_at_utc": "2026-08-26T04:46:20.420Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "events": [
+    {
+      "sequence": 1,
+      "event": "observe-load",
+      "selector": "body",
+      "result": "source=glb-validated errors=0 selection=6/6 ready"
+    },
+    {
+      "sequence": 2,
+      "event": "set-manual-controls",
+      "selector": "#machine-controls-body input[type=range]",
+      "result": "{\"#lift-control\":{\"value\":\"100\",\"ariaValueText\":\"69°\",\"disabled\":false},\"#telescope-control\":{\"value\":\"100\",\"ariaValueText\":\"7.21 m visual\",\"disabled\":false},\"#tilt-control\":{\"value\":\"25\",\"ariaValueText\":\"3°\",\"disabled\":false},\"#steer-control\":{\"value\":\"80\",\"ariaValueText\":\"44° R\",\"disabled\":false},\"#level-control\":{\"value\":\"50\",\"ariaValueText\":\"5° R\",\"disabled\":false}}"
+    },
+    {
+      "sequence": 3,
+      "event": "activate-steering-modes",
+      "selector": "[data-steer-mode]",
+      "result": "circle,crab,front"
+    },
+    {
+      "sequence": 4,
+      "event": "modal-keyboard",
+      "selector": "[data-focus=\"boom\"]",
+      "result": "opened; close focused; Escape restored boom opener"
+    },
+    {
+      "sequence": 5,
+      "event": "stow-reset",
+      "selector": "#stow,#reset-view",
+      "result": "desiredDistanceM=8.80"
+    }
+  ]
+}

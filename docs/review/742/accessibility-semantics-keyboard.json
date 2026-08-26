@@ -1,13 +1,472 @@
 {
-  "schema_version": "2.0.0",
-  "kind": "742-browser-gate-capture",
-  "gate": "accessibility_semantics_and_keyboard",
-  "capture_status": "recapture-required",
+  "boundary": "Chromium DOM and CDP accessibility-tree semantics only; no VoiceOver, NVDA, physical assistive-technology, or physical-device session claimed.",
+  "candidate_tree_sha256": "7a55c8691511cebc5b4f4923ff6bd3cf271279dbf82a65e407100925dc2b61c1",
+  "capture_artifacts": {
+    "automation_trace": {
+      "bytes": 1049,
+      "height_px": null,
+      "path": "docs/review/742/browser-captures/accessibility-semantics-and-keyboard-trace.json",
+      "sha256": "9f16a602c70ce56dc48ff53c986ebe46302179b7de553389d8877a2296e3eba3",
+      "width_px": null
+    },
+    "screenshots": [
+      {
+        "bytes": 170640,
+        "height_px": 720,
+        "path": "docs/review/742/browser-captures/742-accessibility-modal.png",
+        "sha256": "3beda273d2599012daeaa199bfb4682d8a06176446f4662f1baf31b1892b918a",
+        "width_px": 1280
+      }
+    ]
+  },
+  "capture_status": "complete",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "PENDING",
-  "reviewed_source_commit": "PENDING",
-  "environment": null,
-  "capture_artifacts": {"screenshots": [], "automation_trace": null},
-  "observations": {},
-  "boundary": "Browser DOM/accessibility-tree and keyboard evidence only; no VoiceOver, NVDA, or physical assistive-technology session is claimed."
+  "environment": {
+    "assistive_technology_session": false,
+    "automation": {
+      "tool": "Playwright",
+      "version": "1.62.1"
+    },
+    "browser": {
+      "name": "Chromium",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+      "version": "151.0.7922.34"
+    },
+    "captured_at_utc": "2026-08-26T04:46:25.902Z",
+    "gpu": {
+      "api": "WebGL 2",
+      "collection_method": "WEBGL_debug_renderer_info",
+      "reason": null,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Ultra, Unspecified Version)",
+      "status": "observed",
+      "vendor": "Google Inc. (Apple)"
+    },
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
+    },
+    "physical_device_session": false
+  },
+  "gate": "accessibility_semantics_and_keyboard",
+  "kind": "742-browser-gate-capture",
+  "observations": {
+    "accessibility_tree_snapshot": {
+      "source": "Chromium CDP Accessibility.getFullAXTree",
+      "states": [
+        {
+          "nodes": [
+            {
+              "name": "Interactive 3D JLG 742 telehandler visualization",
+              "role": "application",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "ABOUT",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "01 Chassis",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "02 Cab",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "03 Boom",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "04 Carriage",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "05 Steering",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "06 Hydraulics",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "07 Frame level",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "RUN SHOWCASE",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "STOW",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "RESET VIEW",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "Boom lift",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Boom telescope",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Carriage tilt",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Steering angle",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "CIRCLE",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "CRAB",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "FRONT",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "Frame level",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            }
+          ],
+          "state": "controls_open"
+        },
+        {
+          "nodes": [
+            {
+              "name": "Evidence-bound 742",
+              "role": "dialog",
+              "states": {
+                "modal": true
+              },
+              "value": null
+            },
+            {
+              "name": "Close inspector",
+              "role": "button",
+              "states": {
+                "focusable": true,
+                "focused": true
+              },
+              "value": null
+            }
+          ],
+          "state": "modal_open"
+        }
+      ]
+    },
+    "dom_snapshot": {
+      "nodes": [
+        {
+          "attributes": {
+            "data-configuration-id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+            "data-frame-p95-ms": "sampling",
+            "data-frame-sample-count": "0",
+            "data-frame-worst-ms": "sampling",
+            "data-machine": "742",
+            "data-machine-source": "glb-validated",
+            "data-machine-visible-meshes": "385",
+            "data-motion-profile": "full",
+            "data-orbit-base-max-distance-m": "24.00",
+            "data-orbit-desired-distance-m": "11.20",
+            "data-orbit-effective-max-distance-m": "24.00",
+            "data-performance-window-ms": "0",
+            "data-performance-window-reason": "startup",
+            "data-pixel-ratio": "1.00",
+            "data-render-profile": "desktop",
+            "data-runtime-error-count": "0",
+            "data-runtime-release": "1.6.0",
+            "data-selection-fixture-cases": "4/4",
+            "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true}]",
+            "data-selection-nearest-rays": "15",
+            "data-selection-overlap-outcomes": "[{\"ray\":1,\"pairComponents\":[\"chassis\",\"cab\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"cab\",\"boom\"],\"hitDistancesM\":[47.7938,48.5559,49.2512,50.1655,50.5627],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":2,\"pairComponents\":[\"chassis\",\"boom\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.4367,49.1095,49.5383,50.347],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":3,\"pairComponents\":[\"chassis\",\"carriage\"],\"hitComponents\":[\"chassis\",\"steering\",\"hydraulics\",\"carriage\"],\"hitDistancesM\":[47.1709,47.8469,48.1223,53.1576],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":4,\"pairComponents\":[\"chassis\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.887,49.05,49.325,49.835],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":5,\"pairComponents\":[\"chassis\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"cab\",\"hydraulics\"],\"hitDistancesM\":[48.2336,48.4544,49.3597,49.897],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":6,\"pairComponents\":[\"cab\",\"boom\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.4042,49.5559,50.2058,50.6174],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":7,\"pairComponents\":[\"cab\",\"carriage\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"carriage\"],\"hitDistancesM\":[49.1337,49.4647,50.9688,52.4497],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":8,\"pairComponents\":[\"cab\",\"steering\"],\"hitComponents\":[\"cab\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.9142,49.8249,50.5394],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":9,\"pairComponents\":[\"cab\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.1653,49.3778,50.2883,50.865],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":10,\"pairComponents\":[\"boom\",\"carriage\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"carriage\"],\"hitDistancesM\":[48.3683,48.9941,50.0499,52.6526],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":11,\"pairComponents\":[\"boom\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.5259,49.7078,50.0145,50.5834],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":12,\"pairComponents\":[\"boom\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.766,48.9616,49.8385,50.0448,51.804],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":13,\"pairComponents\":[\"carriage\",\"steering\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.2228,51.1062,51.7831],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":14,\"pairComponents\":[\"carriage\",\"hydraulics\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\",\"hydraulics\"],\"hitDistancesM\":[49.2135,51.1193,51.8043,53.1997],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":15,\"pairComponents\":[\"steering\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\"],\"hitDistancesM\":[49.0517,49.7682,50.2248],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true}]",
+            "data-selection-overlap-rays": "15",
+            "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
+            "data-selection-selftest": "pass",
+            "data-selection-volume-count": "6",
+            "data-shadow-profile": "1024px-14m",
+            "data-viewer-started": "true",
+            "data-viewport-css-px": "1280x720",
+            "data-visible-stall-count": "0",
+            "data-zone": "stowed"
+          },
+          "selector": "body",
+          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2411 accuracy reconstruction / 1.3.0\n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperatePresentation controls\n        Stowed studyClose\n        \n      \n      \n        Boom lift0\u00b0\n        Telescope0.00 m visual\n        Carriage tilt0\u00b0\n        SteeringCenter\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevel\n        Run showcaseStowReset view\n        Presentation-only mechanism limits. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More \u2192\n    \n    Drag to orbit / Pinch or scroll to zoom / Select a component\n    machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 37 ms \u00b7 sampling \u00b7 samples 1 \u00b7 p95 sampling \u00b7 worst sampling \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full\n  \n\n  \n  \n    \u00d7\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp \u00b7 open cab \u00b7 standard 370/75-28 tiresAttachment50 in floating carriage \u00b7 48 in pallet forksPrimary set3122332100 \u00b7 3122331300 \u00b7 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__show742ModuleFailure = function () {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.machineSource = \"module-load-failed\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\";\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };"
+        },
+        {
+          "attributes": {
+            "id": "machine-title"
+          },
+          "selector": "#machine-title",
+          "text": "742"
+        },
+        {
+          "attributes": {
+            "class": "diagnostics",
+            "id": "diagnostics"
+          },
+          "selector": "#diagnostics",
+          "text": "machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 37 ms \u00b7 sampling \u00b7 samples 1 \u00b7 p95 sampling \u00b7 worst sampling \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full"
+        },
+        {
+          "attributes": {
+            "aria-controls": "machine-controls-body",
+            "aria-expanded": "true",
+            "class": "controls-toggle",
+            "hidden": "",
+            "id": "controls-toggle",
+            "type": "button"
+          },
+          "selector": "#controls-toggle",
+          "text": "Close"
+        },
+        {
+          "attributes": {
+            "aria-describedby": "inspector-copy",
+            "aria-labelledby": "inspector-title",
+            "aria-modal": "true",
+            "class": "inspector",
+            "id": "inspector",
+            "inert": "",
+            "role": "dialog"
+          },
+          "selector": "#inspector",
+          "text": "\u00d7\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp \u00b7 open cab \u00b7 standard 370/75-28 tiresAttachment50 in floating carriage \u00b7 48 in pallet forksPrimary set3122332100 \u00b7 3122331300 \u00b7 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary"
+        },
+        {
+          "attributes": {
+            "aria-describedby": "motion-boundary",
+            "aria-label": "Boom lift",
+            "aria-valuetext": "0\u00b0",
+            "id": "lift-control",
+            "max": "100",
+            "min": "0",
+            "step": "1",
+            "type": "range",
+            "value": "0"
+          },
+          "selector": "#lift-control",
+          "text": ""
+        },
+        {
+          "attributes": {
+            "aria-describedby": "motion-boundary",
+            "aria-label": "Boom telescope",
+            "aria-valuetext": "0.00 m visual",
+            "id": "telescope-control",
+            "max": "100",
+            "min": "0",
+            "step": "1",
+            "type": "range",
+            "value": "0"
+          },
+          "selector": "#telescope-control",
+          "text": ""
+        },
+        {
+          "attributes": {
+            "aria-describedby": "motion-boundary",
+            "aria-label": "Carriage tilt",
+            "aria-valuetext": "0\u00b0",
+            "id": "tilt-control",
+            "max": "100",
+            "min": "-100",
+            "step": "1",
+            "type": "range",
+            "value": "0"
+          },
+          "selector": "#tilt-control",
+          "text": ""
+        },
+        {
+          "attributes": {
+            "aria-describedby": "motion-boundary",
+            "aria-label": "Steering angle",
+            "aria-valuetext": "Center",
+            "id": "steer-control",
+            "max": "100",
+            "min": "-100",
+            "step": "1",
+            "type": "range",
+            "value": "0"
+          },
+          "selector": "#steer-control",
+          "text": ""
+        },
+        {
+          "attributes": {
+            "aria-describedby": "motion-boundary",
+            "aria-label": "Frame level",
+            "aria-valuetext": "Level",
+            "id": "level-control",
+            "max": "100",
+            "min": "-100",
+            "step": "1",
+            "type": "range",
+            "value": "0"
+          },
+          "selector": "#level-control",
+          "text": ""
+        }
+      ],
+      "url": "http://127.0.0.1:8092/742/?diagnostics=1",
+      "viewport_css_px": [
+        1280,
+        720
+      ]
+    },
+    "interaction_transcript": [
+      {
+        "action": "Inspect application semantics",
+        "expected": "application role and instructions exposed",
+        "id": "application_instructions",
+        "observed": "Chromium AX tree contains application role and controls",
+        "outcome": "pass",
+        "sequence": 1,
+        "target": "#app"
+      },
+      {
+        "action": "Read five stowed slider values",
+        "expected": "exact engineering display values",
+        "id": "slider_value_text",
+        "observed": "{\"#lift-control\":\"0\u00b0\",\"#telescope-control\":\"0.00 m visual\",\"#tilt-control\":\"0\u00b0\",\"#steer-control\":\"Center\",\"#level-control\":\"Level\"}",
+        "outcome": "pass",
+        "sequence": 2,
+        "target": "input[type=range]"
+      },
+      {
+        "action": "Open modal and press Tab",
+        "expected": "focus remains inside modal",
+        "id": "dialog_focus_trap",
+        "observed": "{\"id\":\"\",\"inside\":true}",
+        "outcome": "pass",
+        "sequence": 3,
+        "target": "#inspector"
+      },
+      {
+        "action": "Press Escape",
+        "expected": "modal closes and About opener regains focus",
+        "id": "escape_restore",
+        "observed": "activeElement=#info-toggle",
+        "outcome": "pass",
+        "sequence": 4,
+        "target": "#inspector"
+      },
+      {
+        "action": "Load reduced-motion query",
+        "expected": "autonomy disabled and manual controls available",
+        "id": "reduced_motion",
+        "observed": "{\"profile\":\"reduced\",\"showcaseDisabled\":true,\"manual\":true}",
+        "outcome": "pass",
+        "sequence": 5,
+        "target": "?reduce=1"
+      }
+    ],
+    "physical_screen_reader_session_claimed": false
+  },
+  "reviewed_source_commit": "dff15ef16e49741ad1cc379d247f0c96166b37fc",
+  "schema_version": "2.0.0"
 }

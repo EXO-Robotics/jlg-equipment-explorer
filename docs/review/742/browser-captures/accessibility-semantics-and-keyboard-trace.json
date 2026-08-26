@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "accessibility_semantics_and_keyboard",
+  "captured_at_utc": "2026-08-26T04:46:25.902Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "events": [
+    {
+      "sequence": 1,
+      "event": "application-instructions",
+      "selector": "#app[role=application]",
+      "result": "role and description observed in CDP AX tree"
+    },
+    {
+      "sequence": 2,
+      "event": "slider-value-text",
+      "selector": "input[type=range]",
+      "result": "{\"#lift-control\":\"0°\",\"#telescope-control\":\"0.00 m visual\",\"#tilt-control\":\"0°\",\"#steer-control\":\"Center\",\"#level-control\":\"Level\"}"
+    },
+    {
+      "sequence": 3,
+      "event": "dialog-focus",
+      "selector": "#inspector",
+      "result": "Tab inside=true; Escape restored #info-toggle"
+    },
+    {
+      "sequence": 4,
+      "event": "reduced-motion",
+      "selector": "?reduce=1",
+      "result": "{\"profile\":\"reduced\",\"showcaseDisabled\":true,\"manual\":true}"
+    }
+  ]
+}

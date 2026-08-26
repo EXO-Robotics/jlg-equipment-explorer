@@ -1,9 +1,13 @@
 {
   "boundary": "Owned rendered presentation geometry only; no manufacturer geometry, load, stability, hydraulic response, service, or safety claim.",
-  "candidate_tree_sha256": "PENDING",
+  "candidate_tree_sha256": "7a55c8691511cebc5b4f4923ff6bd3cf271279dbf82a65e407100925dc2b61c1",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
-    "os": "macOS 26.5.2 build 25F84",
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
+    },
     "renderer": "Blender 5.1.1 deterministic review renderer"
   },
   "gate": "extended_visual_fidelity",
@@ -24,6 +28,6 @@
     "docs/review/742/steering-linkage-cutaway.png",
     "docs/review/742/boom-pivot-angle-sensor.png"
   ],
-  "reviewed_source_commit": "PENDING",
+  "reviewed_source_commit": "dff15ef16e49741ad1cc379d247f0c96166b37fc",
   "schema_version": "1.0.0"
 }
