@@ -11,6 +11,7 @@
     "browser_metadata": ["name", "full version", "user agent"],
     "os_metadata": ["name", "version", "build"],
     "gpu_metadata": "Record WebGL API plus unmasked vendor/renderer when WEBGL_debug_renderer_info is observable; otherwise record unavailable and the exact reason.",
+    "accessibility_tree_slider_contract": "Normalize raw Chromium CDP Accessibility.getFullAXTree nodes without inventing display units. Every expected slider name must match exactly; each slider must be enabled, focusable, settable, and retain its finite native numeric value plus equivalent numeric AX valuetext. Unit-suffixed or semantic presentation text is verified separately from the DOM aria-valuetext attribute.",
     "automation": "Record tool and version, one structured JSON trace per gate, UTC capture time, and exact screenshots in BROWSER_CAPTURE_ALLOWLIST.json.",
     "boundaries": ["local browser or responsive emulation only", "no physical-device claim", "no VoiceOver or NVDA session claim", "no deployment claim"]
   },
@@ -32,7 +33,7 @@
       "screenshots_minimum": 1,
       "accessibility_tree_states": ["controls_open", "modal_open"],
       "required_slider_names": ["Boom lift", "Boom telescope", "Carriage tilt", "Steering angle", "Frame level"],
-      "required_stowed_slider_value_text": {"Boom lift": "0°", "Boom telescope": "0.00 m visual", "Carriage tilt": "0°", "Steering angle": "Center", "Frame level": "Level"},
+      "required_dom_stowed_aria_valuetext": {"Boom lift": "0°", "Boom telescope": "0.00 m visual", "Carriage tilt": "0°", "Steering angle": "Center", "Frame level": "Level"},
       "transcript_ids": ["application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"]
     },
     "semantic_selection": {

@@ -7,6 +7,7 @@ import json
 
 from validate_742_browser_evidence import (
     EXPECTED_SCREENSHOT_DIMENSIONS,
+    _validate_accessibility_tree,
     _independent_selection_expected,
     _validate_environment,
     _validate_frame_capture,
@@ -64,6 +65,33 @@ def main() -> None:
     overstated["assistive_technology_session"] = True
     expect_failure(lambda: _validate_environment(overstated), "unsupported assistive-technology claim was accepted")
 
+    slider_names = {"Boom lift", "Boom telescope"}
+    ax_tree = {
+        "source": "Chromium CDP Accessibility.getFullAXTree",
+        "states": [
+            {"state": "controls_open", "nodes": [
+                {"role": "application", "name": "742 application", "value": None, "states": {"focusable": True}},
+                {"role": "button", "name": "About", "value": None, "states": {"focusable": True}},
+                {"role": "slider", "name": "Boom lift", "value": 0, "states": {"focusable": True, "settable": True, "valuetext": "0"}},
+                {"role": "slider", "name": "Boom telescope", "value": 32.5, "states": {"focusable": True, "settable": True, "valuetext": "32.5"}},
+            ]},
+            {"state": "modal_open", "nodes": [
+                {"role": "dialog", "name": "Evidence boundary", "value": None, "states": {"modal": True}},
+                {"role": "button", "name": "Close inspector", "value": None, "states": {"focusable": True}},
+            ]},
+        ],
+    }
+    _validate_accessibility_tree(ax_tree, slider_names)
+    fabricated_units = json.loads(json.dumps(ax_tree))
+    fabricated_units["states"][0]["nodes"][2]["states"]["valuetext"] = "0°"
+    expect_failure(lambda: _validate_accessibility_tree(fabricated_units, slider_names), "fabricated AX display units were accepted")
+    unnamed = json.loads(json.dumps(ax_tree))
+    unnamed["states"][0]["nodes"][2]["name"] = ""
+    expect_failure(lambda: _validate_accessibility_tree(unnamed, slider_names), "unnamed AX slider was accepted")
+    disabled = json.loads(json.dumps(ax_tree))
+    disabled["states"][0]["nodes"][2]["states"]["disabled"] = True
+    expect_failure(lambda: _validate_accessibility_tree(disabled, slider_names), "disabled AX slider was accepted")
+
     if EXPECTED_SCREENSHOT_DIMENSIONS["mobile_browser_interaction"] != {(390, 844), (844, 390)}:
         raise RuntimeError("mobile screenshot viewport contract drift")
 
@@ -76,7 +104,7 @@ def main() -> None:
     }
     if _independent_selection_expected(ray) != "cab":
         raise RuntimeError("independent distance-tie priority recomputation drift")
-    print(json.dumps({"status": "PASS", "negative_cases": 3, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
+    print(json.dumps({"status": "PASS", "negative_cases": 6, "selection_fixtures": len(fixtures), "screenshot_viewport_contracts": len(EXPECTED_SCREENSHOT_DIMENSIONS)}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

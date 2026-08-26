@@ -301,9 +301,7 @@ def _validate_frame_capture(capture: dict, expected_viewport: list[int]) -> None
         raise RuntimeError("742 local browser performance threshold did not pass")
 
 
-def _validate_accessibility_tree(
-    snapshot: dict, slider_names: set[str], expected_value_text: dict[str, str] | None = None
-) -> None:
+def _validate_accessibility_tree(snapshot: dict, slider_names: set[str]) -> None:
     if set(snapshot or {}) != {"source", "states"} or snapshot["source"] != "Chromium CDP Accessibility.getFullAXTree":
         raise RuntimeError("742 accessibility-tree snapshot schema drift")
     states = snapshot["states"]
@@ -314,25 +312,39 @@ def _validate_accessibility_tree(
         if set(record or {}) != {"state", "nodes"} or not isinstance(record["nodes"], list) or not record["nodes"]:
             raise RuntimeError("742 accessibility-tree state snapshot is empty")
         state_nodes[record["state"]] = record["nodes"]
-    observed_sliders = set()
+    observed_sliders = []
     roles_by_state = {}
     for state, nodes in state_nodes.items():
         roles = set()
         for node in nodes:
-            if set(node or {}) != {"role", "name", "states"} or not isinstance(node["states"], dict):
+            if set(node or {}) != {"role", "name", "value", "states"} or not isinstance(node["states"], dict):
                 raise RuntimeError("742 accessibility-tree node schema drift")
             roles.add(node["role"])
             if state == "controls_open" and node["role"] == "slider":
-                observed_sliders.add(node["name"])
-                if expected_value_text is not None and node["name"] in expected_value_text:
-                    if node["states"].get("valuetext") != expected_value_text[node["name"]]:
-                        raise RuntimeError(f"742 accessibility-tree slider value text drift: {node['name']}")
+                observed_sliders.append(node["name"])
+                value = node["value"]
+                value_text = node["states"].get("valuetext")
+                if (
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not math.isfinite(value)
+                    or not isinstance(value_text, str)
+                    or not re.fullmatch(r"-?(?:\d+(?:\.\d+)?|\.\d+)", value_text)
+                    or not math.isclose(float(value_text), float(value), rel_tol=0, abs_tol=1e-9)
+                ):
+                    raise RuntimeError(f"742 accessibility-tree slider native numeric value drift: {node['name']}")
+                if (
+                    node["states"].get("focusable") is not True
+                    or node["states"].get("settable") is not True
+                    or node["states"].get("disabled") not in {None, False}
+                ):
+                    raise RuntimeError(f"742 accessibility-tree slider enabled/focusable/settable state drift: {node['name']}")
         roles_by_state[state] = roles
-    sliders_complete = all(any(observed.startswith(required) for observed in observed_sliders) for required in slider_names)
     if (
         not {"application", "button"}.issubset(roles_by_state["controls_open"])
         or not {"dialog", "button"}.issubset(roles_by_state["modal_open"])
-        or not sliders_complete
+        or len(observed_sliders) != len(slider_names)
+        or set(observed_sliders) != slider_names
     ):
         raise RuntimeError("742 accessibility-tree snapshot omits required semantics")
 
@@ -510,9 +522,7 @@ def validate_complete_browser_artifact(
             raise RuntimeError("742 accessibility evidence schema/boundary drift")
         _validate_dom_snapshot(observations["dom_snapshot"], [1280, 720])
         _require_loaded_zero_error_snapshot(observations["dom_snapshot"])
-        _validate_accessibility_tree(
-            observations["accessibility_tree_snapshot"], set(EXPECTED_STOW_SLIDER_VALUES), EXPECTED_STOW_SLIDER_VALUES,
-        )
+        _validate_accessibility_tree(observations["accessibility_tree_snapshot"], set(EXPECTED_STOW_SLIDER_VALUES))
         for selector, expected in {
             "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°",
             "#steer-control": "Center", "#level-control": "Level",
