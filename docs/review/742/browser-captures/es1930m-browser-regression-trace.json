@@ -1,0 +1,103 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "es1930m_browser_regression",
+  "captured_at_utc": "2026-08-26T05:50:21.358Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
+    "bytes": 48162
+  },
+  "outcomes_sha256": "c886ba4d9fe054c81fb02ac8a57d409a92be715d32afbd3b80d695a792942959",
+  "outcomes": {
+    "load_exact_release": {
+      "outcome": "pass",
+      "route": "/es1930m/",
+      "parsed_status": {
+        "machine": "es1930m",
+        "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+        "source": "glb",
+        "selection": "self-test-pass",
+        "errors": 0,
+        "load_ms": 30,
+        "fps": 61,
+        "p95_ms": 16.8
+      }
+    },
+    "desktop_controls": {
+      "outcome": "pass",
+      "selector": "#lift-control",
+      "result": {
+        "value": "50",
+        "ariaValueText": "3.27 metres platform height; Mechanism active",
+        "disabled": false
+      }
+    },
+    "mobile_controls": {
+      "outcome": "pass",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "aria_expanded": true
+    },
+    "modal_keyboard": {
+      "outcome": "pass",
+      "initial_focus_id": "inspector-close",
+      "tab_inside": true,
+      "restored_focus_component": "chassis"
+    },
+    "drag_orbit": {
+      "outcome": "pass",
+      "before_canvas_sha256": "85517a17519d4d9ac6820bea452f4c76f0c37085cad327209a04915a2f14ce2f",
+      "after_canvas_sha256": "da25f9312bf6b8543691918c755821b4fd1e597f7ad5623ff79b9c24039f67c4"
+    },
+    "pinch_zoom": {
+      "outcome": "pass",
+      "start_points_css_px": [
+        [
+          160,
+          253.2
+        ],
+        [
+          230,
+          253.2
+        ]
+      ],
+      "end_points_css_px": [
+        [
+          95,
+          253.2
+        ],
+        [
+          295,
+          253.2
+        ]
+      ],
+      "hit_test_targets": [
+        "CANVAS",
+        "CANVAS",
+        "CANVAS",
+        "CANVAS"
+      ],
+      "before_canvas_sha256": "c5b0762d42981414292b55394f4d5b2c72c9b951657b16ff7bddbe0f48661fed",
+      "after_canvas_sha256": "b77b604c222cfb7a8b3e040e3a05f73ba00f8a8c21c92014beca78e46b337d18",
+      "before_desired_distance_m": null,
+      "after_desired_distance_m": null,
+      "observable_render_or_distance_change": true
+    },
+    "reduced_motion": {
+      "outcome": "pass",
+      "query": "reduce=1",
+      "body_dataset": "true",
+      "autonomy_disabled": true,
+      "manual_controls_enabled": true
+    },
+    "auto_start_pause_resume": {
+      "outcome": "pass",
+      "observed": "running->paused->running"
+    }
+  }
+}

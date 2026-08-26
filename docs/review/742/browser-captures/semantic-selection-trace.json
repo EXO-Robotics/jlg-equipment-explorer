@@ -1,0 +1,209 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "semantic_selection",
+  "captured_at_utc": "2026-08-26T05:50:00.772Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
+    "bytes": 48162
+  },
+  "outcomes_sha256": "db000037f0ab72791c59b3c3090e65c3b14749a0b1b114efa10c3396cbc62e7d",
+  "outcomes": {
+    "visible_canvas_selection": {
+      "outcome": "pass",
+      "viewport_css_px": [
+        1280,
+        720
+      ],
+      "independently_labeled_probes": [
+        {
+          "outcome": "pass",
+          "id": "boom-upper-visible-surface",
+          "x": 600,
+          "y": 280,
+          "expected_component": "boom",
+          "hit_test_target": "CANVAS",
+          "selected_component": "boom",
+          "rendered_surface_component": "boom",
+          "rendered_surface_mesh": "BaseBoomWeldment",
+          "resolution_basis": "visible-surface"
+        },
+        {
+          "outcome": "pass",
+          "id": "cab-front-visible-surface",
+          "x": 684,
+          "y": 350,
+          "expected_component": "cab",
+          "hit_test_target": "CANVAS",
+          "selected_component": "cab",
+          "rendered_surface_component": "cab",
+          "rendered_surface_mesh": "Dashboard",
+          "resolution_basis": "visible-surface"
+        },
+        {
+          "outcome": "pass",
+          "id": "chassis-center-visible-surface",
+          "x": 824,
+          "y": 398,
+          "expected_component": "chassis",
+          "hit_test_target": "CANVAS",
+          "selected_component": "chassis",
+          "rendered_surface_component": "chassis",
+          "rendered_surface_mesh": "FrameRail_-1",
+          "resolution_basis": "visible-surface"
+        },
+        {
+          "outcome": "pass",
+          "id": "steering-front-wheel-visible-surface",
+          "x": 959,
+          "y": 430,
+          "expected_component": "steering",
+          "hit_test_target": "CANVAS",
+          "selected_component": "steering",
+          "rendered_surface_component": "steering",
+          "rendered_surface_mesh": "WheelRimOuter_RL",
+          "resolution_basis": "visible-surface"
+        }
+      ]
+    },
+    "clear_selection": {
+      "outcome": "pass",
+      "selected_component_after_reset": null
+    },
+    "pinch_suppression": {
+      "outcome": "pass",
+      "selected_component_after_pinch": null,
+      "modal_open_after_pinch": false,
+      "pinch_zoom": {
+        "schema_version": "1.0.0",
+        "gesture": "pinch-out",
+        "target_selector": "#app canvas",
+        "viewport_css_px": [
+          1280,
+          720
+        ],
+        "canvas_rect_css_px": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "start_points_css_px": [
+          [
+            600,
+            302.4
+          ],
+          [
+            680,
+            302.4
+          ]
+        ],
+        "end_points_css_px": [
+          [
+            535,
+            302.4
+          ],
+          [
+            745,
+            302.4
+          ]
+        ],
+        "hit_test_targets": [
+          "CANVAS",
+          "CANVAS",
+          "CANVAS",
+          "CANVAS"
+        ],
+        "all_points_on_canvas": true,
+        "baseline": {
+          "camera_distance_m": 8.798,
+          "desired_distance_m": 8.8,
+          "stable_frames": 6,
+          "samples_camera_distance_m": [
+            8.798,
+            8.798,
+            8.798,
+            8.798,
+            8.798,
+            8.798
+          ]
+        },
+        "after": {
+          "camera_distance_m": 3.366,
+          "desired_distance_m": 3.35,
+          "stable_frames": 6,
+          "samples_camera_distance_m": [
+            8.165,
+            7.603,
+            7.109,
+            6.67,
+            6.282,
+            5.939,
+            5.638,
+            5.371,
+            5.137,
+            4.928,
+            4.744,
+            4.581,
+            4.438,
+            4.312,
+            4.2,
+            4.1,
+            4.013,
+            3.936,
+            3.868,
+            3.808,
+            3.755,
+            3.707,
+            3.666,
+            3.629,
+            3.597,
+            3.568,
+            3.543,
+            3.521,
+            3.501,
+            3.484,
+            3.468,
+            3.455,
+            3.443,
+            3.432,
+            3.423,
+            3.414,
+            3.407,
+            3.401,
+            3.395,
+            3.39,
+            3.385,
+            3.381,
+            3.378,
+            3.375,
+            3.372,
+            3.37,
+            3.368,
+            3.366
+          ]
+        },
+        "intermediate_desired_distance_m": 4.85,
+        "final_gesture_desired_distance_m": 3.35,
+        "camera_distance_delta_m": -5.432,
+        "desired_distance_delta_m": -5.45,
+        "absolute_camera_distance_delta_m": 5.432,
+        "minimum_required_delta_m": 0.5,
+        "expected_direction": "decrease",
+        "actual_direction": "decrease",
+        "monotonic_camera_change": true,
+        "settled_before": true,
+        "settled_after": true,
+        "outcome": "pass"
+      }
+    },
+    "overlap_self_test": {
+      "outcome": "pass",
+      "overlap_ray_count": 15,
+      "fixture_case_count": 4
+    }
+  }
+}

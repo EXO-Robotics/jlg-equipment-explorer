@@ -1,0 +1,144 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "desktop_browser_interaction",
+  "captured_at_utc": "2026-08-26T05:49:38.680Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
+    "bytes": 48162
+  },
+  "outcomes_sha256": "f118a3d622df6b0b6e602028613f37efa0563f1ca02cf5e53a7d77d436fea2b7",
+  "outcomes": {
+    "load_stowed": {
+      "outcome": "pass",
+      "source": "glb-validated",
+      "selection": "6/6 ready",
+      "runtime_error_count": 0
+    },
+    "manual_controls": {
+      "outcome": "pass",
+      "values": {
+        "#lift-control": {
+          "value": "100",
+          "ariaValueText": "69°",
+          "disabled": false
+        },
+        "#telescope-control": {
+          "value": "100",
+          "ariaValueText": "7.21 m visual",
+          "disabled": false
+        },
+        "#tilt-control": {
+          "value": "25",
+          "ariaValueText": "3°",
+          "disabled": false
+        },
+        "#steer-control": {
+          "value": "80",
+          "ariaValueText": "44° R",
+          "disabled": false
+        },
+        "#level-control": {
+          "value": "50",
+          "ariaValueText": "5° R",
+          "disabled": false
+        }
+      }
+    },
+    "steering_modes": {
+      "outcome": "pass",
+      "pressed_modes": [
+        "circle",
+        "crab",
+        "front"
+      ]
+    },
+    "maximum_pose_reset": {
+      "outcome": "pass",
+      "reset_pressed_while_pose": "maximum",
+      "before_reset": {
+        "slider_values": {
+          "#lift-control": "100",
+          "#telescope-control": "100",
+          "#tilt-control": "25",
+          "#steer-control": "80",
+          "#level-control": "50"
+        },
+        "pose_frame_distance_m": 36.54,
+        "desired_distance_m": 36.54
+      },
+      "after_reset": {
+        "slider_values": {
+          "#lift-control": "100",
+          "#telescope-control": "100",
+          "#tilt-control": "25",
+          "#steer-control": "80",
+          "#level-control": "50"
+        },
+        "pose_frame_distance_m": 36.93,
+        "camera_distance_m": 36.915,
+        "desired_distance_m": 36.93,
+        "base_max_distance_m": 24,
+        "effective_max_distance_m": 38.78,
+        "selected_component": null
+      },
+      "settle": {
+        "camera_distance_m": 36.915,
+        "desired_distance_m": 36.93,
+        "stable_frames": 6,
+        "samples_camera_distance_m": [
+          36.467,
+          36.521,
+          36.569,
+          36.611,
+          36.649,
+          36.682,
+          36.711,
+          36.737,
+          36.759,
+          36.779,
+          36.797,
+          36.813,
+          36.827,
+          36.839,
+          36.85,
+          36.859,
+          36.868,
+          36.875,
+          36.882,
+          36.887,
+          36.892,
+          36.897,
+          36.901,
+          36.905,
+          36.908,
+          36.91,
+          36.913,
+          36.915
+        ]
+      }
+    },
+    "component_modal": {
+      "outcome": "pass",
+      "initial_focus_id": "inspector-close",
+      "tab_trapped": true,
+      "restored_focus_component": "boom"
+    },
+    "stalled_load_timeout": {
+      "outcome": "pass",
+      "source": "load-timeout",
+      "viewer_terminal": true,
+      "error_role": "alert",
+      "error_aria_live": "assertive",
+      "error_visible": true,
+      "error_focused": true,
+      "app_inert": true,
+      "interface_inert": true,
+      "disabled_control_count": 12,
+      "total_control_count": 12
+    }
+  }
+}

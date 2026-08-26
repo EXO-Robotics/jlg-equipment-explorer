@@ -1,0 +1,100 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "600s_browser_regression",
+  "captured_at_utc": "2026-08-26T05:50:16.025Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
+    "bytes": 48162
+  },
+  "outcomes_sha256": "bcbd4ad12a6e280e349bc39d33cba22d885abaab65a75b1e4e85729fd7a5e5b6",
+  "outcomes": {
+    "load_exact_release": {
+      "outcome": "pass",
+      "route": "/",
+      "parsed_status": {
+        "source": "blender-showcase-v1.1.0",
+        "meshes": 92,
+        "selection": "5/5 pass",
+        "errors": 0,
+        "load_ms": 126,
+        "render_profile": "desktop",
+        "fps": 60,
+        "p95_ms": 16.7,
+        "reduced_motion": "off"
+      }
+    },
+    "desktop_controls": {
+      "outcome": "pass",
+      "selector": "#boom-control",
+      "result": {
+        "value": "35",
+        "ariaValueText": "35°",
+        "disabled": false
+      }
+    },
+    "mobile_controls": {
+      "outcome": "pass",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "aria_expanded": true
+    },
+    "modal_keyboard": {
+      "outcome": "pass",
+      "initial_focus_id": "inspector-close",
+      "tab_inside": true,
+      "restored_focus_component": "chassis"
+    },
+    "drag_orbit": {
+      "outcome": "pass",
+      "before_canvas_sha256": "40c83942c8a087363b3b656815113d462f068df79397fb8c20daa8cbf6357939",
+      "after_canvas_sha256": "3c98740ebebf92f0dd0c2cca1a73bb9adfb1938be1b92d968879f4ec6f0348b1"
+    },
+    "pinch_zoom": {
+      "outcome": "pass",
+      "start_points_css_px": [
+        [
+          160,
+          253.2
+        ],
+        [
+          230,
+          253.2
+        ]
+      ],
+      "end_points_css_px": [
+        [
+          95,
+          253.2
+        ],
+        [
+          295,
+          253.2
+        ]
+      ],
+      "hit_test_targets": [
+        "CANVAS",
+        "CANVAS",
+        "CANVAS",
+        "CANVAS"
+      ],
+      "before_canvas_sha256": "2c9c88a7aee528cac73bd73573ac410a74e7cbd77ec433a8906efbb2d5555d8f",
+      "after_canvas_sha256": "ba23edfdc334fce193caa465e5dc31ee8d0597f0d0aaaacbc6d0baacb3bd8b07",
+      "before_desired_distance_m": null,
+      "after_desired_distance_m": null,
+      "observable_render_or_distance_change": true
+    },
+    "reduced_motion": {
+      "outcome": "pass",
+      "query": "reduce=1",
+      "body_dataset": "true",
+      "autonomy_disabled": true,
+      "manual_controls_enabled": true
+    }
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "mobile_browser_interaction",
+  "captured_at_utc": "2026-08-26T05:49:55.907Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
+    "bytes": 48162
+  },
+  "outcomes_sha256": "c5f468aa4f40afc7f3111069502735f909fd7abcea7146026b3ad2bb238fc431",
+  "outcomes": {
+    "portrait_controls": {
+      "outcome": "pass",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "controls": [
+        {
+          "id": "lift-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 541.8125,
+            "width": 336,
+            "height": 12,
+            "top": 541.8125,
+            "right": 363,
+            "bottom": 553.8125,
+            "left": 27
+          }
+        },
+        {
+          "id": "telescope-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 578.8125,
+            "width": 336,
+            "height": 12,
+            "top": 578.8125,
+            "right": 363,
+            "bottom": 590.8125,
+            "left": 27
+          }
+        },
+        {
+          "id": "tilt-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 615.8125,
+            "width": 336,
+            "height": 12,
+            "top": 615.8125,
+            "right": 363,
+            "bottom": 627.8125,
+            "left": 27
+          }
+        },
+        {
+          "id": "steer-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 652.8125,
+            "width": 336,
+            "height": 12,
+            "top": 652.8125,
+            "right": 363,
+            "bottom": 664.8125,
+            "left": 27
+          }
+        },
+        {
+          "id": "level-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 729.8125,
+            "width": 336,
+            "height": 12,
+            "top": 729.8125,
+            "right": 363,
+            "bottom": 741.8125,
+            "left": 27
+          }
+        }
+      ]
+    },
+    "short_landscape_controls": {
+      "outcome": "pass",
+      "viewport_css_px": [
+        844,
+        390
+      ],
+      "controls": [
+        {
+          "id": "lift-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 149,
+            "width": 350,
+            "height": 12,
+            "top": 149,
+            "right": 377,
+            "bottom": 161,
+            "left": 27
+          }
+        },
+        {
+          "id": "telescope-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 184,
+            "width": 350,
+            "height": 12,
+            "top": 184,
+            "right": 377,
+            "bottom": 196,
+            "left": 27
+          }
+        },
+        {
+          "id": "tilt-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 219,
+            "width": 350,
+            "height": 12,
+            "top": 219,
+            "right": 377,
+            "bottom": 231,
+            "left": 27
+          }
+        },
+        {
+          "id": "steer-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 254,
+            "width": 350,
+            "height": 12,
+            "top": 254,
+            "right": 377,
+            "bottom": 266,
+            "left": 27
+          }
+        },
+        {
+          "id": "level-control",
+          "disabled": false,
+          "box": {
+            "x": 27,
+            "y": 329,
+            "width": 350,
+            "height": 12,
+            "top": 329,
+            "right": 377,
+            "bottom": 341,
+            "left": 27
+          }
+        }
+      ]
+    },
+    "pinch_zoom": {
+      "schema_version": "1.0.0",
+      "gesture": "pinch-out",
+      "target_selector": "#app canvas",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "canvas_rect_css_px": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "start_points_css_px": [
+        [
+          156,
+          354.48
+        ],
+        [
+          234,
+          354.48
+        ]
+      ],
+      "end_points_css_px": [
+        [
+          90,
+          354.48
+        ],
+        [
+          300,
+          354.48
+        ]
+      ],
+      "hit_test_targets": [
+        "CANVAS",
+        "CANVAS",
+        "CANVAS",
+        "CANVAS"
+      ],
+      "all_points_on_canvas": true,
+      "baseline": {
+        "camera_distance_m": 30.8,
+        "desired_distance_m": 30.8,
+        "stable_frames": 6,
+        "samples_camera_distance_m": [
+          30.8,
+          30.8,
+          30.8,
+          30.8,
+          30.8,
+          30.8
+        ]
+      },
+      "after": {
+        "camera_distance_m": 11.455,
+        "desired_distance_m": 11.44,
+        "stable_frames": 6,
+        "samples_camera_distance_m": [
+          28.55,
+          26.55,
+          24.784,
+          23.233,
+          21.855,
+          20.637,
+          19.562,
+          18.618,
+          17.779,
+          17.038,
+          16.388,
+          15.809,
+          15.301,
+          14.85,
+          14.451,
+          14.099,
+          13.79,
+          13.516,
+          13.273,
+          13.059,
+          12.871,
+          12.704,
+          12.557,
+          12.426,
+          12.311,
+          12.209,
+          12.12,
+          12.04,
+          11.97,
+          11.908,
+          11.854,
+          11.805,
+          11.763,
+          11.725,
+          11.692,
+          11.663,
+          11.637,
+          11.614,
+          11.593,
+          11.575,
+          11.56,
+          11.546,
+          11.533,
+          11.523,
+          11.513,
+          11.504,
+          11.497,
+          11.49,
+          11.484,
+          11.479,
+          11.475,
+          11.471,
+          11.467,
+          11.464,
+          11.461,
+          11.459,
+          11.456,
+          11.455
+        ]
+      },
+      "intermediate_desired_distance_m": 16.68,
+      "final_gesture_desired_distance_m": 11.44,
+      "camera_distance_delta_m": -19.345,
+      "desired_distance_delta_m": -19.36,
+      "absolute_camera_distance_delta_m": 19.345,
+      "minimum_required_delta_m": 0.616,
+      "expected_direction": "decrease",
+      "actual_direction": "decrease",
+      "monotonic_camera_change": true,
+      "settled_before": true,
+      "settled_after": true,
+      "outcome": "pass"
+    },
+    "reduced_motion": {
+      "outcome": "pass",
+      "profile": "reduced",
+      "showcaseDisabled": true,
+      "manual": true
+    }
+  }
+}

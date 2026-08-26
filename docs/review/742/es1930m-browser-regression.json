@@ -1,8 +1,633 @@
 {
-  "schema_version": "2.0.0", "kind": "742-upstream-regression-capture", "gate": "es1930m_browser_regression",
-  "capture_status": "recapture-required", "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "PENDING", "reviewed_source_commit": "PENDING", "environment": null, "capture_runner": null,
-  "capture_artifacts": {"screenshots": [], "automation_trace": null}, "observations": {},
-  "boundary": "Final exact ES1930M runtime 1.0.5 local browser regression recapture required; no deployment or physical-device claim.",
-  "upstream_identity": "REFRESH_FROM_CURRENT_RECEIPT_AT_CAPTURE"
+  "boundary": "Exact current upstream release regression in local headless Chromium only; no deployment, physical-device, or manufacturer-equivalence claim.",
+  "candidate_tree_sha256": "69e969039aaea7244d601f7bd49bbdd0d56537cf180ac9369d2e0355dc985dda",
+  "capture_artifacts": {
+    "automation_trace": {
+      "bytes": 2733,
+      "height_px": null,
+      "path": "docs/review/742/browser-captures/es1930m-browser-regression-trace.json",
+      "sha256": "29757eec3b084afe40c1968cf7ecbd6e98e4920a3118e6a9587da678f41ddfdb",
+      "width_px": null
+    },
+    "screenshots": [
+      {
+        "bytes": 200485,
+        "height_px": 720,
+        "path": "docs/review/742/browser-captures/es1930m-regression-desktop.png",
+        "sha256": "ac9fec58e168949c4c9f5d3201f49f38da64d700398b33342da248a38369f6a0",
+        "width_px": 1280
+      },
+      {
+        "bytes": 101396,
+        "height_px": 844,
+        "path": "docs/review/742/browser-captures/es1930m-regression-mobile.png",
+        "sha256": "c5647d7aecff296d9981270f3782f8aede756efc4447d1dae5ca2827469bc614",
+        "width_px": 390
+      }
+    ]
+  },
+  "capture_runner": {
+    "bytes": 48162,
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17"
+  },
+  "capture_status": "complete",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "environment": {
+    "assistive_technology_session": false,
+    "automation": {
+      "tool": "Playwright",
+      "version": "1.62.1"
+    },
+    "browser": {
+      "name": "Chromium",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+      "version": "151.0.7922.34"
+    },
+    "captured_at_utc": "2026-08-26T05:50:21.358Z",
+    "gpu": {
+      "api": "WebGL 2",
+      "collection_method": "WEBGL_debug_renderer_info",
+      "reason": null,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Ultra, Unspecified Version)",
+      "status": "observed",
+      "vendor": "Google Inc. (Apple)"
+    },
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
+    },
+    "physical_device_session": false
+  },
+  "gate": "es1930m_browser_regression",
+  "kind": "742-upstream-regression-capture",
+  "observations": {
+    "accessibility_tree_snapshot": {
+      "source": "Chromium CDP Accessibility.getFullAXTree",
+      "states": [
+        {
+          "nodes": [
+            {
+              "name": "Interactive 3D JLG ES1930M visualization",
+              "role": "application",
+              "states": {
+                "focusable": true,
+                "focused": true
+              },
+              "value": null
+            },
+            {
+              "name": "ABOUT",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "01 Chassis",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "02 Scissor",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "03 Platform",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "04 Steering",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "STOW MACHINE",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "RESET VIEW",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "START AUTO",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "Platform lift",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Extension deck",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Steering actuator; wheel angles deferred",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            }
+          ],
+          "state": "controls_open"
+        },
+        {
+          "nodes": [
+            {
+              "name": "Interactive 3D JLG ES1930M visualization",
+              "role": "application",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "Compact chassis",
+              "role": "dialog",
+              "states": {
+                "modal": true
+              },
+              "value": null
+            },
+            {
+              "name": "Close inspector",
+              "role": "button",
+              "states": {
+                "focusable": true,
+                "focused": true
+              },
+              "value": null
+            },
+            {
+              "name": "ABOUT",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "01 Chassis",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "02 Scissor",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "03 Platform",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "04 Steering",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "STOW MACHINE",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "RESET VIEW",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "START AUTO",
+              "role": "button",
+              "states": {
+                "focusable": true
+              },
+              "value": null
+            },
+            {
+              "name": "Platform lift",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Extension deck",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            },
+            {
+              "name": "Steering actuator; wheel angles deferred",
+              "role": "slider",
+              "states": {
+                "focusable": true,
+                "orientation": "horizontal",
+                "settable": true,
+                "valuetext": "0"
+              },
+              "value": 0
+            }
+          ],
+          "state": "modal_open"
+        }
+      ]
+    },
+    "assertions": {
+      "auto_start_pause_resume": {
+        "observed": "running->paused->running",
+        "outcome": "pass"
+      },
+      "desktop_controls": {
+        "outcome": "pass",
+        "result": {
+          "ariaValueText": "3.27 metres platform height; Mechanism active",
+          "disabled": false,
+          "value": "50"
+        },
+        "selector": "#lift-control"
+      },
+      "drag_orbit": {
+        "after_canvas_sha256": "da25f9312bf6b8543691918c755821b4fd1e597f7ad5623ff79b9c24039f67c4",
+        "before_canvas_sha256": "85517a17519d4d9ac6820bea452f4c76f0c37085cad327209a04915a2f14ce2f",
+        "outcome": "pass"
+      },
+      "load_exact_release": {
+        "outcome": "pass",
+        "parsed_status": {
+          "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+          "errors": 0,
+          "fps": 61,
+          "load_ms": 30,
+          "machine": "es1930m",
+          "p95_ms": 16.8,
+          "selection": "self-test-pass",
+          "source": "glb"
+        },
+        "route": "/es1930m/"
+      },
+      "mobile_controls": {
+        "aria_expanded": true,
+        "outcome": "pass",
+        "viewport_css_px": [
+          390,
+          844
+        ]
+      },
+      "modal_keyboard": {
+        "initial_focus_id": "inspector-close",
+        "outcome": "pass",
+        "restored_focus_component": "chassis",
+        "tab_inside": true
+      },
+      "pinch_zoom": {
+        "after_canvas_sha256": "b77b604c222cfb7a8b3e040e3a05f73ba00f8a8c21c92014beca78e46b337d18",
+        "after_desired_distance_m": null,
+        "before_canvas_sha256": "c5b0762d42981414292b55394f4d5b2c72c9b951657b16ff7bddbe0f48661fed",
+        "before_desired_distance_m": null,
+        "end_points_css_px": [
+          [
+            95,
+            253.2
+          ],
+          [
+            295,
+            253.2
+          ]
+        ],
+        "hit_test_targets": [
+          "CANVAS",
+          "CANVAS",
+          "CANVAS",
+          "CANVAS"
+        ],
+        "observable_render_or_distance_change": true,
+        "outcome": "pass",
+        "start_points_css_px": [
+          [
+            160,
+            253.2
+          ],
+          [
+            230,
+            253.2
+          ]
+        ]
+      },
+      "reduced_motion": {
+        "autonomy_disabled": true,
+        "body_dataset": "true",
+        "manual_controls_enabled": true,
+        "outcome": "pass",
+        "query": "reduce=1"
+      }
+    },
+    "dom_snapshots": {
+      "desktop": {
+        "nodes": [
+          {
+            "attributes": {
+              "data-autonomy-mode": "manual",
+              "data-configuration-id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+              "data-machine": "es1930m",
+              "data-machine-source": "glb",
+              "data-machine-visible-meshes": "282",
+              "data-motion-profile": "full",
+              "data-presentation-mode": "ready",
+              "data-reduced-motion": "false",
+              "data-runtime-error-count": "0",
+              "data-viewer-started": "true",
+              "data-zone": "stowed"
+            },
+            "selector": "body",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2404 accuracy reconstruction / 1.0.5\n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18\u2032 6\u2033Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Stowed\n          Close\n        \n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324\u00b0\n            Loop0%\n          \n          Start auto\n        \n        Platform lift0%\n        Extension deck0.00 m\n        Steering actuatorCenter\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Scissor\n      03Platform\n      04Steering\n    \n    Drag to orbit / Scroll to zoom / Select a component\n    machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 30 ms \u00b7 61 fps \u00b7 p95 16.8 ms\n  \n\n  \n  \n    \u00d7\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 \u00b7 Service 3122602300 \u00b7 Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  window.__showcaseBootAt = performance.now();"
+          },
+          {
+            "attributes": {
+              "id": "machine-title"
+            },
+            "selector": "#machine-title",
+            "text": "ES1930M"
+          },
+          {
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics"
+            },
+            "selector": "#diagnostics",
+            "text": "machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 30 ms \u00b7 61 fps \u00b7 p95 16.8 ms"
+          },
+          {
+            "attributes": {
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "true",
+              "class": "controls-toggle",
+              "hidden": "",
+              "id": "controls-toggle",
+              "type": "button"
+            },
+            "selector": "#controls-toggle",
+            "text": "Close"
+          },
+          {
+            "attributes": {
+              "aria-describedby": "inspector-copy",
+              "aria-labelledby": "inspector-title",
+              "aria-modal": "true",
+              "class": "inspector",
+              "id": "inspector",
+              "inert": "",
+              "role": "dialog"
+            },
+            "selector": "#inspector",
+            "text": "\u00d7\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 \u00b7 Service 3122602300 \u00b7 Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference"
+          }
+        ],
+        "url": "http://127.0.0.1:8092/es1930m/?diagnostics=1",
+        "viewport_css_px": [
+          1280,
+          720
+        ]
+      },
+      "mobile": {
+        "nodes": [
+          {
+            "attributes": {
+              "class": "mobile-controls-open",
+              "data-autonomy-mode": "manual",
+              "data-configuration-id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+              "data-machine": "es1930m",
+              "data-machine-source": "glb",
+              "data-machine-visible-meshes": "282",
+              "data-motion-profile": "full",
+              "data-presentation-mode": "ready",
+              "data-reduced-motion": "false",
+              "data-runtime-error-count": "0",
+              "data-viewer-started": "true",
+              "data-zone": "stowed"
+            },
+            "selector": "body",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2404 accuracy reconstruction / 1.0.5\n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18\u2032 6\u2033Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Stowed\n          Close\n        \n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324\u00b0\n            Loop0%\n          \n          Start auto\n        \n        Platform lift0%\n        Extension deck0.00 m\n        Steering actuatorCenter\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Scissor\n      03Platform\n      04Steering\n    \n    Drag to orbit / Scroll to zoom / Select a component\n    machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 31 ms \u00b7 sampling \u00b7 sampling\n  \n\n  \n  \n    \u00d7\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 \u00b7 Service 3122602300 \u00b7 Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  window.__showcaseBootAt = performance.now();"
+          },
+          {
+            "attributes": {
+              "id": "machine-title"
+            },
+            "selector": "#machine-title",
+            "text": "ES1930M"
+          },
+          {
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics"
+            },
+            "selector": "#diagnostics",
+            "text": "machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 31 ms \u00b7 sampling \u00b7 sampling"
+          },
+          {
+            "attributes": {
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "true",
+              "class": "controls-toggle",
+              "id": "controls-toggle",
+              "type": "button"
+            },
+            "selector": "#controls-toggle",
+            "text": "Close"
+          },
+          {
+            "attributes": {
+              "aria-describedby": "inspector-copy",
+              "aria-labelledby": "inspector-title",
+              "aria-modal": "true",
+              "class": "inspector",
+              "id": "inspector",
+              "inert": "",
+              "role": "dialog"
+            },
+            "selector": "#inspector",
+            "text": "\u00d7\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 \u00b7 Service 3122602300 \u00b7 Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference"
+          }
+        ],
+        "url": "http://127.0.0.1:8092/es1930m/?diagnostics=1",
+        "viewport_css_px": [
+          390,
+          844
+        ]
+      },
+      "modal_open": {
+        "nodes": [
+          {
+            "attributes": {
+              "class": "inspector-open",
+              "data-autonomy-mode": "manual",
+              "data-configuration-id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+              "data-drive-x": "0.00",
+              "data-drive-z": "0.00",
+              "data-machine": "es1930m",
+              "data-machine-source": "glb",
+              "data-machine-visible-meshes": "282",
+              "data-motion-profile": "full",
+              "data-presentation-mode": "ready",
+              "data-reduced-motion": "false",
+              "data-runtime-error-count": "0",
+              "data-viewer-started": "true",
+              "data-zone": "stowed"
+            },
+            "selector": "body",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2404 accuracy reconstruction / 1.0.5\n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18\u2032 6\u2033Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Stowed\n          Close\n        \n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324\u00b0\n            Loop0%\n          \n          Start auto\n        \n        Platform lift0%\n        Extension deck0.00 m\n        Steering actuatorCenter\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Scissor\n      03Platform\n      04Steering\n    \n    Drag to orbit / Scroll to zoom / Select a component\n    machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 30 ms \u00b7 61 fps \u00b7 p95 16.8 ms\n  \n\n  \n  \n    \u00d7\n    PVC 2404 \u00b7 verified envelope\n    Compact chassis\n    The 30 in-wide chassis packages two 12 V 130 Ah flooded batteries, electric wheel drive, hydraulic steering, active pothole protection, ground controls and leak containment.\n    Width0.76 m / 30 inLength1.48 m / 57.8 inMass1,351 kg / 2,978 lb nominal\n  \n\n  window.__showcaseBootAt = performance.now();"
+          },
+          {
+            "attributes": {
+              "id": "machine-title"
+            },
+            "selector": "#machine-title",
+            "text": "ES1930M"
+          },
+          {
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics"
+            },
+            "selector": "#diagnostics",
+            "text": "machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 30 ms \u00b7 61 fps \u00b7 p95 16.8 ms"
+          },
+          {
+            "attributes": {
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "true",
+              "class": "controls-toggle",
+              "hidden": "",
+              "id": "controls-toggle",
+              "type": "button"
+            },
+            "selector": "#controls-toggle",
+            "text": "Close"
+          },
+          {
+            "attributes": {
+              "aria-describedby": "inspector-copy",
+              "aria-labelledby": "inspector-title",
+              "aria-modal": "true",
+              "class": "inspector",
+              "id": "inspector",
+              "role": "dialog"
+            },
+            "selector": "#inspector",
+            "text": "\u00d7\n    PVC 2404 \u00b7 verified envelope\n    Compact chassis\n    The 30 in-wide chassis packages two 12 V 130 Ah flooded batteries, electric wheel drive, hydraulic steering, active pothole protection, ground controls and leak containment.\n    Width0.76 m / 30 inLength1.48 m / 57.8 inMass1,351 kg / 2,978 lb nominal"
+          }
+        ],
+        "url": "http://127.0.0.1:8092/es1930m/?diagnostics=1",
+        "viewport_css_px": [
+          1280,
+          720
+        ]
+      }
+    },
+    "page": {
+      "parsed_status": {
+        "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+        "errors": 0,
+        "fps": 61,
+        "load_ms": 30,
+        "machine": "es1930m",
+        "p95_ms": 16.8,
+        "selection": "self-test-pass",
+        "source": "glb"
+      },
+      "route": "/es1930m/",
+      "status_text": "machine es1930m \u00b7 config ES1930M-PVC2404-US-STD-FR-FLA130-NM \u00b7 source glb \u00b7 selection self-test-pass \u00b7 errors 0 \u00b7 load 30 ms \u00b7 61 fps \u00b7 p95 16.8 ms",
+      "title": "ES1930M Interactive Equipment Study"
+    },
+    "reduced_motion": {
+      "autonomy_disabled": true,
+      "body_dataset": "true",
+      "manual_controls_enabled": true,
+      "query": "reduce=1"
+    }
+  },
+  "reviewed_source_commit": "60f08b1c6d5f10a04333c84b5af4bd4829834859",
+  "schema_version": "2.0.0",
+  "upstream_identity": {
+    "asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
+    "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+    "receipt_bytes": 3839,
+    "receipt_sha256": "c38eafa8ba1656a4ac864287352e45ed4d2155dffb764970d164b59e0e7defef",
+    "release": "1.0.4",
+    "route": "/es1930m/",
+    "runtime_sha256": "aa684a81d30e45377be80ea5ea5040c4f5689ca612a55f763da2cfd34d8c6420"
+  }
 }

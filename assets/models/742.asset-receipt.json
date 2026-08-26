@@ -669,7 +669,7 @@
       ],
       "result": {
         "admitted_source_binaries": 11,
-        "browser_captures_verified": 0,
+        "browser_captures_verified": 19,
         "claims": 23,
         "committed_source_binaries": 0,
         "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
@@ -702,7 +702,7 @@
         "source_expressions_resolved": true,
         "status": "PASS"
       },
-      "result_sha256": "fd24903296a6963022cac0e6d706c2ddeea2318a355f3069583d675d59d11ef7",
+      "result_sha256": "d0cc764d67307230803536e0159a2066abb6ec4b282b3b05d5ec89d5362bbf46",
       "status": "pass",
       "validator": {
         "bytes": 23500,
@@ -1312,55 +1312,120 @@
     }
   },
   "frozen_source_binary_verification": {
-    "result_sha256": "f7c286699cc31e5c0e188983dc6c68b346e26f8d1ec7b9e62b2edad844f274ed",
+    "result_sha256": "a026dc861f945629931bd9ea8518c3a2e136f0ec494f7dd994aaef279c1ffdf7",
     "status": "pass",
     "verified_count": 11
   },
   "human_review": {
-    "binding": null,
+    "binding": {
+      "browser_capture_allowlist": {
+        "bytes": 8389,
+        "path": "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
+        "sha256": "bdd96387a4c023412e349e0ffcf5aae207dbbda3f551a3a34e868f4940c29568"
+      },
+      "candidate_tree_sha256": "69e969039aaea7244d601f7bd49bbdd0d56537cf180ac9369d2e0355dc985dda",
+      "environment": {
+        "browser": {
+          "name": "Chromium",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+          "version": "151.0.7922.34"
+        },
+        "os": {
+          "build": "25F84",
+          "name": "macOS",
+          "version": "26.5.2"
+        }
+      },
+      "manifest": {
+        "bytes": 4259,
+        "path": "docs/review/742/review-manifest.json",
+        "sha256": "2f05c2db7b7e6d8fa92694258e9e0d7b3f9c772a4bdc14ed3056e429039780f2"
+      },
+      "reviewed_source_commit": "60f08b1c6d5f10a04333c84b5af4bd4829834859"
+    },
     "gates": {
       "600s_browser_regression": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 30579,
+          "path": "docs/review/742/600s-browser-regression.json",
+          "sha256": "d703ef3eaeadb40538e52dbe73ae1c25a4a5038205f20a527edbe77a2f7fc28c"
+        },
+        "status": "pass"
       },
       "accessibility_semantics_and_keyboard": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 25539,
+          "path": "docs/review/742/accessibility-semantics-keyboard.json",
+          "sha256": "d48a1c295783fceb03dafb148adc8fa4e3db58dbba87c1c6a54e3b13a664baca"
+        },
+        "status": "pass"
       },
       "cab_closeup_fidelity": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 1505832,
+          "path": "docs/review/742/cab-close.png",
+          "sha256": "9e5b2bf74b7f2cac6841021a73fe555d9cac4998c56d72124a2efd2c0877de69"
+        },
+        "status": "pass"
       },
       "desktop_browser_interaction": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 51269,
+          "path": "docs/review/742/desktop-browser-interaction.json",
+          "sha256": "2ab5b18b2e929de1e58b0b1a0a07bb8cd59ab187ddbd65b4d7643c30138e8241"
+        },
+        "status": "pass"
       },
       "es1930m_browser_regression": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 27188,
+          "path": "docs/review/742/es1930m-browser-regression.json",
+          "sha256": "2a2233f39aba786d2f7235079d0856a94f4df14241f931483ef61244b23afc53"
+        },
+        "status": "pass"
       },
       "extended_visual_fidelity": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 1377,
+          "path": "docs/review/742/extended-visual-fidelity.json",
+          "sha256": "20f6b2cab5cc375c59e0d514a4b49a74d35f8c17713547aee66255a2148defb6"
+        },
+        "status": "pass"
       },
       "mobile_browser_interaction": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 39580,
+          "path": "docs/review/742/mobile-browser-interaction.json",
+          "sha256": "38dce5efe5252e2eb464f385f66f9962a202663e88caf2f58b5ac6aff7dc53f1"
+        },
+        "status": "pass"
       },
       "performance_profile": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 12115,
+          "path": "docs/review/742/performance-profile.json",
+          "sha256": "477d3e24c17930f690b2126e5cc455cae989a891aff6a8badb0a90ffcd2a390d"
+        },
+        "status": "pass"
       },
       "semantic_selection": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 34259,
+          "path": "docs/review/742/semantic-selection.json",
+          "sha256": "23955e6a3aff5bc0274e96ba89abf0f180d6e464e74d88b3a3e0e63728512344"
+        },
+        "status": "pass"
       },
       "stowed_visual_fidelity": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 1278204,
+          "path": "docs/review/742/stowed-front-left.png",
+          "sha256": "9685042f41b8ad146df51078402f2d53b097037377442753ba84cc1c17803e98"
+        },
+        "status": "pass"
       }
     },
-    "status": "pending"
+    "status": "pass"
   },
   "mechanical_proof": {
     "actual_glb_front_tire_tread_plane_x_m": 2.3529066470621665,
@@ -1562,7 +1627,7 @@
     "unique_multidimensional_state_samples": 416745
   },
   "release": "1.3.0-candidate",
-  "release_status": "candidate_review_pending",
+  "release_status": "reviewed_candidate_not_deployed",
   "runtime": {
     "files": [
       "favicon.ico",

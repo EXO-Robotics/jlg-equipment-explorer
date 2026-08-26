@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "browser-automation-trace",
+  "gate": "accessibility_semantics_and_keyboard",
+  "captured_at_utc": "2026-08-26T05:49:59.221Z",
+  "tool": "Playwright",
+  "tool_version": "1.62.1",
+  "runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
+    "bytes": 48162
+  },
+  "outcomes_sha256": "1f6eaad178b541730a6a587bbe630e6a48b40d7b07f5050c9e81844e5b3dd2e5",
+  "outcomes": {
+    "application_instructions": {
+      "outcome": "pass",
+      "role": "application",
+      "accessibility_source": "Chromium CDP Accessibility.getFullAXTree"
+    },
+    "slider_value_text": {
+      "outcome": "pass",
+      "values": {
+        "#lift-control": "0°",
+        "#telescope-control": "0.00 m visual",
+        "#tilt-control": "0°",
+        "#steer-control": "Center",
+        "#level-control": "Level"
+      }
+    },
+    "dialog_focus_trap": {
+      "outcome": "pass",
+      "focused_after_tab": {
+        "id": "",
+        "inside": true
+      }
+    },
+    "escape_restore": {
+      "outcome": "pass",
+      "restored_focus_id": "info-toggle"
+    },
+    "reduced_motion": {
+      "outcome": "pass",
+      "profile": "reduced",
+      "showcaseDisabled": true,
+      "manual": true
+    }
+  }
+}
