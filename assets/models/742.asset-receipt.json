@@ -1103,7 +1103,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "7efe9a9df0173fd2b0c4cd528ced4631b90a7caf81e8a9b7936d849bc0873e49",
+  "candidate_tree_sha256": "69e969039aaea7244d601f7bd49bbdd0d56537cf180ac9369d2e0355dc985dda",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1193,7 +1193,7 @@
     "owned_review_render_allowlist": {
       "bytes": 3707,
       "path": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
-      "sha256": "e8646405107a25ffc5dba3b9401c49972a627916a19329b09747611a2816ba44"
+      "sha256": "634027c74d3f15cf626ac1119ddf933db920f0ee77d1b942f01c55c3f884033f"
     },
     "package_manifest": {
       "bytes": 2359,
@@ -1271,9 +1271,9 @@
       "sha256": "e7c41bcfb164e0f3976a419257338b8620dfb6f6ce162a6c59fee34077c9fd1a"
     },
     "review_renderer": {
-      "bytes": 12857,
+      "bytes": 17114,
       "path": "scripts/render_742_preview.py",
-      "sha256": "74896aedd0fe97e19f85ad9413f97dd3ecbca60f52229eb277ab21e6337e2948"
+      "sha256": "50a77d787e5bba75ea72d0b58ef8d37c00da1d74805dd218458496f7748564f5"
     },
     "review_validator": {
       "bytes": 17070,
