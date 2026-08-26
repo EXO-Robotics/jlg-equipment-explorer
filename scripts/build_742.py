@@ -303,7 +303,7 @@ def build():
     # The stowed boom runs beside the open cab, over a low service hood. Keep
     # the center portion below the boom and the raised cover entirely outboard;
     # the validator measures both clearances from the exported GLB.
-    wedge("EngineHoodLower", 2.35, 0.50, 0.54, 0.92, (-0.55, 1.10, 0.63), MAT["orange"], engine, "hydraulics")
+    wedge("EngineHoodLower", 2.35, 0.50, 0.54, 0.92, (-0.55, 1.02, 0.63), MAT["orange"], engine, "hydraulics")
     wedge("EngineHoodUpper", 1.50, 0.18, 0.24, 0.50, (-0.83, 1.36, 0.96), MAT["orange"], engine, "hydraulics")
     box("EngineHoodSpine", (1.34, 0.06, 0.50), (-0.86, 1.52, 0.96), MAT["orange_dark"], engine, 0.025, "hydraulics")
     for slot in range(9):

@@ -236,6 +236,8 @@ def main() -> None:
         "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
         "actual_glb_stowed_boom_to_cab_clearance_m": asset_result["stowed_boom_clearance"]["cab"]["clearance_m"],
         "actual_glb_stowed_boom_to_engine_hood_clearance_m": asset_result["stowed_boom_clearance"]["engine_hood"]["clearance_m"],
+        "actual_glb_stowed_service_line_to_cab_clearance_m": asset_result["stowed_service_line_clearance"]["cab"]["clearance_m"],
+        "actual_glb_stowed_service_line_to_engine_clearance_m": asset_result["stowed_service_line_clearance"]["engine"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_m": posed_glb_result["minimum_frame_level_clearance"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_node": posed_glb_result["minimum_frame_level_clearance"]["limiting_node"],
         "actual_posed_glb_named_presets": posed_glb_result["named_presets_posed"],
@@ -334,6 +336,11 @@ def main() -> None:
         < mechanism["collision_proxies"]["minimum_stowed_boom_to_engine_hood_clearance_m"]
     ):
         raise RuntimeError("742 receipt stowed boom cab/hood clearance proof drift")
+    if min(
+        mechanical_proof["actual_glb_stowed_service_line_to_cab_clearance_m"],
+        mechanical_proof["actual_glb_stowed_service_line_to_engine_clearance_m"],
+    ) + 1e-6 < mechanism["collision_proxies"]["minimum_stowed_service_line_to_cab_or_engine_clearance_m"]:
+        raise RuntimeError("742 receipt stowed service-line cab/engine clearance proof drift")
     neutral_binary = mechanical_proof["actual_posed_glb_neutral_binary_contract"]
     expected_blender_companion = {
         "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",

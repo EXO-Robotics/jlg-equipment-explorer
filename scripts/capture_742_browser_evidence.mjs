@@ -86,7 +86,7 @@ const SEMANTIC_CANVAS_PROBES = Object.freeze([
   { id: "boom-base-visible-surface", x: 820, y: 240, expected_component: "boom" },
   { id: "carriage-coupler-visible-surface", x: 680, y: 280, expected_component: "carriage" },
   { id: "steering-front-tire-visible-surface", x: 900, y: 440, expected_component: "steering" },
-  { id: "hydraulics-engine-hood-visible-surface", x: 540, y: 280, expected_component: "hydraulics" },
+  { id: "hydraulics-engine-hood-visible-surface", x: 540, y: 360, expected_component: "hydraulics" },
 ]);
 const GATE_FILES = {
   desktop_browser_interaction: "desktop-browser-interaction.json",

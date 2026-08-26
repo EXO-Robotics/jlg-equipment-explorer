@@ -78,6 +78,7 @@
     "minimum_rigid_underbody_clearance_m": 0.432,
     "minimum_stowed_boom_to_cab_clearance_m": 0.04,
     "minimum_stowed_boom_to_engine_hood_clearance_m": 0.04,
+    "minimum_stowed_service_line_to_cab_or_engine_clearance_m": 0.01,
     "stowed_clearance_authority": "owned reconstructed presentation boundary measured from the exported GLB; not a manufacturer clearance specification",
     "ground_clearance_authority": "published approximate ground clearance; exact manufacturer component locus is unresolved, so validation uses the named reconstructed rigid-underbody proxy set with grounded tires and sweeps the complete displayed frame-level range",
     "base_machine_lateral_bounds_m": [-1.23025, 1.23025],

@@ -48,6 +48,7 @@ STOWED_BOOM_ENVELOPE_NODES = {
     "BaseBoomWeldment", "BaseBoomLowerWear", "MidBoomWeldment",
     "MidBoomTopPlate", "FlyBoomWeldment",
 }
+STOWED_SERVICE_ENVELOPE_PREFIXES = ("BoomHose_", "RetractChain_")
 
 
 def digest(path: Path) -> str:
@@ -210,6 +211,35 @@ def main():
             "clearance_m": measured, "minimum_m": required,
             "boom_node": boom_node, "target_node": target_node,
         }
+    service_bounds = {
+        name: node_world_bounds(document, blob, nodes, parents, node_index)
+        for name, node_index in by_name.items()
+        if name.startswith(STOWED_SERVICE_ENVELOPE_PREFIXES) and "mesh" in nodes[node_index]
+    }
+    service_clearance_results = {}
+    for group_name, ancestor_name in (("cab", "OpenCab"), ("engine", "EngineCompartment")):
+        target_nodes = [node_index for node_index in descendants(nodes, parents, by_name[ancestor_name])
+                        if "mesh" in nodes[node_index]
+                        and not (nodes[node_index].get("extras") or {}).get("is_hit_volume")]
+        candidates = []
+        for service_name, bounds in service_bounds.items():
+            for target_index in target_nodes:
+                candidates.append((
+                    aabb_clearance(bounds, node_world_bounds(document, blob, nodes, parents, target_index)),
+                    service_name,
+                    nodes[target_index].get("name", ""),
+                ))
+        measured, service_node, target_node = min(candidates)
+        required = mechanism["collision_proxies"]["minimum_stowed_service_line_to_cab_or_engine_clearance_m"]
+        if measured + 1e-6 < required:
+            raise RuntimeError(
+                f"Stowed service-line/{group_name} clearance {measured:.4f} m misses {required:.4f} m "
+                f"between {service_node} and {target_node}"
+            )
+        service_clearance_results[group_name] = {
+            "clearance_m": measured, "minimum_m": required,
+            "service_node": service_node, "target_node": target_node,
+        }
     base_lateral_min, base_lateral_max = float("inf"), float("-inf")
     for node_index, node in enumerate(nodes):
         name = node.get("name", "")
@@ -259,6 +289,7 @@ def main():
         "exact_runtime_stow_total_length_with_forks_m": envelope[0],
         "boom_pivot_world_m": boom_pivot_translation,
         "stowed_boom_clearance": clearance_results,
+        "stowed_service_line_clearance": service_clearance_results,
         "mechanical_detail_contracts": sorted(REQUIRED_MECHANICAL_DETAIL),
         "evidence_components_resolved_to_exact_nodes": sorted(evidence_components),
         "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor"
