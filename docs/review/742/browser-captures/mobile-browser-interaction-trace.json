@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "mobile_browser_interaction",
-  "captured_at_utc": "2026-08-26T17:37:54.667Z",
+  "captured_at_utc": "2026-08-26T17:54:26.970Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+      "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
-  "outcomes_sha256": "9cc67c655afb30f44196ba100aee9bd0b86628f6793c39fa3ac4eec1c09035f3",
+  "outcomes_sha256": "ade4fc610168067f8b9de2e8831a375f56e70e52d2f45d51b3381a8f40e5dd0d",
   "outcomes": {
     "portrait_controls": {
       "outcome": "pass",
@@ -2114,12 +2114,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 262.5,
+            "y": 161,
             "width": 350,
             "height": 12,
-            "top": 262.5,
+            "top": 161,
             "right": 377,
-            "bottom": 274.5,
+            "bottom": 173,
             "left": 27
           }
         },
@@ -2128,12 +2128,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 297.5,
+            "y": 196,
             "width": 350,
             "height": 12,
-            "top": 297.5,
+            "top": 196,
             "right": 377,
-            "bottom": 309.5,
+            "bottom": 208,
             "left": 27
           }
         },
@@ -2142,12 +2142,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 332.5,
+            "y": 231,
             "width": 350,
             "height": 12,
-            "top": 332.5,
+            "top": 231,
             "right": 377,
-            "bottom": 344.5,
+            "bottom": 243,
             "left": 27
           }
         },
@@ -2156,12 +2156,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 367.5,
+            "y": 266,
             "width": 350,
             "height": 12,
-            "top": 367.5,
+            "top": 266,
             "right": 377,
-            "bottom": 379.5,
+            "bottom": 278,
             "left": 27
           }
         },
@@ -2170,12 +2170,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 442.5,
+            "y": 341,
             "width": 350,
             "height": 12,
-            "top": 442.5,
+            "top": 341,
             "right": 377,
-            "bottom": 454.5,
+            "bottom": 353,
             "left": 27
           }
         }
@@ -2198,21 +2198,21 @@
       "start_points_css_px": [
         [
           156,
-          270.08
+          354.48
         ],
         [
           234,
-          270.08
+          354.48
         ]
       ],
       "end_points_css_px": [
         [
           90,
-          270.08
+          354.48
         ],
         [
           300,
-          270.08
+          354.48
         ]
       ],
       "hit_test_targets": [
@@ -2241,45 +2241,45 @@
         "stable_frames": 6,
         "samples_camera_distance_m": [
           28.55,
-          26.562,
-          24.794,
-          23.233,
-          21.855,
-          20.644,
-          19.568,
+          26.538,
+          24.784,
+          23.224,
+          21.846,
+          20.637,
+          19.562,
           18.618,
           17.779,
-          17.042,
-          16.391,
-          15.813,
-          15.301,
+          17.038,
+          16.388,
+          15.809,
+          15.298,
           14.85,
-          14.454,
-          14.104,
+          14.451,
+          14.102,
           13.79,
-          13.517,
-          13.274,
+          13.516,
+          13.273,
           13.06,
-          12.872,
+          12.871,
           12.704,
           12.557,
-          12.427,
+          12.426,
           12.311,
           12.21,
           12.12,
           12.041,
-          11.971,
-          11.909,
+          11.97,
+          11.908,
           11.854,
           11.806,
           11.763,
-          11.726,
+          11.725,
           11.692,
           11.663,
           11.637,
           11.614,
           11.593,
-          11.576,
+          11.575,
           11.56,
           11.546,
           11.533,
@@ -2326,10 +2326,10 @@
             "steer-control": "0",
             "level-control": "0"
           },
-          "drive_x": "0.02",
-          "drive_z": "0.01",
+          "drive_x": "0.03",
+          "drive_z": "0.02",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.037,-0.037,-0.037,-0.037"
+          "wheel_rotations_rad": "-0.056,-0.056,-0.056,-0.056"
         },
         "before_reduce": {
           "controls": {

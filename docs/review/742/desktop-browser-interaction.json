@@ -31,7 +31,7 @@
       "source": "repo-locked-default",
       "lockfile": {
         "path": "package-lock.json",
-        "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+        "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
         "bytes": 1786
       },
       "browser_executable": {
@@ -2036,29 +2036,29 @@
         ]
       }
     },
-    "captured_at_utc": "2026-08-26T17:37:48.591Z",
+    "captured_at_utc": "2026-08-26T17:54:20.860Z",
     "physical_device_session": false,
     "assistive_technology_session": false
   },
   "capture_runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
   "capture_artifacts": {
     "screenshots": [
       {
         "path": "docs/review/742/browser-captures/742-desktop-maximum-pose-reset.png",
-        "sha256": "21ed8ef92a7698369e836d74460c2dbb9e48e1d1bc631b049d6da007fffae153",
-        "bytes": 149255,
+        "sha256": "55cbed2266a54290e646de2f39293c5b4c12c84e33f2fcc91a42a58371a4692c",
+        "bytes": 136892,
         "width_px": 1280,
         "height_px": 720
       }
     ],
     "automation_trace": {
       "path": "docs/review/742/browser-captures/desktop-browser-interaction-trace.json",
-      "sha256": "bdb16ec51c465beb01bdfeeca71738560aecdb8c35190ceba780dd77390c0da0",
-      "bytes": 139960,
+      "sha256": "caf6ecd56a02138d3748d7a49bf191ef40c28366d011e201e545c8bafe3b91dc",
+      "bytes": 140487,
       "width_px": null,
       "height_px": null
     }
@@ -2078,7 +2078,7 @@
             "attributes": {
               "data-machine": "742",
               "data-runtime-release": "1.7.2",
-              "data-boot-frame-count": "3",
+              "data-boot-frame-count": "2",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
               "data-viewer-runtime-active": "true",
@@ -2110,7 +2110,7 @@
               "data-zone": "stowed",
               "data-steer-mode-alignment": "centered",
               "data-runtime-frame-count": "30",
-              "data-runtime-last-frame-ms": "591.200",
+              "data-runtime-last-frame-ms": "591.500",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2178,7 +2178,7 @@
             "attributes": {
               "data-machine": "742",
               "data-runtime-release": "1.7.2",
-              "data-boot-frame-count": "3",
+              "data-boot-frame-count": "2",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
               "data-viewer-runtime-active": "true",
@@ -2194,7 +2194,7 @@
               "data-orbit-min-distance-m": "4.40",
               "data-orbit-effective-max-distance-m": "38.37",
               "data-orbit-desired-distance-m": "36.54",
-              "data-orbit-camera-distance-m": "36.348",
+              "data-orbit-camera-distance-m": "36.347",
               "data-orbit-azimuth-rad": "-1.100000",
               "data-orbit-polar-rad": "1.180000",
               "data-frame-p95-ms": "sampling",
@@ -2210,7 +2210,7 @@
               "data-zone": "extended",
               "data-steer-mode-alignment": "center-required",
               "data-runtime-frame-count": "74",
-              "data-runtime-last-frame-ms": "1324.500",
+              "data-runtime-last-frame-ms": "1324.800",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2277,11 +2277,11 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsHoldingClose\n        Manual\n      \n      View reset to frame the current machine pose.\n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseHolding\n            Loop0%\n          \n        \n        Boom lift69°69°\n        Telescope7.21 m visual7.21 m visual\n        Carriage tilt3°3°\n        Steering42.9° R frontReconstructed front steer right; actual front wheel headings FL 42.2 degrees and FR 42.9 degrees; rear wheels held aligned at RL 0.0 degrees and RR 0.0 degrees; fixed-linkage result, not factory controller calibration\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame level5° R5° R\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 44 ms · 59 fps · samples 89 · p95 16.8 ms · worst 50.0 ms · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    Owned reconstruction · PVC 2411\n    Evidence-bound 742\n    Current specification, matched manuals, gallery views and temporary BIM references informed this independently authored asset. No manufacturer geometry, image, decal artwork or manual binary is deployed.\n    Configuration72 hp · open cab · 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksBoundaryIndependent visual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsHoldingClose\n        Manual\n      \n      View reset to frame the current machine pose.\n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseHolding\n            Loop0%\n          \n        \n        Boom lift69°69°\n        Telescope7.21 m visual7.21 m visual\n        Carriage tilt3°3°\n        Steering42.9° R frontReconstructed front steer right; actual front wheel headings FL 42.2 degrees and FR 42.9 degrees; rear wheels held aligned at RL 0.0 degrees and RR 0.0 degrees; fixed-linkage result, not factory controller calibration\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame level5° R5° R\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 44 ms · 59 fps · samples 89 · p95 16.7 ms · worst 49.9 ms · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    Owned reconstruction · PVC 2411\n    Evidence-bound 742\n    Current specification, matched manuals, gallery views and temporary BIM references informed this independently authored asset. No manufacturer geometry, image, decal artwork or manual binary is deployed.\n    Configuration72 hp · open cab · 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksBoundaryIndependent visual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
             "attributes": {
               "data-machine": "742",
               "data-runtime-release": "1.7.2",
-              "data-boot-frame-count": "3",
+              "data-boot-frame-count": "2",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
               "data-viewer-runtime-active": "true",
@@ -2300,8 +2300,8 @@
               "data-orbit-camera-distance-m": "37.569",
               "data-orbit-azimuth-rad": "-1.100000",
               "data-orbit-polar-rad": "1.180000",
-              "data-frame-p95-ms": "16.8 ms",
-              "data-frame-worst-ms": "50.0 ms",
+              "data-frame-p95-ms": "16.7 ms",
+              "data-frame-worst-ms": "49.9 ms",
               "data-visible-stall-count": "0",
               "data-frame-sample-count": "89",
               "data-performance-window-ms": "1517",
@@ -2313,7 +2313,7 @@
               "data-zone": "extended",
               "data-steer-mode-alignment": "center-required",
               "data-runtime-frame-count": "114",
-              "data-runtime-last-frame-ms": "1991.200",
+              "data-runtime-last-frame-ms": "1991.500",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2338,7 +2338,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 44 ms · 59 fps · samples 89 · p95 16.8 ms · worst 50.0 ms · visible stalls 0 · profile desktop · motion full",
+            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 44 ms · 59 fps · samples 89 · p95 16.7 ms · worst 49.9 ms · visible stalls 0 · profile desktop · motion full",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2393,7 +2393,7 @@
               "attributes": {
                 "data-machine": "742",
                 "data-runtime-release": "1.7.2",
-                "data-boot-frame-count": "3",
+                "data-boot-frame-count": "2",
                 "data-runtime-error-count": "0",
                 "data-viewer-started": "true",
                 "data-viewer-runtime-active": "true",
@@ -2425,7 +2425,7 @@
                 "data-zone": "stowed",
                 "data-steer-mode-alignment": "centered",
                 "data-runtime-frame-count": "32",
-                "data-runtime-last-frame-ms": "624.600",
+                "data-runtime-last-frame-ms": "624.800",
                 "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
                 "data-selection-fixture-cases": "5/5",
                 "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2572,7 +2572,7 @@
           "desired_distance_m": 37.58,
           "stable_frames": 6,
           "samples_camera_distance_m": [
-            36.65,
+            36.651,
             36.759,
             36.855,
             36.939,
@@ -2629,42 +2629,42 @@
                 {
                   "counter": "boot",
                   "value": 1,
-                  "at_ms": 36.8
+                  "at_ms": 37.2
                 },
                 {
                   "counter": "boot",
                   "value": 2,
-                  "at_ms": 49.5
+                  "at_ms": 52.6
                 },
                 {
                   "counter": "boot",
                   "value": 3,
-                  "at_ms": 63.7
+                  "at_ms": 69.4
                 },
                 {
                   "counter": "boot",
                   "value": 4,
-                  "at_ms": 82.4
+                  "at_ms": 86
                 },
                 {
                   "counter": "boot",
                   "value": 5,
-                  "at_ms": 98.2
+                  "at_ms": 102.9
                 },
                 {
                   "counter": "boot",
                   "value": 6,
-                  "at_ms": 114.7
+                  "at_ms": 119.3
                 },
                 {
                   "counter": "boot",
                   "value": 7,
-                  "at_ms": 132.3
+                  "at_ms": 135.9
                 },
                 {
                   "counter": "boot",
                   "value": 8,
-                  "at_ms": 148.2
+                  "at_ms": 152.7
                 }
               ]
             },
@@ -2718,42 +2718,42 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 94.4
+                  "at_ms": 95.1
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 99.9
+                  "at_ms": 100.3
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 112.4
+                  "at_ms": 109.4
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 130.4
+                  "at_ms": 125.9
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 147.9
+                  "at_ms": 142.7
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 163.6
+                  "at_ms": 159.2
                 },
                 {
                   "counter": "runtime",
                   "value": 7,
-                  "at_ms": 179.8
+                  "at_ms": 175.7
                 },
                 {
                   "counter": "runtime",
                   "value": 8,
-                  "at_ms": 197.5
+                  "at_ms": 192.9
                 }
               ]
             },
@@ -2771,7 +2771,7 @@
               "total_control_count": 12,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "3",
+              "boot_frame_count": "2",
               "runtime_frame_count": "8",
               "terminal_frame_count": "8",
               "terminal_frame_source": "runtime"
@@ -2789,7 +2789,7 @@
               "total_control_count": 12,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "3",
+              "boot_frame_count": "2",
               "runtime_frame_count": "8",
               "terminal_frame_count": "8",
               "terminal_frame_source": "runtime"
@@ -2807,12 +2807,12 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 85.8
+                  "at_ms": 87.1
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 90.7
+                  "at_ms": 92
                 }
               ]
             },
@@ -2866,117 +2866,117 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 87
+                  "at_ms": 87.6
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 92.7
+                  "at_ms": 93.1
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 145.4
+                  "at_ms": 148.1
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 149.9
+                  "at_ms": 152.4
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 163.5
+                  "at_ms": 163.6
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 179.4
+                  "at_ms": 180.4
                 },
                 {
                   "counter": "runtime",
                   "value": 7,
-                  "at_ms": 196.3
+                  "at_ms": 197.7
                 },
                 {
                   "counter": "runtime",
                   "value": 8,
-                  "at_ms": 214.8
+                  "at_ms": 213.7
                 },
                 {
                   "counter": "runtime",
                   "value": 9,
-                  "at_ms": 230.9
+                  "at_ms": 230.5
                 },
                 {
                   "counter": "runtime",
                   "value": 10,
-                  "at_ms": 247.4
+                  "at_ms": 247.5
                 },
                 {
                   "counter": "runtime",
                   "value": 11,
-                  "at_ms": 263.7
+                  "at_ms": 264.6
                 },
                 {
                   "counter": "runtime",
                   "value": 12,
-                  "at_ms": 280.4
+                  "at_ms": 280.8
                 },
                 {
                   "counter": "runtime",
                   "value": 13,
-                  "at_ms": 297.7
+                  "at_ms": 297.5
                 },
                 {
                   "counter": "runtime",
                   "value": 14,
-                  "at_ms": 313.3
+                  "at_ms": 313.5
                 },
                 {
                   "counter": "runtime",
                   "value": 15,
-                  "at_ms": 332.6
+                  "at_ms": 331.7
                 },
                 {
                   "counter": "runtime",
                   "value": 16,
-                  "at_ms": 346.4
+                  "at_ms": 347.3
                 },
                 {
                   "counter": "runtime",
                   "value": 17,
-                  "at_ms": 362.8
+                  "at_ms": 364.1
                 },
                 {
                   "counter": "runtime",
                   "value": 18,
-                  "at_ms": 379.6
+                  "at_ms": 380.8
                 },
                 {
                   "counter": "runtime",
                   "value": 19,
-                  "at_ms": 396.3
+                  "at_ms": 397.3
                 },
                 {
                   "counter": "runtime",
                   "value": 20,
-                  "at_ms": 412.8
+                  "at_ms": 414.3
                 },
                 {
                   "counter": "runtime",
                   "value": 21,
-                  "at_ms": 431.4
+                  "at_ms": 430.9
                 },
                 {
                   "counter": "runtime",
                   "value": 22,
-                  "at_ms": 447.4
+                  "at_ms": 446.9
                 },
                 {
                   "counter": "runtime",
                   "value": 23,
-                  "at_ms": 464.9
+                  "at_ms": 463.9
                 },
                 {
                   "counter": "runtime",
@@ -2986,22 +2986,22 @@
                 {
                   "counter": "runtime",
                   "value": 25,
-                  "at_ms": 523.8
+                  "at_ms": 521.9
                 },
                 {
                   "counter": "runtime",
                   "value": 26,
-                  "at_ms": 526.2
+                  "at_ms": 523.7
                 },
                 {
                   "counter": "runtime",
                   "value": 27,
-                  "at_ms": 530.9
+                  "at_ms": 531.4
                 },
                 {
                   "counter": "runtime",
                   "value": 28,
-                  "at_ms": 548.5
+                  "at_ms": 547.3
                 },
                 {
                   "counter": "runtime",
@@ -3011,12 +3011,22 @@
                 {
                   "counter": "runtime",
                   "value": 30,
-                  "at_ms": 581.6
+                  "at_ms": 579.9
                 },
                 {
                   "counter": "runtime",
                   "value": 31,
-                  "at_ms": 598.7
+                  "at_ms": 597.1
+                },
+                {
+                  "counter": "runtime",
+                  "value": 32,
+                  "at_ms": 613.9
+                },
+                {
+                  "counter": "runtime",
+                  "value": 33,
+                  "at_ms": 630.4
                 }
               ]
             },
@@ -3029,17 +3039,17 @@
                   "steer-control": "0",
                   "level-control": "0"
                 },
-                "runtime_frame_count": 24
+                "runtime_frame_count": 28
               },
               "end": {
                 "controls": {
                   "lift-control": "0",
                   "telescope-control": "0",
-                  "tilt-control": "1",
+                  "tilt-control": "0",
                   "steer-control": "0",
                   "level-control": "1"
                 },
-                "runtime_frame_count": 31
+                "runtime_frame_count": 33
               }
             },
             "terminal_first": {
@@ -3056,8 +3066,8 @@
               "drive_x": "0.07",
               "drive_z": "0.05",
               "boot_frame_count": "2",
-              "runtime_frame_count": "31",
-              "terminal_frame_count": "31",
+              "runtime_frame_count": "33",
+              "terminal_frame_count": "33",
               "terminal_frame_source": "runtime"
             },
             "terminal_after_250ms": {
@@ -3074,8 +3084,8 @@
               "drive_x": "0.07",
               "drive_z": "0.05",
               "boot_frame_count": "2",
-              "runtime_frame_count": "31",
-              "terminal_frame_count": "31",
+              "runtime_frame_count": "33",
+              "terminal_frame_count": "33",
               "terminal_frame_source": "runtime"
             },
             "animation_state_stable_250ms": true
@@ -3091,152 +3101,162 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 86.8
+                  "at_ms": 89.2
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 92.6
+                  "at_ms": 95.5
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 145.4
+                  "at_ms": 149.5
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 149.8
+                  "at_ms": 153.8
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 167.5
+                  "at_ms": 169.5
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 182.7
+                  "at_ms": 185.5
                 },
                 {
                   "counter": "runtime",
                   "value": 7,
-                  "at_ms": 201.3
+                  "at_ms": 202.5
                 },
                 {
                   "counter": "runtime",
                   "value": 8,
-                  "at_ms": 217.2
+                  "at_ms": 219.1
                 },
                 {
                   "counter": "runtime",
                   "value": 9,
-                  "at_ms": 234.5
+                  "at_ms": 235.8
                 },
                 {
                   "counter": "runtime",
                   "value": 10,
-                  "at_ms": 250.2
+                  "at_ms": 252.4
                 },
                 {
                   "counter": "runtime",
                   "value": 11,
-                  "at_ms": 267.4
+                  "at_ms": 269.2
                 },
                 {
                   "counter": "runtime",
                   "value": 12,
-                  "at_ms": 284.5
+                  "at_ms": 285.7
                 },
                 {
                   "counter": "runtime",
                   "value": 13,
-                  "at_ms": 299.7
+                  "at_ms": 302.6
                 },
                 {
                   "counter": "runtime",
                   "value": 14,
-                  "at_ms": 316.7
+                  "at_ms": 319.4
                 },
                 {
                   "counter": "runtime",
                   "value": 15,
-                  "at_ms": 334.5
+                  "at_ms": 342.4
                 },
                 {
                   "counter": "runtime",
                   "value": 16,
-                  "at_ms": 351.2
+                  "at_ms": 352.4
                 },
                 {
                   "counter": "runtime",
                   "value": 17,
-                  "at_ms": 366
+                  "at_ms": 369
                 },
                 {
                   "counter": "runtime",
                   "value": 18,
-                  "at_ms": 383.1
+                  "at_ms": 385.7
                 },
                 {
                   "counter": "runtime",
                   "value": 19,
-                  "at_ms": 401
+                  "at_ms": 402.1
                 },
                 {
                   "counter": "runtime",
                   "value": 20,
-                  "at_ms": 417.2
+                  "at_ms": 419
                 },
                 {
                   "counter": "runtime",
                   "value": 21,
-                  "at_ms": 432.5
+                  "at_ms": 435.5
                 },
                 {
                   "counter": "runtime",
                   "value": 22,
-                  "at_ms": 450.6
+                  "at_ms": 452.1
                 },
                 {
                   "counter": "runtime",
                   "value": 23,
-                  "at_ms": 466.9
+                  "at_ms": 469
                 },
                 {
                   "counter": "runtime",
                   "value": 24,
-                  "at_ms": 510.6
+                  "at_ms": 511.6
                 },
                 {
                   "counter": "runtime",
                   "value": 25,
-                  "at_ms": 512.9
+                  "at_ms": 513.3
                 },
                 {
                   "counter": "runtime",
                   "value": 26,
-                  "at_ms": 517.7
+                  "at_ms": 520.5
                 },
                 {
                   "counter": "runtime",
                   "value": 27,
-                  "at_ms": 532.7
+                  "at_ms": 535.7
                 },
                 {
                   "counter": "runtime",
                   "value": 28,
-                  "at_ms": 551
+                  "at_ms": 552.3
                 },
                 {
                   "counter": "runtime",
                   "value": 29,
-                  "at_ms": 566.2
+                  "at_ms": 569.1
                 },
                 {
                   "counter": "runtime",
                   "value": 30,
-                  "at_ms": 585
+                  "at_ms": 585.6
+                },
+                {
+                  "counter": "runtime",
+                  "value": 31,
+                  "at_ms": 602.2
+                },
+                {
+                  "counter": "runtime",
+                  "value": 32,
+                  "at_ms": 618.8
                 }
               ]
             },
@@ -3249,17 +3269,17 @@
                   "steer-control": "0",
                   "level-control": "0"
                 },
-                "runtime_frame_count": 23
+                "runtime_frame_count": 28
               },
               "end": {
                 "controls": {
                   "lift-control": "0",
                   "telescope-control": "0",
-                  "tilt-control": "1",
+                  "tilt-control": "0",
                   "steer-control": "0",
                   "level-control": "1"
                 },
-                "runtime_frame_count": 30
+                "runtime_frame_count": 32
               }
             },
             "terminal_first": {
@@ -3276,8 +3296,8 @@
               "drive_x": "0.07",
               "drive_z": "0.05",
               "boot_frame_count": "2",
-              "runtime_frame_count": "30",
-              "terminal_frame_count": "30",
+              "runtime_frame_count": "32",
+              "terminal_frame_count": "32",
               "terminal_frame_source": "runtime"
             },
             "terminal_after_250ms": {
@@ -3294,8 +3314,8 @@
               "drive_x": "0.07",
               "drive_z": "0.05",
               "boot_frame_count": "2",
-              "runtime_frame_count": "30",
-              "terminal_frame_count": "30",
+              "runtime_frame_count": "32",
+              "terminal_frame_count": "32",
               "terminal_frame_source": "runtime"
             },
             "animation_state_stable_250ms": true

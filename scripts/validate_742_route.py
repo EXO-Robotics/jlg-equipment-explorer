@@ -13,6 +13,7 @@ RUNTIME = (ROOT / "viewer/742-runtime.js").read_text()
 MACHINE = (ROOT / "machines/742/machine.js").read_text()
 ARTICULATION = (ROOT / "machines/742/articulation.js").read_text()
 STYLE = (ROOT / "viewer/742.css").read_text()
+BASE_STYLE = (ROOT / "viewer.css").read_text()
 SHARED_RUNTIME = (ROOT / "viewer/runtime.js").read_text()
 SHARED_STYLE = (ROOT / "viewer/multi-machine.css").read_text()
 MACHINE_TABS_STYLE = (ROOT / "viewer/machine-tabs.css").read_text()
@@ -151,6 +152,7 @@ def main():
         'driveCarrier', 'driveCarrier.name="742_DriveCarrier"', 'driveCarrier.add(machineRoot)',
     ], "742 articulation consumer")
     require(STYLE, ['body[data-machine="742"]', '.mode-row', 'body[data-machine="742"].controls-panel-collapsed .control-panel'], "742 style")
+    require(BASE_STYLE, ['body:not(.controls-panel-collapsed) .panel-heading > .autonomy-toggle', 'body:not(.controls-panel-collapsed) .autonomy-bar { display: none; }'], "shared expanded drawer style")
     if 'class="component-nav' in INDEX or 'data-focus=' in INDEX:
         raise RuntimeError("Removed component Explore tabs returned to the 742 route")
     if not ASSET.is_file():

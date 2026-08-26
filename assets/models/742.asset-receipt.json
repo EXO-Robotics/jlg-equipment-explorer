@@ -29,7 +29,7 @@
         "release": "1.1.0",
         "required_parent_edges": 126,
         "root_node": "600S_ROOT",
-        "runtime_sha256": "c71e4a9f2597526755656c100a1643e787a34fac53e5e7efd1020301c5ab3c3f",
+        "runtime_sha256": "3e580ddf553e73450900fa4cdd9a64bda7403fd616d7532d076831e4e524abc3",
         "sha256": "13292e6d742aef3483c3a8f7302b6bd54c7fcb35cb8181fbab76d4af133d99a4",
         "source_blend": "source/blender/600s-showcase-v1.1.blend",
         "source_blend_sha256": "23de7b978f309b77ef5f4efd752950cdc7426393b494ae622ef698f559feaf0c",
@@ -62,7 +62,7 @@
         ],
         "wheelbase_m": 2.5
       },
-      "result_sha256": "def9df5239447ae23f4b0df9d730a8df5944e5343460915578caa0349a363d28",
+      "result_sha256": "8d318024f7777ea4769daa3e638ed0408ea67c544256bad78f75d4938cf13636",
       "status": "pass",
       "validator": {
         "bytes": 40159,
@@ -115,16 +115,16 @@
         "motion_ranges_described": 4,
         "release": "1.1.0",
         "remote_startup_assets": 0,
-        "runtime_release": "1.1.16",
+        "runtime_release": "1.1.17",
         "selection_volumes_self_tested": 5,
         "status": "PASS"
       },
-      "result_sha256": "467c1913ccad5906418fe82126a848d24a6d0d7992ff3f09573f49e80cda8ddc",
+      "result_sha256": "741dc7fa080a80a57dfba47b151a503795f1d8ed5be46a99053d2331b0f9ae25",
       "status": "pass",
       "validator": {
-        "bytes": 10623,
+        "bytes": 10784,
         "path": "scripts/validate_viewer_contract.py",
-        "sha256": "bb04b3b7410c6d0487f0b8a0463c023511df24b2b6c1ceb59eb6fd826c17bd4e"
+        "sha256": "77754bbef3312178c7325a78646cf4704ac859bd59aa33115ccfa037007feb0e"
       }
     },
     "actual_glb_clearance_sweep": {
@@ -1466,14 +1466,14 @@
       "result_sha256": "ee404a08da635a33df54a675307a42efe5a368a7315ac578afb7078420dffbe2",
       "status": "pass",
       "validator": {
-        "bytes": 14002,
+        "bytes": 14252,
         "path": "scripts/validate_742_route.py",
-        "sha256": "ef72e15cafade47c03eef5e9e955cc6868ce20217f004a67e4a04560203b0e94"
+        "sha256": "901f1cfa3f22f1d93c3007f6e9bf03fc2d5c3d977d3859b8ca0d33aac7b85f87"
       }
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "3c683be60d6a2dd1586af5a8bcee4fbd34e0f9226b762e6dd9da381a9e67ff23",
+  "candidate_tree_sha256": "0993c26161f8add3824ddd5c98c91a8c3f357eb01142fd8f515f110bb8f1b087",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1521,9 +1521,9 @@
       "sha256": "1da0373419e8c4532fb8677fb620e5795794249937a136f64e76422982748b13"
     },
     "browser_capture_runner": {
-      "bytes": 91292,
+      "bytes": 92425,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586"
+      "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462"
     },
     "browser_capture_validator": {
       "bytes": 88438,
@@ -1588,12 +1588,12 @@
     "package_lock": {
       "bytes": 1786,
       "path": "package-lock.json",
-      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c"
+      "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6"
     },
     "package_manifest": {
       "bytes": 2865,
       "path": "package.json",
-      "sha256": "d241ec26710c4a847d5181d97f6b4ef813fb8974bdc14e3b656ee2536f21d6f5"
+      "sha256": "1247cff04d72aba3236ca978379ba84adddcc904209914625435977c32edb194"
     },
     "pages_assembler": {
       "bytes": 1485,
@@ -2168,7 +2168,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "4bcb6381f13bb73333ffe1947588b906a06eb74e73fa45372263c0b6550e0f46"
+    "sha256": "dca3c52f853fc1a6bef980a733e93184bee1a75f8b52a8f1340909fb68b9e8fb"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"

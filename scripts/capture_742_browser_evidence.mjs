@@ -101,6 +101,23 @@ const REQUESTED_GATE = options.gate || null;
 if (REQUESTED_GATE && !(REQUESTED_GATE in GATE_FILES)) throw new Error(`unsupported --gate value: ${REQUESTED_GATE}`);
 
 function assert(value, message) { if (!value) throw new Error(message); }
+
+async function withCollapsedModeControl(page, selector, action) {
+  const controls = page.locator("#controls-toggle");
+  const wasExpanded = (await controls.getAttribute("aria-expanded")) === "true";
+  if (wasExpanded) {
+    await controls.click();
+    await page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "false" && document.body.classList.contains("controls-panel-collapsed"));
+  }
+  const mode = page.locator(selector);
+  await mode.waitFor({ state: "visible" });
+  const result = await action(mode);
+  if (wasExpanded) {
+    await controls.click();
+    await page.waitForFunction(() => document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "true" && !document.body.classList.contains("controls-panel-collapsed"));
+  }
+  return result;
+}
 function sha(buffer) { return createHash("sha256").update(buffer).digest("hex"); }
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
@@ -626,7 +643,7 @@ async function reduced742() {
     wheel_rotations_rad: document.body.dataset.wheelRotationsRad || null,
   }));
   const showcase = opened.page.locator("#showcase");
-  await showcase.click();
+  await withCollapsedModeControl(opened.page, "#showcase", (mode) => mode.click());
   await opened.page.waitForFunction(() => document.body.dataset.showcaseActive === "true");
   const movingStart = await sample();
   await opened.page.waitForTimeout(300);
@@ -700,7 +717,7 @@ async function capture742Fault(fault) {
       controls: Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
       runtime_frame_count: Number(document.body.dataset.runtimeFrameCount),
     }));
-    await page.locator("#showcase").click();
+    await withCollapsedModeControl(page, "#showcase", (mode) => mode.click());
     const start = await sample();
     await page.waitForFunction((before) => {
       const controls = Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value]));
@@ -1036,7 +1053,7 @@ async function captureReducedRegression(model) {
   const route = model === "600s" ? "/?diagnostics=1&auto=1" : "/es1930m/?diagnostics=1&auto=1";
   const opened = await openPage([1280, 720], route);
   await waitLoaded(opened.page, model === "600s" ? "blender-showcase-v1.1.0" : "glb", model === "600s" ? "selection 5/5 pass" : "selection self-test-pass");
-  if (model === "es1930m" && await opened.page.locator("#autonomy-toggle").getAttribute("aria-pressed") !== "true") await opened.page.locator("#autonomy-toggle").click();
+  if (model === "es1930m" && await opened.page.locator("#autonomy-toggle").getAttribute("aria-pressed") !== "true") await withCollapsedModeControl(opened.page, "#autonomy-toggle", (mode) => mode.click());
   await opened.page.waitForFunction(() => document.body.dataset.autonomyMode === "auto");
   const movingStart = await opened.page.evaluate(() => ({ x: document.body.dataset.driveX, z: document.body.dataset.driveZ }));
   await opened.page.waitForTimeout(250);
@@ -1072,7 +1089,7 @@ async function captureReducedRegression(model) {
 async function resetRegressionScreenshotFraming(page, model, { collapseControls = false, presentationZoomDeltaY = 0, presentationOrbitRightSteps = 0, minimumEdgeMarginCssPx = 16 } = {}) {
   if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) await page.keyboard.press("Escape");
   const autonomy = page.locator("#autonomy-toggle");
-  if (await autonomy.count() && await autonomy.getAttribute("aria-pressed") === "true" && !(await autonomy.isDisabled())) await autonomy.click();
+  if (await autonomy.count() && await autonomy.getAttribute("aria-pressed") === "true" && !(await autonomy.isDisabled())) await withCollapsedModeControl(page, "#autonomy-toggle", (mode) => mode.click());
   const stow = page.locator("#stow");
   assert(await stow.count(), `${model} stow control is missing before screenshot reset`);
   await stow.click();
@@ -1249,7 +1266,7 @@ async function captureRegression(model) {
     const diagnostics = document.querySelector("#diagnostics")?.value || "";
     return diagnostics.includes("p95 ") && !diagnostics.includes("sampling");
   }, null, { timeout: 30000 });
-  if (model === "600s" && (await desktop.page.locator("#autonomy-toggle").getAttribute("aria-pressed")) === "true") await desktop.page.locator("#autonomy-toggle").click();
+  if (model === "600s" && (await desktop.page.locator("#autonomy-toggle").getAttribute("aria-pressed")) === "true") await withCollapsedModeControl(desktop.page, "#autonomy-toggle", (mode) => mode.click());
   const desktopSnapshot = await snapshot(desktop.page);
   const statusText = await desktop.page.locator("#diagnostics").evaluate((node) => node.value);
   const title = await desktop.page.title();
@@ -1294,19 +1311,19 @@ async function captureRegression(model) {
   assert(activeOpen === "inspector-close" && tabInside && restored === "info-toggle", `${model} modal keyboard/focus failed`);
   let autoObserved = null;
   if (model === "es1930m") {
-    const auto = desktop.page.locator("#autonomy-toggle");
-    await auto.waitFor({ state: "visible" });
     await desktop.page.waitForFunction(() => !document.querySelector("#autonomy-toggle").disabled);
-    await auto.click();
-    await desktop.page.waitForFunction(() => document.body.dataset.presentationMode === "running");
-    const started = await desktop.page.locator("body").getAttribute("data-presentation-mode");
-    await auto.click();
-    await desktop.page.waitForFunction(() => document.body.dataset.presentationMode === "paused");
-    const paused = await desktop.page.locator("body").getAttribute("data-presentation-mode");
-    await auto.click();
-    await desktop.page.waitForFunction(() => document.body.dataset.presentationMode === "running");
-    const resumed = await desktop.page.locator("body").getAttribute("data-presentation-mode");
-    autoObserved = `${started}->${paused}->${resumed}`;
+    autoObserved = await withCollapsedModeControl(desktop.page, "#autonomy-toggle", async (mode) => {
+      await mode.click();
+      await desktop.page.waitForFunction(() => document.body.dataset.presentationMode === "running");
+      const started = await desktop.page.locator("body").getAttribute("data-presentation-mode");
+      await mode.click();
+      await desktop.page.waitForFunction(() => document.body.dataset.presentationMode === "paused");
+      const paused = await desktop.page.locator("body").getAttribute("data-presentation-mode");
+      await mode.click();
+      await desktop.page.waitForFunction(() => document.body.dataset.presentationMode === "running");
+      const resumed = await desktop.page.locator("body").getAttribute("data-presentation-mode");
+      return `${started}->${paused}->${resumed}`;
+    });
   }
   const desktopScreenshotFraming = await resetRegressionScreenshotFraming(desktop.page, model, {
     presentationZoomDeltaY: model === "600s" ? 520 : 360,
@@ -1320,10 +1337,10 @@ async function captureRegression(model) {
   await waitLoaded(mobile.page, expectedSource, selection);
   if ((await mobile.page.locator("#controls-toggle").getAttribute("aria-expanded")) !== "true") await mobile.page.locator("#controls-toggle").click();
   assert((await mobile.page.locator("#controls-toggle").getAttribute("aria-expanded")) === "true", `${model} mobile controls not expanded`);
-  if (model === "600s" && (await mobile.page.locator("#autonomy-toggle").getAttribute("aria-pressed")) === "true") await mobile.page.locator("#autonomy-toggle").click();
+  if (model === "600s" && (await mobile.page.locator("#autonomy-toggle").getAttribute("aria-pressed")) === "true") await withCollapsedModeControl(mobile.page, "#autonomy-toggle", (mode) => mode.click());
   if (model === "es1930m" && !(await mobile.page.locator("#autonomy-toggle").isDisabled())) {
     const mode = await mobile.page.locator("body").getAttribute("data-presentation-mode");
-    if (mode === "running") await mobile.page.locator("#autonomy-toggle").click();
+    if (mode === "running") await withCollapsedModeControl(mobile.page, "#autonomy-toggle", (control) => control.click());
   }
   const mobileSnapshot = await snapshot(mobile.page);
   const pinch = await pinchCanvasRegression(mobile.page);

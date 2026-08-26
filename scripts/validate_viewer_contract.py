@@ -105,6 +105,8 @@ def main() -> None:
         ".sr-only",
         "--mobile-controls-height",
         "body.mobile-controls-open .panel-heading",
+        "body:not(.controls-panel-collapsed) .panel-heading > .autonomy-toggle",
+        "body:not(.controls-panel-collapsed) .autonomy-bar { display: none; }",
         ".autonomy-bar",
         f"@media {COMPACT_VIEWPORT_QUERY}",
     ], "CSS accessibility")

@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.16";
+} from "./assets/models/600s.version.js?v=1.1.17";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);

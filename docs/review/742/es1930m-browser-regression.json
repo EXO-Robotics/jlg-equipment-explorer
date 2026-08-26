@@ -31,7 +31,7 @@
       "source": "repo-locked-default",
       "lockfile": {
         "path": "package-lock.json",
-        "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+        "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
         "bytes": 1786
       },
       "browser_executable": {
@@ -2036,43 +2036,43 @@
         ]
       }
     },
-    "captured_at_utc": "2026-08-26T17:38:36.276Z",
+    "captured_at_utc": "2026-08-26T17:55:08.829Z",
     "physical_device_session": false,
     "assistive_technology_session": false
   },
   "capture_runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
   "capture_artifacts": {
     "screenshots": [
       {
         "path": "docs/review/742/browser-captures/es1930m-regression-maximum-pose.png",
-        "sha256": "7bf108d3dd270b161d8468376f38fe509e60ffcc7006afe7a675d58d59e1f14a",
-        "bytes": 161490,
+        "sha256": "7d58a7e2ed52dee3684e0d26dbf00c52bee56b3a193db92fd539f03bd0004a46",
+        "bytes": 157829,
         "width_px": 1280,
         "height_px": 720
       },
       {
         "path": "docs/review/742/browser-captures/es1930m-regression-desktop.png",
-        "sha256": "3490d8dc92842de1cc224cd42055752a6482af1f3a7fe18a5c896254ff55e8b2",
-        "bytes": 194798,
+        "sha256": "5073b2fbace936878d0253ef17715f43ed4cae6d59da2bf730a269de830fba76",
+        "bytes": 192426,
         "width_px": 1280,
         "height_px": 720
       },
       {
         "path": "docs/review/742/browser-captures/es1930m-regression-mobile.png",
-        "sha256": "5914b8341a5c955f5661aabacbfeea29d2e3a0915f01b73fa17e6f3dc9e10007",
-        "bytes": 93738,
+        "sha256": "7fcbcf11a328aa6b7c3c2e6afb3559374f0da9cfee236698ae0e99a649239d4c",
+        "bytes": 93737,
         "width_px": 390,
         "height_px": 844
       }
     ],
     "automation_trace": {
       "path": "docs/review/742/browser-captures/es1930m-browser-regression-trace.json",
-      "sha256": "7f8cbc0d47130ea796037ebaa75ea4b82132c74fa1750d23c459bab56f8f1317",
-      "bytes": 135227,
+      "sha256": "1f4bc55c79500e4a080dba61c59b9eec56e904fe2e00be7947a24836fcf18290",
+      "bytes": 135345,
       "width_px": null,
       "height_px": null
     }
@@ -2120,7 +2120,7 @@
               "data-zone": "stowed",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "91",
-              "data-runtime-last-frame-ms": "1562.900",
+              "data-runtime-last-frame-ms": "1571.100",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296",
               "class": ""
@@ -2177,7 +2177,7 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2404 accuracy reconstruction / 1.0.9\n      \n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18′ 6″Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        \n          Operate\n          Machine controls\n          Stowed\n          Close\n        \n        Manual\n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n        \n        Platform lift0%0.90 metres platform height; Stowed\n        Extension deck0.00 m0.00 m extension; Stowed\n        Steering actuatorCenterCenter cylinder displacement; Stowed\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 29 ms · sampling · sampling\n  \n\n  \n  \n    ×\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 · Service 3122602300 · Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__showES1930MBootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__showES1930MBootstrapFailure(\"The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2404 accuracy reconstruction / 1.0.9\n      \n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18′ 6″Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        \n          Operate\n          Machine controls\n          Stowed\n          Close\n        \n        Manual\n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n        \n        Platform lift0%0.90 metres platform height; Stowed\n        Extension deck0.00 m0.00 m extension; Stowed\n        Steering actuatorCenterCenter cylinder displacement; Stowed\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 32 ms · sampling · sampling\n  \n\n  \n  \n    ×\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 · Service 3122602300 · Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__showES1930MBootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__showES1930MBootstrapFailure(\"The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
               "data-machine": "es1930m",
               "data-boot-frame-count": "2",
@@ -2195,7 +2195,7 @@
               "data-zone": "stowed",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "34",
-              "data-runtime-last-frame-ms": "614.300",
+              "data-runtime-last-frame-ms": "616.700",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296"
             }
@@ -2209,7 +2209,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 29 ms · sampling · sampling",
+            "text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 32 ms · sampling · sampling",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2268,7 +2268,7 @@
               "data-zone": "stowed",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "160",
-              "data-runtime-last-frame-ms": "2712.900",
+              "data-runtime-last-frame-ms": "2721.100",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296",
               "class": "inspector-open",
@@ -2415,8 +2415,8 @@
               ]
             },
             {
-              "node_id": "49",
-              "backend_dom_node_id": 49,
+              "node_id": "48",
+              "backend_dom_node_id": 48,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -2436,8 +2436,8 @@
               "properties": []
             },
             {
-              "node_id": "50",
-              "backend_dom_node_id": 50,
+              "node_id": "49",
+              "backend_dom_node_id": 49,
               "role": "application",
               "name": {
                 "type": "computedString",
@@ -2478,7 +2478,7 @@
                     "value": "viewer-instructions",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 51,
+                        "backend_dom_node_id": 50,
                         "idref": "viewer-instructions",
                         "text": null
                       }
@@ -2488,8 +2488,8 @@
               ]
             },
             {
-              "node_id": "51",
-              "backend_dom_node_id": 51,
+              "node_id": "50",
+              "backend_dom_node_id": 50,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -2509,8 +2509,8 @@
               "properties": []
             },
             {
-              "node_id": "57",
-              "backend_dom_node_id": 57,
+              "node_id": "56",
+              "backend_dom_node_id": 56,
               "role": "main",
               "name": {
                 "type": "computedString",
@@ -2530,8 +2530,8 @@
               "properties": []
             },
             {
-              "node_id": "144",
-              "backend_dom_node_id": 144,
+              "node_id": "143",
+              "backend_dom_node_id": 143,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -2551,8 +2551,8 @@
               "properties": []
             },
             {
-              "node_id": "58",
-              "backend_dom_node_id": 58,
+              "node_id": "57",
+              "backend_dom_node_id": 57,
               "role": "sectionheader",
               "name": {
                 "type": "computedString",
@@ -2572,8 +2572,8 @@
               "properties": []
             },
             {
-              "node_id": "69",
-              "backend_dom_node_id": 69,
+              "node_id": "67",
+              "backend_dom_node_id": 67,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -2598,7 +2598,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 6,
+                        "backend_dom_node_id": 7,
                         "idref": "machine-title",
                         "text": "ES1930M"
                       }
@@ -2608,8 +2608,8 @@
               ]
             },
             {
-              "node_id": "74",
-              "backend_dom_node_id": 74,
+              "node_id": "72",
+              "backend_dom_node_id": 72,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -2629,8 +2629,8 @@
               "properties": []
             },
             {
-              "node_id": "8",
-              "backend_dom_node_id": 8,
+              "node_id": "9",
+              "backend_dom_node_id": 9,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -2655,7 +2655,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 15,
+                        "backend_dom_node_id": 85,
                         "idref": "operate-title",
                         "text": "Machine controls"
                       }
@@ -2665,8 +2665,8 @@
               ]
             },
             {
-              "node_id": "123",
-              "backend_dom_node_id": 123,
+              "node_id": "122",
+              "backend_dom_node_id": 122,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -2686,8 +2686,8 @@
               "properties": []
             },
             {
-              "node_id": "10",
-              "backend_dom_node_id": 10,
+              "node_id": "13",
+              "backend_dom_node_id": 13,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -2761,8 +2761,8 @@
               "properties": []
             },
             {
-              "node_id": "59",
-              "backend_dom_node_id": 59,
+              "node_id": "58",
+              "backend_dom_node_id": 58,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -2799,8 +2799,8 @@
               ]
             },
             {
-              "node_id": "63",
-              "backend_dom_node_id": 63,
+              "node_id": "62",
+              "backend_dom_node_id": 62,
               "role": "navigation",
               "name": {
                 "type": "computedString",
@@ -2820,8 +2820,8 @@
               "properties": []
             },
             {
-              "node_id": "67",
-              "backend_dom_node_id": 67,
+              "node_id": "65",
+              "backend_dom_node_id": 65,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -2841,8 +2841,8 @@
               "properties": []
             },
             {
-              "node_id": "68",
-              "backend_dom_node_id": 68,
+              "node_id": "66",
+              "backend_dom_node_id": 66,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -2887,8 +2887,8 @@
               ]
             },
             {
-              "node_id": "156",
-              "backend_dom_node_id": 156,
+              "node_id": "155",
+              "backend_dom_node_id": 155,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -2908,8 +2908,8 @@
               "properties": []
             },
             {
-              "node_id": "6",
-              "backend_dom_node_id": 6,
+              "node_id": "7",
+              "backend_dom_node_id": 7,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -2938,8 +2938,8 @@
               ]
             },
             {
-              "node_id": "158",
-              "backend_dom_node_id": 158,
+              "node_id": "157",
+              "backend_dom_node_id": 157,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -2959,8 +2959,8 @@
               "properties": []
             },
             {
-              "node_id": "159",
-              "backend_dom_node_id": 159,
+              "node_id": "158",
+              "backend_dom_node_id": 158,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -2980,8 +2980,8 @@
               "properties": []
             },
             {
-              "node_id": "76",
-              "backend_dom_node_id": 76,
+              "node_id": "74",
+              "backend_dom_node_id": 74,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3001,8 +3001,8 @@
               "properties": []
             },
             {
-              "node_id": "161",
-              "backend_dom_node_id": 161,
+              "node_id": "160",
+              "backend_dom_node_id": 160,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3022,8 +3022,8 @@
               "properties": []
             },
             {
-              "node_id": "79",
-              "backend_dom_node_id": 79,
+              "node_id": "77",
+              "backend_dom_node_id": 77,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3043,8 +3043,8 @@
               "properties": []
             },
             {
-              "node_id": "163",
-              "backend_dom_node_id": 163,
+              "node_id": "162",
+              "backend_dom_node_id": 162,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3064,8 +3064,8 @@
               "properties": []
             },
             {
-              "node_id": "82",
-              "backend_dom_node_id": 82,
+              "node_id": "80",
+              "backend_dom_node_id": 80,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3085,8 +3085,8 @@
               "properties": []
             },
             {
-              "node_id": "165",
-              "backend_dom_node_id": 165,
+              "node_id": "164",
+              "backend_dom_node_id": 164,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3106,8 +3106,8 @@
               "properties": []
             },
             {
-              "node_id": "84",
-              "backend_dom_node_id": 84,
+              "node_id": "82",
+              "backend_dom_node_id": 82,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -3127,8 +3127,8 @@
               "properties": []
             },
             {
-              "node_id": "7",
-              "backend_dom_node_id": 7,
+              "node_id": "8",
+              "backend_dom_node_id": 8,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -3177,7 +3177,7 @@
                     "value": "machine-controls-body",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 88,
+                        "backend_dom_node_id": 87,
                         "idref": "machine-controls-body",
                         "text": null
                       }
@@ -3189,52 +3189,6 @@
             {
               "node_id": "87",
               "backend_dom_node_id": 87,
-              "role": "button",
-              "name": {
-                "type": "computedString",
-                "value": "Switch to automatic drive",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": [
-                {
-                  "name": "invalid",
-                  "value": {
-                    "type": "token",
-                    "value": "false",
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "focusable",
-                  "value": {
-                    "type": "booleanOrUndefined",
-                    "value": true,
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "pressed",
-                  "value": {
-                    "type": "tristate",
-                    "value": "false",
-                    "related_nodes": []
-                  }
-                }
-              ]
-            },
-            {
-              "node_id": "88",
-              "backend_dom_node_id": 88,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -3338,8 +3292,8 @@
               "properties": []
             },
             {
-              "node_id": "149",
-              "backend_dom_node_id": 149,
+              "node_id": "148",
+              "backend_dom_node_id": 148,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3359,8 +3313,8 @@
               "properties": []
             },
             {
-              "node_id": "150",
-              "backend_dom_node_id": 150,
+              "node_id": "149",
+              "backend_dom_node_id": 149,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3380,8 +3334,8 @@
               "properties": []
             },
             {
-              "node_id": "64",
-              "backend_dom_node_id": 64,
+              "node_id": "3",
+              "backend_dom_node_id": 3,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -3418,8 +3372,8 @@
               ]
             },
             {
-              "node_id": "65",
-              "backend_dom_node_id": 65,
+              "node_id": "63",
+              "backend_dom_node_id": 63,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -3456,8 +3410,8 @@
               ]
             },
             {
-              "node_id": "66",
-              "backend_dom_node_id": 66,
+              "node_id": "64",
+              "backend_dom_node_id": 64,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -3494,8 +3448,8 @@
               ]
             },
             {
-              "node_id": "154",
-              "backend_dom_node_id": 154,
+              "node_id": "153",
+              "backend_dom_node_id": 153,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3515,8 +3469,8 @@
               "properties": []
             },
             {
-              "node_id": "155",
-              "backend_dom_node_id": 155,
+              "node_id": "154",
+              "backend_dom_node_id": 154,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3557,8 +3511,8 @@
               "properties": []
             },
             {
-              "node_id": "157",
-              "backend_dom_node_id": 157,
+              "node_id": "156",
+              "backend_dom_node_id": 156,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3620,8 +3574,8 @@
               "properties": []
             },
             {
-              "node_id": "160",
-              "backend_dom_node_id": 160,
+              "node_id": "159",
+              "backend_dom_node_id": 159,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3662,8 +3616,8 @@
               "properties": []
             },
             {
-              "node_id": "162",
-              "backend_dom_node_id": 162,
+              "node_id": "161",
+              "backend_dom_node_id": 161,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3704,8 +3658,8 @@
               "properties": []
             },
             {
-              "node_id": "164",
-              "backend_dom_node_id": 164,
+              "node_id": "163",
+              "backend_dom_node_id": 163,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3746,8 +3700,8 @@
               "properties": []
             },
             {
-              "node_id": "166",
-              "backend_dom_node_id": 166,
+              "node_id": "165",
+              "backend_dom_node_id": 165,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3767,8 +3721,8 @@
               "properties": []
             },
             {
-              "node_id": "167",
-              "backend_dom_node_id": 167,
+              "node_id": "166",
+              "backend_dom_node_id": 166,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -3788,8 +3742,8 @@
               "properties": []
             },
             {
-              "node_id": "15",
-              "backend_dom_node_id": 15,
+              "node_id": "85",
+              "backend_dom_node_id": 85,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -3809,8 +3763,8 @@
               "properties": []
             },
             {
-              "node_id": "16",
-              "backend_dom_node_id": 16,
+              "node_id": "10",
+              "backend_dom_node_id": 10,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -3863,50 +3817,8 @@
               ]
             },
             {
-              "node_id": "18",
-              "backend_dom_node_id": 18,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "MANUAL",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "89",
-              "backend_dom_node_id": 89,
-              "role": "generic",
-              "name": {
-                "type": "computedString",
-                "value": "Autonomous presentation route",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "101",
-              "backend_dom_node_id": 101,
+              "node_id": "100",
+              "backend_dom_node_id": 100,
               "role": "LabelText",
               "name": {
                 "type": "computedString",
@@ -3926,8 +3838,8 @@
               "properties": []
             },
             {
-              "node_id": "107",
-              "backend_dom_node_id": 107,
+              "node_id": "106",
+              "backend_dom_node_id": 106,
               "role": "LabelText",
               "name": {
                 "type": "computedString",
@@ -3947,8 +3859,8 @@
               "properties": []
             },
             {
-              "node_id": "114",
-              "backend_dom_node_id": 114,
+              "node_id": "113",
+              "backend_dom_node_id": 113,
               "role": "LabelText",
               "name": {
                 "type": "computedString",
@@ -3968,8 +3880,8 @@
               "properties": []
             },
             {
-              "node_id": "23",
-              "backend_dom_node_id": 23,
+              "node_id": "22",
+              "backend_dom_node_id": 22,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -4006,8 +3918,8 @@
               ]
             },
             {
-              "node_id": "121",
-              "backend_dom_node_id": 121,
+              "node_id": "120",
+              "backend_dom_node_id": 120,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -4044,8 +3956,8 @@
               ]
             },
             {
-              "node_id": "122",
-              "backend_dom_node_id": 122,
+              "node_id": "121",
+              "backend_dom_node_id": 121,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -4065,7 +3977,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000049",
+              "node_id": "-1000000040",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4086,7 +3998,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000050",
+              "node_id": "-1000000041",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4107,7 +4019,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000051",
+              "node_id": "-1000000042",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4128,7 +4040,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000052",
+              "node_id": "-1000000043",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4149,7 +4061,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000053",
+              "node_id": "-1000000044",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -4212,8 +4124,8 @@
               "properties": []
             },
             {
-              "node_id": "151",
-              "backend_dom_node_id": 151,
+              "node_id": "150",
+              "backend_dom_node_id": 150,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -4233,8 +4145,8 @@
               "properties": []
             },
             {
-              "node_id": "152",
-              "backend_dom_node_id": 152,
+              "node_id": "151",
+              "backend_dom_node_id": 151,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -4254,8 +4166,8 @@
               "properties": []
             },
             {
-              "node_id": "153",
-              "backend_dom_node_id": 153,
+              "node_id": "152",
+              "backend_dom_node_id": 152,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -4506,8 +4418,8 @@
               "properties": []
             },
             {
-              "node_id": "168",
-              "backend_dom_node_id": 168,
+              "node_id": "167",
+              "backend_dom_node_id": 167,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -4527,150 +4439,12 @@
               "properties": []
             },
             {
-              "node_id": "169",
-              "backend_dom_node_id": 169,
+              "node_id": "168",
+              "backend_dom_node_id": 168,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
                 "value": "STOWED",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000027",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "MANUAL",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "171",
-              "backend_dom_node_id": 171,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "DRIVE MODE",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "92",
-              "backend_dom_node_id": 92,
-              "role": "status",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": [
-                {
-                  "name": "live",
-                  "value": {
-                    "type": "token",
-                    "value": "polite",
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "atomic",
-                  "value": {
-                    "type": "boolean",
-                    "value": true,
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "relevant",
-                  "value": {
-                    "type": "tokenList",
-                    "value": "additions text",
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "invalid",
-                  "value": {
-                    "type": "token",
-                    "value": "false",
-                    "related_nodes": []
-                  }
-                }
-              ]
-            },
-            {
-              "node_id": "93",
-              "backend_dom_node_id": 93,
-              "role": "generic",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "94",
-              "backend_dom_node_id": 94,
-              "role": "DescriptionList",
-              "name": {
-                "type": "computedString",
-                "value": "",
                 "related_nodes": []
               },
               "description": {
@@ -4707,8 +4481,8 @@
               "properties": []
             },
             {
-              "node_id": "19",
-              "backend_dom_node_id": 19,
+              "node_id": "18",
+              "backend_dom_node_id": 18,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -4765,7 +4539,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 101,
+                        "backend_dom_node_id": 100,
                         "idref": null,
                         "text": "PLATFORM LIFT 0.90 metres platform height; Stowed 0.90 METRES PLATFORM HEIGHT; STOWED"
                       }
@@ -4775,8 +4549,8 @@
               ]
             },
             {
-              "node_id": "11",
-              "backend_dom_node_id": 11,
+              "node_id": "14",
+              "backend_dom_node_id": 14,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -4857,7 +4631,7 @@
                     "value": "motion-boundary",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 122,
+                        "backend_dom_node_id": 121,
                         "idref": "motion-boundary",
                         "text": null
                       }
@@ -4871,7 +4645,7 @@
                     "value": "lift-control-engineering-detail",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 106,
+                        "backend_dom_node_id": 105,
                         "idref": "lift-control-engineering-detail",
                         "text": null
                       }
@@ -4881,8 +4655,8 @@
               ]
             },
             {
-              "node_id": "106",
-              "backend_dom_node_id": 106,
+              "node_id": "105",
+              "backend_dom_node_id": 105,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -4923,8 +4697,8 @@
               "properties": []
             },
             {
-              "node_id": "109",
-              "backend_dom_node_id": 109,
+              "node_id": "108",
+              "backend_dom_node_id": 108,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -4981,7 +4755,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 107,
+                        "backend_dom_node_id": 106,
                         "idref": null,
                         "text": "EXTENSION DECK 0.00 m extension; Stowed 0.00 M EXTENSION; STOWED"
                       }
@@ -4991,8 +4765,8 @@
               ]
             },
             {
-              "node_id": "13",
-              "backend_dom_node_id": 13,
+              "node_id": "16",
+              "backend_dom_node_id": 16,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -5073,7 +4847,7 @@
                     "value": "motion-boundary",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 122,
+                        "backend_dom_node_id": 121,
                         "idref": "motion-boundary",
                         "text": null
                       }
@@ -5087,7 +4861,7 @@
                     "value": "deck-control-engineering-detail",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 113,
+                        "backend_dom_node_id": 112,
                         "idref": "deck-control-engineering-detail",
                         "text": null
                       }
@@ -5097,8 +4871,8 @@
               ]
             },
             {
-              "node_id": "113",
-              "backend_dom_node_id": 113,
+              "node_id": "112",
+              "backend_dom_node_id": 112,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -5139,8 +4913,8 @@
               "properties": []
             },
             {
-              "node_id": "22",
-              "backend_dom_node_id": 22,
+              "node_id": "21",
+              "backend_dom_node_id": 21,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -5197,7 +4971,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 114,
+                        "backend_dom_node_id": 113,
                         "idref": null,
                         "text": "STEERING ACTUATOR Center cylinder displacement; Stowed CENTER CYLINDER DISPLACEMENT; STOWED"
                       }
@@ -5207,8 +4981,8 @@
               ]
             },
             {
-              "node_id": "20",
-              "backend_dom_node_id": 20,
+              "node_id": "19",
+              "backend_dom_node_id": 19,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -5289,7 +5063,7 @@
                     "value": "motion-boundary",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 122,
+                        "backend_dom_node_id": 121,
                         "idref": "motion-boundary",
                         "text": null
                       }
@@ -5303,7 +5077,7 @@
                     "value": "steer-control-engineering-detail",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 119,
+                        "backend_dom_node_id": 118,
                         "idref": "steer-control-engineering-detail",
                         "text": null
                       }
@@ -5313,8 +5087,8 @@
               ]
             },
             {
-              "node_id": "119",
-              "backend_dom_node_id": 119,
+              "node_id": "118",
+              "backend_dom_node_id": 118,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -5502,154 +5276,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000028",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "DRIVE MODE",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "172",
-              "backend_dom_node_id": 172,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "Manual",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "173",
-              "backend_dom_node_id": 173,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "96",
-              "backend_dom_node_id": 96,
-              "role": "term",
-              "name": {
-                "type": "computedString",
-                "value": "HEADING",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "97",
-              "backend_dom_node_id": 97,
-              "role": "definition",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "99",
-              "backend_dom_node_id": 99,
-              "role": "term",
-              "name": {
-                "type": "computedString",
-                "value": "LOOP",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "100",
-              "backend_dom_node_id": 100,
-              "role": "definition",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000036",
+              "node_id": "-1000000027",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5712,7 +5339,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000039",
+              "node_id": "-1000000030",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5775,7 +5402,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000042",
+              "node_id": "-1000000033",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5838,7 +5465,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000045",
+              "node_id": "-1000000036",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5859,7 +5486,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000046",
+              "node_id": "-1000000037",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5880,7 +5507,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000047",
+              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5901,7 +5528,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000048",
+              "node_id": "-1000000039",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -5922,175 +5549,28 @@
               "properties": []
             },
             {
+              "node_id": "-1000000028",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "0%",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
               "node_id": "-1000000029",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "Manual",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000030",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "Visualization only - steering and wheel motion are ",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000031",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "reconstructed; this is not a machine capability.",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "174",
-              "backend_dom_node_id": 174,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "HEADING",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "175",
-              "backend_dom_node_id": 175,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "324°",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "176",
-              "backend_dom_node_id": 176,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "LOOP",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "177",
-              "backend_dom_node_id": 177,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "0%",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000037",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "0%",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6111,7 +5591,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000040",
+              "node_id": "-1000000031",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6132,7 +5612,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000041",
+              "node_id": "-1000000032",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6153,7 +5633,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000043",
+              "node_id": "-1000000034",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -6174,96 +5654,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000044",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "CENTER CYLINDER DISPLACEMENT; STOWED",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000032",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "HEADING",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000033",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "324°",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000034",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "LOOP",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
               "node_id": "-1000000035",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "0%",
+                "value": "CENTER CYLINDER DISPLACEMENT; STOWED",
                 "related_nodes": []
               },
               "description": {
@@ -6330,8 +5726,8 @@
               ]
             },
             {
-              "node_id": "49",
-              "backend_dom_node_id": 49,
+              "node_id": "48",
+              "backend_dom_node_id": 48,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -6351,8 +5747,8 @@
               "properties": []
             },
             {
-              "node_id": "50",
-              "backend_dom_node_id": 50,
+              "node_id": "49",
+              "backend_dom_node_id": 49,
               "role": "application",
               "name": {
                 "type": "computedString",
@@ -6385,7 +5781,7 @@
                     "value": "viewer-instructions",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 51,
+                        "backend_dom_node_id": 50,
                         "idref": "viewer-instructions",
                         "text": null
                       }
@@ -6395,8 +5791,8 @@
               ]
             },
             {
-              "node_id": "51",
-              "backend_dom_node_id": 51,
+              "node_id": "50",
+              "backend_dom_node_id": 50,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -6416,8 +5812,8 @@
               "properties": []
             },
             {
-              "node_id": "57",
-              "backend_dom_node_id": 57,
+              "node_id": "56",
+              "backend_dom_node_id": 56,
               "role": "main",
               "name": {
                 "type": "computedString",
@@ -6437,8 +5833,8 @@
               "properties": []
             },
             {
-              "node_id": "126",
-              "backend_dom_node_id": 126,
+              "node_id": "125",
+              "backend_dom_node_id": 125,
               "role": "dialog",
               "name": {
                 "type": "computedString",
@@ -6471,7 +5867,7 @@
                     "value": "inspector-copy",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 131,
+                        "backend_dom_node_id": 130,
                         "idref": "inspector-copy",
                         "text": null
                       }
@@ -6485,7 +5881,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 129,
+                        "backend_dom_node_id": 128,
                         "idref": "inspector-title",
                         "text": "PVC 2404, reconstructed honestly."
                       }
@@ -6495,8 +5891,8 @@
               ]
             },
             {
-              "node_id": "144",
-              "backend_dom_node_id": 144,
+              "node_id": "143",
+              "backend_dom_node_id": 143,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -6516,8 +5912,8 @@
               "properties": []
             },
             {
-              "node_id": "58",
-              "backend_dom_node_id": 58,
+              "node_id": "57",
+              "backend_dom_node_id": 57,
               "role": "sectionheader",
               "name": {
                 "type": "computedString",
@@ -6537,8 +5933,8 @@
               "properties": []
             },
             {
-              "node_id": "69",
-              "backend_dom_node_id": 69,
+              "node_id": "67",
+              "backend_dom_node_id": 67,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -6563,7 +5959,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 6,
+                        "backend_dom_node_id": 7,
                         "idref": "machine-title",
                         "text": "ES1930M"
                       }
@@ -6573,8 +5969,8 @@
               ]
             },
             {
-              "node_id": "74",
-              "backend_dom_node_id": 74,
+              "node_id": "72",
+              "backend_dom_node_id": 72,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -6594,8 +5990,8 @@
               "properties": []
             },
             {
-              "node_id": "8",
-              "backend_dom_node_id": 8,
+              "node_id": "9",
+              "backend_dom_node_id": 9,
               "role": "region",
               "name": {
                 "type": "computedString",
@@ -6620,7 +6016,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 15,
+                        "backend_dom_node_id": 85,
                         "idref": "operate-title",
                         "text": "Machine controls"
                       }
@@ -6630,8 +6026,8 @@
               ]
             },
             {
-              "node_id": "123",
-              "backend_dom_node_id": 123,
+              "node_id": "122",
+              "backend_dom_node_id": 122,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -6651,8 +6047,8 @@
               "properties": []
             },
             {
-              "node_id": "10",
-              "backend_dom_node_id": 10,
+              "node_id": "13",
+              "backend_dom_node_id": 13,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -6705,8 +6101,8 @@
               ]
             },
             {
-              "node_id": "127",
-              "backend_dom_node_id": 127,
+              "node_id": "126",
+              "backend_dom_node_id": 126,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -6751,8 +6147,8 @@
               ]
             },
             {
-              "node_id": "128",
-              "backend_dom_node_id": 128,
+              "node_id": "127",
+              "backend_dom_node_id": 127,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -6772,8 +6168,8 @@
               "properties": []
             },
             {
-              "node_id": "129",
-              "backend_dom_node_id": 129,
+              "node_id": "128",
+              "backend_dom_node_id": 128,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -6802,8 +6198,8 @@
               ]
             },
             {
-              "node_id": "131",
-              "backend_dom_node_id": 131,
+              "node_id": "130",
+              "backend_dom_node_id": 130,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -6823,8 +6219,8 @@
               "properties": []
             },
             {
-              "node_id": "132",
-              "backend_dom_node_id": 132,
+              "node_id": "131",
+              "backend_dom_node_id": 131,
               "role": "DescriptionList",
               "name": {
                 "type": "computedString",
@@ -6865,8 +6261,8 @@
               "properties": []
             },
             {
-              "node_id": "59",
-              "backend_dom_node_id": 59,
+              "node_id": "58",
+              "backend_dom_node_id": 58,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -6903,8 +6299,8 @@
               ]
             },
             {
-              "node_id": "63",
-              "backend_dom_node_id": 63,
+              "node_id": "62",
+              "backend_dom_node_id": 62,
               "role": "navigation",
               "name": {
                 "type": "computedString",
@@ -6924,8 +6320,8 @@
               "properties": []
             },
             {
-              "node_id": "67",
-              "backend_dom_node_id": 67,
+              "node_id": "65",
+              "backend_dom_node_id": 65,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -6945,8 +6341,8 @@
               "properties": []
             },
             {
-              "node_id": "68",
-              "backend_dom_node_id": 68,
+              "node_id": "66",
+              "backend_dom_node_id": 66,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -6995,7 +6391,7 @@
                     "value": "inspector",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 126,
+                        "backend_dom_node_id": 125,
                         "idref": "inspector",
                         "text": null
                       }
@@ -7005,8 +6401,8 @@
               ]
             },
             {
-              "node_id": "156",
-              "backend_dom_node_id": 156,
+              "node_id": "155",
+              "backend_dom_node_id": 155,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7026,8 +6422,8 @@
               "properties": []
             },
             {
-              "node_id": "6",
-              "backend_dom_node_id": 6,
+              "node_id": "7",
+              "backend_dom_node_id": 7,
               "role": "heading",
               "name": {
                 "type": "computedString",
@@ -7056,8 +6452,8 @@
               ]
             },
             {
-              "node_id": "158",
-              "backend_dom_node_id": 158,
+              "node_id": "157",
+              "backend_dom_node_id": 157,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7077,8 +6473,8 @@
               "properties": []
             },
             {
-              "node_id": "159",
-              "backend_dom_node_id": 159,
+              "node_id": "158",
+              "backend_dom_node_id": 158,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7098,8 +6494,8 @@
               "properties": []
             },
             {
-              "node_id": "76",
-              "backend_dom_node_id": 76,
+              "node_id": "74",
+              "backend_dom_node_id": 74,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -7119,8 +6515,8 @@
               "properties": []
             },
             {
-              "node_id": "161",
-              "backend_dom_node_id": 161,
+              "node_id": "160",
+              "backend_dom_node_id": 160,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7140,8 +6536,8 @@
               "properties": []
             },
             {
-              "node_id": "79",
-              "backend_dom_node_id": 79,
+              "node_id": "77",
+              "backend_dom_node_id": 77,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -7161,8 +6557,8 @@
               "properties": []
             },
             {
-              "node_id": "163",
-              "backend_dom_node_id": 163,
+              "node_id": "162",
+              "backend_dom_node_id": 162,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7182,8 +6578,8 @@
               "properties": []
             },
             {
-              "node_id": "82",
-              "backend_dom_node_id": 82,
+              "node_id": "80",
+              "backend_dom_node_id": 80,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -7203,8 +6599,8 @@
               "properties": []
             },
             {
-              "node_id": "165",
-              "backend_dom_node_id": 165,
+              "node_id": "164",
+              "backend_dom_node_id": 164,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7224,8 +6620,8 @@
               "properties": []
             },
             {
-              "node_id": "84",
-              "backend_dom_node_id": 84,
+              "node_id": "82",
+              "backend_dom_node_id": 82,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -7245,8 +6641,8 @@
               "properties": []
             },
             {
-              "node_id": "7",
-              "backend_dom_node_id": 7,
+              "node_id": "8",
+              "backend_dom_node_id": 8,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -7295,7 +6691,7 @@
                     "value": "machine-controls-body",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 88,
+                        "backend_dom_node_id": 87,
                         "idref": "machine-controls-body",
                         "text": null
                       }
@@ -7307,52 +6703,6 @@
             {
               "node_id": "87",
               "backend_dom_node_id": 87,
-              "role": "button",
-              "name": {
-                "type": "computedString",
-                "value": "Switch to automatic drive",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": [
-                {
-                  "name": "invalid",
-                  "value": {
-                    "type": "token",
-                    "value": "false",
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "focusable",
-                  "value": {
-                    "type": "booleanOrUndefined",
-                    "value": true,
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "pressed",
-                  "value": {
-                    "type": "tristate",
-                    "value": "false",
-                    "related_nodes": []
-                  }
-                }
-              ]
-            },
-            {
-              "node_id": "88",
-              "backend_dom_node_id": 88,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -7666,8 +7016,8 @@
               "properties": []
             },
             {
-              "node_id": "149",
-              "backend_dom_node_id": 149,
+              "node_id": "148",
+              "backend_dom_node_id": 148,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7687,8 +7037,8 @@
               "properties": []
             },
             {
-              "node_id": "150",
-              "backend_dom_node_id": 150,
+              "node_id": "149",
+              "backend_dom_node_id": 149,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7708,8 +7058,8 @@
               "properties": []
             },
             {
-              "node_id": "64",
-              "backend_dom_node_id": 64,
+              "node_id": "3",
+              "backend_dom_node_id": 3,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -7746,8 +7096,8 @@
               ]
             },
             {
-              "node_id": "65",
-              "backend_dom_node_id": 65,
+              "node_id": "63",
+              "backend_dom_node_id": 63,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -7784,8 +7134,8 @@
               ]
             },
             {
-              "node_id": "66",
-              "backend_dom_node_id": 66,
+              "node_id": "64",
+              "backend_dom_node_id": 64,
               "role": "link",
               "name": {
                 "type": "computedString",
@@ -7822,8 +7172,8 @@
               ]
             },
             {
-              "node_id": "154",
-              "backend_dom_node_id": 154,
+              "node_id": "153",
+              "backend_dom_node_id": 153,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7843,8 +7193,8 @@
               "properties": []
             },
             {
-              "node_id": "155",
-              "backend_dom_node_id": 155,
+              "node_id": "154",
+              "backend_dom_node_id": 154,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7885,8 +7235,8 @@
               "properties": []
             },
             {
-              "node_id": "157",
-              "backend_dom_node_id": 157,
+              "node_id": "156",
+              "backend_dom_node_id": 156,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7948,8 +7298,8 @@
               "properties": []
             },
             {
-              "node_id": "160",
-              "backend_dom_node_id": 160,
+              "node_id": "159",
+              "backend_dom_node_id": 159,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -7990,8 +7340,8 @@
               "properties": []
             },
             {
-              "node_id": "162",
-              "backend_dom_node_id": 162,
+              "node_id": "161",
+              "backend_dom_node_id": 161,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -8032,8 +7382,8 @@
               "properties": []
             },
             {
-              "node_id": "164",
-              "backend_dom_node_id": 164,
+              "node_id": "163",
+              "backend_dom_node_id": 163,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -8074,8 +7424,8 @@
               "properties": []
             },
             {
-              "node_id": "166",
-              "backend_dom_node_id": 166,
+              "node_id": "165",
+              "backend_dom_node_id": 165,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -8095,8 +7445,8 @@
               "properties": []
             },
             {
-              "node_id": "167",
-              "backend_dom_node_id": 167,
+              "node_id": "166",
+              "backend_dom_node_id": 166,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -8116,8 +7466,8 @@
               "properties": []
             },
             {
-              "node_id": "15",
-              "backend_dom_node_id": 15,
+              "node_id": "85",
+              "backend_dom_node_id": 85,
               "role": "strong",
               "name": {
                 "type": "computedString",
@@ -8137,8 +7487,8 @@
               "properties": []
             },
             {
-              "node_id": "16",
-              "backend_dom_node_id": 16,
+              "node_id": "10",
+              "backend_dom_node_id": 10,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -8191,50 +7541,8 @@
               ]
             },
             {
-              "node_id": "18",
-              "backend_dom_node_id": 18,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "MANUAL",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "89",
-              "backend_dom_node_id": 89,
-              "role": "generic",
-              "name": {
-                "type": "computedString",
-                "value": "Autonomous presentation route",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "101",
-              "backend_dom_node_id": 101,
+              "node_id": "100",
+              "backend_dom_node_id": 100,
               "role": "LabelText",
               "name": {
                 "type": "computedString",
@@ -8254,8 +7562,8 @@
               "properties": []
             },
             {
-              "node_id": "107",
-              "backend_dom_node_id": 107,
+              "node_id": "106",
+              "backend_dom_node_id": 106,
               "role": "LabelText",
               "name": {
                 "type": "computedString",
@@ -8275,8 +7583,8 @@
               "properties": []
             },
             {
-              "node_id": "114",
-              "backend_dom_node_id": 114,
+              "node_id": "113",
+              "backend_dom_node_id": 113,
               "role": "LabelText",
               "name": {
                 "type": "computedString",
@@ -8296,8 +7604,8 @@
               "properties": []
             },
             {
-              "node_id": "23",
-              "backend_dom_node_id": 23,
+              "node_id": "22",
+              "backend_dom_node_id": 22,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -8334,8 +7642,8 @@
               ]
             },
             {
-              "node_id": "121",
-              "backend_dom_node_id": 121,
+              "node_id": "120",
+              "backend_dom_node_id": 120,
               "role": "button",
               "name": {
                 "type": "computedString",
@@ -8372,8 +7680,8 @@
               ]
             },
             {
-              "node_id": "122",
-              "backend_dom_node_id": 122,
+              "node_id": "121",
+              "backend_dom_node_id": 121,
               "role": "paragraph",
               "name": {
                 "type": "computedString",
@@ -8393,7 +7701,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000049",
+              "node_id": "-1000000040",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8414,7 +7722,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000050",
+              "node_id": "-1000000041",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8435,7 +7743,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000051",
+              "node_id": "-1000000042",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8456,7 +7764,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000052",
+              "node_id": "-1000000043",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8477,7 +7785,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000053",
+              "node_id": "-1000000044",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8498,7 +7806,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000054",
+              "node_id": "-1000000045",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8519,7 +7827,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000075",
+              "node_id": "-1000000066",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8540,7 +7848,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000076",
+              "node_id": "-1000000067",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8561,7 +7869,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000077",
+              "node_id": "-1000000068",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8582,7 +7890,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000078",
+              "node_id": "-1000000069",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8603,7 +7911,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000079",
+              "node_id": "-1000000070",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8624,7 +7932,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000080",
+              "node_id": "-1000000071",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8645,7 +7953,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000081",
+              "node_id": "-1000000072",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8666,7 +7974,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000082",
+              "node_id": "-1000000073",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -8855,8 +8163,8 @@
               "properties": []
             },
             {
-              "node_id": "151",
-              "backend_dom_node_id": 151,
+              "node_id": "150",
+              "backend_dom_node_id": 150,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -8876,8 +8184,8 @@
               "properties": []
             },
             {
-              "node_id": "152",
-              "backend_dom_node_id": 152,
+              "node_id": "151",
+              "backend_dom_node_id": 151,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -8897,8 +8205,8 @@
               "properties": []
             },
             {
-              "node_id": "153",
-              "backend_dom_node_id": 153,
+              "node_id": "152",
+              "backend_dom_node_id": 152,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -9149,8 +8457,8 @@
               "properties": []
             },
             {
-              "node_id": "168",
-              "backend_dom_node_id": 168,
+              "node_id": "167",
+              "backend_dom_node_id": 167,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
@@ -9170,150 +8478,12 @@
               "properties": []
             },
             {
-              "node_id": "169",
-              "backend_dom_node_id": 169,
+              "node_id": "168",
+              "backend_dom_node_id": 168,
               "role": "StaticText",
               "name": {
                 "type": "computedString",
                 "value": "STOWED",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000027",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "MANUAL",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "171",
-              "backend_dom_node_id": 171,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "DRIVE MODE",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "92",
-              "backend_dom_node_id": 92,
-              "role": "status",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": [
-                {
-                  "name": "live",
-                  "value": {
-                    "type": "token",
-                    "value": "polite",
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "atomic",
-                  "value": {
-                    "type": "boolean",
-                    "value": true,
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "relevant",
-                  "value": {
-                    "type": "tokenList",
-                    "value": "additions text",
-                    "related_nodes": []
-                  }
-                },
-                {
-                  "name": "invalid",
-                  "value": {
-                    "type": "token",
-                    "value": "false",
-                    "related_nodes": []
-                  }
-                }
-              ]
-            },
-            {
-              "node_id": "93",
-              "backend_dom_node_id": 93,
-              "role": "generic",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "94",
-              "backend_dom_node_id": 94,
-              "role": "DescriptionList",
-              "name": {
-                "type": "computedString",
-                "value": "",
                 "related_nodes": []
               },
               "description": {
@@ -9350,8 +8520,8 @@
               "properties": []
             },
             {
-              "node_id": "19",
-              "backend_dom_node_id": 19,
+              "node_id": "18",
+              "backend_dom_node_id": 18,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -9408,7 +8578,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 101,
+                        "backend_dom_node_id": 100,
                         "idref": null,
                         "text": "PLATFORM LIFT 0.90 metres platform height; Stowed 0.90 METRES PLATFORM HEIGHT; STOWED"
                       }
@@ -9418,8 +8588,8 @@
               ]
             },
             {
-              "node_id": "11",
-              "backend_dom_node_id": 11,
+              "node_id": "14",
+              "backend_dom_node_id": 14,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -9500,7 +8670,7 @@
                     "value": "motion-boundary",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 122,
+                        "backend_dom_node_id": 121,
                         "idref": "motion-boundary",
                         "text": null
                       }
@@ -9514,7 +8684,7 @@
                     "value": "lift-control-engineering-detail",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 106,
+                        "backend_dom_node_id": 105,
                         "idref": "lift-control-engineering-detail",
                         "text": null
                       }
@@ -9524,8 +8694,8 @@
               ]
             },
             {
-              "node_id": "106",
-              "backend_dom_node_id": 106,
+              "node_id": "105",
+              "backend_dom_node_id": 105,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -9566,8 +8736,8 @@
               "properties": []
             },
             {
-              "node_id": "109",
-              "backend_dom_node_id": 109,
+              "node_id": "108",
+              "backend_dom_node_id": 108,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -9624,7 +8794,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 107,
+                        "backend_dom_node_id": 106,
                         "idref": null,
                         "text": "EXTENSION DECK 0.00 m extension; Stowed 0.00 M EXTENSION; STOWED"
                       }
@@ -9634,8 +8804,8 @@
               ]
             },
             {
-              "node_id": "13",
-              "backend_dom_node_id": 13,
+              "node_id": "16",
+              "backend_dom_node_id": 16,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -9716,7 +8886,7 @@
                     "value": "motion-boundary",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 122,
+                        "backend_dom_node_id": 121,
                         "idref": "motion-boundary",
                         "text": null
                       }
@@ -9730,7 +8900,7 @@
                     "value": "deck-control-engineering-detail",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 113,
+                        "backend_dom_node_id": 112,
                         "idref": "deck-control-engineering-detail",
                         "text": null
                       }
@@ -9740,8 +8910,8 @@
               ]
             },
             {
-              "node_id": "113",
-              "backend_dom_node_id": 113,
+              "node_id": "112",
+              "backend_dom_node_id": 112,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -9782,8 +8952,8 @@
               "properties": []
             },
             {
-              "node_id": "22",
-              "backend_dom_node_id": 22,
+              "node_id": "21",
+              "backend_dom_node_id": 21,
               "role": "status",
               "name": {
                 "type": "computedString",
@@ -9840,7 +9010,7 @@
                     "value": null,
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 114,
+                        "backend_dom_node_id": 113,
                         "idref": null,
                         "text": "STEERING ACTUATOR Center cylinder displacement; Stowed CENTER CYLINDER DISPLACEMENT; STOWED"
                       }
@@ -9850,8 +9020,8 @@
               ]
             },
             {
-              "node_id": "20",
-              "backend_dom_node_id": 20,
+              "node_id": "19",
+              "backend_dom_node_id": 19,
               "role": "slider",
               "name": {
                 "type": "computedString",
@@ -9932,7 +9102,7 @@
                     "value": "motion-boundary",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 122,
+                        "backend_dom_node_id": 121,
                         "idref": "motion-boundary",
                         "text": null
                       }
@@ -9946,7 +9116,7 @@
                     "value": "steer-control-engineering-detail",
                     "related_nodes": [
                       {
-                        "backend_dom_node_id": 119,
+                        "backend_dom_node_id": 118,
                         "idref": "steer-control-engineering-detail",
                         "text": null
                       }
@@ -9956,8 +9126,8 @@
               ]
             },
             {
-              "node_id": "119",
-              "backend_dom_node_id": 119,
+              "node_id": "118",
+              "backend_dom_node_id": 118,
               "role": "generic",
               "name": {
                 "type": "computedString",
@@ -10040,7 +9210,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000085",
+              "node_id": "-1000000076",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10061,7 +9231,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000084",
+              "node_id": "-1000000075",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10082,7 +9252,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000089",
+              "node_id": "-1000000080",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10103,7 +9273,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000087",
+              "node_id": "-1000000078",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10124,7 +9294,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000088",
+              "node_id": "-1000000079",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10145,7 +9315,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000093",
+              "node_id": "-1000000084",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10166,7 +9336,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000091",
+              "node_id": "-1000000082",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10187,7 +9357,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000092",
+              "node_id": "-1000000083",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10313,154 +9483,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000028",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "DRIVE MODE",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "172",
-              "backend_dom_node_id": 172,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "Manual",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "173",
-              "backend_dom_node_id": 173,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "96",
-              "backend_dom_node_id": 96,
-              "role": "term",
-              "name": {
-                "type": "computedString",
-                "value": "HEADING",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "97",
-              "backend_dom_node_id": 97,
-              "role": "definition",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "99",
-              "backend_dom_node_id": 99,
-              "role": "term",
-              "name": {
-                "type": "computedString",
-                "value": "LOOP",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "100",
-              "backend_dom_node_id": 100,
-              "role": "definition",
-              "name": {
-                "type": "computedString",
-                "value": "",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000036",
+              "node_id": "-1000000027",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10523,7 +9546,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000039",
+              "node_id": "-1000000030",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10586,7 +9609,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000042",
+              "node_id": "-1000000033",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10649,7 +9672,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000045",
+              "node_id": "-1000000036",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10670,7 +9693,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000046",
+              "node_id": "-1000000037",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10691,7 +9714,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000047",
+              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10712,7 +9735,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000048",
+              "node_id": "-1000000039",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10733,175 +9756,28 @@
               "properties": []
             },
             {
+              "node_id": "-1000000028",
+              "backend_dom_node_id": null,
+              "role": "InlineTextBox",
+              "name": {
+                "type": "computedString",
+                "value": "0%",
+                "related_nodes": []
+              },
+              "description": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "value": {
+                "type": null,
+                "value": null,
+                "related_nodes": []
+              },
+              "properties": []
+            },
+            {
               "node_id": "-1000000029",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "Manual",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000030",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "Visualization only - steering and wheel motion are ",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000031",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "reconstructed; this is not a machine capability.",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "174",
-              "backend_dom_node_id": 174,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "HEADING",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "175",
-              "backend_dom_node_id": 175,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "324°",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "176",
-              "backend_dom_node_id": 176,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "LOOP",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "177",
-              "backend_dom_node_id": 177,
-              "role": "StaticText",
-              "name": {
-                "type": "computedString",
-                "value": "0%",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000037",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "0%",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000038",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10922,7 +9798,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000040",
+              "node_id": "-1000000031",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10943,7 +9819,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000041",
+              "node_id": "-1000000032",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10964,7 +9840,7 @@
               "properties": []
             },
             {
-              "node_id": "-1000000043",
+              "node_id": "-1000000034",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
@@ -10985,96 +9861,12 @@
               "properties": []
             },
             {
-              "node_id": "-1000000044",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "CENTER CYLINDER DISPLACEMENT; STOWED",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000032",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "HEADING",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000033",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "324°",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
-              "node_id": "-1000000034",
-              "backend_dom_node_id": null,
-              "role": "InlineTextBox",
-              "name": {
-                "type": "computedString",
-                "value": "LOOP",
-                "related_nodes": []
-              },
-              "description": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "value": {
-                "type": null,
-                "value": null,
-                "related_nodes": []
-              },
-              "properties": []
-            },
-            {
               "node_id": "-1000000035",
               "backend_dom_node_id": null,
               "role": "InlineTextBox",
               "name": {
                 "type": "computedString",
-                "value": "0%",
+                "value": "CENTER CYLINDER DISPLACEMENT; STOWED",
                 "related_nodes": []
               },
               "description": {
@@ -11142,7 +9934,7 @@
                 "data-zone": "stowed",
                 "data-viewer-module-loaded": "true",
                 "data-runtime-frame-count": "34",
-                "data-runtime-last-frame-ms": "613.000",
+                "data-runtime-last-frame-ms": "604.500",
                 "data-machine-source": "glb",
                 "data-machine-visible-meshes": "296",
                 "class": "controls-panel-collapsed"
@@ -11219,8 +10011,8 @@
       },
       "drag_orbit": {
         "outcome": "pass",
-        "before_canvas_sha256": "5f87a7f2ec00619fe4e9b85beba6bc5454a1d9b92bc4580de44dc6eed1cc5f29",
-        "after_canvas_sha256": "3b69741df91d9b7953dd6f50515e27f9e8f603e76e311b24a49c8b05c9207510"
+        "before_canvas_sha256": "fed0921af5acbbe3f1d89afb8be9190769ef7010a8cfb8030f992747b1371506",
+        "after_canvas_sha256": "94687874bf6c8caf54758c7895e148b54442fc31d214e9af0faab5b2ea4e88b6"
       },
       "pinch_zoom": {
         "outcome": "pass",
@@ -11250,8 +10042,8 @@
           "CANVAS",
           "CANVAS"
         ],
-        "before_canvas_sha256": "ba14f47e737031c6d02f5584d646402382f5065f64894e0f18057269bd7cbeea",
-        "after_canvas_sha256": "18c0a82e460c1bd25dc02f65de33ed95f9f6cc35643fdb1dc983f2739268ec84",
+        "before_canvas_sha256": "7a1fba8dce8344003052846ff89285f5f3d1a857bfe1490e3e9fbd0c7b11c846",
+        "after_canvas_sha256": "a6f4fce6085a6ebcc1dabed05b1f4c160330988d5387bc156c398c8931a5a68f",
         "before_desired_distance_m": "9.197",
         "after_desired_distance_m": "3.219",
         "observable_render_or_distance_change": true
@@ -11302,52 +10094,62 @@
                 {
                   "counter": "boot",
                   "value": 1,
-                  "at_ms": 63.4
+                  "at_ms": 45.5
                 },
                 {
                   "counter": "boot",
                   "value": 2,
-                  "at_ms": 79.3
+                  "at_ms": 53.6
                 },
                 {
                   "counter": "boot",
                   "value": 3,
-                  "at_ms": 97.1
+                  "at_ms": 66.1
                 },
                 {
                   "counter": "boot",
                   "value": 4,
-                  "at_ms": 114.2
+                  "at_ms": 82.9
                 },
                 {
                   "counter": "boot",
                   "value": 5,
-                  "at_ms": 131.2
+                  "at_ms": 98.7
                 },
                 {
                   "counter": "boot",
                   "value": 6,
-                  "at_ms": 147.6
+                  "at_ms": 115.3
                 },
                 {
                   "counter": "boot",
                   "value": 7,
-                  "at_ms": 162.8
+                  "at_ms": 132.6
                 },
                 {
                   "counter": "boot",
                   "value": 8,
-                  "at_ms": 179.8
+                  "at_ms": 149.5
                 },
                 {
                   "counter": "boot",
                   "value": 9,
-                  "at_ms": 198.1
+                  "at_ms": 165.6
                 },
                 {
                   "counter": "boot",
                   "value": 10,
-                  "at_ms": 214
+                  "at_ms": 182.4
+                },
+                {
+                  "counter": "boot",
+                  "value": 11,
+                  "at_ms": 198.9
+                },
+                {
+                  "counter": "boot",
+                  "value": 12,
+                  "at_ms": 216.1
                 }
               ]
             },
@@ -11364,9 +10166,9 @@
               "total_control_count": 7,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "10",
+              "boot_frame_count": "12",
               "runtime_frame_count": null,
-              "terminal_frame_count": "10",
+              "terminal_frame_count": "12",
               "terminal_frame_source": "boot"
             },
             "terminal_after_250ms": {
@@ -11382,9 +10184,9 @@
               "total_control_count": 7,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "10",
+              "boot_frame_count": "12",
               "runtime_frame_count": null,
-              "terminal_frame_count": "10",
+              "terminal_frame_count": "12",
               "terminal_frame_source": "boot"
             },
             "animation_state_stable_250ms": true
@@ -11399,57 +10201,57 @@
                 {
                   "counter": "boot",
                   "value": 1,
-                  "at_ms": 62.9
+                  "at_ms": 61.6
                 },
                 {
                   "counter": "boot",
                   "value": 2,
-                  "at_ms": 79.4
+                  "at_ms": 78.7
                 },
                 {
                   "counter": "boot",
                   "value": 3,
-                  "at_ms": 94.8
+                  "at_ms": 94.5
                 },
                 {
                   "counter": "boot",
                   "value": 4,
-                  "at_ms": 112
+                  "at_ms": 112.1
                 },
                 {
                   "counter": "boot",
                   "value": 5,
-                  "at_ms": 129.8
+                  "at_ms": 128.8
                 },
                 {
                   "counter": "boot",
                   "value": 6,
-                  "at_ms": 146.4
+                  "at_ms": 145.4
                 },
                 {
                   "counter": "boot",
                   "value": 7,
-                  "at_ms": 163.1
+                  "at_ms": 162
                 },
                 {
                   "counter": "boot",
                   "value": 8,
-                  "at_ms": 178.4
+                  "at_ms": 178.5
                 },
                 {
                   "counter": "boot",
                   "value": 9,
-                  "at_ms": 195.3
+                  "at_ms": 195.5
                 },
                 {
                   "counter": "boot",
                   "value": 10,
-                  "at_ms": 212.9
+                  "at_ms": 212
                 },
                 {
                   "counter": "boot",
                   "value": 11,
-                  "at_ms": 229.5
+                  "at_ms": 228.7
                 }
               ]
             },
@@ -11501,52 +10303,47 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 91.5
+                  "at_ms": 93.1
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 96.4
+                  "at_ms": 99.2
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 97.8
+                  "at_ms": 108.7
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 116.6
+                  "at_ms": 126.1
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 130.6
+                  "at_ms": 142.5
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 148.9
+                  "at_ms": 159.3
                 },
                 {
                   "counter": "runtime",
                   "value": 7,
-                  "at_ms": 165.2
+                  "at_ms": 175.9
                 },
                 {
                   "counter": "runtime",
                   "value": 8,
-                  "at_ms": 181.3
+                  "at_ms": 192.1
                 },
                 {
                   "counter": "runtime",
                   "value": 9,
-                  "at_ms": 197.1
-                },
-                {
-                  "counter": "runtime",
-                  "value": 10,
-                  "at_ms": 215.8
+                  "at_ms": 208.8
                 }
               ]
             },
@@ -11563,9 +10360,9 @@
               "total_control_count": 7,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "2",
-              "runtime_frame_count": "10",
-              "terminal_frame_count": "10",
+              "boot_frame_count": null,
+              "runtime_frame_count": "9",
+              "terminal_frame_count": "9",
               "terminal_frame_source": "runtime"
             },
             "terminal_after_250ms": {
@@ -11581,9 +10378,9 @@
               "total_control_count": 7,
               "drive_x": null,
               "drive_z": null,
-              "boot_frame_count": "2",
-              "runtime_frame_count": "10",
-              "terminal_frame_count": "10",
+              "boot_frame_count": null,
+              "runtime_frame_count": "9",
+              "terminal_frame_count": "9",
               "terminal_frame_source": "runtime"
             },
             "animation_state_stable_250ms": true
@@ -11598,52 +10395,52 @@
                 {
                   "counter": "runtime",
                   "value": 1,
-                  "at_ms": 86.1
+                  "at_ms": 90.9
                 },
                 {
                   "counter": "runtime",
                   "value": 2,
-                  "at_ms": 91.2
+                  "at_ms": 95.8
                 },
                 {
                   "counter": "runtime",
                   "value": 3,
-                  "at_ms": 93.1
+                  "at_ms": 97.2
                 },
                 {
                   "counter": "runtime",
                   "value": 4,
-                  "at_ms": 109.7
+                  "at_ms": 113
                 },
                 {
                   "counter": "runtime",
                   "value": 5,
-                  "at_ms": 126.4
+                  "at_ms": 130.8
                 },
                 {
                   "counter": "runtime",
                   "value": 6,
-                  "at_ms": 143
+                  "at_ms": 147
                 },
                 {
                   "counter": "runtime",
                   "value": 7,
-                  "at_ms": 159.6
+                  "at_ms": 163
                 },
                 {
                   "counter": "runtime",
                   "value": 8,
-                  "at_ms": 176.4
+                  "at_ms": 180.7
                 },
                 {
                   "counter": "runtime",
                   "value": 9,
-                  "at_ms": 192.7
+                  "at_ms": 197.5
                 },
                 {
                   "counter": "runtime",
                   "value": 10,
-                  "at_ms": 209.9
+                  "at_ms": 214.3
                 }
               ]
             },
@@ -11754,7 +10551,7 @@
                 "rect_css_px": {
                   "left": 28,
                   "right": 418,
-                  "top": 267.72,
+                  "top": 376.22,
                   "bottom": 692
                 },
                 "intersects_machine_bounds": false
@@ -11912,7 +10709,7 @@
                 "data-zone": "indoor-only",
                 "data-viewer-module-loaded": "true",
                 "data-runtime-frame-count": "113",
-                "data-runtime-last-frame-ms": "1929.500",
+                "data-runtime-last-frame-ms": "1937.800",
                 "data-machine-source": "glb",
                 "data-machine-visible-meshes": "296",
                 "class": "",
@@ -12055,52 +10852,62 @@
             {
               "counter": "boot",
               "value": 1,
-              "at_ms": 63.4
+              "at_ms": 45.5
             },
             {
               "counter": "boot",
               "value": 2,
-              "at_ms": 79.3
+              "at_ms": 53.6
             },
             {
               "counter": "boot",
               "value": 3,
-              "at_ms": 97.1
+              "at_ms": 66.1
             },
             {
               "counter": "boot",
               "value": 4,
-              "at_ms": 114.2
+              "at_ms": 82.9
             },
             {
               "counter": "boot",
               "value": 5,
-              "at_ms": 131.2
+              "at_ms": 98.7
             },
             {
               "counter": "boot",
               "value": 6,
-              "at_ms": 147.6
+              "at_ms": 115.3
             },
             {
               "counter": "boot",
               "value": 7,
-              "at_ms": 162.8
+              "at_ms": 132.6
             },
             {
               "counter": "boot",
               "value": 8,
-              "at_ms": 179.8
+              "at_ms": 149.5
             },
             {
               "counter": "boot",
               "value": 9,
-              "at_ms": 198.1
+              "at_ms": 165.6
             },
             {
               "counter": "boot",
               "value": 10,
-              "at_ms": 214
+              "at_ms": 182.4
+            },
+            {
+              "counter": "boot",
+              "value": 11,
+              "at_ms": 198.9
+            },
+            {
+              "counter": "boot",
+              "value": 12,
+              "at_ms": 216.1
             }
           ]
         },
@@ -12117,9 +10924,9 @@
           "total_control_count": 7,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "10",
+          "boot_frame_count": "12",
           "runtime_frame_count": null,
-          "terminal_frame_count": "10",
+          "terminal_frame_count": "12",
           "terminal_frame_source": "boot"
         },
         "terminal_after_250ms": {
@@ -12135,9 +10942,9 @@
           "total_control_count": 7,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "10",
+          "boot_frame_count": "12",
           "runtime_frame_count": null,
-          "terminal_frame_count": "10",
+          "terminal_frame_count": "12",
           "terminal_frame_source": "boot"
         },
         "animation_state_stable_250ms": true
@@ -12152,57 +10959,57 @@
             {
               "counter": "boot",
               "value": 1,
-              "at_ms": 62.9
+              "at_ms": 61.6
             },
             {
               "counter": "boot",
               "value": 2,
-              "at_ms": 79.4
+              "at_ms": 78.7
             },
             {
               "counter": "boot",
               "value": 3,
-              "at_ms": 94.8
+              "at_ms": 94.5
             },
             {
               "counter": "boot",
               "value": 4,
-              "at_ms": 112
+              "at_ms": 112.1
             },
             {
               "counter": "boot",
               "value": 5,
-              "at_ms": 129.8
+              "at_ms": 128.8
             },
             {
               "counter": "boot",
               "value": 6,
-              "at_ms": 146.4
+              "at_ms": 145.4
             },
             {
               "counter": "boot",
               "value": 7,
-              "at_ms": 163.1
+              "at_ms": 162
             },
             {
               "counter": "boot",
               "value": 8,
-              "at_ms": 178.4
+              "at_ms": 178.5
             },
             {
               "counter": "boot",
               "value": 9,
-              "at_ms": 195.3
+              "at_ms": 195.5
             },
             {
               "counter": "boot",
               "value": 10,
-              "at_ms": 212.9
+              "at_ms": 212
             },
             {
               "counter": "boot",
               "value": 11,
-              "at_ms": 229.5
+              "at_ms": 228.7
             }
           ]
         },
@@ -12254,52 +11061,47 @@
             {
               "counter": "runtime",
               "value": 1,
-              "at_ms": 91.5
+              "at_ms": 93.1
             },
             {
               "counter": "runtime",
               "value": 2,
-              "at_ms": 96.4
+              "at_ms": 99.2
             },
             {
               "counter": "runtime",
               "value": 3,
-              "at_ms": 97.8
+              "at_ms": 108.7
             },
             {
               "counter": "runtime",
               "value": 4,
-              "at_ms": 116.6
+              "at_ms": 126.1
             },
             {
               "counter": "runtime",
               "value": 5,
-              "at_ms": 130.6
+              "at_ms": 142.5
             },
             {
               "counter": "runtime",
               "value": 6,
-              "at_ms": 148.9
+              "at_ms": 159.3
             },
             {
               "counter": "runtime",
               "value": 7,
-              "at_ms": 165.2
+              "at_ms": 175.9
             },
             {
               "counter": "runtime",
               "value": 8,
-              "at_ms": 181.3
+              "at_ms": 192.1
             },
             {
               "counter": "runtime",
               "value": 9,
-              "at_ms": 197.1
-            },
-            {
-              "counter": "runtime",
-              "value": 10,
-              "at_ms": 215.8
+              "at_ms": 208.8
             }
           ]
         },
@@ -12316,9 +11118,9 @@
           "total_control_count": 7,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "2",
-          "runtime_frame_count": "10",
-          "terminal_frame_count": "10",
+          "boot_frame_count": null,
+          "runtime_frame_count": "9",
+          "terminal_frame_count": "9",
           "terminal_frame_source": "runtime"
         },
         "terminal_after_250ms": {
@@ -12334,9 +11136,9 @@
           "total_control_count": 7,
           "drive_x": null,
           "drive_z": null,
-          "boot_frame_count": "2",
-          "runtime_frame_count": "10",
-          "terminal_frame_count": "10",
+          "boot_frame_count": null,
+          "runtime_frame_count": "9",
+          "terminal_frame_count": "9",
           "terminal_frame_source": "runtime"
         },
         "animation_state_stable_250ms": true
@@ -12351,52 +11153,52 @@
             {
               "counter": "runtime",
               "value": 1,
-              "at_ms": 86.1
+              "at_ms": 90.9
             },
             {
               "counter": "runtime",
               "value": 2,
-              "at_ms": 91.2
+              "at_ms": 95.8
             },
             {
               "counter": "runtime",
               "value": 3,
-              "at_ms": 93.1
+              "at_ms": 97.2
             },
             {
               "counter": "runtime",
               "value": 4,
-              "at_ms": 109.7
+              "at_ms": 113
             },
             {
               "counter": "runtime",
               "value": 5,
-              "at_ms": 126.4
+              "at_ms": 130.8
             },
             {
               "counter": "runtime",
               "value": 6,
-              "at_ms": 143
+              "at_ms": 147
             },
             {
               "counter": "runtime",
               "value": 7,
-              "at_ms": 159.6
+              "at_ms": 163
             },
             {
               "counter": "runtime",
               "value": 8,
-              "at_ms": 176.4
+              "at_ms": 180.7
             },
             {
               "counter": "runtime",
               "value": 9,
-              "at_ms": 192.7
+              "at_ms": 197.5
             },
             {
               "counter": "runtime",
               "value": 10,
-              "at_ms": 209.9
+              "at_ms": 214.3
             }
           ]
         },
@@ -12446,6 +11248,6 @@
     "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
     "release": "1.0.5",
     "asset_sha256": "bd1322dec96ae734a67cde145e61ed537641600ac550727b2fe215004ac4cd90",
-    "runtime_sha256": "70540043ea8613b485995df03e5d54ec27c47810ada65758b17c588c4dd6174d"
+    "runtime_sha256": "565d44adbbb686c0ca082d9af8968f14716d8451c38e723de1499a626100da63"
   }
 }

@@ -31,7 +31,7 @@
       "source": "repo-locked-default",
       "lockfile": {
         "path": "package-lock.json",
-        "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+        "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
         "bytes": 1786
       },
       "browser_executable": {
@@ -2036,29 +2036,29 @@
         ]
       }
     },
-    "captured_at_utc": "2026-08-26T17:38:03.523Z",
+    "captured_at_utc": "2026-08-26T17:54:35.908Z",
     "physical_device_session": false,
     "assistive_technology_session": false
   },
   "capture_runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
   "capture_artifacts": {
     "screenshots": [
       {
         "path": "docs/review/742/browser-captures/742-semantic-selection-boom.png",
-        "sha256": "8e8f672f1c39d50e5882562a08c13f243254c78efc13eb1cd79f0fcc31e10f35",
-        "bytes": 147767,
+        "sha256": "133ca179feca0f966b196bb1a471cf1f7fd255929e3547796db17f40a1349fef",
+        "bytes": 147751,
         "width_px": 1280,
         "height_px": 720
       }
     ],
     "automation_trace": {
       "path": "docs/review/742/browser-captures/semantic-selection-trace.json",
-      "sha256": "dbe47874622460771b7074e8528a1e19d04076b17a204836f73a2603ef779ef2",
-      "bytes": 105702,
+      "sha256": "2cb495aa25a2651f0ee615bb742141c6c2a7ce141e5c974d508b93807d10f9a2",
+      "bytes": 105700,
       "width_px": null,
       "height_px": null
     }
@@ -2093,7 +2093,7 @@
             "data-orbit-min-distance-m": "4.40",
             "data-orbit-effective-max-distance-m": "24.00",
             "data-orbit-desired-distance-m": "23.94",
-            "data-orbit-camera-distance-m": "23.926",
+            "data-orbit-camera-distance-m": "23.925",
             "data-orbit-azimuth-rad": "-1.100000",
             "data-orbit-polar-rad": "1.180000",
             "data-frame-p95-ms": "16.7 ms",
@@ -2108,8 +2108,8 @@
             "data-rear-toe-deg": "0.000",
             "data-zone": "stowed",
             "data-steer-mode-alignment": "centered",
-            "data-runtime-frame-count": "317",
-            "data-runtime-last-frame-ms": "5368.300",
+            "data-runtime-frame-count": "321",
+            "data-runtime-last-frame-ms": "5414.200",
             "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
             "data-selection-fixture-cases": "5/5",
             "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2838,18 +2838,18 @@
               8.289,
               7.834,
               7.433,
-              7.078,
-              6.765,
+              7.08,
+              6.767,
               6.49,
-              6.246,
-              6.031,
+              6.247,
+              6.033,
               5.841,
-              5.672,
+              5.673,
               5.524,
               5.393,
               5.277,
               5.175,
-              5.084,
+              5.085,
               5.005,
               4.934,
               4.872,
@@ -2861,10 +2861,10 @@
               4.624,
               4.598,
               4.575,
-              4.554,
+              4.555,
               4.537,
               4.521,
-              4.506,
+              4.507,
               4.494,
               4.483,
               4.473,
@@ -2872,7 +2872,7 @@
               4.457,
               4.451,
               4.445,
-              4.439,
+              4.44,
               4.435,
               4.431,
               4.427,
@@ -2908,7 +2908,7 @@
         "stow_pressed": true,
         "controls_expanded": false,
         "selected_component": null,
-        "camera_distance_m": 23.926,
+        "camera_distance_m": 23.925,
         "desired_distance_m": 23.94,
         "pose_frame_distance_m": 8.81,
         "effective_max_distance_m": 24,
@@ -2945,18 +2945,18 @@
           },
           "projected_bounds_css_px": {
             "left": 481.52,
-            "right": 793.21,
-            "top": 277.78,
+            "right": 793.22,
+            "top": 277.77,
             "bottom": 457.79
           },
           "edge_margins_css_px": {
             "left": 481.52,
-            "right": 486.79,
-            "top": 277.78,
+            "right": 486.78,
+            "top": 277.77,
             "bottom": 262.21
           },
           "minimum_edge_margin_css_px": 28,
-          "camera_distance_m": 23.926,
+          "camera_distance_m": 23.925,
           "camera_orientation": {
             "kind": "azimuth-polar",
             "azimuth_rad": -1.1,

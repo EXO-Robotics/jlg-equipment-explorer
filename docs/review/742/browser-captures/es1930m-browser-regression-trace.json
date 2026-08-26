@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "es1930m_browser_regression",
-  "captured_at_utc": "2026-08-26T17:38:36.276Z",
+  "captured_at_utc": "2026-08-26T17:55:08.829Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+      "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
-  "outcomes_sha256": "c0a55a4b30dc2d930eefb484fe25dfa1b1329a794472a7cb774bd4667eb82d94",
+  "outcomes_sha256": "426d03b5b64be523d881f92e484f949b2c76e34e4a0652b1c84f541bfae41f70",
   "outcomes": {
     "load_exact_release": {
       "outcome": "pass",
@@ -2071,7 +2071,7 @@
               "data-zone": "stowed",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "34",
-              "data-runtime-last-frame-ms": "613.000",
+              "data-runtime-last-frame-ms": "604.500",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296",
               "class": "controls-panel-collapsed"
@@ -2148,8 +2148,8 @@
     },
     "drag_orbit": {
       "outcome": "pass",
-      "before_canvas_sha256": "5f87a7f2ec00619fe4e9b85beba6bc5454a1d9b92bc4580de44dc6eed1cc5f29",
-      "after_canvas_sha256": "3b69741df91d9b7953dd6f50515e27f9e8f603e76e311b24a49c8b05c9207510"
+      "before_canvas_sha256": "fed0921af5acbbe3f1d89afb8be9190769ef7010a8cfb8030f992747b1371506",
+      "after_canvas_sha256": "94687874bf6c8caf54758c7895e148b54442fc31d214e9af0faab5b2ea4e88b6"
     },
     "pinch_zoom": {
       "outcome": "pass",
@@ -2179,8 +2179,8 @@
         "CANVAS",
         "CANVAS"
       ],
-      "before_canvas_sha256": "ba14f47e737031c6d02f5584d646402382f5065f64894e0f18057269bd7cbeea",
-      "after_canvas_sha256": "18c0a82e460c1bd25dc02f65de33ed95f9f6cc35643fdb1dc983f2739268ec84",
+      "before_canvas_sha256": "7a1fba8dce8344003052846ff89285f5f3d1a857bfe1490e3e9fbd0c7b11c846",
+      "after_canvas_sha256": "a6f4fce6085a6ebcc1dabed05b1f4c160330988d5387bc156c398c8931a5a68f",
       "before_desired_distance_m": "9.197",
       "after_desired_distance_m": "3.219",
       "observable_render_or_distance_change": true
@@ -2231,52 +2231,62 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 63.4
+                "at_ms": 45.5
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 79.3
+                "at_ms": 53.6
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 97.1
+                "at_ms": 66.1
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 114.2
+                "at_ms": 82.9
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 131.2
+                "at_ms": 98.7
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 147.6
+                "at_ms": 115.3
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 162.8
+                "at_ms": 132.6
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 179.8
+                "at_ms": 149.5
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 198.1
+                "at_ms": 165.6
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 214
+                "at_ms": 182.4
+              },
+              {
+                "counter": "boot",
+                "value": 11,
+                "at_ms": 198.9
+              },
+              {
+                "counter": "boot",
+                "value": 12,
+                "at_ms": 216.1
               }
             ]
           },
@@ -2293,9 +2303,9 @@
             "total_control_count": 7,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "10",
+            "boot_frame_count": "12",
             "runtime_frame_count": null,
-            "terminal_frame_count": "10",
+            "terminal_frame_count": "12",
             "terminal_frame_source": "boot"
           },
           "terminal_after_250ms": {
@@ -2311,9 +2321,9 @@
             "total_control_count": 7,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "10",
+            "boot_frame_count": "12",
             "runtime_frame_count": null,
-            "terminal_frame_count": "10",
+            "terminal_frame_count": "12",
             "terminal_frame_source": "boot"
           },
           "animation_state_stable_250ms": true
@@ -2328,57 +2338,57 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 62.9
+                "at_ms": 61.6
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 79.4
+                "at_ms": 78.7
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 94.8
+                "at_ms": 94.5
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 112
+                "at_ms": 112.1
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 129.8
+                "at_ms": 128.8
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 146.4
+                "at_ms": 145.4
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 163.1
+                "at_ms": 162
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 178.4
+                "at_ms": 178.5
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 195.3
+                "at_ms": 195.5
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 212.9
+                "at_ms": 212
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 229.5
+                "at_ms": 228.7
               }
             ]
           },
@@ -2430,52 +2440,47 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 91.5
+                "at_ms": 93.1
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 96.4
+                "at_ms": 99.2
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 97.8
+                "at_ms": 108.7
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 116.6
+                "at_ms": 126.1
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 130.6
+                "at_ms": 142.5
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 148.9
+                "at_ms": 159.3
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 165.2
+                "at_ms": 175.9
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 181.3
+                "at_ms": 192.1
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 197.1
-              },
-              {
-                "counter": "runtime",
-                "value": 10,
-                "at_ms": 215.8
+                "at_ms": 208.8
               }
             ]
           },
@@ -2492,9 +2497,9 @@
             "total_control_count": 7,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "2",
-            "runtime_frame_count": "10",
-            "terminal_frame_count": "10",
+            "boot_frame_count": null,
+            "runtime_frame_count": "9",
+            "terminal_frame_count": "9",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2510,9 +2515,9 @@
             "total_control_count": 7,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "2",
-            "runtime_frame_count": "10",
-            "terminal_frame_count": "10",
+            "boot_frame_count": null,
+            "runtime_frame_count": "9",
+            "terminal_frame_count": "9",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2527,52 +2532,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 86.1
+                "at_ms": 90.9
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 91.2
+                "at_ms": 95.8
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 93.1
+                "at_ms": 97.2
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 109.7
+                "at_ms": 113
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 126.4
+                "at_ms": 130.8
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 143
+                "at_ms": 147
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 159.6
+                "at_ms": 163
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 176.4
+                "at_ms": 180.7
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 192.7
+                "at_ms": 197.5
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 209.9
+                "at_ms": 214.3
               }
             ]
           },
@@ -2683,7 +2688,7 @@
               "rect_css_px": {
                 "left": 28,
                 "right": 418,
-                "top": 267.72,
+                "top": 376.22,
                 "bottom": 692
               },
               "intersects_machine_bounds": false
@@ -2841,7 +2846,7 @@
               "data-zone": "indoor-only",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "113",
-              "data-runtime-last-frame-ms": "1929.500",
+              "data-runtime-last-frame-ms": "1937.800",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296",
               "class": "",

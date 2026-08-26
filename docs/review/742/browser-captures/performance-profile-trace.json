@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "performance_profile",
-  "captured_at_utc": "2026-08-26T17:38:09.077Z",
+  "captured_at_utc": "2026-08-26T17:54:41.524Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+      "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
-  "outcomes_sha256": "16c15045d92e0d0150181beb1627328162ee5d49b2b6d928179c22b5c2fc6195",
+  "outcomes_sha256": "6a80ee216d4312f7027b06eb05292365bf3eb7be1dc588b7ea22f1ee3ecc0b43",
   "outcomes": {
     "desktop": {
       "outcome": "pass",
@@ -2031,7 +2031,7 @@
       ],
       "summary": {
         "sample_count": 180,
-        "p95_ms": 16.7,
+        "p95_ms": 16.8,
         "worst_ms": 16.8,
         "visible_stall_count_gte_250ms": 0
       }
@@ -2044,7 +2044,7 @@
       ],
       "summary": {
         "sample_count": 180,
-        "p95_ms": 16.7,
+        "p95_ms": 16.8,
         "worst_ms": 16.8,
         "visible_stall_count_gte_250ms": 0
       }
@@ -2057,7 +2057,7 @@
       ],
       "summary": {
         "sample_count": 180,
-        "p95_ms": 16.8,
+        "p95_ms": 16.7,
         "worst_ms": 16.8,
         "visible_stall_count_gte_250ms": 0
       }

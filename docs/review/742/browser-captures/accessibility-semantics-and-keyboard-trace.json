@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T17:38:01.007Z",
+  "captured_at_utc": "2026-08-26T17:54:33.348Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
+      "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
-    "bytes": 91292
+    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
+    "bytes": 92425
   },
-  "outcomes_sha256": "62b585a7def1fe495a454056d7500ed9f98bb3e7bdf602fb26ad7bef121322cd",
+  "outcomes_sha256": "1e3aa98d83322fdf04042effd81ce2458eebd64cd29e750e05aba9f641e3673a",
   "outcomes": {
     "application_instructions": {
       "outcome": "pass",
@@ -2062,10 +2062,10 @@
             "steer-control": "0",
             "level-control": "0"
           },
-          "drive_x": null,
-          "drive_z": null,
-          "drive_loop": null,
-          "wheel_rotations_rad": null
+          "drive_x": "0.02",
+          "drive_z": "0.01",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.037,-0.037,-0.037,-0.037"
         },
         "before_reduce": {
           "controls": {
@@ -2073,51 +2073,51 @@
             "telescope-control": "0",
             "tilt-control": "1",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.20",
+          "drive_z": "0.13",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
+          "wheel_rotations_rad": "-0.373,-0.374,-0.373,-0.374"
         },
         "reduced_start": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
+          "wheel_rotations_rad": "-0.391,-0.392,-0.391,-0.392"
         },
         "reduced_end": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
+          "wheel_rotations_rad": "-0.391,-0.392,-0.391,-0.392"
         },
         "relaxed": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336",
+          "wheel_rotations_rad": "-0.391,-0.392,-0.391,-0.392",
           "control_pressed": "false",
           "manual": true
         }

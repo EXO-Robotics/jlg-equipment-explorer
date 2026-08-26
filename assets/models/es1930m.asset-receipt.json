@@ -37,7 +37,7 @@
     "review_evidence": {
       "bytes": 223689,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "dbcfcb8cd735df836bb0538e293d099bfd683af0c0b0ff41d035b5e1f326b061"
+      "sha256": "10fbdb758f90f0f88485992369029f0489fff417b1d298b8932d1cefcfe20e8c"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -109,7 +109,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "70540043ea8613b485995df03e5d54ec27c47810ada65758b17c588c4dd6174d"
+    "sha256": "565d44adbbb686c0ca082d9af8968f14716d8451c38e723de1499a626100da63"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"
