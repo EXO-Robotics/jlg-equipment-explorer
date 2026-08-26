@@ -72,22 +72,22 @@
     "sampled_lift_states": 101
   },
   "release": "1.0.4",
-  "release_status": "release",
+  "release_status": "candidate_not_deployable",
   "review_flags": {
-    "600s_regression_suite_pass": true,
-    "accessibility_reviewed": true,
-    "deployed_pages_reviewed": true,
-    "desktop_browser_zero_errors": true,
-    "extension_browser_reviewed": true,
-    "figure_eight_presentation_reviewed": true,
-    "mobile_and_pinch_reviewed": true,
-    "mobile_drag_direction_reviewed": true,
-    "performance_reviewed": true,
-    "platform_controls_visual_reviewed": true,
-    "raised_pose_browser_reviewed": true,
-    "selection_and_focus_reviewed": true,
-    "steering_boundary_reviewed": true,
-    "stowed_silhouette_reviewed": true
+    "600s_regression_suite_pass": false,
+    "accessibility_reviewed": false,
+    "deployed_pages_reviewed": false,
+    "desktop_browser_zero_errors": false,
+    "extension_browser_reviewed": false,
+    "figure_eight_presentation_reviewed": false,
+    "mobile_and_pinch_reviewed": false,
+    "mobile_drag_direction_reviewed": false,
+    "performance_reviewed": false,
+    "platform_controls_visual_reviewed": false,
+    "raised_pose_browser_reviewed": false,
+    "selection_and_focus_reviewed": false,
+    "steering_boundary_reviewed": false,
+    "stowed_silhouette_reviewed": false
   },
   "runtime": {
     "files": [
@@ -103,8 +103,8 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "78529f247708604f0222a61182367459f0c91ce81f4e7930d2c63d67c836d937"
+    "sha256": "aa684a81d30e45377be80ea5ea5040c4f5689ca612a55f763da2cfd34d8c6420"
   },
   "schema_version": "1.0.0",
-  "written": "2026-08-25"
+  "written": "2026-08-26"
 }

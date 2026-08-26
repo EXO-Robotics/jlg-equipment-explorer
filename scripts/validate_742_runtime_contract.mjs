@@ -19,6 +19,7 @@ requireTokens(runtime, [
   "frontmost-rendered-component-then-nearest-proxy", "selectionOverlapOutcomes", "selectionFixtureOutcomes",
   "setProgrammaticViewDistance", "orbitEffectiveMaxDistanceM", "effectiveMaxDistance",
   "showTerminalError", "identity-failed", "contract-failed", "load-failed", "loader-start-failed",
+  "const ASSET_LOAD_TIMEOUT_MS = 15000", "load-timeout", "clearTimeout(loadTimeout)",
   "controlPanel.querySelectorAll(\"button, input\")", "if (terminalFailure) return;",
   "handleMotionPreferenceChange", "syncReducedMotion(true)", "scheduleMotionAnnouncement",
   "resetPerformanceWindow", "visibility-hidden", "visibility-visible",
@@ -27,6 +28,7 @@ requireTokens(runtime, [
 ], "runtime");
 requireTokens(index, [
   'id="motion-announcement" aria-live="polite" aria-atomic="true"',
+  'id="error" role="alert" aria-live="assertive" tabindex="-1"',
   "window.__show742ModuleFailure", "module-load-failed", 'onerror="window.__show742ModuleFailure()"',
 ]);
 if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
@@ -84,6 +86,7 @@ console.log(JSON.stringify({
   visible_frame_samples: frameWindow.length,
   visible_stalls: stalls.length,
   terminal_module_failure_fallback: true,
+  bounded_asset_timeout_ms: 15000,
   settled_live_region: true,
   dynamic_reduced_motion_listener: true,
   dynamic_chain_and_sensor_consumer: true,

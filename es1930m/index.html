@@ -7,8 +7,8 @@
   <title>ES1930M Interactive Equipment Study</title>
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="preload" href="../assets/models/es1930m.glb?v=c128b99ceb3a" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.0.4">
-  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.4">
+  <link rel="stylesheet" href="../viewer.css?v=1.0.5">
+  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.5">
   <script type="importmap">
     {
       "imports": {
@@ -27,12 +27,12 @@
     <span id="loader-status">Loading ES1930M</span>
     <small id="loader-detail">Validating the PVC 2404 reconstruction</small>
   </div>
-  <div class="error" id="error" hidden><div><strong>Viewer unavailable.</strong><p id="error-copy">This interactive study needs WebGL and a valid ES1930M asset.</p></div></div>
+  <div class="error" id="error" role="alert" aria-live="assertive" tabindex="-1" hidden><div><strong>Viewer unavailable.</strong><p id="error-copy">This interactive study needs WebGL and a valid ES1930M asset.</p></div></div>
 
   <main class="interface">
     <header class="topbar">
       <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
-      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.4</div>
+      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.5</div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 
@@ -86,7 +86,7 @@
       <button type="button" data-focus="steering" aria-pressed="false"><i>04</i>Steering</button>
     </nav>
     <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll to zoom <span>/</span> Select a component</div>
-    <output class="diagnostics" id="diagnostics" hidden aria-live="polite"></output>
+    <output class="diagnostics" id="diagnostics" hidden></output>
   </main>
 
   <div class="scrim" id="scrim" aria-hidden="true"></div>
@@ -99,6 +99,6 @@
   </aside>
 
   <script>window.__showcaseBootAt = performance.now();</script>
-  <script type="module" src="../viewer/runtime.js?v=1.0.4"></script>
+  <script type="module" src="../viewer/runtime.js?v=1.0.5"></script>
 </body>
 </html>

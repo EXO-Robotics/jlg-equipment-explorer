@@ -2,7 +2,8 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.6";
 
-const ROUTE_RELEASE = "1.6.0";
+const ROUTE_RELEASE = "1.6.1";
+const ASSET_LOAD_TIMEOUT_MS = 15000;
 const machine = JLG742_MACHINE;
 const query = new URLSearchParams(location.search);
 const forceReducedMotion = query.get("reduce") === "1";
@@ -207,6 +208,7 @@ function updateCamera(delta = 1) {
   const ease = reducedMotion ? 1 : Math.min(1, delta * 7);
   orbit.target.lerp(orbit.desiredTarget, ease);
   orbit.distance = THREE.MathUtils.lerp(orbit.distance, orbit.desiredDistance, ease);
+  document.body.dataset.orbitCameraDistanceM = orbit.distance.toFixed(3);
   const sinPolar = Math.sin(orbit.polar);
   camera.position.set(
     orbit.target.x + orbit.distance * sinPolar * Math.cos(orbit.azimuth),
@@ -502,6 +504,14 @@ function selectAt(clientX, clientY) {
   const semanticHits = raycaster.intersectObjects(selectionVolumes, false);
   const visibleSurfaceHit = nearestVisibleComponentIntersection(raycaster);
   const hit = resolveSelectionIntersection(semanticHits, visibleSurfaceHit);
+  if (visibleSurfaceHit) {
+    document.body.dataset.lastRenderedSurfaceComponent = visibleSurfaceHit.semanticComponent;
+    document.body.dataset.lastRenderedSurfaceMesh = visibleSurfaceHit.object.name;
+  } else {
+    delete document.body.dataset.lastRenderedSurfaceComponent;
+    delete document.body.dataset.lastRenderedSurfaceMesh;
+  }
+  document.body.dataset.lastSelectionResolutionBasis = visibleSurfaceHit && hit?.object.userData.component === visibleSurfaceHit.semanticComponent ? "visible-surface" : "nearest-proxy";
   const component = hit?.object.userData.component || null;
   runtime.selection = component || "miss";
   if (component) {
@@ -823,8 +833,12 @@ app.addEventListener("keydown", (event) => {
 
 function loadMachineAsset() {
   const loadStarted = performance.now();
+  const loadTimeout = setTimeout(() => {
+    showTerminalError(new Error(`742 asset load exceeded ${ASSET_LOAD_TIMEOUT_MS} ms`), "The evidence-bound 742 asset did not finish loading in time. No substitute was shown.", "load-timeout");
+  }, ASSET_LOAD_TIMEOUT_MS);
   try {
     new GLTFLoader().load(machine.assetUrl, (gltf) => {
+      clearTimeout(loadTimeout);
       if (terminalFailure) return;
       try {
         const validation = machine.validateAsset(gltf.scene);
@@ -862,9 +876,11 @@ function loadMachineAsset() {
         showTerminalError(error, `The ${machine.identity.model} asset failed its hierarchy or semantic-selection contract. No substitute was shown.`, "contract-failed");
       }
     }, undefined, (error) => {
+      clearTimeout(loadTimeout);
       showTerminalError(error, `The evidence-bound ${machine.identity.model} asset could not be loaded. No procedural substitute was used.`, "load-failed");
     });
   } catch (error) {
+    clearTimeout(loadTimeout);
     showTerminalError(error, `The evidence-bound ${machine.identity.model} asset loader could not start. No procedural substitute was used.`, "loader-start-failed");
   }
 }

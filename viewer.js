@@ -7,11 +7,13 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.9";
+} from "./assets/models/600s.version.js?v=1.1.10";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
-const reducedMotion = query.get("reduce") === "1" || (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false);
+const forceReducedMotion = query.get("reduce") === "1";
+const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)") ?? null;
+let reducedMotion = forceReducedMotion || Boolean(motionPreference?.matches);
 const compactRender = window.matchMedia?.("(max-width: 800px)").matches ?? false;
 const lowMemoryDevice = Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4;
 const renderProfile = lowMemoryDevice ? "economy" : compactRender ? "mobile" : "desktop";
@@ -802,7 +804,7 @@ let lastMotionStatus = motionStatus.value || motionStatus.textContent;
 const suffixes = { boomAngle: "°", telescope: "%", turntableAngle: "°", steeringAngle: "°" };
 const controlNames = { boomAngle: "Boom", telescope: "Extend", turntableAngle: "Rotate", steeringAngle: "Steer" };
 const fixedPoseQuery = ["boom", "extend", "rotate", "steer"].some((key) => query.has(key));
-const autonomyLocked = reducedMotion || fixedPoseQuery;
+let autonomyLocked = reducedMotion || fixedPoseQuery;
 const autonomy = {
   enabled: !autonomyLocked && query.get("auto") !== "0",
   phase: 0,
@@ -887,15 +889,20 @@ function updateAutonomyTelemetry(now = performance.now()) {
   const recovering = autonomy.enabled && !overrideKeys.length && autonomy.routeError > 0.6;
   const overrideLabel = overrideKeys.map((key) => controlNames[key]).join(" + ");
   const mode = autonomyLocked ? "Static pose" : autonomy.enabled ? overrideKeys.length ? `Override · ${overrideLabel}` : recovering ? "Route recovery" : "Auto loop" : "Manual";
-  autonomyMode.value = mode;
-  autonomyNote.textContent = autonomyLocked
+  if (autonomyMode.value !== mode) autonomyMode.value = mode;
+  const note = autonomyLocked
     ? reducedMotion ? "Reduced motion keeps the route stationary." : "Query poses keep the route stationary."
     : autonomy.enabled ? recovering ? "Steering back onto the presentation route." : "Move a slider for a 6 s override." : "All machine controls are live.";
-  driveHeadingOutput.value = `${String(normalizedHeadingDegrees(autonomy.heading)).padStart(3, "0")}°`;
-  driveLoopOutput.value = `${Math.round((autonomy.phase / (Math.PI * 2)) * 100)}%`;
+  if (autonomyNote.textContent !== note) autonomyNote.textContent = note;
+  const heading = `${String(normalizedHeadingDegrees(autonomy.heading)).padStart(3, "0")}°`;
+  const loop = `${Math.round((autonomy.phase / (Math.PI * 2)) * 100)}%`;
+  if (driveHeadingOutput.value !== heading) driveHeadingOutput.value = heading;
+  if (driveLoopOutput.value !== loop) driveLoopOutput.value = loop;
   autonomyToggle.disabled = autonomyLocked;
-  autonomyToggle.setAttribute("aria-pressed", String(autonomy.enabled));
-  autonomyToggle.textContent = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
+  const pressed = String(autonomy.enabled);
+  if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
+  const buttonLabel = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
+  if (autonomyToggle.textContent !== buttonLabel) autonomyToggle.textContent = buttonLabel;
   document.body.dataset.autonomyMode = autonomyLocked ? "static" : autonomy.enabled ? overrideKeys.length ? "override" : recovering ? "recovering" : "auto" : "manual";
   document.body.dataset.autonomyOverrides = overrideKeys.join(",") || "none";
   document.body.dataset.driveHeading = String(normalizedHeadingDegrees(autonomy.heading));
@@ -910,6 +917,31 @@ function setAutonomyEnabled(enabled) {
   setMotionStatus(autonomy.enabled ? "Autonomous" : "Manual");
   updateAutonomyTelemetry();
 }
+
+function syncReducedMotion(announce = false) {
+  const nextReducedMotion = forceReducedMotion || Boolean(motionPreference?.matches);
+  const changed = nextReducedMotion !== reducedMotion;
+  const wasAutonomous = autonomy.enabled;
+  reducedMotion = nextReducedMotion;
+  autonomyLocked = reducedMotion || fixedPoseQuery;
+  document.body.dataset.reducedMotion = String(reducedMotion);
+  if (reducedMotion) {
+    Object.keys(targets).forEach((key) => { targets[key] = machineState[key]; });
+    orbit.vTheta = 0;
+    orbit.vPhi = 0;
+    setAutonomyEnabled(false);
+    syncInputs();
+    if (announce && changed) setMotionStatus(wasAutonomous ? "Reduced motion · auto stopped" : "Reduced motion");
+  } else {
+    updateAutonomyTelemetry();
+    if (announce && changed) setMotionStatus(autonomyLocked ? "Static query pose" : "Manual · auto available");
+  }
+  updateDiagnostics();
+}
+
+const handleMotionPreferenceChange = () => syncReducedMotion(true);
+if (motionPreference?.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
+else motionPreference?.addListener?.(handleMotionPreferenceChange);
 
 autonomyToggle.addEventListener("click", () => setAutonomyEnabled(!autonomy.enabled));
 updateAutonomyTelemetry();

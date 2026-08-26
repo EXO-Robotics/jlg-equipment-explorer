@@ -87,6 +87,13 @@ def main() -> None:
 
     require_tokens(viewer, [
         'query.get("reduce") === "1"',
+        'const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)")',
+        "let reducedMotion = forceReducedMotion",
+        "function syncReducedMotion(announce = false)",
+        'motionPreference.addEventListener("change", handleMotionPreferenceChange)',
+        "Object.keys(targets).forEach((key) => { targets[key] = machineState[key]; })",
+        "let autonomyLocked = reducedMotion || fixedPoseQuery",
+        "if (autonomyMode.value !== mode) autonomyMode.value = mode",
         'window.addEventListener("error", recordRuntimeError)',
         'window.addEventListener("unhandledrejection", recordRuntimeError)',
         "runSelectionVolumeSelfTest",
@@ -138,6 +145,7 @@ def main() -> None:
     ], "viewer runtime")
 
     for forbidden in (
+        "const reducedMotion = query.get",
         "focusComponent(hit.component",
         "dataset.lastSelectionVolume",
         'canvas.style.cursor = hit ? "pointer"',
