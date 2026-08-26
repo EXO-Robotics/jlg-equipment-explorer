@@ -87,6 +87,8 @@ def main() -> None:
 
     if index.count('aria-describedby="motion-boundary"') != 4:
         raise RuntimeError("Every motion range must reference the presentation-only boundary")
+    if 'class="component-nav' in index or 'data-focus=' in index:
+        raise RuntimeError("Removed component Explore tabs returned to the 600S route")
     for asset in ("viewer.css", "viewer.js"):
         if f'{asset}?v={runtime_release}' not in index:
             raise RuntimeError(f"{asset} cache key does not match runtime release {runtime_release}")
@@ -142,7 +144,6 @@ def main() -> None:
         'function focusComponent(component)',
         "prepareHitVolumes",
         "updateHitVolumeEmphasis",
-        'focusKeys = { "1": "chassis", "2": "turntable", "3": "boom", "4": "platform" }',
         'event.key === "ArrowLeft"',
         'event.key === "ArrowRight"',
         'event.key === "ArrowUp"',
@@ -211,7 +212,7 @@ def main() -> None:
         "release": release,
         "runtime_release": runtime_release,
         "mobile_controls_default": "collapsed",
-        "keyboard_components": 4,
+        "component_navigation_removed": True,
         "motion_ranges_described": 4,
         "selection_volumes_self_tested": 5,
         "remote_startup_assets": 0,

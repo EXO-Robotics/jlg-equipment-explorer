@@ -20,7 +20,7 @@
   <meta name="twitter:image:alt" content="JLG 600S boom lift reconstruction shown in the 3D authoring workspace">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="preload" href="../assets/models/es1930m.glb?v=bd1322dec96a" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.0.10">
+  <link rel="stylesheet" href="../viewer.css?v=1.0.11">
   <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.9">
   <link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">
   <script type="importmap">
@@ -34,7 +34,7 @@
 </head>
 <body data-machine="es1930m">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG ES1930M visualization" aria-describedby="viewer-instructions"></div>
-  <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.</p>
+  <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.</p>
 
   <div class="loader" id="loader" role="status">
     <span class="loader-mark"></span>
@@ -72,11 +72,13 @@
 
     <section class="control-panel" aria-labelledby="operate-title">
       <div class="panel-heading">
-        <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
-        <div class="panel-state">
+        <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">
+          <span class="panel-kicker">Operate</span>
+          <strong id="operate-title">Machine controls</strong>
           <output id="motion-status" aria-live="polite" aria-atomic="true">Stowed</output>
-          <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">Close</button>
-        </div>
+          <i class="controls-action" aria-hidden="true">Close</i>
+        </button>
+        <button class="autonomy-toggle" id="autonomy-toggle" type="button" aria-pressed="false" disabled>Manual</button>
       </div>
       <div class="controls-body" id="machine-controls-body">
         <div class="autonomy-bar" aria-label="Autonomous presentation route">
@@ -89,7 +91,6 @@
             <div><dt>Heading</dt><dd id="drive-heading">000°</dd></div>
             <div><dt>Loop</dt><dd id="drive-loop">0%</dd></div>
           </dl>
-          <button class="autonomy-toggle" id="autonomy-toggle" type="button" aria-pressed="false" disabled>Start auto</button>
         </div>
         <label class="control-row"><span>Platform lift</span><output id="lift-value">0%</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Platform lift" aria-describedby="motion-boundary"></label>
         <label class="control-row"><span>Extension deck</span><output id="deck-value">0.00 m</output><input id="deck-control" type="range" min="0" max="100" value="0" step="1" aria-label="Extension deck" aria-describedby="motion-boundary"></label>
@@ -99,14 +100,7 @@
       </div>
     </section>
 
-    <nav class="component-nav" aria-label="Explore components">
-      <span>Explore</span>
-      <button type="button" data-focus="chassis" aria-pressed="false"><i>01</i>Chassis</button>
-      <button type="button" data-focus="scissor" aria-pressed="false"><i>02</i>Scissor</button>
-      <button type="button" data-focus="platform" aria-pressed="false"><i>03</i>Platform</button>
-      <button type="button" data-focus="steering" aria-pressed="false"><i>04</i>Steering</button>
-    </nav>
-    <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll to zoom <span>/</span> Select a component</div>
+    <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom</div>
     <output class="diagnostics" id="diagnostics" hidden></output>
   </main>
 
@@ -152,6 +146,6 @@
       window.__showES1930MBootstrapFailure("The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, 8000);
   </script>
-  <script type="module" src="../viewer/runtime.js?v=1.0.11" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__showES1930MBootstrapFailure('The ES1930M rendering runtime could not be loaded. No substitute was shown.')"></script>
+  <script type="module" src="../viewer/runtime.js?v=1.0.12" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__showES1930MBootstrapFailure('The ES1930M rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

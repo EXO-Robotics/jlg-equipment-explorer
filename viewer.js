@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.15";
+} from "./assets/models/600s.version.js?v=1.1.16";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -61,7 +61,7 @@ function setControlsPanel(open) {
   controlsToggle.hidden = false;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
   controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls");
-  controlsToggle.textContent = expanded ? "Close" : (isMobile ? "Adjust" : "Open");
+  controlsToggle.querySelector(".controls-action").textContent = expanded ? "Close" : (isMobile ? "Adjust" : "Open");
   document.body.classList.toggle("mobile-controls-open", isMobile && expanded);
   document.body.classList.toggle("controls-panel-collapsed", !expanded);
   requestAnimationFrame(updateMobileControlHeight);
@@ -971,8 +971,9 @@ function updateAutonomyTelemetry(now = performance.now()) {
   autonomyToggle.disabled = autonomyLocked;
   const pressed = String(autonomy.enabled);
   if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
-  const buttonLabel = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
+  const buttonLabel = autonomyLocked ? "Static" : autonomy.enabled ? "Auto" : "Manual";
   if (autonomyToggle.textContent !== buttonLabel) autonomyToggle.textContent = buttonLabel;
+  autonomyToggle.setAttribute("aria-label", autonomyLocked ? "Automatic drive unavailable" : autonomy.enabled ? "Switch to manual drive" : "Switch to automatic drive");
   document.body.dataset.autonomyMode = autonomyLocked ? "static" : autonomy.enabled ? overrideKeys.length ? "override" : recovering ? "recovering" : "auto" : "manual";
   document.body.dataset.autonomyOverrides = overrideKeys.join(",") || "none";
   document.body.dataset.driveHeading = String(normalizedHeadingDegrees(autonomy.heading));
@@ -1177,7 +1178,6 @@ function resetView() {
 document.querySelector("#reset-view").addEventListener("click", resetView);
 
 app.addEventListener("keydown", (event) => {
-  const focusKeys = { "1": "chassis", "2": "turntable", "3": "boom", "4": "platform" };
   let handled = true;
   if (event.key === "ArrowLeft") orbit.theta -= 0.12;
   else if (event.key === "ArrowRight") orbit.theta += 0.12;
@@ -1185,7 +1185,6 @@ app.addEventListener("keydown", (event) => {
   else if (event.key === "ArrowDown") orbit.phi = THREE.MathUtils.clamp(orbit.phi + 0.08, 0.42, 1.48);
   else if (event.key === "+" || event.key === "=") { orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal - 1.2, 7, 38); orbit.userZoomed = true; }
   else if (event.key === "-" || event.key === "_") { orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal + 1.2, 7, 38); orbit.userZoomed = true; }
-  else if (focusKeys[event.key]) focusComponent(focusKeys[event.key]);
   else if (event.key === "0") resetView();
   else handled = false;
   if (!handled) return;
@@ -1312,8 +1311,6 @@ function focusComponent(component) {
   updateHitVolumeEmphasis(hoveredHit);
   openInspector(component);
 }
-document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => focusComponent(button.dataset.focus)));
-
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const selectionPriority = {

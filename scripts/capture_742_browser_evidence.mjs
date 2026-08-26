@@ -491,7 +491,7 @@ async function projectedStowMachineBounds(page, model, minimumEdgeMarginCssPx, {
     const canvasRect = document.querySelector("canvas").getBoundingClientRect();
     const machineRect = { left: minX, right: maxX, top: minY, bottom: maxY };
     const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
-    const occludingSelectors = [".control-panel", ".component-nav", ".diagnostics"];
+    const occludingSelectors = [".control-panel", ".diagnostics"];
     const occlusionChecks = occludingSelectors.flatMap((selector) => {
       const element = document.querySelector(selector);
       if (!element || element.hidden || getComputedStyle(element).display === "none" || getComputedStyle(element).visibility === "hidden") return [];
@@ -789,13 +789,13 @@ async function captureDesktop742() {
   }));
   assert(JSON.stringify(resetView.slider_values) === JSON.stringify(beforeReset.slider_values), "Reset View changed the maximum machine pose");
   assert(resetView.pose_frame_distance_m > 0 && resetView.desired_distance_m > 0 && resetView.desired_distance_m <= resetView.effective_max_distance_m && resetView.effective_max_distance_m >= resetView.base_max_distance_m && Math.abs(resetView.camera_distance_m - resetView.desired_distance_m) <= 0.03, `maximum-pose Reset View framing contract failed: ${JSON.stringify(resetView)}`);
-  await page.locator('[data-focus="boom"]').click();
+  await page.locator("#info-toggle").click();
   await page.waitForFunction(() => document.body.classList.contains("inspector-open"));
   await page.waitForFunction(() => document.activeElement?.id === "inspector-close");
   const modalOpen = await snapshot(page);
   assert((await page.evaluate(() => document.activeElement?.id)) === "inspector-close", "742 modal did not focus close button");
   await page.keyboard.press("Escape");
-  assert((await page.evaluate(() => document.activeElement?.dataset?.focus)) === "boom", "742 modal did not restore opener focus");
+  assert((await page.evaluate(() => document.activeElement?.id)) === "info-toggle", "742 modal did not restore opener focus");
   const screenshotPath = await screenshot(page, "742-desktop-maximum-pose-reset.png");
   assert(errors.length === 0, `742 desktop console errors: ${errors.join(" | ")}`);
   await opened.context.close();
@@ -805,7 +805,7 @@ async function captureDesktop742() {
     manual_controls: pass({ values }),
     steering_modes: pass({ pressed_modes: modes, center_required_rejection: centerRequiredRejection }),
     maximum_pose_reset: pass({ reset_pressed_while_pose: "maximum", before_reset: beforeReset, after_reset: resetView, settle: resetSettle }),
-    component_modal: pass({ initial_focus_id: "inspector-close", tab_trapped: true, restored_focus_component: "boom" }),
+    about_modal: pass({ initial_focus_id: "inspector-close", tab_trapped: true, restored_focus_id: "info-toggle" }),
     terminal_failure_matrix: pass({ cases: await capture742Faults() }),
   };
   const tracePath = await writeTrace(gate, capturedAt, assertions);
@@ -1280,7 +1280,7 @@ async function captureRegression(model) {
   const drag = await dragCanvas(desktop.page);
   const axControls = await axNodes(desktop.page);
   const axDomSliders = await domSliderEvidence(desktop.page, regressionSliderSelectors);
-  const modalOpener = model === "es1930m" ? desktop.page.locator('[data-focus="platform"]') : desktop.page.locator("[data-focus]").first();
+  const modalOpener = desktop.page.locator("#info-toggle");
   await modalOpener.click();
   await desktop.page.waitForFunction(() => document.body.classList.contains("inspector-open"));
   await desktop.page.waitForFunction(() => document.activeElement?.id === "inspector-close");
@@ -1290,8 +1290,8 @@ async function captureRegression(model) {
   await desktop.page.keyboard.press("Tab");
   const tabInside = await desktop.page.evaluate(() => document.querySelector("#inspector").contains(document.activeElement));
   await desktop.page.keyboard.press("Escape");
-  const restored = await desktop.page.evaluate(() => document.activeElement?.dataset?.focus || "");
-  assert(activeOpen === "inspector-close" && tabInside && restored, `${model} modal keyboard/focus failed`);
+  const restored = await desktop.page.evaluate(() => document.activeElement?.id || "");
+  assert(activeOpen === "inspector-close" && tabInside && restored === "info-toggle", `${model} modal keyboard/focus failed`);
   let autoObserved = null;
   if (model === "es1930m") {
     const auto = desktop.page.locator("#autonomy-toggle");
@@ -1346,7 +1346,7 @@ async function captureRegression(model) {
     load_exact_release: pass({ route: model === "600s" ? "/" : "/es1930m/", parsed_status: parsed }),
     desktop_controls: pass({ selector: sliderSelector, result: controlResult, collapsed_snapshot: desktopPanelCollapsed, reopen_available: true, reopened: true }),
     mobile_controls: pass({ viewport_css_px: [390, 844], aria_expanded: true }),
-    modal_keyboard: pass({ initial_focus_id: activeOpen, tab_inside: tabInside, restored_focus_component: restored }),
+    modal_keyboard: pass({ initial_focus_id: activeOpen, tab_inside: tabInside, restored_focus_id: restored }),
     drag_orbit: pass({ before_canvas_sha256: drag.before, after_canvas_sha256: drag.after }),
     pinch_zoom: pinch,
     reduced_motion: pass(reduced),

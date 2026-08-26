@@ -52,8 +52,8 @@ requireTokens(runtime, [
   "sorted.filter((sample) => sample >= 250).length",
   'showcaseStarted !== null && !reducedMotion',
   '? "Autonomous"',
-  'const ROUTE_RELEASE = "1.7.1"',
-  'showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Stop auto" : "Start auto"',
+  'const ROUTE_RELEASE = "1.7.2"',
+  'showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Auto" : "Manual"',
   'autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual"',
   'showcaseLoop.textContent = `${Math.round((route.phase / (Math.PI * 2)) * 100)}%`',
 ], "runtime");
@@ -68,15 +68,18 @@ requireTokens(index, [
   '<output id="tilt-value" aria-hidden="true">',
   '<output id="steer-value" aria-hidden="true">',
   '<output id="level-value" aria-hidden="true">',
-  'data-runtime-release="1.7.1"',
-  '../viewer/742-runtime.js?v=1.7.1',
-  '../viewer/742.css?v=1.7.1',
+  'data-runtime-release="1.7.2"',
+  '../viewer/742-runtime.js?v=1.7.2',
+  '../viewer/742.css?v=1.7.2',
   'class="autonomy-bar" aria-label="Automatic mechanism presentation"',
   'id="autonomy-mode" aria-live="polite" aria-atomic="true"',
   'id="showcase-phase"', 'id="showcase-loop"',
   'class="autonomy-toggle" id="showcase"',
   '<div class="action-row"><button class="primary-action" id="stow" type="button">Stow machine</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>',
 ]);
+if (index.includes('class="component-nav') || index.includes('data-focus=')) {
+  throw new Error("Removed component Explore tabs returned to the 742 route");
+}
 requireTokens(machine, ['status: stowed ? "Stowed" : "Holding"'], "machine presentation");
 if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
   throw new Error("Per-frame outputs must not be live regions");

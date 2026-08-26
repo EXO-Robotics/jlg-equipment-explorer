@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "mobile_browser_interaction",
-  "captured_at_utc": "2026-08-26T17:02:24.533Z",
+  "captured_at_utc": "2026-08-26T17:37:54.667Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
+      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
-    "bytes": 91407
+    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
+    "bytes": 91292
   },
-  "outcomes_sha256": "4481278b9455d6df0a9c98037ba4590c82f96c90c4802930826299a580917003",
+  "outcomes_sha256": "9cc67c655afb30f44196ba100aee9bd0b86628f6793c39fa3ac4eec1c09035f3",
   "outcomes": {
     "portrait_controls": {
       "outcome": "pass",
@@ -2114,12 +2114,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 250.5,
+            "y": 262.5,
             "width": 350,
             "height": 12,
-            "top": 250.5,
+            "top": 262.5,
             "right": 377,
-            "bottom": 262.5,
+            "bottom": 274.5,
             "left": 27
           }
         },
@@ -2128,12 +2128,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 285.5,
+            "y": 297.5,
             "width": 350,
             "height": 12,
-            "top": 285.5,
+            "top": 297.5,
             "right": 377,
-            "bottom": 297.5,
+            "bottom": 309.5,
             "left": 27
           }
         },
@@ -2142,12 +2142,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 320.5,
+            "y": 332.5,
             "width": 350,
             "height": 12,
-            "top": 320.5,
+            "top": 332.5,
             "right": 377,
-            "bottom": 332.5,
+            "bottom": 344.5,
             "left": 27
           }
         },
@@ -2156,12 +2156,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 355.5,
+            "y": 367.5,
             "width": 350,
             "height": 12,
-            "top": 355.5,
+            "top": 367.5,
             "right": 377,
-            "bottom": 367.5,
+            "bottom": 379.5,
             "left": 27
           }
         },
@@ -2170,12 +2170,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 430.5,
+            "y": 442.5,
             "width": 350,
             "height": 12,
-            "top": 430.5,
+            "top": 442.5,
             "right": 377,
-            "bottom": 442.5,
+            "bottom": 454.5,
             "left": 27
           }
         }
@@ -2240,50 +2240,50 @@
         "desired_distance_m": 11.44,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          28.523,
-          26.55,
-          24.784,
-          23.224,
+          28.55,
+          26.562,
+          24.794,
+          23.233,
           21.855,
-          20.637,
-          19.562,
-          18.613,
-          17.774,
-          17.038,
-          16.384,
-          15.806,
-          15.298,
-          14.847,
-          14.451,
-          14.099,
-          13.789,
-          13.516,
-          13.273,
-          13.059,
-          12.869,
-          12.703,
-          12.556,
-          12.426,
+          20.644,
+          19.568,
+          18.618,
+          17.779,
+          17.042,
+          16.391,
+          15.813,
+          15.301,
+          14.85,
+          14.454,
+          14.104,
+          13.79,
+          13.517,
+          13.274,
+          13.06,
+          12.872,
+          12.704,
+          12.557,
+          12.427,
           12.311,
           12.21,
           12.12,
-          12.04,
-          11.97,
-          11.908,
+          12.041,
+          11.971,
+          11.909,
           11.854,
-          11.805,
+          11.806,
           11.763,
-          11.725,
+          11.726,
           11.692,
           11.663,
           11.637,
           11.614,
           11.593,
-          11.575,
+          11.576,
           11.56,
           11.546,
           11.533,
-          11.522,
+          11.523,
           11.513,
           11.504,
           11.497,
@@ -2326,62 +2326,62 @@
             "steer-control": "0",
             "level-control": "0"
           },
-          "drive_x": null,
-          "drive_z": null,
-          "drive_loop": null,
-          "wheel_rotations_rad": null
+          "drive_x": "0.02",
+          "drive_z": "0.01",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.037,-0.037,-0.037,-0.037"
         },
         "before_reduce": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
+          "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392"
         },
         "reduced_start": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
+          "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392"
         },
         "reduced_end": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
+          "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392"
         },
         "relaxed": {
           "controls": {
             "lift-control": "0",
             "telescope-control": "0",
-            "tilt-control": "1",
+            "tilt-control": "2",
             "steer-control": "0",
-            "level-control": "1"
+            "level-control": "2"
           },
-          "drive_x": "0.18",
-          "drive_z": "0.12",
+          "drive_x": "0.21",
+          "drive_z": "0.14",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336",
+          "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392",
           "control_pressed": "false",
           "manual": true
         }
@@ -2459,19 +2459,9 @@
               "selector": ".control-panel",
               "rect_css_px": {
                 "left": 12,
-                "right": 292,
-                "top": 769,
+                "right": 346,
+                "top": 751,
                 "bottom": 832
-              },
-              "intersects_machine_bounds": false
-            },
-            {
-              "selector": ".component-nav",
-              "rect_css_px": {
-                "left": 12,
-                "right": 378,
-                "top": 723,
-                "bottom": 761
               },
               "intersects_machine_bounds": false
             },
@@ -2553,18 +2543,8 @@
               "selector": ".control-panel",
               "rect_css_px": {
                 "left": 12,
-                "right": 292,
-                "top": 321,
-                "bottom": 382
-              },
-              "intersects_machine_bounds": false
-            },
-            {
-              "selector": ".component-nav",
-              "rect_css_px": {
-                "left": 404,
-                "right": 832,
-                "top": 344,
+                "right": 402,
+                "top": 309,
                 "bottom": 382
               },
               "intersects_machine_bounds": false

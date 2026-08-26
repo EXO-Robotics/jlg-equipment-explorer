@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "es1930m_browser_regression",
-  "captured_at_utc": "2026-08-26T17:03:06.959Z",
+  "captured_at_utc": "2026-08-26T17:38:36.276Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
+      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
-    "bytes": 91407
+    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
+    "bytes": 91292
   },
-  "outcomes_sha256": "e06fed8a4c99accedb05b6beac1c3712f6129e84864a18ff31542977bcfd5730",
+  "outcomes_sha256": "c0a55a4b30dc2d930eefb484fe25dfa1b1329a794472a7cb774bd4667eb82d94",
   "outcomes": {
     "load_exact_release": {
       "outcome": "pass",
@@ -2032,7 +2032,7 @@
         "source": "glb",
         "selection": "self-test-pass",
         "errors": 0,
-        "load_ms": 31,
+        "load_ms": 28,
         "fps": 60,
         "p95_ms": 16.8
       }
@@ -2054,7 +2054,7 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2404 accuracy reconstruction / 1.0.9\n      \n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18′ 6″Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Stowed\n          Open\n        \n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n          Start auto\n        \n        Platform lift0%0.90 metres platform height; Stowed\n        Extension deck0.00 m0.00 m extension; Stowed\n        Steering actuatorCenterCenter cylinder displacement; Stowed\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Scissor\n      03Platform\n      04Steering\n    \n    Drag to orbit / Scroll to zoom / Select a component\n    machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 31 ms · sampling · sampling\n  \n\n  \n  \n    ×\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 · Service 3122602300 · Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__showES1930MBootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__showES1930MBootstrapFailure(\"The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2404 accuracy reconstruction / 1.0.9\n      \n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18′ 6″Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        \n          Operate\n          Machine controls\n          Stowed\n          Open\n        \n        Manual\n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n        \n        Platform lift0%0.90 metres platform height; Stowed\n        Extension deck0.00 m0.00 m extension; Stowed\n        Steering actuatorCenterCenter cylinder displacement; Stowed\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 28 ms · sampling · sampling\n  \n\n  \n  \n    ×\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 · Service 3122602300 · Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__showES1930MBootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__showES1930MBootstrapFailure(\"The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
               "data-machine": "es1930m",
               "data-boot-frame-count": "2",
@@ -2071,7 +2071,7 @@
               "data-zone": "stowed",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "34",
-              "data-runtime-last-frame-ms": "616.800",
+              "data-runtime-last-frame-ms": "613.000",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296",
               "class": "controls-panel-collapsed"
@@ -2086,7 +2086,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 31 ms · sampling · sampling",
+            "text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 28 ms · sampling · sampling",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2094,7 +2094,7 @@
           },
           {
             "selector": "#controls-toggle",
-            "text": "Open",
+            "text": "Operate\n          Machine controls\n          Stowed\n          Open",
             "attributes": {
               "class": "controls-toggle",
               "id": "controls-toggle",
@@ -2119,7 +2119,7 @@
           },
           {
             "selector": "#machine-controls-body",
-            "text": "Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n          Start auto\n        \n        Platform lift0%0.90 metres platform height; Stowed\n        Extension deck0.00 m0.00 m extension; Stowed\n        Steering actuatorCenterCenter cylinder displacement; Stowed\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.",
+            "text": "Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n        \n        Platform lift0%0.90 metres platform height; Stowed\n        Extension deck0.00 m0.00 m extension; Stowed\n        Steering actuatorCenterCenter cylinder displacement; Stowed\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.",
             "attributes": {
               "class": "controls-body",
               "id": "machine-controls-body",
@@ -2144,12 +2144,12 @@
       "outcome": "pass",
       "initial_focus_id": "inspector-close",
       "tab_inside": true,
-      "restored_focus_component": "platform"
+      "restored_focus_id": "info-toggle"
     },
     "drag_orbit": {
       "outcome": "pass",
-      "before_canvas_sha256": "2c1fd3abff2fbf1098b66fb8546d92ffeca75247aa55c7bd49f7615103388628",
-      "after_canvas_sha256": "7e3675a2e5f81d329aab2021ee7894950b37560b9603a390bbd39e74e2f16b58"
+      "before_canvas_sha256": "5f87a7f2ec00619fe4e9b85beba6bc5454a1d9b92bc4580de44dc6eed1cc5f29",
+      "after_canvas_sha256": "3b69741df91d9b7953dd6f50515e27f9e8f603e76e311b24a49c8b05c9207510"
     },
     "pinch_zoom": {
       "outcome": "pass",
@@ -2179,8 +2179,8 @@
         "CANVAS",
         "CANVAS"
       ],
-      "before_canvas_sha256": "4b3b7e0a838dfda03a4ecbd781d97c670875496a8faafb07290b5f2dfee9bf8a",
-      "after_canvas_sha256": "9ea740fa2d0d9bf30b000f3d6be814a49014de464e1d6d4537fb9254ec786af8",
+      "before_canvas_sha256": "ba14f47e737031c6d02f5584d646402382f5065f64894e0f18057269bd7cbeea",
+      "after_canvas_sha256": "18c0a82e460c1bd25dc02f65de33ed95f9f6cc35643fdb1dc983f2739268ec84",
       "before_desired_distance_m": "9.197",
       "after_desired_distance_m": "3.219",
       "observable_render_or_distance_change": true
@@ -2231,62 +2231,52 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 46.2
+                "at_ms": 63.4
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 54.1
+                "at_ms": 79.3
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 66.4
+                "at_ms": 97.1
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 80.9
+                "at_ms": 114.2
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 96.8
+                "at_ms": 131.2
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 114.7
+                "at_ms": 147.6
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 130.1
+                "at_ms": 162.8
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 146.8
+                "at_ms": 179.8
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 165
+                "at_ms": 198.1
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 181.8
-              },
-              {
-                "counter": "boot",
-                "value": 11,
-                "at_ms": 197.1
-              },
-              {
-                "counter": "boot",
-                "value": 12,
-                "at_ms": 215.1
+                "at_ms": 214
               }
             ]
           },
@@ -2303,9 +2293,9 @@
             "total_control_count": 7,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "12",
+            "boot_frame_count": "10",
             "runtime_frame_count": null,
-            "terminal_frame_count": "12",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "boot"
           },
           "terminal_after_250ms": {
@@ -2321,9 +2311,9 @@
             "total_control_count": 7,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "12",
+            "boot_frame_count": "10",
             "runtime_frame_count": null,
-            "terminal_frame_count": "12",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "boot"
           },
           "animation_state_stable_250ms": true
@@ -2338,57 +2328,57 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 63.7
+                "at_ms": 62.9
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 79.9
+                "at_ms": 79.4
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 98.1
+                "at_ms": 94.8
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 114.7
+                "at_ms": 112
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 130
+                "at_ms": 129.8
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 148.3
+                "at_ms": 146.4
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 165
+                "at_ms": 163.1
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 180.6
+                "at_ms": 178.4
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 198.2
+                "at_ms": 195.3
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 214.9
+                "at_ms": 212.9
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 232.1
+                "at_ms": 229.5
               }
             ]
           },
@@ -2440,47 +2430,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 94.3
+                "at_ms": 91.5
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 99.5
+                "at_ms": 96.4
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 114.6
+                "at_ms": 97.8
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 129.4
+                "at_ms": 116.6
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 147.8
+                "at_ms": 130.6
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 163.6
+                "at_ms": 148.9
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 180
+                "at_ms": 165.2
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 196.5
+                "at_ms": 181.3
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 214.5
+                "at_ms": 197.1
+              },
+              {
+                "counter": "runtime",
+                "value": 10,
+                "at_ms": 215.8
               }
             ]
           },
@@ -2498,8 +2493,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "9",
-            "terminal_frame_count": "9",
+            "runtime_frame_count": "10",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2516,8 +2511,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "9",
-            "terminal_frame_count": "9",
+            "runtime_frame_count": "10",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2532,52 +2527,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 93.8
+                "at_ms": 86.1
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 99
+                "at_ms": 91.2
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 100
+                "at_ms": 93.1
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 117.6
+                "at_ms": 109.7
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 132.8
+                "at_ms": 126.4
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 150.6
+                "at_ms": 143
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 167.7
+                "at_ms": 159.6
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 183.1
+                "at_ms": 176.4
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 199.6
+                "at_ms": 192.7
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 215.7
+                "at_ms": 209.9
               }
             ]
           },
@@ -2688,17 +2683,7 @@
               "rect_css_px": {
                 "left": 28,
                 "right": 418,
-                "top": 285.72,
-                "bottom": 692
-              },
-              "intersects_machine_bounds": false
-            },
-            {
-              "selector": ".component-nav",
-              "rect_css_px": {
-                "left": 1062,
-                "right": 1252,
-                "top": 506,
+                "top": 267.72,
                 "bottom": 692
               },
               "intersects_machine_bounds": false
@@ -2781,19 +2766,9 @@
               "selector": ".control-panel",
               "rect_css_px": {
                 "left": 12,
-                "right": 292,
-                "top": 769,
+                "right": 346,
+                "top": 751,
                 "bottom": 832
-              },
-              "intersects_machine_bounds": false
-            },
-            {
-              "selector": ".component-nav",
-              "rect_css_px": {
-                "left": 12,
-                "right": 378,
-                "top": 727,
-                "bottom": 761
               },
               "intersects_machine_bounds": false
             },
@@ -2849,7 +2824,7 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2404 accuracy reconstruction / 1.0.9\n      \n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18′ 6″Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Indoor height zone\n          Close\n        \n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n          Start auto\n        \n        Platform lift100%5.64 metres platform height; Indoor height zone\n        Extension deck0.55 m0.55 m extension; Indoor height zone\n        Steering actuator80 mm R80 mm R cylinder displacement; Indoor height zone\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Scissor\n      03Platform\n      04Steering\n    \n    Drag to orbit / Scroll to zoom / Select a component\n    machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 31 ms · 60 fps · p95 16.8 ms\n  \n\n  \n  \n    ×\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 · Service 3122602300 · Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__showES1930MBootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__showES1930MBootstrapFailure(\"The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  \n    \n    ES1930M ready\n    ES1930M-PVC2404-US-STD-FR-FLA130-NM validated\n  \n  Viewer unavailable.This interactive study needs WebGL and a valid ES1930M asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2404 accuracy reconstruction / 1.0.9\n      \n      About\n    \n\n    \n      Interactive mechanism study\n      ES1930M\n      Micro-sized scissor lift PVC 2404\n    \n\n    \n      18′ 6″Indoor platform height\n      500 lbPlatform capacity\n      30 inOverall width\n      Unofficial visualization. Reconstructed coordinates are identified and are not service or safety data.\n    \n\n    \n      \n        \n          Operate\n          Machine controls\n          Indoor height zone\n          Close\n        \n        Manual\n      \n      \n        \n          \n            Drive mode\n            Manual\n            Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.\n          \n          \n            Heading324°\n            Loop0%\n          \n        \n        Platform lift100%5.64 metres platform height; Indoor height zone\n        Extension deck0.55 m0.55 m extension; Indoor height zone\n        Steering actuator80 mm R80 mm R cylinder displacement; Indoor height zone\n        Stow machineReset view\n        Visual mechanism reconstruction. Not operational, stability, load, or safety data.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 28 ms · 60 fps · p95 16.8 ms\n  \n\n  \n  \n    ×\n    Evidence boundary\n    PVC 2404,reconstructed honestly.\n    Current JLG parts, service and operation publications establish the machine identity, five-level topology and performance envelope. Unpublished pivot coordinates remain labeled reconstruction.\n    ModelES1930M standard ANSI/US configurationPrimary setParts 3122602400 · Service 3122602300 · Operation 3122602200BoundaryNot a service, training, fabrication, stability, or safety reference\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__showES1930MBootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__showES1930MBootstrapFailure(\"The ES1930M rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
               "data-machine": "es1930m",
               "data-boot-frame-count": "2",
@@ -2857,7 +2832,7 @@
               "data-configuration-id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
               "data-runtime-error-count": "0",
               "data-viewer-runtime-active": "true",
-              "data-orbit-camera-distance-m": "11.796",
+              "data-orbit-camera-distance-m": "11.797",
               "data-orbit-desired-distance-m": "12.367",
               "data-reduced-motion": "false",
               "data-motion-profile": "full",
@@ -2866,7 +2841,7 @@
               "data-zone": "indoor-only",
               "data-viewer-module-loaded": "true",
               "data-runtime-frame-count": "113",
-              "data-runtime-last-frame-ms": "1933.400",
+              "data-runtime-last-frame-ms": "1929.500",
               "data-machine-source": "glb",
               "data-machine-visible-meshes": "296",
               "class": "",
@@ -2883,7 +2858,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 31 ms · 60 fps · p95 16.8 ms",
+            "text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 28 ms · 60 fps · p95 16.8 ms",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2891,7 +2866,7 @@
           },
           {
             "selector": "#controls-toggle",
-            "text": "Close",
+            "text": "Operate\n          Machine controls\n          Indoor height zone\n          Close",
             "attributes": {
               "class": "controls-toggle",
               "id": "controls-toggle",

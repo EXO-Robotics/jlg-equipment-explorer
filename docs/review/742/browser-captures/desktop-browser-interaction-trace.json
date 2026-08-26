@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "desktop_browser_interaction",
-  "captured_at_utc": "2026-08-26T17:02:18.449Z",
+  "captured_at_utc": "2026-08-26T17:37:48.591Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
+      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
-    "bytes": 91407
+    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
+    "bytes": 91292
   },
-  "outcomes_sha256": "9fae5638f3261f8619d71a3c8f9783663d5f9b879f4a58b26f48e9bb0b574777",
+  "outcomes_sha256": "729bc225b2d46772d2c85ad5104083985ae2041866eb47aa539d95c53f2a824a",
   "outcomes": {
     "load_stowed": {
       "outcome": "pass",
@@ -2040,11 +2040,11 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controls\n        StowedOpen\n        \n      \n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop0%\n          \n          Start auto\n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More →\n    \n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 45 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsStowedOpen\n        Manual\n      \n      \n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop0%\n          \n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 44 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
             "attributes": {
               "data-machine": "742",
-              "data-runtime-release": "1.7.1",
-              "data-boot-frame-count": "2",
+              "data-runtime-release": "1.7.2",
+              "data-boot-frame-count": "3",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
               "data-viewer-runtime-active": "true",
@@ -2076,7 +2076,7 @@
               "data-zone": "stowed",
               "data-steer-mode-alignment": "centered",
               "data-runtime-frame-count": "32",
-              "data-runtime-last-frame-ms": "622.100",
+              "data-runtime-last-frame-ms": "624.600",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2099,7 +2099,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 45 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full",
+            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 44 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile desktop · motion full",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2107,7 +2107,7 @@
           },
           {
             "selector": "#controls-toggle",
-            "text": "Open",
+            "text": "OperateMachine controlsStowedOpen",
             "attributes": {
               "class": "controls-toggle",
               "id": "controls-toggle",
@@ -2132,7 +2132,7 @@
           },
           {
             "selector": "#machine-controls-body",
-            "text": "Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop0%\n          \n          Start auto\n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.",
+            "text": "Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop0%\n          \n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.",
             "attributes": {
               "class": "controls-body",
               "id": "machine-controls-body",
@@ -2223,33 +2223,33 @@
         "desired_distance_m": 37.58,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          36.645,
-          36.754,
-          36.85,
-          36.935,
-          37.011,
-          37.077,
-          37.135,
-          37.187,
-          37.233,
-          37.273,
-          37.309,
-          37.341,
-          37.369,
-          37.393,
-          37.415,
-          37.434,
-          37.451,
-          37.466,
-          37.479,
-          37.491,
-          37.501,
+          36.65,
+          36.759,
+          36.855,
+          36.939,
+          37.014,
+          37.08,
+          37.138,
+          37.19,
+          37.235,
+          37.275,
+          37.311,
+          37.342,
+          37.37,
+          37.394,
+          37.416,
+          37.435,
+          37.452,
+          37.467,
+          37.48,
+          37.492,
+          37.502,
           37.511,
           37.519,
           37.526,
           37.532,
           37.538,
-          37.542,
+          37.543,
           37.547,
           37.551,
           37.554,
@@ -2260,11 +2260,11 @@
         ]
       }
     },
-    "component_modal": {
+    "about_modal": {
       "outcome": "pass",
       "initial_focus_id": "inspector-close",
       "tab_trapped": true,
-      "restored_focus_component": "boom"
+      "restored_focus_id": "info-toggle"
     },
     "terminal_failure_matrix": {
       "outcome": "pass",
@@ -2280,42 +2280,42 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 42.2
+                "at_ms": 36.8
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 54.5
+                "at_ms": 49.5
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 68.2
+                "at_ms": 63.7
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 84
+                "at_ms": 82.4
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 100.3
+                "at_ms": 98.2
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 118.1
+                "at_ms": 114.7
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 133
+                "at_ms": 132.3
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 149.9
+                "at_ms": 148.2
               }
             ]
           },
@@ -2369,42 +2369,42 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 93.8
+                "at_ms": 94.4
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 100.3
+                "at_ms": 99.9
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 111.5
+                "at_ms": 112.4
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 128.9
+                "at_ms": 130.4
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 144.2
+                "at_ms": 147.9
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 161.8
+                "at_ms": 163.6
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 179.1
+                "at_ms": 179.8
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 195.5
+                "at_ms": 197.5
               }
             ]
           },
@@ -2422,7 +2422,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": null,
+            "boot_frame_count": "3",
             "runtime_frame_count": "8",
             "terminal_frame_count": "8",
             "terminal_frame_source": "runtime"
@@ -2440,7 +2440,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": null,
+            "boot_frame_count": "3",
             "runtime_frame_count": "8",
             "terminal_frame_count": "8",
             "terminal_frame_source": "runtime"
@@ -2458,12 +2458,12 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 88.5
+                "at_ms": 85.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 93.8
+                "at_ms": 90.7
               }
             ]
           },
@@ -2517,152 +2517,157 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 90.9
+                "at_ms": 87
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 96.7
+                "at_ms": 92.7
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 151.8
+                "at_ms": 145.4
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 156.1
+                "at_ms": 149.9
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 168.7
+                "at_ms": 163.5
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 186.3
+                "at_ms": 179.4
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 203.5
+                "at_ms": 196.3
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 218.6
+                "at_ms": 214.8
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 236.9
+                "at_ms": 230.9
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 253.1
+                "at_ms": 247.4
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 268.5
+                "at_ms": 263.7
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 286.9
+                "at_ms": 280.4
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 302.7
+                "at_ms": 297.7
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 320.3
+                "at_ms": 313.3
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 337.7
+                "at_ms": 332.6
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 351.6
+                "at_ms": 346.4
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 368.3
+                "at_ms": 362.8
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 386.9
+                "at_ms": 379.6
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 401.7
+                "at_ms": 396.3
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 419.2
+                "at_ms": 412.8
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 434.8
+                "at_ms": 431.4
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 452.1
+                "at_ms": 447.4
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 468.8
+                "at_ms": 464.9
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 513
+                "at_ms": 480.1
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 515.5
+                "at_ms": 523.8
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 517.9
+                "at_ms": 526.2
               },
               {
                 "counter": "runtime",
                 "value": 27,
-                "at_ms": 535.9
+                "at_ms": 530.9
               },
               {
                 "counter": "runtime",
                 "value": 28,
-                "at_ms": 553.1
+                "at_ms": 548.5
               },
               {
                 "counter": "runtime",
                 "value": 29,
-                "at_ms": 568.6
+                "at_ms": 564
               },
               {
                 "counter": "runtime",
                 "value": 30,
-                "at_ms": 585.4
+                "at_ms": 581.6
+              },
+              {
+                "counter": "runtime",
+                "value": 31,
+                "at_ms": 598.7
               }
             ]
           },
@@ -2675,7 +2680,7 @@
                 "steer-control": "0",
                 "level-control": "0"
               },
-              "runtime_frame_count": 23
+              "runtime_frame_count": 24
             },
             "end": {
               "controls": {
@@ -2685,7 +2690,7 @@
                 "steer-control": "0",
                 "level-control": "1"
               },
-              "runtime_frame_count": 30
+              "runtime_frame_count": 31
             }
           },
           "terminal_first": {
@@ -2702,8 +2707,8 @@
             "drive_x": "0.07",
             "drive_z": "0.05",
             "boot_frame_count": "2",
-            "runtime_frame_count": "30",
-            "terminal_frame_count": "30",
+            "runtime_frame_count": "31",
+            "terminal_frame_count": "31",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2720,8 +2725,8 @@
             "drive_x": "0.07",
             "drive_z": "0.05",
             "boot_frame_count": "2",
-            "runtime_frame_count": "30",
-            "terminal_frame_count": "30",
+            "runtime_frame_count": "31",
+            "terminal_frame_count": "31",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2737,152 +2742,152 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 89.7
+                "at_ms": 86.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 95.6
+                "at_ms": 92.6
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 150.8
+                "at_ms": 145.4
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 155.3
+                "at_ms": 149.8
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 164.9
+                "at_ms": 167.5
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 180.5
+                "at_ms": 182.7
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 198.5
+                "at_ms": 201.3
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 215.2
+                "at_ms": 217.2
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 232.4
+                "at_ms": 234.5
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 247.3
+                "at_ms": 250.2
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 265.7
+                "at_ms": 267.4
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 282.1
+                "at_ms": 284.5
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 297.9
+                "at_ms": 299.7
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 314.2
+                "at_ms": 316.7
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 332.4
+                "at_ms": 334.5
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 348
+                "at_ms": 351.2
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 363.5
+                "at_ms": 366
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 380.6
+                "at_ms": 383.1
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 397.7
+                "at_ms": 401
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 415.6
+                "at_ms": 417.2
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 431.2
+                "at_ms": 432.5
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 447.3
+                "at_ms": 450.6
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 463.4
+                "at_ms": 466.9
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 508.4
+                "at_ms": 510.6
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 510.9
+                "at_ms": 512.9
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 514
+                "at_ms": 517.7
               },
               {
                 "counter": "runtime",
                 "value": 27,
-                "at_ms": 532.1
+                "at_ms": 532.7
               },
               {
                 "counter": "runtime",
                 "value": 28,
-                "at_ms": 547.5
+                "at_ms": 551
               },
               {
                 "counter": "runtime",
                 "value": 29,
-                "at_ms": 564.5
+                "at_ms": 566.2
               },
               {
                 "counter": "runtime",
                 "value": 30,
-                "at_ms": 581.3
+                "at_ms": 585
               }
             ]
           },

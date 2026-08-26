@@ -4,7 +4,7 @@ import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.12";
 import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
 import { advanceFigureEight, JLG742_FIGURE_EIGHT, sampleFigureEight } from "./presentation-route.mjs?v=1.0.10";
 
-const ROUTE_RELEASE = "1.7.1";
+const ROUTE_RELEASE = "1.7.2";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -775,7 +775,8 @@ function syncShowcaseControls() {
   const active = showcaseStarted !== null && !reducedMotion;
   document.body.dataset.showcaseActive = String(active);
   showcaseButton.setAttribute("aria-pressed", String(active));
-  showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Stop auto" : "Start auto";
+  showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Auto" : "Manual";
+  showcaseButton.setAttribute("aria-label", reducedMotion ? "Automatic drive unavailable" : active ? "Switch to manual drive" : "Switch to automatic drive");
   autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual";
   autonomyNote.textContent = active
     ? "Driving a full figure-eight with reconstructed steering and mechanism motion."
@@ -868,12 +869,6 @@ globalThis.__EQUIPMENT_EXPLORER_EVIDENCE__ = Object.freeze({
   },
 });
 document.querySelector("#reset-view").addEventListener("click", resetView);
-document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => {
-  setComponentSelection(button.dataset.focus);
-  focusCamera(button.dataset.focus);
-  openInspector(button.dataset.focus);
-}));
-
 const inspector = document.querySelector("#inspector");
 const infoToggle = document.querySelector("#info-toggle");
 const inspectorClose = document.querySelector("#inspector-close");
@@ -957,7 +952,7 @@ function setControlsPanel(open) {
   controlsToggle.hidden = false;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
   controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls");
-  controlsToggle.textContent = expanded ? "Close" : (mobileQuery.matches ? "Adjust" : "Open");
+  controlsToggle.querySelector(".controls-action").textContent = expanded ? "Close" : (mobileQuery.matches ? "Adjust" : "Open");
   document.body.classList.toggle("mobile-controls-open", mobileQuery.matches && expanded);
   document.body.classList.toggle("controls-panel-collapsed", !expanded);
   requestAnimationFrame(syncMobileControlHeight);
@@ -974,18 +969,6 @@ mobileQuery.addEventListener?.("change", () => {
 });
 setControlsPanel(mobileQuery.matches ? query.get("controls") === "1" : true);
 
-const componentNav = document.querySelector(".component-nav");
-const navOverflowCue = document.querySelector("#nav-overflow-cue");
-function updateNavOverflowCue() {
-  const canScroll = componentNav.scrollWidth > componentNav.clientWidth + 2;
-  const hasMore = componentNav.scrollLeft + componentNav.clientWidth < componentNav.scrollWidth - 2;
-  navOverflowCue.hidden = !compact || !canScroll || !hasMore;
-  componentNav.dataset.overflow = canScroll ? hasMore ? "more" : "end" : "none";
-}
-componentNav.addEventListener("scroll", updateNavOverflowCue, { passive: true });
-new ResizeObserver(updateNavOverflowCue).observe(componentNav);
-requestAnimationFrame(updateNavOverflowCue);
-
 app.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") orbit.azimuth += 0.12;
   else if (event.key === "ArrowRight") orbit.azimuth -= 0.12;
@@ -994,7 +977,6 @@ app.addEventListener("keydown", (event) => {
   else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(interactionMinDistance, orbit.desiredDistance * 0.9);
   else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(effectiveMaxDistance, orbit.desiredDistance * 1.1);
   else if (event.key === "0") resetView();
-  else if (/^[1-7]$/.test(event.key)) document.querySelectorAll("[data-focus]")[Number(event.key) - 1]?.click();
   else return;
   document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(2);
   event.preventDefault();

@@ -301,8 +301,9 @@ function updatePresentationTelemetry(sample = sampleFigureEight(presentationRout
   autonomyToggle.disabled = locked || !rig;
   const pressed = String(presentationRoute.enabled);
   if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
-  const buttonText = presentationRoute.enabled ? "Pause auto" : paused ? "Resume auto" : "Start auto";
+  const buttonText = locked ? "Static" : presentationRoute.enabled ? "Auto" : "Manual";
   if (autonomyToggle.textContent !== buttonText) autonomyToggle.textContent = buttonText;
+  autonomyToggle.setAttribute("aria-label", locked ? "Automatic drive unavailable" : presentationRoute.enabled ? "Switch to manual drive" : "Switch to automatic drive");
   document.body.dataset.presentationMode = locked ? "static" : presentationRoute.enabled ? "running" : paused ? "paused" : "ready";
   document.body.dataset.autonomyMode = locked ? "static" : presentationRoute.enabled ? "auto" : paused ? "paused" : "manual";
   if (presentationRoute.enabled) setOutputValue(motionStatus, "Autonomous");
@@ -437,15 +438,6 @@ function focusCamera(name) {
   orbit.polar = preset.polar;
 }
 document.querySelector("#reset-view").addEventListener("click", () => focusCamera("default"));
-document.querySelectorAll("[data-focus]").forEach((button, index) => button.addEventListener("click", () => {
-  setPresentationRouteEnabled(false, { reset: true });
-  document.querySelectorAll("[data-focus]").forEach((candidate) => candidate.setAttribute("aria-pressed", "false"));
-  button.setAttribute("aria-pressed", "true");
-  focusCamera(button.dataset.focus);
-  openInspector(button.dataset.focus);
-  selected = index;
-}));
-
 const inspector = document.querySelector("#inspector");
 const infoToggle = document.querySelector("#info-toggle");
 let inspectorOpener = null;
@@ -491,7 +483,7 @@ function setControlsPanel(open) {
   controlsToggle.hidden = false;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
   controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls");
-  controlsToggle.textContent = expanded ? "Close" : (mobileQuery.matches ? "Adjust" : "Open");
+  controlsToggle.querySelector(".controls-action").textContent = expanded ? "Close" : (mobileQuery.matches ? "Adjust" : "Open");
   document.body.classList.toggle("mobile-controls-open", mobileQuery.matches && expanded);
   document.body.classList.toggle("controls-panel-collapsed", !expanded);
   requestAnimationFrame(syncMobileControlHeight);
@@ -526,7 +518,6 @@ document.addEventListener("keydown", (event) => {
   else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(1.6, orbit.desiredDistance * 0.9);
   else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(18, orbit.desiredDistance * 1.1);
   else if (event.key === "0") focusCamera("default");
-  else if (/^[1-4]$/.test(event.key)) document.querySelectorAll("[data-focus]")[Number(event.key) - 1]?.click();
   else return;
   event.preventDefault();
 });

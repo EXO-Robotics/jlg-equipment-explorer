@@ -20,16 +20,16 @@
   <meta name="twitter:image:alt" content="JLG 600S boom lift reconstruction shown in the 3D authoring workspace">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="preload" href="../assets/models/742.glb?v=a6c75d61abd2" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.1.6">
-  <link rel="stylesheet" href="../viewer/742.css?v=1.7.1">
+  <link rel="stylesheet" href="../viewer.css?v=1.1.7">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.7.2">
   <link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">
   <script type="importmap">
     {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
   </script>
 </head>
-<body data-machine="742" data-runtime-release="1.7.1">
+<body data-machine="742" data-runtime-release="1.7.2">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
-  <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
+  <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.</p>
 
   <div class="loader" id="loader" role="status"><span class="loader-mark"></span><span id="loader-status">Loading 742</span><small id="loader-detail">Validating the PVC 2411 reconstruction</small></div>
   <div class="error" id="error" role="alert" aria-live="assertive" tabindex="-1" hidden><div><strong>Viewer unavailable.</strong><p id="error-copy">This interactive study needs WebGL and a valid owned 742 asset.</p></div></div>
@@ -63,10 +63,10 @@
 
     <section class="control-panel telehandler-controls" aria-labelledby="operate-title">
       <div class="panel-heading">
-        <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
-        <div class="panel-state"><output id="motion-status" aria-hidden="true">Stowed</output><button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">Close</button></div>
-        <p class="sr-only" id="motion-announcement" aria-live="polite" aria-atomic="true"></p>
+        <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls"><span class="panel-kicker">Operate</span><strong id="operate-title">Machine controls</strong><output id="motion-status" aria-hidden="true">Stowed</output><i class="controls-action" aria-hidden="true">Close</i></button>
+        <button class="autonomy-toggle" id="showcase" type="button" aria-pressed="false">Manual</button>
       </div>
+      <p class="sr-only" id="motion-announcement" aria-live="polite" aria-atomic="true"></p>
       <div class="controls-body" id="machine-controls-body">
         <div class="autonomy-bar" aria-label="Automatic mechanism presentation">
           <div class="autonomy-summary">
@@ -78,7 +78,6 @@
             <div><dt>Phase</dt><dd id="showcase-phase">Stowed</dd></div>
             <div><dt>Loop</dt><dd id="showcase-loop">0%</dd></div>
           </dl>
-          <button class="autonomy-toggle" id="showcase" type="button" aria-pressed="false">Start auto</button>
         </div>
         <label class="control-row"><span>Boom lift</span><output id="lift-value" aria-hidden="true">0°</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom lift" aria-describedby="motion-boundary"></label>
         <label class="control-row"><span>Telescope</span><output id="telescope-value" aria-hidden="true">0.00 m visual</output><input id="telescope-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom telescope" aria-describedby="motion-boundary"></label>
@@ -97,18 +96,7 @@
       </div>
     </section>
 
-    <nav class="component-nav component-nav-seven" aria-label="Explore components">
-      <span>Explore</span>
-      <button type="button" data-focus="chassis" aria-pressed="false"><i>01</i>Chassis</button>
-      <button type="button" data-focus="cab" aria-pressed="false"><i>02</i>Cab</button>
-      <button type="button" data-focus="boom" aria-pressed="false"><i>03</i>Boom</button>
-      <button type="button" data-focus="carriage" aria-pressed="false"><i>04</i>Carriage</button>
-      <button type="button" data-focus="steering" aria-pressed="false"><i>05</i>Steering</button>
-      <button type="button" data-focus="hydraulics" aria-pressed="false"><i>06</i>Hydraulics</button>
-      <button type="button" data-focus="frame" aria-pressed="false"><i>07</i>Frame level</button>
-      <span class="nav-overflow-cue" id="nav-overflow-cue" aria-hidden="true">More →</span>
-    </nav>
-    <div class="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details</div>
+    <div class="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom</div>
     <output class="diagnostics" id="diagnostics" hidden></output>
   </main>
 
@@ -159,6 +147,6 @@
       window.__show742ModuleFailure("The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, bootTimeoutMs);
   </script>
-    <script type="module" src="../viewer/742-runtime.js?v=1.7.1" onerror="window.__show742ModuleFailure()"></script>
+    <script type="module" src="../viewer/742-runtime.js?v=1.7.2" onerror="window.__show742ModuleFailure()"></script>
 </body>
 </html>

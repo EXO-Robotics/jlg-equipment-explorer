@@ -994,7 +994,7 @@ def _validate_projected_machine_bounds(record: dict, expected_viewport: list[int
     occlusion_checks = record["occlusion_checks"]
     if not isinstance(occlusion_checks, list) or not occlusion_checks:
         raise RuntimeError("742 projected whole-machine proof omitted visible interface occlusion checks")
-    allowed_selectors = {".control-panel", ".component-nav", ".diagnostics"}
+    allowed_selectors = {".control-panel", ".diagnostics"}
     for check in occlusion_checks:
         if (
             set(check or {}) != {"selector", "rect_css_px", "intersects_machine_bounds"}
@@ -1366,7 +1366,7 @@ def validate_complete_browser_artifact(
         for snapshot in observations["dom_snapshots"].values():
             _validate_dom_snapshot(snapshot, [1280, 720])
             _require_loaded_zero_error_snapshot(snapshot)
-        if set(assertions) != {"load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "terminal_failure_matrix"}:
+        if set(assertions) != {"load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "about_modal", "terminal_failure_matrix"}:
             raise RuntimeError("742 desktop structured outcome set drift")
         reset = assertions["maximum_pose_reset"]
         before, after = reset.get("before_reset", {}), reset.get("after_reset", {})

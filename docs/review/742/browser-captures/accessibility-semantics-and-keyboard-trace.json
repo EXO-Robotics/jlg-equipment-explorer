@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T17:02:30.884Z",
+  "captured_at_utc": "2026-08-26T17:38:01.007Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
+      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,8 +2018,8 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
-    "bytes": 91407
+    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
+    "bytes": 91292
   },
   "outcomes_sha256": "62b585a7def1fe495a454056d7500ed9f98bb3e7bdf602fb26ad7bef121322cd",
   "outcomes": {

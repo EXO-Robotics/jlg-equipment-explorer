@@ -41,9 +41,9 @@ def main():
         'Visual mechanism reconstruction.', 'No load, stability, service, training, or safety behavior is simulated.',
         'class="autonomy-bar" aria-label="Automatic mechanism presentation"',
         'id="autonomy-mode" aria-live="polite" aria-atomic="true"', 'id="showcase-phase"', 'id="showcase-loop"',
-        '<h2 id="operate-title">Machine controls</h2>', '<output id="motion-status" aria-hidden="true">Stowed</output>',
+        '<strong id="operate-title">Machine controls</strong>', '<output id="motion-status" aria-hidden="true">Stowed</output>',
         'id="stow" type="button">Stow machine</button>',
-        'Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details',
+        'Drag to orbit <span>/</span> Scroll or pinch to zoom',
         '<link rel="stylesheet" href="../viewer/machine-tabs.css?v=1.0.0">',
         '<nav class="machine-tabs" aria-label="Machine showcases">',
         '<a href="../" aria-label="JLG 600S boom lift showcase">600S</a>',
@@ -55,14 +55,12 @@ def main():
         raise RuntimeError("742 route must expose exactly one current machine link")
     if INDEX.count('aria-describedby="motion-boundary"') != 5:
         raise RuntimeError("Every 742 range must reference the safety boundary")
-    if INDEX.count('data-focus=') != 7:
-        raise RuntimeError("742 component navigation must expose seven focus targets")
     if re.search(r'id="motion-status"[^>]+aria-live', INDEX) or re.search(r'id="diagnostics"[^>]+aria-live', INDEX):
         raise RuntimeError("Per-frame status and diagnostics must not be live regions")
     require(RUNTIME, [
         'import JLG742_MACHINE from "../machines/742/machine.js?v=', 'const pointers = new Map()',
         'gestureUsedPinch', '!gestureUsedPinch', 'pinchStartDistance', 'pointercancel',
-        'velocityAzimuth', 'frameP95Ms', 'data-steer-mode', 'machine.showcase', '/^[1-7]$/',
+        'velocityAzimuth', 'frameP95Ms', 'data-steer-mode', 'machine.showcase',
         'controlsBody.inert = !expanded', 'query.get("reduce") === "1"',
         'event.key === "Escape"', 'event.key !== "Tab"', 'modalBackground.forEach',
         'setInert(element, true)', 'setInert(inspector, false)', 'restoreTarget.focus',
@@ -152,7 +150,9 @@ def main():
         'wheelRollPivots', '`WheelRoll_${corner}`',
         'driveCarrier', 'driveCarrier.name="742_DriveCarrier"', 'driveCarrier.add(machineRoot)',
     ], "742 articulation consumer")
-    require(STYLE, ['body[data-machine="742"]', '.mode-row', '.component-nav-seven', '.nav-overflow-cue', 'button[data-focus][aria-pressed="true"]'], "742 style")
+    require(STYLE, ['body[data-machine="742"]', '.mode-row', 'body[data-machine="742"].controls-panel-collapsed .control-panel'], "742 style")
+    if 'class="component-nav' in INDEX or 'data-focus=' in INDEX:
+        raise RuntimeError("Removed component Explore tabs returned to the 742 route")
     if not ASSET.is_file():
         raise RuntimeError("742 route asset is missing")
     asset_sha = hashlib.sha256(ASSET.read_bytes()).hexdigest()
@@ -170,7 +170,7 @@ def main():
     print(json.dumps({
         "status":"PASS", "route":"/742/", "isolated_runtime":"viewer/742-runtime.js",
         "isolated_style":"viewer/742.css", "shared_es_runtime_unchanged_by_742":True,
-        "motion_ranges":5, "steering_modes":3, "component_focus_targets":7,
+        "motion_ranges":5, "steering_modes":3, "component_navigation_removed":True,
         "pinch_zoom":True, "pinch_click_suppression":True, "inertia":True,
         "modal_focus_contract":True, "engineering_aria_value_text":True, "engineering_aria_details":True,
         "semantic_volume_self_test":True, "nearest_visible_overlap_test":True, "independent_selection_fixtures":True,

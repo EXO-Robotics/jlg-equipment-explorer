@@ -20,7 +20,7 @@
   <meta name="twitter:image:alt" content="JLG 600S boom lift reconstruction shown in the 3D authoring workspace">
   <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="preload" href="assets/models/600s.glb?v=13292e6d742a" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="viewer.css?v=1.1.15">
+  <link rel="stylesheet" href="viewer.css?v=1.1.16">
   <link rel="stylesheet" href="viewer/machine-tabs.css?v=1.0.0">
   <style>
     @media (max-height: 670px) and (max-width: 800px) {
@@ -40,7 +40,7 @@
 </head>
 <body>
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 600S visualization" aria-describedby="viewer-instructions"></div>
-  <p class="sr-only" id="viewer-instructions">Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.</p>
+  <p class="sr-only" id="viewer-instructions">Use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.</p>
 
   <div class="loader" id="loader" role="status">
     <span class="loader-mark"></span>
@@ -86,11 +86,13 @@
 
     <section class="control-panel" aria-labelledby="operate-title">
       <div class="panel-heading">
-        <div><span>Operate</span><h2 id="operate-title">Machine controls</h2></div>
-        <div class="panel-state">
+        <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">
+          <span class="panel-kicker">Operate</span>
+          <strong id="operate-title">Machine controls</strong>
           <output id="motion-status" aria-live="polite" aria-atomic="true">Autonomous</output>
-          <button class="controls-toggle" id="controls-toggle" type="button" aria-controls="machine-controls-body" aria-expanded="true" aria-label="Close machine controls">Close</button>
-        </div>
+          <i class="controls-action" aria-hidden="true">Close</i>
+        </button>
+        <button class="autonomy-toggle" id="autonomy-toggle" type="button" aria-pressed="true">Auto</button>
       </div>
 
       <div class="controls-body" id="machine-controls-body">
@@ -104,7 +106,6 @@
             <div><dt>Heading</dt><dd><output id="drive-heading">000°</output></dd></div>
             <div><dt>Loop</dt><dd><output id="drive-loop">0%</output></dd></div>
           </dl>
-          <button class="autonomy-toggle" id="autonomy-toggle" type="button" aria-pressed="true">Pause auto</button>
         </div>
 
         <label class="control-row">
@@ -132,15 +133,7 @@
       </div>
     </section>
 
-    <nav class="component-nav" aria-label="Explore components">
-      <span>Explore</span>
-      <button type="button" data-focus="chassis" aria-pressed="false"><i>01</i>Chassis</button>
-      <button type="button" data-focus="turntable" aria-pressed="false"><i>02</i>Turntable</button>
-      <button type="button" data-focus="boom" aria-pressed="false"><i>03</i>Boom</button>
-      <button type="button" data-focus="platform" aria-pressed="false"><i>04</i>Platform</button>
-    </nav>
-
-    <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details</div>
+    <div class="interaction-hint" id="interaction-hint">Drag to orbit <span>/</span> Scroll or pinch to zoom</div>
     <output class="diagnostics" id="diagnostics" hidden aria-live="polite"></output>
   </main>
 
@@ -190,6 +183,6 @@
       window.__show600BootstrapFailure("The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, 8000);
   </script>
-  <script type="module" src="viewer.js?v=1.1.15" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__show600BootstrapFailure('The 600S rendering runtime could not be loaded. No substitute was shown.')"></script>
+  <script type="module" src="viewer.js?v=1.1.16" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__show600BootstrapFailure('The 600S rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

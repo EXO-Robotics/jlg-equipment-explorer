@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "semantic_selection",
-  "captured_at_utc": "2026-08-26T17:02:33.412Z",
+  "captured_at_utc": "2026-08-26T17:38:03.523Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -11,7 +11,7 @@
     "source": "repo-locked-default",
     "lockfile": {
       "path": "package-lock.json",
-      "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7",
+      "sha256": "2258dd125f5c7088510306dab0d8fc203223702ac7b43b2841ea79bbdf01c37c",
       "bytes": 1786
     },
     "browser_executable": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
-    "bytes": 91407
+    "sha256": "2d61b3fea81089bbd436a9086293ddff05f24b10d769c8496bae68ca7c046586",
+    "bytes": 91292
   },
-  "outcomes_sha256": "b2e955ab19ae80e829d53de7e1cd23109b9ca66fd5bd0df477028fe7aa8f4b06",
+  "outcomes_sha256": "05c53f924c5c151e13a8ce0e8687e2185bbb58461f873ad1e91175a42f15eebd",
   "outcomes": {
     "visible_canvas_selection": {
       "outcome": "pass",
@@ -2171,20 +2171,20 @@
           "desired_distance_m": 4.4,
           "stable_frames": 6,
           "samples_camera_distance_m": [
-            8.286,
+            8.289,
             7.834,
             7.433,
-            7.08,
-            6.767,
+            7.078,
+            6.765,
             6.49,
             6.246,
-            6.03,
+            6.031,
             5.841,
             5.672,
             5.524,
             5.393,
             5.277,
-            5.174,
+            5.175,
             5.084,
             5.005,
             4.934,
@@ -2244,7 +2244,7 @@
       "stow_pressed": true,
       "controls_expanded": false,
       "selected_component": null,
-      "camera_distance_m": 23.925,
+      "camera_distance_m": 23.926,
       "desired_distance_m": 23.94,
       "pose_frame_distance_m": 8.81,
       "effective_max_distance_m": 24,
@@ -2281,18 +2281,18 @@
         },
         "projected_bounds_css_px": {
           "left": 481.52,
-          "right": 793.22,
-          "top": 277.77,
+          "right": 793.21,
+          "top": 277.78,
           "bottom": 457.79
         },
         "edge_margins_css_px": {
           "left": 481.52,
-          "right": 486.78,
-          "top": 277.77,
+          "right": 486.79,
+          "top": 277.78,
           "bottom": 262.21
         },
         "minimum_edge_margin_css_px": 28,
-        "camera_distance_m": 23.925,
+        "camera_distance_m": 23.926,
         "camera_orientation": {
           "kind": "azimuth-polar",
           "azimuth_rad": -1.1,
@@ -2303,18 +2303,8 @@
             "selector": ".control-panel",
             "rect_css_px": {
               "left": 28,
-              "right": 308,
-              "top": 615,
-              "bottom": 692
-            },
-            "intersects_machine_bounds": false
-          },
-          {
-            "selector": ".component-nav",
-            "rect_css_px": {
-              "left": 1062,
-              "right": 1252,
-              "top": 380,
+              "right": 418,
+              "top": 597,
               "bottom": 692
             },
             "intersects_machine_bounds": false
