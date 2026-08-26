@@ -1,9 +1,13 @@
 {
   "boundary": "Owned rendered presentation geometry only; no manufacturer geometry; reconstructed steering evidence is not factory steering or crab calibration. No load, stability, hydraulic response, service, or safety claim.",
-  "candidate_tree_sha256": "PENDING",
+  "candidate_tree_sha256": "26551797785e34ec20503778e93cbcd3fa845b35f2e2a342672481b3dd0f91b7",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
-    "os": null,
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
+    },
     "renderer": "Blender 5.1.1 deterministic review renderer"
   },
   "gate": "extended_visual_fidelity",
@@ -11,42 +15,42 @@
   "render_observations": [
     {
       "artifact": {
-        "bytes": 930991,
+        "bytes": 930217,
         "path": "docs/review/742/maximum-lift-level-forks.png",
-        "sha256": "ad6277ce08f09364fe65690731f122a4373e027470345e5557bfda0c67533495"
+        "sha256": "1d2868abb853cfa1f39ffcfe066485f57a9cdc645a779371ffb9718012cbad12"
       },
       "claim": "Level fork load surface is visible at the selected reconstructed maximum-lift pose.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "maximum_lift_level_attachment"
     },
     {
       "artifact": {
-        "bytes": 737150,
+        "bytes": 738367,
         "path": "docs/review/742/maximum-lift-forks-close.png",
-        "sha256": "75e03a987d26b844d77f2a14e3ab79a4813cbba927bf2be14b0cf980f8486e72"
+        "sha256": "c6c7ba4bc1f0a69ddba9bdcd867aa2bc43e41bbbc38ff83de66d1a2f47d34baf"
       },
       "claim": "Fork heels, blades, and the red validated posed-GLB fork-top/load-surface datum with exact contact markers are fully framed at maximum lift.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "maximum_lift_fork_closeup"
     },
     {
       "artifact": {
-        "bytes": 894604,
+        "bytes": 893013,
         "path": "docs/review/742/maximum-reach-24in-load-center.png",
-        "sha256": "7822a60d3fc5f7df544e7f53e3c7dcbada6f4ac6b14d9ef5458bbc6c9311c8cd"
+        "sha256": "13953b29ededdf8db06159accd574dbddab3ca87d796fce149ce565a8fa1cd10"
       },
       "claim": "The selected 3 degree maximum-reach pose and 24 inch load-center reference are visible.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "maximum_reach_load_center_pose"
     },
     {
       "artifact": {
-        "bytes": 708552,
+        "bytes": 700088,
         "path": "docs/review/742/retract-chain-routing-cutaway.png",
-        "sha256": "22ea2d8573a2790f2465eb57c11827636fa86b75cfafa3864d2f5603d815da25"
+        "sha256": "91642702a74cc7a206b76d6d36506d6f34b2b4e4b140530db24f7154658aa184"
       },
       "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "retract_chain_tangent_sheave_routing"
     },
     {
@@ -56,7 +60,7 @@
         "sha256": "11f7d5aa1ac87984f9e1f84a0c3811f2f3e568c48dd14648e33e44b6a7b5764d"
       },
       "claim": "One through-rod steering cylinder with two visible rod ends, two rigid tie bars, and four highlighted pivots is visible.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "through_rod_two_tie_bars_four_pivots"
     },
     {
@@ -66,7 +70,7 @@
         "sha256": "2deabde9d3a4f50344a783905d72357f527f9cc9ca31c8d15d872794806e1baf"
       },
       "claim": "The unobstructed REAR AXLE / FIXED THROUGH-ROD RACK caption identifies the rear state; the through-rod rack, two rigid tie bars, and all four highlighted joints are visible without label overlap.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "rear_through_rod_two_tie_bars_four_joints"
     },
     {
@@ -75,8 +79,8 @@
         "path": "docs/review/742/circle-steering-plan.png",
         "sha256": "df69a12331d5cb0d084b80357d90f8991c199d557649db5bea4c50e033895fb8"
       },
-      "claim": "The visible CIRCLE label reports reconstructed headings FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg, TWO ACTUAL ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 93.466% — NOT FACTORY ACKERMANN; both ICR constructions are drawn.",
-      "observed": false,
+      "claim": "The visible CIRCLE label reports reconstructed headings FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg, TWO ACTUAL ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 93.466% \u2014 NOT FACTORY ACKERMANN; both ICR constructions are drawn.",
+      "observed": true,
       "semantic_id": "circle_headings_two_actual_icrs_scrub"
     },
     {
@@ -86,7 +90,7 @@
         "sha256": "dd982b0bde645a355a56347cfdc4af340f76fde69b4c6c8e65d42d9f8e915380"
       },
       "claim": "The visible CRAB label reports reconstructed headings FL 55.000 / FR 54.914 / RL 54.914 / RR 55.000 deg, FULL-POSE TOE 0.086 deg, and DENSE MAX 0.753 deg.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "crab_headings_toe_diagnostics"
     },
     {
@@ -95,21 +99,21 @@
         "path": "docs/review/742/front-steering-plan.png",
         "sha256": "e9cf940c2983c9aec1a183e920f1dc9a833d9e18858d93d3b017a4fac631fee0"
       },
-      "claim": "The visible FRONT label reports reconstructed headings FL 55.000 / FR 54.914 deg, REAR HELD ALIGNED, ACTUAL FRONT ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 61.060% — NOT FACTORY ACKERMANN; the front ICR construction lines are drawn.",
-      "observed": false,
+      "claim": "The visible FRONT label reports reconstructed headings FL 55.000 / FR 54.914 deg, REAR HELD ALIGNED, ACTUAL FRONT ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 61.060% \u2014 NOT FACTORY ACKERMANN; the front ICR construction lines are drawn.",
+      "observed": true,
       "semantic_id": "front_headings_rear_aligned_actual_icrs_scrub"
     },
     {
       "artifact": {
-        "bytes": 1237788,
+        "bytes": 1239489,
         "path": "docs/review/742/boom-pivot-angle-sensor.png",
-        "sha256": "4c16a1828f3e07d5d65bb81582acae16a820c21631f09a964019c43811bbb055"
+        "sha256": "7e4f683d7f6dcff902e3570c4be26f12fc99c76c21589a993ef3636bfc7aa3aa"
       },
       "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
-      "observed": false,
+      "observed": true,
       "semantic_id": "rigid_boom_angle_sensor_crank_and_link"
     }
   ],
-  "reviewed_source_commit": "PENDING",
+  "reviewed_source_commit": "67dd7515147b1982305700620e66644c9601e236",
   "schema_version": "2.0.0"
 }

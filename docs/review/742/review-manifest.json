@@ -1,60 +1,110 @@
 {
-  "schema_version": "3.0.0",
+  "candidate_tree_sha256": "26551797785e34ec20503778e93cbcd3fa845b35f2e2a342672481b3dd0f91b7",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "PENDING",
-  "reviewed_source_commit": "PENDING",
-  "environment": null,
-  "gates": {
-    "600s_browser_regression": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 exact-current 600S browser regression recapture and direct review are pending."
+  "environment": {
+    "browser": {
+      "name": "Chromium",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+      "version": "151.0.7922.34"
     },
-    "accessibility_semantics_and_keyboard": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 Chromium accessibility-tree, unit-bearing engineering detail, live-region, and keyboard review are pending; no physical assistive-technology session is claimed."
-    },
-    "cab_closeup_fidelity": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Direct review of the exact frozen Wave7 cab close-up render is pending."
-    },
-    "desktop_browser_interaction": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 desktop interaction, fault, reset, and whole-machine framing recapture and direct review are pending."
-    },
-    "es1930m_browser_regression": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 exact-current ES1930M browser regression recapture and direct review are pending."
-    },
-    "extended_visual_fidelity": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Direct review of all ten named, hash-bound Wave7 mechanism render claims is pending."
-    },
-    "mobile_browser_interaction": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 portrait and short-landscape interaction, live reduced-motion, and pinch-distance review are pending."
-    },
-    "performance_profile": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 local visible-frame performance windows and their exact screenshot diagnostics are pending."
-    },
-    "semantic_selection": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Wave7 six-component direct visible-canvas selection and independent outcome review are pending."
-    },
-    "stowed_visual_fidelity": {
-      "status": "pending",
-      "artifact": null,
-      "notes": "Direct review of the exact frozen Wave7 stowed render is pending."
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
     }
   },
-  "reviewed_source_commit": "PENDING"
+  "gates": {
+    "600s_browser_regression": {
+      "artifact": {
+        "bytes": 466773,
+        "path": "docs/review/742/600s-browser-regression.json",
+        "sha256": "96c9343e6b6af1efe5c6a51b81652a4d4247a6093c374b3d8a6ba84bfd0fed92"
+      },
+      "notes": "Wave7 exact-current 600S browser regression recapture and direct review are pending.",
+      "status": "pass"
+    },
+    "accessibility_semantics_and_keyboard": {
+      "artifact": {
+        "bytes": 324641,
+        "path": "docs/review/742/accessibility-semantics-keyboard.json",
+        "sha256": "c66a921465444e4ab630a4e30c0c943e6de9fa4ddcee4f462fdbcfe319ca508f"
+      },
+      "notes": "Wave7 Chromium accessibility-tree, unit-bearing engineering detail, live-region, and keyboard review are pending; no physical assistive-technology session is claimed.",
+      "status": "pass"
+    },
+    "cab_closeup_fidelity": {
+      "artifact": {
+        "bytes": 1505367,
+        "path": "docs/review/742/cab-close.png",
+        "sha256": "ec45da193d25c0466bc2c7f1a0adfe9f34c450a05ad3a65730bdd20b90df9c73"
+      },
+      "notes": "Direct review of the exact frozen Wave7 cab close-up render is pending.",
+      "status": "pass"
+    },
+    "desktop_browser_interaction": {
+      "artifact": {
+        "bytes": 180775,
+        "path": "docs/review/742/desktop-browser-interaction.json",
+        "sha256": "6c66f75ae88e705531825ee8569895979bff735af412582bbd05912335470ce7"
+      },
+      "notes": "Wave7 desktop interaction, fault, reset, and whole-machine framing recapture and direct review are pending.",
+      "status": "pass"
+    },
+    "es1930m_browser_regression": {
+      "artifact": {
+        "bytes": 457486,
+        "path": "docs/review/742/es1930m-browser-regression.json",
+        "sha256": "f8c04a04d14e9c0773bd7adee1403aa75cc609fa4a8bc427bd3538b79aa4ef97"
+      },
+      "notes": "Wave7 exact-current ES1930M browser regression recapture and direct review are pending.",
+      "status": "pass"
+    },
+    "extended_visual_fidelity": {
+      "artifact": {
+        "bytes": 5354,
+        "path": "docs/review/742/extended-visual-fidelity.json",
+        "sha256": "c38c2f658d308f825c16994aa01113aeb4bd67e75c20f4386d752d1667c63b03"
+      },
+      "notes": "Direct review of all ten named, hash-bound Wave7 mechanism render claims is pending.",
+      "status": "pass"
+    },
+    "mobile_browser_interaction": {
+      "artifact": {
+        "bytes": 152654,
+        "path": "docs/review/742/mobile-browser-interaction.json",
+        "sha256": "38e43677850960e134c83ec48d65d444e197c89428c7ce1015c42d5a9f5649eb"
+      },
+      "notes": "Wave7 portrait and short-landscape interaction, live reduced-motion, and pinch-distance review are pending.",
+      "status": "pass"
+    },
+    "performance_profile": {
+      "artifact": {
+        "bytes": 114583,
+        "path": "docs/review/742/performance-profile.json",
+        "sha256": "64639ed50d594bee086bfdaf2fe6b891dd6fb1acee15be0a2a8ddd70ea952d86"
+      },
+      "notes": "Wave7 local visible-frame performance windows and their exact screenshot diagnostics are pending.",
+      "status": "pass"
+    },
+    "semantic_selection": {
+      "artifact": {
+        "bytes": 142015,
+        "path": "docs/review/742/semantic-selection.json",
+        "sha256": "9273290c4f9198603470fa972cf457467afff2f938cac478acb56c22cfbe4cb2"
+      },
+      "notes": "Wave7 six-component direct visible-canvas selection and independent outcome review are pending.",
+      "status": "pass"
+    },
+    "stowed_visual_fidelity": {
+      "artifact": {
+        "bytes": 1276747,
+        "path": "docs/review/742/stowed-front-left.png",
+        "sha256": "d42835c5aed6d1714c30f5afbfb446d3aa8c8377ee6f86b56488b607d0af3c88"
+      },
+      "notes": "Direct review of the exact frozen Wave7 stowed render is pending.",
+      "status": "pass"
+    }
+  },
+  "reviewed_source_commit": "67dd7515147b1982305700620e66644c9601e236",
+  "schema_version": "3.0.0"
 }
