@@ -8,6 +8,7 @@ import io
 import json
 import unittest
 
+from bind_742_review import mark_extended_visual_observations_reviewed
 from validate_742_review import (
     EXPECTED_ID,
     EXTENDED_VISUAL_RENDER_CONTRACT,
@@ -114,6 +115,23 @@ class ExtendedVisualSemanticsTests(unittest.TestCase):
         record, allowed = fixture()
         with self.assertRaises(RuntimeError):
             _validate_extended_visual_semantics(record, allowed, expected_observed=False)
+
+    def test_binder_marks_every_pending_render_observed(self) -> None:
+        record, _ = fixture()
+        for observation in record["render_observations"]:
+            observation["observed"] = False
+        mark_extended_visual_observations_reviewed(record)
+        self.assertTrue(all(observation["observed"] is True for observation in record["render_observations"]))
+
+    def test_binder_rejects_partial_review_without_mutating_pending_records(self) -> None:
+        record, _ = fixture()
+        for observation in record["render_observations"]:
+            observation["observed"] = False
+        record["render_observations"][4]["observed"] = True
+        before = [observation["observed"] for observation in record["render_observations"]]
+        with self.assertRaisesRegex(RuntimeError, "entirely pending"):
+            mark_extended_visual_observations_reviewed(record)
+        self.assertEqual(before, [observation["observed"] for observation in record["render_observations"]])
 
     def test_missing_circle_render_is_rejected(self) -> None:
         record, allowed = fixture()

@@ -17,6 +17,7 @@ from pathlib import Path
 from validate_742_browser_evidence import BROWSER_GATES
 from validate_742_review import (
     BROWSER_CAPTURE_ALLOWLIST_PATH,
+    EXTENDED_VISUAL_RENDER_CONTRACT,
     EXPECTED_ARTIFACT_PATHS,
     HUMAN_GATES,
     ROOT,
@@ -46,6 +47,17 @@ def _candidate_canonical_paths(receipt: dict) -> list[Path]:
     if any(str(path.relative_to(ROOT)) == BROWSER_CAPTURE_ALLOWLIST_PATH for path in paths):
         raise RuntimeError("742 pending receipt incorrectly treats the post-capture allowlist as candidate input")
     return paths
+
+
+def mark_extended_visual_observations_reviewed(artifact: dict) -> None:
+    """Atomically complete the explicitly approved visual observations."""
+    observations = artifact.get("render_observations")
+    if not isinstance(observations, list) or len(observations) != len(EXTENDED_VISUAL_RENDER_CONTRACT):
+        raise RuntimeError("742 extended visual review transition render set drift")
+    if any(not isinstance(observation, dict) or observation.get("observed") is not False for observation in observations):
+        raise RuntimeError("742 extended visual review transition requires an entirely pending render set")
+    for observation in observations:
+        observation["observed"] = True
 
 
 def main() -> None:
@@ -115,6 +127,7 @@ def main() -> None:
                 artifact["reviewed_source_commit"] = args.reviewed_source_commit
                 if gate == "extended_visual_fidelity":
                     artifact["environment"]["os"] = browser_environments[0]["os"]
+                    mark_extended_visual_observations_reviewed(artifact)
                 _write_json(artifact_path, artifact)
             manifest["gates"][gate]["status"] = "pass"
             manifest["gates"][gate]["artifact"] = record(artifact_path)
