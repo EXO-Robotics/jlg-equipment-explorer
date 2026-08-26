@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.8";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.9";
+import { orbitDragDelta } from "./pointer-gestures.mjs?v=1.0.9";
 
-const ROUTE_RELEASE = "1.6.5";
+const ROUTE_RELEASE = "1.6.6";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -186,7 +187,7 @@ function applyShadowProfile() {
   if (!shadowLight) return;
   const shortLandscape = innerHeight <= 500 && innerWidth > innerHeight;
   const size = shortLandscape || compact ? 512 : 1024;
-  const coverage = compact && innerHeight > innerWidth ? 16 : 14;
+  const coverage = 20;
   if (shadowLight.shadow.mapSize.x !== size) {
     shadowLight.shadow.mapSize.set(size, size);
     shadowLight.shadow.map?.dispose();
@@ -202,12 +203,12 @@ function applyShadowProfile() {
   document.body.dataset.pixelRatio = renderer.getPixelRatio().toFixed(2);
 }
 applyShadowProfile();
-const floor = new THREE.Mesh(new THREE.CircleGeometry(8, 80), new THREE.MeshStandardMaterial({ color: 0x242a29, roughness: 0.96 }));
+const floor = new THREE.Mesh(new THREE.CircleGeometry(18, 96), new THREE.MeshStandardMaterial({ color: 0x242a2a, roughness: 0.96, metalness: 0 }));
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
-const grid = new THREE.GridHelper(14, 28, 0x5d625c, 0x303633);
-grid.position.y = 0.003;
+const grid = new THREE.GridHelper(34, 34, 0x5c5f56, 0x30342f);
+grid.position.y = 0.004;
 grid.material.transparent = true;
 grid.material.opacity = 0.12;
 scene.add(grid);
@@ -248,6 +249,8 @@ function updateCamera(delta = 1) {
   orbit.target.lerp(orbit.desiredTarget, ease);
   orbit.distance = THREE.MathUtils.lerp(orbit.distance, orbit.desiredDistance, ease);
   document.body.dataset.orbitCameraDistanceM = orbit.distance.toFixed(3);
+  document.body.dataset.orbitAzimuthRad = orbit.azimuth.toFixed(6);
+  document.body.dataset.orbitPolarRad = orbit.polar.toFixed(6);
   const sinPolar = Math.sin(orbit.polar);
   camera.position.set(
     orbit.target.x + orbit.distance * sinPolar * Math.cos(orbit.azimuth),
@@ -277,6 +280,7 @@ renderer.domElement.addEventListener("pointerdown", (event) => {
   app.focus({ preventScroll: true });
   pointers.set(event.pointerId, {
     x: event.clientX, y: event.clientY, startX: event.clientX, startY: event.clientY, moved: 0,
+    pointerType: event.pointerType || "mouse",
   });
   try { renderer.domElement.setPointerCapture(event.pointerId); } catch {}
   if (pointers.size === 2) {
@@ -304,8 +308,9 @@ renderer.domElement.addEventListener("pointermove", (event) => {
   }
   const dx = active.x - previousX;
   const dy = active.y - previousY;
-  orbit.velocityAzimuth = -dx * 0.006;
-  orbit.velocityPolar = dy * 0.006;
+  const drag = orbitDragDelta(dx, dy, active.pointerType);
+  orbit.velocityAzimuth = drag.azimuth;
+  orbit.velocityPolar = drag.polar;
   orbit.azimuth += orbit.velocityAzimuth;
   orbit.polar = THREE.MathUtils.clamp(orbit.polar + orbit.velocityPolar, 0.25, 1.52);
 }, { passive: false });

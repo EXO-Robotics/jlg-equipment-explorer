@@ -89,6 +89,22 @@ REQUIRED_EDGES = {
     "ExtensionFrontToeBoard": "ExtensionDeck",
     **{f"Level{index:02d}": "ScissorAssembly" for index in range(1, 6)},
 }
+REQUIRED_BRANDING_EDGES = {
+    "ChassisJLGPlate_RH": "Chassis",
+    "ChassisJLGPlate_LH": "Chassis",
+    "ChassisJLGMark_RH": "Chassis",
+    "ChassisJLGMark_LH": "Chassis",
+    "PlatformModelBadgePlate_RH": "FixedRails",
+    "PlatformModelBadgePlate_LH": "FixedRails",
+    "PlatformModelMark_RH": "FixedRails",
+    "PlatformModelMark_LH": "FixedRails",
+    "PlatformFamilyMark_RH": "FixedRails",
+    "PlatformFamilyMark_LH": "FixedRails",
+    "PlatformJLGOutline_Front": "ExtensionDeck",
+    "PlatformJLGMark_Front": "ExtensionDeck",
+    "PlatformJLGOutline_Rear": "FixedRails",
+    "PlatformJLGMark_Rear": "FixedRails",
+}
 
 
 def sha256(path: Path) -> str:
@@ -243,7 +259,7 @@ def main():
     if (
         root_extras.get("configuration_id") != CONFIGURATION_ID
         or root_extras.get("pvc") != "2404"
-        or root_extras.get("release") != "1.0.4"
+        or root_extras.get("release") != "1.0.5"
     ):
         raise RuntimeError("GLB root evidence identity mismatch")
     if missing := sorted(REQUIRED_MECHANISM_NODES - by_name.keys()):
@@ -289,6 +305,21 @@ def main():
     legacy_present = sorted(legacy_console_names.intersection(by_name))
     if legacy_present:
         raise RuntimeError(f"Legacy ES1930M control-board naming remains: {legacy_present}")
+    legacy_branding = sorted({"ES1930M_Label_-1", "ES1930M_Label_1", "ModelBadgePlate_-1", "ModelBadgePlate_1"}.intersection(by_name))
+    if legacy_branding:
+        raise RuntimeError(f"Legacy chassis-mounted ES1930M model badges remain: {legacy_branding}")
+    for child, expected_parent in REQUIRED_BRANDING_EDGES.items():
+        if child not in by_name:
+            raise RuntimeError(f"Missing evidence-bound ES1930M branding node: {child}")
+        actual_parent = nodes[parents[by_name[child]]].get("name") if by_name[child] in parents else None
+        if actual_parent != expected_parent:
+            raise RuntimeError(f"Branding parent mismatch for {child}: {actual_parent} != {expected_parent}")
+        extras = nodes[by_name[child]].get("extras") or {}
+        if "Mark" in child:
+            if extras.get("marking_authority") != "independently_typeset_nominative_mark":
+                raise RuntimeError(f"Branding authority metadata missing: {child}")
+            if not str(extras.get("marking_source", "")).startswith(("PVC2404_", "official_")):
+                raise RuntimeError(f"Branding source metadata missing: {child}")
     for name in HIT_VOLUMES:
         if name not in by_name or not (nodes[by_name[name]].get("extras") or {}).get("is_hit_volume"):
             raise RuntimeError(f"Missing declared interaction volume: {name}")
@@ -372,6 +403,7 @@ def main():
         "visible_envelope_xyz_m": envelope,
         "deployed_extension_envelope_m": deployed_length,
         "guard_continuity_pairs": guard_pairs,
+        "branding_nodes": sorted(REQUIRED_BRANDING_EDGES),
     }, indent=2, sort_keys=True))
 
 

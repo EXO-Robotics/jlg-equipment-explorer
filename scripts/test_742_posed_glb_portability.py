@@ -104,10 +104,10 @@ def main() -> None:
             or "run_742_posed_glb_gate.py" in standard_check
             or "Blender" in standard_check or "blender" in standard_check):
         raise RuntimeError("standard 742 check is not isolated from Blender startup")
-    pages_workflow = (repository_root / ".github/workflows/pages.yml").read_text(encoding="utf-8")
-    if ("Run pinned-Blender posed-GLB companion gate" not in pages_workflow
-            or "scripts/run_742_posed_glb_gate.py" not in pages_workflow):
-        raise RuntimeError("Pages CI no longer runs the distinct pinned-Blender companion")
+    certification_workflow = (repository_root / ".github/workflows/742-release-certification.yml").read_text(encoding="utf-8")
+    if ("Run pinned-Blender posed-GLB companion gate" not in certification_workflow
+            or "scripts/run_742_posed_glb_gate.py" not in certification_workflow):
+        raise RuntimeError("742 release certification no longer runs the distinct pinned-Blender companion")
 
     checkout_a = Path("/private/tmp/742-portability/workspace-a")
     checkout_b = Path("/private/tmp/742-portability/different/workspace-b")
@@ -149,7 +149,7 @@ def main() -> None:
         "level": 0, "steerMode": "circle",
     })
     binary_contract = validate_neutral_binary_contract(gate, neutral)
-    if binary_contract["beams_checked"] < 100 or binary_contract["points_checked"] != 4:
+    if binary_contract["beams_checked"] < 100 or binary_contract["points_checked"] != 6:
         raise RuntimeError("portable committed-binary endpoint coverage drift")
 
     sample = next((name for name in sorted(neutral["geometry"]["beams"])

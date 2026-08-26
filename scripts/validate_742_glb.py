@@ -33,7 +33,7 @@ REQUIRED_EDGES = {
 REQUIRED_MECHANICAL_DETAIL = {
     "LiftCylinderBarrel", "LiftCylinderRod", "LiftCylinderBasePin", "LiftCylinderRodPin",
     "TelescopeCylinderBarrel", "TelescopeCylinderRod", "CompensationCylinderBarrel", "CompensationCylinderRod",
-    "CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod", "CarriageTiltLink",
+    "CarriageTiltCylinderBasePin", "CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod", "CarriageTiltCylinderRodPin", "CarriageTiltLink", "CarriageTiltLinkPin",
     "FrameLevelCylinderBarrel", "FrameLevelCylinderRod", "RearAxleStabilizerBarrel", "RearAxleStabilizerRod",
     "FrontSteerCylinder", "FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
     "RearSteerCylinder", "RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight",
@@ -161,6 +161,22 @@ def main():
     missing_detail = sorted(REQUIRED_MECHANICAL_DETAIL - set(by_name))
     if missing_detail:
         raise RuntimeError(f"Missing mechanical detail contracts: {missing_detail}")
+    tilt_nodes = (
+        "CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod", "CarriageTiltLink",
+        "CarriageTiltCylinderBasePin", "CarriageTiltCylinderRodPin", "CarriageTiltLinkPin",
+    )
+    tilt_bounds = [node_world_bounds(document, blob, nodes, parents, by_name[name]) for name in tilt_nodes]
+    tilt_minimum_height = min(bounds[0][1] for bounds in tilt_bounds)
+    tilt_maximum_lateral = max(abs(edge[2]) for bounds in tilt_bounds for edge in bounds)
+    carriage_contract = mechanism["carriage"]
+    if tilt_minimum_height + 1e-6 < carriage_contract["stowed_tilt_actuator_minimum_height_m"]:
+        raise RuntimeError(
+            f"Stowed carriage-tilt actuator hangs below its owned boom-head presentation floor: {tilt_minimum_height:.4f} m"
+        )
+    if tilt_maximum_lateral > carriage_contract["stowed_tilt_actuator_maximum_lateral_offset_m"] + 1e-6:
+        raise RuntimeError(
+            f"Stowed carriage-tilt actuator projects outside its owned inboard envelope: {tilt_maximum_lateral:.4f} m"
+        )
     evidence = json.loads(EVIDENCE_PATH.read_text())
     evidence_components = {component for system in evidence["systems"]
                            for claim in system["claims"] for component in claim["components"]}

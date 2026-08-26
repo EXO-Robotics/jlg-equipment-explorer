@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T12:16:18.658Z",
+  "captured_at_utc": "2026-08-26T13:53:31.891Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,7 +2018,7 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb",
+    "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
     "bytes": 88402
   },
   "outcomes_sha256": "1a848b75ad40b27d15735d85c6e641cf864f0a09b83c8d4e6402d8fbfc2697ee",

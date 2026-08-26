@@ -93,7 +93,7 @@ for snippet in required_presentation:
 for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "const curvature = -planarCurvature", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
     if snippet not in route_source:
         raise RuntimeError(f"Figure-eight math contract missing: {snippet}")
-for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.0.8', '../viewer.css?v=1.0.8', '../viewer/multi-machine.css?v=1.0.8', '../viewer/machine-tabs.css?v=1.0.0', '<nav class="machine-tabs" aria-label="Machine showcases">', '<a href="../" aria-label="JLG 600S boom lift showcase">600S</a>', '<a href="../742/" aria-label="JLG 742 telehandler showcase">742</a>', '<a href="../es1930m/" aria-current="page" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', "countBootFrame", "dataset.terminalFrameCount", "dataset.terminalFrameSource", 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
+for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.0.9', '../viewer.css?v=1.0.9', '../viewer/multi-machine.css?v=1.0.9', '../viewer/machine-tabs.css?v=1.0.0', '<nav class="machine-tabs" aria-label="Machine showcases">', '<a href="../" aria-label="JLG 600S boom lift showcase">600S</a>', '<a href="../742/" aria-label="JLG 742 telehandler showcase">742</a>', '<a href="../es1930m/" aria-current="page" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', "countBootFrame", "dataset.terminalFrameCount", "dataset.terminalFrameSource", 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
     if snippet not in html_source:
         raise RuntimeError(f"600S-aligned control-board naming missing: {snippet}")
 if '<link rel="icon" href="../favicon.ico" type="image/x-icon">' not in html_source:
@@ -108,7 +108,7 @@ if 'id="diagnostics" hidden aria-live=' in html_source:
 if "const reducedMotion = query.get" in viewer_source:
     raise RuntimeError("Reduced-motion preference must remain live after startup")
 for import_path in ("machine.js", "pointer-gestures.mjs", "presentation-route.mjs"):
-    if f'{import_path}?v=1.0.8' not in viewer_source:
+    if f'{import_path}?v=1.0.9' not in viewer_source:
         raise RuntimeError(f"ES1930M runtime cache identity drift: {import_path}")
 for snippet in (f'const COMPACT_VIEWPORT_QUERY = "{COMPACT_VIEWPORT_QUERY}"', "matchMedia(COMPACT_VIEWPORT_QUERY)"):
     if snippet not in viewer_source:

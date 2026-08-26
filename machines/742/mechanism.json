@@ -54,7 +54,9 @@
     "visual_tilt_degrees": [-5, 12],
     "fork_blade_dimensions_m": [1.2192, 0.06, 0.102],
     "minimum_flat-floor_clearance_m": 0.0,
-    "authority": "published attachment topology and 2.36 x 4 x 48 in fork selection; the exact 48 in length is 1.2192 m while 1200 mm is the rounded metric label. Displayed pivot travel and the ground-clear zero-degree stow are reconstructed"
+    "stowed_tilt_actuator_minimum_height_m": 1.15,
+    "stowed_tilt_actuator_maximum_lateral_offset_m": 0.35,
+    "authority": "published attachment topology and 2.36 x 4 x 48 in fork selection; the exact 48 in length is 1.2192 m while 1200 mm is the rounded metric label. Displayed pivot travel, tilt-cylinder anchors, the owned 1.15 m stowed actuator presentation floor, and the ground-clear zero-degree stow are reconstructed"
   },
   "hydraulic_cylinder_strokes_m": {
     "lift": 1.07,

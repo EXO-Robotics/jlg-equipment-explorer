@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "desktop_browser_interaction",
-  "captured_at_utc": "2026-08-26T12:16:06.532Z",
+  "captured_at_utc": "2026-08-26T13:53:19.681Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb",
+    "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
     "bytes": 88402
   },
-  "outcomes_sha256": "b384e7960c9ea86dd218537d5fb46817c786a2cfbc8acd595af974a8be698018",
+  "outcomes_sha256": "50dd05155c05ebebc3cdf4e875aa4e44db3e08253b4396e63ec3a29e894cef89",
   "outcomes": {
     "load_stowed": {
       "outcome": "pass",
@@ -2107,26 +2107,26 @@
         "desired_distance_m": 37.58,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          36.661,
-          36.768,
-          36.863,
-          36.946,
-          37.02,
-          37.086,
+          36.659,
+          36.766,
+          36.861,
+          36.945,
+          37.019,
+          37.085,
           37.143,
-          37.194,
-          37.239,
-          37.279,
-          37.314,
-          37.345,
+          37.193,
+          37.238,
+          37.278,
+          37.313,
+          37.344,
           37.372,
           37.396,
           37.418,
-          37.437,
+          37.436,
           37.453,
           37.468,
           37.481,
-          37.493,
+          37.492,
           37.503,
           37.512,
           37.52,
@@ -2164,42 +2164,42 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 39.2
+                "at_ms": 45.2
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 54.9
+                "at_ms": 58.1
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 73.2
+                "at_ms": 70.6
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 89.2
+                "at_ms": 85.7
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 105.7
+                "at_ms": 101.9
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 121.9
+                "at_ms": 118.5
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 138.3
+                "at_ms": 135.3
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 155.1
+                "at_ms": 151.8
               }
             ]
           },
@@ -2253,42 +2253,42 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 87.1
+                "at_ms": 90.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 92.3
+                "at_ms": 96
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 104.5
+                "at_ms": 99.6
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 121.2
+                "at_ms": 117.3
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 138
+                "at_ms": 133.9
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 154.5
+                "at_ms": 150.4
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 171.1
+                "at_ms": 167.2
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 187.7
+                "at_ms": 183.8
               }
             ]
           },
@@ -2342,12 +2342,12 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 81.3
+                "at_ms": 92.6
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 86.5
+                "at_ms": 98
               }
             ]
           },
@@ -2365,7 +2365,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "2",
+            "boot_frame_count": "3",
             "runtime_frame_count": "2",
             "terminal_frame_count": "2",
             "terminal_frame_source": "runtime"
@@ -2383,7 +2383,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "2",
+            "boot_frame_count": "3",
             "runtime_frame_count": "2",
             "terminal_frame_count": "2",
             "terminal_frame_source": "runtime"
@@ -2401,132 +2401,132 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 82.7
+                "at_ms": 86.1
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 88.5
+                "at_ms": 91.9
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 141.5
+                "at_ms": 145.1
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 145.7
+                "at_ms": 149.4
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 148.7
+                "at_ms": 166
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 164.6
+                "at_ms": 182.8
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 180.9
+                "at_ms": 199.4
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 198.6
+                "at_ms": 216.4
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 215.4
+                "at_ms": 233.1
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 231.9
+                "at_ms": 248.9
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 248.8
+                "at_ms": 266.5
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 265.5
+                "at_ms": 282.6
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 282
+                "at_ms": 299.7
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 298.9
+                "at_ms": 316.4
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 315.6
+                "at_ms": 332.8
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 332.5
+                "at_ms": 349.9
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 348.3
+                "at_ms": 366.1
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 364.4
+                "at_ms": 382.1
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 382.2
+                "at_ms": 399.8
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 397.5
+                "at_ms": 416.1
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 414.6
+                "at_ms": 432.1
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 431
+                "at_ms": 449.3
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 448.6
+                "at_ms": 465.6
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 467.7
+                "at_ms": 484.6
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 506.1
+                "at_ms": 526.7
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 508
+                "at_ms": 528.4
               }
             ]
           },
@@ -2601,132 +2601,132 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 82.8
+                "at_ms": 82.7
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 88.6
+                "at_ms": 88.7
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 141.1
+                "at_ms": 141.5
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 145.3
+                "at_ms": 145.9
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 148.6
+                "at_ms": 152.3
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 164.1
+                "at_ms": 168.7
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 181.2
+                "at_ms": 185.1
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 198.8
+                "at_ms": 202.7
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 215.5
+                "at_ms": 218.8
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 232.1
+                "at_ms": 236.1
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 248.8
+                "at_ms": 252.8
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 265.6
+                "at_ms": 269
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 281.8
+                "at_ms": 285.5
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 298.9
+                "at_ms": 302.6
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 316
+                "at_ms": 319
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 332.6
+                "at_ms": 341.5
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 348.7
+                "at_ms": 352.3
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 365.4
+                "at_ms": 368.7
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 382.1
+                "at_ms": 385.3
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 398.5
+                "at_ms": 402
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 414.6
+                "at_ms": 418.6
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 430.7
+                "at_ms": 435.4
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 448.5
+                "at_ms": 452.1
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 467.3
+                "at_ms": 471.2
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 506.4
+                "at_ms": 522.5
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 508.1
+                "at_ms": 524.2
               }
             ]
           },

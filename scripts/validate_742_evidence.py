@@ -306,6 +306,7 @@ def main():
     tracked = [Path(value.decode()) for value in tracked_output.split(b"\0") if value]
     allowed_binary_artifacts = {
         Path("tools/blender_mcp_official/dist/blender_mcp_addon-1.0.0.zip"),
+        Path("assets/social/equipment-explorer-pages-thumbnail.png"),
         Path("assets/models/600s.glb"), Path("assets/models/es1930m.glb"), Path("assets/models/742.glb"),
         Path("source/blender/600s-blockout-v0.2.blend"), Path("source/blender/600s-detailed-v0.3.blend"),
         Path("source/blender/600s-showcase-v1.0.blend"), Path("source/blender/600s-showcase-v1.1.blend"),

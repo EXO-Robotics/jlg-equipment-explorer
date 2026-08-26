@@ -434,9 +434,20 @@ def build():
         fork["published_fork_thickness_m"] = 0.060
         fork["published_fork_width_m"] = 0.102
         cylinder(f"ForkCollar_{side}", 0.058, 0.12, (0.0,0.28,z), MAT["zinc"], carriage, component="carriage")
-    beam("CarriageTiltCylinderBarrel", (4.216,-1.21,0.42), (4.82,-1.08,0.42), 0.120, MAT["hydraulic"], fly, "hydraulics", 20)
-    beam("CarriageTiltCylinderRod", (4.70,-1.10,0.42), (5.15,-0.43,0.42), 0.060, MAT["zinc"], fly, "hydraulics", 18)
-    beam("CarriageTiltLink", (5.15,-0.43,0.42), (5.216,-0.22,0.42), 0.028, MAT["zinc"], fly, "hydraulics", 14)
+    # The supported tilt slave is tucked inside the boom-head silhouette. Its
+    # exact anchors are reconstructed presentation coordinates, so visible
+    # clevises and pins make that boundary legible without implying service data.
+    tilt_base = (4.216,-0.48,-0.12)
+    tilt_rod_pin = (5.116,-0.5699723455133307,-0.12)
+    tilt_link_pin = (5.216,-0.35,-0.12)
+    beam("CarriageTiltCylinderBarrel", tilt_base, (5.034,-0.455,-0.12), 0.120, MAT["hydraulic"], fly, "hydraulics", 20)
+    beam("CarriageTiltCylinderRod", (4.954,-0.458,-0.12), tilt_rod_pin, 0.060, MAT["zinc"], fly, "hydraulics", 18)
+    beam("CarriageTiltLink", tilt_rod_pin, tilt_link_pin, 0.028, MAT["zinc"], fly, "hydraulics", 14)
+    box("CarriageTiltBaseClevisInboard", (0.18,0.16,0.05), (tilt_base[0],tilt_base[1],-0.195), MAT["black"], fly, 0.012, "hydraulics")
+    box("CarriageTiltBaseClevisOutboard", (0.18,0.16,0.05), (tilt_base[0],tilt_base[1],-0.045), MAT["black"], fly, 0.012, "hydraulics")
+    cylinder("CarriageTiltCylinderBasePin", 0.038, 0.22, tilt_base, MAT["zinc"], fly, component="hydraulics")
+    cylinder("CarriageTiltCylinderRodPin", 0.035, 0.20, tilt_rod_pin, MAT["zinc"], fly, component="hydraulics")
+    cylinder("CarriageTiltLinkPin", 0.035, 0.20, tilt_link_pin, MAT["zinc"], fly, component="hydraulics")
     for node in ("CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod"):
         bpy.data.objects[node]["published_stroke_m"] = 0.388
 
@@ -490,6 +501,7 @@ def build():
         "retract_chain": chain_alias("RetractChain_C"),
         "front_steer_actuator": ["FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight", "FrontSteerBarLeft", "FrontSteerBarRight"],
         "rear_steer_actuator": ["RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight", "RearSteerBarLeft", "RearSteerBarRight"],
+        "carriage_tilt_actuator": ["CarriageTiltCylinderBasePin", "CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod", "CarriageTiltCylinderRodPin", "CarriageTiltLink", "CarriageTiltLinkPin"],
     }, sort_keys=True)
 
     bpy.context.scene["asset_configuration_id"] = CONFIG["configuration_id"]

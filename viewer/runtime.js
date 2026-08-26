@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.8";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.8";
-import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.8";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.9";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.9";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.9";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -135,12 +135,12 @@ for (const [color, intensity, position] of [[0xffefd4, 4.0, [-5, 9, 7]], [0x9fc9
   light.shadow.mapSize.set(mobileQuery.matches ? 1024 : 2048, mobileQuery.matches ? 1024 : 2048);
   scene.add(light);
 }
-const floor = new THREE.Mesh(new THREE.CircleGeometry(12, 96), new THREE.MeshStandardMaterial({ color: 0x242a29, roughness: 0.96 }));
+const floor = new THREE.Mesh(new THREE.CircleGeometry(18, 96), new THREE.MeshStandardMaterial({ color: 0x242a2a, roughness: 0.96, metalness: 0 }));
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
-const grid = new THREE.GridHelper(24, 48, 0x5d625c, 0x303633);
-grid.position.y = 0.003;
+const grid = new THREE.GridHelper(34, 34, 0x5c5f56, 0x30342f);
+grid.position.y = 0.004;
 grid.material.transparent = true;
 grid.material.opacity = 0.12;
 scene.add(grid);

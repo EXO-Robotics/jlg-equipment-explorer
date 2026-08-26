@@ -17,6 +17,12 @@ function requireTokens(source, tokens, label) {
 
 requireTokens(runtime, [
   'const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)"',
+  'import { orbitDragDelta } from "./pointer-gestures.mjs?v=1.0.9"',
+  'pointerType: event.pointerType || "mouse"',
+  'const drag = orbitDragDelta(dx, dy, active.pointerType)',
+  'new THREE.CircleGeometry(18, 96)',
+  'new THREE.GridHelper(34, 34, 0x5c5f56, 0x30342f)',
+  'const coverage = 20',
   "matchMedia(COMPACT_VIEWPORT_QUERY)",
   "nearestVisibleComponentIntersection", "resolveSelectionIntersection(semanticHits, visibleSurfaceHit)",
   "frontmost-rendered-component-then-nearest-proxy", "selectionOverlapOutcomes", "selectionFixtureOutcomes",

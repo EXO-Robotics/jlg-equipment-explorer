@@ -4,6 +4,8 @@
 
 The parts, service and operation set 3122602400/2300/2200 explicitly identifies ES1930M PVC 2404. It controls current configuration, component identity, mechanism topology, dimensions and visible system relationships for this project.
 
+PVC 2404 Parts Figure 8-7, pages 234 and 236, is the marking-placement authority. Items 822A/822B identify separate right/left model decals `1001322860` and `1001322861` on the long platform toe-board faces. Item 825A identifies the standard JLG logo installation `1001304327`, the 3-5/16 in and 2-5/8 in JLG marks `1001256675`/`1001256676`, and the right/left door treatments `1001304321`/`1001304322`. The placement drawings and standard-machine gallery views reconcile JLG identity marks to both chassis access doors and both platform end boards. The owned GLB uses independently typeset nominative text and simple backing geometry; no manufacturer decal raster, vector path or extracted artwork is included.
+
 ## PVC 1001 standalone schematics
 
 JLG Online Express currently labels standalone hydraulic 3122602600 and electrical 3122602500 as PVC 1001. They are official JLG publications but do not inherit PVC 2404 authority.

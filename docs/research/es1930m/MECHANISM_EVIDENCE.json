@@ -190,6 +190,37 @@
       ]
     },
     {
+      "id": "brand_and_model_markings",
+      "claims": [
+        {
+          "id": "BR-001",
+          "statement": "PVC 2404 Parts Figure 8-7 identifies separate right-hand and left-hand ES1930M model decals on the two long platform toe-board faces.",
+          "source": "3122602400",
+          "pvc": "2404",
+          "pages": [234, 236],
+          "components": ["PlatformModelBadgePlate_RH", "PlatformModelBadgePlate_LH", "PlatformModelMark_RH", "PlatformModelMark_LH"],
+          "part_numbers": ["1001322860", "1001322861"],
+          "evidence_type": "parts_relationship_and_visual_placement",
+          "authority": "verified",
+          "geometry_use": "topology_and_visual_placement",
+          "confidence": "high"
+        },
+        {
+          "id": "BR-002",
+          "statement": "PVC 2404 Parts Figure 8-7 identifies the standard JLG logo installation, two published wordmark sizes and right/left chassis-door treatments; its placement views show JLG identity marks on both chassis door faces and the platform end faces.",
+          "source": "3122602400",
+          "pvc": "2404",
+          "pages": [234, 236],
+          "components": ["ChassisJLGMark_RH", "ChassisJLGMark_LH", "PlatformJLGMark_Front", "PlatformJLGMark_Rear"],
+          "part_numbers": ["1001304327", "1001256675", "1001256676", "1001304321", "1001304322"],
+          "evidence_type": "parts_relationship_and_visual_placement",
+          "authority": "verified",
+          "geometry_use": "topology_and_visual_placement",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
       "id": "schematics",
       "claims": [
         {

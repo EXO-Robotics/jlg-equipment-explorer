@@ -405,7 +405,7 @@ async function projectedStowMachineBounds(page, model, minimumEdgeMarginCssPx, {
       },
       es1930m: {
         asset: "/assets/models/es1930m.glb",
-        machineModule: "/machines/es1930m/machine.js?v=1.0.8",
+        machineModule: "/machines/es1930m/machine.js?v=1.0.9",
         cameraKind: "azimuth-polar",
       },
       "600s": {

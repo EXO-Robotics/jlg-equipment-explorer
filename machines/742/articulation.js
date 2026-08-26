@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { JLG742_MECHANISM, solve742RigGeometry, solve742State } from "./solver.js?v=1.1.7";
+import { JLG742_MECHANISM, solve742RigGeometry, solve742State } from "./solver.js?v=1.1.8";
 
 export { JLG742_MECHANISM, solve742RigGeometry, solve742State };
 
 function required(root,name){const node=root.getObjectByName(name);if(!node)throw new Error(`742 asset is missing ${name}`);return node;}
-const DYNAMIC_NAMES=["LiftCylinderBarrel","LiftCylinderRod","LiftCylinderRodPin","TelescopeCylinderBarrel","TelescopeCylinderRod","CompensationCylinderBarrel","CompensationCylinderRod","CarriageTiltCylinderBarrel","CarriageTiltCylinderRod","CarriageTiltLink","FrameLevelCylinderBarrel","FrameLevelCylinderRod","RearAxleStabilizerBarrel","RearAxleStabilizerRod","FrontSteerCylinderBarrel","FrontSteerCylinderRodLeft","FrontSteerCylinderRodRight","RearSteerCylinderBarrel","RearSteerCylinderRodLeft","RearSteerCylinderRodRight","BoomAngleSensorCrank","BoomAngleSensorLink","BoomAngleSensorFrameJoint","BoomAngleSensorCrankJoint","BoomAngleSensorBoomJoint",
+const DYNAMIC_NAMES=["LiftCylinderBarrel","LiftCylinderRod","LiftCylinderRodPin","TelescopeCylinderBarrel","TelescopeCylinderRod","CompensationCylinderBarrel","CompensationCylinderRod","CarriageTiltCylinderBarrel","CarriageTiltCylinderRod","CarriageTiltLink","CarriageTiltCylinderRodPin","CarriageTiltLinkPin","FrameLevelCylinderBarrel","FrameLevelCylinderRod","RearAxleStabilizerBarrel","RearAxleStabilizerRod","FrontSteerCylinderBarrel","FrontSteerCylinderRodLeft","FrontSteerCylinderRodRight","RearSteerCylinderBarrel","RearSteerCylinderRodLeft","RearSteerCylinderRodRight","BoomAngleSensorCrank","BoomAngleSensorLink","BoomAngleSensorFrameJoint","BoomAngleSensorCrankJoint","BoomAngleSensorBoomJoint",
   ...Array.from({length:2},(_,lane)=>Array.from({length:3},(_,segment)=>`LiftHose_${lane}_${segment}`)).flat(),
   ...Array.from({length:4},(_,lane)=>Array.from({length:10},(_,segment)=>`BoomHose_${lane}_${segment}`)).flat(),
   "FrontSteerBarLeft","FrontSteerBarRight","RearSteerBarLeft","RearSteerBarRight",

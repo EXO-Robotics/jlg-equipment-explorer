@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "600s_browser_regression",
-  "captured_at_utc": "2026-08-26T12:16:37.911Z",
+  "captured_at_utc": "2026-08-26T13:53:51.157Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,20 +2018,20 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb",
+    "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
     "bytes": 88402
   },
-  "outcomes_sha256": "57d4c8ef5fcb6b1fc4f7e724e7759f3ec91db57e6b338f1f0dafe1dc5705d1ea",
+  "outcomes_sha256": "e79899e6a5b74d6500536f89ec764d7880a4734084336f456228c9aa770d7177",
   "outcomes": {
     "load_exact_release": {
       "outcome": "pass",
       "route": "/",
       "parsed_status": {
         "source": "blender-showcase-v1.1.0",
-        "meshes": 92,
+        "meshes": 98,
         "selection": "5/5 pass",
         "errors": 0,
-        "load_ms": 130,
+        "load_ms": 128,
         "render_profile": "desktop",
         "fps": 60,
         "p95_ms": 16.8,
@@ -2063,8 +2063,8 @@
     },
     "drag_orbit": {
       "outcome": "pass",
-      "before_canvas_sha256": "73df2110e2ae73c36370f44856b7bbe15b390bd9edac566fd632d8c4f13cca68",
-      "after_canvas_sha256": "8b5322ad585eca0864393f90609331ac37fdff9418fc096b39ca42c5f328eed2"
+      "before_canvas_sha256": "3d03a6db91a6c2a0ce82c48b44ac6d3631efbef5fdf5227b10eb2ab1f5f1cff8",
+      "after_canvas_sha256": "cc549cb2bd43dc68d7476f4fc38ac4bb61af75688095533c7e618e78cc6cc7f9"
     },
     "pinch_zoom": {
       "outcome": "pass",
@@ -2094,10 +2094,10 @@
         "CANVAS",
         "CANVAS"
       ],
-      "before_canvas_sha256": "d2461d0c56d96427c116bad2154faf04a615e4b5c1f0cd9e63777dc1b4207f25",
-      "after_canvas_sha256": "34406c1712d1fc40bca717bc80e32a7761d58a3c8dba8917cc663ad4a3b05384",
-      "before_desired_distance_m": "24.000",
-      "after_desired_distance_m": "8.400",
+      "before_canvas_sha256": "f9ee7339dca27d2696654a8443ff2755b11b0e305a36cb1f66ef3377a8ac8ee6",
+      "after_canvas_sha256": "c86b69455a17143ccd06f7bb0103689060187bfd16ed0e1ad76992f75538362b",
+      "before_desired_distance_m": "29.967",
+      "after_desired_distance_m": "10.537",
       "observable_render_or_distance_change": true
     },
     "reduced_motion": {
@@ -2114,15 +2114,15 @@
           "z": "-0.01"
         },
         "reduced_start": {
-          "x": "0.54",
+          "x": "0.55",
           "z": "-0.01"
         },
         "reduced_end": {
-          "x": "0.54",
+          "x": "0.55",
           "z": "-0.01"
         },
         "relaxed": {
-          "x": "0.54",
+          "x": "0.55",
           "z": "-0.01",
           "control_pressed": "false",
           "manual": true
@@ -2146,62 +2146,62 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 40.8
+                "at_ms": 40.1
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 49.2
+                "at_ms": 50.9
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 61.1
+                "at_ms": 67.1
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 78.3
+                "at_ms": 84
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 95
+                "at_ms": 100.9
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 111.2
+                "at_ms": 117.7
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 127.5
+                "at_ms": 134.2
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 144.3
+                "at_ms": 150.4
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 160.9
+                "at_ms": 167.5
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 178.5
+                "at_ms": 184.4
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 195.1
+                "at_ms": 200.5
               },
               {
                 "counter": "boot",
                 "value": 12,
-                "at_ms": 211.8
+                "at_ms": 217.7
               }
             ]
           },
@@ -2253,62 +2253,62 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 41.1
+                "at_ms": 40.8
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 49.8
+                "at_ms": 50.2
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 62.3
+                "at_ms": 66.7
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 78.7
+                "at_ms": 83.4
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 95.4
+                "at_ms": 99.2
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 112.9
+                "at_ms": 116
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 129.7
+                "at_ms": 133.4
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 146.2
+                "at_ms": 149.5
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 163.1
+                "at_ms": 166
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 179.7
+                "at_ms": 182.7
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 195.9
+                "at_ms": 200
               },
               {
                 "counter": "boot",
                 "value": 12,
-                "at_ms": 213
+                "at_ms": 216.3
               }
             ]
           },
@@ -2360,52 +2360,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 93.4
+                "at_ms": 90.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 94.9
+                "at_ms": 92.3
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 105.5
+                "at_ms": 101
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 122.4
+                "at_ms": 117.2
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 139
+                "at_ms": 134.2
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 155.7
+                "at_ms": 149.7
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 172.2
+                "at_ms": 167.1
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 188.3
+                "at_ms": 183.5
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 205.2
+                "at_ms": 200.4
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 222.4
+                "at_ms": 216.5
               }
             ]
           },
@@ -2422,7 +2422,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "1",
+            "boot_frame_count": "2",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2440,7 +2440,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "1",
+            "boot_frame_count": "2",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2457,52 +2457,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 87.8
+                "at_ms": 91.4
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 89.3
+                "at_ms": 92.9
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 100.6
+                "at_ms": 102.2
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 117
+                "at_ms": 117.9
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 133.6
+                "at_ms": 135
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 150.2
+                "at_ms": 151.8
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 166.9
+                "at_ms": 167.8
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 183.7
+                "at_ms": 185.5
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 200.4
+                "at_ms": 201.3
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 217
+                "at_ms": 217.6
               }
             ]
           },
@@ -2519,7 +2519,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "1",
+            "boot_frame_count": "2",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2537,7 +2537,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "1",
+            "boot_frame_count": "2",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2552,8 +2552,8 @@
         "reset_pressed": true,
         "stow_pressed": true,
         "controls_expanded": true,
-        "camera_distance_m": 27,
-        "desired_distance_m": 27,
+        "camera_distance_m": 33.594,
+        "desired_distance_m": 33.595,
         "viewer_terminal": false,
         "machine_source": "blender-showcase-v1.1.0",
         "reset_distance_m": 18,
@@ -2589,19 +2589,19 @@
             ]
           },
           "projected_bounds_css_px": {
-            "left": 517.29,
-            "right": 821.61,
-            "top": 324.3,
-            "bottom": 463.53
+            "left": 540.31,
+            "right": 782.96,
+            "top": 330.68,
+            "bottom": 440.41
           },
           "edge_margins_css_px": {
-            "left": 517.29,
-            "right": 458.39,
-            "top": 324.3,
-            "bottom": 256.47
+            "left": 540.31,
+            "right": 497.04,
+            "top": 330.68,
+            "bottom": 279.59
           },
           "minimum_edge_margin_css_px": 16,
-          "camera_distance_m": 27,
+          "camera_distance_m": 33.594,
           "camera_orientation": {
             "kind": "theta-phi",
             "theta_rad": 0.76,
@@ -2646,8 +2646,8 @@
         "reset_pressed": true,
         "stow_pressed": true,
         "controls_expanded": false,
-        "camera_distance_m": 27,
-        "desired_distance_m": 27,
+        "camera_distance_m": 34.399,
+        "desired_distance_m": 34.4,
         "viewer_terminal": false,
         "machine_source": "blender-showcase-v1.1.0",
         "reset_distance_m": 24,
@@ -2683,19 +2683,19 @@
             ]
           },
           "projected_bounds_css_px": {
-            "left": 88.3,
-            "right": 361.16,
-            "top": 378.64,
-            "bottom": 551.88
+            "left": 109.59,
+            "right": 320.7,
+            "top": 387.05,
+            "bottom": 519.46
           },
           "edge_margins_css_px": {
-            "left": 88.3,
-            "right": 28.84,
-            "top": 378.64,
-            "bottom": 292.12
+            "left": 109.59,
+            "right": 69.3,
+            "top": 387.05,
+            "bottom": 324.54
           },
           "minimum_edge_margin_css_px": 16,
-          "camera_distance_m": 27,
+          "camera_distance_m": 34.399,
           "camera_orientation": {
             "kind": "theta-phi",
             "theta_rad": 1.12,
@@ -2727,8 +2727,8 @@
               "rect_css_px": {
                 "left": 97.5,
                 "right": 292.5,
-                "top": 66,
-                "bottom": 134.7
+                "top": 108,
+                "bottom": 176.7
               },
               "intersects_machine_bounds": false
             }
