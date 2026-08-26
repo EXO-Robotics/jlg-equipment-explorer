@@ -628,9 +628,7 @@ function setControlOutputs(solved = machine.solveState(state)) {
   document.body.dataset.zone = presentation.zone;
   const centered = Math.abs(state.steer) <= 0.01;
   document.body.dataset.steerModeAlignment = centered ? "centered" : "center-required";
-  motionStatus.value = !centered
-    ? `${presentation.status} · axle heading spread F ${document.body.dataset.frontToeDeg}° / R ${document.body.dataset.rearToeDeg}° · center steering before changing mode`
-    : presentation.status;
+  motionStatus.value = presentation.status;
   return presentation;
 }
 function applyControls() {
@@ -739,7 +737,7 @@ document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEve
   if (Math.abs(state.steer) > 0.01) {
     document.body.dataset.steerModeAlignment = "center-required";
     document.querySelectorAll("[data-steer-mode]").forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate.dataset.steerMode === state.steerMode)));
-    motionStatus.value = `${machine.presentState(state).status} · axle heading spread F ${document.body.dataset.frontToeDeg}° / R ${document.body.dataset.rearToeDeg}° · center steering before changing mode`;
+    motionStatus.value = "Center steering";
     announceMotion("Center all wheel headings before changing steering mode.");
     return;
   }

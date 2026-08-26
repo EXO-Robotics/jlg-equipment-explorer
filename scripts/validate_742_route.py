@@ -85,6 +85,8 @@ def main():
     ], "dedicated 742 runtime")
     if re.search(r"renderedInterval\s*<\s*250", RUNTIME):
         raise RuntimeError("742 p95 must not discard visible stalls at or above 250 ms")
+    if 'motionStatus.value = !centered' in RUNTIME or 'axle heading spread F ${document.body.dataset.frontToeDeg}' in RUNTIME:
+        raise RuntimeError("742 visible status must remain concise like the 600S control panel")
     if 'return [...intersections].sort((a, b) => (b.object.userData.selectionPriority' in RUNTIME:
         raise RuntimeError("742 selection must not rank semantic priority before material distance")
     if 'orbit.desiredDistance = view.distance' in RUNTIME:
