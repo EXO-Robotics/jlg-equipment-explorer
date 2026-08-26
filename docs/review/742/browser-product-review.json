@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
+  "review_date": "2026-08-25",
+  "environment": {
+    "browser": "Codex in-app Browser with Chromium engine",
+    "os": "macOS 26.5.2 build 25F84",
+    "server": "Python static HTTP server on isolated localhost port 8091"
+  },
+  "browser_checks": {
+    "desktop_1440x900": {
+      "stowed_machine_fully_visible": true,
+      "maximum_lift_carriage_and_forks_fully_visible": true,
+      "maximum_reach_attachment_visible_outside_control_safe_area": true,
+      "steering_output_at_maximum": "55 degrees right",
+      "circle_crab_front_modes_operable": true,
+      "runtime_errors": 0,
+      "selection_self_test": "6/6 ready"
+    },
+    "portrait_390x844": {
+      "stowed_machine_fully_visible": true,
+      "controls_collapsed_by_default": true,
+      "all_five_mechanism_sliders_reachable_when_expanded": true,
+      "component_navigation_overflow_cue": "More ->",
+      "runtime_errors": 0
+    },
+    "short_landscape_844x390": {
+      "stowed_machine_fully_visible": true,
+      "controls_collapsed_by_default": true,
+      "all_five_mechanism_sliders_present_and_reachable": true,
+      "runtime_errors": 0
+    },
+    "accessibility_surface": {
+      "application_has_instructions": true,
+      "all_five_sliders_have_engineering_aria_valuetext": [
+        "3 degrees",
+        "0.00 metres visual",
+        "0 degrees",
+        "Center",
+        "Level"
+      ],
+      "dialog_background_inert_while_open": true,
+      "dialog_escape_close": true,
+      "dialog_focus_restored_to_opener": true,
+      "component_dialog_focus_restored_to_component": true,
+      "keyboard_focus_trap_contract_static_validation": "pass",
+      "physical_screen_reader_session_claimed": false,
+      "boundary": "This review proves the browser accessibility tree and keyboard-modal surface, not a physical VoiceOver or NVDA session."
+    },
+    "performance": {
+      "desktop_p95_frame_time_ms_observed_range": [16.8, 18.6],
+      "portrait_p95_frame_time_ms": 18.4,
+      "short_landscape_p95_frame_time_ms": 17.8,
+      "background_tab_samples_excluded_by_runtime": true,
+      "physical_low_end_mobile_gpu_claimed": false
+    },
+    "regressions": {
+      "600s": {
+        "title": "600S Interactive Equipment Study",
+        "route_loaded": true,
+        "runtime_errors": 0,
+        "machine_identity_present": true
+      },
+      "es1930m": {
+        "title": "ES1930M Interactive Equipment Study",
+        "route_loaded": true,
+        "runtime_errors": 0,
+        "machine_source": "glb",
+        "machine_identity_present": true
+      }
+    }
+  },
+  "review_boundary": "Local static-browser and owned-render review only. No deployment, physical device, load, stability, hydraulic-response, service, safety, or manufacturer-equivalence claim is made."
+}

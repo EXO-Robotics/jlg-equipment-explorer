@@ -618,50 +618,102 @@
     "verified_count": 11
   },
   "human_review": {
-    "binding": null,
+    "binding": {
+      "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+      "environment": {
+        "browser": "Codex in-app Browser with Chromium engine",
+        "os": "macOS 26.5.2 build 25F84"
+      },
+      "manifest": {
+        "bytes": 4373,
+        "path": "docs/review/742/review-manifest.json",
+        "sha256": "2cbeccb1f927ab23c16a49eabe5f2ef281db99a1a7ccfed07ad2fe584fbc9487"
+      },
+      "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5"
+    },
     "gates": {
       "600s_browser_regression": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "accessibility_assistive_technology": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "cab_closeup_fidelity": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 1503285,
+          "path": "docs/review/742/cab-close.png",
+          "sha256": "24dba0dbddff7dff6e7522e926017098af3cbfdb9645b2adcf42832768935afc"
+        },
+        "status": "pass"
       },
       "desktop_browser_interaction": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "es1930m_browser_regression": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "extended_visual_fidelity": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 817078,
+          "path": "docs/review/742/maximum-lift-level-forks.png",
+          "sha256": "fab246dfdf653ee1c3478bfda36445d56325bdacc9f9cd3422c13c4fe69e8920"
+        },
+        "status": "pass"
       },
       "mobile_browser_interaction": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "performance_profile": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "semantic_selection": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 3016,
+          "path": "docs/review/742/browser-product-review.json",
+          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
+        },
+        "status": "pass"
       },
       "stowed_visual_fidelity": {
-        "artifact": null,
-        "status": "pending"
+        "artifact": {
+          "bytes": 1275828,
+          "path": "docs/review/742/stowed-front-left.png",
+          "sha256": "012a14da16e58608ba47f891c3fd4d3980c05e7aaa9ca8274dc8200fd6dac0dd"
+        },
+        "status": "pass"
       }
     },
-    "status": "pending"
+    "status": "pass"
   },
   "mechanical_proof": {
     "asset_sha256": "82093658a6d71721c01748934f8f6780db5c2da3ee4ddd6f073a66627716ef97",
@@ -693,7 +745,7 @@
     "unique_multidimensional_state_samples": 416745
   },
   "release": "1.1.0-candidate",
-  "release_status": "candidate_review_pending",
+  "release_status": "reviewed_candidate_not_deployed",
   "runtime": {
     "files": [
       "742/index.html",

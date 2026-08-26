@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
+  "environment": {
+    "browser": "Codex in-app Browser with Chromium engine",
+    "os": "macOS 26.5.2 build 25F84"
+  },
+  "gates": {
+    "stowed_visual_fidelity": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/stowed-front-left.png",
+        "sha256": "012a14da16e58608ba47f891c3fd4d3980c05e7aaa9ca8274dc8200fd6dac0dd",
+        "bytes": 1275828
+      },
+      "notes": "Owned stowed render reviewed for silhouette, tire contact, fork scale, and base-machine proportions."
+    },
+    "extended_visual_fidelity": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/maximum-lift-level-forks.png",
+        "sha256": "fab246dfdf653ee1c3478bfda36445d56325bdacc9f9cd3422c13c4fe69e8920",
+        "bytes": 817078
+      },
+      "notes": "Maximum-lift render reviewed with level forks and continuous visible mechanism treatment."
+    },
+    "cab_closeup_fidelity": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/cab-close.png",
+        "sha256": "24dba0dbddff7dff6e7522e926017098af3cbfdb9645b2adcf42832768935afc",
+        "bytes": 1503285
+      },
+      "notes": "Cab close-up reviewed for open-cab configuration, structure, controls, glazing, and owned-detail consistency."
+    },
+    "desktop_browser_interaction": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "Desktop stow, maximum lift, maximum reach, steering modes, controls, and zero-error diagnostics reviewed."
+    },
+    "mobile_browser_interaction": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "390 by 844 portrait and 844 by 390 short-landscape layouts reviewed with all five controls reachable."
+    },
+    "accessibility_assistive_technology": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "Browser accessibility tree, engineering aria values, keyboard modal, focus trap contract, Escape, inert background, and focus restoration reviewed. Physical screen-reader hardware is explicitly not claimed."
+    },
+    "semantic_selection": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "Runtime semantic hit-volume self-test reported 6 of 6 ready and component dialogs restored focus to their opener."
+    },
+    "performance_profile": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "Observed local p95 frame times remained from 16.8 to 18.6 ms; physical low-end mobile GPU performance is not claimed."
+    },
+    "600s_browser_regression": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "600S route loaded its exact machine identity with zero runtime errors on the isolated static server."
+    },
+    "es1930m_browser_regression": {
+      "status": "pass",
+      "artifact": {
+        "path": "docs/review/742/browser-product-review.json",
+        "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada",
+        "bytes": 3016
+      },
+      "notes": "ES1930M route loaded its GLB and exact machine identity with zero runtime errors on the isolated static server."
+    }
+  }
+}
