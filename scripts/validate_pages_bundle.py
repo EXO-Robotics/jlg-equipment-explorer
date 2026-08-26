@@ -5,6 +5,7 @@ import hashlib
 import json
 import posixpath
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 site = Path(sys.argv[1] if len(sys.argv) > 1 else "_site").resolve()
 workflow_source = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
 package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+receipt = json.loads((ROOT / "assets/models/742.asset-receipt.json").read_text(encoding="utf-8"))
 posed_runner_source = (ROOT / "scripts/run_742_posed_glb_gate.py").read_text(encoding="utf-8")
 rebuild_verifier_source = (ROOT / "scripts/verify_742_deterministic_rebuild.py").read_text(encoding="utf-8")
 deployment_verifier_source = (ROOT / "scripts/verify_pages_deployment.py").read_text(encoding="utf-8")
@@ -41,6 +43,25 @@ missing_blender_ci_tokens = sorted(required_blender_ci_tokens - set(
 ))
 if missing_blender_ci_tokens:
     raise RuntimeError(f"Pages CI pinned-Blender contract drift: {missing_blender_ci_tokens}")
+checkout_block = workflow_source.split("- name: Check out repository", 1)[-1].split("- name:", 1)[0]
+if "fetch-depth: 0" not in checkout_block:
+    raise RuntimeError("Pages CI must fetch full history before checking reviewed-source ancestry")
+shallow = subprocess.check_output(
+    ["git", "rev-parse", "--is-shallow-repository"], cwd=ROOT, text=True,
+).strip()
+if shallow != "false":
+    raise RuntimeError("Pages validation requires a full-history checkout")
+reviewed_source_commit = ((receipt.get("human_review") or {}).get("binding") or {}).get("reviewed_source_commit", "")
+if not re.fullmatch(r"[0-9a-f]{40}", reviewed_source_commit):
+    raise RuntimeError("742 receipt reviewed-source commit is missing or malformed")
+if subprocess.run(
+    ["git", "cat-file", "-e", f"{reviewed_source_commit}^{{commit}}"], cwd=ROOT, check=False,
+).returncode:
+    raise RuntimeError("742 reviewed-source commit is absent from the full-history checkout")
+if subprocess.run(
+    ["git", "merge-base", "--is-ancestor", reviewed_source_commit, "HEAD"], cwd=ROOT, check=False,
+).returncode:
+    raise RuntimeError("742 reviewed-source commit is not an ancestor of the Pages candidate")
 rebuild_companion = "_attestations/742-deterministic-rebuild-attestation.json"
 required_rebuild_ci_tokens = {
     'test "${GITHUB_SHA}" = "$(git rev-parse HEAD)"',
@@ -51,6 +72,7 @@ required_rebuild_ci_tokens = {
     f"--output {rebuild_companion}",
     "--require-human-reviewed",
     "--require-release",
+    "git merge-base --is-ancestor",
 }
 missing_rebuild_ci_tokens = sorted(token for token in required_rebuild_ci_tokens if token not in workflow_source)
 if missing_rebuild_ci_tokens:
@@ -86,8 +108,15 @@ install_index = workflow_source.index("Install checksum-pinned Blender 5.1.1")
 rebuild_index = workflow_source.index("python3 -B scripts/verify_742_deterministic_rebuild.py")
 validation_index = workflow_source.index("npm run check")
 deploy_index = workflow_source.index("uses: actions/deploy-pages@")
-if not install_index < rebuild_index < validation_index < deploy_index:
+predeploy_index = workflow_source.index("Enforce strict 742 predeployment gate")
+configure_index = workflow_source.index("uses: actions/configure-pages@")
+upload_index = workflow_source.index("uses: actions/upload-pages-artifact@")
+http_verify_index = workflow_source.index("Verify exact deployed 742 public surface")
+final_release_index = workflow_source.index("--require-release")
+if not install_index < rebuild_index < validation_index < predeploy_index < configure_index < upload_index < deploy_index:
     raise RuntimeError("Pages CI must install Blender, rebuild twice, validate, then deploy in that order")
+if not deploy_index < http_verify_index < final_release_index:
+    raise RuntimeError("Only HTTP verification and final release confirmation may run after Pages deployment")
 research = {
     "README.md", "REFERENCES.md", "CONFIGURATION.md", "DIMENSIONS.md", "ARTICULATION.md",
     "SOURCE_RECONCILIATION.md", "DETAILED_RECONSTRUCTION.md", "COMPARISON_MATRIX.md",
@@ -178,4 +207,5 @@ print(json.dumps({
     "candidate_receipt_packaged": False, "review_evidence_packaged": False,
     "manufacturer_source_binaries": [], "favicon_routes_verified": len(favicon_routes),
     "posed_glb_ci_blender": "5.1.1-checksum-pinned",
+    "full_history_checkout": True, "reviewed_source_ancestry": True,
 }, indent=2, sort_keys=True))

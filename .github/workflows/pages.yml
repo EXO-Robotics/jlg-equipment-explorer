@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
 
       - name: Require private 742 frozen-source artifact identity
         run: |
@@ -77,11 +79,18 @@ jobs:
             --sources-dir _private-evidence/742 \
             --require-source-binaries \
             > _attestations/742-source-replay-result.json
+
+      - name: Enforce strict 742 predeployment gate
+        run: |
           python3 -B scripts/validate_742_receipt.py \
             --sources-dir _private-evidence/742 \
             --require-source-binaries \
             --require-human-reviewed \
             --rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json
+          REVIEWED_SOURCE_COMMIT="$(python3 -B -c 'import json; print(json.load(open("assets/models/742.asset-receipt.json", encoding="utf-8"))["human_review"]["binding"]["reviewed_source_commit"])')"
+          printf '%s\n' "${REVIEWED_SOURCE_COMMIT}" | grep -Eq '^[0-9a-f]{40}$'
+          git cat-file -e "${REVIEWED_SOURCE_COMMIT}^{commit}"
+          git merge-base --is-ancestor "${REVIEWED_SOURCE_COMMIT}" "${GITHUB_SHA}"
 
       - name: Assemble static site
         run: |
