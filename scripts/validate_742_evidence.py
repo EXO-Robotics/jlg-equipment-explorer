@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import struct
 import subprocess
 from pathlib import Path
 
@@ -18,6 +19,7 @@ EVIDENCE = RESEARCH / "MECHANISM_EVIDENCE.json"
 CONFIG = ROOT / "machines/742/742.configuration.json"
 MECHANISM = ROOT / "machines/742/mechanism.json"
 REFERENCES = RESEARCH / "REFERENCES.md"
+OWNED_RENDER_ALLOWLIST = ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json"
 EXPECTED_ID = "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"
 PRIMARY_PUBLICATIONS = {"3132247", "3132245", "3122332100", "3122331300", "3122329900", "3122333200", "3122333100"}
 ADMITTED = {"primary", "visual-only", "visual-envelope-only"}
@@ -41,6 +43,39 @@ def digest(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             hasher.update(chunk)
     return hasher.hexdigest()
+
+
+def read_owned_render_allowlist() -> dict[Path, dict]:
+    record = json.loads(OWNED_RENDER_ALLOWLIST.read_text(encoding="utf-8"))
+    if set(record) != {"schema_version", "kind", "artifacts"}:
+        raise RuntimeError("742 owned-render allowlist schema drift")
+    if record["schema_version"] != "1.0.0" or record["kind"] != "owned-742-review-render-allowlist":
+        raise RuntimeError("742 owned-render allowlist identity drift")
+    allowed: dict[Path, dict] = {}
+    fields = {"path", "sha256", "bytes", "width_px", "height_px", "provenance"}
+    for artifact in record.get("artifacts") or []:
+        if set(artifact) != fields:
+            raise RuntimeError("742 owned-render record schema drift")
+        relative = Path(artifact["path"])
+        if relative.is_absolute() or ".." in relative.parts or relative.suffix.lower() != ".png":
+            raise RuntimeError(f"Unsafe 742 owned-render path: {relative}")
+        if relative in allowed or not str(relative).startswith("docs/review/742/"):
+            raise RuntimeError(f"Duplicate or out-of-scope 742 owned-render path: {relative}")
+        path = ROOT / relative
+        if not path.is_file() or digest(path) != artifact["sha256"] or path.stat().st_size != artifact["bytes"]:
+            raise RuntimeError(f"742 owned-render artifact drift: {relative}")
+        data = path.read_bytes()
+        if data[:8] != b"\x89PNG\r\n\x1a\n" or len(data) < 24:
+            raise RuntimeError(f"742 owned-render is not a valid PNG: {relative}")
+        width, height = struct.unpack(">II", data[16:24])
+        if (width, height) != (artifact["width_px"], artifact["height_px"]):
+            raise RuntimeError(f"742 owned-render dimensions drift: {relative}")
+        if not isinstance(artifact["provenance"], str) or "independently authored" not in artifact["provenance"]:
+            raise RuntimeError(f"742 owned-render provenance is not explicit: {relative}")
+        allowed[relative] = artifact
+    if not allowed:
+        raise RuntimeError("742 owned-render allowlist is empty")
+    return allowed
 
 
 def main():
@@ -82,7 +117,7 @@ def main():
     }
     if identities != {EXPECTED_ID} or config.get("pvc") != "2411":
         raise RuntimeError(f"742 configuration identity drift: {identities}")
-    if config.get("target_release") != "1.1.0":
+    if config.get("target_release") != "1.2.0":
         raise RuntimeError("742 target release drift")
     choices = config.get("choices") or {}
     for key in ("engine", "drive", "steer", "tires", "cab", "carriage", "forks"):
@@ -222,6 +257,7 @@ def main():
         if observed != expected:
             raise RuntimeError(f"Evidence-derived mechanical binding drift: {claim_id}: {observed}")
 
+    owned_review_renders = read_owned_render_allowlist()
     tracked_output = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
     tracked = [Path(value.decode()) for value in tracked_output.split(b"\0") if value]
     allowed_binary_artifacts = {
@@ -230,6 +266,7 @@ def main():
         Path("source/blender/600s-blockout-v0.2.blend"), Path("source/blender/600s-detailed-v0.3.blend"),
         Path("source/blender/600s-showcase-v1.0.blend"), Path("source/blender/600s-showcase-v1.1.blend"),
         Path("source/blender/es1930m-showcase-v1.0.blend"), Path("source/blender/742-showcase-v1.0.blend"),
+        *owned_review_renders,
     }
     leaked = sorted(
         str(path) for path in tracked
@@ -237,13 +274,13 @@ def main():
     )
     tracked_names = {path.name for path in tracked}
     leaked.extend(sorted(filename for filename in filenames if filename in tracked_names))
-    manufacturer_hashes_by_size = {
-        source["bytes"]: source["sha256"] for source in admitted_sources
-    }
+    manufacturer_hashes_by_size: dict[int, set[str]] = {}
+    for source in admitted_sources:
+        manufacturer_hashes_by_size.setdefault(source["bytes"], set()).add(source["sha256"])
     for relative in tracked:
         path = ROOT / relative
         if path.is_file() and path.stat().st_size in manufacturer_hashes_by_size:
-            if digest(path) == manufacturer_hashes_by_size[path.stat().st_size]:
+            if digest(path) in manufacturer_hashes_by_size[path.stat().st_size]:
                 leaked.append(str(relative))
     if leaked:
         raise RuntimeError(f"Manufacturer source binaries committed: {sorted(set(leaked))}")
@@ -278,6 +315,7 @@ def main():
         "local_binaries_missing":sorted(missing_binaries),
         "frozen_source_binary_status":binary_status,
         "committed_source_binaries":0,
+        "owned_review_renders_verified":len(owned_review_renders),
     }, indent=2, sort_keys=True))
 
 

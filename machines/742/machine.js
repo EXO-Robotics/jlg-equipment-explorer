@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { JLG742_CAMERAS, jlg742ComponentView, jlg742FollowView } from "./cameras.js?v=1.1.3";
 import { JLG742_COMPONENTS } from "./inspector.js?v=1.1.3";
-import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.3";
-import { JLG742_GLB_URL, JLG742_RELEASE } from "./version.js?v=1.1.3";
+import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.4";
+import { JLG742_GLB_URL, JLG742_RELEASE } from "./version.js?v=1.1.4";
 
 export const JLG742_MACHINE = Object.freeze({
   id: "742",
@@ -39,6 +39,7 @@ export const JLG742_MACHINE = Object.freeze({
   componentView: jlg742ComponentView,
   presentState(state) {
     const degrees = THREE.MathUtils.radToDeg;
+    const displayDegrees = (value) => `${Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value.toFixed(1)}°`;
     const angle = degrees(THREE.MathUtils.lerp(JLG742_MECHANISM.boomMinimum, JLG742_MECHANISM.boomMaximum, state.lift));
     const extension = state.telescope * (JLG742_MECHANISM.midTravel + JLG742_MECHANISM.flyTravel);
     const tiltDegrees = state.tilt < 0
@@ -47,7 +48,7 @@ export const JLG742_MACHINE = Object.freeze({
     const stowed = state.lift < 0.01 && state.telescope < 0.01 && Math.abs(state.tilt) < 0.01 && Math.abs(state.steer) < 0.01 && Math.abs(state.level) < 0.01;
     return Object.freeze({
       outputs: Object.freeze({
-        lift: `${Math.round(angle)}°`, telescope: `${extension.toFixed(2)} m visual`,
+        lift: displayDegrees(angle), telescope: `${extension.toFixed(2)} m visual`,
         tilt: `${Math.round(tiltDegrees)}°`, steer: Math.abs(state.steer) < 0.01 ? "Center" : `${Math.round(Math.abs(state.steer) * degrees(JLG742_MECHANISM.steerMaximum))}° ${state.steer < 0 ? "L" : "R"}`,
         level: Math.abs(state.level) < 0.01 ? "Level" : `${Math.round(Math.abs(state.level) * degrees(JLG742_MECHANISM.frameLevelMaximum))}° ${state.level < 0 ? "L" : "R"}`,
       }),

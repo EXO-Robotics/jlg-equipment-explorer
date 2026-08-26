@@ -6,10 +6,14 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 import subprocess
 import sys
 from pathlib import Path
+
+from validate_742_review import HUMAN_GATES, validate_review_manifest
+from verify_pages_deployment import REQUIRED_742_PUBLIC_FILES
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,11 +23,17 @@ CANONICAL_FILES = {
     "asset": "assets/models/742.glb",
     "source_blend": "source/blender/742-showcase-v1.0.blend",
     "builder": "scripts/build_742.py",
+    "solver_bridge": "scripts/solve_742_pose.mjs",
+    "solver_validator": "scripts/validate_742_solver.mjs",
     "receipt_writer": "scripts/write_742_receipt.py",
     "receipt_validator": "scripts/validate_742_receipt.py",
     "project_readme": "README.md",
     "package_manifest": "package.json",
     "pages_workflow": ".github/workflows/pages.yml",
+    "pages_assembler": "scripts/assemble_pages.py",
+    "pages_bundle_validator": "scripts/validate_pages_bundle.py",
+    "pages_manifest_writer": "scripts/write_pages_attestation.py",
+    "pages_deployment_verifier": "scripts/verify_pages_deployment.py",
     "configuration": "machines/742/742.configuration.json",
     "mechanism": "machines/742/mechanism.json",
     "source_manifest": "docs/research/742/SOURCE_MANIFEST.json",
@@ -39,6 +49,10 @@ CANONICAL_FILES = {
     "rights_boundary": "docs/research/742/RIGHTS_AND_BIM_BOUNDARY.md",
     "reference_board_boundary": "docs/research/742/reference-board/README.md",
     "review_renderer": "scripts/render_742_preview.py",
+    "review_validator": "scripts/validate_742_review.py",
+    "review_binder": "scripts/bind_742_review.py",
+    "deterministic_rebuild_verifier": "scripts/verify_742_deterministic_rebuild.py",
+    "owned_review_render_allowlist": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
 }
 CANONICAL_RUNTIME = [
     "742/index.html",
@@ -50,6 +64,7 @@ CANONICAL_RUNTIME = [
     "machines/742/inspector.js",
     "machines/742/cameras.js",
     "machines/742/version.js",
+    "machines/742/solver.js",
 ]
 AUTOMATED_CHECKS = {
     "600s_viewer_contract": ("scripts/validate_viewer_contract.py", []),
@@ -62,18 +77,6 @@ AUTOMATED_CHECKS = {
     "asset_contract": ("scripts/validate_742_glb.py", []),
     "mechanical_kinematics": ("scripts/validate_742_kinematics.py", []),
     "route_contract": ("scripts/validate_742_route.py", []),
-}
-HUMAN_GATES = {
-    "stowed_visual_fidelity",
-    "extended_visual_fidelity",
-    "cab_closeup_fidelity",
-    "desktop_browser_interaction",
-    "mobile_browser_interaction",
-    "accessibility_assistive_technology",
-    "semantic_selection",
-    "performance_profile",
-    "600s_browser_regression",
-    "es1930m_browser_regression",
 }
 TOP_LEVEL_FIELDS = {
     "schema_version", "release", "release_status", "written", "configuration_id",
@@ -110,6 +113,27 @@ def aggregate_digest(paths: list[Path]) -> str:
     return hasher.hexdigest()
 
 
+def solver_circle_inner_degrees(result: dict, mechanism: dict) -> float:
+    steering = mechanism["steering"]
+    half_wheelbase = steering["wheelbase_m"] / 2
+    track = steering["wheel_center_track_m"]
+    outside_center_path = result["visual_circle_outside_wheel_center_radius_m"]
+    projected_outside = math.sqrt(outside_center_path ** 2 - half_wheelbase ** 2)
+    return math.degrees(math.atan2(half_wheelbase, projected_outside - track))
+
+
+def solver_stroke_usage(result: dict) -> dict:
+    ranges = result["cylinder_ranges"]
+    return {
+        "lift": ranges["lift"]["stroke_usage_m"],
+        "telescope": ranges["telescope"]["stroke_usage_m"],
+        "head_tilt_slave": ranges["carriageTilt"]["stroke_usage_m"],
+        "compensation_master": ranges["compensation"]["stroke_usage_m"],
+        "frame_sway": ranges["frameLevel"]["stroke_usage_m"],
+        "rear_axle_stabilization_visible_subset": ranges["rearAxleStabilizer"]["stroke_usage_m"],
+    }
+
+
 def replay_check(name: str, record: dict) -> Path:
     expected_script, expected_args = AUTOMATED_CHECKS[name]
     expected_fields = {"status", "validator", "arguments", "result_sha256", "result"}
@@ -135,8 +159,10 @@ def replay_check(name: str, record: dict) -> Path:
     return validator
 
 
-def verify_human_review(review: dict, candidate_tree_sha256: str, require_review: bool) -> list[str]:
-    if set(review) != {"status", "binding", "gates"} or set(review.get("gates") or {}) != HUMAN_GATES:
+def verify_human_review(
+    review: dict, candidate_tree_sha256: str, require_review: bool, canonical_paths: list[Path]
+) -> list[str]:
+    if set(review) != {"status", "binding", "gates"} or set(review.get("gates") or {}) != set(HUMAN_GATES):
         raise RuntimeError("742 human review schema drift")
     incomplete = []
     for name, gate in review["gates"].items():
@@ -167,6 +193,11 @@ def verify_human_review(review: dict, candidate_tree_sha256: str, require_review
         environment = binding["environment"]
         if not isinstance(environment, dict) or not environment.get("browser") or not environment.get("os"):
             raise RuntimeError("742 human review environment is incomplete")
+        reviewed, expected_binding = validate_review_manifest(
+            ROOT / binding["manifest"]["path"], candidate_tree_sha256, canonical_paths
+        )
+        if reviewed != review["gates"] or expected_binding != binding:
+            raise RuntimeError("742 semantically parsed review evidence disagrees with the receipt")
     if require_review and incomplete:
         raise RuntimeError(f"742 human review gates incomplete: {sorted(incomplete)}")
     return sorted(incomplete)
@@ -175,33 +206,29 @@ def verify_human_review(review: dict, candidate_tree_sha256: str, require_review
 def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path) -> None:
     attestation = json.loads(path.read_text(encoding="utf-8"))
     fields = {
-        "schema_version", "kind", "configuration_id", "source_commit", "workflow_run_url",
-        "route_url", "route_http_status", "route_sha256", "asset_url", "asset_http_status",
-        "asset_sha256", "asset_bytes", "pages_build_manifest_sha256", "candidate_receipt_sha256",
+        "schema_version", "kind", "configuration_id", "source_commit", "workflow_run_url", "base_url",
+        "pages_build_manifest_url", "pages_build_manifest_http_status", "pages_build_manifest_sha256",
+        "pages_build_manifest_bytes", "candidate_receipt_sha256", "frozen_source_replay", "verified_files",
     }
-    if set(attestation) != fields or attestation["schema_version"] != "1.0.0" or attestation["kind"] != "github-pages-http-attestation":
+    if set(attestation) != fields or attestation["schema_version"] != "2.0.0" or attestation["kind"] != "github-pages-http-attestation":
         raise RuntimeError("742 deployment attestation schema drift")
     if attestation["configuration_id"] != EXPECTED_ID:
         raise RuntimeError("742 deployment attestation identity drift")
-    if attestation["route_url"] != "https://exo-robotics.github.io/jlg-equipment-explorer/742/":
-        raise RuntimeError("742 deployment attestation route is not canonical")
-    if attestation["asset_url"] != "https://exo-robotics.github.io/jlg-equipment-explorer/assets/models/742.glb":
-        raise RuntimeError("742 deployment attestation asset URL is not canonical")
-    if attestation["route_http_status"] != 200 or attestation["asset_http_status"] != 200:
-        raise RuntimeError("742 deployment attestation did not observe HTTP 200")
-    if attestation["route_sha256"] != digest(ROOT / "742/index.html"):
-        raise RuntimeError("742 deployed route HTML does not match the candidate route")
+    base_url = "https://exo-robotics.github.io/jlg-equipment-explorer/"
+    if attestation["base_url"] != base_url or attestation["pages_build_manifest_url"] != f"{base_url}pages-build-manifest.json":
+        raise RuntimeError("742 deployment attestation URL identity drift")
+    if attestation["pages_build_manifest_http_status"] != 200:
+        raise RuntimeError("742 deployment attestation did not retrieve the public build manifest")
+    if attestation["frozen_source_replay"] != "not_performed_in_deployment_workflow":
+        raise RuntimeError("742 deployment attestation must not claim frozen-source replay")
     if not re.fullmatch(r"[0-9a-f]{40}", attestation["source_commit"]):
         raise RuntimeError("742 deployment attestation source commit is malformed")
     if not re.fullmatch(r"https://github\.com/EXO-Robotics/jlg-equipment-explorer/actions/runs/\d+", attestation["workflow_run_url"]):
         raise RuntimeError("742 deployment attestation workflow run is malformed")
-    asset = receipt["files"]["asset"]
-    if attestation["asset_sha256"] != asset["sha256"] or attestation["asset_bytes"] != asset["bytes"]:
-        raise RuntimeError("742 deployed asset does not match the candidate receipt")
     if attestation["candidate_receipt_sha256"] != digest(receipt_path):
         raise RuntimeError("742 deployment attestation does not bind the canonical candidate receipt")
     build_manifest_path = path.parent / "pages-build-manifest.json"
-    if not build_manifest_path.is_file() or attestation["pages_build_manifest_sha256"] != digest(build_manifest_path):
+    if not build_manifest_path.is_file() or attestation["pages_build_manifest_sha256"] != digest(build_manifest_path) or attestation["pages_build_manifest_bytes"] != build_manifest_path.stat().st_size:
         raise RuntimeError("742 deployment attestation does not bind the Pages build manifest")
     build_manifest = json.loads(build_manifest_path.read_text(encoding="utf-8"))
     if set(build_manifest) != {"schema_version", "kind", "source_commit", "files"}:
@@ -213,21 +240,72 @@ def verify_deployment_attestation(path: Path, receipt: dict, receipt_path: Path)
     site_files = build_manifest.get("files") or {}
     if "assets/models/742.asset-receipt.json" in site_files:
         raise RuntimeError("Non-release 742 receipt was packaged into Pages")
-    expected_site_files = {"assets/models/742.glb": {"sha256": asset["sha256"], "bytes": asset["bytes"]}}
-    for runtime_path in CANONICAL_RUNTIME:
-        local = ROOT / runtime_path
-        expected_site_files[runtime_path] = {"sha256": digest(local), "bytes": local.stat().st_size}
-    public_docs = {
-        "research_readme", "references", "configuration_notes", "dimensions_notes", "articulation_notes",
-        "source_reconciliation", "detailed_reconstruction", "comparison_matrix", "rights_boundary",
-        "source_manifest", "mechanism_evidence", "reference_board_boundary",
-    }
-    for label in public_docs:
-        record = receipt["files"][label]
-        expected_site_files[record["path"]] = {"sha256": record["sha256"], "bytes": record["bytes"]}
+    expected_site_files = {}
+    for site_path in REQUIRED_742_PUBLIC_FILES:
+        local = ROOT / site_path
+        expected_site_files[site_path] = {"sha256": digest(local), "bytes": local.stat().st_size}
     for site_path, expected in expected_site_files.items():
         if site_files.get(site_path) != expected:
             raise RuntimeError(f"742 Pages build manifest drift: {site_path}")
+        committed = subprocess.run(
+            ["git", "show", f"{attestation['source_commit']}:{site_path}"], cwd=ROOT,
+            capture_output=True, check=False,
+        )
+        if committed.returncode or committed.stdout != (ROOT / site_path).read_bytes():
+            raise RuntimeError(f"742 deployed source commit does not contain the attested public bytes: {site_path}")
+    verified_files = attestation.get("verified_files") or {}
+    if set(verified_files) != REQUIRED_742_PUBLIC_FILES:
+        raise RuntimeError("742 deployment attestation did not verify the exact required public file set")
+    for site_path, expected in expected_site_files.items():
+        observed = verified_files[site_path]
+        if set(observed) != {"url", "http_status", "sha256", "bytes"}:
+            raise RuntimeError(f"742 deployed-file attestation schema drift: {site_path}")
+        if observed != {"url": f"{base_url}{site_path}", "http_status": 200, **expected}:
+            raise RuntimeError(f"742 deployed-file attestation drift: {site_path}")
+    binding = (receipt.get("human_review") or {}).get("binding")
+    if binding:
+        ancestor = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", binding["reviewed_source_commit"], attestation["source_commit"]],
+            cwd=ROOT, capture_output=True, check=False,
+        )
+        if ancestor.returncode:
+            raise RuntimeError("742 deployed source commit does not descend from the reviewed candidate commit")
+
+
+def verify_rebuild_attestation(path: Path, receipt: dict) -> None:
+    attestation = json.loads(path.read_text(encoding="utf-8"))
+    fields = {
+        "schema_version", "kind", "configuration_id", "blender_version", "builder", "solver_bridge", "solver", "configuration",
+        "run_1_glb", "run_2_glb", "committed_glb", "run_1_blend", "run_2_blend",
+        "glb_byte_identical", "blend_byte_identity_claimed", "boundary",
+    }
+    if set(attestation) != fields or attestation["schema_version"] != "1.0.0" or attestation["kind"] != "742-deterministic-glb-rebuild-attestation":
+        raise RuntimeError("742 deterministic rebuild attestation schema drift")
+    if attestation["configuration_id"] != EXPECTED_ID or not re.fullmatch(r"Blender \d+\.\d+\.\d+.*", attestation["blender_version"]):
+        raise RuntimeError("742 deterministic rebuild attestation identity drift")
+    for label, expected_path in {
+        "builder": "scripts/build_742.py", "solver_bridge": "scripts/solve_742_pose.mjs",
+        "solver": "machines/742/solver.js", "configuration": "machines/742/742.configuration.json",
+        "committed_glb": "assets/models/742.glb",
+    }.items():
+        record = attestation[label]
+        if set(record) != {"path", "sha256", "bytes"} or record["path"] != expected_path:
+            raise RuntimeError(f"742 deterministic rebuild {label} record drift")
+        local = ROOT / expected_path
+        if record["sha256"] != digest(local) or record["bytes"] != local.stat().st_size:
+            raise RuntimeError(f"742 deterministic rebuild {label} no longer matches the candidate")
+    for label in ("run_1_glb", "run_2_glb", "run_1_blend", "run_2_blend"):
+        record = attestation[label]
+        if set(record) != {"sha256", "bytes"} or not re.fullmatch(r"[0-9a-f]{64}", record.get("sha256", "")) or not isinstance(record.get("bytes"), int) or record["bytes"] <= 0:
+            raise RuntimeError(f"742 deterministic rebuild output record drift: {label}")
+    expected_asset = receipt["files"]["asset"]
+    exact = {"sha256": expected_asset["sha256"], "bytes": expected_asset["bytes"]}
+    if attestation["run_1_glb"] != exact or attestation["run_2_glb"] != exact or attestation["committed_glb"] != {"path": expected_asset["path"], **exact}:
+        raise RuntimeError("742 deterministic rebuild GLBs are not byte-identical to the receipt asset")
+    if attestation["glb_byte_identical"] is not True or not isinstance(attestation["blend_byte_identity_claimed"], bool):
+        raise RuntimeError("742 deterministic rebuild result flags drift")
+    if not isinstance(attestation["boundary"], str) or "Blend-file byte identity" not in attestation["boundary"]:
+        raise RuntimeError("742 deterministic rebuild boundary is incomplete")
 
 
 def main() -> None:
@@ -237,6 +315,7 @@ def main() -> None:
     parser.add_argument("--require-source-binaries", action="store_true")
     parser.add_argument("--require-human-reviewed", action="store_true")
     parser.add_argument("--deployment-attestation", type=Path)
+    parser.add_argument("--rebuild-attestation", type=Path)
     parser.add_argument("--require-deployed", action="store_true")
     parser.add_argument("--require-release", action="store_true", help="Require source-record, human-review, and external deployment gates together.")
     args = parser.parse_args()
@@ -244,10 +323,14 @@ def main() -> None:
         raise RuntimeError("--require-source-binaries requires --sources-dir")
     if args.require_deployed and not args.deployment_attestation:
         raise RuntimeError("--require-deployed requires --deployment-attestation")
+    if args.require_deployed and not args.sources_dir:
+        raise RuntimeError("--require-deployed requires --sources-dir for an independent frozen-binary replay")
     if args.require_release and not args.deployment_attestation:
         raise RuntimeError("--require-release requires --deployment-attestation")
     if args.require_release and not args.sources_dir:
         raise RuntimeError("--require-release requires --sources-dir for an independent frozen-binary replay")
+    if args.require_release and not args.rebuild_attestation:
+        raise RuntimeError("--require-release requires --rebuild-attestation for a byte-identical GLB rebuild")
 
     receipt = json.loads(args.receipt.read_text(encoding="utf-8"))
     if set(receipt) != TOP_LEVEL_FIELDS or receipt.get("schema_version") != "2.0.0":
@@ -285,7 +368,7 @@ def main() -> None:
     asset_result = checks["asset_contract"]["result"]
     kinematic_result = checks["mechanical_kinematics"]["result"]
     mechanism = json.loads((ROOT / CANONICAL_FILES["mechanism"]).read_text(encoding="utf-8"))
-    circle_angles = kinematic_result["positive_circle_max_wheel_angles_degrees"]
+    circle_inner_degrees = solver_circle_inner_degrees(kinematic_result, mechanism)
     expected_mechanical_proof = {
         "asset_sha256": asset_result["sha256"],
         "source_blend_sha256": asset_result["source_blend_sha256"],
@@ -296,9 +379,18 @@ def main() -> None:
         "published_maximum_forward_reach_m": configuration["published_performance"]["maximum_forward_reach_m"],
         "posed_24in_load_center_forward_reach_m": kinematic_result["maximum_reach_pose"]["forward_reach_m"],
         "evidence_steering_inner_limit_degrees": mechanism["steering"]["visual_inner_limit_degrees"],
-        "posed_circle_maximum_wheel_degrees": max(abs(value) for value in circle_angles.values()),
+        "solver_circle_maximum_inner_wheel_degrees": circle_inner_degrees,
+        "solver_maximum_ackermann_center_error_m": kinematic_result["maximum_ackermann_center_error_m"],
         "published_hydraulic_cylinder_strokes_m": mechanism["hydraulic_cylinder_strokes_m"],
-        "posed_evidence_stroke_usage_m": kinematic_result["evidence_stroke_usage_m"],
+        "solver_evidence_stroke_usage_m": solver_stroke_usage(kinematic_result),
+        "solver_fixed_barrel_length_ranges_m": {
+            name: record["fixed_barrel_length_range_m"] for name, record in kinematic_result["cylinder_ranges"].items()
+        },
+        "rear_axle_stabilization_usage_boundary": kinematic_result["rear_axle_stabilization_usage_boundary"],
+        "continuous_retract_chain_samples": kinematic_result["continuous_retract_chain_samples"],
+        "minimum_retract_chain_segment_m": kinematic_result["minimum_retract_chain_segment_m"],
+        "stowed_fork_bottom_m": kinematic_result["stow"]["fork_bottom_m"],
+        "canonical_solver": kinematic_result["canonical_solver"],
         "unique_multidimensional_state_samples": kinematic_result["unique_multidimensional_state_samples"],
     }
     if receipt.get("mechanical_proof") != expected_mechanical_proof:
@@ -309,8 +401,23 @@ def main() -> None:
         raise RuntimeError("742 receipt maximum-height pose proof drift")
     if abs(expected_mechanical_proof["posed_24in_load_center_forward_reach_m"] - expected_mechanical_proof["published_maximum_forward_reach_m"]) > 0.02:
         raise RuntimeError("742 receipt maximum-reach pose proof drift")
-    if expected_mechanical_proof["evidence_steering_inner_limit_degrees"] != 55 or expected_mechanical_proof["posed_circle_maximum_wheel_degrees"] != 55.0:
+    if expected_mechanical_proof["evidence_steering_inner_limit_degrees"] != 55 or abs(expected_mechanical_proof["solver_circle_maximum_inner_wheel_degrees"] - 55.0) > 1e-9:
         raise RuntimeError("742 receipt 55-degree steering proof drift")
+    if expected_mechanical_proof["solver_maximum_ackermann_center_error_m"] > 1e-9:
+        raise RuntimeError("742 receipt Ackermann closure proof drift")
+    if any(max(values) - min(values) > 1e-12 for values in expected_mechanical_proof["solver_fixed_barrel_length_ranges_m"].values()):
+        raise RuntimeError("742 receipt fixed-barrel proof drift")
+    usage = expected_mechanical_proof["solver_evidence_stroke_usage_m"]
+    published = expected_mechanical_proof["published_hydraulic_cylinder_strokes_m"]
+    for name in ("lift", "telescope", "head_tilt_slave", "compensation_master", "frame_sway"):
+        if abs(usage[name] - published[name]) > 2e-5:
+            raise RuntimeError(f"742 receipt evidence-stroke proof drift: {name}")
+    if not 0 < usage["rear_axle_stabilization_visible_subset"] <= published["rear_axle_stabilization"]:
+        raise RuntimeError("742 receipt RAS visible-subset proof drift")
+    if expected_mechanical_proof["minimum_retract_chain_segment_m"] < 0.15 or expected_mechanical_proof["continuous_retract_chain_samples"] < 2001:
+        raise RuntimeError("742 receipt continuous retract-chain proof drift")
+    if not 0.1 <= expected_mechanical_proof["stowed_fork_bottom_m"] <= 0.4:
+        raise RuntimeError("742 receipt stowed-fork height proof drift")
 
     source = receipt.get("frozen_source_binary_verification") or {}
     if set(source) != {"status", "result_sha256", "verified_count"} or source["status"] not in {"not_run", "pass"}:
@@ -340,11 +447,13 @@ def main() -> None:
         source_replayed = True
     if args.require_source_binaries and source["status"] != "pass":
         raise RuntimeError("742 receipt was not written with frozen-source binary verification")
-    if args.require_release and source["status"] != "pass":
-        raise RuntimeError("742 release requires a receipt written with frozen-source binary verification")
+    if (args.require_deployed or args.require_release) and source["status"] != "pass":
+        raise RuntimeError("742 deployed/release gate requires a receipt written with frozen-source binary verification")
 
     incomplete = verify_human_review(
-        receipt["human_review"], receipt["candidate_tree_sha256"], args.require_human_reviewed or args.require_release
+        receipt["human_review"], receipt["candidate_tree_sha256"],
+        args.require_human_reviewed or args.require_deployed or args.require_release,
+        file_paths + runtime_paths + validator_paths,
     )
     if (not incomplete) != (receipt["release_status"] == "reviewed_candidate_not_deployed"):
         raise RuntimeError("742 human review and release status disagree")
@@ -352,6 +461,12 @@ def main() -> None:
     if args.deployment_attestation:
         verify_deployment_attestation(args.deployment_attestation, receipt, args.receipt)
         deployed = True
+    rebuild_verified = False
+    if args.rebuild_attestation:
+        verify_rebuild_attestation(args.rebuild_attestation, receipt)
+        rebuild_verified = True
+    if (args.require_deployed or args.require_release) and not source_replayed:
+        raise RuntimeError("742 deployed/release gate requires a fresh frozen-source binary replay")
 
     print(json.dumps({
         "status": "PASS",
@@ -363,7 +478,8 @@ def main() -> None:
         "human_review_status": receipt["human_review"]["status"],
         "incomplete_human_gates": incomplete,
         "deployed_attestation_verified": deployed,
-        "release_gate_complete": deployed and not incomplete and source["status"] == "pass",
+        "deterministic_rebuild_verified": rebuild_verified,
+        "release_gate_complete": deployed and not incomplete and source["status"] == "pass" and source_replayed and rebuild_verified,
         "release_status": receipt["release_status"],
     }, indent=2, sort_keys=True))
 

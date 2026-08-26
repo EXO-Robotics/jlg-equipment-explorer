@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import math
+import subprocess
 from pathlib import Path
 
 import bpy
@@ -16,6 +17,14 @@ CONFIG = json.loads((ROOT / "machines/742/742.configuration.json").read_text())
 BLEND_PATH = ROOT / "source/blender/742-showcase-v1.0.blend"
 GLB_PATH = ROOT / "assets/models/742.glb"
 MAT = {}
+
+
+def solved_pose(state):
+    completed = subprocess.run(
+        ["node", str(ROOT / "scripts/solve_742_pose.mjs"), json.dumps(state)],
+        check=True, capture_output=True, text=True,
+    )
+    return json.loads(completed.stdout)
 
 
 def material(name, color, metallic=0.0, roughness=0.5, alpha=1.0):
@@ -106,6 +115,18 @@ def beam(name, start, end, radius, mat, owner=None, component=None, vertices=16)
     obj["authored_length_m"] = direction.length
     obj["rig_axis"] = "local_y_after_gltf_export"
     return obj
+
+
+def pose_beam(name, endpoints):
+    obj = bpy.data.objects[name]
+    a, b = (Vector(point) for point in endpoints)
+    direction = b - a
+    if direction.length < 1e-6:
+        raise RuntimeError(f"{name} collapsed in authored pose")
+    obj.location = (a + b) / 2
+    obj.rotation_mode = "QUATERNION"
+    obj.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(direction.normalized())
+    obj.scale = (1, 1, direction.length / float(obj.get("authored_length_m", direction.length)))
 
 
 def square_beam(name, start, end, width, mat, owner=None, component=None):
@@ -230,7 +251,7 @@ def build():
     root["model"] = "JLG 742"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2411"
-    root["release"] = "1.1.0"
+    root["release"] = "1.2.0"
     root["units"] = "meters"
     root["ownership"] = "owned_reconstruction_no_manufacturer_geometry"
     root["disclaimer"] = "visual reconstruction; not load, stability, service, training, or safety authority"
@@ -244,8 +265,10 @@ def build():
         cylinder(f"{axle_name}Differential", 0.25, 0.62, (x, 0.64, 0), MAT["black"], running, rotation=(math.pi / 2, 0, 0), component="steering")
         steering_cylinder = empty(f"{axle_name}SteerCylinder", owner=running, component="steering")
         beam(f"{axle_name}SteerCylinderBarrel", (x, 0.76, -0.46), (x, 0.76, 0.46), 0.055, MAT["hydraulic"], steering_cylinder, "steering", 20)
-        beam(f"{axle_name}SteerCylinderRodLeft", (x, 0.76, -0.46), (x - 0.12, 0.59, -0.89), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
-        beam(f"{axle_name}SteerCylinderRodRight", (x, 0.76, 0.46), (x - 0.12, 0.59, 0.89), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
+        beam(f"{axle_name}SteerCylinderRodLeft", (x, 0.76, -0.46), (x, 0.76, -0.72), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
+        beam(f"{axle_name}SteerCylinderRodRight", (x, 0.76, 0.46), (x, 0.76, 0.72), 0.028, MAT["zinc"], steering_cylinder, "steering", 16)
+        beam(f"{axle_name}SteerBarLeft", (x, 0.76, -0.72), (x - 0.12, 0.59, -0.89), 0.024, MAT["black"], steering_cylinder, "steering", 14)
+        beam(f"{axle_name}SteerBarRight", (x, 0.76, 0.72), (x - 0.12, 0.59, 0.89), 0.024, MAT["black"], steering_cylinder, "steering", 14)
     wheels = {name: wheel(name, x, z, running) for name, x, z in (
         ("FL", front_x, -wheel_lateral), ("FR", front_x, wheel_lateral), ("RL", rear_x, -wheel_lateral), ("RR", rear_x, wheel_lateral)
     )}
@@ -254,7 +277,7 @@ def build():
 
     frame = empty("FrameLevelPivot", (0, 0.82, 0), root, "ARROWS", 0.20, "frame")
     frame["published_limit_degrees"] = 10
-    frame["pivot_authority"] = "reconstructed_at_axle_height_not_manufacturer_geometry"
+    frame["pivot_authority"] = "reconstructed_longitudinal_roll_axis_at_0.82m_visual_height_not_manufacturer_axle_centerline"
     chassis = empty("Chassis", (0, -0.82, 0), frame, component="chassis")
     box("MainFrame", (4.72, 0.34, 1.56), (0, 0.88, 0), MAT["black"], chassis, 0.09, "chassis")
     box("BellyPan", (4.60, 0.16, 1.63), (-0.05, 0.64, 0), MAT["black_soft"], chassis, 0.05, "chassis")
@@ -366,7 +389,13 @@ def build():
     for side, z in (("L",-0.24),("R",0.24)):
         beam(f"ExtendChain_{side}", (0.40,-0.22,z), (4.95,-0.22,z), 0.012, MAT["black"], base, "boom", 10)
         cylinder(f"BoomSheave_{side}", 0.105, 0.035, (5.02,-0.22,z), MAT["zinc"], base, component="boom")
-    beam("RetractChain_C", (5.10,-0.29,0), (0.44,-0.29,0), 0.012, MAT["black"], base, "boom", 10)
+    beam("RetractChain_C", (5.10,-0.25,0), (0.27,-0.25,0), 0.012, MAT["black"], base, "boom", 10)
+    beam("RetractChain_C_Wrap", (0.27,-0.25,0), (0.27,-0.43,0), 0.012, MAT["black"], base, "boom", 10)
+    beam("RetractChain_C_Moving", (0.27,-0.43,0), (0.94,-0.43,0), 0.012, MAT["black"], base, "boom", 10)
+    for name, alias in (("RetractChain_C", "retract-chain-fixed-leg"),
+                        ("RetractChain_C_Wrap", "retract-chain-sheave-wrap"),
+                        ("RetractChain_C_Moving", "retract-chain-moving-leg")):
+        bpy.data.objects[name]["mechanism_alias"] = alias
     cylinder("RetractSheave_C", 0.095, 0.035, (0.15,-0.29,0), MAT["zinc"], mid, component="boom")
     box("BoomAngleSensorBracket", (0.18,0.14,0.05), (-2.20,1.64,-0.50), MAT["black"], lift_cyl, 0.012, "boom")
     cylinder("BoomAngleSensorBody", 0.080, 0.070, (-2.20,1.64,-0.56), MAT["hydraulic"], lift_cyl, vertices=20, component="boom")
@@ -417,6 +446,30 @@ def build():
     ):
         hit = box(name, size, location, MAT["black"], owner, 0, component)
         hit["is_hit_volume"] = True
+
+    # Freeze the exported source at the exact runtime stow. Every dynamic beam
+    # is posed by the executable production solver, eliminating renderer/build
+    # math drift and preserving fixed barrel lengths in the authored GLB.
+    stow = solved_pose({"lift": 0, "telescope": 0, "tilt": 0, "steer": 0,
+                        "level": 0, "steerMode": "circle"})
+    state = stow["state"]
+    boom_pivot.rotation_euler[2] = state["boomAngle"]
+    mid.location.x = 0.12 + state["midTranslation"]
+    fly.location.x = 0.12 + state["flyTranslation"]
+    carriage_pivot.rotation_euler[2] = state["carriageAngle"]
+    frame.rotation_euler[0] = state["frameAngle"]
+    for corner, angle in state["wheelAngles"].items():
+        wheels[corner].rotation_euler[1] = angle
+    for name, endpoints in stow["geometry"]["beams"].items():
+        pose_beam(name, endpoints)
+    for name, point in stow["geometry"]["points"].items():
+        bpy.data.objects[name].location = point
+    root["solver_contract"] = "machines/742/solver.js"
+    root["mechanism_aliases"] = json.dumps({
+        "retract_chain": ["RetractChain_C", "RetractChain_C_Wrap", "RetractChain_C_Moving"],
+        "front_steer_actuator": ["FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight", "FrontSteerBarLeft", "FrontSteerBarRight"],
+        "rear_steer_actuator": ["RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight", "RearSteerBarLeft", "RearSteerBarRight"],
+    }, sort_keys=True)
 
     bpy.context.scene["asset_configuration_id"] = CONFIG["configuration_id"]
     bpy.context.scene["evidence_freeze_date"] = "2026-08-25"

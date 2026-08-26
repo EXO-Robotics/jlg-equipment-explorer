@@ -11,11 +11,14 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 import subprocess
 import sys
 from datetime import date
 from pathlib import Path
+
+from validate_742_review import HUMAN_GATES, validate_review_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,11 +29,17 @@ FILES = {
     "asset": ROOT / "assets/models/742.glb",
     "source_blend": ROOT / "source/blender/742-showcase-v1.0.blend",
     "builder": ROOT / "scripts/build_742.py",
+    "solver_bridge": ROOT / "scripts/solve_742_pose.mjs",
+    "solver_validator": ROOT / "scripts/validate_742_solver.mjs",
     "receipt_writer": ROOT / "scripts/write_742_receipt.py",
     "receipt_validator": ROOT / "scripts/validate_742_receipt.py",
     "project_readme": ROOT / "README.md",
     "package_manifest": ROOT / "package.json",
     "pages_workflow": ROOT / ".github/workflows/pages.yml",
+    "pages_assembler": ROOT / "scripts/assemble_pages.py",
+    "pages_bundle_validator": ROOT / "scripts/validate_pages_bundle.py",
+    "pages_manifest_writer": ROOT / "scripts/write_pages_attestation.py",
+    "pages_deployment_verifier": ROOT / "scripts/verify_pages_deployment.py",
     "configuration": ROOT / "machines/742/742.configuration.json",
     "mechanism": ROOT / "machines/742/mechanism.json",
     "source_manifest": ROOT / "docs/research/742/SOURCE_MANIFEST.json",
@@ -46,6 +55,10 @@ FILES = {
     "rights_boundary": ROOT / "docs/research/742/RIGHTS_AND_BIM_BOUNDARY.md",
     "reference_board_boundary": ROOT / "docs/research/742/reference-board/README.md",
     "review_renderer": ROOT / "scripts/render_742_preview.py",
+    "review_validator": ROOT / "scripts/validate_742_review.py",
+    "review_binder": ROOT / "scripts/bind_742_review.py",
+    "deterministic_rebuild_verifier": ROOT / "scripts/verify_742_deterministic_rebuild.py",
+    "owned_review_render_allowlist": ROOT / "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
 }
 RUNTIME_FILES = [
     ROOT / "742/index.html",
@@ -57,6 +70,7 @@ RUNTIME_FILES = [
     ROOT / "machines/742/inspector.js",
     ROOT / "machines/742/cameras.js",
     ROOT / "machines/742/version.js",
+    ROOT / "machines/742/solver.js",
 ]
 AUTOMATED_CHECKS = {
     "600s_viewer_contract": ("validate_viewer_contract.py", []),
@@ -70,20 +84,6 @@ AUTOMATED_CHECKS = {
     "mechanical_kinematics": ("validate_742_kinematics.py", []),
     "route_contract": ("validate_742_route.py", []),
 }
-HUMAN_GATES = (
-    "stowed_visual_fidelity",
-    "extended_visual_fidelity",
-    "cab_closeup_fidelity",
-    "desktop_browser_interaction",
-    "mobile_browser_interaction",
-    "accessibility_assistive_technology",
-    "semantic_selection",
-    "performance_profile",
-    "600s_browser_regression",
-    "es1930m_browser_regression",
-)
-
-
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -107,6 +107,27 @@ def aggregate_digest(paths: list[Path]) -> str:
         hasher.update(path.read_bytes())
         hasher.update(b"\0")
     return hasher.hexdigest()
+
+
+def solver_circle_inner_degrees(result: dict, mechanism: dict) -> float:
+    steering = mechanism["steering"]
+    half_wheelbase = steering["wheelbase_m"] / 2
+    track = steering["wheel_center_track_m"]
+    outside_center_path = result["visual_circle_outside_wheel_center_radius_m"]
+    projected_outside = math.sqrt(outside_center_path ** 2 - half_wheelbase ** 2)
+    return math.degrees(math.atan2(half_wheelbase, projected_outside - track))
+
+
+def solver_stroke_usage(result: dict) -> dict:
+    ranges = result["cylinder_ranges"]
+    return {
+        "lift": ranges["lift"]["stroke_usage_m"],
+        "telescope": ranges["telescope"]["stroke_usage_m"],
+        "head_tilt_slave": ranges["carriageTilt"]["stroke_usage_m"],
+        "compensation_master": ranges["compensation"]["stroke_usage_m"],
+        "frame_sway": ranges["frameLevel"]["stroke_usage_m"],
+        "rear_axle_stabilization_visible_subset": ranges["rearAxleStabilizer"]["stroke_usage_m"],
+    }
 
 
 def run_check(script: str, extra_args: list[str]) -> dict:
@@ -133,51 +154,13 @@ def run_check(script: str, extra_args: list[str]) -> dict:
     }
 
 
-def read_review_manifest(path: Path | None, candidate_tree_sha256: str) -> tuple[dict, dict | None]:
+def read_review_manifest(
+    path: Path | None, candidate_tree_sha256: str, canonical_paths: list[Path]
+) -> tuple[dict, dict | None]:
     pending = {name: {"status": "pending", "artifact": None} for name in HUMAN_GATES}
     if path is None:
         return pending, None
-    record = relative_file_record(path)
-    manifest = json.loads(path.read_text(encoding="utf-8"))
-    expected = {
-        "schema_version", "configuration_id", "candidate_tree_sha256",
-        "reviewed_source_commit", "environment", "gates",
-    }
-    if set(manifest) != expected:
-        raise RuntimeError("742 review manifest has non-canonical top-level fields")
-    if manifest["schema_version"] != "1.0.0" or manifest["configuration_id"] != EXPECTED_ID:
-        raise RuntimeError("742 review manifest identity/schema drift")
-    if not re.fullmatch(r"[0-9a-f]{40}", manifest.get("reviewed_source_commit", "")):
-        raise RuntimeError("742 review manifest requires an exact reviewed source commit")
-    if manifest["candidate_tree_sha256"] != candidate_tree_sha256:
-        raise RuntimeError("742 review manifest does not bind the current candidate tree")
-    commit_check = subprocess.run(
-        ["git", "cat-file", "-e", f"{manifest['reviewed_source_commit']}^{{commit}}"],
-        cwd=ROOT, capture_output=True, check=False,
-    )
-    if commit_check.returncode:
-        raise RuntimeError("742 reviewed source commit does not resolve in this repository")
-    environment = manifest.get("environment")
-    if not isinstance(environment, dict) or not environment.get("browser") or not environment.get("os"):
-        raise RuntimeError("742 review manifest requires browser and OS environment identity")
-    if set(manifest.get("gates") or {}) != set(HUMAN_GATES):
-        raise RuntimeError("742 review manifest must address every canonical human gate")
-    reviewed = {}
-    for name in HUMAN_GATES:
-        gate = manifest["gates"][name]
-        if set(gate) != {"status", "artifact", "notes"} or gate["status"] != "pass":
-            raise RuntimeError(f"742 human gate is not explicitly passed: {name}")
-        artifact_path = ROOT / gate["artifact"]["path"]
-        actual = relative_file_record(artifact_path)
-        if actual != gate["artifact"]:
-            raise RuntimeError(f"742 human gate artifact drift: {name}")
-        reviewed[name] = {"status": "pass", "artifact": actual}
-    return reviewed, {
-        "manifest": record,
-        "candidate_tree_sha256": candidate_tree_sha256,
-        "reviewed_source_commit": manifest["reviewed_source_commit"],
-        "environment": environment,
-    }
+    return validate_review_manifest(path, candidate_tree_sha256, canonical_paths)
 
 
 def main() -> None:
@@ -200,7 +183,7 @@ def main() -> None:
     asset_result = checks["asset_contract"]["result"]
     kinematic_result = checks["mechanical_kinematics"]["result"]
     mechanism = json.loads(FILES["mechanism"].read_text(encoding="utf-8"))
-    circle_angles = kinematic_result["positive_circle_max_wheel_angles_degrees"]
+    circle_inner_degrees = solver_circle_inner_degrees(kinematic_result, mechanism)
     mechanical_proof = {
         "asset_sha256": asset_result["sha256"],
         "source_blend_sha256": asset_result["source_blend_sha256"],
@@ -211,9 +194,18 @@ def main() -> None:
         "published_maximum_forward_reach_m": configuration["published_performance"]["maximum_forward_reach_m"],
         "posed_24in_load_center_forward_reach_m": kinematic_result["maximum_reach_pose"]["forward_reach_m"],
         "evidence_steering_inner_limit_degrees": mechanism["steering"]["visual_inner_limit_degrees"],
-        "posed_circle_maximum_wheel_degrees": max(abs(value) for value in circle_angles.values()),
+        "solver_circle_maximum_inner_wheel_degrees": circle_inner_degrees,
+        "solver_maximum_ackermann_center_error_m": kinematic_result["maximum_ackermann_center_error_m"],
         "published_hydraulic_cylinder_strokes_m": mechanism["hydraulic_cylinder_strokes_m"],
-        "posed_evidence_stroke_usage_m": kinematic_result["evidence_stroke_usage_m"],
+        "solver_evidence_stroke_usage_m": solver_stroke_usage(kinematic_result),
+        "solver_fixed_barrel_length_ranges_m": {
+            name: record["fixed_barrel_length_range_m"] for name, record in kinematic_result["cylinder_ranges"].items()
+        },
+        "rear_axle_stabilization_usage_boundary": kinematic_result["rear_axle_stabilization_usage_boundary"],
+        "continuous_retract_chain_samples": kinematic_result["continuous_retract_chain_samples"],
+        "minimum_retract_chain_segment_m": kinematic_result["minimum_retract_chain_segment_m"],
+        "stowed_fork_bottom_m": kinematic_result["stow"]["fork_bottom_m"],
+        "canonical_solver": kinematic_result["canonical_solver"],
         "unique_multidimensional_state_samples": kinematic_result["unique_multidimensional_state_samples"],
     }
     if abs(mechanical_proof["posed_glb_length_less_forks_m"] - mechanical_proof["published_length_less_forks_m"]) > 0.015:
@@ -222,8 +214,23 @@ def main() -> None:
         raise RuntimeError("742 receipt maximum-height pose proof drift")
     if abs(mechanical_proof["posed_24in_load_center_forward_reach_m"] - mechanical_proof["published_maximum_forward_reach_m"]) > 0.02:
         raise RuntimeError("742 receipt maximum-reach pose proof drift")
-    if mechanical_proof["evidence_steering_inner_limit_degrees"] != 55 or mechanical_proof["posed_circle_maximum_wheel_degrees"] != 55.0:
+    if mechanical_proof["evidence_steering_inner_limit_degrees"] != 55 or abs(mechanical_proof["solver_circle_maximum_inner_wheel_degrees"] - 55.0) > 1e-9:
         raise RuntimeError("742 receipt 55-degree steering proof drift")
+    if mechanical_proof["solver_maximum_ackermann_center_error_m"] > 1e-9:
+        raise RuntimeError("742 receipt Ackermann closure proof drift")
+    if any(max(values) - min(values) > 1e-12 for values in mechanical_proof["solver_fixed_barrel_length_ranges_m"].values()):
+        raise RuntimeError("742 receipt fixed-barrel proof drift")
+    usage = mechanical_proof["solver_evidence_stroke_usage_m"]
+    published = mechanical_proof["published_hydraulic_cylinder_strokes_m"]
+    for name in ("lift", "telescope", "head_tilt_slave", "compensation_master", "frame_sway"):
+        if abs(usage[name] - published[name]) > 2e-5:
+            raise RuntimeError(f"742 receipt evidence-stroke proof drift: {name}")
+    if not 0 < usage["rear_axle_stabilization_visible_subset"] <= published["rear_axle_stabilization"]:
+        raise RuntimeError("742 receipt RAS visible-subset proof drift")
+    if mechanical_proof["minimum_retract_chain_segment_m"] < 0.15 or mechanical_proof["continuous_retract_chain_samples"] < 2001:
+        raise RuntimeError("742 receipt continuous retract-chain proof drift")
+    if not 0.1 <= mechanical_proof["stowed_fork_bottom_m"] <= 0.4:
+        raise RuntimeError("742 receipt stowed-fork height proof drift")
     if args.sources_dir:
         source_check = run_check(
             "validate_742_evidence.py",
@@ -240,7 +247,7 @@ def main() -> None:
     validator_paths = [ROOT / "scripts" / value[0] for value in AUTOMATED_CHECKS.values()]
     receipt_inputs = list(FILES.values()) + RUNTIME_FILES + validator_paths
     candidate_tree_sha256 = aggregate_digest(receipt_inputs)
-    human_gates, review_binding = read_review_manifest(args.review_manifest, candidate_tree_sha256)
+    human_gates, review_binding = read_review_manifest(args.review_manifest, candidate_tree_sha256, receipt_inputs)
     human_complete = all(gate["status"] == "pass" for gate in human_gates.values())
     receipt = {
         "schema_version": "2.0.0",

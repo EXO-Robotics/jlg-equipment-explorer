@@ -2,10 +2,12 @@
 """Render review-only stills from the owned 742 Blender source."""
 
 import math
+import json
+import subprocess
 from pathlib import Path
 
 import bpy
-from mathutils import Matrix, Vector
+from mathutils import Vector
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,11 +16,6 @@ OUTPUT_DIR = ROOT / "tmp/742/review-renders"
 
 def point_at(obj, target):
     obj.rotation_euler = (Vector(target) - obj.location).to_track_quat("-Z", "Y").to_euler()
-
-
-def rotate_xy(point, angle):
-    x, y, z = point
-    return (math.cos(angle) * x - math.sin(angle) * y, math.sin(angle) * x + math.cos(angle) * y, z)
 
 
 def set_beam(name, start, end):
@@ -31,114 +28,35 @@ def set_beam(name, start, end):
     obj.scale = (1, 1, direction.length / float(obj.get("authored_length_m", direction.length)))
 
 
-def pose_circle_steering(amount=1.0):
-    inner = math.radians(55) * amount
-    half_wheelbase = 3.42 / 2
-    track = 2.1005
-    if abs(inner) < 1e-7:
-        outer = 0.0
-    else:
-        center_radius = track / 2 + half_wheelbase / math.tan(abs(inner))
-        outer = math.atan(half_wheelbase / (center_radius + track / 2))
-    angles = {"FL": outer, "FR": inner, "RL": -outer, "RR": -inner}
-    for corner, angle in angles.items():
+def solved_pose(lift, telescope, tilt=0.0, steer=0.0, level=0.0, steer_mode="circle"):
+    request = {"lift": lift, "telescope": telescope, "tilt": tilt / 12 if tilt >= 0 else tilt / 5,
+               "steer": steer, "level": level / 10, "steerMode": steer_mode}
+    completed = subprocess.run(["node", str(ROOT / "scripts/solve_742_pose.mjs"), json.dumps(request)],
+                               check=True, capture_output=True, text=True)
+    return json.loads(completed.stdout)
+
+
+def apply_solved_pose(pose):
+    state = pose["state"]
+    bpy.data.objects["BoomLiftPivot"].rotation_euler[2] = state["boomAngle"]
+    bpy.data.objects["BoomMid"].location.x = 0.12 + state["midTranslation"]
+    bpy.data.objects["BoomFly"].location.x = 0.12 + state["flyTranslation"]
+    bpy.data.objects["CarriageTiltPivot"].rotation_euler[2] = state["carriageAngle"]
+    bpy.data.objects["FrameLevelPivot"].rotation_euler[0] = state["frameAngle"]
+    for corner, angle in state["wheelAngles"].items():
         bpy.data.objects[f"SteerPivot_{corner}"].rotation_euler[1] = angle
+    for name, endpoints in pose["geometry"]["beams"].items():
+        set_beam(name, endpoints[0], endpoints[1])
+    for name, point in pose["geometry"]["points"].items():
+        bpy.data.objects[name].location = point
 
-    def joint(x, lateral, angle):
-        inward = 0.16 if lateral < 0 else -0.16
-        dx = -0.12 * math.cos(angle) - inward * math.sin(angle)
-        dz = -0.12 * math.sin(angle) + inward * math.cos(angle)
-        return Vector((x + dx, 0.59, lateral + dz))
 
-    for axle, x, left, right in (("Front", 1.71, "FL", "FR"), ("Rear", -1.71, "RL", "RR")):
-        left_cap, right_cap = Vector((x, 0.76, -0.46)), Vector((x, 0.76, 0.46))
-        set_beam(f"{axle}SteerCylinderBarrel", left_cap, right_cap)
-        set_beam(f"{axle}SteerCylinderRodLeft", left_cap, joint(x, -1.05025, angles[left]))
-        set_beam(f"{axle}SteerCylinderRodRight", right_cap, joint(x, 1.05025, angles[right]))
+def pose_circle_steering(amount=1.0):
+    apply_solved_pose(solved_pose(0, 0, steer=amount, steer_mode="circle"))
 
 
 def pose_mechanisms(lift, telescope, tilt=0.0, level=0.0):
-    angle = math.radians(3 + 66 * lift)
-    travel = 3.604 * telescope
-    boom = bpy.data.objects["BoomLiftPivot"]
-    mid = bpy.data.objects["BoomMid"]
-    fly = bpy.data.objects["BoomFly"]
-    carriage = bpy.data.objects["CarriageTiltPivot"]
-    frame = bpy.data.objects["FrameLevelPivot"]
-    boom.rotation_euler[2] = angle
-    mid.location.x = 0.12 + travel
-    fly.location.x = 0.12 + travel
-    carriage.rotation_euler[2] = -angle + math.radians(tilt)
-    frame.rotation_euler[0] = math.radians(level)
-
-    pivot = Vector((-2.158, 1.838, 0))
-    lift_base = Vector((-1.80, 0.70, 0))
-    lift_anchor = pivot + Vector(rotate_xy((2.412, -0.20, 0), angle))
-    delta = lift_anchor - lift_base
-    set_beam("LiftCylinderBarrel", lift_base, lift_base + delta * 0.72)
-    set_beam("LiftCylinderRod", lift_base + delta * 0.55, lift_anchor)
-    bpy.data.objects["LiftCylinderRodPin"].location = lift_anchor
-    for lane, lateral in enumerate((-0.16, -0.23)):
-        start = Vector((-1.88, 0.74 if lane == 0 else 0.70, lateral))
-        end = Vector((lift_anchor.x, lift_anchor.y, lateral))
-        delta = end - start
-        path = (start, start + delta * 0.34 + Vector((0, -0.12, 0)), start + delta * 0.70 + Vector((0, -0.09, 0)), end)
-        for segment in range(3):
-            set_beam(f"LiftHose_{lane}_{segment}", path[segment], path[segment + 1])
-
-    tele_start, tele_end = Vector((0.55, -0.22, 0)), Vector((3.36 + travel, -0.22, 0))
-    tele_delta = tele_end - tele_start
-    set_beam("TelescopeCylinderBarrel", tele_start, tele_start + tele_delta * 0.62)
-    set_beam("TelescopeCylinderRod", tele_start + tele_delta * 0.48, tele_end)
-
-    compensation_base = Vector((-2.00, 1.50, -0.31))
-    compensation_anchor = pivot + Vector(rotate_xy((0.80, 0.30, -0.31), angle))
-    compensation_delta = compensation_anchor - compensation_base
-    set_beam("CompensationCylinderBarrel", compensation_base, compensation_base + compensation_delta * 0.67)
-    set_beam("CompensationCylinderRod", compensation_base + compensation_delta * 0.52, compensation_anchor)
-
-    mid_x, fly_x = 0.12 + travel, 0.12 + travel
-    for lane, lateral in enumerate((-0.27, -0.20, 0.20, 0.27)):
-        start, end = Vector((0.15, -0.38, lateral)), Vector((mid_x + fly_x + 2.95, -0.32, lateral))
-        delta = end - start
-        path = (start, start + delta * 0.34 + Vector((0, -0.08, 0)), start + delta * 0.69 + Vector((0, -0.06, 0)), end)
-        for segment in range(3):
-            set_beam(f"BoomHose_{lane}_{segment}", path[segment], path[segment + 1])
-    for side, lateral in (("L", -0.24), ("R", 0.24)):
-        set_beam(f"ExtendChain_{side}", (0.40, -0.22, lateral), (mid_x + fly_x + 4.70, -0.22, lateral))
-    set_beam("RetractChain_C", (5.10, -0.29, 0), (mid_x + fly_x + 0.20, -0.29, 0))
-
-    carriage_pivot = Vector((5.296, -0.80, 0))
-    carriage_angle = -angle + math.radians(tilt)
-    tilt_base = Vector((4.216, -1.21, 0.42))
-    rod_anchor = carriage_pivot + Vector(rotate_xy((-0.1494, 0.3705, 0.42), carriage_angle))
-    link_anchor = carriage_pivot + Vector(rotate_xy((-0.08, 0.58, 0.42), carriage_angle))
-    delta = rod_anchor - tilt_base
-    set_beam("CarriageTiltCylinderBarrel", tilt_base, tilt_base + delta * 0.66)
-    set_beam("CarriageTiltCylinderRod", tilt_base + delta * 0.50, rod_anchor)
-    set_beam("CarriageTiltLink", rod_anchor, link_anchor)
-
-    level_base = Vector((-0.0133, 0.6054, 0.4865))
-    frame_pivot = Vector((0, 0.82, 0))
-    level_anchor = Vector((0.1121, 1.2428, 1.1607)) - frame_pivot
-    level_anchor.rotate(Matrix.Rotation(math.radians(level), 4, "X"))
-    level_anchor += frame_pivot
-    delta = level_anchor - level_base
-    set_beam("FrameLevelCylinderBarrel", level_base, level_base + delta * 0.67)
-    set_beam("FrameLevelCylinderRod", level_base + delta * 0.52, level_anchor)
-
-    ras_base = Vector((-1.95, 0.64, -0.45))
-    ras_anchor = Vector((-1.55, 0.92, -0.65)) - frame_pivot
-    ras_anchor.rotate(Matrix.Rotation(math.radians(level), 4, "X"))
-    ras_anchor += frame_pivot
-    ras_delta = ras_anchor - ras_base
-    set_beam("RearAxleStabilizerBarrel", ras_base, ras_base + ras_delta * 0.67)
-    set_beam("RearAxleStabilizerRod", ras_base + ras_delta * 0.52, ras_anchor)
-
-    sensor_base = Vector((-2.15, 1.64, -0.56))
-    sensor_anchor = pivot + Vector(rotate_xy((0.35, -0.10, -0.56), angle))
-    set_beam("BoomAngleSensorLink", sensor_base, sensor_anchor)
-    bpy.data.objects["BoomAngleSensorBoomJoint"].location = sensor_anchor
+    apply_solved_pose(solved_pose(lift, telescope, tilt=tilt, level=level))
 
 
 for obj in bpy.data.objects:
@@ -201,10 +119,20 @@ steer_cutaway = [
 ]
 for obj in steer_cutaway:
     obj.hide_render = True
+steer_names = {"FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
+               "FrontSteerBarLeft", "FrontSteerBarRight"}
+steer_occluders = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURVE", "FONT"}
+                   and obj.get("component") == "steering" and obj.name not in steer_names]
+for obj in steer_occluders:
+    obj.hide_render = True
+bpy.context.view_layer.update()
+steer_center = sum((bpy.data.objects[name].matrix_world.translation for name in steer_names), Vector()) / len(steer_names)
 camera.location = (4.5, 0.0, 1.55)
-point_at(camera, (1.71, 0.0, 0.70))
+point_at(camera, steer_center)
 scene.render.filepath = str(OUTPUT_DIR / "742-front-double-ended-steer-cylinder-cutaway.png")
 bpy.ops.render.render(write_still=True)
+for obj in steer_occluders:
+    obj.hide_render = False
 for obj in steer_cutaway:
     obj.hide_render = False
 pose_circle_steering(0.0)
@@ -222,6 +150,21 @@ camera.location = (8.8, -10.5, 6.2)
 point_at(camera, (1.5, 0.0, 4.3))
 scene.render.filepath = str(OUTPUT_DIR / "742-boom-underside-lines-chains.png")
 bpy.ops.render.render(write_still=True)
+chain_keep = ("Chain", "Sheave", "BoomRigidTube", "BoomHose")
+chain_cutaway = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURVE", "FONT"}
+                 and not any(token in obj.name for token in chain_keep)]
+for obj in chain_cutaway:
+    obj.hide_render = True
+bpy.context.view_layer.update()
+chain_objects = [obj for obj in bpy.data.objects if any(token in obj.name for token in chain_keep)
+                 and obj.type in {"MESH", "CURVE"}]
+chain_center = sum((obj.matrix_world.translation for obj in chain_objects), Vector()) / len(chain_objects)
+camera.location = chain_center + Vector((3.8, -7.2, 2.6))
+point_at(camera, chain_center)
+scene.render.filepath = str(OUTPUT_DIR / "742-retract-chain-routing-cutaway.png")
+bpy.ops.render.render(write_still=True)
+for obj in chain_cutaway:
+    obj.hide_render = False
 pose_mechanisms(1.0, 1.0)
 camera.location = (27.0, 30.0, 21.0)
 point_at(camera, (3.0, 0, 8.0))

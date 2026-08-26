@@ -9,6 +9,8 @@ body[data-machine="742"] .control-panel { width: min(420px, calc(100vw - 56px));
 body[data-machine="742"] .telehandler-controls .control-row { padding-top: 9px; }
 body[data-machine="742"] .telehandler-controls .action-row { grid-template-columns: 1.2fr .8fr 1fr; }
 body[data-machine="742"][data-zone="extended"] #telescope-value { color: var(--accent); }
+body[data-machine="742"][data-motion-profile="reduced"] #showcase:disabled { border-color: var(--line); background: rgba(255,255,255,.04); color: var(--muted); cursor: not-allowed; }
+body[data-machine="742"] .component-nav button[data-focus][aria-pressed="true"] { padding-left: 6px; border-color: var(--accent); background: rgba(255,159,26,.12); color: var(--accent); }
 .mode-row { display: grid; grid-template-columns: 1fr repeat(3, auto); align-items: center; gap: 6px; padding-top: 10px; color: var(--paper); font: 700 8px/1 "Courier New", monospace; letter-spacing: .1em; text-transform: uppercase; }
 .mode-row > span { color: var(--muted); }
 .mode-row button { min-height: 30px; padding: 0 9px; border: 1px solid var(--line); background: transparent; cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }

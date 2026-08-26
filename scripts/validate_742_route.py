@@ -33,6 +33,7 @@ def main():
         'data-steer-mode="circle"', 'data-steer-mode="crab"', 'data-steer-mode="front"', 'id="showcase"', 'id="stow"',
         'id="inspector" role="dialog" aria-modal="true"', 'aria-describedby="inspector-copy" inert',
         'href="../viewer/742.css?', 'src="../viewer/742-runtime.js?',
+        f'PVC 2411 accuracy reconstruction / {CONFIG["target_release"]}', 'id="reduced-motion-note"',
         'Presentation-only mechanism limits.', 'No load, stability, service, training, or safety behavior is simulated.',
     ], "742 HTML")
     if INDEX.count('aria-describedby="motion-boundary"') != 5:
@@ -48,8 +49,20 @@ def main():
         'setInert(element, true)', 'setInert(inspector, false)', 'restoreTarget.focus',
         'setAttribute("aria-valuetext", value)', 'runSelectionVolumeSelfTest()',
         'raycaster.intersectObjects(selectionVolumes, false)', 'hit.castShadow = false',
+        'orderedSelectionIntersections', 'selectionOverlapRays', 'selectionPriorityRays',
+        'overlappingRayCount > 0', 'priorityRayCount === overlappingRayCount',
+        'function clearComponentSelection()', 'function resetView()', 'framedPosedModelView()',
+        'showcaseButton.disabled = true', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
+        'if (!skipNextVisibleFrame && renderedInterval >= 4)', 'runtime.visibleStalls += 1',
+        'document.body.dataset.frameWorstMs', 'document.body.dataset.frameSampleCount',
+        'document.body.dataset.viewportCssPx', 'document.body.dataset.renderProfile', 'document.body.dataset.pixelRatio',
+        'function applyShadowProfile()', 'document.body.dataset.shadowProfile',
         'document.body.dataset.selectionSelftest =', 'document.body.dataset.machineSource = "contract-failed"',
     ], "dedicated 742 runtime")
+    if re.search(r"renderedInterval\s*<\s*250", RUNTIME):
+        raise RuntimeError("742 p95 must not discard visible stalls at or above 250 ms")
+    if 'const posedComponent = name === "default" ? framedPosedModelView()' not in RUNTIME:
+        raise RuntimeError("742 reset view must frame the current posed machine")
     if "const touches = new Map()" in RUNTIME:
         raise RuntimeError("Legacy multi-touch implementation returned to the 742 runtime")
     if 'JLG742_MACHINE' in SHARED_RUNTIME or '"742"' in SHARED_RUNTIME or 'body[data-machine="742"]' in SHARED_STYLE:
@@ -58,7 +71,7 @@ def main():
         '742-PVC2411-US-STD-OC-D36-FF370-C50-PF481', 'interactionVolumes', 'showcase(t)',
         'steerMode: "circle"', 'JLG742_GLB_URL',
     ], "742 machine module")
-    require(STYLE, ['body[data-machine="742"]', '.mode-row', '.component-nav-seven', '.nav-overflow-cue'], "742 style")
+    require(STYLE, ['body[data-machine="742"]', '.mode-row', '.component-nav-seven', '.nav-overflow-cue', 'button[data-focus][aria-pressed="true"]'], "742 style")
     if not ASSET.is_file():
         raise RuntimeError("742 route asset is missing")
     asset_sha = hashlib.sha256(ASSET.read_bytes()).hexdigest()
@@ -79,7 +92,10 @@ def main():
         "motion_ranges":5, "steering_modes":3, "component_focus_targets":7,
         "pinch_zoom":True, "pinch_click_suppression":True, "inertia":True,
         "modal_focus_contract":True, "engineering_aria_value_text":True,
-        "semantic_volume_self_test":True, "asset_failure_ui":True, "performance_p95_diagnostic":True,
+        "semantic_volume_self_test":True, "overlapping_priority_ray_test":True,
+        "selection_reset_contract":True, "pose_aware_reset":True, "reduced_motion_showcase_disabled":True,
+        "asset_failure_ui":True, "performance_p95_diagnostic":True, "visible_stalls_included":True,
+        "adaptive_shadow_profile":True, "performance_sample_metadata":True,
         "asset_sha256":asset_sha,
         "candidate_release":CONFIG["target_release"], "runtime_release":runtime_release.group(1),
     }, indent=2, sort_keys=True))

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "742-visual-gate-observation",
+  "gate": "extended_visual_fidelity",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
+  "environment": {
+    "renderer": "Blender 5.1.1 deterministic review renderer",
+    "os": "macOS 26.5.2 build 25F84"
+  },
+  "render_artifacts": [
+    "docs/review/742/maximum-lift-level-forks.png",
+    "docs/review/742/maximum-reach-24in-load-center.png",
+    "docs/review/742/retract-chain-routing-cutaway.png",
+    "docs/review/742/steering-linkage-cutaway.png"
+  ],
+  "observations": {
+    "maximum_lift_level_attachment_visible": true,
+    "maximum_reach_load_center_pose_visible": true,
+    "retract_chain_sheave_routing_visible": true,
+    "double_ended_steering_ram_and_bars_visible": true
+  },
+  "boundary": "Owned rendered presentation geometry only; no manufacturer geometry, load, stability, hydraulic response, service, or safety claim."
+}

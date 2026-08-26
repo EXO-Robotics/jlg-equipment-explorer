@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -24,10 +25,27 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
+      - name: Require frozen 742 source-evidence artifact identity
+        run: |
+          test -n "${{ vars.JLG742_SOURCE_EVIDENCE_RUN_ID }}"
+
+      - name: Download private frozen 742 source evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: 742-frozen-source-evidence
+          path: _private-evidence/742
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ vars.JLG742_SOURCE_EVIDENCE_RUN_ID }}
+
       - name: Validate repository contracts
         run: |
           npm run check
           python3 -B scripts/validate_es1930m_receipt.py --require-predeploy
+          python3 -B scripts/validate_742_receipt.py \
+            --sources-dir _private-evidence/742 \
+            --require-source-binaries \
+            --require-human-reviewed
 
       - name: Assemble static site
         run: |
@@ -46,3 +64,26 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+
+      - name: Verify exact deployed 742 public surface
+        run: |
+          python3 -B scripts/verify_pages_deployment.py \
+            --base-url "${{ steps.deployment.outputs.page_url }}" \
+            --build-manifest _site/pages-build-manifest.json \
+            --candidate-receipt assets/models/742.asset-receipt.json \
+            --workflow-run-url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --output _attestations/742-pages-http-attestation.json
+
+      - name: Enforce complete deployed candidate gate
+        run: |
+          python3 -B scripts/validate_742_receipt.py \
+            --sources-dir _private-evidence/742 \
+            --deployment-attestation _attestations/742-pages-http-attestation.json \
+            --require-deployed
+
+      - name: Upload external deployment attestation
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: 742-pages-attestation
+          path: _attestations
+          if-no-files-found: error

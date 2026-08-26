@@ -4,8 +4,8 @@
       "arguments": [],
       "result": {
         "asset": "assets/models/600s.glb",
-        "bytes": 1250732,
-        "cache_key": "4dd98f412238",
+        "bytes": 1253072,
+        "cache_key": "64b969d1b24f",
         "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
         "ground_clearance_m": 0.29,
         "interaction_volumes": [
@@ -16,20 +16,23 @@
           "Platform_Hit"
         ],
         "mesh_count": 408,
-        "node_count": 463,
+        "node_count": 473,
         "platform_envelope_m": [
           0.91,
           2.44
         ],
+        "platform_leveling_max_error_degrees": 0.0,
         "powertrack_full_travel_run_gap_m": 0.0,
         "powertrack_max_neighbor_gap_m": 0.002,
+        "powertrack_push_tube_full_travel_min_overlap_m": 0.0566,
+        "powertrack_push_tube_stowed_min_overlap_m": 0.07,
         "release": "1.1.0",
-        "required_parent_edges": 100,
+        "required_parent_edges": 112,
         "root_node": "600S_ROOT",
-        "runtime_sha256": "aa93f66540774f4829ce757abdf0a61a85318d8ca89dbb91a1bc892495f2f185",
-        "sha256": "4dd98f4122381b3fa797f4d1e00b42b2179939364cf8238681e0b0041326fcfd",
+        "runtime_sha256": "27fab21dbd5f147f51d17e930674c82ccefaa8266ef90f047bb892199fd5319e",
+        "sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
         "source_blend": "source/blender/600s-showcase-v1.1.blend",
-        "source_blend_sha256": "f6c4f94095fab931ec185d83ccf421d3c621f08d983ed743359d461b227bccf1",
+        "source_blend_sha256": "a88fefb921a5a34d7c71cf76a67a045cf1c21e0b9d7db61d879d1a253825c34e",
         "status": "PASS",
         "tailswing_m": 1.2193,
         "telescope_fly_overlap_at_100_m": 1.33,
@@ -59,19 +62,19 @@
         ],
         "wheelbase_m": 2.5
       },
-      "result_sha256": "f7578a978f9aae065afd400f70cceb1de037f2076f627c1b003bf4721200e6a8",
+      "result_sha256": "63ef16003c4deeca2ebc2b386776fa9a6ae63de69b10a1506ffaffc8ca049eda",
       "status": "pass",
       "validator": {
-        "bytes": 35701,
+        "bytes": 40159,
         "path": "scripts/validate_600s_glb.py",
-        "sha256": "5e632ab81076cfa46411a329487d84762d4a30d91ca7967c3e4bac9427db8a71"
+        "sha256": "136b944fe7ff7faffd75a863ce23a62c35b09e36518c76759fed0ea55009af5d"
       }
     },
     "600s_configuration_contract": {
       "arguments": [],
       "result": {
         "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
-        "required_parent_edges": 100,
+        "required_parent_edges": 112,
         "sections": [
           "boom",
           "chassis",
@@ -88,7 +91,7 @@
         ],
         "status": "PASS"
       },
-      "result_sha256": "bb5c063e8f58c272b774e770cb7936d928cc4d6127cfb1a7fa8a8b857ad3c73e",
+      "result_sha256": "3afcda7947ada614eaf48942c2fa3072b7c3c1419a3bf2170c97c923e934ed0e",
       "status": "pass",
       "validator": {
         "bytes": 5195,
@@ -104,16 +107,16 @@
         "motion_ranges_described": 4,
         "release": "1.1.0",
         "remote_startup_assets": 0,
-        "runtime_release": "1.1.5",
+        "runtime_release": "1.1.9",
         "selection_volumes_self_tested": 5,
         "status": "PASS"
       },
-      "result_sha256": "8a80b1ad6b4d8132d49d665dbaf9541fa9d13de685c67992bb1e281c5ca8ae94",
+      "result_sha256": "10e7c59968c88312cf3d1268bf8e1f14533a1f66188a755a358bac07f1e4af65",
       "status": "pass",
       "validator": {
-        "bytes": 5039,
+        "bytes": 6076,
         "path": "scripts/validate_viewer_contract.py",
-        "sha256": "8579187e5ecf52caae2003d23b6e604d64f8904086f934ef7f546ba3638d1cf4"
+        "sha256": "632b3e97ea29579698f119114a5459ed64abe248f9a8cdd7015a2934d530581d"
       }
     },
     "asset_contract": {
@@ -121,9 +124,72 @@
       "result": {
         "asset": "assets/models/742.glb",
         "base_machine_width_excluding_mirrors_m": 2.4605007084173027,
-        "bytes": 1555308,
+        "bytes": 1577540,
         "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
         "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor",
+        "evidence_components_resolved_to_exact_nodes": [
+          "742_ROOT",
+          "AcceleratorPedal",
+          "BoomAngleSensorBody",
+          "BoomAngleSensorLink",
+          "BoomBase",
+          "BoomFly",
+          "BoomHose_0_0",
+          "BoomLiftPivot",
+          "BoomMid",
+          "BoomRigidTube_0",
+          "BrakePedal",
+          "Carriage",
+          "CarriageTiltCylinderBarrel",
+          "CarriageTiltCylinderRod",
+          "CarriageTiltPivot",
+          "CompensationCylinderBarrel",
+          "CompensationCylinderRod",
+          "Dashboard",
+          "ExtendChain_L",
+          "ExtendChain_R",
+          "ForkCollar_L",
+          "ForkCollar_R",
+          "ForkL",
+          "ForkPin",
+          "ForkR",
+          "FrameLevelCylinderBarrel",
+          "FrameLevelCylinderRod",
+          "FrameLevelPivot",
+          "FrontSteerBarLeft",
+          "FrontSteerBarRight",
+          "FrontSteerCylinderBarrel",
+          "FrontSteerCylinderRodLeft",
+          "FrontSteerCylinderRodRight",
+          "FrontWindshield",
+          "Joystick",
+          "LiftCylinderBarrel",
+          "LiftCylinderRod",
+          "OpenCab",
+          "OperatorSeat",
+          "RearAxle",
+          "RearAxleStabilizerBarrel",
+          "RearAxleStabilizerCylinder",
+          "RearAxleStabilizerRod",
+          "RearCabGlass",
+          "RearSteerBarLeft",
+          "RearSteerBarRight",
+          "RearSteerCylinderBarrel",
+          "RearSteerCylinderRodLeft",
+          "RearSteerCylinderRodRight",
+          "RetractChain_C",
+          "RetractChain_C_Moving",
+          "RetractChain_C_Wrap",
+          "RoofGlass",
+          "SteerPivot_FL",
+          "SteerPivot_FR",
+          "SteerPivot_RL",
+          "SteerPivot_RR",
+          "SteeringWheel",
+          "TelescopeCylinderBarrel",
+          "TelescopeCylinderRod"
+        ],
+        "exact_runtime_stow_total_length_with_forks_m": 6.977199971675873,
         "fork_mesh_extents_length_width_thickness_m": [
           [
             1.2192000150680542,
@@ -167,6 +233,8 @@
           "ForkR",
           "FrameLevelCylinderBarrel",
           "FrameLevelCylinderRod",
+          "FrontSteerBarLeft",
+          "FrontSteerBarRight",
           "FrontSteerCylinder",
           "FrontSteerCylinderBarrel",
           "FrontSteerCylinderRodLeft",
@@ -177,23 +245,27 @@
           "LiftCylinderRodPin",
           "RearAxleStabilizerBarrel",
           "RearAxleStabilizerRod",
+          "RearSteerBarLeft",
+          "RearSteerBarRight",
           "RearSteerCylinder",
           "RearSteerCylinderBarrel",
           "RearSteerCylinderRodLeft",
           "RearSteerCylinderRodRight",
           "RetractChain_C",
+          "RetractChain_C_Moving",
+          "RetractChain_C_Wrap",
           "RetractSheave_C",
           "TelescopeCylinderBarrel",
           "TelescopeCylinderRod"
         ],
-        "meshes": 352,
+        "meshes": 358,
         "mirror_inclusive_visual_width_m": 2.5802503204946143,
-        "nodes": 372,
-        "sha256": "82093658a6d71721c01748934f8f6780db5c2da3ee4ddd6f073a66627716ef97",
-        "source_blend_sha256": "19f5cf65468701e0523280557e3efca688420c0aabc7220d2c372c2b38656d7e",
+        "nodes": 378,
+        "sha256": "3165b65d65637120cdc17cffec9ef63d32adcc8d7919181e802c069423a6e58f",
+        "source_blend_sha256": "f6f4d38582cfbc12811a7abdaa24ae06dc48e3cbe6cfbfba530e604bec17f323",
         "status": "PASS",
         "triangle_budget": 60000,
-        "triangles": 32348,
+        "triangles": 32628,
         "visible_bounds_max_m": [
           4.597199976444244,
           2.4200004366079244,
@@ -210,12 +282,12 @@
           2.5802503204946143
         ]
       },
-      "result_sha256": "4ee1d2c56105e2101e5825af22a9f87a39f5d82601bf910b6568dff2129c1e38",
+      "result_sha256": "f24bb9c1225c2ceed53069931516f5bfc62241c67b13712654a8ea4324f29243",
       "status": "pass",
       "validator": {
-        "bytes": 9620,
+        "bytes": 11075,
         "path": "scripts/validate_742_glb.py",
-        "sha256": "85b45b5af70433fe3ba3746c331e0dfdb74c5fb4e01e60d5dd8aecddb9d1d6a8"
+        "sha256": "fefddcc8a9bcd7ae4be5f8f52b6f3f81011f774980348ef856fb0a01e568f703"
       }
     },
     "es1930m_asset_contract": {
@@ -223,7 +295,69 @@
       "result": {
         "asset": "assets/models/es1930m.glb",
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
-        "deployed_extension_envelope_m": 2.030000057830942,
+        "deployed_extension_envelope_m": 2.0304999846965073,
+        "guard_continuity_pairs": [
+          {
+            "fixed": "TopRail_-1",
+            "lateral_clearance_m": 0.003999985754489899,
+            "moving": "ExtensionTopRail_-1",
+            "overlap_m": [
+              0.5679999887943268,
+              0.29299998879432676,
+              0.017999988794326738
+            ]
+          },
+          {
+            "fixed": "MidRail_-1",
+            "lateral_clearance_m": 0.003999985754489899,
+            "moving": "ExtensionMidRail_-1",
+            "overlap_m": [
+              0.5679999887943268,
+              0.29299998879432676,
+              0.017999988794326738
+            ]
+          },
+          {
+            "fixed": "MainToeBoard_-1",
+            "lateral_clearance_m": 0.0029999874532222748,
+            "moving": "ExtensionToeBoard_-1",
+            "overlap_m": [
+              0.568000040948391,
+              0.29300004094839094,
+              0.018000040948390916
+            ]
+          },
+          {
+            "fixed": "TopRail_1",
+            "lateral_clearance_m": 0.003999985754489899,
+            "moving": "ExtensionTopRail_1",
+            "overlap_m": [
+              0.5679999887943268,
+              0.29299998879432676,
+              0.017999988794326738
+            ]
+          },
+          {
+            "fixed": "MidRail_1",
+            "lateral_clearance_m": 0.003999985754489899,
+            "moving": "ExtensionMidRail_1",
+            "overlap_m": [
+              0.5679999887943268,
+              0.29299998879432676,
+              0.017999988794326738
+            ]
+          },
+          {
+            "fixed": "MainToeBoard_1",
+            "lateral_clearance_m": 0.0029999874532222748,
+            "moving": "ExtensionToeBoard_1",
+            "overlap_m": [
+              0.568000040948391,
+              0.29300004094839094,
+              0.018000040948390916
+            ]
+          }
+        ],
         "interaction_volumes": [
           "Chassis_Hit",
           "Platform_Hit",
@@ -231,35 +365,35 @@
           "Steering_Hit"
         ],
         "link_groups": 20,
-        "meshes": 142,
-        "nodes": 253,
-        "pivot_markers": 68,
-        "sha256": "adda71683962cf5894e3bdbc57719eab9627832bd908cfc37bb340e43a0510de",
-        "source_blend_sha256": "6044325c4ca4b4e545f2375cc99278e4b5c9033cdb4f8ab74a7ac790f5810ac9",
+        "meshes": 282,
+        "nodes": 407,
+        "pivot_markers": 71,
+        "sha256": "9eaae3b614f8067c1e451e9e2a1c0fc1fb1d9bd49b22ed93dc9f4972eea70977",
+        "source_blend_sha256": "0b713e95ef8273dab3a52fe2b4bf56fd06bd4529aa5acf5ef3bc248b3c7ff842",
         "status": "PASS",
-        "triangles": 30448,
+        "triangles": 35344,
         "visible_bounds_max_m": [
-          0.7350000679637319,
+          0.7354999948292971,
           1.979000013321638,
-          0.3800000336455891
+          0.3830000087618828
         ],
         "visible_bounds_min_m": [
           -0.7449999898672104,
-          0.004999986619990127,
-          -0.3800000336455891
+          0.0009999992325901985,
+          -0.3830000087618828
         ],
         "visible_envelope_xyz_m": [
-          1.4800000578309422,
-          1.974000026701648,
-          0.7600000672911782
+          1.4804999846965075,
+          1.978000014089048,
+          0.7660000175237656
         ]
       },
-      "result_sha256": "4d60686196175e683b9b74ad2ea11d404384040b4254f37e219a47bb9f20e46e",
+      "result_sha256": "41fd1ff2a928cf53bb72337fa0714b38c56246e92c377154b4db88946da3e455",
       "status": "pass",
       "validator": {
-        "bytes": 10690,
+        "bytes": 17799,
         "path": "scripts/validate_es1930m_glb.py",
-        "sha256": "e30884b05a28bd381fad75f742ec682ad5d216e2be82dcb811719f00b27160de"
+        "sha256": "d11089a75b67711cc949be1180491ccd848c8e1d3b9605295e89571a73010dfe"
       }
     },
     "es1930m_kinematics_contract": {
@@ -268,24 +402,24 @@
         "collision_proxy_assertions": 4141,
         "collision_proxy_status": "PASS",
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
-        "cylinder_observed_stroke_m": 0.6855,
+        "cylinder_observed_stroke_m": 0.6855000428797274,
         "indoor_raised_span_m": 0.3657813554570545,
         "levels": 5,
         "maximum_link_length_error_m": 4.440892098500626e-16,
+        "maximum_rear_fixed_anchor_error_m": 0.0,
         "maximum_shared_pivot_error_m": 0.0,
-        "maximum_symmetry_error_m": 0.0,
-        "maximum_translation_per_0_01_sample_m": 0.049164512674566105,
+        "maximum_translation_per_0_01_sample_m": 0.05411392820809057,
         "outdoor_lift_ratio": 0.7742616033755276,
         "samples": 101,
         "status": "PASS",
         "stowed_span_m": 1.105486318323298
       },
-      "result_sha256": "493afc9205a06cc9b23237a7d27898c67c9c02c43850c92612d89a5317de923b",
+      "result_sha256": "17ce35810415ee0b6305042a9bdb544508151968ad120ad35ab571fefdbd9e0f",
       "status": "pass",
       "validator": {
-        "bytes": 11283,
+        "bytes": 10674,
         "path": "scripts/validate_es1930m_kinematics.py",
-        "sha256": "8c399a9f0aae5725363f8a8aa640352872450ceb0578d533dfae7c43a21bd64b"
+        "sha256": "60ad5b0e80ccd712d9c503ef204f6f5cda2dbdd5ede015de9c36728c572c3ed2"
       }
     },
     "es1930m_release_receipt": {
@@ -299,6 +433,7 @@
         "verified_files": [
           "assets/models/es1930m.glb",
           "docs/research/es1930m/MECHANISM_EVIDENCE.json",
+          "docs/research/es1930m/REVIEW_EVIDENCE.json",
           "docs/research/es1930m/SOURCE_MANIFEST.json",
           "docs/research/es1930m/VISUAL_COMPARISON.md",
           "machines/es1930m/es1930m.configuration.json",
@@ -307,12 +442,12 @@
           "source/blender/es1930m-showcase-v1.0.blend"
         ]
       },
-      "result_sha256": "f74d7aabbd4b69b89b379256b7742d86e1b70ed04220df105fef251b907a81ac",
+      "result_sha256": "d9dc1a431c313f04e2eb5f481699f90a2f052703c1aa4a2f13b6ef4f3fd6794a",
       "status": "pass",
       "validator": {
-        "bytes": 3092,
+        "bytes": 2982,
         "path": "scripts/validate_es1930m_receipt.py",
-        "sha256": "22fd218c353e06fe390f3165da462307113cb65c4f0ecbc74f16190003cd7cf9"
+        "sha256": "ba4eb04ea279c599f97d9578403331ea75dc9fd6f2823ba1a4076cd50e5ae0ac"
       }
     },
     "evidence_ledger": {
@@ -340,6 +475,7 @@
         ],
         "local_binaries_verified": [],
         "local_binaries_verified_count": 0,
+        "owned_review_renders_verified": 6,
         "primary_publications": [
           "3122329900",
           "3122331300",
@@ -352,20 +488,95 @@
         "source_expressions_resolved": true,
         "status": "PASS"
       },
-      "result_sha256": "f53e851f5489a41c9f2096957dc77bbd973d03e2454f5f744416c821f1f0c340",
+      "result_sha256": "beb1e5984156332f961952ed238891110b0f635dc5e662351b32921103767349",
       "status": "pass",
       "validator": {
-        "bytes": 17487,
+        "bytes": 19878,
         "path": "scripts/validate_742_evidence.py",
-        "sha256": "97245c07d36205a9e771ce5eb2d21a6c349e4788520f2a5d6575cc85ae7b5155"
+        "sha256": "a958ffe106cde2f67fa144fb58e9a085dfd2c63e056f5cb9b3a7ab2bb2f10dec"
       }
     },
     "mechanical_kinematics": {
       "arguments": [],
       "result": {
-        "boundary": "independent visual geometry and endpoint-continuity solver only; not manufacturer dynamics, load, stability, interlock, service, or safety authority",
-        "circle_outside_wheel_center_radius_m": 3.714827974177303,
+        "boundary": "owned presentation geometry only; not manufacturer dynamics, load, stability, interlock, service, or safety authority",
+        "canonical_solver": "machines/742/solver.js",
         "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+        "continuous_retract_chain_samples": 2001,
+        "cylinder_ranges": {
+          "carriageTilt": {
+            "fixed_barrel_length_range_m": [
+              0.8199999999999995,
+              0.8200000000000004
+            ],
+            "minimum_rod_exposure_m": 0.3104377483815176,
+            "pin_distance_m": [
+              1.1304377483815176,
+              1.518436797465588
+            ],
+            "stroke_usage_m": 0.38799904908407035
+          },
+          "compensation": {
+            "fixed_barrel_length_range_m": [
+              0.6499999999999998,
+              0.6500000000000002
+            ],
+            "minimum_rod_exposure_m": 0.08654194279347649,
+            "pin_distance_m": [
+              0.7365419427934765,
+              1.0145419427934765
+            ],
+            "stroke_usage_m": 0.278
+          },
+          "frameLevel": {
+            "fixed_barrel_length_range_m": [
+              0.5999999999999998,
+              0.6000000000000001
+            ],
+            "minimum_rod_exposure_m": 0.25615847386647117,
+            "pin_distance_m": [
+              0.8561584738664711,
+              1.0241548261246192
+            ],
+            "stroke_usage_m": 0.16799635225814802
+          },
+          "lift": {
+            "fixed_barrel_length_range_m": [
+              1.6499999999999995,
+              1.6500000000000004
+            ],
+            "minimum_rod_exposure_m": 0.1949139261993602,
+            "pin_distance_m": [
+              1.8449139261993601,
+              2.9149140847728794
+            ],
+            "stroke_usage_m": 1.0700001585735193
+          },
+          "rearAxleStabilizer": {
+            "fixed_barrel_length_range_m": [
+              0.33999999999999997,
+              0.34000000000000014
+            ],
+            "minimum_rod_exposure_m": 0.14008179931362974,
+            "pin_distance_m": [
+              0.48008179931362976,
+              0.5856641982914639
+            ],
+            "stroke_usage_m": 0.10558239897783411
+          },
+          "telescope": {
+            "fixed_barrel_length_range_m": [
+              2.0999999999999996,
+              2.1000000000000005
+            ],
+            "minimum_rod_exposure_m": 0.7099999999999995,
+            "pin_distance_m": [
+              2.8099999999999996,
+              6.414000000000001
+            ],
+            "stroke_usage_m": 3.604000000000001
+          }
+        },
         "dynamic_hierarchy_nodes_checked": [
           "BoomAngleSensorLink",
           "BoomHose_0_0",
@@ -378,6 +589,8 @@
           "ExtendChain_L",
           "FrameLevelCylinderBarrel",
           "FrameLevelCylinderRod",
+          "FrontSteerBarLeft",
+          "FrontSteerBarRight",
           "FrontSteerCylinderBarrel",
           "FrontSteerCylinderRodLeft",
           "FrontSteerCylinderRodRight",
@@ -387,56 +600,37 @@
           "LiftHose_1_2",
           "RearAxleStabilizerBarrel",
           "RearAxleStabilizerRod",
+          "RearSteerBarLeft",
+          "RearSteerBarRight",
           "RearSteerCylinderBarrel",
           "RearSteerCylinderRodLeft",
           "RearSteerCylinderRodRight",
           "RetractChain_C",
+          "RetractChain_C_Moving",
+          "RetractChain_C_Wrap",
           "TelescopeCylinderBarrel",
           "TelescopeCylinderRod"
         ],
         "dynamic_point_nodes_checked": [
           "BoomAngleSensorBoomJoint"
         ],
-        "evidence_stroke_usage_m": {
-          "compensation_master": 0.2786140327311646,
-          "frame_sway": 0.16799635225814802,
-          "head_tilt_slave": 0.38768155210839916,
-          "lift": 1.0699178066952966,
-          "rear_axle_stabilization_visible_subset": 0.10558239897783411,
-          "telescope": 3.604
-        },
-        "lift_cylinder_pin_distance_range_m": [
-          2.3198201301780323,
-          3.389737936873329
-        ],
         "maximum_ackermann_center_error_m": 8.881784197001252e-16,
-        "maximum_adjacent_endpoint_step_m": 0.7353448601650644,
+        "maximum_adjacent_carriage_endpoint_step_m": 0.7687597465331243,
+        "maximum_fork_y_m": 13.071943772235729,
         "maximum_level_fork_surface_y_m": 12.7988545956441,
         "maximum_reach_pose": {
-          "boom_angle_degrees": 3.0,
+          "boom_angle_degrees": 3,
           "forward_reach_m": 8.870003555906646,
-          "load_center_m": 0.6096,
-          "telescope_fraction": 1.0
+          "load_center_m": 0.6096
         },
-        "minimum_base_mid_overlap_m": 1.826,
-        "minimum_fork_blade_y_m": 0.45200280913569224,
-        "minimum_mid_fly_overlap_m": 1.626,
-        "positive_circle_max_wheel_angles_degrees": {
-          "FL": 27.407591430064652,
-          "FR": 55.0,
-          "RL": -27.407591430064652,
-          "RR": -55.0
-        },
-        "positive_front_max_wheel_angles_degrees": {
-          "FL": 37.26423587605834,
-          "FR": 55.0,
-          "RL": 0.0,
-          "RR": 0.0
-        },
-        "published_maximum_lift_height_m": 12.8,
-        "published_outside_turning_radius_crosscheck_m": 3.66,
+        "maximum_retract_endpoint_step_m": 0.003604000000001051,
+        "minimum_fork_blade_y_m": 0.1655929174181786,
+        "minimum_retract_chain_segment_m": 0.18,
+        "minimum_retract_leg_vertical_separation_m": 0.18,
+        "published_outside_turning_radius_m": 3.66,
+        "radius_semantics": "reported independently; published reference locus and tire swept-envelope convention are unresolved",
         "rear_axle_stabilization_published_stroke_m": 0.2,
-        "rear_axle_stabilization_usage_boundary": "only frame-level-induced endpoint travel is shown; free/slow/locked RAS states are not simulated",
+        "rear_axle_stabilization_usage_boundary": "only frame-level-induced endpoint travel is shown; free/slow/locked RAS behavior is not simulated",
         "sample_axes": {
           "frame_level": 9,
           "lift": 21,
@@ -446,22 +640,35 @@
           "tilt": 7
         },
         "status": "PASS",
-        "unique_multidimensional_state_samples": 416745
+        "steering_linkage": {
+          "maximum_rod_bar_closure_error_m": 0,
+          "minimum_steering_bar_length_m": 0.25126428441912546,
+          "minimum_straight_rod_length_m": 0.13999999999999996
+        },
+        "stow": {
+          "boom_angle_degrees": 0,
+          "fork_bottom_m": 0.32800000000000007,
+          "fork_load_surface_m": 0.388,
+          "total_length_rear_plane_to_fork_tip_m": 6.977200000000001
+        },
+        "unique_multidimensional_state_samples": 416745,
+        "visual_circle_outside_wheel_center_radius_m": 3.714827974177303
       },
-      "result_sha256": "06a904f87d4556fe755c9f56529a3b28ad5c46e120dfb074d70d6296060a837f",
+      "result_sha256": "8b268e734f272a3d620c21f38f2401312bfc00ee2647d2728ff11dfa8c69e5c7",
       "status": "pass",
       "validator": {
-        "bytes": 17509,
+        "bytes": 7829,
         "path": "scripts/validate_742_kinematics.py",
-        "sha256": "5bf295c707306b8446f1984dc45281b164ae03af75868832999297f437d3846e"
+        "sha256": "9d338dea5789eab878fdf98123b36981df960309141740a35034693ce15f3cc9"
       }
     },
     "route_contract": {
       "arguments": [],
       "result": {
+        "adaptive_shadow_profile": true,
         "asset_failure_ui": true,
-        "asset_sha256": "82093658a6d71721c01748934f8f6780db5c2da3ee4ddd6f073a66627716ef97",
-        "candidate_release": "1.1.0",
+        "asset_sha256": "3165b65d65637120cdc17cffec9ef63d32adcc8d7919181e802c069423a6e58f",
+        "candidate_release": "1.2.0",
         "component_focus_targets": 7,
         "engineering_aria_value_text": true,
         "inertia": true,
@@ -469,27 +676,33 @@
         "isolated_style": "viewer/742.css",
         "modal_focus_contract": true,
         "motion_ranges": 5,
+        "overlapping_priority_ray_test": true,
         "performance_p95_diagnostic": true,
+        "performance_sample_metadata": true,
         "pinch_click_suppression": true,
         "pinch_zoom": true,
+        "pose_aware_reset": true,
+        "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.5.0",
+        "runtime_release": "1.5.5",
+        "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "shared_es_runtime_unchanged_by_742": true,
         "status": "PASS",
-        "steering_modes": 3
+        "steering_modes": 3,
+        "visible_stalls_included": true
       },
-      "result_sha256": "f1aab6b8f08a47889984c1819d21fd64e50bf0fc1deb11fb29e6097d24d08b03",
+      "result_sha256": "1074229117356f7d4ca03c70317150386ef891285f0d5668d0fd34a42c1e941e",
       "status": "pass",
       "validator": {
-        "bytes": 5285,
+        "bytes": 6768,
         "path": "scripts/validate_742_route.py",
-        "sha256": "cecbba149286478b725917135059b47614647763ede2745d6a6ab45f0faa4396"
+        "sha256": "874bf86265f80e07bec3555f9e3b565b15fcdd553fa5837bad0c590538e3767c"
       }
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -497,19 +710,19 @@
   },
   "files": {
     "articulation_notes": {
-      "bytes": 3936,
+      "bytes": 4708,
       "path": "docs/research/742/ARTICULATION.md",
-      "sha256": "a56caf0b6adbcb2a0e4805dee9279d4f0d094ffd92a44351ae6c89b51663c0be"
+      "sha256": "ee239b6bd232451b35c5643b7de072c240670a269e5e314537c386a80dea516c"
     },
     "asset": {
-      "bytes": 1555308,
+      "bytes": 1577540,
       "path": "assets/models/742.glb",
-      "sha256": "82093658a6d71721c01748934f8f6780db5c2da3ee4ddd6f073a66627716ef97"
+      "sha256": "3165b65d65637120cdc17cffec9ef63d32adcc8d7919181e802c069423a6e58f"
     },
     "builder": {
-      "bytes": 26024,
+      "bytes": 29077,
       "path": "scripts/build_742.py",
-      "sha256": "56e6d915b95ca8685b2844734a2a955325bf298d35fa5b6a255c7d371c86e911"
+      "sha256": "05e34346d1607499a4086c67eea890016339d6a531d2f05b4882dfaaee2e0a0d"
     },
     "comparison_matrix": {
       "bytes": 1267,
@@ -519,7 +732,7 @@
     "configuration": {
       "bytes": 1647,
       "path": "machines/742/742.configuration.json",
-      "sha256": "bca4697e27db948461c8802fe2296adb4186af67a2162a0ac553496e7995a9e4"
+      "sha256": "77fd23af7dadf37e9699b26c5a1f041e38e8546260064b2eb8c730801e6e4211"
     },
     "configuration_notes": {
       "bytes": 1182,
@@ -527,9 +740,14 @@
       "sha256": "0917bf23070948017147d3b2112840666877bfff2b609c7486b45c0c623dad6e"
     },
     "detailed_reconstruction": {
-      "bytes": 1826,
+      "bytes": 2127,
       "path": "docs/research/742/DETAILED_RECONSTRUCTION.md",
-      "sha256": "4e7b37a3484697926151368e7544d59eabab5c13ba147f339c9a5f3cabf13ff4"
+      "sha256": "5a57a5cff920a1b553b9f8d0ea848c14795da34b7070b480d22b61e7161b32c8"
+    },
+    "deterministic_rebuild_verifier": {
+      "bytes": 4592,
+      "path": "scripts/verify_742_deterministic_rebuild.py",
+      "sha256": "67b8e9b882bdb733f00f25f8f47a5005fe8fe27ec9554b62295b39ac23522f77"
     },
     "dimensions_notes": {
       "bytes": 1969,
@@ -537,39 +755,64 @@
       "sha256": "4b5c82595669f7008d19409d3ca84ea3bee36790737a823eef93918aadbbc26b"
     },
     "mechanism": {
-      "bytes": 2552,
+      "bytes": 3024,
       "path": "machines/742/mechanism.json",
-      "sha256": "8a49a685af7ab5842f560b9e141300ee57292711086a1ecff1642aad4165b2da"
+      "sha256": "5f9f82e906b21f369941eba3512813fff7ed31e9bbc539cccda7c9d4bd55c13e"
     },
     "mechanism_evidence": {
-      "bytes": 10861,
+      "bytes": 11087,
       "path": "docs/research/742/MECHANISM_EVIDENCE.json",
-      "sha256": "1ce11704f2cee18b7d1ba0253e425c88c3ada14d7c216c71ebb3ebc6b180ee0e"
+      "sha256": "8f477bca867cae7bceb329bed4b25dd5602182118e30ed6519426cd454477583"
+    },
+    "owned_review_render_allowlist": {
+      "bytes": 2029,
+      "path": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
+      "sha256": "0081957eaf06d087d73bc5e8f560e34d6fe23e25501bda10efcd07506f92d06a"
     },
     "package_manifest": {
-      "bytes": 1800,
+      "bytes": 2260,
       "path": "package.json",
-      "sha256": "a05b01e7f0891dc65223f749754923622fdac24ff5bd5236955cf37380ae75a2"
+      "sha256": "6a74be147c71289a1a2c3a30ef4caa256737783d8e0113c86f3ccbdd4f327c9f"
+    },
+    "pages_assembler": {
+      "bytes": 1453,
+      "path": "scripts/assemble_pages.py",
+      "sha256": "bd34d1123c2697c25a85c85122daa16831b88f834f7687cbcf16d9b9bd840c70"
+    },
+    "pages_bundle_validator": {
+      "bytes": 4086,
+      "path": "scripts/validate_pages_bundle.py",
+      "sha256": "1a323b1a7b39e96fa011e2b638e5666af5285d9226f8da7a1191106466fb30cb"
+    },
+    "pages_deployment_verifier": {
+      "bytes": 6442,
+      "path": "scripts/verify_pages_deployment.py",
+      "sha256": "feee58c35c5b227fa74a1f7773debd1728fb14f8ccc699c55aa4ad6dea51fd14"
+    },
+    "pages_manifest_writer": {
+      "bytes": 1603,
+      "path": "scripts/write_pages_attestation.py",
+      "sha256": "4765fafaca67ff41d7df14e82d13976179919cdeb0e2186e9c475aa6be4c01ec"
     },
     "pages_workflow": {
-      "bytes": 7507,
+      "bytes": 3076,
       "path": ".github/workflows/pages.yml",
-      "sha256": "68a484f9d91cb39fad23e1feffe29d2696ff19d8481e6c9a42c11727be7247b7"
+      "sha256": "e4da52284cc74c77c53cb256ea8745f7c7e1e462426040dd377f5312d3f85eca"
     },
     "project_readme": {
-      "bytes": 7707,
+      "bytes": 9740,
       "path": "README.md",
-      "sha256": "a567e5783db2d07fab13217edeef372f8ff677d1fe47113d9421829498294b72"
+      "sha256": "af56960c6b829eb2e546238fa817f802e1c01b78da306e95bf7b6c18ba2be983"
     },
     "receipt_validator": {
-      "bytes": 21649,
+      "bytes": 29968,
       "path": "scripts/validate_742_receipt.py",
-      "sha256": "d2034ef1145e98ef00dcffe1048e26b4ad16e6e62ee4d1e11d00cfcc4cd68aca"
+      "sha256": "6f9ef9f5dbd8b0543cce5af550e736f2bc2f9a4c8d7299df701fde9d9dd8bfae"
     },
     "receipt_writer": {
-      "bytes": 14234,
+      "bytes": 15455,
       "path": "scripts/write_742_receipt.py",
-      "sha256": "a43eb1ca77b7fda98b4d783ea9f0f81e55c113b67b5bd88c2872cd73fd785142"
+      "sha256": "4afc5f699bc54a5679db1f2ecc03688c73c40c32e00424847ad7f24b0969f371"
     },
     "reference_board_boundary": {
       "bytes": 481,
@@ -586,20 +829,40 @@
       "path": "docs/research/742/README.md",
       "sha256": "824797ad1707de4f12928b32669d705767b61303e486a82a37e130a135bb3812"
     },
+    "review_binder": {
+      "bytes": 3472,
+      "path": "scripts/bind_742_review.py",
+      "sha256": "459d88ddb771b247db01c5aed95f4d7d323355c085fd7e73bb8369bca2e1dbc0"
+    },
     "review_renderer": {
-      "bytes": 10034,
+      "bytes": 7141,
       "path": "scripts/render_742_preview.py",
-      "sha256": "fadc9a79f2e4992a5aac0500e9721622c4e59324f220b4ce37fdfa0c966aeb07"
+      "sha256": "6c3d33db3df2df6d02bd990134ae09999966f39bfdad1acc08da207fc3675628"
+    },
+    "review_validator": {
+      "bytes": 24906,
+      "path": "scripts/validate_742_review.py",
+      "sha256": "db1e171fe8878377c81938eb19954269f6a1823c564e6cda5c8f2e1c97bc21a5"
     },
     "rights_boundary": {
-      "bytes": 1684,
+      "bytes": 2159,
       "path": "docs/research/742/RIGHTS_AND_BIM_BOUNDARY.md",
-      "sha256": "e32f28f48c10780da1ac761bb99ed1467b6c05b749a8e9ada5eccd24345c0cb2"
+      "sha256": "f1929c35c01ef269d55f5640f955c56ee70c18db77124cd563dc9c48c799c4c0"
+    },
+    "solver_bridge": {
+      "bytes": 1067,
+      "path": "scripts/solve_742_pose.mjs",
+      "sha256": "b8de30e1a7eddfe38bc32e5316783d1352787ec647efccd7c39704b535deddc4"
+    },
+    "solver_validator": {
+      "bytes": 6873,
+      "path": "scripts/validate_742_solver.mjs",
+      "sha256": "39f4782f32bd572b6a7f8acca4518e8aca415f540d1bc212638e37421e2147b3"
     },
     "source_blend": {
-      "bytes": 302482,
+      "bytes": 305595,
       "path": "source/blender/742-showcase-v1.0.blend",
-      "sha256": "19f5cf65468701e0523280557e3efca688420c0aabc7220d2c372c2b38656d7e"
+      "sha256": "f6f4d38582cfbc12811a7abdaa24ae06dc48e3cbe6cfbfba530e604bec17f323"
     },
     "source_manifest": {
       "bytes": 4939,
@@ -607,127 +870,69 @@
       "sha256": "e0aed78a3b5222eff8c3d0b838b3ef02668ae27784c140c693706d16177ba2dd"
     },
     "source_reconciliation": {
-      "bytes": 3559,
+      "bytes": 3609,
       "path": "docs/research/742/SOURCE_RECONCILIATION.md",
-      "sha256": "f3f9868f561c7ca6fe032def8436081425bf5c77d59729ea985a056f8fa24d71"
+      "sha256": "b74d27b11baf163b05a3ad81407febcf53cbf76d3a27f1382920380a82349ce4"
     }
   },
   "frozen_source_binary_verification": {
-    "result_sha256": "02134c8b0c98637296f1fc31fa15eaca09a471b0087a753b6cb38de82b10c223",
+    "result_sha256": "971f5fc532dd28fa8c5d22c3dc7c4c11fabf77f1b0225f86df68d8a90f56656e",
     "status": "pass",
     "verified_count": 11
   },
   "human_review": {
-    "binding": {
-      "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
-      "environment": {
-        "browser": "Codex in-app Browser with Chromium engine",
-        "os": "macOS 26.5.2 build 25F84"
-      },
-      "manifest": {
-        "bytes": 4373,
-        "path": "docs/review/742/review-manifest.json",
-        "sha256": "2cbeccb1f927ab23c16a49eabe5f2ef281db99a1a7ccfed07ad2fe584fbc9487"
-      },
-      "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5"
-    },
+    "binding": null,
     "gates": {
       "600s_browser_regression": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
-      "accessibility_assistive_technology": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+      "accessibility_semantics_and_keyboard": {
+        "artifact": null,
+        "status": "pending"
       },
       "cab_closeup_fidelity": {
-        "artifact": {
-          "bytes": 1503285,
-          "path": "docs/review/742/cab-close.png",
-          "sha256": "24dba0dbddff7dff6e7522e926017098af3cbfdb9645b2adcf42832768935afc"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "desktop_browser_interaction": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "es1930m_browser_regression": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "extended_visual_fidelity": {
-        "artifact": {
-          "bytes": 817078,
-          "path": "docs/review/742/maximum-lift-level-forks.png",
-          "sha256": "fab246dfdf653ee1c3478bfda36445d56325bdacc9f9cd3422c13c4fe69e8920"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "mobile_browser_interaction": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "performance_profile": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "semantic_selection": {
-        "artifact": {
-          "bytes": 3016,
-          "path": "docs/review/742/browser-product-review.json",
-          "sha256": "3e495f82dfd08ed5e0bc7c0774687a780288f976a87dacc660cf6a906a43bada"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       },
       "stowed_visual_fidelity": {
-        "artifact": {
-          "bytes": 1275828,
-          "path": "docs/review/742/stowed-front-left.png",
-          "sha256": "012a14da16e58608ba47f891c3fd4d3980c05e7aaa9ca8274dc8200fd6dac0dd"
-        },
-        "status": "pass"
+        "artifact": null,
+        "status": "pending"
       }
     },
-    "status": "pass"
+    "status": "pending"
   },
   "mechanical_proof": {
-    "asset_sha256": "82093658a6d71721c01748934f8f6780db5c2da3ee4ddd6f073a66627716ef97",
+    "asset_sha256": "3165b65d65637120cdc17cffec9ef63d32adcc8d7919181e802c069423a6e58f",
+    "canonical_solver": "machines/742/solver.js",
+    "continuous_retract_chain_samples": 2001,
     "evidence_steering_inner_limit_degrees": 55,
+    "minimum_retract_chain_segment_m": 0.18,
     "posed_24in_load_center_forward_reach_m": 8.870003555906646,
-    "posed_circle_maximum_wheel_degrees": 55.0,
-    "posed_evidence_stroke_usage_m": {
-      "compensation_master": 0.2786140327311646,
-      "frame_sway": 0.16799635225814802,
-      "head_tilt_slave": 0.38768155210839916,
-      "lift": 1.0699178066952966,
-      "rear_axle_stabilization_visible_subset": 0.10558239897783411,
-      "telescope": 3.604
-    },
     "posed_glb_length_less_forks_m": 5.758000090718269,
     "posed_level_fork_surface_height_m": 12.7988545956441,
     "published_hydraulic_cylinder_strokes_m": {
@@ -741,11 +946,49 @@
     "published_length_less_forks_m": 5.76,
     "published_maximum_forward_reach_m": 8.86,
     "published_maximum_lift_height_m": 12.8,
-    "source_blend_sha256": "19f5cf65468701e0523280557e3efca688420c0aabc7220d2c372c2b38656d7e",
+    "rear_axle_stabilization_usage_boundary": "only frame-level-induced endpoint travel is shown; free/slow/locked RAS behavior is not simulated",
+    "solver_circle_maximum_inner_wheel_degrees": 54.99999999999999,
+    "solver_evidence_stroke_usage_m": {
+      "compensation_master": 0.278,
+      "frame_sway": 0.16799635225814802,
+      "head_tilt_slave": 0.38799904908407035,
+      "lift": 1.0700001585735193,
+      "rear_axle_stabilization_visible_subset": 0.10558239897783411,
+      "telescope": 3.604000000000001
+    },
+    "solver_fixed_barrel_length_ranges_m": {
+      "carriageTilt": [
+        0.8199999999999995,
+        0.8200000000000004
+      ],
+      "compensation": [
+        0.6499999999999998,
+        0.6500000000000002
+      ],
+      "frameLevel": [
+        0.5999999999999998,
+        0.6000000000000001
+      ],
+      "lift": [
+        1.6499999999999995,
+        1.6500000000000004
+      ],
+      "rearAxleStabilizer": [
+        0.33999999999999997,
+        0.34000000000000014
+      ],
+      "telescope": [
+        2.0999999999999996,
+        2.1000000000000005
+      ]
+    },
+    "solver_maximum_ackermann_center_error_m": 8.881784197001252e-16,
+    "source_blend_sha256": "f6f4d38582cfbc12811a7abdaa24ae06dc48e3cbe6cfbfba530e604bec17f323",
+    "stowed_fork_bottom_m": 0.32800000000000007,
     "unique_multidimensional_state_samples": 416745
   },
-  "release": "1.1.0-candidate",
-  "release_status": "reviewed_candidate_not_deployed",
+  "release": "1.2.0-candidate",
+  "release_status": "candidate_review_pending",
   "runtime": {
     "files": [
       "742/index.html",
@@ -756,9 +999,10 @@
       "machines/742/articulation.js",
       "machines/742/inspector.js",
       "machines/742/cameras.js",
-      "machines/742/version.js"
+      "machines/742/version.js",
+      "machines/742/solver.js"
     ],
-    "sha256": "e0cf7b60d032a28fe205f00631c408f8ac5d4e5811c77642e68a58c746bc9f28"
+    "sha256": "b358f51903c5ceef047a3a3369d11a5e2aa595a1e2b366ec25cdd9bd9afb2f34"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-25"

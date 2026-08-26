@@ -16,7 +16,7 @@ The telehandler showcase is available at `http://localhost:8080/742/?diagnostics
 
 The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
 
-Validate the current GLBs, source ledgers, route contracts, and receipts with `npm run check`. For the 742, `npm run receipt:742` independently replays the automated validators and writes a hash-bound candidate receipt. It deliberately leaves browser, visual, accessibility, performance, cross-route regression, and deployment gates pending unless a canonical review manifest binds each gate to an artifact, exact commit, browser, and operating-system environment.
+Validate the current GLBs, source ledgers, route contracts, and receipts with `npm run check`. For the 742, `npm run receipt:742` independently replays the automated validators and writes a hash-bound candidate receipt. It deliberately leaves browser, visual, accessibility-semantics-and-keyboard, performance, cross-route regression, deterministic rebuild, and deployment gates pending unless their separate evidence is supplied.
 
 Repository and CI checks run the 742 source ledger in explicit manifest-only mode; their output is `NOT_VERIFIED` for the external binaries. A fail-closed binary recheck requires the separately retained evidence directory:
 
@@ -26,11 +26,31 @@ python3 -B scripts/validate_742_evidence.py \
   --require-source-binaries
 ```
 
-The candidate receipt is not included in the Pages site. After an authorized Pages deployment, CI probes the public route and exact GLB over HTTP, validates them against the local candidate, and uploads a separate `742-pages-attestation` workflow artifact. That external attestation does not convert pending human gates into passes.
+The candidate receipt and manufacturer source binaries are not included in the Pages site. After an authorized deployment, CI retrieves the public build manifest plus the exact 742 HTML, GLB, CSS, runtime, machine modules, configuration, mechanism record, and public research files. Every response must be HTTP 200 and match the build manifest by SHA-256 and byte count before CI uploads a separate `742-pages-attestation` artifact. That external attestation does not convert pending review gates into passes and expressly does not claim a frozen-source replay.
 
-To close the human gates, first write a pending receipt and take its `candidate_tree_sha256`. A review manifest supplied through `python3 -B scripts/write_742_receipt.py --review-manifest <path>` must name that exact tree, an existing 40-character reviewed commit, browser and OS environment, and every canonical gate. Each passed gate must reference a repository-contained artifact by exact path, SHA-256, and byte count. Partial or unbound human review is rejected rather than inferred.
+To close the human gates, first write a pending receipt, commit the exact candidate, and take its `candidate_tree_sha256`. A review manifest supplied through `python3 -B scripts/write_742_receipt.py --review-manifest docs/review/742/review-manifest.json` must name that tree, the exact reviewed commit, browser and OS environment, and every canonical gate. Each gate has its own fixed artifact path and gate-specific schema; one generic boolean report cannot satisfy multiple gates. The six visual PNGs are accepted only through an exact path/hash/size/dimensions allowlist, and the source-binary hash scan still rejects any manufacturer file with an admitted hash. The accessibility gate proves browser semantics and keyboard behavior only—it does not claim VoiceOver, NVDA, or physical assistive-technology testing. The 600S and ES1930M regression artifacts bind the exact upstream configuration, release, asset, runtime, and receipt identities.
 
-`scripts/validate_742_receipt.py --require-release` is the combined final gate: it requires `--sources-dir` to replay all frozen binaries, a receipt written with that verification, every artifact-backed human gate, and the separate Pages deployment attestation. The Pages workflow itself requests only deployment attestation, so publishing cannot silently turn pending human judgments into release approval.
+After the observations have actually been repeated against that commit, `scripts/bind_742_review.py --reviewed-source-commit <40-character-commit>` updates only their candidate/commit bindings and manifest file records, then parses every gate. Its output warns that binding is not observation; running it cannot create review proof by itself.
+
+Before release qualification, generate a byte-identical rebuild attestation with the retained Blender version:
+
+```sh
+python3 -B scripts/verify_742_deterministic_rebuild.py \
+  --blender /path/to/Blender \
+  --output /path/to/742-deterministic-rebuild-attestation.json
+```
+
+`scripts/validate_742_receipt.py --require-release` is the combined final gate. It requires `--sources-dir` for a fresh replay of every frozen binary, a receipt originally written with that same verification, every semantically parsed review gate, the byte-identical GLB rebuild attestation, and the separate Pages deployment attestation:
+
+```sh
+python3 -B scripts/validate_742_receipt.py \
+  --sources-dir /path/to/frozen-742-evidence \
+  --deployment-attestation /path/to/742-pages-http-attestation.json \
+  --rebuild-attestation /path/to/742-deterministic-rebuild-attestation.json \
+  --require-release
+```
+
+`--require-deployed` also requires the frozen-source directory, a fresh replay, and all review gates. The Pages workflow therefore requires a private Actions artifact named `742-frozen-source-evidence` from the exact run named by repository variable `JLG742_SOURCE_EVIDENCE_RUN_ID`; it downloads that non-public artifact, replays all 11 hashes before deployment, and repeats the complete deployed-candidate gate before uploading the public HTTP attestation. If the variable or retained artifact is absent, deployment fails closed. Manufacturer binaries are never placed in the Pages bundle.
 
 ## What is ready
 

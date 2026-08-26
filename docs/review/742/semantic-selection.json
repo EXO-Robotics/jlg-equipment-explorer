@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "742-gate-observation",
+  "gate": "semantic_selection",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
+  "environment": {
+    "browser": "Codex in-app Browser with Chromium engine",
+    "os": "macOS 26.5.2 build 25F84"
+  },
+  "observations": {
+    "dom_dataset": {
+      "semantic_volume_count": 6,
+      "semantic_volume_ready_count": 6,
+      "selection_overlap_rays": 15,
+      "selection_priority_rays": 15,
+      "selection_self_test": "pass",
+      "proxy_volume_shadows": "disabled"
+    },
+    "selection_transcript": [
+      {"action": "run production multi-volume overlap ray set", "observed": "15 of 15 priority rays resolved to the intended semantic component"},
+      {"action": "select Boom", "observed": "Boom selected styling and aria-pressed changed together"},
+      {"action": "start follow then Reset View", "observed": "selected styling and aria-pressed both cleared"},
+      {"action": "perform pinch", "observed": "no component dialog opened and no semantic selection changed"}
+    ]
+  },
+  "boundary": "Production-volume overlap-ray dataset and local interaction transcript only."
+}

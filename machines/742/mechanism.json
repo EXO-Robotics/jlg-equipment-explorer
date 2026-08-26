@@ -5,7 +5,7 @@
   "boom": {
     "sections": 3,
     "pivot_m": [-2.158, 1.838, 0.0],
-    "stowed_angle_degrees": 3,
+    "stowed_angle_degrees": 0,
     "maximum_visual_angle_degrees": 69,
     "mid_authored_origin_m": 0.12,
     "fly_authored_origin_m": 0.12,
@@ -13,7 +13,8 @@
     "mid_visual_travel_m": 3.604,
     "fly_visual_travel_m": 3.604,
     "level_fork_surface_height_at_max_pose_m": 12.8,
-    "travel_authority": "3.604 m telescope-cylinder stroke is evidence-derived; second-section +3.604 m and chained third-section additional +3.604 m are the visual chain relationship; authored origins remain reconstructed"
+    "travel_authority": "3.604 m telescope-cylinder stroke is evidence-derived; second-section +3.604 m and chained third-section additional +3.604 m are the visual chain relationship; authored origins and the zero-degree ground-clear stow remain reconstructed",
+    "runtime_stow": {"boom_angle_degrees": 0, "neutral_fork_load_surface_target_m": 0.388, "neutral_fork_surface_acceptance_m": [0.32, 0.46], "exact_total_length_with_48in_forks_m": 6.9772, "total_length_tolerance_m": 0.005}
   },
   "frame_level": {
     "axis": "X",
@@ -25,15 +26,15 @@
     "visual_inner_limit_degrees": 55,
     "wheelbase_m": 3.42,
     "wheel_center_track_m": 2.1005,
-    "outside_turning_radius_crosscheck_m": 3.66,
-    "authority": "published modes/wheelbase/turning radius plus service-manual 55 degree limit; wheel-center track is a temporary-reference measurement, with geometric Ackermann angles computed from wheelbase and track"
+    "published_outside_turning_radius_m": 3.66,
+    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit; wheel-center track is a temporary-reference measurement used only for reconstructed visual Ackermann closure. The published outside-radius reference locus and tire swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the solver wheel-center path"
   },
   "carriage": {
     "type": "standard floating 50 inch",
     "visual_tilt_degrees": [-5, 12],
     "fork_blade_dimensions_m": [1.2192, 0.06, 0.102],
-    "minimum_flat-floor_clearance_m": 0.08,
-    "authority": "published attachment topology and 60 x 102 x 1200 mm fork size; displayed pivot travel is reconstructed and down-tilt is limited to preserve flat-floor clearance at maximum frame-level presentation"
+    "minimum_flat-floor_clearance_m": 0.0,
+    "authority": "published attachment topology and 2.36 x 4 x 48 in fork selection; the exact 48 in length is 1.2192 m while 1200 mm is the rounded metric label. Displayed pivot travel and the ground-clear zero-degree stow are reconstructed"
   },
   "hydraulic_cylinder_strokes_m": {
     "lift": 1.07,

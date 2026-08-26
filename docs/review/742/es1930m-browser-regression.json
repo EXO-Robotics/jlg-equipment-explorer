@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "742-upstream-regression-observation",
+  "gate": "es1930m_browser_regression",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
+  "environment": {
+    "browser": "Codex in-app Browser with Chromium engine",
+    "os": "macOS 26.5.2 build 25F84"
+  },
+  "upstream_identity": {
+    "route": "/es1930m/",
+    "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
+    "release": "1.0.3",
+    "asset_sha256": "9eaae3b614f8067c1e451e9e2a1c0fc1fb1d9bd49b22ed93dc9f4972eea70977",
+    "runtime_sha256": "3052909b4fe5bbb56f8c9f2e42edaf2b7d95d6202e0a6b818f705e3d30d89130",
+    "receipt_sha256": "697ed2c30e998afa87a8682dfb6f8bfe92f54d4fbd5d7be1476108b834b9ce48",
+    "receipt_bytes": 3808
+  },
+  "observations": {
+    "title": "ES1930M Interactive Equipment Study",
+    "status_text": "machine es1930m · config ES1930M-PVC2404-US-STD-FR-FLA130-NM · source glb · selection self-test-pass · errors 0 · load 26 ms · 61 fps · p95 17.1 ms",
+    "parsed_status": {"machine": "es1930m", "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM", "source": "glb", "selection": "self-test-pass", "errors": 0, "load_ms": 26, "fps": 61, "p95_ms": 17.1},
+    "interaction_transcript": [{"action": "load /es1930m/ against exact upstream receipt identity", "observed": "title and status DOM matched; selection self-test passed; errors 0"}]
+  },
+  "boundary": "Exact local upstream release identity and browser DOM transcript; no new ES1930M visual acceptance claim."
+}

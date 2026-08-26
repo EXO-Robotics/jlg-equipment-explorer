@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "target_release": "1.1.0",
+  "target_release": "1.2.0",
   "model": "742",
   "pvc": "2411",
   "market": "ANSI_US",
@@ -36,7 +36,7 @@
     "operating_weight_kg": 9645
   },
   "visual_motion_limits": {
-    "boom_angle_degrees": [3, 69],
+    "boom_angle_degrees": [0, 69],
     "nested_section_travel_m": [3.604, 3.604],
     "carriage_tilt_degrees": [-5, 12],
     "steer_degrees": [-55, 55],

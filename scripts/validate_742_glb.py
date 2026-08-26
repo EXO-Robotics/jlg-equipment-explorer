@@ -16,6 +16,7 @@ GLB = ROOT / "assets/models/742.glb"
 BLEND = ROOT / "source/blender/742-showcase-v1.0.blend"
 CONFIG_PATH = ROOT / "machines/742/742.configuration.json"
 MECHANISM_PATH = ROOT / "machines/742/mechanism.json"
+EVIDENCE_PATH = ROOT / "docs/research/742/MECHANISM_EVIDENCE.json"
 VERSION = ROOT / "machines/742/version.js"
 EXPECTED_ID = "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"
 TRIANGLE_BUDGET = 60000
@@ -34,7 +35,8 @@ REQUIRED_MECHANICAL_DETAIL = {
     "FrameLevelCylinderBarrel", "FrameLevelCylinderRod", "RearAxleStabilizerBarrel", "RearAxleStabilizerRod",
     "FrontSteerCylinder", "FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
     "RearSteerCylinder", "RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight",
-    "ExtendChain_L", "ExtendChain_R", "RetractChain_C",
+    "FrontSteerBarLeft", "FrontSteerBarRight", "RearSteerBarLeft", "RearSteerBarRight",
+    "ExtendChain_L", "ExtendChain_R", "RetractChain_C", "RetractChain_C_Wrap", "RetractChain_C_Moving",
     "BoomSheave_L", "BoomSheave_R", "RetractSheave_C",
     "BoomAngleSensorBracket", "BoomAngleSensorBody", "BoomAngleSensorLink", "BoomAngleSensorFrameJoint", "BoomAngleSensorBoomJoint",
     "BoomRigidTube_0", "BoomRigidTube_1", "BoomRigidTube_2", "ForkL", "ForkR",
@@ -63,6 +65,11 @@ def main():
     extras = nodes[root_index].get("extras") or {}
     if extras.get("configuration_id") != EXPECTED_ID or extras.get("ownership") != "owned_reconstruction_no_manufacturer_geometry":
         raise RuntimeError("742 GLB identity/ownership metadata drift")
+    if extras.get("solver_contract") != "machines/742/solver.js":
+        raise RuntimeError("742 GLB is not bound to the executable production solver")
+    aliases = json.loads(extras.get("mechanism_aliases") or "{}")
+    if aliases.get("retract_chain") != ["RetractChain_C", "RetractChain_C_Wrap", "RetractChain_C_Moving"]:
+        raise RuntimeError("742 retract-chain canonical aliases drifted")
     for child, expected_parent in REQUIRED_EDGES.items():
         if child not in by_name:
             raise RuntimeError(f"Missing required node: {child}")
@@ -76,6 +83,12 @@ def main():
     missing_detail = sorted(REQUIRED_MECHANICAL_DETAIL - set(by_name))
     if missing_detail:
         raise RuntimeError(f"Missing mechanical detail contracts: {missing_detail}")
+    evidence = json.loads(EVIDENCE_PATH.read_text())
+    evidence_components = {component for system in evidence["systems"]
+                           for claim in system["claims"] for component in claim["components"]}
+    unresolved_components = sorted(evidence_components - set(by_name))
+    if unresolved_components:
+        raise RuntimeError(f"Evidence components do not resolve to exact GLB nodes: {unresolved_components}")
     triangles = 0
     for mesh in document.get("meshes", []):
         for primitive in mesh.get("primitives", []):
@@ -100,6 +113,9 @@ def main():
                 raise RuntimeError(f"{fork_name} axis {axis} is {actual:.4f} m, expected {target}")
     minimum, maximum = visible_bounds(document, blob, nodes, parents)
     envelope = [maximum[i] - minimum[i] for i in range(3)]
+    stow_contract = mechanism["boom"]["runtime_stow"]
+    if abs(envelope[0] - stow_contract["exact_total_length_with_48in_forks_m"]) > stow_contract["total_length_tolerance_m"]:
+        raise RuntimeError(f"Exact runtime-stow total length drift: {envelope[0]:.6f} m")
     if minimum[1] < -0.005:
         raise RuntimeError(f"Ground-running geometry penetrates the floor: {minimum[1]:.4f} m")
     if not 2.34 <= envelope[1] <= 2.55:
@@ -152,7 +168,9 @@ def main():
         "mirror_inclusive_visual_width_m": envelope[2],
         "length_less_forks_m": length_less_forks,
         "fork_mesh_extents_length_width_thickness_m": fork_extents,
+        "exact_runtime_stow_total_length_with_forks_m": envelope[0],
         "mechanical_detail_contracts": sorted(REQUIRED_MECHANICAL_DETAIL),
+        "evidence_components_resolved_to_exact_nodes": sorted(evidence_components),
         "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor"
     }, indent=2, sort_keys=True))
 

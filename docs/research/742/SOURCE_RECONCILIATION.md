@@ -15,6 +15,6 @@ Conflicts and boundaries:
 - The published 2.46 m width is enforced on the base-machine geometry excluding mirrors. The owned left mirror produces an approximately 2.58 m overall visual envelope, which is reported separately rather than folded into the published width.
 - The specification's 8.86 m maximum forward reach and 12.8 m maximum lift height are tested as distinct poses. The reach gate uses a 3-degree/full-extension state and a 24 in load center; the height gate uses 69 degrees with level forks. Neither pose carries a load/capacity claim.
 - Downward carriage tilt is limited to 5 degrees in the presentation so the fork geometry retains flat-floor clearance even at the displayed frame-level extremes. This is a visual collision boundary, not an inferred machine interlock.
-- Frame leveling rotates around an independently reconstructed 0.82 m axle-height longitudinal pivot rather than the ground origin. JLG publishes the function and 10-degree limit, not this pivot coordinate.
+- Frame leveling rotates around an independently reconstructed longitudinal axis at 0.82 m visual height rather than the ground origin. JLG publishes the function and 10-degree limit; the implementation does not label that coordinate as an axle centerline.
 - Manual diagrams are not treated as scale drawings.
 - Official imagery and BIM geometry are not redistributed.

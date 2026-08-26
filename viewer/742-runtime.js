@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.3";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.5";
 
-const ROUTE_RELEASE = "1.5.0";
+const ROUTE_RELEASE = "1.5.5";
 const machine = JLG742_MACHINE;
 if (document.body.dataset.machine !== machine.id) throw new Error(`Equipment route identity mismatch: ${document.body.dataset.machine}`);
 if (document.body.dataset.runtimeRelease !== ROUTE_RELEASE) throw new Error(`742 runtime cache identity mismatch: expected ${ROUTE_RELEASE}`);
@@ -26,7 +26,8 @@ const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 
 const state = { ...machine.stowState };
-const runtime = { errors: 0, frames: 0, fps: "sampling", frameP95Ms: "sampling", loadMs: "pending", selection: "pending" };
+const runtime = { errors: 0, frames: 0, fps: "sampling", frameP95Ms: "sampling", frameWorstMs: "sampling", visibleStalls: 0, loadMs: "pending", selection: "pending" };
+const frameTimes = [];
 let model = null;
 let rig = null;
 let selected = null;
@@ -46,7 +47,7 @@ document.body.dataset.runtimeErrorCount = "0";
 
 function updateDiagnostics() {
   diagnostics.hidden = !diagnosticsEnabled;
-  diagnostics.value = `machine ${machine.id} · config ${machine.configurationId} · source ${document.body.dataset.machineSource || "loading"} · selection ${runtime.selection} · errors ${runtime.errors} · load ${runtime.loadMs} · ${runtime.fps} · p95 ${runtime.frameP95Ms}`;
+  diagnostics.value = `machine ${machine.id} · config ${machine.configurationId} · source ${document.body.dataset.machineSource || "loading"} · selection ${runtime.selection} · errors ${runtime.errors} · load ${runtime.loadMs} · ${runtime.fps} · samples ${frameTimes?.length ?? 0} · p95 ${runtime.frameP95Ms} · worst ${runtime.frameWorstMs} · visible stalls ${runtime.visibleStalls} · profile ${document.body.dataset.renderProfile || "pending"} · motion ${reducedMotion ? "reduced" : "full"}`;
 }
 
 function pixelRatio() {
@@ -78,19 +79,41 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.04;
 app.appendChild(renderer.domElement);
+document.body.dataset.motionProfile = reducedMotion ? "reduced" : "full";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111719);
 scene.fog = new THREE.Fog(0x111719, 14, 28);
 const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.04, 100);
 scene.add(new THREE.HemisphereLight(0xdce9f1, 0x262a25, 2.0));
+let shadowLight = null;
 for (const [color, intensity, position] of [[0xffefd4, 4.0, [-5, 9, 7]], [0x9fc9e2, 2.0, [5, 4, 6]], [0xff8b43, 1.5, [5, 4, -5]]]) {
   const light = new THREE.DirectionalLight(color, intensity);
   light.position.set(...position);
   light.castShadow = intensity > 3;
-  light.shadow.mapSize.set(compact ? 1024 : 2048, compact ? 1024 : 2048);
+  if (light.castShadow) shadowLight = light;
   scene.add(light);
 }
+function applyShadowProfile() {
+  if (!shadowLight) return;
+  const shortLandscape = innerHeight <= 500 && innerWidth > innerHeight;
+  const size = shortLandscape || compact ? 512 : 1024;
+  const coverage = compact && innerHeight > innerWidth ? 16 : 14;
+  if (shadowLight.shadow.mapSize.x !== size) {
+    shadowLight.shadow.mapSize.set(size, size);
+    shadowLight.shadow.map?.dispose();
+    shadowLight.shadow.map = null;
+  }
+  Object.assign(shadowLight.shadow.camera, { left: -coverage, right: coverage, top: coverage, bottom: -coverage, near: 0.5, far: 36 });
+  shadowLight.shadow.camera.updateProjectionMatrix();
+  shadowLight.shadow.bias = -0.00025;
+  shadowLight.shadow.normalBias = 0.025;
+  document.body.dataset.shadowProfile = `${size}px-${coverage}m`;
+  document.body.dataset.renderProfile = shortLandscape ? "short-landscape" : compact && innerHeight > innerWidth ? "portrait" : compact ? "compact" : "desktop";
+  document.body.dataset.viewportCssPx = `${innerWidth}x${innerHeight}`;
+  document.body.dataset.pixelRatio = renderer.getPixelRatio().toFixed(2);
+}
+applyShadowProfile();
 const floor = new THREE.Mesh(new THREE.CircleGeometry(8, 80), new THREE.MeshStandardMaterial({ color: 0x242a29, roughness: 0.96 }));
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
@@ -104,7 +127,7 @@ scene.add(grid);
 function adaptView(view, name = "default") {
   const portrait = compact && innerHeight > innerWidth;
   const shortLandscape = compact && innerWidth > innerHeight && innerHeight <= 500;
-  const scale = portrait ? (name === "default" ? 2.10 : name === "follow" ? 1.24 : 1.14) : shortLandscape ? 1.24 : 1;
+  const scale = portrait ? (name === "default" ? 2.75 : name === "follow" ? 1.24 : 1.14) : shortLandscape ? 1.24 : 1;
   return { ...view, distance: view.distance * scale };
 }
 const defaultView = adaptView(machine.componentView("default", state, compact), "default");
@@ -200,6 +223,9 @@ renderer.domElement.addEventListener("pointercancel", (event) => endPointer(even
 const raycaster = new THREE.Raycaster();
 const pointerNdc = new THREE.Vector2();
 const selectionPriority = new Map(["chassis", "steering", "boom", "hydraulics", "cab", "carriage"].map((component, index) => [component, index]));
+function orderedSelectionIntersections(intersections) {
+  return [...intersections].sort((a, b) => (b.object.userData.selectionPriority - a.object.userData.selectionPriority) || a.distance - b.distance);
+}
 function prepareInteractionVolumes(root) {
   if (new Set(machine.interactionVolumes).size !== machine.interactionVolumes.length) throw new Error("Duplicate semantic selection-volume name");
   const volumes = machine.interactionVolumes.map((name) => {
@@ -227,28 +253,73 @@ function runSelectionVolumeSelfTest() {
   camera.updateMatrixWorld(true);
   const probe = new THREE.Raycaster();
   const center = new THREE.Vector3();
+  const volumeCenters = new Map();
   const passed = selectionVolumes.filter((hit) => {
     new THREE.Box3().setFromObject(hit).getCenter(center);
+    volumeCenters.set(hit, center.clone());
     const projected = center.clone().project(camera);
     probe.setFromCamera(new THREE.Vector2(projected.x, projected.y), camera);
     return probe.intersectObject(hit, false)[0]?.object === hit && Number.isInteger(hit.userData.selectionPriority);
   }).length;
-  document.body.dataset.selectionSelftest = passed === selectionVolumes.length ? "pass" : "fail";
+  let overlappingRayCount = 0;
+  let priorityRayCount = 0;
+  for (let firstIndex = 0; firstIndex < selectionVolumes.length; firstIndex += 1) {
+    for (let secondIndex = firstIndex + 1; secondIndex < selectionVolumes.length; secondIndex += 1) {
+      const first = selectionVolumes[firstIndex];
+      const second = selectionVolumes[secondIndex];
+      const origin = volumeCenters.get(first);
+      const direction = volumeCenters.get(second).clone().sub(origin);
+      const centerDistance = direction.length();
+      if (centerDistance < 0.001) continue;
+      direction.normalize();
+      probe.set(origin.clone().addScaledVector(direction, -50), direction);
+      probe.near = 0;
+      probe.far = centerDistance + 100;
+      const intersections = probe.intersectObjects(selectionVolumes, false);
+      const uniqueHits = [...new Set(intersections.map((intersection) => intersection.object))];
+      if (uniqueHits.length < 2) continue;
+      overlappingRayCount += 1;
+      const resolved = orderedSelectionIntersections(intersections)[0];
+      const expected = uniqueHits.reduce((winner, candidate) => {
+        if (!winner || candidate.userData.selectionPriority > winner.userData.selectionPriority) return candidate;
+        return winner;
+      }, null);
+      if (resolved?.object === expected) priorityRayCount += 1;
+    }
+  }
+  const selfTestPassed = passed === selectionVolumes.length && overlappingRayCount > 0 && priorityRayCount === overlappingRayCount;
+  document.body.dataset.selectionSelftest = selfTestPassed ? "pass" : "fail";
   document.body.dataset.selectionVolumeCount = String(selectionVolumes.length);
-  return passed === selectionVolumes.length;
+  document.body.dataset.selectionOverlapRays = String(overlappingRayCount);
+  document.body.dataset.selectionPriorityRays = String(priorityRayCount);
+  return selfTestPassed;
+}
+function setComponentSelection(component) {
+  selected = component || null;
+  document.querySelectorAll("[data-focus]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.focus === component)));
+  if (component) document.body.dataset.selectedComponent = component;
+  else delete document.body.dataset.selectedComponent;
+}
+function clearComponentSelection() {
+  setComponentSelection(null);
+  delete document.body.dataset.lastSelectionVolume;
+  runtime.selection = selectionVolumes.length ? `${selectionVolumes.length}/${selectionVolumes.length} ready` : "pending";
+  updateDiagnostics();
 }
 function selectAt(clientX, clientY) {
   if (!model || !selectionVolumes.length) return;
   const rect = renderer.domElement.getBoundingClientRect();
   pointerNdc.set((clientX - rect.left) / rect.width * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointerNdc, camera);
-  const hit = raycaster.intersectObjects(selectionVolumes, false)
-    .sort((a, b) => (b.object.userData.selectionPriority - a.object.userData.selectionPriority) || a.distance - b.distance)[0];
+  const hit = orderedSelectionIntersections(raycaster.intersectObjects(selectionVolumes, false))[0];
   const component = hit?.object.userData.component || null;
   runtime.selection = component || "miss";
   if (component) {
     document.body.dataset.lastSelectionVolume = hit.object.name;
+    setComponentSelection(component);
     openInspector(component);
+  } else {
+    setComponentSelection(null);
   }
   updateDiagnostics();
 }
@@ -319,7 +390,7 @@ function framedPosedModelView(component = null) {
   const margin = component
     ? (compact ? 1.12 : 1.10)
     : tallPose
-      ? (compact ? 1.48 : 1.35)
+      ? (compact ? 1.90 : 1.75)
       : widePose
         ? (compact ? 1.42 : 1.85)
       : compact && innerHeight > innerWidth
@@ -343,6 +414,7 @@ function updateFollowView(controlId) {
   orbit.desiredTarget.set(...view.target);
   orbit.desiredDistance = view.distance;
   activeViewName = "follow";
+  clearComponentSelection();
 }
 for (const control of machine.controls) {
   document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
@@ -357,6 +429,7 @@ document.querySelector("#stow").addEventListener("click", () => {
   for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
   document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
   applyControls();
+  clearComponentSelection();
 });
 
 document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEventListener("click", () => {
@@ -367,25 +440,35 @@ document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEve
 
 let showcaseStarted = null;
 let lastShowcaseFrameAt = 0;
-document.querySelector("#showcase")?.addEventListener("click", () => { showcaseStarted = performance.now(); });
+const showcaseButton = document.querySelector("#showcase");
+if (reducedMotion) {
+  showcaseButton.disabled = true;
+  showcaseButton.textContent = "Showcase off";
+  showcaseButton.setAttribute("aria-describedby", "motion-boundary reduced-motion-note");
+}
+showcaseButton?.addEventListener("click", () => {
+  if (!reducedMotion) showcaseStarted = performance.now();
+});
 
 let activeViewName = "default";
 function focusCamera(name) {
   const preset = adaptView(machine.componentView(name, state, compact), name);
   orbit.azimuth = preset.azimuth;
   orbit.polar = preset.polar;
-  const posedComponent = name === "default" ? null : framedPosedModelView(name);
+  const posedComponent = name === "default" ? framedPosedModelView() : framedPosedModelView(name);
   orbit.desiredTarget.set(...(posedComponent || preset).target);
   orbit.desiredDistance = (posedComponent || preset).distance;
   activeViewName = name;
 }
-document.querySelector("#reset-view").addEventListener("click", () => focusCamera("default"));
-document.querySelectorAll("[data-focus]").forEach((button, index) => button.addEventListener("click", () => {
-  document.querySelectorAll("[data-focus]").forEach((candidate) => candidate.setAttribute("aria-pressed", "false"));
-  button.setAttribute("aria-pressed", "true");
+function resetView() {
+  clearComponentSelection();
+  focusCamera("default");
+}
+document.querySelector("#reset-view").addEventListener("click", resetView);
+document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => {
+  setComponentSelection(button.dataset.focus);
   focusCamera(button.dataset.focus);
   openInspector(button.dataset.focus);
-  selected = index;
 }));
 
 const inspector = document.querySelector("#inspector");
@@ -500,7 +583,7 @@ app.addEventListener("keydown", (event) => {
   else if (event.key === "ArrowDown") orbit.polar = Math.min(1.52, orbit.polar + 0.08);
   else if (event.key === "+" || event.key === "=") orbit.desiredDistance = Math.max(distanceLimits.minDistance, orbit.desiredDistance * 0.9);
   else if (event.key === "-" || event.key === "_") orbit.desiredDistance = Math.min(distanceLimits.maxDistance, orbit.desiredDistance * 1.1);
-  else if (event.key === "0") focusCamera("default");
+  else if (event.key === "0") resetView();
   else if (/^[1-7]$/.test(event.key)) document.querySelectorAll("[data-focus]")[Number(event.key) - 1]?.click();
   else return;
   event.preventDefault();
@@ -561,6 +644,7 @@ new GLTFLoader().load(machine.assetUrl, (gltf) => {
   document.body.dataset.machineSource = "load-failed";
 });
 
+let skipNextVisibleFrame = false;
 function animate(now) {
   requestAnimationFrame(animate);
   if (document.hidden) {
@@ -570,10 +654,12 @@ function animate(now) {
   }
   const renderedInterval = now - lastFrame;
   const delta = Math.min(renderedInterval / 1000, 0.05);
-  if (renderedInterval >= 4 && renderedInterval < 250) {
+  if (!skipNextVisibleFrame && renderedInterval >= 4) {
     frameTimes.push(renderedInterval);
     if (frameTimes.length > 180) frameTimes.shift();
+    if (renderedInterval >= 250) runtime.visibleStalls += 1;
   }
+  skipNextVisibleFrame = false;
   lastFrame = now;
   if (!pointers.size && !reducedMotion) {
     orbit.azimuth += orbit.velocityAzimuth;
@@ -581,7 +667,7 @@ function animate(now) {
     orbit.velocityAzimuth *= 0.88;
     orbit.velocityPolar *= 0.88;
   }
-  if (showcaseStarted !== null && machine.showcase) {
+  if (showcaseStarted !== null && machine.showcase && !reducedMotion) {
     const elapsed = (now - showcaseStarted) / (machine.showcaseDurationMs ?? 14000);
     if (elapsed >= 1) showcaseStarted = now;
     Object.assign(state, machine.showcase(elapsed % 1));
@@ -601,14 +687,17 @@ function animate(now) {
     if (frameTimes.length) {
       const sorted = [...frameTimes].sort((a, b) => a - b);
       runtime.frameP95Ms = `${sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))].toFixed(1)} ms`;
+      runtime.frameWorstMs = `${sorted.at(-1).toFixed(1)} ms`;
       document.body.dataset.frameP95Ms = runtime.frameP95Ms;
+      document.body.dataset.frameWorstMs = runtime.frameWorstMs;
+      document.body.dataset.visibleStallCount = String(runtime.visibleStalls);
+      document.body.dataset.frameSampleCount = String(frameTimes.length);
     }
     runtime.frames = 0;
     fpsStart = now;
     updateDiagnostics();
   }
 }
-const frameTimes = [];
 requestAnimationFrame(animate);
 addEventListener("resize", () => {
   compact = mobileQuery.matches;
@@ -616,6 +705,7 @@ addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setPixelRatio(pixelRatio());
   renderer.setSize(innerWidth, innerHeight);
+  applyShadowProfile();
   if (activeViewName === "follow") {
     updateFollowView("resize");
   } else {
@@ -629,6 +719,9 @@ document.addEventListener("visibilitychange", () => {
   lastFrame = performance.now();
   fpsStart = lastFrame;
   runtime.frameP95Ms = "sampling";
+  runtime.frameWorstMs = "sampling";
+  document.body.dataset.frameSampleCount = "0";
+  skipNextVisibleFrame = true;
   updateDiagnostics();
 });
 setControlOutputs();

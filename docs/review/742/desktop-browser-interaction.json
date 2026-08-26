@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "742-gate-observation",
+  "gate": "desktop_browser_interaction",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
+  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
+  "environment": {
+    "browser": "Codex in-app Browser with Chromium engine",
+    "os": "macOS 26.5.2 build 25F84",
+    "viewport_css_px": [1280, 720]
+  },
+  "observations": {
+    "dom_dataset": {
+      "machine_source": "glb-validated",
+      "render_profile": "desktop",
+      "pixel_ratio": 1.0,
+      "shadow_profile": "1024px-14m",
+      "frame_sample_count": 180,
+      "frame_p95_ms": 17.6,
+      "frame_worst_ms": 33.3,
+      "visible_stall_count": 0,
+      "selection_overlap_rays": 15,
+      "selection_priority_rays": 15,
+      "runtime_error_count": 0
+    },
+    "interaction_transcript": [
+      {"action": "load /742/", "observed": "validated GLB source; complete stowed machine visible; zero runtime errors"},
+      {"action": "exercise five mechanism sliders and Circle, Crab, Front steering modes", "observed": "all controls enabled and engineering outputs updated"},
+      {"action": "set maximum pose then invoke Reset View", "observed": "6.83 x 14.07 x 2.58 m posed bounds framed at 37.73 m; complete machine visible after convergence"},
+      {"action": "select Boom then start follow and reset", "observed": "Boom aria-pressed true on selection and false after follow/reset"}
+    ]
+  },
+  "boundary": "Local Chromium interaction transcript and DOM dataset only; no deployment or physical-device claim."
+}
