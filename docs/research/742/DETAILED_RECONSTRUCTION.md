@@ -1,7 +1,7 @@
 # Detailed reconstruction checklist
 
 - Four rough-terrain tire assemblies with independent tread blocks, wheel faces, hubs, and lug hardware
-- Front and rear steer pivots, axle housings, one fixed-barrel double-ended steering cylinder plus separate invariant left/right steering bars per axle, mirrored rear circle-steer geometry, and explicitly measured residual crab toe
+- Front and rear steer pivots, axle housings, one fixed axle-mounted double-rod/through-rod steering cylinder plus two invariant tie bars per axle, one static trapezoid shared by all modes, source-correct rear hydraulic phasing/hold semantics, and explicitly measured crab toe and front/circle scrub diagnostics
 - Chassis rails, counterweight, belly pans, tow points, steps, fenders, lights, grille, and layered engine hood
 - Open ROPS/FOPS cab with glazing, seat, steering wheel, dashboard, joystick, pedals, mirrors, roof guard, and handrails
 - Three nested boom sections with wear bands and pins; fixed-length barrels with variable rod exposure for the lift, telescope, compensation-master, head-tilt, frame-level, and rear-stabilization cues; one continuous extend-chain assembly presented by two parallel tangent legs; one separate continuous retract-chain assembly with a tangent U-wrap; fixed-total articulated lift and inter-section boom service-line cues; and a frame-mounted rotary boom-angle sensor with invariant crank and connecting rod

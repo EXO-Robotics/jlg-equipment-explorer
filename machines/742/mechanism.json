@@ -27,10 +27,11 @@
     "wheelbase_m": 3.42,
     "wheel_center_track_m": 2.1005,
     "published_outside_turning_radius_m": 3.66,
-    "linkage": "one fixed double-ended cylinder barrel, one continuous translated opposed-rod rack, and two invariant steering bars per axle",
-    "reconstructed_geometry": {"steering_bar_length_m": 0.3309588579567261, "rack_joint_span_m": 1.735341218434296, "rack_maximum_shift_m": 0.22052192595337095, "crab_rack_scale": 0.15, "front_mode_rack_scale": 0.15},
-    "acceptance": {"maximum_circle_icr_relative_spread": 0.005, "maximum_crab_residual_toe_degrees": 2.1, "maximum_front_mode_icr_relative_spread": 0.05},
-    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit. Wheel-center track, rack stroke, steering-arm anchors, crab/front-mode rack scales, and the resulting linkage curves are reconstructed. Front-only and crab presentations use conservative 15 percent rack commands; these are not claimed factory controller limits or calibrations. Exact nonzero crab parallelism is incompatible with this owned continuous-rack/fixed-bar Ackermann topology, so residual toe is measured rather than hidden. The published outside-radius reference locus and tire/body swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the reconstructed swept envelope"
+    "linkage": "per axle: one fixed axle-mounted double-acting double-rod/through-rod cylinder and one invariant tie bar from each rod end to an integrated knuckle arm; the same static trapezoid is used in every mode",
+    "reconstructed_geometry": {"steering_arm_rearward_m": 0.13739354211066662, "steering_arm_inward_m": -0.0909690404422484, "steering_bar_length_m": 0.5634413306323492, "rack_half_width_m": 0.6504575864573594, "rack_joint_span_m": 1.3009151729147188, "rack_longitudinal_offset_m": -0.35584108351910215, "rack_maximum_shift_m": 0.15812269946250607},
+    "mode_hydraulics": {"circle": "rear rack opposite hydraulic phase", "crab": "rear rack same hydraulic phase", "front": "rear rack blocked and held at its operator-aligned position"},
+    "acceptance": {"minimum_circle_wheel_angle_degrees": 35, "minimum_front_wheel_angle_degrees": 35, "minimum_crab_wheel_angle_degrees": 20, "maximum_dense_crab_residual_toe_degrees": 1, "maximum_rigid_bar_length_drift_m": 1e-12, "maximum_rod_joint_span_drift_m": 1e-12},
+    "authority": "Parts Figs 5-45 and 5-71 establish one fixed axle-mounted through-rod cylinder (PN 7029528) and two tie bars (PN 70026799) per axle; hydraulic Sheet 1 and the operator alignment procedure establish opposite-phase rear motion for circle, held rear position for front, and same-phase rear motion for crab. The same full-travel reconstructed static linkage is therefore used in every mode. Rack travel, pickup coordinates, static toe, and the resulting scrub curve are unresolved because axle publication 31200162 is not admitted. The dense maximum within-axle toe is measured and gated, while front/circle ICR residuals remain diagnostics rather than manufacturer Ackermann claims. The 55 degree service limit is reached by at least one wheel but is not bound by evidence to inner versus outer or to the published 3.66 m radius test. The published radius reference locus, mode, tolerance, inflation, and tire/body envelope convention remain unresolved and are reported separately from reconstructed wheel-center and swept-envelope values"
   },
   "service_lines": {
     "lift_hose_total_length_m": 3.21,
@@ -38,7 +39,8 @@
     "boom_loop_reconstructed_bend_radius_m": 0.14,
     "boom_loop_arc_segments": 8,
     "minimum_boom_hose_to_rigid_tube_surface_clearance_m": 0.005,
-    "authority": "parts/service sources establish flexible auxiliary lines inside or below the boom; exact hose lengths, bend guides and anchors are unresolved reconstructed presentation coordinates. The curved-loop radius and clearance are owned visual collision boundaries, not manufacturer hose specifications"
+    "maximum_adjacent_chord_angle_degrees": 22.5,
+    "authority": "parts/service sources establish flexible auxiliary lines inside or below the boom; exact hose lengths, bend guides and anchors are unresolved reconstructed presentation coordinates. Each displayed boom route uses tangent straight legs and an eight-chord 0.140 m semicircular return with an exact reconstructed 5.000 m centerline. The bend radius, centerline length, and analytically measured capsule clearance are owned visual boundaries, not manufacturer hose specifications"
   },
   "validated_actual_glb_measurements": {
     "maximum_lift_fork_load_surface_m": 12.798856,

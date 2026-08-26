@@ -6,10 +6,10 @@ export const JLG742_MECHANISM = Object.freeze({
   carriageTiltDown: radians(5), carriageTiltUp: radians(12), steerMaximum: radians(55),
   wheelbase: 3.42, wheelCenterTrack: 2.1005, frameLevelMaximum: radians(10),
   extendSheaveRadius: .105, retractSheaveRadius: .095, chainCenterlineOffset: .018, chainWrapSegments: 8,
-  steeringArmRearward: .38700586914887836, steeringArmInward: 0,
-  steeringRackHalfWidth: .867670609217148, steeringRackLongitudinalOffset: -.16952361304189612,
-  steeringRackMaximumShift: .22052192595337095, steeringBarLength: .3309588579567261,
-  steeringCrabRackScale: .15, steeringFrontRackScale: .15, boomHoseLoopRadius: .14, boomHoseArcSegments: 8, boomHoseTotalLength: 5.00,
+  steeringArmRearward: .13739354211066662, steeringArmInward: -.0909690404422484,
+  steeringRackHalfWidth: .6504575864573594, steeringRackLongitudinalOffset: -.35584108351910215,
+  steeringRackMaximumShift: .15812269946250607, steeringBarLength: .5634413306323492,
+  boomHoseLoopRadius: .14, boomHoseArcSegments: 8, boomHoseTotalLength: 5.00,
   liftHoseGuideOffset: Object.freeze([.15,-.08,0]), liftHoseLegLength: 1.52,
   barrelLengths: Object.freeze({ lift: 1.65, telescope: 2.10, compensation: 0.65,
     carriageTilt: 0.82, frameLevel: 0.60, rearAxleStabilizer: 0.34 }), rodOverlap: 0.08,
@@ -45,8 +45,8 @@ function steeringAngleFromRack(side,rackShift){
 }
 function axleWheelAngles(localCommand,facing){const rackShift=localCommand*JLG742_MECHANISM.steeringRackMaximumShift;return Object.freeze({left:facing*steeringAngleFromRack(-1,rackShift),right:facing*steeringAngleFromRack(1,rackShift),rackShift});}
 function steeringCommands(steerCommand,mode){
-  if(mode==="crab")return Object.freeze({front:steerCommand*JLG742_MECHANISM.steeringCrabRackScale,rear:-steerCommand*JLG742_MECHANISM.steeringCrabRackScale});
-  if(mode==="front")return Object.freeze({front:steerCommand*JLG742_MECHANISM.steeringFrontRackScale,rear:0});
+  if(mode==="crab")return Object.freeze({front:steerCommand,rear:-steerCommand});
+  if(mode==="front")return Object.freeze({front:steerCommand,rear:0});
   return Object.freeze({front:steerCommand,rear:mode==="circle"?steerCommand:0});
 }
 function wheelAngles(steerCommand,mode){
@@ -60,8 +60,9 @@ function addArticulatedHose(beams,prefix,start,end,guideOffset,legLength){
   beams[`${prefix}_0`]=[start,guide];beams[`${prefix}_1`]=[guide,elbow];beams[`${prefix}_2`]=[elbow,end];
 }
 function addHoseULoop(beams,prefix,start,end,totalLength,radius){
-  const centerY=(start[1]+end[1])/2,upperY=centerY+radius,lowerY=centerY-radius;
-  const routeLength=(x)=>Math.hypot(x-start[0],upperY-start[1])+Math.PI*radius+Math.hypot(x-end[0],lowerY-end[1]);
+  const centerY=(start[1]+end[1])/2,upperY=centerY+radius,lowerY=centerY-radius,
+    arcChordLength=2*radius*JLG742_MECHANISM.boomHoseArcSegments*Math.sin(Math.PI/(2*JLG742_MECHANISM.boomHoseArcSegments));
+  const routeLength=(x)=>Math.abs(x-start[0])+arcChordLength+Math.abs(x-end[0]);
   let low=Math.max(start[0],end[0]),high=low+totalLength;
   if(routeLength(low)>totalLength)throw new Error(`${prefix} cannot store its reconstructed fixed hose length`);
   for(let index=0;index<80;index+=1){const middle=(low+high)/2;if(routeLength(middle)<totalLength)low=middle;else high=middle;}
@@ -81,7 +82,7 @@ export function solve742RigGeometry(input,authored={midX:.12,flyX:.12}){const st
   cylinders.telescope=fixedCylinder(beams,"TelescopeCylinderBarrel","TelescopeCylinderRod",[.55,-.22,0],[3.36+state.midTranslation,-.22,0],JLG742_MECHANISM.barrelLengths.telescope);
   const compensationBase=[-2,1.5,-.31],compensationAnchor=add(pivot,rotateBoom([.6226421237161451,.2334907963935544,-.31],state.boomAngle));cylinders.compensation=fixedCylinder(beams,"CompensationCylinderBarrel","CompensationCylinderRod",compensationBase,compensationAnchor,JLG742_MECHANISM.barrelLengths.compensation);
   const midX=authored.midX+state.midTranslation,flyX=authored.flyX+state.flyTranslation,movingHoseEndX=midX+.70;
-  [-.40,-.34,.34,.40].forEach((lateral,lane)=>{const start=[.15,-.40,lateral],end=[movingHoseEndX,-.40,lateral];addHoseULoop(beams,`BoomHose_${lane}`,start,end,JLG742_MECHANISM.boomHoseTotalLength,JLG742_MECHANISM.boomHoseLoopRadius);});
+  [-.40,-.34,.34,.40].forEach((lateral,lane)=>{const start=[.15,-.26,lateral],end=[movingHoseEndX,-.54,lateral];addHoseULoop(beams,`BoomHose_${lane}`,start,end,JLG742_MECHANISM.boomHoseTotalLength,JLG742_MECHANISM.boomHoseLoopRadius);});
   const extendSheave=[midX+4.8,-.22],extendAttachmentX=midX+flyX+.70;
   for(const[side,lateral]of[["L",-.24],["R",.24]]){const prefix=`ExtendChain_${side}`,radius=JLG742_MECHANISM.extendSheaveRadius+JLG742_MECHANISM.chainCenterlineOffset,wrap=addSemicircle(beams,`${prefix}_Wrap`,extendSheave,radius,lateral,true);beams[prefix]=[[.4,extendSheave[1]+radius,lateral],wrap[0]];beams[`${prefix}_Moving`]=[wrap.at(-1),[extendAttachmentX,extendSheave[1]-radius,lateral]];}
   const retractSheave=[midX+.15,-.34],retractRadius=JLG742_MECHANISM.retractSheaveRadius+JLG742_MECHANISM.chainCenterlineOffset,retractAttachmentX=midX+flyX+.7,retractWrap=addSemicircle(beams,"RetractChain_C_Wrap",retractSheave,retractRadius,0,false);beams.RetractChain_C=[[5.1,retractSheave[1]+retractRadius,0],retractWrap[0]];beams.RetractChain_C_Moving=[retractWrap.at(-1),[retractAttachmentX,retractSheave[1]-retractRadius,0]];

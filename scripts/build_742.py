@@ -251,7 +251,7 @@ def build():
     root["model"] = "JLG 742"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2411"
-    root["release"] = "1.3.0"
+    root["release"] = CONFIG["target_release"]
     root["units"] = "meters"
     root["ownership"] = "owned_reconstruction_no_manufacturer_geometry"
     root["disclaimer"] = "visual reconstruction; not load, stability, service, training, or safety authority"

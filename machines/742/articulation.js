@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { JLG742_MECHANISM, solve742RigGeometry, solve742State } from "./solver.js?v=1.1.6";
+import { JLG742_MECHANISM, solve742RigGeometry, solve742State } from "./solver.js?v=1.1.7";
 
 export { JLG742_MECHANISM, solve742RigGeometry, solve742State };
 

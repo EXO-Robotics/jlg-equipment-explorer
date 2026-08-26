@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { JLG742_CAMERAS, jlg742ComponentView, jlg742FollowView } from "./cameras.js?v=1.1.3";
 import { JLG742_COMPONENTS } from "./inspector.js?v=1.1.3";
-import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.6";
-import { JLG742_GLB_URL, JLG742_RELEASE } from "./version.js?v=1.1.4";
+import { apply742State, create742Rig, JLG742_MECHANISM, solve742State } from "./articulation.js?v=1.1.7";
+import { JLG742_GLB_URL, JLG742_RELEASE } from "./version.js?v=1.1.5";
 
 export const JLG742_MACHINE = Object.freeze({
   id: "742",
@@ -45,17 +45,18 @@ export const JLG742_MACHINE = Object.freeze({
     const tiltDegrees = state.tilt < 0
       ? state.tilt * degrees(JLG742_MECHANISM.carriageTiltDown)
       : state.tilt * degrees(JLG742_MECHANISM.carriageTiltUp);
+    const solved = solve742State(state);
+    const wheelHeadings = Object.values(solved.wheelAngles).map((value) => degrees(value));
+    const maximumHeading = Math.max(...wheelHeadings.map(Math.abs));
     const stowed = state.lift < 0.01 && state.telescope < 0.01 && Math.abs(state.tilt) < 0.01 && Math.abs(state.steer) < 0.01 && Math.abs(state.level) < 0.01;
     return Object.freeze({
       outputs: Object.freeze({
         lift: displayDegrees(angle), telescope: `${extension.toFixed(2)} m visual`,
-        tilt: `${Math.round(tiltDegrees)}°`, steer: Math.abs(state.steer) < 0.01 ? "Center" : `${Math.round(Math.abs(state.steer) * degrees(JLG742_MECHANISM.steerMaximum))}° ${state.steer < 0 ? "L" : "R"}`,
+        tilt: `${Math.round(tiltDegrees)}°`, steer: Math.abs(state.steer) < 0.01 ? "Center" : `${displayDegrees(maximumHeading)} ${state.steer < 0 ? "L" : "R"} max wheel · reconstructed`,
         level: Math.abs(state.level) < 0.01 ? "Level" : `${Math.round(Math.abs(state.level) * degrees(JLG742_MECHANISM.frameLevelMaximum))}° ${state.level < 0 ? "L" : "R"}`,
       }),
       zone: stowed ? "stowed" : state.telescope > 0.75 ? "extended" : "active",
-      status: stowed ? "Stowed study" : state.steerMode === "front"
-        ? "front steer · reconstructed limited-rack study"
-        : `${state.steerMode} steer · visual mechanism active`,
+      status: stowed ? "Stowed study" : `${state.steerMode} steer · full static-linkage study`,
     });
   },
   showcase(t) {
@@ -70,7 +71,10 @@ export const JLG742_MACHINE = Object.freeze({
       tilt: Math.sin(t*Math.PI*2) * 0.35,
       steer: Math.sin(t*Math.PI*4) * 0.55,
       level: Math.sin(t*Math.PI*2) * 0.38,
-      steerMode: t < 0.34 ? "circle" : t < 0.67 ? "crab" : "front",
+      // The source documents require manual wheel alignment before changing
+      // modes. Both showcase transitions therefore occur at exact zeroes of
+      // the steering waveform, avoiding a synthetic rear-rack snap.
+      steerMode: t < 0.25 ? "circle" : t < 0.50 ? "crab" : "front",
     };
   },
 });

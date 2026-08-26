@@ -43,6 +43,15 @@ def proof_beam(name, start, end, radius, material):
     return target
 
 
+def proof_sphere(name, location, radius, material):
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=10, radius=radius,
+                                        location=location)
+    target = bpy.context.object
+    target.name = name
+    target.data.materials.append(material)
+    return target
+
+
 def proof_label(name, body, location, size, material):
     bpy.ops.object.text_add(location=location, rotation=(math.pi / 2, 0, 0))
     target = bpy.context.object
@@ -168,36 +177,79 @@ steer_cutaway = [
 for obj in steer_cutaway:
     obj.hide_render = True
 camera.data.lens = 58
-camera.location = (0.0, 0.0, 8.8)
+camera.location = (0.0, 0.0, 10.4)
 point_at(camera, (0.0, 0.0, 0.58))
+plan_proof_mat = bpy.data.materials.new("SteeringConstructionOrange")
+plan_proof_mat.diffuse_color = (1.0, .12, .01, 1.0)
+plan_proof_mat.use_nodes = True
+plan_proof_mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (1.0, .02, .002, 1.0)
+
+
+def steering_plan_construction(pose, include_front_icr=False, rear_neutral=False):
+    overlays = []
+    half_track, half_base = 2.1005 / 2, 3.42 / 2
+    for corner, angle in pose["state"]["wheelAngles"].items():
+        pivot = bpy.data.objects[f"SteerPivot_{corner}"].matrix_world.translation
+        overlays.append(proof_sphere(f"Proof_{corner}_Pivot", pivot + Vector((0, 0, .08)),
+                                     .065, plan_proof_mat))
+        if abs(angle) > 1e-8 and (include_front_icr or pose["state"]["steerMode"] == "circle"):
+            side = -half_track if corner.endswith("L") else half_track
+            axle_x = half_base if corner.startswith("F") else -half_base
+            wheelbase = 3.42 if include_front_icr else 1.71
+            center_lateral = side + wheelbase / math.tan(angle) if include_front_icr else side + axle_x / math.tan(angle)
+            icr = Vector((0, center_lateral, pivot.z + .08))
+            overlays.append(proof_beam(f"Proof_{corner}_ICRLine", pivot + Vector((0, 0, .08)),
+                                       icr, .012, plan_proof_mat))
+            overlays.append(proof_sphere(f"Proof_{corner}_ICR", icr, .05, plan_proof_mat))
+    if rear_neutral:
+        for corner in ("RL", "RR"):
+            pivot = bpy.data.objects[f"SteerPivot_{corner}"].matrix_world.translation
+            overlays.append(proof_beam(f"Proof_{corner}_HeldHeading",
+                                       pivot + Vector((-.30, 0, .08)),
+                                       pivot + Vector((.30, 0, .08)), .015, plan_proof_mat))
+    return overlays
+
+
+circle_pose = solved_pose(0, 0, steer=1.0, steer_mode="circle")
+circle_overlays = steering_plan_construction(circle_pose)
 circle_label = proof_label("Proof_CircleMode",
-                           "CIRCLE / FL 27.477 / FR 55.000 / RL -27.477 / RR -55.000 deg\nFOUR-WHEEL ICR RELATIVE SPREAD 0.434%",
-                           (0, 0, 1.72), .105, steering_label_mat)
+                           "CIRCLE / FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg\nSTATIC LINKAGE / TWO ACTUAL ICR CONSTRUCTIONS\nSCRUB DIAGNOSTIC 93.466% — NOT FACTORY ACKERMANN",
+                           (0, -1.45, 1.72), .076, steering_label_mat)
 circle_label.rotation_mode = "XYZ"; circle_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-circle-steering-plan.png")
 bpy.ops.render.render(write_still=True)
 bpy.data.objects.remove(circle_label, do_unlink=True)
+for target in circle_overlays:
+    bpy.data.objects.remove(target, do_unlink=True)
 pose_steering("crab", 1.0)
+crab_pose = solved_pose(0, 0, steer=1.0, steer_mode="crab")
+crab_overlays = steering_plan_construction(crab_pose)
 crab_label = proof_label("Proof_CrabMode",
-                         "CRAB / ACTUAL FL 4.677 / FR 5.181 / RL 5.181 / RR 4.677 deg\n15% RECONSTRUCTED RACK / RESIDUAL TOE 0.504 deg",
-                         (0, 0, 1.72), .105, steering_label_mat)
+                         "CRAB / FL 55.000 / FR 54.914 / RL 54.914 / RR 55.000 deg\nSAME STATIC LINKAGE / FULL-POSE TOE 0.086 deg / DENSE MAX 0.753 deg",
+                         (0, -1.45, 1.72), .080, steering_label_mat)
 crab_label.rotation_mode = "XYZ"; crab_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-crab-steering-plan.png")
 bpy.ops.render.render(write_still=True)
 bpy.data.objects.remove(crab_label, do_unlink=True)
+for target in crab_overlays:
+    bpy.data.objects.remove(target, do_unlink=True)
 pose_steering("front", 1.0)
 front_label_mat = bpy.data.materials.new("FrontModeProofLabel")
 front_label_mat.diffuse_color = (.05, .012, .006, 1.0)
 front_label_mat.use_nodes = True
 front_label_mat.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (.05, .012, .006, 1.0)
+front_pose = solved_pose(0, 0, steer=1.0, steer_mode="front")
+front_overlays = steering_plan_construction(front_pose, include_front_icr=True, rear_neutral=True)
 front_label = proof_label("Proof_FrontModeBoundary",
-                          "FRONT-ONLY / 15% RECONSTRUCTED RACK\nMAX INNER 5.181 deg / ICR FIT 4.869%",
-                          (0, 0, 1.72), .12, front_label_mat)
+                          "FRONT / FL 55.000 / FR 54.914 deg / REAR HELD ALIGNED\nFULL STATIC-LINKAGE TRAVEL / ACTUAL FRONT ICR CONSTRUCTIONS\nSCRUB DIAGNOSTIC 61.060% — NOT FACTORY ACKERMANN",
+                          (0, -1.45, 1.72), .076, front_label_mat)
 front_label.rotation_mode = "XYZ"
 front_label.rotation_euler = (0, 0, 0)
-scene.render.filepath = str(OUTPUT_DIR / "742-front-steering-limited-plan.png")
+scene.render.filepath = str(OUTPUT_DIR / "742-front-steering-plan.png")
 bpy.ops.render.render(write_still=True)
 bpy.data.objects.remove(front_label, do_unlink=True)
+for target in front_overlays:
+    bpy.data.objects.remove(target, do_unlink=True)
 pose_circle_steering(1.0)
 steer_names = {"FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
                "FrontSteerBarLeft", "FrontSteerBarRight"}
@@ -210,36 +262,61 @@ steer_occluders = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURV
 for obj in steer_occluders:
     obj.hide_render = True
 bpy.context.view_layer.update()
+front_marker_objects = []
+for marker_name, beam_name, endpoint_index in (
+    ("Proof_FrontRackLeft", "FrontSteerCylinderRodLeft", 1),
+    ("Proof_FrontRackRight", "FrontSteerCylinderRodRight", 1),
+    ("Proof_FrontKnuckleLeft", "FrontSteerBarLeft", 1),
+    ("Proof_FrontKnuckleRight", "FrontSteerBarRight", 1),
+):
+    beam = bpy.data.objects[beam_name]
+    half = float(beam.get("authored_length_m")) / 2
+    endpoint = beam.matrix_world @ Vector((0, 0, -half if endpoint_index == 0 else half))
+    front_marker_objects.append(proof_sphere(marker_name, endpoint, .055, plan_proof_mat))
 steer_center = sum((bpy.data.objects[name].matrix_world.translation for name in steer_names), Vector()) / len(steer_names)
 camera.data.lens = 55
 camera.location = (6.5, 0.0, 2.2)
 point_at(camera, steer_center)
 scene.render.filepath = str(OUTPUT_DIR / "742-front-double-ended-steer-cylinder-cutaway.png")
 bpy.ops.render.render(write_still=True)
+for target in front_marker_objects:
+    bpy.data.objects.remove(target, do_unlink=True)
 for obj in steer_occluders:
     obj.hide_render = False
 rear_keep = {"RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight",
-             "RearSteerBarLeft", "RearSteerBarRight", "RearAxle", "RearDifferential",
-             "RearAxleTubeLeft", "RearAxleTubeRight", "RearPinionFlange",
+             "RearSteerBarLeft", "RearSteerBarRight",
              "SteerPivot_RL", "SteerPivot_RR"}
-rear_visual_prefixes = ("Tire_R", "Tread_R", "WheelRimOuter_R", "WheelHub_R",
-                        "PlanetaryCap_R", "Lug_R")
+rear_visual_prefixes = ()
 rear_occluders = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURVE", "FONT"}
                   and obj.get("component") == "steering" and obj.name not in rear_keep
                   and not obj.name.startswith(rear_visual_prefixes)]
 for obj in rear_occluders:
     obj.hide_render = True
-rear_center = sum((bpy.data.objects[name].matrix_world.translation for name in rear_keep), Vector()) / len(rear_keep)
-camera.data.lens = 52
-camera.location = rear_center + Vector((0.0, 0.0, 8.8))
+rear_marker_objects = []
+for marker_name, beam_name, endpoint_index in (
+    ("Proof_RearRackLeft", "RearSteerCylinderRodLeft", 1),
+    ("Proof_RearRackRight", "RearSteerCylinderRodRight", 1),
+    ("Proof_RearKnuckleLeft", "RearSteerBarLeft", 1),
+    ("Proof_RearKnuckleRight", "RearSteerBarRight", 1),
+):
+    beam = bpy.data.objects[beam_name]
+    half = float(beam.get("authored_length_m")) / 2
+    endpoint = beam.matrix_world @ Vector((0, 0, -half if endpoint_index == 0 else half))
+    rear_marker_objects.append(proof_sphere(marker_name, endpoint, .055, plan_proof_mat))
+rear_center = (bpy.data.objects["SteerPivot_RL"].matrix_world.translation +
+               bpy.data.objects["SteerPivot_RR"].matrix_world.translation) / 2
+camera.data.lens = 58
+camera.location = rear_center + Vector((0.0, 0.0, 6.4))
 point_at(camera, rear_center)
 rear_label = proof_label("Proof_RearSteering",
-                         "MIRRORED REAR RACK / INVARIANT BARS / ENDPOINT CLOSURE 0",
-                         rear_center + Vector((0, 0, 1.55)), .105, steering_label_mat)
+                         "REAR AXLE / FIXED THROUGH-ROD RACK\nTWO RIGID TIE BARS / FOUR VISIBLE JOINTS",
+                         rear_center + Vector((0, -.80, 1.55)), .072, steering_label_mat)
 rear_label.rotation_mode = "XYZ"; rear_label.rotation_euler = (0, 0, 0)
 scene.render.filepath = str(OUTPUT_DIR / "742-rear-steering-linkage.png")
 bpy.ops.render.render(write_still=True)
 bpy.data.objects.remove(rear_label, do_unlink=True)
+for target in rear_marker_objects:
+    bpy.data.objects.remove(target, do_unlink=True)
 for obj in rear_occluders:
     obj.hide_render = False
 for obj in steer_cutaway:
@@ -321,12 +398,12 @@ if "Emission Color" in label_bsdf.inputs:
     label_bsdf.inputs["Emission Strength"].default_value = 2.0
 max_lift_forks = mesh_world_points(("ForkL", "ForkR"))
 max_lift_surface = VALIDATED_GLB["maximum_lift_fork_load_surface_m"]
-level_datum = proof_beam("Proof_MaxLiftForkLevel", (2.2, -1.1, max_lift_surface + .08),
-                         (5.2, -1.1, max_lift_surface + .08), .022, datum_mat)
-lift_ground_datum = proof_beam("Proof_MaxLiftGround", (2.2, -1.1, .04),
-                               (5.2, -1.1, .04), .022, datum_mat)
-lift_dimension = proof_beam("Proof_MaxLiftDimension", (5.05, -1.1, .04),
-                            (5.05, -1.1, max_lift_surface + .08), .018, datum_mat)
+level_datum = proof_beam("Proof_MaxLiftForkLevel", (2.2, -1.1, max_lift_surface),
+                         (5.2, -1.1, max_lift_surface), .022, datum_mat)
+lift_ground_datum = proof_beam("Proof_MaxLiftGround", (2.2, -1.1, 0),
+                               (5.2, -1.1, 0), .022, datum_mat)
+lift_dimension = proof_beam("Proof_MaxLiftDimension", (5.05, -1.1, 0),
+                            (5.05, -1.1, max_lift_surface), .018, datum_mat)
 lift_labels = [
     proof_label("Proof_MaxLiftValue", f"VALIDATED POSED-GLB FORK LOAD SURFACE  {max_lift_surface:.6f} m",
                 (3.55, -1.12, max_lift_surface + .38), .24, label_mat),

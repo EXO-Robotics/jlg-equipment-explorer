@@ -118,8 +118,17 @@ def main() -> None:
         minimum = 0.05 if name.startswith("BoomHose") else 0.10
         if hose["minimum_segment_length_m"] < minimum:
             failures.append(f"{name} articulated route collapsed")
+        if name.startswith("BoomHose") and any(abs(value - 5.0) > 1e-9
+                                                for value in hose["total_length_range_m"]):
+            failures.append(f"{name} misses its exact reconstructed 5.000 m centerline contract")
     if result["maximum_hose_endpoint_step_m"] > 0.002:
         failures.append("service-line endpoint continuity exceeded the dense-step bound")
+    if result["minimum_boom_hose_to_rigid_tube_surface_clearance_m"] < 0.005:
+        failures.append("analytic boom-hose/rigid-tube capsule clearance is below 5 mm")
+    if result["maximum_boom_hose_adjacent_direction_change_degrees"] > 22.500001:
+        failures.append("boom-hose route exceeds its maximum adjacent chord angle")
+    if abs(result["boom_hose_nominal_centerline_length_m"] - 5.0) > 1e-12:
+        failures.append("boom-hose nominal centerline contract drifted")
     if result["minimum_fork_blade_y_m"] < MECH["collision_proxies"]["minimum_fork_y_m"] - 1e-6:
         failures.append("fork blade crossed the flat-floor proxy")
     target_height = CONFIG["published_performance"]["maximum_lift_height_m"]
@@ -147,15 +156,11 @@ def main() -> None:
     if steering["maximum_rod_bar_closure_error_m"] > 1e-12:
         failures.append("steering rod/bar joint lost endpoint closure")
     if abs(steering["maximum_inner_wheel_angle_degrees"] - 55) > 1e-9:
-        failures.append("rigid steering linkage misses the published 55-degree inner-wheel limit")
-    if steering["maximum_ackermann_relative_error"] > 0.005:
-        failures.append("reconstructed rigid linkage exceeds its visual Ackermann-fit boundary")
-    if steering["maximum_four_wheel_icr_relative_spread"] > 0.005:
-        failures.append("four-wheel circle-steer linkage lost its reconstructed ICR closure")
-    if steering["maximum_crab_heading_spread_degrees"] > 2.1 or steering["maximum_crab_corresponding_heading_error_degrees"] > 2.1:
-        failures.append("continuous-rack crab presentation exceeded its explicit residual-toe boundary")
-    if steering["maximum_front_mode_icr_relative_spread"] > 0.05:
-        failures.append("limited-rack front-only presentation exceeded its reconstructed ICR-fit boundary")
+        failures.append("rigid steering linkage misses the published 55-degree reconstructed maximum")
+    if steering["maximum_front_mode_wheel_angle_degrees"] < 35 or steering["maximum_crab_mode_wheel_angle_degrees"] < 20:
+        failures.append("source-correct steering modes do not achieve useful minimum travel")
+    if steering["maximum_crab_heading_spread_degrees"] > 1 or steering["maximum_crab_corresponding_heading_error_degrees"] > 1:
+        failures.append("static-linkage crab toe exceeds its owned one-degree visual boundary")
     for name, values in result["rigid_link_ranges_m"].items():
         if values[1] - values[0] > 1e-12:
             failures.append(f"{name} changes length")

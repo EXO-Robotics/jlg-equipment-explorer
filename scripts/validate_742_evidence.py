@@ -160,7 +160,7 @@ def main():
     }
     if identities != {EXPECTED_ID} or config.get("pvc") != "2411":
         raise RuntimeError(f"742 configuration identity drift: {identities}")
-    if config.get("target_release") != "1.3.0":
+    if config.get("target_release") != "1.4.0":
         raise RuntimeError("742 target release drift")
     choices = config.get("choices") or {}
     for key in ("engine", "drive", "steer", "tires", "cab", "carriage", "forks"):
@@ -292,7 +292,7 @@ def main():
         "DIM-003": ("3132247", [1], "verified-current", "published-dimension"),
         "DIM-004": ("3132247", [1], "verified-current", "published-dimension"),
         "DIM-005": ("implementation-boundary", [], "reconstructed", "prohibited"),
-        "STEER-003": ("3122331300+implementation-boundary", [16], "mixed", "published-limit-plus-reconstruction"),
+        "STEER-003": ("3122333200+3122332100+3122331300+implementation-boundary", [7, 16, 65], "mixed", "published-dimension-plus-reconstruction"),
     }
     for claim_id, expected in required_mechanical_bindings.items():
         claim = by_claim_id.get(claim_id) or {}
