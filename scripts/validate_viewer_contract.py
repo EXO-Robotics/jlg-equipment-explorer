@@ -10,10 +10,16 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = PROJECT_ROOT / "index.html"
+REDIRECT_PATH = PROJECT_ROOT / "600s/index.html"
 STYLE_PATH = PROJECT_ROOT / "viewer.css"
 VIEWER_PATH = PROJECT_ROOT / "viewer.js"
 VERSION_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
 PACKAGE_PATH = PROJECT_ROOT / "package.json"
+COMPACT_VIEWPORT_QUERY = '(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)'
+
+
+def compact_viewport(width: int, height: int) -> bool:
+    return width <= 800 or (height <= 500 and width > height and width <= 1000)
 
 
 def require_tokens(source: str, tokens: list[str], contract: str) -> None:
@@ -24,6 +30,7 @@ def require_tokens(source: str, tokens: list[str], contract: str) -> None:
 
 def main() -> None:
     index = INDEX_PATH.read_text(encoding="utf-8")
+    redirect = REDIRECT_PATH.read_text(encoding="utf-8")
     style = STYLE_PATH.read_text(encoding="utf-8")
     viewer = VIEWER_PATH.read_text(encoding="utf-8")
     version_source = VERSION_PATH.read_text(encoding="utf-8")
@@ -36,6 +43,15 @@ def main() -> None:
         raise RuntimeError("Cannot read runtime release from package.json")
 
     require_tokens(index, [
+        '<link rel="icon" href="./favicon.ico" type="image/x-icon">',
+        'id="error" role="alert" aria-live="assertive" tabindex="-1"',
+        "window.__show600BootstrapFailure",
+        'dataset.viewerRuntimeActive === "true"',
+        "countBootFrame",
+        "dataset.terminalFrameCount",
+        "dataset.terminalFrameSource",
+        'onerror="window.__show600BootstrapFailure',
+        "onload=\"document.body.dataset.viewerModuleLoaded='true'\"",
         'id="app" role="application" tabindex="0"',
         'aria-describedby="viewer-instructions"',
         'id="motion-status" aria-live="polite" aria-atomic="true"',
@@ -46,6 +62,10 @@ def main() -> None:
         'id="drive-heading"',
         'id="drive-loop"',
         'id="motion-boundary"',
+        'id="boom-control" type="range" min="0" max="72" value="0" step="1" aria-label="Boom lift"',
+        'id="extend-control" type="range" min="0" max="100" value="0" step="1" aria-label="Extend"',
+        'id="rotate-control" type="range" min="-180" max="180" value="0" step="1" aria-label="Rotate"',
+        'id="steer-control" type="range" min="-28" max="28" value="0" step="1" aria-label="Steering"',
         'id="diagnostics" hidden aria-live="polite"',
         'id="inspector" role="dialog" aria-modal="true"',
         'aria-describedby="inspector-copy" inert',
@@ -53,6 +73,10 @@ def main() -> None:
         "Presentation-only motion limits. Not operational data.",
         ".compact-control { display: grid; }",
     ], "HTML accessibility/safety")
+    require_tokens(redirect, [
+        '<link rel="icon" href="../favicon.ico" type="image/x-icon">',
+        'location.replace(`../${location.search}${location.hash}`)',
+    ], "600S redirect routing")
 
     if index.count('aria-describedby="motion-boundary"') != 4:
         raise RuntimeError("Every motion range must reference the presentation-only boundary")
@@ -68,16 +92,37 @@ def main() -> None:
         "transition: none !important",
         "@media (forced-colors: active)",
         ".diagnostics",
+        "pointer-events: none",
         ".sr-only",
         "--mobile-controls-height",
         "body.mobile-controls-open .panel-heading",
         ".autonomy-bar",
+        f"@media {COMPACT_VIEWPORT_QUERY}",
     ], "CSS accessibility")
 
     require_tokens(viewer, [
+        f'const COMPACT_VIEWPORT_QUERY = "{COMPACT_VIEWPORT_QUERY}"',
+        "window.matchMedia?.(COMPACT_VIEWPORT_QUERY)",
+        "window.matchMedia(COMPACT_VIEWPORT_QUERY)",
         'query.get("reduce") === "1"',
-        'window.addEventListener("error", recordRuntimeError)',
-        'window.addEventListener("unhandledrejection", recordRuntimeError)',
+        'const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)")',
+        "let reducedMotion = forceReducedMotion",
+        "function syncReducedMotion(announce = false)",
+        'motionPreference.addEventListener("change", handleMotionPreferenceChange)',
+        "Object.keys(targets).forEach((key) => { targets[key] = machineState[key]; })",
+        "let autonomyLocked = reducedMotion || fixedPoseQuery",
+        "if (autonomyMode.value !== mode) autonomyMode.value = mode",
+        'window.addEventListener("error", (event) => showTerminalError',
+        'window.addEventListener("unhandledrejection", (event) => showTerminalError',
+        'document.body.dataset.viewerRuntimeActive = "true"',
+        'function showTerminalError(error, message, source = "runtime-failed")',
+        'const ASSET_LOAD_TIMEOUT_MS = 15000',
+        '"load-timeout"',
+        '"load-failed"',
+        '"contract-failed"',
+        '__EQUIPMENT_EXPLORER_TEST_FAULT__ === "asset-contract"',
+        'controlPanel.querySelectorAll("button, input")',
+        'if (terminalFailure) return',
         "runSelectionVolumeSelfTest",
         'dataset.selectionSelftest = result',
         'dataset.canvasInteraction = "navigation-only"',
@@ -90,12 +135,17 @@ def main() -> None:
         'event.key === "ArrowUp"',
         'event.key === "ArrowDown"',
         'event.key === "0"',
-        "aria-valuetext",
+        "setEngineeringValueText",
+        'input.setAttribute("aria-details", detailId)',
+        "dataset.runtimeFrameCount",
+        "dataset.terminalFrameCount",
+        "dataset.terminalFrameSource",
         "focusBeforeInspector",
         'event.key !== "Tab"',
         "reducedMotion ? targets[key]",
         "orbit.target.copy(orbit.targetGoal)",
-        'dataset.machineSource = "procedural-load-fallback"',
+        "document.body.dataset.orbitCameraDistanceM = orbit.radius.toFixed(3)",
+        "document.body.dataset.orbitDesiredDistanceM = orbit.radiusGoal.toFixed(3)",
         'authority = "independently-typeset-nominative-mark"',
         "not_manufacturer_artwork",
         "frameP95Ms",
@@ -129,12 +179,19 @@ def main() -> None:
     ], "viewer runtime")
 
     for forbidden in (
+        "const reducedMotion = query.get",
+        "procedural-contract-fallback",
+        "procedural-load-fallback",
+        "retaining procedural degraded fixture",
         "focusComponent(hit.component",
         "dataset.lastSelectionVolume",
         'canvas.style.cursor = hit ? "pointer"',
     ):
         if forbidden in viewer:
             raise RuntimeError(f"Canvas must remain navigation-only; found {forbidden!r}")
+
+    if not compact_viewport(844, 390) or compact_viewport(1280, 720):
+        raise RuntimeError("Responsive control fixture drift: 844x390 must be compact and 1280x720 must remain desktop")
 
     print(json.dumps({
         "status": "PASS",
@@ -145,6 +202,8 @@ def main() -> None:
         "motion_ranges_described": 4,
         "selection_volumes_self_tested": 5,
         "remote_startup_assets": 0,
+        "compact_short_landscape": [844, 390],
+        "desktop_expanded": [1280, 720],
     }, indent=2, sort_keys=True))
 
 

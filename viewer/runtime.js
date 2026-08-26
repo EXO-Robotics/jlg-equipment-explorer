@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.4";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.4";
-import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.4";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.8";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.8";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.8";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -11,7 +11,10 @@ if (!machine) throw new Error(`Unknown equipment route: ${document.body.dataset.
 document.body.dataset.viewerStarted = "true";
 document.body.dataset.configurationId = machine.configurationId;
 const query = new URLSearchParams(location.search);
-const reducedMotion = query.get("reduce") === "1" || matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+const forceReducedMotion = query.get("reduce") === "1";
+const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
+const ASSET_LOAD_TIMEOUT_MS = 15000;
+let reducedMotion = forceReducedMotion || motionPreference.matches;
 const app = document.querySelector("#app");
 const loader = document.querySelector("#loader");
 const loaderStatus = document.querySelector("#loader-status");
@@ -21,7 +24,8 @@ const errorCopy = document.querySelector("#error-copy");
 const controlsBody = document.querySelector("#machine-controls-body");
 const controlsToggle = document.querySelector("#controls-toggle");
 const controlPanel = document.querySelector(".control-panel");
-const mobileQuery = matchMedia("(max-width: 800px)");
+const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)";
+const mobileQuery = matchMedia(COMPACT_VIEWPORT_QUERY);
 const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 const autonomyToggle = document.querySelector("#autonomy-toggle");
@@ -29,6 +33,7 @@ const autonomyMode = document.querySelector("#autonomy-mode");
 const autonomyNote = document.querySelector("#autonomy-note");
 const driveHeading = document.querySelector("#drive-heading");
 const driveLoop = document.querySelector("#drive-loop");
+const motionStatus = document.querySelector("#motion-status");
 
 const state = { ...machine.stowState };
 const runtime = { errors: 0, frames: 0, fps: "sampling", p95: "sampling", frameDurations: [], loadMs: "pending", selection: "pending" };
@@ -37,6 +42,10 @@ let rig = null;
 let selected = null;
 let lastFrame = performance.now();
 let fpsStart = lastFrame;
+let terminalFailure = false;
+let animationFrameId = null;
+let assetLoadTimeout = null;
+let runtimeFrameCount = 0;
 const presentationRoute = {
   enabled: !reducedMotion && query.get("auto") === "1",
   phase: 0,
@@ -50,14 +59,45 @@ function recordError(error) {
   if (error) console.error(error);
   updateDiagnostics();
 }
-addEventListener("error", (event) => recordError(event.error));
-addEventListener("unhandledrejection", (event) => recordError(event.reason));
 document.body.dataset.runtimeErrorCount = "0";
 
 function updateDiagnostics() {
   diagnostics.hidden = !diagnosticsEnabled;
   diagnostics.value = `machine ${machine.id} · config ${machine.configurationId} · source ${document.body.dataset.machineSource || "loading"} · selection ${runtime.selection} · errors ${runtime.errors} · load ${runtime.loadMs} · ${runtime.fps} · ${runtime.p95}`;
 }
+
+function showTerminalError(error, message, source = "runtime-failed") {
+  if (terminalFailure) return;
+  terminalFailure = true;
+  presentationRoute.enabled = false;
+  clearTimeout(assetLoadTimeout);
+  if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+  animationFrameId = null;
+  document.body.dataset.machineSource = source;
+  document.body.dataset.viewerRuntimeActive = "false";
+  const useRuntimeFrameCount = runtimeFrameCount >= 2;
+  const terminalFrameCount = useRuntimeFrameCount ? runtimeFrameCount : Number(document.body.dataset.bootFrameCount || 0);
+  document.body.dataset.terminalFrameCount = String(terminalFrameCount);
+  document.body.dataset.terminalFrameSource = useRuntimeFrameCount ? "runtime" : "boot";
+  document.body.dataset.viewerTerminal = "true";
+  document.body.classList.remove("inspector-open", "mobile-controls-open");
+  document.body.classList.add("viewer-terminal-error");
+  recordError(error);
+  loader.hidden = true;
+  errorCopy.textContent = message;
+  errorPanel.hidden = false;
+  app.setAttribute("inert", "");
+  document.querySelector(".interface")?.setAttribute("inert", "");
+  document.querySelector("#inspector")?.setAttribute("inert", "");
+  controlsBody.inert = true;
+  controlPanel.setAttribute("aria-disabled", "true");
+  controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
+  errorPanel.focus({ preventScroll: true });
+}
+
+addEventListener("error", (event) => showTerminalError(event.error, "The ES1930M viewer stopped after an unexpected runtime error. No substitute was shown."));
+addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The ES1930M viewer stopped after an unexpected runtime error. No substitute was shown."));
+document.body.dataset.viewerRuntimeActive = "true";
 
 function rendererOrNull() {
   try {
@@ -71,8 +111,7 @@ function rendererOrNull() {
 
 const renderer = rendererOrNull();
 if (!renderer) {
-  loader.hidden = true;
-  errorPanel.hidden = false;
+  showTerminalError(new Error("WebGL unavailable"), "This interactive study needs a browser with WebGL enabled.", "webgl-unavailable");
   throw new Error("WebGL unavailable");
 }
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobileQuery.matches ? 1.35 : 1.75));
@@ -111,6 +150,8 @@ function updateCamera(delta = 1) {
   const ease = reducedMotion ? 1 : Math.min(1, delta * 7);
   orbit.target.lerp(orbit.desiredTarget, ease);
   orbit.distance = THREE.MathUtils.lerp(orbit.distance, orbit.desiredDistance, ease);
+  document.body.dataset.orbitCameraDistanceM = orbit.distance.toFixed(3);
+  document.body.dataset.orbitDesiredDistanceM = orbit.desiredDistance.toFixed(3);
   const sinPolar = Math.sin(orbit.polar);
   camera.position.set(
     orbit.target.x + orbit.distance * sinPolar * Math.cos(orbit.azimuth),
@@ -191,11 +232,40 @@ function selectAt(clientX, clientY) {
   updateDiagnostics();
 }
 
+function setOutputValue(output, value) {
+  if (output.value !== value) output.value = value;
+}
+
+function setEngineeringValueText(input, value) {
+  const detailId = `${input.id}-engineering-detail`;
+  let detail = document.getElementById(detailId);
+  if (!detail) {
+    detail = document.createElement("span");
+    detail.id = detailId;
+    detail.className = "sr-only";
+    input.insertAdjacentElement("afterend", detail);
+  }
+  if (detail.textContent !== value) detail.textContent = value;
+  if (input.getAttribute("aria-valuetext") !== value) input.setAttribute("aria-valuetext", value);
+  if (input.getAttribute("aria-details") !== detailId) input.setAttribute("aria-details", detailId);
+}
+
 function setControlOutputs() {
   const presentation = machine.presentState(state);
-  for (const control of machine.controls) document.querySelector(`#${control.outputId}`).value = presentation.outputs[control.id];
+  for (const control of machine.controls) {
+    const output = document.querySelector(`#${control.outputId}`);
+    const input = document.querySelector(`#${control.inputId}`);
+    const value = presentation.outputs[control.id];
+    setOutputValue(output, value);
+    const ariaValue = control.id === "lift"
+      ? `${(0.90 + state.lift * (machine.specifications.indoorPlatformHeightM - 0.90)).toFixed(2)} metres platform height; ${presentation.status}`
+      : control.id === "deck"
+        ? `${value} extension; ${presentation.status}`
+        : `${value} cylinder displacement; ${presentation.status}`;
+    setEngineeringValueText(input, ariaValue);
+  }
   document.body.dataset.zone = presentation.zone;
-  document.querySelector("#motion-status").value = presentation.status;
+  if (!presentationRoute.enabled) setOutputValue(motionStatus, presentation.status);
 }
 
 function normalizedHeadingDegrees(radians) {
@@ -224,8 +294,10 @@ function updatePresentationTelemetry(sample = sampleFigureEight(presentationRout
     : "Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.";
   if (autonomyMode.value !== modeText) autonomyMode.value = modeText;
   if (autonomyNote.textContent !== noteText) autonomyNote.textContent = noteText;
-  driveHeading.textContent = `${String(normalizedHeadingDegrees(sample.heading)).padStart(3, "0")}°`;
-  driveLoop.textContent = `${Math.round((sample.phase / (Math.PI * 2)) * 100)}%`;
+  const heading = `${String(normalizedHeadingDegrees(sample.heading)).padStart(3, "0")}°`;
+  const loop = `${Math.round((sample.phase / (Math.PI * 2)) * 100)}%`;
+  if (driveHeading.textContent !== heading) driveHeading.textContent = heading;
+  if (driveLoop.textContent !== loop) driveLoop.textContent = loop;
   autonomyToggle.disabled = locked || !rig;
   const pressed = String(presentationRoute.enabled);
   if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
@@ -233,8 +305,8 @@ function updatePresentationTelemetry(sample = sampleFigureEight(presentationRout
   if (autonomyToggle.textContent !== buttonText) autonomyToggle.textContent = buttonText;
   document.body.dataset.presentationMode = locked ? "static" : presentationRoute.enabled ? "running" : paused ? "paused" : "ready";
   document.body.dataset.autonomyMode = locked ? "static" : presentationRoute.enabled ? "auto" : paused ? "paused" : "manual";
-  if (presentationRoute.enabled) document.querySelector("#motion-status").value = "Autonomous";
-  else if (paused) document.querySelector("#motion-status").value = "Paused";
+  if (presentationRoute.enabled) setOutputValue(motionStatus, "Autonomous");
+  else if (paused) setOutputValue(motionStatus, "Paused");
 }
 
 function applyPresentationVisualSample(sample) {
@@ -270,6 +342,27 @@ function setPresentationRouteEnabled(enabled, { reset = false } = {}) {
   updatePresentationTelemetry();
 }
 
+function syncReducedMotion(announce = false) {
+  const nextReducedMotion = forceReducedMotion || motionPreference.matches;
+  const changed = nextReducedMotion !== reducedMotion;
+  reducedMotion = nextReducedMotion;
+  document.body.dataset.reducedMotion = String(reducedMotion);
+  document.body.dataset.motionProfile = reducedMotion ? "reduced" : "full";
+  if (reducedMotion) {
+    presentationRoute.enabled = false;
+    setPresentationRouteEnabled(false);
+    if (announce && changed) setOutputValue(motionStatus, "Reduced motion · auto stopped");
+  } else {
+    updatePresentationTelemetry();
+    if (announce && changed) setOutputValue(motionStatus, "Manual · auto available");
+  }
+  updateDiagnostics();
+}
+
+const handleMotionPreferenceChange = () => syncReducedMotion(true);
+if (motionPreference.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
+else motionPreference.addListener(handleMotionPreferenceChange);
+
 function updatePresentationRoute(delta) {
   if (!presentationRoute.enabled || !rig) return;
   const next = advanceFigureEight(presentationRoute.phase, delta);
@@ -293,6 +386,7 @@ function updatePresentationRoute(delta) {
 }
 
 autonomyToggle.addEventListener("click", () => setPresentationRouteEnabled(!presentationRoute.enabled));
+syncReducedMotion(false);
 updatePresentationTelemetry();
 function fitMachineBounds() {
   if (!model) return;
@@ -436,46 +530,65 @@ document.addEventListener("keydown", (event) => {
 });
 
 const loadStarted = performance.now();
-new GLTFLoader().load(machine.assetUrl, (gltf) => {
-  const validation = machine.validateAsset(gltf.scene);
-  if (!validation.ok) throw new Error(`${machine.identity.model} asset validation failed: ${validation.missing.join(", ")}`);
-  model = gltf.scene;
-  model.traverse((node) => {
-    if (node.isMesh) {
-      if (node.userData?.is_hit_volume) {
-        node.material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false });
-        node.castShadow = false;
-        node.receiveShadow = false;
-      } else {
-        node.castShadow = true;
-        node.receiveShadow = true;
-      }
+assetLoadTimeout = setTimeout(() => {
+  showTerminalError(new Error(`${machine.identity.model} asset load exceeded ${ASSET_LOAD_TIMEOUT_MS} ms`), `The evidence-bound ${machine.identity.model} asset did not finish loading in time. No substitute was shown.`, "load-timeout");
+}, ASSET_LOAD_TIMEOUT_MS);
+try {
+  new GLTFLoader().load(machine.assetUrl, (gltf) => {
+    clearTimeout(assetLoadTimeout);
+    if (terminalFailure) return;
+    try {
+      if (globalThis.__EQUIPMENT_EXPLORER_TEST_FAULT__ === "asset-contract") throw new Error("Injected ES1930M asset-contract failure");
+      const validation = machine.validateAsset(gltf.scene);
+      if (!validation.ok) throw new Error(`${machine.identity.model} asset validation failed: ${validation.missing.join(", ")}`);
+      model = gltf.scene;
+      model.traverse((node) => {
+        if (node.isMesh) {
+          if (node.userData?.is_hit_volume) {
+            node.material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false });
+            node.castShadow = false;
+            node.receiveShadow = false;
+          } else {
+            node.castShadow = true;
+            node.receiveShadow = true;
+          }
+        }
+      });
+      rig = machine.createRig(model);
+      applyControls();
+      const selfTest = machine.selfTestRig?.(rig, state) || { ok: true, failures: [] };
+      if (!selfTest.ok) throw new Error(`Interaction motion self-test failed: ${selfTest.failures.join(", ")}`);
+      scene.add(model);
+      runtime.loadMs = `${Math.round(performance.now() - loadStarted)} ms`;
+      runtime.selection = "self-test-pass";
+      document.body.dataset.machineSource = "glb";
+      document.body.dataset.machineVisibleMeshes = String(model.getObjectsByProperty("isMesh", true).length);
+      setPresentationRouteEnabled(presentationRoute.enabled);
+      loaderStatus.textContent = `${machine.identity.model} ready`;
+      loaderDetail.textContent = `${machine.configurationId} validated`;
+      loader.classList.add("done");
+      updateDiagnostics();
+    } catch (error) {
+      if (model) scene.remove(model);
+      model = null;
+      rig = null;
+      showTerminalError(error, `The ${machine.identity.model} asset failed its hierarchy or motion contract. No substitute was shown.`, "contract-failed");
     }
+  }, undefined, (error) => {
+    clearTimeout(assetLoadTimeout);
+    showTerminalError(error, `The evidence-bound ${machine.identity.model} asset could not be loaded. No procedural substitute was used.`, "load-failed");
   });
-  scene.add(model);
-  rig = machine.createRig(model);
-  applyControls();
-  const selfTest = machine.selfTestRig?.(rig, state) || { ok: true, failures: [] };
-  if (!selfTest.ok) throw new Error(`Interaction motion self-test failed: ${selfTest.failures.join(", ")}`);
-  runtime.loadMs = `${Math.round(performance.now() - loadStarted)} ms`;
-  runtime.selection = "self-test-pass";
-  document.body.dataset.machineSource = "glb";
-  document.body.dataset.machineVisibleMeshes = String(model.getObjectsByProperty("isMesh", true).length);
-  setPresentationRouteEnabled(presentationRoute.enabled);
-  loaderStatus.textContent = `${machine.identity.model} ready`;
-  loaderDetail.textContent = `${machine.configurationId} validated`;
-  loader.classList.add("done");
-  updateDiagnostics();
-}, undefined, (error) => {
-  recordError(error);
-  loader.hidden = true;
-  errorPanel.hidden = false;
-  errorCopy.textContent = `The evidence-bound ${machine.identity.model} asset could not be loaded. No procedural substitute was used.`;
-  document.body.dataset.machineSource = "load-failed";
-});
+} catch (error) {
+  clearTimeout(assetLoadTimeout);
+  showTerminalError(error, `The evidence-bound ${machine.identity.model} asset loader could not start. No procedural substitute was used.`, "loader-start-failed");
+}
 
 function animate(now) {
-  requestAnimationFrame(animate);
+  if (terminalFailure) return;
+  animationFrameId = requestAnimationFrame(animate);
+  runtimeFrameCount += 1;
+  document.body.dataset.runtimeFrameCount = String(runtimeFrameCount);
+  document.body.dataset.runtimeLastFrameMs = Number(now).toFixed(3);
   const delta = Math.min((now - lastFrame) / 1000, 0.05);
   lastFrame = now;
   updatePresentationRoute(delta);
@@ -493,7 +606,7 @@ function animate(now) {
     updateDiagnostics();
   }
 }
-requestAnimationFrame(animate);
+if (!terminalFailure) animationFrameId = requestAnimationFrame(animate);
 addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();

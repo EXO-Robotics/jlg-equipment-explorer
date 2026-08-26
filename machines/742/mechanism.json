@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "coordinate_system": {"longitudinal": "+X toward attachment", "vertical": "+Y", "lateral": "+Z machine right"},
+  "boom": {
+    "sections": 3,
+    "pivot_m": [-2.158, 1.838, 0.3],
+    "stowed_angle_degrees": 0,
+    "maximum_visual_angle_degrees": 69,
+    "mid_authored_origin_m": 0.12,
+    "fly_authored_origin_m": 0.12,
+    "carriage_authored_origin_m": [5.296, -0.8, 0.0],
+    "mid_visual_travel_m": 3.604,
+    "fly_visual_travel_m": 3.604,
+    "level_fork_surface_height_at_max_pose_m": 12.8,
+    "travel_authority": "3.604 m telescope-cylinder stroke is evidence-derived; second-section +3.604 m and chained third-section additional +3.604 m are the visual chain relationship. The parallel extend paths and center retract path use reconstructed sheave radii/anchors and invariant tangent U-routes; no manufacturer chain length is claimed. Authored origins and the zero-degree ground-clear stow remain reconstructed",
+    "runtime_stow": {"boom_angle_degrees": 0, "neutral_fork_load_surface_target_m": 0.388, "neutral_fork_surface_acceptance_m": [0.32, 0.46], "exact_total_length_with_48in_forks_m": 6.9772, "total_length_tolerance_m": 0.005}
+  },
+  "frame_level": {
+    "axis": "X",
+    "visual_limit_degrees": 10,
+    "authority": "published function and limit; pivot coordinates reconstructed"
+  },
+  "steering": {
+    "modes": ["circle", "crab", "front"],
+    "visual_inner_limit_degrees": 55,
+    "wheelbase_m": 3.42,
+    "wheel_center_track_m": 2.1005,
+    "published_outside_turning_radius_m": 3.66,
+    "linkage": "per axle: one fixed axle-mounted double-acting double-rod/through-rod cylinder and one invariant tie bar from each rod end to an integrated knuckle arm; the same static trapezoid is used in every mode",
+    "reconstructed_geometry": {"steering_arm_rearward_m": 0.13739354211066662, "steering_arm_inward_m": -0.0909690404422484, "steering_bar_length_m": 0.5634413306323492, "rack_half_width_m": 0.6504575864573594, "rack_joint_span_m": 1.3009151729147188, "rack_longitudinal_offset_m": -0.35584108351910215, "rack_maximum_shift_m": 0.15812269946250607},
+    "mode_hydraulics": {"circle": "rear rack opposite hydraulic phase", "crab": "rear rack same hydraulic phase", "front": "rear rack blocked and held at its operator-aligned position"},
+    "acceptance": {"minimum_circle_wheel_angle_degrees": 35, "minimum_front_wheel_angle_degrees": 35, "minimum_crab_wheel_angle_degrees": 20, "maximum_dense_crab_residual_toe_degrees": 1, "maximum_rigid_bar_length_drift_m": 1e-12, "maximum_rod_joint_span_drift_m": 1e-12},
+    "authority": "Parts Figs 5-45 and 5-71 establish one fixed axle-mounted through-rod cylinder (PN 7029528) and two tie bars (PN 70026799) per axle; hydraulic Sheet 1 and the operator alignment procedure establish opposite-phase rear motion for circle, held rear position for front, and same-phase rear motion for crab. The same full-travel reconstructed static linkage is therefore used in every mode. Rack travel, pickup coordinates, static toe, and the resulting scrub curve are unresolved because axle publication 31200162 is not admitted. The dense maximum within-axle toe is measured and gated, while front/circle ICR residuals remain diagnostics rather than manufacturer Ackermann claims. The 55 degree service limit is reached by at least one wheel but is not bound by evidence to inner versus outer or to the published 3.66 m radius test. The published radius reference locus, mode, tolerance, inflation, and tire/body envelope convention remain unresolved and are reported separately from reconstructed wheel-center and swept-envelope values"
+  },
+  "service_lines": {
+    "lift_hose_total_length_m": 3.21,
+    "boom_intersection_hose_total_length_m": 5.0,
+    "boom_loop_reconstructed_bend_radius_m": 0.14,
+    "boom_loop_arc_segments": 8,
+    "minimum_boom_hose_to_rigid_tube_surface_clearance_m": 0.005,
+    "maximum_adjacent_chord_angle_degrees": 22.5,
+    "authority": "parts/service sources establish flexible auxiliary lines inside or below the boom; exact hose lengths, bend guides and anchors are unresolved reconstructed presentation coordinates. Each displayed boom route uses tangent straight legs and an eight-chord 0.140 m semicircular return with an exact reconstructed 5.000 m centerline. The bend radius, centerline length, and analytically measured capsule clearance are owned visual boundaries, not manufacturer hose specifications"
+  },
+  "validated_actual_glb_measurements": {
+    "maximum_lift_fork_load_surface_m": 12.798856,
+    "maximum_reach_front_tire_tread_plane_x_m": 2.352907,
+    "maximum_reach_24in_load_center_x_m": 11.220003,
+    "maximum_reach_m": 8.867096,
+    "authority": "rounded presentation labels cross-checked by scripts/validate_742_posed_glb.py against the actual posed GLB; not manufacturer measurement authority"
+  },
+  "carriage": {
+    "type": "standard floating 50 inch",
+    "visual_tilt_degrees": [-5, 12],
+    "fork_blade_dimensions_m": [1.2192, 0.06, 0.102],
+    "minimum_flat-floor_clearance_m": 0.0,
+    "authority": "published attachment topology and 2.36 x 4 x 48 in fork selection; the exact 48 in length is 1.2192 m while 1200 mm is the rounded metric label. Displayed pivot travel and the ground-clear zero-degree stow are reconstructed"
+  },
+  "hydraulic_cylinder_strokes_m": {
+    "lift": 1.07,
+    "telescope": 3.604,
+    "head_tilt_slave": 0.388,
+    "compensation_master": 0.278,
+    "frame_sway": 0.168,
+    "rear_axle_stabilization": 0.2
+  },
+  "reach_pose": {
+    "boom_angle_degrees": 3.0,
+    "telescope_fraction": 1.0,
+    "load_center_m": 0.6096,
+    "published_forward_reach_m": 8.86,
+    "authority": "published reach and 24 inch load center; selected 3 degree visual pose is reconstructed. Validation derives the front tire tread plane from the posed GLB geometry rather than a coordinate constant"
+  },
+  "collision_proxies": {
+    "ground_y_m": 0.0,
+    "minimum_fork_y_m": 0.08,
+    "minimum_boom_overlap_m": 0.18,
+    "minimum_rigid_underbody_clearance_m": 0.432,
+    "minimum_stowed_boom_to_cab_clearance_m": 0.04,
+    "minimum_stowed_boom_to_engine_hood_clearance_m": 0.04,
+    "minimum_stowed_service_line_to_cab_or_engine_clearance_m": 0.01,
+    "service_line_clearance_sweep": {"lift_samples": 201, "telescope_samples": 201, "minimum_clearance_m": 0.01, "authority": "dense owned-proxy sweep of every displayed boom hose and extend/retract chain segment against the inner cab handrail and reconstructed engine obstacles; not a manufacturer clearance specification"},
+    "stowed_clearance_authority": "owned reconstructed presentation boundary measured from the exported GLB; not a manufacturer clearance specification",
+    "ground_clearance_authority": "published approximate ground clearance; exact manufacturer component locus is unresolved, so validation uses the named reconstructed rigid-underbody proxy set with grounded tires and sweeps the complete displayed frame-level range",
+    "base_machine_lateral_bounds_m": [-1.23025, 1.23025],
+    "visual_bounds_including_mirrors_m": [-1.35, 1.23025]
+  }
+}

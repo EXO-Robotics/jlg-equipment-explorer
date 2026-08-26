@@ -1,6 +1,7 @@
 {
   "name": "jlg-equipment-explorer",
-  "version": "1.1.10",
+  "version": "1.1.14",
+  "type": "module",
   "private": true,
   "license": "UNLICENSED",
   "description": "Unofficial interactive equipment visualization prototype",
@@ -10,10 +11,18 @@
   },
   "scripts": {
     "start": "python3 -B -m http.server 8080",
-    "check": "npm run check:600s && npm run check:es1930m",
+    "check": "npm run check:600s && npm run check:es1930m && npm run check:742",
     "check:600s": "node --check viewer.js && python3 -B scripts/validate_viewer_contract.py && python3 -B scripts/validate_600s_evidence.py && python3 -B scripts/validate_600s_configuration.py && python3 -B scripts/validate_600s_glb.py",
-    "check:es1930m": "node --check viewer/runtime.js && node --check machines/es1930m/articulation.js && node --check machines/es1930m/machine.js && node scripts/validate_es1930m_gestures.mjs && node scripts/validate_es1930m_figure_eight.mjs && python3 -B scripts/validate_es1930m_evidence.py && python3 -B scripts/validate_es1930m_runtime_contract.py && python3 -B scripts/validate_es1930m_kinematics.py && python3 -B scripts/validate_es1930m_glb.py && python3 -B scripts/validate_es1930m_receipt.py",
+    "check:es1930m": "node --check viewer/runtime.js && node --check machines/es1930m/articulation.js && node --check machines/es1930m/machine.js && node scripts/validate_es1930m_gestures.mjs && node scripts/validate_es1930m_figure_eight.mjs && python3 -B scripts/validate_es1930m_evidence.py && python3 -B scripts/validate_es1930m_runtime_contract.py && python3 -B scripts/validate_es1930m_kinematics.py && python3 -B scripts/validate_es1930m_glb.py && python3 -B scripts/test_es1930m_review_binding.py && python3 -B scripts/validate_es1930m_receipt.py",
+    "check:742": "node --check viewer/742-runtime.js && node --check machines/742/articulation.js && node --check machines/742/machine.js && node --check machines/742/inspector.js && node --check machines/742/cameras.js && node --check machines/742/version.js && node --check machines/742/solver.js && node --check scripts/solve_742_pose.mjs && node --check scripts/validate_742_solver.mjs && node scripts/validate_742_runtime_contract.mjs && python3 -B scripts/validate_742_review.py --help && python3 -B scripts/bind_742_review.py --help && python3 -B scripts/verify_742_deterministic_rebuild.py --help && python3 -B scripts/verify_pages_deployment.py --help && python3 -B scripts/validate_742_evidence.py --manifest-only && python3 -B scripts/validate_742_kinematics.py && python3 -B scripts/validate_742_glb.py && python3 -B scripts/validate_742_actual_glb_clearance_sweep.py && python3 -B scripts/validate_742_portable_posed_glb.py && python3 -B scripts/validate_742_route.py && python3 -B scripts/validate_742_receipt.py",
     "check:pages": "python3 -B scripts/validate_pages_bundle.py _site",
-    "receipt": "python3 -B scripts/write_600s_receipt.py"
+    "check:capture:742-toolchain": "node scripts/capture_742_browser_evidence.mjs --verify-toolchain-only=1",
+    "capture:742:install": "playwright install chromium",
+    "capture:742": "node scripts/capture_742_browser_evidence.mjs",
+    "receipt": "python3 -B scripts/write_600s_receipt.py",
+    "receipt:742": "python3 -B scripts/write_742_receipt.py"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

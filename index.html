@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="An unofficial interactive visualization of a telescopic boom lift.">
   <title>600S Interactive Equipment Study</title>
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="preload" href="assets/models/600s.glb?v=13292e6d742a" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="viewer.css?v=1.1.10">
+  <link rel="stylesheet" href="viewer.css?v=1.1.14">
   <style>
     @media (max-height: 670px) and (max-width: 800px) {
       .compact-control { display: grid; }
@@ -33,10 +34,10 @@
     <small id="loader-detail">Preparing the interactive viewer</small>
   </div>
 
-  <div class="error" id="error" hidden>
+  <div class="error" id="error" role="alert" aria-live="assertive" tabindex="-1" hidden>
     <div>
-      <strong>WebGL is unavailable.</strong>
-      <p>This interactive study needs a browser with WebGL enabled.</p>
+      <strong>Viewer unavailable.</strong>
+      <p id="error-copy">This interactive study needs a browser with WebGL enabled.</p>
     </div>
   </div>
 
@@ -87,19 +88,19 @@
 
         <label class="control-row">
           <span>Boom lift</span><output id="boom-value">0°</output>
-          <input id="boom-control" type="range" min="0" max="72" value="0" step="1" aria-describedby="motion-boundary">
+          <input id="boom-control" type="range" min="0" max="72" value="0" step="1" aria-label="Boom lift" aria-describedby="motion-boundary">
         </label>
         <label class="control-row">
           <span>Extend</span><output id="extend-value">0%</output>
-          <input id="extend-control" type="range" min="0" max="100" value="0" step="1" aria-describedby="motion-boundary">
+          <input id="extend-control" type="range" min="0" max="100" value="0" step="1" aria-label="Extend" aria-describedby="motion-boundary">
         </label>
         <label class="control-row">
           <span>Rotate</span><output id="rotate-value">0°</output>
-          <input id="rotate-control" type="range" min="-180" max="180" value="0" step="1" aria-describedby="motion-boundary">
+          <input id="rotate-control" type="range" min="-180" max="180" value="0" step="1" aria-label="Rotate" aria-describedby="motion-boundary">
         </label>
         <label class="control-row compact-control">
           <span>Steering</span><output id="steer-value">0°</output>
-          <input id="steer-control" type="range" min="-28" max="28" value="0" step="1" aria-describedby="motion-boundary">
+          <input id="steer-control" type="range" min="-28" max="28" value="0" step="1" aria-label="Steering" aria-describedby="motion-boundary">
         </label>
 
         <div class="action-row">
@@ -137,14 +138,37 @@
 
   <script>
     window.__showcaseBootAt = performance.now();
+    let bootFrameCount = 0;
+    function countBootFrame() {
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      bootFrameCount += 1;
+      document.body.dataset.bootFrameCount = String(bootFrameCount);
+      requestAnimationFrame(countBootFrame);
+    }
+    requestAnimationFrame(countBootFrame);
+    window.__show600BootstrapFailure = function (message, source = "module-load-failed") {
+      if (document.body.dataset.viewerTerminal === "true") return;
+      const failure = document.querySelector("#error");
+      document.body.classList.add("viewer-terminal-error");
+      document.body.dataset.viewerTerminal = "true";
+      document.body.dataset.viewerRuntimeActive = "false";
+      document.body.dataset.machineSource = source;
+      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || "0";
+      document.body.dataset.terminalFrameSource = "boot";
+      document.body.dataset.runtimeErrorCount = "1";
+      document.querySelector("#loader").hidden = true;
+      document.querySelector("#error-copy").textContent = message;
+      failure.hidden = false;
+      for (const selector of ["#app", ".interface", "#inspector", "#machine-controls-body"]) document.querySelector(selector)?.setAttribute("inert", "");
+      document.querySelector(".control-panel")?.setAttribute("aria-disabled", "true");
+      document.querySelectorAll(".interface button, .interface input").forEach((control) => { control.disabled = true; });
+      failure.focus({ preventScroll: true });
+    };
     window.setTimeout(() => {
-      if (document.body.dataset.viewerStarted) return;
-      const status = document.querySelector("#loader-status");
-      const detail = document.querySelector("#loader-detail");
-      if (status) status.textContent = "Rendering runtime delayed";
-      if (detail) detail.textContent = "The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.";
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      window.__show600BootstrapFailure("The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, 8000);
   </script>
-  <script type="module" src="viewer.js?v=1.1.10"></script>
+  <script type="module" src="viewer.js?v=1.1.14" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__show600BootstrapFailure('The 600S rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

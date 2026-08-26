@@ -1,0 +1,71 @@
+.identity-long h1 { font-size: clamp(62px, 8.4vw, 132px); }
+.identity-long p { display: flex; align-items: center; gap: 10px; }
+.evidence-chip { display: inline-flex; padding: 5px 7px; border: 1px solid rgba(243,165,31,.45); color: var(--accent); font-size: 7px; letter-spacing: .12em; }
+body[data-machine="es1930m"][data-zone="outdoor-limit"] #lift-value { color: var(--accent); }
+body[data-machine="es1930m"][data-zone="indoor-only"] #lift-value { color: #ff8268; }
+body[data-machine="742"] { --accent: #ff9f1a; --accent-dark: #bd6100; }
+body[data-machine="742"] .identity-long h1 { font-size: clamp(88px, 12vw, 184px); }
+body[data-machine="742"] .control-panel { width: min(420px, calc(100vw - 56px)); }
+body[data-machine="742"] .telehandler-controls .control-row { padding-top: 9px; }
+body[data-machine="742"] .telehandler-controls .action-row { grid-template-columns: 1.2fr .8fr 1fr; }
+body[data-machine="742"][data-zone="extended"] #telescope-value { color: var(--accent); }
+body[data-machine="742"][data-motion-profile="reduced"] #showcase:disabled { border-color: var(--line); background: rgba(255,255,255,.04); color: var(--muted); cursor: not-allowed; }
+body[data-machine="742"] .component-nav button[data-focus][aria-pressed="true"] { padding-left: 6px; border-color: var(--accent); background: rgba(255,159,26,.12); color: var(--accent); }
+body[data-machine="742"].viewer-terminal-error #app, body[data-machine="742"].viewer-terminal-error .interface, body[data-machine="742"].viewer-terminal-error .inspector, body[data-machine="742"].viewer-terminal-error .scrim { visibility: hidden; pointer-events: none; }
+.mode-row { display: grid; grid-template-columns: 1fr repeat(3, auto); align-items: center; gap: 6px; padding-top: 10px; color: var(--paper); font: 700 8px/1 "Courier New", monospace; letter-spacing: .1em; text-transform: uppercase; }
+.mode-row > span { color: var(--muted); }
+.mode-row button { min-height: 30px; padding: 0 9px; border: 1px solid var(--line); background: transparent; cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+.mode-row button[aria-pressed="true"] { border-color: var(--accent); background: rgba(255,159,26,.12); color: var(--accent); }
+.inspector > a { margin-top: 22px; color: var(--accent); font: 700 9px/1.4 "Courier New", monospace; letter-spacing: .08em; text-transform: uppercase; }
+.inspector { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--accent) rgba(255,255,255,.08); }
+.inspector-close { position: sticky; top: 0; z-index: 1; flex: 0 0 auto; margin-left: auto; }
+.nav-overflow-cue { display: none; }
+@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
+  .identity-long h1 { font-size: clamp(44px, 13vw, 67px); letter-spacing: -.065em; }
+  .evidence-chip { display: none; }
+  body[data-machine="742"] .control-panel { width: auto; }
+  body[data-machine="742"] .identity-long h1 { font-size: clamp(58px, 19vw, 90px); }
+  body[data-machine="742"] .component-nav-seven { overflow-x: auto; overflow-y: hidden; justify-content: flex-start; padding-bottom: 4px; scrollbar-width: thin; scrollbar-color: var(--accent) rgba(255,255,255,.08); }
+  body[data-machine="742"] .component-nav-seven::-webkit-scrollbar { height: 3px; }
+  body[data-machine="742"] .component-nav-seven::-webkit-scrollbar-track { background: rgba(255,255,255,.08); }
+  body[data-machine="742"] .component-nav-seven::-webkit-scrollbar-thumb { background: var(--accent); }
+  body[data-machine="742"] .component-nav-seven button { flex: 0 0 76px; }
+  body[data-machine="742"] .specs p { display: none; }
+  .nav-overflow-cue { position: sticky; right: 0; z-index: 2; flex: 0 0 55px; min-height: 34px; place-items: center; background: linear-gradient(90deg, rgba(16,18,17,.5), rgba(16,18,17,.98) 36%); color: var(--accent); font: 700 7px/1 "Courier New", monospace; letter-spacing: .08em; text-transform: uppercase; pointer-events: none; }
+  .nav-overflow-cue:not([hidden]) { display: grid; }
+  .inspector { padding-bottom: max(30px, env(safe-area-inset-bottom)); }
+}
+@media (max-height: 500px) and (orientation: landscape) and (min-width: 801px) and (max-width: 1000px) {
+  :root { --header: 58px; }
+  .topbar { padding: 0 16px; height: var(--header); grid-template-columns: 1fr 1fr; }
+  .prototype-label { display: none; }
+  .identity { top: calc(var(--header) + 12px); left: 16px; }
+  .identity h1, body[data-machine="742"] .identity-long h1 { margin-top: 9px; font-size: 52px; }
+  .identity p { margin-top: 10px; font-size: 8px; }
+  .status { font-size: 8px; }
+  .specs { display: none; }
+  body[data-machine="742"] .control-panel { left: 12px; right: auto; bottom: max(8px, env(safe-area-inset-bottom)); width: min(380px, 46vw); max-height: calc(100svh - var(--header) - 16px); padding: 10px 14px; overflow-y: auto; overscroll-behavior: contain; }
+  .panel-heading { align-items: center; padding-bottom: 0; border-bottom-color: transparent; }
+  .panel-state { gap: 10px; }
+  .controls-toggle { display: block; touch-action: manipulation; }
+  body.mobile-controls-open .panel-heading { padding-bottom: 10px; border-bottom-color: var(--line); }
+  .control-row, body[data-machine="742"] .telehandler-controls .control-row { padding-top: 7px; }
+  .compact-control { display: grid; }
+  .action-row { margin-top: 10px; }
+  .motion-boundary { margin-top: 7px; font-size: 7px; }
+  .component-nav { left: calc(min(380px, 46vw) + 24px); right: 12px; bottom: max(8px, env(safe-area-inset-bottom)); display: flex; width: auto; }
+  .component-nav > span:not(.nav-overflow-cue) { display: none; }
+  .component-nav button { flex: 1; display: block; min-height: 34px; border: 1px solid var(--line); border-right: 0; background: rgba(16,18,17,.72); text-align: center; font-size: 8px; backdrop-filter: blur(12px); }
+  .component-nav button:last-of-type { border-right: 1px solid var(--line); }
+  .component-nav i { display: none; }
+  .interaction-hint { display: none; }
+  .diagnostics { left: auto; right: 12px; top: calc(var(--header) + 7px); max-width: calc(54vw - 24px); transform: none; font-size: 7px; }
+  body.mobile-controls-open .identity { opacity: 0; visibility: hidden; }
+}
+@media (max-height: 670px) and (max-width: 800px) {
+  .compact-control { display: grid; }
+}
+@media (max-width: 480px) {
+  body[data-machine="es1930m"] .specs { display: none; }
+  body[data-machine="es1930m"] .identity-long h1 { font-size: clamp(42px, 14vw, 55px); }
+}

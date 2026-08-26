@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "evidence_freeze_date": "2026-08-25",
+  "systems": [
+    {
+      "id": "boom",
+      "claims": [
+        {"id":"BOOM-001","statement":"The 742 boom assembly contains distinct first, second, and third boom section assemblies.","source":"3122329900","pvc":"2411","pages":[52,53,54,56,58],"components":["BoomBase","BoomMid","BoomFly"],"part_numbers":["1001168656","1001168574","1001168735","1001168963"],"evidence_type":["topological"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"BOOM-002","statement":"One retract-chain assembly is routed bottom-front inside the first section; one extend-chain assembly has two parallel legs/clevis ends, and auxiliary hoses run inside or along the underside rather than as exposed top-side bars.","source":"3122329900+3122331300","pvc":"2411","pages":[60,62,66,68,511,518,744],"components":["ExtendChain_L","ExtendChain_R","RetractChain_C","RetractChain_C_Wrap","RetractChain_C_Moving","BoomRigidTube_0","BoomHose_0_0"],"part_numbers":[],"evidence_type":["topological","functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"BOOM-003","statement":"The evidence-derived telescope-cylinder stroke is 3604 mm and the visual chain relationship advances the second and third sections by 3.604 m each; exact authored origins, anchors, overlap, chain pitch, and sheave diameter remain reconstructed.","source":"3122333200+implementation-boundary","pvc":"2411","pages":[7],"components":["BoomMid","BoomFly","TelescopeCylinderBarrel","TelescopeCylinderRod"],"part_numbers":[],"evidence_type":["dimensional","topological"],"authority":"mixed","geometry_use":"published-dimension-plus-reconstruction","confidence":"high"}
+      ]
+    },
+    {
+      "id": "hydraulic-actuators",
+      "claims": [
+        {"id":"HYD-001","statement":"The hydraulic schematic identifies separate lift, telescope, head-tilt slave, compensation master, frame-sway, and rear-axle-stabilization cylinders with strokes of 1070, 3604, 388, 278, 168, and 200 mm respectively.","source":"3122333200","pvc":"2411","pages":[7],"components":["LiftCylinderBarrel","TelescopeCylinderBarrel","CarriageTiltCylinderBarrel","CompensationCylinderBarrel","FrameLevelCylinderBarrel","RearAxleStabilizerBarrel"],"part_numbers":[],"evidence_type":["dimensional","topological"],"authority":"verified-current","geometry_use":"published-dimension","confidence":"high"},
+        {"id":"HYD-002","statement":"The frame-mounted boom angle sensor uses a fixed rotary body, short crank lever, and ball-jointed connecting rod to a first-section boom pin.","source":"3122329900","pvc":"2411","pages":[950],"components":["BoomAngleSensorBody","BoomAngleSensorCrank","BoomAngleSensorLink"],"part_numbers":[],"evidence_type":["topological","functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"HYD-003","statement":"Owned actuator anchor coordinates are reconstructed. Endpoint-distance deltas are visual stroke reconciliation only and do not establish hydraulic response, force, phasing, service, or safety behavior.","source":"implementation-boundary","pvc":"2411","pages":[],"components":["LiftCylinderRod","TelescopeCylinderRod","CarriageTiltCylinderRod","CompensationCylinderRod","FrameLevelCylinderRod","RearAxleStabilizerRod"],"part_numbers":[],"evidence_type":["dimensional","functional"],"authority":"reconstructed","geometry_use":"prohibited","confidence":"high"}
+      ]
+    },
+    {
+      "id": "published-envelope-and-attachment-dimensions",
+      "claims": [
+        {"id":"DIM-001","statement":"The current 742 specification publishes length less forks as 227 in (5.76 m).","source":"3132247","pvc":"current-product","pages":[1],"components":["742_ROOT","Carriage"],"part_numbers":[],"evidence_type":["dimensional"],"authority":"verified-current","geometry_use":"published-dimension","confidence":"high"},
+        {"id":"DIM-002","statement":"The current 742 specification publishes maximum lift height as 42 ft (12.8 m).","source":"3132247","pvc":"current-product","pages":[1],"components":["BoomLiftPivot","Carriage","ForkL","ForkR"],"part_numbers":[],"evidence_type":["dimensional","functional"],"authority":"verified-current","geometry_use":"published-dimension","confidence":"high"},
+        {"id":"DIM-003","statement":"The current 742 specification publishes maximum forward reach as 29 ft 1 in (8.86 m).","source":"3132247","pvc":"current-product","pages":[1],"components":["BoomMid","BoomFly","Carriage"],"part_numbers":[],"evidence_type":["dimensional","functional"],"authority":"verified-current","geometry_use":"published-dimension","confidence":"high"},
+        {"id":"DIM-004","statement":"The first listed pallet-fork selection is 2.36 x 4 x 48 in, with the metric label rounded to 60 x 102 x 1200 mm; the owned blade uses the exact 48 in length of 1.2192 m.","source":"3132247","pvc":"current-product","pages":[1],"components":["ForkL","ForkR"],"part_numbers":[],"evidence_type":["dimensional","topological"],"authority":"verified-current","geometry_use":"published-dimension","confidence":"high"},
+        {"id":"DIM-005","statement":"Owned GLB dimensions and maximum-height/reach poses are independent visual reconciliations to the published values. They are not manufacturer coordinates, load-chart geometry, capacity proof, or operating-envelope authority.","source":"implementation-boundary","pvc":"2411-current-product","pages":[],"components":["742_ROOT","BoomLiftPivot","BoomMid","BoomFly","Carriage","ForkL","ForkR"],"part_numbers":[],"evidence_type":["dimensional","functional"],"authority":"reconstructed","geometry_use":"prohibited","confidence":"high"}
+      ]
+    },
+    {
+      "id": "steering-and-axles",
+      "claims": [
+        {"id":"STEER-001","statement":"The operator can select four-wheel circle, four-wheel crab, or two-wheel front steering.","source":"3132247+3122332100","pvc":"2411-current-product","pages":[1,46,53],"components":["SteerPivot_FL","SteerPivot_FR","SteerPivot_RL","SteerPivot_RR"],"part_numbers":[],"evidence_type":["functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"STEER-002","statement":"Each axle uses one fixed axle-mounted double-acting double-rod/through-rod steering cylinder PN 7029528 and two tie bars PN 70026799 between its opposed rod ends and the integrated knuckle arms; no duplicate hydraulic actuator or selector linkage is present.","source":"3122329900+3122333200","pvc":"2411","pages":[7,432,484],"components":["FrontSteerCylinderBarrel","FrontSteerCylinderRodLeft","FrontSteerCylinderRodRight","FrontSteerBarLeft","FrontSteerBarRight","RearSteerCylinderBarrel","RearSteerCylinderRodLeft","RearSteerCylinderRodRight","RearSteerBarLeft","RearSteerBarRight"],"part_numbers":["7029528","70026799"],"evidence_type":["topological","functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"STEER-003","statement":"The hydraulic selector sends the rear cylinder opposite phase in four-wheel circle, holds it in two-wheel front, and sends it same phase in crab. The operator aligns one wheel per axle before selecting a mode, so mode selection does not change the static within-axle trapezoid. The service publication gives a 55 degree steering limit. Displayed angles are solved from the same reconstructed full-travel rack and invariant tie bars in every mode; within-axle toe and front/circle scrub are measured owned-geometry properties, not factory calibration.","source":"3122333200+3122332100+3122331300+implementation-boundary","pvc":"2411","pages":[7,16,65],"components":["SteerPivot_FL","SteerPivot_FR","SteerPivot_RL","SteerPivot_RR","FrontSteerBarLeft","FrontSteerBarRight","RearSteerBarLeft","RearSteerBarRight"],"part_numbers":[],"evidence_type":["topological","functional","dimensional"],"authority":"mixed","geometry_use":"published-dimension-plus-reconstruction","confidence":"high"},
+        {"id":"STEER-004","statement":"The axle assembly uses a transverse axle tube and central differential housing with a longitudinal driveshaft/pinion input; exact cast geometry and clearance locus remain unresolved.","source":"3122329900+3132247+implementation-boundary","pvc":"2411-current-product","pages":[1,424,432,434],"components":["FrontAxle","RearAxle","FrontDifferential","RearDifferential","FrontPinionFlange","RearPinionFlange"],"part_numbers":[],"evidence_type":["topological","dimensional"],"authority":"mixed","geometry_use":"published-dimension-plus-reconstruction","confidence":"high"}
+      ]
+    },
+    {
+      "id": "frame-level-and-rear-axle",
+      "claims": [
+        {"id":"LEVEL-001","statement":"The frame-level switch rotates the machine frame left or right and the published limit is 10 degrees.","source":"3132247+3122332100","pvc":"2411-current-product","pages":[1,47],"components":["FrameLevelPivot","FrameLevelCylinderBarrel","FrameLevelCylinderRod"],"part_numbers":[],"evidence_type":["functional","dimensional"],"authority":"verified-current","geometry_use":"published-dimension","confidence":"high"},
+        {"id":"LEVEL-002","statement":"The rear axle stabilization system has free-pivot, slow-pivot, and locked behavior depending on boom angle and machine controls.","source":"3122332100","pvc":"2411","pages":[71],"components":["RearAxle","RearAxleStabilizerCylinder"],"part_numbers":[],"evidence_type":["functional","topological"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"LEVEL-003","statement":"Frame-level and rear-axle stabilization behavior is not simulated; only a separated visual hierarchy and bounded roll are shown.","source":"implementation-boundary","pvc":"2411","pages":[],"components":["FrameLevelPivot","RearAxle"],"part_numbers":[],"evidence_type":["functional"],"authority":"deferred","geometry_use":"prohibited","confidence":"high"}
+      ]
+    },
+    {
+      "id": "carriage-and-forks",
+      "claims": [
+        {"id":"CARR-001","statement":"The standard carriage is fully floating and side-adjustable; 50, 60, and 72 inch widths are offered.","source":"3132247+3132245","pvc":"current-product","pages":[1,5],"components":["Carriage","ForkL","ForkR"],"part_numbers":[],"evidence_type":["topological","functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"CARR-002","statement":"The PVC 2411 parts manual identifies a 50 inch carriage assembly and its fork pin and collars.","source":"3122329900","pvc":"2411","pages":[128,129],"components":["Carriage","ForkPin","ForkCollar_L","ForkCollar_R"],"part_numbers":["1170021","3423275","90200003"],"evidence_type":["topological"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"CARR-003","statement":"The joystick controls boom movement and a roller switch controls carriage tilt.","source":"3122332100","pvc":"2411","pages":[132],"components":["CarriageTiltPivot"],"part_numbers":[],"evidence_type":["functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"}
+      ]
+    },
+    {
+      "id": "cab-and-controls",
+      "claims": [
+        {"id":"CAB-001","statement":"PVC 2411 contains separate open-cab and enclosed-cab assemblies; the frozen no-option configuration uses the open-cab branch.","source":"3122329900+3132247","pvc":"2411-current-product","pages":[1,550,560],"components":["OpenCab","FrontWindshield","RearCabGlass","RoofGlass","OperatorSeat","Dashboard","Joystick"],"part_numbers":[],"evidence_type":["topological","visual"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"},
+        {"id":"CAB-002","statement":"The operator station includes a steering wheel, instrument panel, joystick, pedals, horn, frame-level indicator, and three-position steer selector.","source":"3122332100","pvc":"2411","pages":[46,47,53],"components":["SteeringWheel","Dashboard","Joystick","BrakePedal","AcceleratorPedal"],"part_numbers":[],"evidence_type":["topological","functional"],"authority":"verified-current","geometry_use":"topology-only","confidence":"high"}
+      ]
+    }
+  ]
+}

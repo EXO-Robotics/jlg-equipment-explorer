@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "target_release": "1.4.0",
+  "model": "742",
+  "pvc": "2411",
+  "market": "ANSI_US",
+  "serial_family": "0160116278_and_after",
+  "choices": {
+    "engine": "DEUTZ_TCD_3_6L_L4_72HP_STANDARD",
+    "drive": "4X4_POWERSHIFT",
+    "steer": "SELECTABLE_CIRCLE_CRAB_FRONT",
+    "tires": "370_75_28_STANDARD",
+    "cab": "OPEN_CAB_STANDARD",
+    "carriage": "STANDARD_FLOATING_50IN_1270MM",
+    "forks": "PALLET_2_36X4X48IN_60X102X1200MM",
+    "options": []
+  },
+  "published_dimensions_m": {
+    "length_less_forks": 5.76,
+    "width": 2.46,
+    "height": 2.43,
+    "wheelbase": 3.42,
+    "ground_clearance": 0.432,
+    "outside_turning_radius": 3.66,
+    "fork_length": 1.2192,
+    "carriage_width": 1.27
+  },
+  "published_performance": {
+    "rated_capacity_kg": 3175,
+    "maximum_lift_height_m": 12.8,
+    "capacity_at_maximum_lift_height_kg": 2722,
+    "maximum_forward_reach_m": 8.86,
+    "capacity_at_maximum_reach_kg": 454,
+    "frame_level_degrees_each_side": 10,
+    "operating_weight_kg": 9645
+  },
+  "visual_motion_limits": {
+    "boom_angle_degrees": [0, 69],
+    "nested_section_travel_m": [3.604, 3.604],
+    "carriage_tilt_degrees": [-5, 12],
+    "steer_degrees": [-55, 55],
+    "frame_level_degrees": [-10, 10]
+  },
+  "interaction_volumes": [
+    "Chassis_Hit",
+    "Cab_Hit",
+    "Boom_Hit",
+    "Carriage_Hit",
+    "Steering_Hit",
+    "Hydraulics_Hit"
+  ],
+  "boundary": "Visual reconstruction only. Published limits identify the source envelope; this implementation is not load, stability, service, training, or safety authority."
+}

@@ -1,0 +1,110 @@
+{
+  "candidate_tree_sha256": "74ebfd02d588d29df86883d0584c294066a724a6801ae3791591a991f1b3adec",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "environment": {
+    "browser": {
+      "name": "Chromium",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+      "version": "151.0.7922.34"
+    },
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
+    }
+  },
+  "gates": {
+    "600s_browser_regression": {
+      "artifact": {
+        "bytes": 466677,
+        "path": "docs/review/742/600s-browser-regression.json",
+        "sha256": "9b8483f03fdebade592bfd161d2cf80821ea46fdaf56d06e4790c988ced60748"
+      },
+      "notes": "Exact-current 600S desktop and mobile regression capture reviewed; navigation, controls, selection, and zero-error assertions passed.",
+      "status": "pass"
+    },
+    "accessibility_semantics_and_keyboard": {
+      "artifact": {
+        "bytes": 305294,
+        "path": "docs/review/742/accessibility-semantics-keyboard.json",
+        "sha256": "beebe6b0a6fbe5483fb54fa69e4cbc97d1788a803fedf919d5f83e50dfbb1bb6"
+      },
+      "notes": "Chromium accessibility tree, engineering value text, live-region behavior, modal focus, and keyboard interactions reviewed and passed; no physical assistive-technology session is claimed.",
+      "status": "pass"
+    },
+    "cab_closeup_fidelity": {
+      "artifact": {
+        "bytes": 1505367,
+        "path": "docs/review/742/cab-close.png",
+        "sha256": "ec45da193d25c0466bc2c7f1a0adfe9f34c450a05ad3a65730bdd20b90df9c73"
+      },
+      "notes": "Exact frozen cab close-up reviewed; cab, controls, glazing, and boom-to-cab separation are visibly coherent.",
+      "status": "pass"
+    },
+    "desktop_browser_interaction": {
+      "artifact": {
+        "bytes": 180639,
+        "path": "docs/review/742/desktop-browser-interaction.json",
+        "sha256": "2e6b6ba249770751e2c9f96de0fcf0ed6a27244bcf0631723b65ebf58c89cd4d"
+      },
+      "notes": "Desktop controls, steering boundary, terminal faults, reset framing, and settled machine states reviewed and passed.",
+      "status": "pass"
+    },
+    "es1930m_browser_regression": {
+      "artifact": {
+        "bytes": 458504,
+        "path": "docs/review/742/es1930m-browser-regression.json",
+        "sha256": "33eced26805f03cc7e2228d77c1a93c11b8eea879e705b20c88b19107fcfbf35"
+      },
+      "notes": "Exact-current ES1930M desktop, mobile, and maximum-pose regression capture reviewed; all assertions passed.",
+      "status": "pass"
+    },
+    "extended_visual_fidelity": {
+      "artifact": {
+        "bytes": 6199,
+        "path": "docs/review/742/extended-visual-fidelity.json",
+        "sha256": "3a4e8be398dff7b3023fbf6e2fcb93717cff6d61aee5f8b159022e8d205cc5b3"
+      },
+      "notes": "All twelve named, hash-bound mechanism render claims directly reviewed and passed.",
+      "status": "pass"
+    },
+    "mobile_browser_interaction": {
+      "artifact": {
+        "bytes": 152655,
+        "path": "docs/review/742/mobile-browser-interaction.json",
+        "sha256": "aa79eb32d99cab03d18f8b9ec4c532890a910be319b2ca07496fd4747c44435c"
+      },
+      "notes": "Portrait and short-landscape controls, pinch zoom, reduced motion, and framing directly reviewed and passed.",
+      "status": "pass"
+    },
+    "performance_profile": {
+      "artifact": {
+        "bytes": 114583,
+        "path": "docs/review/742/performance-profile.json",
+        "sha256": "7c8406b2f8cd90310da43285d63e5031d34dd76c4f64938d31f3ddac084dc608"
+      },
+      "notes": "Local visible-frame performance windows and exact diagnostic screenshots reviewed; recorded thresholds passed.",
+      "status": "pass"
+    },
+    "semantic_selection": {
+      "artifact": {
+        "bytes": 141972,
+        "path": "docs/review/742/semantic-selection.json",
+        "sha256": "ba8bd213b15b7855c78e05fa69335e238900465d9c968a9849a0d0a1c55b6d37"
+      },
+      "notes": "Six-component visible-surface selection behavior and independent selection outcomes directly reviewed and passed.",
+      "status": "pass"
+    },
+    "stowed_visual_fidelity": {
+      "artifact": {
+        "bytes": 1276747,
+        "path": "docs/review/742/stowed-front-left.png",
+        "sha256": "d42835c5aed6d1714c30f5afbfb446d3aa8c8377ee6f86b56488b607d0af3c88"
+      },
+      "notes": "Exact frozen stowed render directly reviewed; whole-machine composition and boom/body separation passed.",
+      "status": "pass"
+    }
+  },
+  "reviewed_source_commit": "4d857635d8a325cc2a49f164cae292c4e92192f1",
+  "schema_version": "3.0.0"
+}

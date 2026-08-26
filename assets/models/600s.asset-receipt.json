@@ -7,11 +7,11 @@
   "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-26T12:21:47Z",
+  "exported_at": "2026-08-26T12:43:06Z",
   "sha256": "13292e6d742aef3483c3a8f7302b6bd54c7fcb35cb8181fbab76d4af133d99a4",
   "source_blend_sha256": "23de7b978f309b77ef5f4efd752950cdc7426393b494ae622ef698f559feaf0c",
   "cache_key": "13292e6d742a",
-  "runtime_sha256": "ccdf6b75c51487838c0d131c391d39c2133e62dc18d8b84c94a5aa5d317d28de",
+  "runtime_sha256": "b843b392338d97ec754e85bdc3d72420b5040b8fcfb098759d059a13a1e7b740",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [

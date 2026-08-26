@@ -6,9 +6,17 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+COMPACT_VIEWPORT_QUERY = '(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)'
+
+
+def compact_viewport(width: int, height: int) -> bool:
+    return width <= 800 or (height <= 500 and width > height and width <= 1000)
+
+
 spec = json.loads((ROOT / "machines/es1930m/mechanism.json").read_text())
 source = (ROOT / "machines/es1930m/articulation.js").read_text()
 viewer_source = (ROOT / "viewer/runtime.js").read_text()
+style_source = (ROOT / "viewer.css").read_text()
 route_source = (ROOT / "viewer/presentation-route.mjs").read_text()
 html_source = (ROOT / "es1930m/index.html").read_text()
 
@@ -56,6 +64,27 @@ required_presentation = [
     "rig.steerSpindles[0].rotation.y = sample.steerRight",
     "rig.wheelRollPivots[index].rotation.z = presentationRoute.wheelRotations[index]",
     "orbit.desiredTarget.set(sample.x, 1.05, sample.z)",
+    "const ASSET_LOAD_TIMEOUT_MS = 15000",
+    "function showTerminalError(error, message, source = \"runtime-failed\")",
+    'showTerminalError(error, `The ${machine.identity.model} asset failed its hierarchy or motion contract.',
+    '"load-timeout"',
+    '"load-failed"',
+    '"loader-start-failed"',
+    'document.querySelector(".interface")?.setAttribute("inert", "")',
+    'controlPanel.querySelectorAll("button, input")',
+    "if (terminalFailure) return",
+    "function syncReducedMotion(announce = false)",
+    'motionPreference.addEventListener("change", handleMotionPreferenceChange)',
+    "setPresentationRouteEnabled(false)",
+    "setEngineeringValueText(input, ariaValue)",
+    'input.setAttribute("aria-details", detailId)',
+    "document.body.dataset.runtimeFrameCount",
+    "document.body.dataset.terminalFrameCount",
+    "document.body.dataset.terminalFrameSource",
+    'metres platform height',
+    "function setOutputValue(output, value)",
+    'document.body.dataset.viewerRuntimeActive = "true"',
+    '__EQUIPMENT_EXPLORER_TEST_FAULT__ === "asset-contract"',
 ]
 for snippet in required_presentation:
     if snippet not in viewer_source:
@@ -63,10 +92,26 @@ for snippet in required_presentation:
 for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "const curvature = -planarCurvature", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
     if snippet not in route_source:
         raise RuntimeError(f"Figure-eight math contract missing: {snippet}")
-for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto"):
+for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.0.8', '../viewer.css?v=1.0.8', '../viewer/multi-machine.css?v=1.0.8', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', "countBootFrame", "dataset.terminalFrameCount", "dataset.terminalFrameSource", 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
     if snippet not in html_source:
         raise RuntimeError(f"600S-aligned control-board naming missing: {snippet}")
+if '<link rel="icon" href="../favicon.ico" type="image/x-icon">' not in html_source:
+    raise RuntimeError("ES1930M project-Pages favicon route drift")
 for snippet in ('"Auto loop"', '"Pause auto"', '"Resume auto"', 'dataset.autonomyMode'):
     if snippet not in viewer_source:
         raise RuntimeError(f"600S-aligned runtime naming missing: {snippet}")
-print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion), "presentation_contracts_checked": len(required_presentation) + 7, "control_board_names_checked": 7}, indent=2))
+if 'id="diagnostics" hidden aria-live=' in html_source:
+    raise RuntimeError("Continuously sampled diagnostics must not be a live region")
+if "const reducedMotion = query.get" in viewer_source:
+    raise RuntimeError("Reduced-motion preference must remain live after startup")
+for import_path in ("machine.js", "pointer-gestures.mjs", "presentation-route.mjs"):
+    if f'{import_path}?v=1.0.8' not in viewer_source:
+        raise RuntimeError(f"ES1930M runtime cache identity drift: {import_path}")
+for snippet in (f'const COMPACT_VIEWPORT_QUERY = "{COMPACT_VIEWPORT_QUERY}"', "matchMedia(COMPACT_VIEWPORT_QUERY)"):
+    if snippet not in viewer_source:
+        raise RuntimeError(f"ES1930M compact responsive contract missing: {snippet}")
+if f"@media {COMPACT_VIEWPORT_QUERY}" not in style_source:
+    raise RuntimeError("ES1930M compact CSS query drift")
+if not compact_viewport(844, 390) or compact_viewport(1280, 720):
+    raise RuntimeError("ES1930M responsive fixtures drifted")
+print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion), "presentation_contracts_checked": len(required_presentation) + 7, "control_board_names_checked": 7, "compact_short_landscape": [844, 390], "desktop_expanded": [1280, 720]}, indent=2))

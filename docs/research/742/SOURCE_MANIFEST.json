@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_freeze_date": "2026-08-25",
+  "target": {"model": "742", "pvc": "2411", "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"},
+  "repository_policy": {
+    "source_binaries_committed": false,
+    "signed_download_urls_committed": false,
+    "manufacturer_geometry_committed": false,
+    "manual_illustrations_are_scale_drawings": false,
+    "verification_policy": "Manifest validation is repository-local; frozen binary verification is a separate fail-closed command requiring an explicit sources directory."
+  },
+  "sources": [
+    {
+      "id": "SPEC", "kind": "specification", "publication": "3132247", "revision": "R092503", "pvc": "current-product", "pages": 2,
+      "sha256": "78e7e9abcc3f0d8419373e1b24ff75a90016345dd57b5bac33a86ca6b33a5625", "bytes": 611327,
+      "local_filename": "742-spec.pdf", "url": "https://dam.jlg.com/DigizuiteCore/LegacyService/api/assetstream/25121/-1.pdf", "admission": "primary"
+    },
+    {
+      "id": "BROCHURE", "kind": "brochure", "publication": "3132245", "revision": "R0726_05", "pvc": "current-product-family", "pages": 9,
+      "sha256": "c70a18eb6bf0926584ac092ef5ee70d326b3ba9d2feb23697185f27e369002dc", "bytes": 4874598,
+      "local_filename": "jlg-telehandlers-brochure.pdf", "url": "https://www.jlg.com/dfsmedia/e4042b10c9ce4595b4cc059f1299f079/184303-source", "admission": "primary"
+    },
+    {
+      "id": "OPERATION", "kind": "operation_manual", "publication": "3122332100", "revision": "2024-11-11", "pvc": "2411", "pages": 230,
+      "sha256": "9903efd6eabf5f3f57b3c0a7afcf853f9b41e4c34b6a70500b7ec967931c6b0b", "bytes": 25949463, "local_filename": "742-operation-3122332100.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications", "dam_asset_id": 148815, "admission": "primary"
+    },
+    {
+      "id": "SERVICE", "kind": "service_manual", "publication": "3122331300", "revision": "2025-04-03", "pvc": "2411", "pages": 674,
+      "sha256": "bb0a26df790c513e33a755d416fb45acb65a3ef6f6a6253c691c5d8da20d9bdf", "bytes": 111262097, "local_filename": "742-service-3122331300.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications", "dam_asset_id": 148813, "admission": "primary"
+    },
+    {
+      "id": "PARTS", "kind": "parts_manual", "publication": "3122329900", "revision": "2025-10-16", "pvc": "2411", "pages": 1214,
+      "sha256": "185fdd8247519bc5cc5f9af638b823f38ff4d8215cb8f247e323da3f5352af31", "bytes": 93054050, "local_filename": "742-parts-3122329900.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications", "dam_asset_id": 148066, "admission": "primary"
+    },
+    {
+      "id": "HYDRAULIC", "kind": "hydraulic_schematic", "publication": "3122333200", "revision": "2024-11-11", "pvc": "2411", "pages": 30,
+      "sha256": "8580a1c16cc2490011422f5159a2b598e8d8f2c8abbd4f546ff24bf4a3997258", "bytes": 2452651, "local_filename": "742-hydraulic-3122333200.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications", "dam_asset_id": 148879, "admission": "primary"
+    },
+    {
+      "id": "ELECTRICAL", "kind": "electrical_schematic", "publication": "3122333100", "revision": "2024-11-11", "pvc": "2411", "pages": 98,
+      "sha256": "c533e96b70e5910647112a56b3679a846e420844ab8a0f6b8d7b179584bbab67", "bytes": 4977809, "local_filename": "742-electrical-3122333100.pdf",
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications", "dam_asset_id": 148878, "admission": "primary"
+    },
+    {
+      "id": "GALLERY-FL", "kind": "official_gallery_image", "asset": "179076", "sha256": "a5fa48b13cd8c445bfab04d3b4f91d3c00754dc2969a23fac44bb40ea616ac7f", "bytes": 6591072, "local_filename": "742-extended-front-left.png", "admission": "visual-only"
+    },
+    {
+      "id": "GALLERY-FR", "kind": "official_gallery_image", "asset": "181978", "sha256": "b4fbd7d2fd676a264ac719a8bd7ad399791e2adcc28db5c8a4025c2bb6017fb7", "bytes": 6859495, "local_filename": "742-extended-front-right.png", "admission": "visual-only"
+    },
+    {
+      "id": "GALLERY-SIDE", "kind": "official_gallery_image", "asset": "179075", "sha256": "be019d40cacee8bd9efecfb05282d76a112fc1b121dd5688131f5160a6e16541", "bytes": 6546641, "local_filename": "742-retracted-side-right.png", "admission": "visual-only"
+    },
+    {
+      "id": "BIM", "kind": "ifc_package", "asset": "142541", "export_date": "2020-12-30", "format": "IFC2X3", "sha256": "25975b64343aea0469a46bae8232fe1483b195a3ae5e4fb0ff99a285267e5ae3", "bytes": 16546770, "local_filename": "1001226000_742_BIM_IFC.zip", "admission": "visual-envelope-only"
+    },
+    {
+      "id": "OPERATION-2605", "kind": "operation_manual_index_record", "publication": "3122603100", "revision": "2026-06-01", "pvc": "2605", "pages": null,
+      "catalog_url": "https://onlineexpress.jlg.com/technical-publications", "dam_asset_id": 210255, "admission": "quarantined-unmatched-pvc"
+    }
+  ]
+}

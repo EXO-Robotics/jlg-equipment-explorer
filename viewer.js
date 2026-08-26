@@ -7,17 +7,21 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.10";
+} from "./assets/models/600s.version.js?v=1.1.14";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
-const reducedMotion = query.get("reduce") === "1" || (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false);
-const compactRender = window.matchMedia?.("(max-width: 800px)").matches ?? false;
+const forceReducedMotion = query.get("reduce") === "1";
+const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)") ?? null;
+let reducedMotion = forceReducedMotion || Boolean(motionPreference?.matches);
+const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)";
+const compactRender = window.matchMedia?.(COMPACT_VIEWPORT_QUERY).matches ?? false;
 const lowMemoryDevice = Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4;
 const renderProfile = lowMemoryDevice ? "economy" : compactRender ? "mobile" : "desktop";
 const maximumPixelRatio = lowMemoryDevice ? 1.15 : compactRender ? 1.35 : 1.75;
 const shadowMapSize = lowMemoryDevice || compactRender ? 1024 : 2048;
 const minimumFrameInterval = lowMemoryDevice ? 1000 / 30 : compactRender ? 1000 / 45 : 0;
+const ASSET_LOAD_TIMEOUT_MS = 15000;
 const app = document.querySelector("#app");
 const loader = document.querySelector("#loader");
 const loaderStatus = document.querySelector("#loader-status");
@@ -27,7 +31,7 @@ const diagnosticsOutput = document.querySelector("#diagnostics");
 const controlPanel = document.querySelector(".control-panel");
 const controlsBody = document.querySelector("#machine-controls-body");
 const controlsToggle = document.querySelector("#controls-toggle");
-const mobileControlsQuery = window.matchMedia("(max-width: 800px)");
+const mobileControlsQuery = window.matchMedia(COMPACT_VIEWPORT_QUERY);
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 const runtimeDiagnostics = {
   errors: 0,
@@ -35,6 +39,9 @@ const runtimeDiagnostics = {
   frameRate: "sampling",
   loadMs: "pending",
 };
+let terminalFailure = false;
+let animationFrameId = null;
+let runtimeFrameCount = 0;
 document.body.dataset.renderProfile = renderProfile;
 document.body.dataset.reducedMotion = String(reducedMotion);
 
@@ -67,13 +74,42 @@ if (mobileControlsQuery.addEventListener) mobileControlsQuery.addEventListener("
 else mobileControlsQuery.addListener(handleMobileControlsChange);
 setMobileControls(false);
 
-function recordRuntimeError() {
+function recordRuntimeError(error) {
   runtimeDiagnostics.errors += 1;
   document.body.dataset.runtimeErrorCount = String(runtimeDiagnostics.errors);
+  if (error) console.error(error);
   updateDiagnostics();
 }
-window.addEventListener("error", recordRuntimeError);
-window.addEventListener("unhandledrejection", recordRuntimeError);
+
+function showTerminalError(error, message, source = "runtime-failed") {
+  if (terminalFailure) return;
+  terminalFailure = true;
+  if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+  animationFrameId = null;
+  document.body.classList.remove("inspector-open", "mobile-controls-open");
+  document.body.classList.add("viewer-terminal-error");
+  document.body.dataset.viewerTerminal = "true";
+  document.body.dataset.machineSource = source;
+  document.body.dataset.viewerRuntimeActive = "false";
+  const useRuntimeFrameCount = runtimeFrameCount >= 2;
+  const terminalFrameCount = useRuntimeFrameCount ? runtimeFrameCount : Number(document.body.dataset.bootFrameCount || 0);
+  document.body.dataset.terminalFrameCount = String(terminalFrameCount);
+  document.body.dataset.terminalFrameSource = useRuntimeFrameCount ? "runtime" : "boot";
+  recordRuntimeError(error);
+  loader.hidden = true;
+  document.querySelector("#error-copy").textContent = message;
+  errorPanel.hidden = false;
+  app.setAttribute("inert", "");
+  document.querySelector(".interface")?.setAttribute("inert", "");
+  document.querySelector("#inspector")?.setAttribute("inert", "");
+  controlsBody.inert = true;
+  controlPanel.setAttribute("aria-disabled", "true");
+  controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
+  errorPanel.focus({ preventScroll: true });
+}
+window.addEventListener("error", (event) => showTerminalError(event.error, "The 600S viewer stopped after an unexpected runtime error. No substitute was shown."));
+window.addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The 600S viewer stopped after an unexpected runtime error. No substitute was shown."));
+document.body.dataset.viewerRuntimeActive = "true";
 
 function updateDiagnostics() {
   if (!diagnosticsOutput) return;
@@ -107,8 +143,7 @@ function createRenderer() {
 
 const renderer = createRenderer();
 if (!renderer) {
-  loader.hidden = true;
-  errorPanel.hidden = false;
+  showTerminalError(new Error("WebGL unavailable"), "This interactive study needs a browser with WebGL enabled.", "webgl-unavailable");
 } else {
 renderer.setPixelRatio(pixelRatio());
 renderer.setSize(innerWidth, innerHeight);
@@ -750,10 +785,18 @@ prepareHitVolumes(rig.hitVolumes);
 
 function loadBlockoutRig() {
   return new Promise((resolve) => {
+    const loadTimeout = setTimeout(() => {
+      showTerminalError(new Error(`600S asset load exceeded ${ASSET_LOAD_TIMEOUT_MS} ms`), "The evidence-bound 600S asset did not finish loading in time. No substitute was shown.", "load-timeout");
+      resolve();
+    }, ASSET_LOAD_TIMEOUT_MS);
     loaderStatus.textContent = "Loading equipment model";
     loaderDetail.textContent = "Fetching the optimized 600S detailed reconstruction";
-    new GLTFLoader().load(GLB_URL, (gltf) => {
+    try {
+      new GLTFLoader().load(GLB_URL, (gltf) => {
+      clearTimeout(loadTimeout);
+      if (terminalFailure) { resolve(); return; }
       try {
+        if (globalThis.__EQUIPMENT_EXPLORER_TEST_FAULT__ === "asset-contract") throw new Error("Injected 600S asset-contract failure");
         loaderStatus.textContent = "Preparing materials and shadows";
         loaderDetail.textContent = `Applying the ${renderProfile} render profile`;
         const loadedRig = configureBlockoutRig(gltf);
@@ -769,9 +812,7 @@ function loadBlockoutRig() {
         updateDiagnostics();
         projectOverview.facts[0] = ["Model", `Blender Showcase reconstruction v${SHOWCASE_RELEASE} · ${loadedRig.visibleMeshCount} runtime meshes`];
       } catch (error) {
-        console.warn("600S GLB contract validation failed; retaining procedural degraded fixture.", error);
-        document.body.dataset.machineSource = "procedural-contract-fallback";
-        projectOverview.facts[0] = ["Model", "Procedural degraded fixture"];
+        showTerminalError(error, "The evidence-bound 600S asset failed its hierarchy or motion contract. No substitute was shown.", "contract-failed");
       }
       resolve();
     }, (event) => {
@@ -782,13 +823,15 @@ function loadBlockoutRig() {
         loaderDetail.textContent = `${(event.loaded / 1024).toFixed(0)} KB received`;
       }
     }, (error) => {
-      console.warn("600S GLB failed to load; retaining procedural degraded fixture.", error);
-      document.body.dataset.machineSource = "procedural-load-fallback";
-      projectOverview.facts[0] = ["Model", "Procedural degraded fixture"];
-      loaderStatus.textContent = "Using simplified fallback";
-      loaderDetail.textContent = "The Blender model could not be loaded";
+      clearTimeout(loadTimeout);
+      showTerminalError(error, "The evidence-bound 600S asset could not be loaded. No procedural substitute was used.", "load-failed");
       resolve();
-    });
+      });
+    } catch (error) {
+      clearTimeout(loadTimeout);
+      showTerminalError(error, "The evidence-bound 600S asset loader could not start. No procedural substitute was used.", "loader-start-failed");
+      resolve();
+    }
   });
 }
 
@@ -816,7 +859,7 @@ let lastMotionStatus = motionStatus.value || motionStatus.textContent;
 const suffixes = { boomAngle: "°", telescope: "%", turntableAngle: "°", steeringAngle: "°" };
 const controlNames = { boomAngle: "Boom", telescope: "Extend", turntableAngle: "Rotate", steeringAngle: "Steer" };
 const fixedPoseQuery = ["boom", "extend", "rotate", "steer"].some((key) => query.has(key));
-const autonomyLocked = reducedMotion || fixedPoseQuery;
+let autonomyLocked = reducedMotion || fixedPoseQuery;
 const autonomy = {
   enabled: !autonomyLocked && query.get("auto") !== "0",
   phase: 0,
@@ -845,6 +888,20 @@ function setMotionStatus(value) {
   motionStatus.value = value;
 }
 
+function setEngineeringValueText(input, value) {
+  const detailId = `${input.id}-engineering-detail`;
+  let detail = document.getElementById(detailId);
+  if (!detail) {
+    detail = document.createElement("span");
+    detail.id = detailId;
+    detail.className = "sr-only";
+    input.insertAdjacentElement("afterend", detail);
+  }
+  if (detail.textContent !== value) detail.textContent = value;
+  if (input.getAttribute("aria-valuetext") !== value) input.setAttribute("aria-valuetext", value);
+  if (input.getAttribute("aria-details") !== detailId) input.setAttribute("aria-details", detailId);
+}
+
 Object.entries(inputs).forEach(([key, input]) => {
   input.addEventListener("pointerdown", () => { autonomy.activeControl = key; });
   const releaseControl = () => {
@@ -857,7 +914,7 @@ Object.entries(inputs).forEach(([key, input]) => {
     targets[key] = Number(input.value);
     if (autonomy.enabled) autonomy.overrideUntil[key] = performance.now() + AUTONOMY_OVERRIDE_MS;
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
-    input.setAttribute("aria-valuetext", outputs[key].value);
+    setEngineeringValueText(input, outputs[key].value);
     setMotionStatus(autonomy.enabled ? "Manual override" : "Positioning");
   });
 });
@@ -866,7 +923,7 @@ function syncInputs() {
   Object.entries(inputs).forEach(([key, input]) => {
     input.value = String(Math.round(targets[key]));
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
-    input.setAttribute("aria-valuetext", outputs[key].value);
+    setEngineeringValueText(input, outputs[key].value);
   });
 }
 
@@ -901,15 +958,20 @@ function updateAutonomyTelemetry(now = performance.now()) {
   const recovering = autonomy.enabled && !overrideKeys.length && autonomy.routeError > 0.6;
   const overrideLabel = overrideKeys.map((key) => controlNames[key]).join(" + ");
   const mode = autonomyLocked ? "Static pose" : autonomy.enabled ? overrideKeys.length ? `Override · ${overrideLabel}` : recovering ? "Route recovery" : "Auto loop" : "Manual";
-  autonomyMode.value = mode;
-  autonomyNote.textContent = autonomyLocked
+  if (autonomyMode.value !== mode) autonomyMode.value = mode;
+  const note = autonomyLocked
     ? reducedMotion ? "Reduced motion keeps the route stationary." : "Query poses keep the route stationary."
     : autonomy.enabled ? recovering ? "Steering back onto the presentation route." : "Move a slider for a 6 s override." : "All machine controls are live.";
-  driveHeadingOutput.value = `${String(normalizedHeadingDegrees(autonomy.heading)).padStart(3, "0")}°`;
-  driveLoopOutput.value = `${Math.round((autonomy.phase / (Math.PI * 2)) * 100)}%`;
+  if (autonomyNote.textContent !== note) autonomyNote.textContent = note;
+  const heading = `${String(normalizedHeadingDegrees(autonomy.heading)).padStart(3, "0")}°`;
+  const loop = `${Math.round((autonomy.phase / (Math.PI * 2)) * 100)}%`;
+  if (driveHeadingOutput.value !== heading) driveHeadingOutput.value = heading;
+  if (driveLoopOutput.value !== loop) driveLoopOutput.value = loop;
   autonomyToggle.disabled = autonomyLocked;
-  autonomyToggle.setAttribute("aria-pressed", String(autonomy.enabled));
-  autonomyToggle.textContent = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
+  const pressed = String(autonomy.enabled);
+  if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
+  const buttonLabel = autonomyLocked ? "Static" : autonomy.enabled ? "Pause auto" : "Start auto";
+  if (autonomyToggle.textContent !== buttonLabel) autonomyToggle.textContent = buttonLabel;
   document.body.dataset.autonomyMode = autonomyLocked ? "static" : autonomy.enabled ? overrideKeys.length ? "override" : recovering ? "recovering" : "auto" : "manual";
   document.body.dataset.autonomyOverrides = overrideKeys.join(",") || "none";
   document.body.dataset.driveHeading = String(normalizedHeadingDegrees(autonomy.heading));
@@ -924,6 +986,31 @@ function setAutonomyEnabled(enabled) {
   setMotionStatus(autonomy.enabled ? "Autonomous" : "Manual");
   updateAutonomyTelemetry();
 }
+
+function syncReducedMotion(announce = false) {
+  const nextReducedMotion = forceReducedMotion || Boolean(motionPreference?.matches);
+  const changed = nextReducedMotion !== reducedMotion;
+  const wasAutonomous = autonomy.enabled;
+  reducedMotion = nextReducedMotion;
+  autonomyLocked = reducedMotion || fixedPoseQuery;
+  document.body.dataset.reducedMotion = String(reducedMotion);
+  if (reducedMotion) {
+    Object.keys(targets).forEach((key) => { targets[key] = machineState[key]; });
+    orbit.vTheta = 0;
+    orbit.vPhi = 0;
+    setAutonomyEnabled(false);
+    syncInputs();
+    if (announce && changed) setMotionStatus(wasAutonomous ? "Reduced motion · auto stopped" : "Reduced motion");
+  } else {
+    updateAutonomyTelemetry();
+    if (announce && changed) setMotionStatus(autonomyLocked ? "Static query pose" : "Manual · auto available");
+  }
+  updateDiagnostics();
+}
+
+const handleMotionPreferenceChange = () => syncReducedMotion(true);
+if (motionPreference?.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
+else motionPreference?.addListener?.(handleMotionPreferenceChange);
 
 autonomyToggle.addEventListener("click", () => setAutonomyEnabled(!autonomy.enabled));
 updateAutonomyTelemetry();
@@ -1488,6 +1575,8 @@ function updateCamera(dt) {
     orbit.radius = THREE.MathUtils.damp(orbit.radius, orbit.radiusGoal, 5, dt);
     orbit.target.lerp(orbit.targetGoal, 1 - Math.exp(-5 * dt));
   }
+  document.body.dataset.orbitCameraDistanceM = orbit.radius.toFixed(3);
+  document.body.dataset.orbitDesiredDistanceM = orbit.radiusGoal.toFixed(3);
   const sinPhi = Math.sin(orbit.phi);
   camera.position.set(
     orbit.target.x + orbit.radius * sinPhi * Math.sin(orbit.theta),
@@ -1510,7 +1599,11 @@ let lastRenderedAt = 0;
 let collectFrameSamples = false;
 const frameSamples = [];
 function animate(now = 0) {
-  requestAnimationFrame(animate);
+  if (terminalFailure) return;
+  animationFrameId = requestAnimationFrame(animate);
+  runtimeFrameCount += 1;
+  document.body.dataset.runtimeFrameCount = String(runtimeFrameCount);
+  document.body.dataset.runtimeLastFrameMs = Number(now).toFixed(3);
   if (document.hidden) {
     clock.getDelta();
     return;
@@ -1543,10 +1636,12 @@ function animate(now = 0) {
 resetView();
 updateCamera(0.016);
 renderer.render(scene, camera);
-animate();
+animationFrameId = requestAnimationFrame(animate);
 setTimeout(() => document.querySelector("#interaction-hint").classList.add("fade"), 6500);
 loadBlockoutRig().finally(() => {
+  if (terminalFailure) return;
   requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (terminalFailure) return;
     const loadMs = Math.round(performance.now() - (window.__showcaseBootAt || 0));
     document.body.dataset.loadMs = String(loadMs);
     runtimeDiagnostics.loadMs = `${loadMs} ms`;

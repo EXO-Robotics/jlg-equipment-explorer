@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -16,6 +17,13 @@ concurrency:
 
 jobs:
   deploy:
+    env:
+      BLENDER_VERSION: "5.1.1"
+      BLENDER_ARCHIVE: blender-5.1.1-linux-x64.tar.xz
+      # Published in https://mirror.blender.org/release/Blender5.1/blender-5.1.1.sha256
+      BLENDER_SHA256: 6f9fff89fef154ef7974d1a1c4b916ab4bc1f5618bcb48d5befee1bd0a7c7f2a
+      BLENDER_BIN: ${{ github.workspace }}/.tooling/blender-5.1.1-linux-x64/blender
+      JLG742_SOURCE_EVIDENCE_RUN_ID: ${{ vars.JLG742_SOURCE_EVIDENCE_RUN_ID }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,11 +31,72 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
 
-      - name: Validate model and runtime contracts
+      - name: Require private 742 frozen-source artifact identity
+        run: |
+          case "${JLG742_SOURCE_EVIDENCE_RUN_ID}" in
+            ''|*[!0-9]*) echo "JLG742_SOURCE_EVIDENCE_RUN_ID must be an exact Actions run ID" >&2; exit 1 ;;
+          esac
+
+      - name: Download private frozen 742 source evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: 742-frozen-source-evidence
+          path: _private-evidence/742
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ vars.JLG742_SOURCE_EVIDENCE_RUN_ID }}
+
+      - name: Install checksum-pinned Blender 5.1.1
+        run: |
+          test "$(uname -m)" = "x86_64"
+          mkdir -p .tooling
+          curl --fail --location --retry 3 \
+            --output ".tooling/${BLENDER_ARCHIVE}" \
+            "https://mirror.blender.org/release/Blender5.1/blender-5.1.1-linux-x64.tar.xz"
+          echo "${BLENDER_SHA256}  .tooling/${BLENDER_ARCHIVE}" | sha256sum --check -
+          tar -xJf ".tooling/${BLENDER_ARCHIVE}" -C .tooling
+          test -x "${BLENDER_BIN}"
+          test "$("${BLENDER_BIN}" --version | head -n 1)" = "Blender ${BLENDER_VERSION}"
+
+      - name: Rebuild exact checked-out 742 candidate twice
+        run: |
+          test "${GITHUB_SHA}" = "$(git rev-parse HEAD)"
+          git diff --exit-code
+          git diff --cached --exit-code
+          mkdir -p _attestations
+          python3 -B scripts/verify_742_deterministic_rebuild.py \
+            --blender "${BLENDER_BIN}" \
+            --output _attestations/742-deterministic-rebuild-attestation.json
+
+      - name: Run pinned-Blender posed-GLB companion gate
+        run: |
+          test "${GITHUB_SHA}" = "$(git rev-parse HEAD)"
+          BLENDER_BIN="${BLENDER_BIN}" python3 -B scripts/run_742_posed_glb_gate.py \
+            > _attestations/742-blender-posed-glb-result.json
+
+      - name: Validate repository contracts
         run: |
           npm run check
           python3 -B scripts/validate_es1930m_receipt.py --require-predeploy
+          python3 -B scripts/validate_742_evidence.py \
+            --sources-dir _private-evidence/742 \
+            --require-source-binaries \
+            > _attestations/742-source-replay-result.json
+
+      - name: Enforce strict 742 predeployment gate
+        run: |
+          python3 -B scripts/validate_742_receipt.py \
+            --sources-dir _private-evidence/742 \
+            --require-source-binaries \
+            --require-human-reviewed \
+            --rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json
+          REVIEWED_SOURCE_COMMIT="$(python3 -B -c 'import json; print(json.load(open("assets/models/742.asset-receipt.json", encoding="utf-8"))["human_review"]["binding"]["reviewed_source_commit"])')"
+          printf '%s\n' "${REVIEWED_SOURCE_COMMIT}" | grep -Eq '^[0-9a-f]{40}$'
+          git cat-file -e "${REVIEWED_SOURCE_COMMIT}^{commit}"
+          git merge-base --is-ancestor "${REVIEWED_SOURCE_COMMIT}" "${GITHUB_SHA}"
 
       - name: Assemble static site
         run: |
@@ -46,3 +115,30 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+
+      - name: Verify exact deployed 742 public surface
+        run: |
+          python3 -B scripts/verify_pages_deployment.py \
+            --base-url "${{ steps.deployment.outputs.page_url }}" \
+            --build-manifest _site/pages-build-manifest.json \
+            --candidate-receipt assets/models/742.asset-receipt.json \
+            --workflow-run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            --source-replay-result _attestations/742-source-replay-result.json \
+            --source-evidence-run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${JLG742_SOURCE_EVIDENCE_RUN_ID}" \
+            --rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json \
+            --output _attestations/742-pages-http-attestation.json
+
+      - name: Enforce complete deployed candidate gate
+        run: |
+          python3 -B scripts/validate_742_receipt.py \
+            --sources-dir _private-evidence/742 \
+            --deployment-attestation _attestations/742-pages-http-attestation.json \
+            --rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json \
+            --require-release
+
+      - name: Upload external deployment attestation
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: 742-pages-attestation
+          path: _attestations
+          if-no-files-found: error
