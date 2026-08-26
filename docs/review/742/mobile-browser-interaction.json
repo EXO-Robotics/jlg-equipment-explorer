@@ -1,26 +1,83 @@
 {
-  "schema_version": "1.0.0",
-  "kind": "742-gate-observation",
-  "gate": "mobile_browser_interaction",
+  "boundary": "Viewport and pointer-gesture transcript only; no physical mobile device or mobile GPU claim.",
+  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
-  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
   "environment": {
     "browser": "Codex in-app Browser with Chromium engine",
     "os": "macOS 26.5.2 build 25F84",
-    "viewports_css_px": [[390, 844], [844, 390]]
-  },
-  "observations": {
-    "dom_datasets": {
-      "portrait": {"source": "glb-validated", "render_profile": "portrait", "pixel_ratio": 1.0, "shadow_profile": "512px-16m", "sample_count": 180, "p95_ms": 17.7, "worst_ms": 49.1, "visible_stalls": 0, "runtime_errors": 0},
-      "short_landscape": {"source": "glb-validated", "render_profile": "short-landscape", "pixel_ratio": 1.0, "shadow_profile": "512px-14m", "sample_count": 180, "p95_ms": 17.8, "worst_ms": 33.4, "visible_stalls": 0, "runtime_errors": 0}
-    },
-    "interaction_transcript": [
-      {"viewport_css_px": [390, 844], "action": "load stowed route and expand Adjust", "observed": "complete machine visible; five enabled manual sliders reachable"},
-      {"viewport_css_px": [390, 844], "action": "enable reduced motion", "observed": "Showcase disabled while five manual sliders remained enabled"},
-      {"viewport_css_px": [844, 390], "action": "load route and expand Adjust", "observed": "five sliders present and reachable in short landscape"},
-      {"viewport_css_px": [390, 844], "action": "perform pinch gesture", "observed": "zoom changed without an accidental component selection"}
+    "viewports_css_px": [
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
     ]
   },
-  "boundary": "Viewport and pointer-gesture transcript only; no physical mobile device or mobile GPU claim."
+  "gate": "mobile_browser_interaction",
+  "kind": "742-gate-observation",
+  "observations": {
+    "dom_datasets": {
+      "portrait": {
+        "p95_ms": 17.7,
+        "pixel_ratio": 1.0,
+        "render_profile": "portrait",
+        "runtime_errors": 0,
+        "sample_count": 180,
+        "shadow_profile": "512px-16m",
+        "source": "glb-validated",
+        "visible_stalls": 0,
+        "worst_ms": 49.1
+      },
+      "short_landscape": {
+        "p95_ms": 17.8,
+        "pixel_ratio": 1.0,
+        "render_profile": "short-landscape",
+        "runtime_errors": 0,
+        "sample_count": 180,
+        "shadow_profile": "512px-14m",
+        "source": "glb-validated",
+        "visible_stalls": 0,
+        "worst_ms": 33.4
+      }
+    },
+    "interaction_transcript": [
+      {
+        "action": "load stowed route and expand Adjust",
+        "observed": "complete machine visible; five enabled manual sliders reachable",
+        "viewport_css_px": [
+          390,
+          844
+        ]
+      },
+      {
+        "action": "enable reduced motion",
+        "observed": "Showcase disabled while five manual sliders remained enabled",
+        "viewport_css_px": [
+          390,
+          844
+        ]
+      },
+      {
+        "action": "load route and expand Adjust",
+        "observed": "five sliders present and reachable in short landscape",
+        "viewport_css_px": [
+          844,
+          390
+        ]
+      },
+      {
+        "action": "perform pinch gesture",
+        "observed": "zoom changed without an accidental component selection",
+        "viewport_css_px": [
+          390,
+          844
+        ]
+      }
+    ]
+  },
+  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
+  "schema_version": "1.0.0"
 }

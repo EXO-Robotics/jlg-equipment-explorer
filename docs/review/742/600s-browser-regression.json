@@ -1,28 +1,43 @@
 {
-  "schema_version": "1.0.0",
-  "kind": "742-upstream-regression-observation",
-  "gate": "600s_browser_regression",
+  "boundary": "Exact local upstream release identity and browser DOM transcript; no new 600S visual acceptance claim.",
+  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
-  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
   "environment": {
     "browser": "Codex in-app Browser with Chromium engine",
     "os": "macOS 26.5.2 build 25F84"
   },
-  "upstream_identity": {
-    "route": "/",
-    "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
-    "release": "1.1.0",
-    "asset_sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
-    "runtime_sha256": "27fab21dbd5f147f51d17e930674c82ccefaa8266ef90f047bb892199fd5319e",
-    "receipt_sha256": "3c0bd6d9d882a2b1deb52c7137cb1e6c28de1f9c831be4ab652285c2af32986b",
-    "receipt_bytes": 3675
-  },
+  "gate": "600s_browser_regression",
+  "kind": "742-upstream-regression-observation",
   "observations": {
-    "title": "600S Interactive Equipment Study",
-    "status_text": "source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 106 ms · render desktop / 60 fps / p95 17.8 ms · reduced motion off",
-    "parsed_status": {"source": "blender-showcase-v1.1.0", "meshes": 92, "selection": "5/5 pass", "errors": 0, "load_ms": 106, "render_profile": "desktop", "fps": 60, "p95_ms": 17.8, "reduced_motion": "off"},
-    "interaction_transcript": [{"action": "load root / against exact upstream receipt identity", "observed": "title and status DOM matched; selection 5/5 passed; errors 0"}]
+    "interaction_transcript": [
+      {
+        "action": "load root / against exact upstream receipt identity",
+        "observed": "title and status DOM matched; selection 5/5 passed; errors 0"
+      }
+    ],
+    "parsed_status": {
+      "errors": 0,
+      "fps": 60,
+      "load_ms": 106,
+      "meshes": 92,
+      "p95_ms": 17.8,
+      "reduced_motion": "off",
+      "render_profile": "desktop",
+      "selection": "5/5 pass",
+      "source": "blender-showcase-v1.1.0"
+    },
+    "status_text": "source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 106 ms \u00b7 render desktop / 60 fps / p95 17.8 ms \u00b7 reduced motion off",
+    "title": "600S Interactive Equipment Study"
   },
-  "boundary": "Exact local upstream release identity and browser DOM transcript; no new 600S visual acceptance claim."
+  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
+  "schema_version": "1.0.0",
+  "upstream_identity": {
+    "asset_sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
+    "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
+    "receipt_bytes": 3675,
+    "receipt_sha256": "3c0bd6d9d882a2b1deb52c7137cb1e6c28de1f9c831be4ab652285c2af32986b",
+    "release": "1.1.0",
+    "route": "/",
+    "runtime_sha256": "27fab21dbd5f147f51d17e930674c82ccefaa8266ef90f047bb892199fd5319e"
+  }
 }

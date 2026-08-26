@@ -1,27 +1,45 @@
 {
-  "schema_version": "1.0.0",
-  "kind": "742-gate-observation",
-  "gate": "accessibility_semantics_and_keyboard",
+  "boundary": "Keyboard and browser semantic-surface transcript only; no VoiceOver, NVDA, or other physical screen-reader session is claimed.",
+  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
-  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
   "environment": {
     "browser": "Codex in-app Browser with Chromium engine",
     "os": "macOS 26.5.2 build 25F84"
   },
+  "gate": "accessibility_semantics_and_keyboard",
+  "kind": "742-gate-observation",
   "observations": {
+    "keyboard_transcript": [
+      {
+        "action": "open information dialog, press Tab repeatedly",
+        "observed": "focus remained trapped inside the dialog"
+      },
+      {
+        "action": "press Escape",
+        "observed": "dialog closed and focus returned to its opener"
+      },
+      {
+        "action": "open component dialog, press Escape",
+        "observed": "dialog closed and focus returned to the component opener"
+      },
+      {
+        "action": "enable reduced motion",
+        "observed": "automatic Showcase disabled; five manual controls remained enabled"
+      }
+    ],
     "semantic_snapshot": {
       "application_instructions_exposed": true,
-      "slider_aria_valuetext": ["0°", "0.00 m visual", "0°", "Center", "Level"],
       "dialog_background_inert": true,
-      "physical_screen_reader_session_claimed": false
-    },
-    "keyboard_transcript": [
-      {"action": "open information dialog, press Tab repeatedly", "observed": "focus remained trapped inside the dialog"},
-      {"action": "press Escape", "observed": "dialog closed and focus returned to its opener"},
-      {"action": "open component dialog, press Escape", "observed": "dialog closed and focus returned to the component opener"},
-      {"action": "enable reduced motion", "observed": "automatic Showcase disabled; five manual controls remained enabled"}
-    ]
+      "physical_screen_reader_session_claimed": false,
+      "slider_aria_valuetext": [
+        "0\u00b0",
+        "0.00 m visual",
+        "0\u00b0",
+        "Center",
+        "Level"
+      ]
+    }
   },
-  "boundary": "Keyboard and browser semantic-surface transcript only; no VoiceOver, NVDA, or other physical screen-reader session is claimed."
+  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
+  "schema_version": "1.0.0"
 }

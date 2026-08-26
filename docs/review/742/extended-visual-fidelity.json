@@ -1,13 +1,18 @@
 {
-  "schema_version": "1.0.0",
-  "kind": "742-visual-gate-observation",
-  "gate": "extended_visual_fidelity",
+  "boundary": "Owned rendered presentation geometry only; no manufacturer geometry, load, stability, hydraulic response, service, or safety claim.",
+  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
-  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
   "environment": {
-    "renderer": "Blender 5.1.1 deterministic review renderer",
-    "os": "macOS 26.5.2 build 25F84"
+    "os": "macOS 26.5.2 build 25F84",
+    "renderer": "Blender 5.1.1 deterministic review renderer"
+  },
+  "gate": "extended_visual_fidelity",
+  "kind": "742-visual-gate-observation",
+  "observations": {
+    "double_ended_steering_ram_and_bars_visible": true,
+    "maximum_lift_level_attachment_visible": true,
+    "maximum_reach_load_center_pose_visible": true,
+    "retract_chain_sheave_routing_visible": true
   },
   "render_artifacts": [
     "docs/review/742/maximum-lift-level-forks.png",
@@ -15,11 +20,6 @@
     "docs/review/742/retract-chain-routing-cutaway.png",
     "docs/review/742/steering-linkage-cutaway.png"
   ],
-  "observations": {
-    "maximum_lift_level_attachment_visible": true,
-    "maximum_reach_load_center_pose_visible": true,
-    "retract_chain_sheave_routing_visible": true,
-    "double_ended_steering_ram_and_bars_visible": true
-  },
-  "boundary": "Owned rendered presentation geometry only; no manufacturer geometry, load, stability, hydraulic response, service, or safety claim."
+  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
+  "schema_version": "1.0.0"
 }

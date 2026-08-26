@@ -1,56 +1,78 @@
 {
-  "schema_version": "1.0.0",
-  "kind": "742-gate-observation",
-  "gate": "performance_profile",
+  "boundary": "Local Chromium frame-time samples only; no physical low-end mobile GPU claim.",
+  "candidate_tree_sha256": "38db981e9913b7e484b327bbc05b6025049272effef0acbe295c218bf07cd66d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "38d82d1b9a8643617c00cc35ac8b99f1699b8ec20676b1587b83e348c1e05e61",
-  "reviewed_source_commit": "ec07090d91c646fa29fd3bbee834adda688bc1b5",
   "environment": {
     "browser": "Codex in-app Browser with Chromium engine",
     "os": "macOS 26.5.2 build 25F84",
-    "viewports_css_px": [[1280, 720], [390, 844], [844, 390]]
+    "viewports_css_px": [
+      [
+        1280,
+        720
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ]
   },
+  "gate": "performance_profile",
+  "kind": "742-gate-observation",
   "observations": {
+    "artifact_safe_sample_metadata_exposed": true,
+    "background_samples_excluded": true,
     "desktop": {
-      "viewport_css_px": [1280, 720],
-      "render_profile": "desktop",
-      "pixel_ratio": 1.0,
-      "shadow_profile": "1024px-14m",
-      "sample_count": 180,
+      "machine_source": "glb-validated",
       "p95_frame_time_ms": 17.6,
-      "worst_frame_time_ms": 33.3,
-      "visible_stall_count_gte_250ms": 0,
-      "runtime_error_count": 0,
-      "machine_source": "glb-validated"
-    },
-    "portrait": {
-      "viewport_css_px": [390, 844],
-      "render_profile": "portrait",
       "pixel_ratio": 1.0,
-      "shadow_profile": "512px-16m",
-      "sample_count": 180,
-      "p95_frame_time_ms": 17.7,
-      "worst_frame_time_ms": 49.1,
-      "visible_stall_count_gte_250ms": 0,
+      "render_profile": "desktop",
       "runtime_error_count": 0,
-      "machine_source": "glb-validated"
+      "sample_count": 180,
+      "shadow_profile": "1024px-14m",
+      "viewport_css_px": [
+        1280,
+        720
+      ],
+      "visible_stall_count_gte_250ms": 0,
+      "worst_frame_time_ms": 33.3
+    },
+    "physical_low_end_mobile_gpu_claimed": false,
+    "portrait": {
+      "machine_source": "glb-validated",
+      "p95_frame_time_ms": 17.7,
+      "pixel_ratio": 1.0,
+      "render_profile": "portrait",
+      "runtime_error_count": 0,
+      "sample_count": 180,
+      "shadow_profile": "512px-16m",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "visible_stall_count_gte_250ms": 0,
+      "worst_frame_time_ms": 49.1
     },
     "short_landscape": {
-      "viewport_css_px": [844, 390],
-      "render_profile": "short-landscape",
-      "pixel_ratio": 1.0,
-      "shadow_profile": "512px-14m",
-      "sample_count": 180,
+      "machine_source": "glb-validated",
       "p95_frame_time_ms": 17.8,
-      "worst_frame_time_ms": 33.4,
-      "visible_stall_count_gte_250ms": 0,
+      "pixel_ratio": 1.0,
+      "render_profile": "short-landscape",
       "runtime_error_count": 0,
-      "machine_source": "glb-validated"
+      "sample_count": 180,
+      "shadow_profile": "512px-14m",
+      "viewport_css_px": [
+        844,
+        390
+      ],
+      "visible_stall_count_gte_250ms": 0,
+      "worst_frame_time_ms": 33.4
     },
-    "background_samples_excluded": true,
-    "visible_stalls_included": true,
-    "artifact_safe_sample_metadata_exposed": true,
-    "physical_low_end_mobile_gpu_claimed": false
+    "visible_stalls_included": true
   },
-  "boundary": "Local Chromium frame-time samples only; no physical low-end mobile GPU claim."
+  "reviewed_source_commit": "37885e286186ca9141e85782fc41d5aed2ace0fb",
+  "schema_version": "1.0.0"
 }
