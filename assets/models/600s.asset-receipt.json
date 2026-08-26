@@ -7,11 +7,11 @@
   "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-25T23:33:33Z",
-  "sha256": "e830ae3a5504feb7891a1ebb59f7f23946b32d1e6bd684f1339b70bc7bf5bc9c",
-  "source_blend_sha256": "1cb3a5d7df4e44d094fff2f18952ad066a69008ad837499cc3e30f1f7cd4a383",
-  "cache_key": "e830ae3a5504",
-  "runtime_sha256": "e28d21bf647d74d360d7cbe306ee686cdb3bdd5de751aff400f372a3c63617f8",
+  "exported_at": "2026-08-26T00:36:50Z",
+  "sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
+  "source_blend_sha256": "a88fefb921a5a34d7c71cf76a67a045cf1c21e0b9d7db61d879d1a253825c34e",
+  "cache_key": "64b969d1b24f",
+  "runtime_sha256": "283c6c12cab382b61069dd0416107683d0af8ec470c7b3ff882be53630e77949",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -52,7 +52,9 @@
       2.5,
       1.24
     ],
-    "telescope_overlap_stowed_m": 1.567
+    "telescope_overlap_stowed_m": 1.567,
+    "powertrack_push_tube_stowed_min_overlap_m": 0.07,
+    "powertrack_push_tube_full_travel_min_overlap_m": 0.0566
   },
   "review": {
     "loads_without_console_error": true,
@@ -63,10 +65,10 @@
     "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "Fresh local in-app browser 2026-08-25: exact e830ae3a5504 GLB loaded as blender-showcase-v1.1.0 under runtime 1.1.6 with 92 optimized visible meshes and zero runtime errors at 1280 x 720, 390 x 844, and 390 x 650.",
-      "motion": "Runtime 1.1.6 exercised autonomous drive with chassis-follow lighting, bounded 28.0/23.5 degree inner/outer steering, four tire-only roll transforms, two endpoint-follow steer-hose solvers, full visual telescope travel with the moving carrier bend, simultaneous Boom + Steer override reporting, and stow reset from x 6.28/z -3.37 to the origin.",
-      "selection": "Five-volume runtime selection self-test passed on exact e830ae3a5504 GLB under runtime 1.1.6 with zero instrumented errors.",
-      "silhouette_scope": "Fresh local desktop stowed and 20-degree/full-extension working poses were reviewed on exact e830ae3a5504. Collapsed and expanded 390 x 844 plus expanded 390 x 650 mobile layouts were reviewed with Steering visible and reachable. Fixed-camera paired source overlays and deployed Pages proof remain separate gates."
+      "browser": "2026-08-25 local browser review of GLB 64b969d1b24f: Blender source active, 92 visible meshes, 132 ms sampled load, 18.1 ms frame p95, runtime error count 0, and no console warnings/errors.",
+      "motion": "Local live review: full pose 20 deg lift / 100% extend / 28 deg steer stayed connected; Ackermann displayed 28.0/23.5 deg; simultaneous Boom+Steering override moved 0.206 m in 1 s at the 0.2 m/s crawl; stow returned controls and drive origin to zero.",
+      "selection": "Local browser selection self-test passed all five contracted hit volumes against the detailed Blender hierarchy.",
+      "silhouette_scope": "Direct local review covered stowed, autonomous, and full-travel working poses plus collapsed/expanded controls at 390x844 and 390x650; this is local presentation acceptance, not exact-machine or deployed Pages proof."
     }
   },
   "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Wheel roll is separated from steer/axle transforms, while the inner/outer visual steering split remains reconstructed. Lift, steering, tower/tension, platform-level, and steering-hose endpoint linkages use visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."

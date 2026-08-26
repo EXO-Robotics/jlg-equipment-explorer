@@ -128,3 +128,7 @@ the furthest independently translating telescope stage.
     moving visual leg whose wheel-side endpoint follows the steering pivot.
 21. `PowertrackBend` and `PowertrackMovingRun` inherit the same telescope stage so
     their relative spacing cannot open during FlyBoom travel.
+22. The fly-attached `PowertrackPushTube` retains at least 0.004 m of three-axis
+    AABB engagement with the mid-stage carrier bend in both stowed and full
+    evidence-bounded telescope poses; the engagement check is topological and
+    does not promote reconstructed bracket coordinates to fabrication data.

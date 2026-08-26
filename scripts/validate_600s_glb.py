@@ -347,6 +347,12 @@ def validate_receipt(receipt: dict[str, Any], report: dict[str, Any]) -> None:
         require_close_list(mechanical.get(key), report[key], f"mechanical_validation.{key}")
     if not close(float(mechanical.get("telescope_overlap_stowed_m", float("nan"))), report["telescope_overlap_stowed_m"]):
         raise RuntimeError("Receipt mechanical_validation.telescope_overlap_stowed_m is stale")
+    for key in (
+        "powertrack_push_tube_stowed_min_overlap_m",
+        "powertrack_push_tube_full_travel_min_overlap_m",
+    ):
+        if not close(float(mechanical.get(key, float("nan"))), report[key]):
+            raise RuntimeError(f"Receipt mechanical_validation.{key} is stale")
 
     if not RECEIPT_TEMPLATE_PATH.is_file():
         raise RuntimeError(f"Missing receipt template: {RECEIPT_TEMPLATE_PATH}")
@@ -608,6 +614,31 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
     if full_travel_run_gap > POWERTRACK_MAX_VISIBLE_GAP_M:
         raise RuntimeError(f"Powertrack sampled runs separate at full visual travel: {full_travel_run_gap:.4f} m")
 
+    bend_mins = [float("inf")] * 3
+    bend_maxs = [float("-inf")] * 3
+    for bend_index in range(1, 6):
+        bend_min, bend_max = mesh_world_aabb(
+            document, blob, nodes, parents, by_name[f"PowertrackBendDisplayLink_{bend_index:02d}"]
+        )
+        for axis in range(3):
+            bend_mins[axis] = min(bend_mins[axis], bend_min[axis])
+            bend_maxs[axis] = max(bend_maxs[axis], bend_max[axis])
+
+    push_min, push_max = mesh_world_aabb(document, blob, nodes, parents, by_name["PowertrackPushTube"])
+    push_tube_overlaps = {}
+    for pose, fly_travel in (("stowed", 0.0), ("full_travel", TELESCOPE_FLY_TRAVEL_M)):
+        overlap = [
+            min(bend_maxs[axis], push_max[axis] + (fly_travel if axis == 0 else 0.0))
+            - max(bend_mins[axis], push_min[axis] + (fly_travel if axis == 0 else 0.0))
+            for axis in range(3)
+        ]
+        push_tube_overlaps[pose] = min(overlap)
+        if any(value < POWERTRACK_MAX_VISIBLE_GAP_M for value in overlap):
+            raise RuntimeError(
+                f"Powertrack push tube leaves the carrier bend at {pose}: "
+                f"axis overlap={[round(value, 4) for value in overlap]}"
+            )
+
     materials = {material.get("name") for material in document.get("materials", [])}
     required_system_materials = {
         "JLG_Hydraulic_Black", "JLG_Electrical_Loom", "JLG_Control_Cable",
@@ -716,6 +747,8 @@ def validate(*, require_receipt: bool = True) -> dict[str, Any]:
         "powertrack_max_neighbor_gap_m": round(maximum_powertrack_gap, 4),
         "platform_leveling_max_error_degrees": round(platform_leveling_max_error_degrees, 4),
         "powertrack_full_travel_run_gap_m": round(full_travel_run_gap, 4),
+        "powertrack_push_tube_stowed_min_overlap_m": round(push_tube_overlaps["stowed"], 4),
+        "powertrack_push_tube_full_travel_min_overlap_m": round(push_tube_overlaps["full_travel"], 4),
         "visible_envelope_m": [round(value, 4) for value in envelope],
         "visible_bounds_min_m": [round(value, 4) for value in mins],
         "visible_bounds_max_m": [round(value, 4) for value in maxs],

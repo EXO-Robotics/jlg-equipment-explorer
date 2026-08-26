@@ -37,7 +37,9 @@
     "mesh_count": null,
     "visible_bounds_min_m": null,
     "visible_bounds_max_m": null,
-    "telescope_overlap_stowed_m": null
+    "telescope_overlap_stowed_m": null,
+    "powertrack_push_tube_stowed_min_overlap_m": null,
+    "powertrack_push_tube_full_travel_min_overlap_m": null
   },
   "review": {
     "loads_without_console_error": false,

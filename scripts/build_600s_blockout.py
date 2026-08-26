@@ -772,7 +772,10 @@ set_authority(powertrack_bend, "reconstructed", "3122579700:645; display samplin
 for bend_index, angle in enumerate((-1.15, -0.65, -0.15, 0.35, 0.85), start=1):
     link = box(f"PowertrackBendDisplayLink_{bend_index:02d}", (0.15, 0.44, 0.09), powertrack_bend, (0.16 * math.cos(angle), 0.0, 0.16 * math.sin(angle)), MAT_POWERTRACK, "boom", round=0.018, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-004")
     link.rotation_euler.y = -angle
-tube("PowertrackPushTube", (0.10, 0.0, -0.31), (1.45, 0.0, -0.30), 0.035, fly_boom, MAT_DARK_METAL, "boom", 12, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-002")
+# The fly-attached tube slides through the mid-stage carrier bend. Keep enough
+# aft engagement for the complete evidence-bounded FlyBoom visual travel rather
+# than fitting only the stowed pose.
+tube("PowertrackPushTube", (-0.26, 0.0, -0.31), (1.45, 0.0, -0.30), 0.035, fly_boom, MAT_DARK_METAL, "boom", 12, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-002")
 
 box("TelescopeCylinderBarrel", (2.40, 0.16, 0.16), main_boom, (2.05, 0.0, -0.08), MAT_HYDRAULIC, "boom", round=0.06, evidence="MECHANISM_EVIDENCE:TEL-003")
 box("TelescopeCylinderRod", (1.35, 0.08, 0.08), mid_boom, (0.42, 0.0, -0.08), MAT_METAL, "boom", round=0.03, evidence="MECHANISM_EVIDENCE:TEL-003")

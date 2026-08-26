@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.6";
+} from "./assets/models/600s.version.js?v=1.1.7";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -1367,7 +1367,7 @@ function updateAutonomy(dt, now) {
     24
   );
 
-  const driveSpeed = activeOverrideKey(now) === "steeringAngle" ? 0.2 : AUTONOMY_PATH.speed;
+  const driveSpeed = activeOverrideKeys(now).includes("steeringAngle") ? 0.2 : AUTONOMY_PATH.speed;
   autonomy.heading += (driveSpeed / AUTONOMY_PATH.wheelbase) *
     Math.tan(THREE.MathUtils.degToRad(machineState.steeringAngle)) * dt;
   autonomy.x += Math.cos(autonomy.heading) * driveSpeed * dt;

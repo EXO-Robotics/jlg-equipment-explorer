@@ -10,7 +10,7 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=1.1.6`.
+Then open `http://localhost:8080/?v=1.1.7`.
 
 The required Three.js r160 runtime is version-pinned under `vendor/three-r160`, so the viewer has no startup dependency on a third-party CDN. There is no build step, package install, or network requirement for the interactive model.
 

@@ -108,6 +108,8 @@ def main() -> None:
             "visible_bounds_min_m": mechanical["visible_bounds_min_m"],
             "visible_bounds_max_m": mechanical["visible_bounds_max_m"],
             "telescope_overlap_stowed_m": mechanical["telescope_overlap_stowed_m"],
+            "powertrack_push_tube_stowed_min_overlap_m": mechanical["powertrack_push_tube_stowed_min_overlap_m"],
+            "powertrack_push_tube_full_travel_min_overlap_m": mechanical["powertrack_push_tube_full_travel_min_overlap_m"],
         },
         "review": review,
         "evidence_boundary": json.loads(RECEIPT_TEMPLATE_PATH.read_text(encoding="utf-8"))["evidence_boundary"],
