@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG ES1930M micro scissor lift.">
   <title>ES1930M Interactive Equipment Study</title>
-  <link rel="preload" href="../assets/models/es1930m.glb?v=9adc5f3ccbcb" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="../viewer.css?v=1.0.2">
-  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.2">
+  <link rel="preload" href="../assets/models/es1930m.glb?v=9eaae3b614f8" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="../viewer.css?v=1.0.3">
+  <link rel="stylesheet" href="../viewer/multi-machine.css?v=1.0.3">
   <script type="importmap">
     {
       "imports": {
@@ -31,7 +31,7 @@
   <main class="interface">
     <header class="topbar">
       <a class="wordmark" href="../" aria-label="Equipment Explorer home"><span>Equipment</span><b>Explorer</b></a>
-      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.2</div>
+      <div class="prototype-label">PVC 2404 accuracy reconstruction / 1.0.3</div>
       <button class="icon-button" id="info-toggle" type="button" aria-controls="inspector" aria-expanded="false">About</button>
     </header>
 
@@ -57,6 +57,18 @@
         </div>
       </div>
       <div class="controls-body" id="machine-controls-body">
+        <div class="autonomy-bar" aria-label="Figure-eight showcase presentation path">
+          <div class="autonomy-summary">
+            <span>Presentation path</span>
+            <output id="autonomy-mode" aria-live="polite" aria-atomic="true">Ready</output>
+            <small id="autonomy-note">Visualization only - steering and wheel motion are reconstructed; not a machine capability.</small>
+          </div>
+          <dl class="autonomy-readouts">
+            <div><dt>Heading</dt><dd id="drive-heading">000°</dd></div>
+            <div><dt>Loop</dt><dd id="drive-loop">0%</dd></div>
+          </dl>
+          <button class="autonomy-toggle" id="autonomy-toggle" type="button" aria-pressed="false" disabled>Start path</button>
+        </div>
         <label class="control-row"><span>Platform lift</span><output id="lift-value">0%</output><input id="lift-control" type="range" min="0" max="100" value="0" step="1" aria-label="Platform lift" aria-describedby="motion-boundary"></label>
         <label class="control-row"><span>Extension deck</span><output id="deck-value">0.00 m</output><input id="deck-control" type="range" min="0" max="100" value="0" step="1" aria-label="Extension deck" aria-describedby="motion-boundary"></label>
         <label class="control-row compact-control"><span>Steering actuator</span><output id="steer-value">Center</output><input id="steer-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Steering actuator; wheel angles deferred" aria-describedby="motion-boundary"></label>
@@ -86,6 +98,6 @@
   </aside>
 
   <script>window.__showcaseBootAt = performance.now();</script>
-  <script type="module" src="../viewer/runtime.js?v=1.0.2"></script>
+  <script type="module" src="../viewer/runtime.js?v=1.0.3"></script>
 </body>
 </html>

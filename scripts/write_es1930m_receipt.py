@@ -32,6 +32,7 @@ RUNTIME_FILES = [
     ROOT / "viewer/multi-machine.css",
     ROOT / "viewer/runtime.js",
     ROOT / "viewer/pointer-gestures.mjs",
+    ROOT / "viewer/presentation-route.mjs",
     ROOT / "machines/es1930m/machine.js",
     ROOT / "machines/es1930m/articulation.js",
     ROOT / "machines/es1930m/inspector.js",
@@ -91,7 +92,7 @@ def main():
         "schema_version": "1.0.0",
         # Artifact identity is stable across deployment review; release_status
         # alone records whether the exact public bytes have been approved.
-        "release": "1.0.2",
+        "release": "1.0.3",
         "release_status": "release" if release_ready else "candidate_not_deployable",
         "written": str(date.today()),
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",

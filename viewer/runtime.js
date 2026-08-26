@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.2";
-import { pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.2";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.3";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.3";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.3";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -23,6 +24,11 @@ const controlPanel = document.querySelector(".control-panel");
 const mobileQuery = matchMedia("(max-width: 800px)");
 const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
+const autonomyToggle = document.querySelector("#autonomy-toggle");
+const autonomyMode = document.querySelector("#autonomy-mode");
+const autonomyNote = document.querySelector("#autonomy-note");
+const driveHeading = document.querySelector("#drive-heading");
+const driveLoop = document.querySelector("#drive-loop");
 
 const state = { ...machine.stowState };
 const runtime = { errors: 0, frames: 0, fps: "sampling", p95: "sampling", frameDurations: [], loadMs: "pending", selection: "pending" };
@@ -31,6 +37,12 @@ let rig = null;
 let selected = null;
 let lastFrame = performance.now();
 let fpsStart = lastFrame;
+const presentationRoute = {
+  enabled: !reducedMotion && query.get("auto") === "1",
+  phase: 0,
+  distanceM: 0,
+  wheelRotations: [0, 0, 0, 0],
+};
 
 function recordError(error) {
   runtime.errors += 1;
@@ -84,11 +96,11 @@ for (const [color, intensity, position] of [[0xffefd4, 4.0, [-5, 9, 7]], [0x9fc9
   light.shadow.mapSize.set(mobileQuery.matches ? 1024 : 2048, mobileQuery.matches ? 1024 : 2048);
   scene.add(light);
 }
-const floor = new THREE.Mesh(new THREE.CircleGeometry(8, 80), new THREE.MeshStandardMaterial({ color: 0x242a29, roughness: 0.96 }));
+const floor = new THREE.Mesh(new THREE.CircleGeometry(12, 96), new THREE.MeshStandardMaterial({ color: 0x242a29, roughness: 0.96 }));
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
-const grid = new THREE.GridHelper(14, 28, 0x5d625c, 0x303633);
+const grid = new THREE.GridHelper(24, 48, 0x5d625c, 0x303633);
 grid.position.y = 0.003;
 grid.material.transparent = true;
 grid.material.opacity = 0.12;
@@ -112,7 +124,7 @@ updateCamera();
 const pointers = new Map();
 let pinchDistance = null;
 renderer.domElement.addEventListener("pointerdown", (event) => {
-  pointers.set(event.pointerId, { x: event.clientX, y: event.clientY, startX: event.clientX, startY: event.clientY, moved: 0 });
+  pointers.set(event.pointerId, { x: event.clientX, y: event.clientY, startX: event.clientX, startY: event.clientY, moved: 0, pointerType: event.pointerType || "mouse" });
   renderer.domElement.setPointerCapture(event.pointerId);
   if (pointers.size === 2) {
     const [a, b] = [...pointers.values()];
@@ -135,8 +147,9 @@ renderer.domElement.addEventListener("pointermove", (event) => {
     for (const active of pointers.values()) active.moved += Math.abs(dx) + Math.abs(dy) + 8;
     return;
   }
-  orbit.azimuth -= dx * 0.006;
-  orbit.polar = THREE.MathUtils.clamp(orbit.polar + dy * 0.006, 0.25, 1.52);
+  const drag = orbitDragDelta(dx, dy, pointer.pointerType);
+  orbit.azimuth += drag.azimuth;
+  orbit.polar = THREE.MathUtils.clamp(orbit.polar + drag.polar, 0.25, 1.52);
 });
 function finishPointer(event, allowSelection) {
   const pointer = pointers.get(event.pointerId);
@@ -171,7 +184,10 @@ function selectAt(clientX, clientY) {
   const hit = raycaster.intersectObjects(volumes, false)[0];
   const component = hit ? componentFor(hit.object) : null;
   runtime.selection = component || "miss";
-  if (component) openInspector(component);
+  if (component) {
+    setPresentationRouteEnabled(false, { reset: true });
+    openInspector(component);
+  }
   updateDiagnostics();
 }
 
@@ -181,6 +197,102 @@ function setControlOutputs() {
   document.body.dataset.zone = presentation.zone;
   document.querySelector("#motion-status").value = presentation.status;
 }
+
+function normalizedHeadingDegrees(radians) {
+  return Math.round(((THREE.MathUtils.radToDeg(radians) % 360) + 360) % 360);
+}
+
+function resetPresentationPose() {
+  if (!rig) return;
+  rig.root.position.set(0, 0, 0);
+  rig.root.rotation.y = 0;
+  presentationRoute.phase = 0;
+  presentationRoute.distanceM = 0;
+  presentationRoute.wheelRotations.fill(0);
+  for (const spindle of rig.steerSpindles) spindle.rotation.y = 0;
+  for (const wheel of rig.wheelRollPivots) wheel.rotation.z = 0;
+  document.body.dataset.driveX = "0.00";
+  document.body.dataset.driveZ = "0.00";
+}
+
+function updatePresentationTelemetry(sample = sampleFigureEight(presentationRoute.phase)) {
+  const locked = reducedMotion;
+  const paused = !presentationRoute.enabled && presentationRoute.distanceM > 0;
+  const modeText = locked ? "Static presentation" : presentationRoute.enabled ? "Figure-eight running" : paused ? "Figure-eight paused" : "Ready";
+  const noteText = locked
+    ? "Motion disabled by reduced-motion preference."
+    : "Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.";
+  if (autonomyMode.value !== modeText) autonomyMode.value = modeText;
+  if (autonomyNote.textContent !== noteText) autonomyNote.textContent = noteText;
+  driveHeading.textContent = `${String(normalizedHeadingDegrees(sample.heading)).padStart(3, "0")}°`;
+  driveLoop.textContent = `${Math.round((sample.phase / (Math.PI * 2)) * 100)}%`;
+  autonomyToggle.disabled = locked || !rig;
+  const pressed = String(presentationRoute.enabled);
+  if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
+  const buttonText = presentationRoute.enabled ? "Pause path" : paused ? "Resume path" : "Start path";
+  if (autonomyToggle.textContent !== buttonText) autonomyToggle.textContent = buttonText;
+  document.body.dataset.presentationMode = locked ? "static" : presentationRoute.enabled ? "running" : paused ? "paused" : "ready";
+  if (presentationRoute.enabled) document.querySelector("#motion-status").value = "Showcase route";
+  else if (paused) document.querySelector("#motion-status").value = "Route paused";
+}
+
+function applyPresentationVisualSample(sample) {
+  rig.steerSpindles[0].rotation.y = sample.steerRight;
+  rig.steerSpindles[1].rotation.y = sample.steerLeft;
+  rig.root.position.set(sample.x, 0, sample.z);
+  rig.root.rotation.y = sample.heading;
+  orbit.desiredTarget.set(sample.x, 1.05, sample.z);
+  document.body.dataset.driveX = sample.x.toFixed(2);
+  document.body.dataset.driveZ = sample.z.toFixed(2);
+  document.body.dataset.steerActuatorCommand = sample.steer.toFixed(3);
+  document.body.dataset.visualSteerLeftRad = sample.steerLeft.toFixed(3);
+  document.body.dataset.visualSteerRightRad = sample.steerRight.toFixed(3);
+}
+
+function setPresentationRouteEnabled(enabled, { reset = false } = {}) {
+  presentationRoute.enabled = Boolean(enabled) && !reducedMotion && Boolean(rig);
+  if (reset) resetPresentationPose();
+  if (presentationRoute.enabled) {
+    Object.assign(state, machine.stowState);
+    const sample = sampleFigureEight(presentationRoute.phase);
+    state.steer = sample.steer;
+    for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
+    machine.applyState(rig, machine.solveState(state));
+    applyPresentationVisualSample(sample);
+  } else if (reset) {
+    state.steer = 0;
+    document.querySelector("#steer-control").value = 0;
+    machine.applyState(rig, machine.solveState(state));
+    fitMachineBounds();
+  }
+  setControlOutputs();
+  updatePresentationTelemetry();
+}
+
+function updatePresentationRoute(delta) {
+  if (!presentationRoute.enabled || !rig) return;
+  const next = advanceFigureEight(presentationRoute.phase, delta);
+  presentationRoute.phase = next.phase;
+  presentationRoute.distanceM += 0.72 * delta;
+  const wheelRates = next.sample.wheelSpeedScales.map((scale) => -(0.72 * scale) / 0.13);
+  for (let index = 0; index < presentationRoute.wheelRotations.length; index += 1) {
+    presentationRoute.wheelRotations[index] += wheelRates[index] * delta;
+  }
+  state.steer = next.sample.steer;
+  document.querySelector("#steer-control").value = state.steer * 100;
+  machine.applyState(rig, machine.solveState(state));
+  applyPresentationVisualSample(next.sample);
+  for (let index = 0; index < rig.wheelRollPivots.length; index += 1) {
+    rig.wheelRollPivots[index].rotation.z = presentationRoute.wheelRotations[index];
+  }
+  document.body.dataset.wheelRotationRad = presentationRoute.wheelRotations[0].toFixed(3);
+  document.body.dataset.wheelRotationsRad = presentationRoute.wheelRotations.map((value) => value.toFixed(3)).join(",");
+  setControlOutputs();
+  updatePresentationTelemetry(next.sample);
+}
+
+autonomyToggle.addEventListener("click", () => setPresentationRouteEnabled(!presentationRoute.enabled));
+updatePresentationTelemetry();
 function fitMachineBounds() {
   if (!model) return;
   const bounds = new THREE.Box3();
@@ -208,11 +320,15 @@ function applyControls() {
 }
 for (const control of machine.controls) {
   document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
-    state[control.id] = Number(event.currentTarget.value) / control.inputDivisor;
+    const requestedValue = Number(event.currentTarget.value);
+    setPresentationRouteEnabled(false, { reset: true });
+    event.currentTarget.value = requestedValue;
+    state[control.id] = requestedValue / control.inputDivisor;
     applyControls();
   });
 }
 document.querySelector("#stow").addEventListener("click", () => {
+  setPresentationRouteEnabled(false, { reset: true });
   Object.assign(state, machine.stowState);
   for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
   applyControls();
@@ -227,6 +343,7 @@ function focusCamera(name) {
 }
 document.querySelector("#reset-view").addEventListener("click", () => focusCamera("default"));
 document.querySelectorAll("[data-focus]").forEach((button, index) => button.addEventListener("click", () => {
+  setPresentationRouteEnabled(false, { reset: true });
   document.querySelectorAll("[data-focus]").forEach((candidate) => candidate.setAttribute("aria-pressed", "false"));
   button.setAttribute("aria-pressed", "true");
   focusCamera(button.dataset.focus);
@@ -343,6 +460,7 @@ new GLTFLoader().load(machine.assetUrl, (gltf) => {
   runtime.selection = "self-test-pass";
   document.body.dataset.machineSource = "glb";
   document.body.dataset.machineVisibleMeshes = String(model.getObjectsByProperty("isMesh", true).length);
+  setPresentationRouteEnabled(presentationRoute.enabled);
   loaderStatus.textContent = `${machine.identity.model} ready`;
   loaderDetail.textContent = `${machine.configurationId} validated`;
   loader.classList.add("done");
@@ -359,6 +477,7 @@ function animate(now) {
   requestAnimationFrame(animate);
   const delta = Math.min((now - lastFrame) / 1000, 0.05);
   lastFrame = now;
+  updatePresentationRoute(delta);
   updateCamera(delta);
   renderer.render(scene, camera);
   runtime.frames += 1;

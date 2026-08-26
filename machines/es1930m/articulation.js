@@ -144,6 +144,7 @@ export function createES1930MRig(root) {
     cylinderUpperMarker: required(root, "PIVOT_LIFT_CYLINDER_UPPER"),
     steerBarrel: required(root, "SteerCylinderBarrel"),
     steerSpindles: [required(root, "SteerSpindle_R"), required(root, "SteerSpindle_L")],
+    wheelRollPivots: [required(root, "FrontWheelRoll_R"), required(root, "FrontWheelRoll_L"), required(root, "RearWheelRoll_R"), required(root, "RearWheelRoll_L")],
     potholeBars,
     potholeInitialY: potholeBars.map((node) => node.position.y),
     guardPairs: [-1, 1].flatMap((side) => [

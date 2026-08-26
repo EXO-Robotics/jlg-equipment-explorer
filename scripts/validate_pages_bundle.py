@@ -7,7 +7,7 @@ from pathlib import Path
 
 site = Path(sys.argv[1] if len(sys.argv) > 1 else "_site").resolve()
 required = {
-    "index.html", "600s/index.html", "es1930m/index.html", "viewer/runtime.js",
+    "index.html", "600s/index.html", "es1930m/index.html", "viewer/runtime.js", "viewer/presentation-route.mjs",
     "machines/es1930m/machine.js", "assets/models/600s.glb", "assets/models/es1930m.glb",
     "assets/models/600s.asset-receipt.json", "assets/models/es1930m.asset-receipt.json",
 }

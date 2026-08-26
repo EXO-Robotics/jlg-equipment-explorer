@@ -29,6 +29,25 @@ REQUIRED_MECHANISM_NODES = {
     "ExtensionTopRail_-1", "ExtensionTopRail_1", "ExtensionMidRail_-1", "ExtensionMidRail_1",
     "MainToeBoard_-1", "MainToeBoard_1", "ExtensionToeBoard_-1", "ExtensionToeBoard_1",
     "ExtensionFrontToeBoard",
+    "FrontWheelRoll_R", "FrontWheelRoll_L", "RearWheelRoll_R", "RearWheelRoll_L",
+}
+REQUIRED_CONTROL_NODES = {
+    "PlatformControlCarrier", "PlatformControlCarrierBack", "PlatformControlCarrierLeftGuard",
+    "PlatformControlCarrierRightGuard", "PlatformControlCarrierFloor", "PlatformControlCarrierTopLip",
+    "PlatformControlCarrierRailHook", "PlatformControlModule", "PlatformControlHousing",
+    "PlatformControlFaceBezel", "PlatformControlFace", "PlatformIndicatorLegendPanel", "PlatformBatteryBarField",
+    "PlatformIndoorCapacityIndicator", "PlatformOutdoorCapacityIndicator", "PlatformSystemFaultIndicator",
+    "PlatformBatteryDischargeIndicatorRed", "PlatformBatteryDischargeIndicatorGreen1",
+    "PlatformBatteryDischargeIndicatorGreen2", "PlatformTiltIndicator", "PlatformOverloadIndicator",
+    "PlatformEmergencyStop", "PlatformEmergencyStopBase", "PlatformEmergencyStopMushroom",
+    "PlatformEmergencyStopCollar", "PlatformLiftDriveSelector", "PlatformHornButton",
+    "PlatformIndoorOutdoorSelector", "PlatformDriveSpeedSelector", "PlatformUSBPort",
+    "PlatformAlarm", "PlatformAlarmBody", "PlatformAlarmGrille", "PlatformJoystick",
+    "PlatformJoystickMountPlate", "PlatformJoystickBootRing_1", "PlatformJoystickBootRing_2",
+    "PlatformJoystickBootRing_3", "PlatformJoystickGrip", "PlatformJoystickTopRocker",
+    "PlatformJoystickTrigger", "PlatformControlCable", "PlatformControlCableConnector",
+    "PlatformControlCableLead", "PlatformControlCableDrop", "PlatformPhoneCradle",
+    "PlatformPhoneCradleBack", "PlatformPhoneCradleBottom", "PlatformPhoneCradleLipLeft", "PlatformPhoneCradleLipRight",
 }
 REQUIRED_EDGES = {
     "Chassis": "ES1930M_ROOT",
@@ -44,6 +63,17 @@ REQUIRED_EDGES = {
     "ExtensionRails": "ExtensionDeck",
     "SelfClosingGate": "ExtensionDeck",
     "PlatformControls": "PlatformAssembly",
+    "PlatformControlCarrier": "PlatformControls",
+    "PlatformControlModule": "PlatformControls",
+    "PlatformEmergencyStop": "PlatformControlModule",
+    "PlatformAlarm": "PlatformControlModule",
+    "PlatformJoystick": "PlatformControlModule",
+    "PlatformControlCable": "PlatformControls",
+    "PlatformPhoneCradle": "PlatformControlCarrier",
+    "FrontWheelRoll_R": "SteerSpindle_R",
+    "FrontWheelRoll_L": "SteerSpindle_L",
+    "RearWheelRoll_R": "Chassis",
+    "RearWheelRoll_L": "Chassis",
     "TopRail_-1": "FixedRails",
     "TopRail_1": "FixedRails",
     "MidRail_-1": "FixedRails",
@@ -210,10 +240,16 @@ def main():
     if "ES1930M_ROOT" not in by_name or by_name["ES1930M_ROOT"] in parents:
         raise RuntimeError("Missing or parented ES1930M_ROOT")
     root_extras = nodes[by_name["ES1930M_ROOT"]].get("extras") or {}
-    if root_extras.get("configuration_id") != CONFIGURATION_ID or root_extras.get("pvc") != "2404":
+    if (
+        root_extras.get("configuration_id") != CONFIGURATION_ID
+        or root_extras.get("pvc") != "2404"
+        or root_extras.get("release") != "1.0.3"
+    ):
         raise RuntimeError("GLB root evidence identity mismatch")
     if missing := sorted(REQUIRED_MECHANISM_NODES - by_name.keys()):
         raise RuntimeError(f"Missing mechanism nodes: {missing}")
+    if missing := sorted(REQUIRED_CONTROL_NODES - by_name.keys()):
+        raise RuntimeError(f"Missing platform control nodes: {missing}")
     for child, expected_parent in REQUIRED_EDGES.items():
         if child not in by_name:
             raise RuntimeError(f"Missing required node: {child}")
@@ -235,6 +271,17 @@ def main():
         raise RuntimeError(f"Expected 20 explicit scissor link groups, found {len(link_groups)}")
     if len(pivot_markers) < 68:
         raise RuntimeError(f"Expected at least 68 pivot markers, found {len(pivot_markers)}")
+    controls_root = by_name["PlatformControls"]
+    control_meshes = [
+        name for name, index in by_name.items()
+        if "mesh" in nodes[index]
+        and descends_from(index, controls_root, parents)
+        and (nodes[index].get("extras") or {}).get("component") == "controls"
+    ]
+    if len(control_meshes) < 62:
+        raise RuntimeError(f"Platform control detail regression: expected at least 62 tagged meshes, found {len(control_meshes)}")
+    if any(name.startswith("PlatformControlCableCoil") for name in by_name):
+        raise RuntimeError("Standard frozen configuration must not include the optional coiled control cable")
     for name in HIT_VOLUMES:
         if name not in by_name or not (nodes[by_name[name]].get("extras") or {}).get("is_hit_volume"):
             raise RuntimeError(f"Missing declared interaction volume: {name}")

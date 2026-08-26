@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { pointerDistance, scaledPinchDistance } from "../viewer/pointer-gestures.mjs";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "../viewer/pointer-gestures.mjs";
 
 const start = pointerDistance({ x: 100, y: 100 }, { x: 200, y: 100 });
 const spread = pointerDistance({ x: 75, y: 100 }, { x: 225, y: 100 });
@@ -12,4 +12,14 @@ assert.ok(scaledPinchDistance(6, start, squeeze) > 6, "finger squeeze must zoom 
 assert.equal(scaledPinchDistance(17, start, 10), 18, "zoom-out clamp");
 assert.equal(scaledPinchDistance(2, start, 1000), 1.6, "zoom-in clamp");
 assert.equal(scaledPinchDistance(6, 0, spread), 6, "invalid baseline must be stable");
-console.log(JSON.stringify({ status: "PASS", synthetic_two_pointer_cases: 5 }, null, 2));
+assert.deepEqual(orbitDragDelta(10, 8, "touch", 0.01), { azimuth: 0.1, polar: -0.08 }, "touch drag must follow the finger");
+assert.deepEqual(orbitDragDelta(10, 8, "mouse", 0.01), { azimuth: -0.1, polar: 0.08 }, "mouse orbit contract must remain unchanged");
+assert.deepEqual(orbitDragDelta(0, 0, "touch"), { azimuth: 0, polar: -0 }, "zero touch delta must be stable");
+const flagshipTheta = -0.85;
+const esAzimuth = Math.PI / 2 - flagshipTheta;
+const swipeRadians = 0.12;
+const flagshipAfter = { x: Math.sin(flagshipTheta - swipeRadians), z: Math.cos(flagshipTheta - swipeRadians), polar: 1.18 - 0.08 };
+const esAfter = { x: Math.cos(esAzimuth + swipeRadians), z: Math.sin(esAzimuth + swipeRadians), polar: 1.18 - 0.08 };
+assert.ok(Math.hypot(flagshipAfter.x - esAfter.x, flagshipAfter.z - esAfter.z) < 1e-12, "touch horizontal drag must match the 600S flagship camera orbit despite the different spherical basis");
+assert.equal(esAfter.polar, flagshipAfter.polar, "touch vertical drag must match the 600S flagship camera orbit");
+console.log(JSON.stringify({ status: "PASS", synthetic_two_pointer_cases: 5, drag_direction_cases: 3, flagship_camera_equivalence_cases: 2 }, null, 2));

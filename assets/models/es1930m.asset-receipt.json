@@ -1,23 +1,23 @@
 {
   "asset_metrics": {
     "explicit_scissor_link_groups": 20,
-    "meshes": 148,
-    "nodes": 262,
+    "meshes": 282,
+    "nodes": 407,
     "pivot_markers": 71,
     "stowed_envelope_xyz_m": [
       1.4804999846965075,
-      1.974000026701648,
-      0.7600000672911782
+      1.978000014089048,
+      0.7660000175237656
     ],
-    "triangles": 30712
+    "triangles": 35344
   },
   "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority.",
   "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
   "files": {
     "asset": {
-      "bytes": 983568,
+      "bytes": 1370440,
       "path": "assets/models/es1930m.glb",
-      "sha256": "9adc5f3ccbcb4c31e06aa1d900981cc8a4aed6a5a2bb8c9815a7a62504fd27d6"
+      "sha256": "9eaae3b614f8067c1e451e9e2a1c0fc1fb1d9bd49b22ed93dc9f4972eea70977"
     },
     "configuration": {
       "bytes": 2570,
@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 6081,
+      "bytes": 8085,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "bb1467be30ce49395ea3e49bad01ec4b4777be2694f4df87e278d24502a6ad6b"
+      "sha256": "9c2355de9c8f5f70e644a658ab07eed9cfc89e4bbf93e59516d66e208823ac8b"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -45,9 +45,9 @@
       "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
-      "bytes": 190029,
+      "bytes": 268976,
       "path": "source/blender/es1930m-showcase-v1.0.blend",
-      "sha256": "d4cfb5c0a2c26654b810e39cfc1df01ff8e6896eb997683c62bc80dbd4a84612"
+      "sha256": "0b713e95ef8273dab3a52fe2b4bf56fd06bd4529aa5acf5ef3bc248b3c7ff842"
     },
     "source_manifest": {
       "bytes": 4860,
@@ -71,16 +71,19 @@
     "maximum_translation_per_0_01_sample_m": 0.05411392820809057,
     "sampled_lift_states": 101
   },
-  "release": "1.0.2",
-  "release_status": "release",
+  "release": "1.0.3",
+  "release_status": "candidate_not_deployable",
   "review_flags": {
     "600s_regression_suite_pass": true,
     "accessibility_reviewed": true,
-    "deployed_pages_reviewed": true,
+    "deployed_pages_reviewed": false,
     "desktop_browser_zero_errors": true,
     "extension_browser_reviewed": true,
+    "figure_eight_presentation_reviewed": true,
     "mobile_and_pinch_reviewed": true,
+    "mobile_drag_direction_reviewed": true,
     "performance_reviewed": true,
+    "platform_controls_visual_reviewed": true,
     "raised_pose_browser_reviewed": true,
     "selection_and_focus_reviewed": true,
     "steering_boundary_reviewed": true,
@@ -93,13 +96,14 @@
       "viewer/multi-machine.css",
       "viewer/runtime.js",
       "viewer/pointer-gestures.mjs",
+      "viewer/presentation-route.mjs",
       "machines/es1930m/machine.js",
       "machines/es1930m/articulation.js",
       "machines/es1930m/inspector.js",
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "343ad7fef1f2cef86a61c0e2034573f9df00e6e7ebdf7305b27b8713f301b815"
+    "sha256": "3052909b4fe5bbb56f8c9f2e42edaf2b7d95d6202e0a6b818f705e3d30d89130"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-25"

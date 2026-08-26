@@ -47,8 +47,8 @@ def empty(name: str, location=(0, 0, 0), parent=None, display="PLAIN_AXES", size
     return obj
 
 
-def bevelled_box(name, size, location, mat, parent=None, bevel=0.012, component=None):
-    bpy.ops.mesh.primitive_cube_add(location=location)
+def bevelled_box(name, size, location, mat, parent=None, bevel=0.012, component=None, rotation=(0, 0, 0)):
+    bpy.ops.mesh.primitive_cube_add(location=location, rotation=rotation)
     obj = bpy.context.object
     obj.name = name
     obj.scale = tuple(value / 2 for value in size)
@@ -57,6 +57,25 @@ def bevelled_box(name, size, location, mat, parent=None, bevel=0.012, component=
         modifier = obj.modifiers.new("EdgeSoftening", "BEVEL")
         modifier.width = bevel
         modifier.segments = 2
+    obj.data.materials.append(mat)
+    if component:
+        obj["component"] = component
+    if parent:
+        parent_keep_transform(obj, parent)
+    return obj
+
+
+def torus(name, major_radius, minor_radius, location, mat, parent=None, rotation=(0, 0, 0), component=None):
+    bpy.ops.mesh.primitive_torus_add(
+        major_segments=20,
+        minor_segments=8,
+        location=location,
+        rotation=rotation,
+        major_radius=major_radius,
+        minor_radius=minor_radius,
+    )
+    obj = bpy.context.object
+    obj.name = name
     obj.data.materials.append(mat)
     if component:
         obj["component"] = component
@@ -162,6 +181,10 @@ def build():
         "zinc": material("Zinc Hardware", (0.50, 0.53, 0.51, 1), 0.72, 0.30),
         "black": material("Control Black", (0.025, 0.03, 0.028, 1), 0.15, 0.52),
         "red": material("Emergency Red", (0.68, 0.018, 0.012, 1), 0.05, 0.40),
+        "green": material("Indicator Green", (0.035, 0.56, 0.12, 1), 0.0, 0.30),
+        "yellow": material("Indicator Amber", (0.96, 0.52, 0.025, 1), 0.0, 0.32),
+        "blue": material("Display Blue Black", (0.018, 0.075, 0.105, 1), 0.05, 0.25),
+        "rubber": material("Control Rubber", (0.012, 0.014, 0.013, 1), 0.0, 0.88),
         "white": material("Marking White", (0.82, 0.83, 0.77, 1), 0.02, 0.65),
         "battery": material("Battery Case", (0.12, 0.14, 0.15, 1), 0.05, 0.74),
         "deck": material("Deck Surface", (0.19, 0.20, 0.18, 1), 0.45, 0.55),
@@ -171,7 +194,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.2"
+    root["release"] = "1.0.3"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
@@ -218,10 +241,33 @@ def build():
     for side in (-1, 1):
         spindle = empty(f"SteerSpindle_{'R' if side < 0 else 'L'}", (wheel_x, side * wheel_lateral, 0.135), steer, "ARROWS", 0.07)
         spindle["component"] = "steering"
-        cylinder(f"FrontTire_{side}", 0.13, 0.09, (0, 0, 0), MAT["tire"], spindle, rotation=(math.pi / 2, 0, 0), vertices=32, component="steering")
-        cylinder(f"FrontHub_{side}", 0.061, 0.09, (0, 0, 0), MAT["wheel"], spindle, rotation=(math.pi / 2, 0, 0), component="steering")
-        cylinder(f"RearTire_{side}", 0.13, 0.09, (rear_x, side * wheel_lateral, 0.135), MAT["tire"], chassis, rotation=(math.pi / 2, 0, 0), vertices=32, component="chassis")
-        cylinder(f"RearHub_{side}", 0.058, 0.09, (rear_x, side * wheel_lateral, 0.135), MAT["wheel"], chassis, rotation=(math.pi / 2, 0, 0), component="chassis")
+        side_name = "R" if side < 0 else "L"
+        front_roll = empty(f"FrontWheelRoll_{side_name}", parent=spindle, display="ARROWS", size=0.045)
+        front_roll["component"] = "steering"
+        front_roll["authority"] = "reconstructed_presentation_motion"
+        cylinder(f"FrontTire_{side}", 0.13, 0.09, (0, 0, 0), MAT["tire"], front_roll, rotation=(math.pi / 2, 0, 0), vertices=32, component="steering")
+        cylinder(f"FrontHub_{side}", 0.061, 0.09, (0, 0, 0), MAT["wheel"], front_roll, rotation=(math.pi / 2, 0, 0), component="steering")
+        for tread_index in range(12):
+            angle = tread_index * math.tau / 12
+            bevelled_box(
+                f"FrontTread_{side}_{tread_index:02d}", (0.040, 0.096, 0.012),
+                (0.128 * math.cos(angle), 0, 0.128 * math.sin(angle)), MAT["rubber"], front_roll,
+                0.002, "steering", rotation=(0, angle + math.pi / 2, 0),
+            )
+        bevelled_box(f"FrontHubIndex_{side}", (0.045, 0.096, 0.010), (0.028, 0, 0), MAT["zinc"], front_roll, 0.002, "steering")
+        rear_roll = empty(f"RearWheelRoll_{side_name}", (rear_x, side * wheel_lateral, 0.135), chassis, "ARROWS", 0.045)
+        rear_roll["component"] = "chassis"
+        rear_roll["authority"] = "reconstructed_presentation_motion"
+        cylinder(f"RearTire_{side}", 0.13, 0.09, (0, 0, 0), MAT["tire"], rear_roll, rotation=(math.pi / 2, 0, 0), vertices=32, component="chassis")
+        cylinder(f"RearHub_{side}", 0.058, 0.09, (0, 0, 0), MAT["wheel"], rear_roll, rotation=(math.pi / 2, 0, 0), component="chassis")
+        for tread_index in range(12):
+            angle = tread_index * math.tau / 12
+            bevelled_box(
+                f"RearTread_{side}_{tread_index:02d}", (0.040, 0.096, 0.012),
+                (0.128 * math.cos(angle), 0, 0.128 * math.sin(angle)), MAT["rubber"], rear_roll,
+                0.002, "chassis", rotation=(0, angle + math.pi / 2, 0),
+            )
+        bevelled_box(f"RearHubIndex_{side}", (0.045, 0.096, 0.010), (0.028, 0, 0), MAT["zinc"], rear_roll, 0.002, "chassis")
     steer_cyl = empty("SteerCylinder", parent=steer)
     beam_between("SteerCylinderBarrel", (0.535, -0.22, 0.24), (0.535, 0.22, 0.24), 0.032, MAT["scissor"], steer_cyl, "steering")
     beam_between("SteerCylinderRod", (0.535, -0.31, 0.24), (0.535, 0.31, 0.24), 0.0175, MAT["zinc"], steer_cyl, "steering")
@@ -353,10 +399,130 @@ def build():
     gate_hinge = empty("PIVOT_GATE_HINGE", (x_max, -moving_lateral, top), gate, "SPHERE", 0.025)
     gate_hinge["is_pivot_marker"] = True
 
+    # PVC 2404 parts Fig. 4-14/4-15 and operation Fig. 11 define a removable
+    # controller module nested inside a deep molded carrier. The control faces
+    # inboard so the operator can reach it while the carrier remains outside the
+    # working envelope. Dimensions here are visually reconciled, not service data.
     controls = empty("PlatformControls", parent=platform)
-    bevelled_box("PlatformControlBox", (0.22, 0.16, 0.13), (0.42, -0.27, 1.78), MAT["black"], controls, 0.022, "controls")
-    cylinder("PlatformEmergencyStop", 0.022, 0.026, (0.37, -0.365, 1.80), MAT["red"], controls, rotation=(math.pi / 2, 0, 0), component="controls")
-    cylinder("PlatformJoystick", 0.016, 0.105, (0.46, -0.31, 1.88), MAT["black"], controls, rotation=(0.12, 0, 0), component="controls")
+    controls["component"] = "controls"
+    controls["authority"] = "PVC2404_parts_fig_4_14_4_15_operation_fig_11_visual_reconstruction"
+
+    carrier = empty("PlatformControlCarrier", parent=controls)
+    carrier["component"] = "controls"
+    bevelled_box("PlatformControlCarrierBack", (0.345, 0.038, 0.300), (0.32, -0.313, 1.765), MAT["black"], carrier, 0.018, "controls")
+    bevelled_box("PlatformControlCarrierLeftGuard", (0.042, 0.170, 0.255), (0.158, -0.245, 1.750), MAT["black"], carrier, 0.016, "controls")
+    bevelled_box("PlatformControlCarrierRightGuard", (0.042, 0.170, 0.255), (0.482, -0.245, 1.750), MAT["black"], carrier, 0.016, "controls")
+    bevelled_box("PlatformControlCarrierFloor", (0.345, 0.170, 0.040), (0.32, -0.245, 1.632), MAT["black"], carrier, 0.014, "controls")
+    bevelled_box("PlatformControlCarrierTopLip", (0.345, 0.080, 0.035), (0.32, -0.278, 1.905), MAT["black"], carrier, 0.012, "controls")
+    bevelled_box("PlatformControlCarrierLeftWindow", (0.010, 0.080, 0.090), (0.136, -0.238, 1.770), MAT["deck"], carrier, 0.004, "controls")
+    bevelled_box("PlatformControlCarrierRightWindow", (0.010, 0.080, 0.090), (0.504, -0.238, 1.770), MAT["deck"], carrier, 0.004, "controls")
+    bevelled_box("PlatformControlCarrierRailHook", (0.285, 0.050, 0.040), (0.32, -0.320, 1.930), MAT["black"], carrier, 0.010, "controls")
+    for side, x in (("Left", 0.19), ("Right", 0.45)):
+        cylinder(f"PlatformControlCarrierMountBolt_{side}", 0.010, 0.040, (x, -0.343, 1.692), MAT["zinc"], carrier, rotation=(math.pi / 2, 0, 0), vertices=16, component="controls")
+        cylinder(f"PlatformControlCarrierMountWasher_{side}", 0.017, 0.006, (x, -0.365, 1.692), MAT["zinc"], carrier, rotation=(math.pi / 2, 0, 0), vertices=20, component="controls")
+
+    module = empty("PlatformControlModule", parent=controls)
+    module["component"] = "controls"
+    module["part_number"] = "1001274605"
+    housing = bevelled_box("PlatformControlHousing", (0.285, 0.125, 0.215), (0.32, -0.230, 1.755), MAT["black"], module, 0.022, "controls")
+    housing["part_number"] = "1001274604"
+    bevelled_box("PlatformControlUpperShoulder", (0.270, 0.112, 0.055), (0.32, -0.225, 1.875), MAT["black"], module, 0.018, "controls", rotation=(math.radians(-8), 0, 0))
+    bevelled_box("PlatformControlFaceBezel", (0.258, 0.020, 0.112), (0.32, -0.157, 1.795), MAT["zinc"], module, 0.009, "controls", rotation=(math.radians(-7), 0, 0))
+    bevelled_box("PlatformControlFace", (0.244, 0.012, 0.100), (0.32, -0.144, 1.795), MAT["black"], module, 0.007, "controls", rotation=(math.radians(-7), 0, 0))
+    # The upper face is a symbol-and-status legend, not a display. Recessed
+    # pictograms and battery bars keep the PVC 2404 visual organization legible
+    # without claiming live telemetry or inventing printed text.
+    bevelled_box("PlatformIndicatorLegendPanel", (0.190, 0.007, 0.060), (0.345, -0.136, 1.822), MAT["black"], module, 0.004, "controls", rotation=(math.radians(-7), 0, 0))
+    icon_y = -0.127
+    icon_xs = (0.272, 0.296, 0.320, 0.348, 0.376, 0.404, 0.428)
+    # Indoor house, outdoor sun, fault cross, battery field, tilt triangle,
+    # and overload platform are small molded/printed-symbol proxies.
+    for suffix, a, b in (
+        ("IndoorRoofL", (icon_xs[0] - 0.008, icon_y, 1.833), (icon_xs[0], icon_y, 1.841)),
+        ("IndoorRoofR", (icon_xs[0], icon_y, 1.841), (icon_xs[0] + 0.008, icon_y, 1.833)),
+        ("IndoorBase", (icon_xs[0] - 0.007, icon_y, 1.832), (icon_xs[0] + 0.007, icon_y, 1.832)),
+        ("FaultSlashA", (icon_xs[2] - 0.007, icon_y, 1.830), (icon_xs[2] + 0.007, icon_y, 1.844)),
+        ("FaultSlashB", (icon_xs[2] - 0.007, icon_y, 1.844), (icon_xs[2] + 0.007, icon_y, 1.830)),
+        ("TiltBase", (icon_xs[5] - 0.008, icon_y, 1.831), (icon_xs[5] + 0.008, icon_y, 1.831)),
+        ("TiltLeft", (icon_xs[5] - 0.008, icon_y, 1.831), (icon_xs[5], icon_y, 1.844)),
+        ("TiltRight", (icon_xs[5], icon_y, 1.844), (icon_xs[5] + 0.008, icon_y, 1.831)),
+        ("OverloadDeck", (icon_xs[6] - 0.008, icon_y, 1.837), (icon_xs[6] + 0.008, icon_y, 1.837)),
+        ("OverloadArrow", (icon_xs[6], icon_y, 1.844), (icon_xs[6], icon_y, 1.831)),
+    ):
+        square_beam_between(f"PlatformLegend{suffix}", a, b, 0.0022, MAT["white"], module, "controls")
+    cylinder("PlatformLegendOutdoorSun", 0.006, 0.005, (icon_xs[1], icon_y, 1.837), MAT["white"], module, rotation=(math.pi / 2, 0, 0), vertices=16, component="controls")
+    bevelled_box("PlatformBatteryBarField", (0.046, 0.005, 0.020), (0.362, -0.129, 1.837), MAT["black"], module, 0.002, "controls", rotation=(math.radians(-7), 0, 0))
+    for bar_index, (bar_x, mat) in enumerate(((0.346, MAT["red"]), (0.354, MAT["yellow"]), (0.362, MAT["green"]), (0.370, MAT["green"]), (0.378, MAT["green"]))):
+        bevelled_box(f"PlatformBatteryBar_{bar_index + 1}", (0.005, 0.007, 0.011 + bar_index * 0.0015), (bar_x, -0.125, 1.837), mat, module, 0.001, "controls")
+    for name, x, z, mat in (
+        ("PlatformIndoorCapacityIndicator", icon_xs[0], 1.815, MAT["green"]),
+        ("PlatformOutdoorCapacityIndicator", icon_xs[1], 1.815, MAT["yellow"]),
+        ("PlatformSystemFaultIndicator", icon_xs[2], 1.815, MAT["red"]),
+        ("PlatformBatteryDischargeIndicatorRed", 0.350, 1.815, MAT["red"]),
+        ("PlatformBatteryDischargeIndicatorGreen1", 0.362, 1.815, MAT["green"]),
+        ("PlatformBatteryDischargeIndicatorGreen2", 0.374, 1.815, MAT["green"]),
+        ("PlatformTiltIndicator", icon_xs[5], 1.815, MAT["red"]),
+        ("PlatformOverloadIndicator", icon_xs[6], 1.815, MAT["red"]),
+    ):
+        cylinder(name, 0.0055, 0.009, (x, -0.126, z), mat, module, rotation=(math.pi / 2, 0, 0), vertices=16, component="controls")
+    for corner, (x, z) in enumerate(((0.205, 1.755), (0.435, 1.755), (0.205, 1.835), (0.435, 1.835))):
+        cylinder(f"PlatformControlFaceScrew_{corner + 1}", 0.005, 0.010, (x, -0.128, z), MAT["zinc"], module, rotation=(math.pi / 2, 0, 0), vertices=12, component="controls")
+
+    # The lower bank follows operation Fig. 11: mushroom stop, lift/drive,
+    # horn, indoor/outdoor mode, and drive speed. Indicator colors describe
+    # lenses only; they do not assert a live machine state.
+    estop = empty("PlatformEmergencyStop", parent=module)
+    estop["component"] = "controls"
+    cylinder("PlatformEmergencyStopBase", 0.032, 0.018, (0.222, -0.142, 1.704), MAT["black"], estop, rotation=(math.pi / 2, 0, 0), vertices=24, component="controls")
+    cylinder("PlatformEmergencyStopMushroom", 0.038, 0.028, (0.222, -0.123, 1.704), MAT["red"], estop, rotation=(math.pi / 2, 0, 0), vertices=28, component="controls")
+    torus("PlatformEmergencyStopCollar", 0.034, 0.005, (0.222, -0.141, 1.704), MAT["yellow"], estop, rotation=(math.pi / 2, 0, 0), component="controls")
+
+    for name, x, z in (
+        ("PlatformLiftDriveSelector", 0.302, 1.710),
+        ("PlatformIndoorOutdoorSelector", 0.378, 1.710),
+        ("PlatformDriveSpeedSelector", 0.442, 1.710),
+    ):
+        cylinder(f"{name}Bezel", 0.017, 0.014, (x, -0.140, z), MAT["zinc"], module, rotation=(math.pi / 2, 0, 0), vertices=20, component="controls")
+        bevelled_box(name, (0.011, 0.018, 0.030), (x, -0.127, z + 0.007), MAT["black"], module, 0.004, "controls", rotation=(0, 0, math.radians(8)))
+    cylinder("PlatformHornButtonBezel", 0.017, 0.014, (0.300, -0.140, 1.664), MAT["zinc"], module, rotation=(math.pi / 2, 0, 0), vertices=20, component="controls")
+    cylinder("PlatformHornButton", 0.012, 0.020, (0.300, -0.126, 1.664), MAT["black"], module, rotation=(math.pi / 2, 0, 0), vertices=20, component="controls")
+    bevelled_box("PlatformUSBPortBezel", (0.050, 0.012, 0.027), (0.408, -0.134, 1.664), MAT["zinc"], module, 0.005, "controls")
+    bevelled_box("PlatformUSBPort", (0.031, 0.008, 0.011), (0.408, -0.126, 1.664), MAT["black"], module, 0.002, "controls")
+    cradle = empty("PlatformPhoneCradle", parent=carrier)
+    cradle["component"] = "controls"
+    bevelled_box("PlatformPhoneCradleBack", (0.112, 0.015, 0.102), (0.424, -0.132, 1.605), MAT["black"], cradle, 0.008, "controls")
+    bevelled_box("PlatformPhoneCradleBottom", (0.112, 0.042, 0.018), (0.424, -0.110, 1.558), MAT["black"], cradle, 0.006, "controls")
+    for side, x in (("Left", 0.372), ("Right", 0.476)):
+        bevelled_box(f"PlatformPhoneCradleLip{side}", (0.014, 0.040, 0.102), (x, -0.110, 1.605), MAT["black"], cradle, 0.005, "controls")
+
+    alarm = empty("PlatformAlarm", parent=module)
+    alarm["component"] = "controls"
+    cylinder("PlatformAlarmBody", 0.029, 0.022, (0.475, -0.236, 1.810), MAT["black"], alarm, rotation=(0, math.pi / 2, 0), vertices=24, component="controls")
+    cylinder("PlatformAlarmGrille", 0.024, 0.006, (0.489, -0.236, 1.810), MAT["zinc"], alarm, rotation=(0, math.pi / 2, 0), vertices=24, component="controls")
+    for offset_y, offset_z in ((0, 0), (-0.010, 0), (0.010, 0), (0, -0.010), (0, 0.010)):
+        cylinder(f"PlatformAlarmPort_{offset_y}_{offset_z}", 0.0035, 0.008, (0.494, -0.236 + offset_y, 1.810 + offset_z), MAT["black"], alarm, rotation=(0, math.pi / 2, 0), vertices=10, component="controls")
+
+    joystick = empty("PlatformJoystick", parent=module)
+    joystick["component"] = "controls"
+    joystick["part_number"] = "1600402"
+    bevelled_box("PlatformJoystickMountPlate", (0.118, 0.105, 0.020), (0.238, -0.222, 1.892), MAT["black"], joystick, 0.010, "controls")
+    for ring, (major, minor, z) in enumerate(((0.040, 0.009, 1.904), (0.035, 0.008, 1.914), (0.030, 0.007, 1.924))):
+        torus(f"PlatformJoystickBootRing_{ring + 1}", major, minor, (0.238, -0.222, z), MAT["rubber"], joystick, component="controls")
+    cylinder("PlatformJoystickShaft", 0.013, 0.066, (0.238, -0.222, 1.940), MAT["zinc"], joystick, vertices=18, component="controls")
+    cylinder("PlatformJoystickGrip", 0.026, 0.082, (0.238, -0.222, 1.930), MAT["rubber"], joystick, vertices=24, component="controls")
+    bevelled_box("PlatformJoystickTopRocker", (0.034, 0.023, 0.012), (0.238, -0.222, 1.972), MAT["zinc"], joystick, 0.005, "controls")
+    bevelled_box("PlatformJoystickTrigger", (0.022, 0.014, 0.043), (0.238, -0.187, 1.938), MAT["black"], joystick, 0.005, "controls", rotation=(math.radians(-12), 0, 0))
+    for corner, (x, y) in enumerate(((0.195, -0.255), (0.281, -0.255), (0.195, -0.189), (0.281, -0.189))):
+        cylinder(f"PlatformJoystickMountScrew_{corner + 1}", 0.0045, 0.010, (x, y, 1.905), MAT["zinc"], joystick, vertices=12, component="controls")
+
+    cable = empty("PlatformControlCable", parent=controls)
+    cable["component"] = "controls"
+    cylinder("PlatformControlCableConnector", 0.021, 0.040, (0.500, -0.273, 1.688), MAT["zinc"], cable, rotation=(0, math.pi / 2, 0), vertices=20, component="controls")
+    # Standard-machine evidence supports the removable box harness, but JLG
+    # lists the coiled platform-control cable as an option. Keep this frozen
+    # configuration to a short relaxed lead with reconstructed routing.
+    beam_between("PlatformControlCableLead", (0.520, -0.273, 1.688), (0.548, -0.300, 1.640), 0.009, MAT["rubber"], cable, "controls", vertices=12)
+    beam_between("PlatformControlCableDrop", (0.548, -0.300, 1.640), (0.525, -0.310, 1.575), 0.009, MAT["rubber"], cable, "controls", vertices=12)
 
     for name, size, location, component in (
         ("Chassis_Hit", (1.48, 0.76, 0.55), (0, 0, 0.30), "chassis"),

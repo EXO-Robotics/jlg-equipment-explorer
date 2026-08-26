@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 spec = json.loads((ROOT / "machines/es1930m/mechanism.json").read_text())
 source = (ROOT / "machines/es1930m/articulation.js").read_text()
+viewer_source = (ROOT / "viewer/runtime.js").read_text()
+route_source = (ROOT / "viewer/presentation-route.mjs").read_text()
 
 expected = {
     "levels": spec["solver"]["level_count"],
@@ -45,4 +47,19 @@ required_motion = [
 for snippet in required_motion:
     if snippet not in source:
         raise RuntimeError(f"Runtime motion contract missing: {snippet}")
-print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion)}, indent=2))
+required_presentation = [
+    "steering and wheel motion are reconstructed; this is not a machine capability.",
+    "setPresentationRouteEnabled(false, { reset: true })",
+    "state.steer = next.sample.steer",
+    "rig.root.rotation.y = sample.heading",
+    "rig.steerSpindles[0].rotation.y = sample.steerRight",
+    "rig.wheelRollPivots[index].rotation.z = presentationRoute.wheelRotations[index]",
+    "orbit.desiredTarget.set(sample.x, 1.05, sample.z)",
+]
+for snippet in required_presentation:
+    if snippet not in viewer_source:
+        raise RuntimeError(f"Presentation route contract missing: {snippet}")
+for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
+    if snippet not in route_source:
+        raise RuntimeError(f"Figure-eight math contract missing: {snippet}")
+print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion), "presentation_contracts_checked": len(required_presentation) + 6}, indent=2))
