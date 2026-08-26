@@ -23,8 +23,15 @@ jobs:
       - name: Check out exact preview checkpoint
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
-      - name: Validate coherent pending candidate
-        run: npm run check
+      - name: Validate cross-platform preview surface
+        run: |
+          npm run check:600s
+          npm run check:es1930m
+          node --check viewer/742-runtime.js
+          node scripts/validate_742_runtime_contract.mjs
+          python3 -B scripts/validate_742_glb.py
+          python3 -B scripts/validate_742_portable_posed_glb.py
+          python3 -B scripts/validate_742_route.py
 
       - name: Assemble non-release review preview
         run: |
