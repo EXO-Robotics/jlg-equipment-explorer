@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.9";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.1.0";
 import { directOrbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.11";
 import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.9";
+import { activeAutoOverrides, beginAutoOverride, clearAutoOverrides, createAutoOverrideController, dampMotion, endAutoOverride, holdAutoOverride } from "./auto-override.mjs?v=1.0.0";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -47,11 +48,14 @@ let animationFrameId = null;
 let assetLoadTimeout = null;
 let runtimeFrameCount = 0;
 const presentationRoute = {
-  enabled: !reducedMotion && query.get("auto") === "1",
+  enabled: false,
+  requested: !reducedMotion && query.get("auto") !== "0",
   phase: 0,
+  mechanismProgress: 0,
   distanceM: 0,
   wheelRotations: [0, 0, 0, 0],
 };
+const controlOverrides = createAutoOverrideController(machine.controls.map((control) => control.id));
 
 function recordError(error) {
   runtime.errors += 1;
@@ -277,6 +281,7 @@ function resetPresentationPose() {
   rig.root.position.set(0, 0, 0);
   rig.root.rotation.y = 0;
   presentationRoute.phase = 0;
+  presentationRoute.mechanismProgress = 0;
   presentationRoute.distanceM = 0;
   presentationRoute.wheelRotations.fill(0);
   for (const spindle of rig.steerSpindles) spindle.rotation.y = 0;
@@ -288,10 +293,14 @@ function resetPresentationPose() {
 function updatePresentationTelemetry(sample = sampleFigureEight(presentationRoute.phase)) {
   const locked = reducedMotion;
   const paused = !presentationRoute.enabled && presentationRoute.distanceM > 0;
-  const modeText = locked ? "Static pose" : presentationRoute.enabled ? "Auto loop" : paused ? "Auto paused" : "Manual";
+  const overrideIds = presentationRoute.enabled ? activeAutoOverrides(controlOverrides) : [];
+  const overrideLabel = overrideIds.map((id) => machine.controls.find((control) => control.id === id)?.label || id).join(" + ");
+  const modeText = locked ? "Static pose" : presentationRoute.enabled ? overrideIds.length ? `Override · ${overrideLabel}` : "Auto loop" : paused ? "Auto paused" : "Manual";
   const noteText = locked
     ? "Motion disabled by reduced-motion preference."
-    : "Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.";
+    : presentationRoute.enabled
+      ? overrideIds.length ? "Auto keeps driving; adjusted controls resume after 6 s." : "Move a slider for a 6 s override."
+      : "All machine controls are live.";
   if (autonomyMode.value !== modeText) autonomyMode.value = modeText;
   if (autonomyNote.textContent !== noteText) autonomyNote.textContent = noteText;
   const heading = `${String(normalizedHeadingDegrees(sample.heading)).padStart(3, "0")}°`;
@@ -305,17 +314,20 @@ function updatePresentationTelemetry(sample = sampleFigureEight(presentationRout
   if (autonomyToggle.textContent !== buttonText) autonomyToggle.textContent = buttonText;
   autonomyToggle.setAttribute("aria-label", locked ? "Automatic drive unavailable" : presentationRoute.enabled ? "Switch to manual drive" : "Switch to automatic drive");
   document.body.dataset.presentationMode = locked ? "static" : presentationRoute.enabled ? "running" : paused ? "paused" : "ready";
-  document.body.dataset.autonomyMode = locked ? "static" : presentationRoute.enabled ? "auto" : paused ? "paused" : "manual";
-  if (presentationRoute.enabled) setOutputValue(motionStatus, "Autonomous");
+  document.body.dataset.autonomyMode = locked ? "static" : presentationRoute.enabled ? overrideIds.length ? "override" : "auto" : paused ? "paused" : "manual";
+  document.body.dataset.autonomyOverrides = overrideIds.join(",") || "none";
+  if (presentationRoute.enabled) setOutputValue(motionStatus, overrideIds.length ? "Manual override" : "Autonomous");
   else if (paused) setOutputValue(motionStatus, "Paused");
 }
 
-function applyPresentationVisualSample(sample) {
-  rig.steerSpindles[0].rotation.y = sample.steerRight;
-  rig.steerSpindles[1].rotation.y = sample.steerLeft;
+function applyPresentationVisualSample(sample, steeringOverridden = false, delta = 1 / 60) {
+  rig.steerSpindles[0].rotation.y = steeringOverridden ? 0 : sample.steerRight;
+  rig.steerSpindles[1].rotation.y = steeringOverridden ? 0 : sample.steerLeft;
   rig.root.position.set(sample.x, 0, sample.z);
   rig.root.rotation.y = sample.heading;
-  orbit.desiredTarget.set(sample.x, 1.05, sample.z);
+  const follow = machine.followView(state, mobileQuery.matches);
+  orbit.desiredTarget.set(sample.x, dampMotion(orbit.desiredTarget.y, follow.target[1], 2.4, delta), sample.z);
+  orbit.desiredDistance = dampMotion(orbit.desiredDistance, follow.distance, 2.2, delta);
   document.body.dataset.driveX = sample.x.toFixed(2);
   document.body.dataset.driveZ = sample.z.toFixed(2);
   document.body.dataset.steerActuatorCommand = sample.steer.toFixed(3);
@@ -327,18 +339,11 @@ function setPresentationRouteEnabled(enabled, { reset = false } = {}) {
   presentationRoute.enabled = Boolean(enabled) && !reducedMotion && Boolean(rig);
   if (reset) resetPresentationPose();
   if (presentationRoute.enabled) {
-    Object.assign(state, machine.stowState);
     const sample = sampleFigureEight(presentationRoute.phase);
-    state.steer = sample.steer;
-    for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
     machine.applyState(rig, machine.solveState(state));
     applyPresentationVisualSample(sample);
-  } else if (reset) {
-    state.steer = 0;
-    document.querySelector("#steer-control").value = 0;
-    machine.applyState(rig, machine.solveState(state));
-    fitMachineBounds();
   }
+  clearAutoOverrides(controlOverrides);
   setControlOutputs();
   updatePresentationTelemetry();
 }
@@ -364,19 +369,24 @@ const handleMotionPreferenceChange = () => syncReducedMotion(true);
 if (motionPreference.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
 else motionPreference.addListener(handleMotionPreferenceChange);
 
-function updatePresentationRoute(delta) {
+function updatePresentationRoute(delta, now = performance.now()) {
   if (!presentationRoute.enabled || !rig) return;
   const next = advanceFigureEight(presentationRoute.phase, delta);
   presentationRoute.phase = next.phase;
+  presentationRoute.mechanismProgress = (presentationRoute.mechanismProgress + delta / (machine.showcaseDurationMs / 1000)) % 1;
   presentationRoute.distanceM += 0.72 * delta;
   const wheelRates = next.sample.wheelSpeedScales.map((scale) => -(0.72 * scale) / 0.13);
   for (let index = 0; index < presentationRoute.wheelRotations.length; index += 1) {
     presentationRoute.wheelRotations[index] += wheelRates[index] * delta;
   }
-  state.steer = next.sample.steer;
-  document.querySelector("#steer-control").value = state.steer * 100;
+  const commands = { ...machine.showcase(presentationRoute.mechanismProgress), steer: next.sample.steer };
+  const overrideIds = activeAutoOverrides(controlOverrides, now);
+  for (const control of machine.controls) {
+    if (!overrideIds.includes(control.id)) state[control.id] = dampMotion(state[control.id], commands[control.id], control.id === "steer" ? 8 : 3.2, delta);
+    document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
+  }
   machine.applyState(rig, machine.solveState(state));
-  applyPresentationVisualSample(next.sample);
+  applyPresentationVisualSample(next.sample, overrideIds.includes("steer"), delta);
   for (let index = 0; index < rig.wheelRollPivots.length; index += 1) {
     rig.wheelRollPivots[index].rotation.z = presentationRoute.wheelRotations[index];
   }
@@ -415,12 +425,17 @@ function applyControls() {
   fitMachineBounds();
 }
 for (const control of machine.controls) {
-  document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
-    const requestedValue = Number(event.currentTarget.value);
-    setPresentationRouteEnabled(false, { reset: true });
-    event.currentTarget.value = requestedValue;
-    state[control.id] = requestedValue / control.inputDivisor;
+  const input = document.querySelector(`#${control.inputId}`);
+  input.addEventListener("pointerdown", () => beginAutoOverride(controlOverrides, control.id));
+  const releaseControl = () => endAutoOverride(controlOverrides, control.id);
+  input.addEventListener("pointerup", releaseControl);
+  input.addEventListener("pointercancel", releaseControl);
+  input.addEventListener("change", releaseControl);
+  input.addEventListener("input", (event) => {
+    state[control.id] = Number(event.currentTarget.value) / control.inputDivisor;
+    if (presentationRoute.enabled) holdAutoOverride(controlOverrides, control.id);
     applyControls();
+    updatePresentationTelemetry();
   });
 }
 document.querySelector("#stow").addEventListener("click", () => {
@@ -556,7 +571,7 @@ try {
       runtime.selection = "self-test-pass";
       document.body.dataset.machineSource = "glb";
       document.body.dataset.machineVisibleMeshes = String(model.getObjectsByProperty("isMesh", true).length);
-      setPresentationRouteEnabled(presentationRoute.enabled);
+      setPresentationRouteEnabled(presentationRoute.requested);
       loaderStatus.textContent = `${machine.identity.model} ready`;
       loaderDetail.textContent = `${machine.configurationId} validated`;
       loader.classList.add("done");
@@ -584,7 +599,7 @@ function animate(now) {
   document.body.dataset.runtimeLastFrameMs = Number(now).toFixed(3);
   const delta = Math.min((now - lastFrame) / 1000, 0.05);
   lastFrame = now;
-  updatePresentationRoute(delta);
+  updatePresentationRoute(delta, now);
   updateCamera(delta);
   renderer.render(scene, camera);
   runtime.frames += 1;

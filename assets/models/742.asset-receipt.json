@@ -1453,7 +1453,7 @@
         "pose_aware_reset": true,
         "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.7.2",
+        "runtime_release": "1.8.0",
         "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "settled_motion_live_region": true,
@@ -1463,7 +1463,7 @@
         "terminal_accessible_failure_ui": true,
         "visible_stalls_included": true
       },
-      "result_sha256": "ee404a08da635a33df54a675307a42efe5a368a7315ac578afb7078420dffbe2",
+      "result_sha256": "9b30c0497bf5f07c0ac41c060a8d65896fb29ffc650522b4a5cb6bceba38e507",
       "status": "pass",
       "validator": {
         "bytes": 14252,
@@ -1473,7 +1473,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "0993c26161f8add3824ddd5c98c91a8c3f357eb01142fd8f515f110bb8f1b087",
+  "candidate_tree_sha256": "0a0d0639bdc2fc6c4bbbebe31a8bbdacd13f273f067b6161be15dd75b19a970e",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1521,9 +1521,9 @@
       "sha256": "1da0373419e8c4532fb8677fb620e5795794249937a136f64e76422982748b13"
     },
     "browser_capture_runner": {
-      "bytes": 92425,
+      "bytes": 93062,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462"
+      "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e"
     },
     "browser_capture_validator": {
       "bytes": 88438,
@@ -1591,9 +1591,9 @@
       "sha256": "d2d07fba5c7b59aaafedb021bca3922c15c46b0b5b93b38ca3ae6f14f05ae4a6"
     },
     "package_manifest": {
-      "bytes": 2865,
+      "bytes": 2961,
       "path": "package.json",
-      "sha256": "1247cff04d72aba3236ca978379ba84adddcc904209914625435977c32edb194"
+      "sha256": "3e79ebc42bcbae6fce2be618261ab8d5f6fa313f059a12568f3f2c8d518d3b01"
     },
     "pages_assembler": {
       "bytes": 1485,
@@ -1601,14 +1601,14 @@
       "sha256": "56328e9ce0d9f91db6a72f26f9608a1eb38613f96b263c46b14c71d263130c5e"
     },
     "pages_bundle_validator": {
-      "bytes": 15480,
+      "bytes": 15508,
       "path": "scripts/validate_pages_bundle.py",
-      "sha256": "c561fc88e9689158962d0417b6c3aa999e562545aafd401a8be878068a65ecc4"
+      "sha256": "01c1933887e01ab5c1fecf97c9cd7f57c1ea31b414190afe4958040f16ffa3f4"
     },
     "pages_deployment_verifier": {
-      "bytes": 11074,
+      "bytes": 11102,
       "path": "scripts/verify_pages_deployment.py",
-      "sha256": "94a31b6221bcd79dae2ce41822d0c6ad7384f1fd0a63d752549afa4673fb9f75"
+      "sha256": "d633ce8068403fa42f7af3d4063597579706890a01f53e6ef9c2b5288f53c11a"
     },
     "pages_manifest_writer": {
       "bytes": 1683,
@@ -1631,14 +1631,14 @@
       "sha256": "8a7ca48c58304dd5c2860a4cbed6f407acc8ea6e71984d8dbdd88061b3b15686"
     },
     "receipt_validator": {
-      "bytes": 53229,
+      "bytes": 53261,
       "path": "scripts/validate_742_receipt.py",
-      "sha256": "ab4ec840ae0bd6365b10860f58233c9a6936cfc859478582dc2e207583677f1d"
+      "sha256": "3e8e047d71b0ae07272d737a1d041c4ff83779332968ff3b361de007688ce21a"
     },
     "receipt_writer": {
-      "bytes": 32403,
+      "bytes": 32442,
       "path": "scripts/write_742_receipt.py",
-      "sha256": "41358afa4ed379e063305a1269bf6262f1a737bb9463e76b900bd58ffaf6d8bd"
+      "sha256": "8e5c90ff000f65829a0422857b4f0ca13059c19342c1555840c0250aae57e66b"
     },
     "reference_board_boundary": {
       "bytes": 481,
@@ -2160,6 +2160,7 @@
       "viewer.css",
       "viewer/742.css",
       "viewer/742-runtime.js",
+      "viewer/auto-override.mjs",
       "viewer/presentation-route.mjs",
       "machines/742/machine.js",
       "machines/742/articulation.js",
@@ -2168,7 +2169,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "dca3c52f853fc1a6bef980a733e93184bee1a75f8b52a8f1340909fb68b9e8fb"
+    "sha256": "d556e8cdb1f1d555e7c537921e9eb43f07b8bedf3e3a4c101e5bb72f172e8788"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"

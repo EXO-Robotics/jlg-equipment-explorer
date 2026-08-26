@@ -27,6 +27,7 @@ export const ES1930M_MACHINE = Object.freeze({
   ]),
   interactionVolumes: Object.freeze(["Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"]),
   stowState: Object.freeze({ lift: 0, deck: 0, steer: 0 }),
+  showcaseDurationMs: 60000,
   defaultCamera: "default",
   validateAsset(root) {
     const missing = this.requiredNodes.filter((name) => !root.getObjectByName(name));
@@ -43,6 +44,19 @@ export const ES1930M_MACHINE = Object.freeze({
   selfTestRig(rig, state) { return selfTestES1930MRig(rig, this.solveState(state)); },
   followView: es1930mFollowView,
   componentView: es1930mComponentView,
+  showcase(t) {
+    const smooth = (start, end, value) => {
+      const progress = Math.max(0, Math.min(1, (value - start) / (end - start)));
+      return progress * progress * (3 - 2 * progress);
+    };
+    // One 60 s presentation cycle gives the reconstructed lift 21.6 s to
+    // raise and 21.6 s to lower, inside the published 20-25 s rated band.
+    // Deck travel is shown only during the high hold. This is visualization
+    // choreography, not an operating sequence or simultaneous-motion claim.
+    const lift = smooth(0.02, 0.38, t) * (1 - smooth(0.62, 0.98, t));
+    const deck = smooth(0.42, 0.50, t) * (1 - smooth(0.54, 0.62, t));
+    return Object.freeze({ lift, deck });
+  },
   presentState(state) {
     const outdoorRatio = (4.57 - 0.90) / (5.64 - 0.90);
     const stowed = state.lift < 0.01 && state.deck < 0.01 && Math.abs(state.steer) < 0.01;

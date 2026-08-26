@@ -37,7 +37,7 @@
     "review_evidence": {
       "bytes": 223689,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "10fbdb758f90f0f88485992369029f0489fff417b1d298b8932d1cefcfe20e8c"
+      "sha256": "dd4ae036a9c20c1aa42387526bd87e0917f66640c09a33930d5a6a9dcddedd4f"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -101,6 +101,7 @@
       "viewer/multi-machine.css",
       "viewer/machine-tabs.css",
       "viewer/runtime.js",
+      "viewer/auto-override.mjs",
       "viewer/pointer-gestures.mjs",
       "viewer/presentation-route.mjs",
       "machines/es1930m/machine.js",
@@ -109,7 +110,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "565d44adbbb686c0ca082d9af8968f14716d8451c38e723de1499a626100da63"
+    "sha256": "66bf352a84fb5eb20e83b1df0bea9ff3e202f896e63aa38159f430261a2d97c1"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"

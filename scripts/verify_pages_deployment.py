@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_ID = "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481"
 SOURCE_EVIDENCE_ARTIFACT = "742-frozen-source-evidence"
 REQUIRED_742_PUBLIC_FILES = {
-    "742/index.html", "assets/models/742.glb", "viewer.css", "viewer/742.css", "viewer/742-runtime.js",
+    "742/index.html", "assets/models/742.glb", "viewer.css", "viewer/742.css", "viewer/742-runtime.js", "viewer/auto-override.mjs",
     "machines/742/machine.js", "machines/742/articulation.js", "machines/742/inspector.js",
     "machines/742/cameras.js", "machines/742/version.js", "machines/742/742.configuration.json",
     "machines/742/mechanism.json", "machines/742/solver.js", "docs/research/742/README.md", "docs/research/742/REFERENCES.md",

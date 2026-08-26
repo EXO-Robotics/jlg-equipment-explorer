@@ -18,7 +18,7 @@ ROUTES = {
 REQUIRED = {
     "index.html", "600s/index.html", "742/index.html", "es1930m/index.html",
     "viewer.css", "viewer/machine-tabs.css", "viewer.js", "viewer/runtime.js",
-    "viewer/742.css", "viewer/742-runtime.js", "assets/models/600s.glb",
+    "viewer/742.css", "viewer/742-runtime.js", "viewer/auto-override.mjs", "assets/models/600s.glb",
     "assets/models/es1930m.glb", "assets/models/742.glb",
     "assets/social/equipment-explorer-pages-thumbnail.png", "pages-build-manifest.json",
 }

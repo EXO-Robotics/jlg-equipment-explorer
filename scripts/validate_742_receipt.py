@@ -71,6 +71,7 @@ CANONICAL_RUNTIME = [
     "viewer.css",
     "viewer/742.css",
     "viewer/742-runtime.js",
+    "viewer/auto-override.mjs",
     "viewer/presentation-route.mjs",
     "machines/742/machine.js",
     "machines/742/articulation.js",

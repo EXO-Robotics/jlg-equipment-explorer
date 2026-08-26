@@ -3,8 +3,9 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.12";
 import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
 import { advanceFigureEight, JLG742_FIGURE_EIGHT, sampleFigureEight } from "./presentation-route.mjs?v=1.0.10";
+import { activeAutoOverrides, beginAutoOverride, clearAutoOverrides, createAutoOverrideController, dampMotion, endAutoOverride, holdAutoOverride } from "./auto-override.mjs?v=1.0.0";
 
-const ROUTE_RELEASE = "1.7.2";
+const ROUTE_RELEASE = "1.8.0";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -49,6 +50,7 @@ let selectionVolumes = [];
 let lastFrame = performance.now();
 let fpsStart = lastFrame;
 let showcaseStarted = null;
+let showcaseProgress = 0;
 let terminalFailure = false;
 let motionAnnouncementTimer = null;
 let skipNextVisibleFrame = true;
@@ -60,6 +62,8 @@ const showcaseRoute = {
   wheelRotations: Object.fromEntries(["FL", "FR", "RL", "RR"].map((corner) => [corner, 0])),
 };
 const routeWheelCorners = Object.freeze(["FR", "FL", "RR", "RL"]);
+const autoRequested = !reducedMotion && query.get("auto") !== "0";
+const controlOverrides = createAutoOverrideController(machine.controls.map((control) => control.id));
 
 function recordError(error) {
   runtime.errors += 1;
@@ -736,11 +740,18 @@ function updateFollowView(controlId) {
   clearComponentSelection();
 }
 for (const control of machine.controls) {
-  document.querySelector(`#${control.inputId}`).addEventListener("input", (event) => {
-    stopShowcase();
+  const input = document.querySelector(`#${control.inputId}`);
+  input.addEventListener("pointerdown", () => beginAutoOverride(controlOverrides, control.id));
+  const releaseControl = () => endAutoOverride(controlOverrides, control.id);
+  input.addEventListener("pointerup", releaseControl);
+  input.addEventListener("pointercancel", releaseControl);
+  input.addEventListener("change", releaseControl);
+  input.addEventListener("input", (event) => {
     state[control.id] = Number(event.currentTarget.value) / control.inputDivisor;
+    if (showcaseStarted !== null) holdAutoOverride(controlOverrides, control.id);
     const presentation = applyControls();
-    if (machine.followView && (control.id === "lift" || control.id === "telescope")) updateFollowView(control.id);
+    if (showcaseStarted === null && machine.followView && (control.id === "lift" || control.id === "telescope")) updateFollowView(control.id);
+    syncShowcaseControls();
     scheduleMotionAnnouncement(`${control.label}: ${presentation.outputs[control.id]}. ${presentation.status}.`);
   });
 }
@@ -770,21 +781,26 @@ document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEve
   announceMotion(`${button.textContent.trim()} steering selected. ${presentation.status}.`);
 }));
 
-let lastShowcaseFrameAt = 0;
 function syncShowcaseControls() {
   const active = showcaseStarted !== null && !reducedMotion;
+  const overrideIds = active ? activeAutoOverrides(controlOverrides) : [];
+  const overrideLabel = overrideIds.map((id) => machine.controls.find((control) => control.id === id)?.label || id).join(" + ");
   document.body.dataset.showcaseActive = String(active);
+  document.body.dataset.autonomyMode = reducedMotion ? "static" : active ? overrideIds.length ? "override" : "auto" : "manual";
+  document.body.dataset.autonomyOverrides = overrideIds.join(",") || "none";
   showcaseButton.setAttribute("aria-pressed", String(active));
   showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Auto" : "Manual";
   showcaseButton.setAttribute("aria-label", reducedMotion ? "Automatic drive unavailable" : active ? "Switch to manual drive" : "Switch to automatic drive");
-  autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual";
+  autonomyMode.value = reducedMotion ? "Reduced motion" : active ? overrideIds.length ? `Override · ${overrideLabel}` : "Auto loop" : "Manual";
   autonomyNote.textContent = active
-    ? "Driving a full figure-eight with reconstructed steering and mechanism motion."
+    ? overrideIds.length ? "Auto keeps driving; adjusted controls resume after 6 s." : "Move a slider for a 6 s override."
     : "Visualization only - drive and mechanism motion are reconstructed; not a machine capability.";
+  if (active) motionStatus.value = overrideIds.length ? "Manual override" : "Autonomous";
   showcaseLoop.textContent = `${Math.round((showcaseRoute.phase / (Math.PI * 2)) * 100)}%`;
 }
 function resetShowcaseRoute() {
   showcaseRoute.phase = 0;
+  showcaseProgress = 0;
   showcaseRoute.distanceM = 0;
   for (const corner of Object.keys(showcaseRoute.wheelRotations)) showcaseRoute.wheelRotations[corner] = 0;
   if (!rig) return;
@@ -798,6 +814,16 @@ function resetShowcaseRoute() {
 }
 function stopShowcase() {
   showcaseStarted = null;
+  clearAutoOverrides(controlOverrides);
+  syncShowcaseControls();
+}
+function startShowcase() {
+  if (reducedMotion || !rig) return;
+  showcaseStarted = performance.now();
+  clearAutoOverrides(controlOverrides);
+  const sample = sampleFigureEight(showcaseRoute.phase, JLG742_FIGURE_EIGHT);
+  rig.driveCarrier.position.set(sample.x, 0, sample.z);
+  rig.driveCarrier.rotation.set(0, sample.heading, 0);
   syncShowcaseControls();
 }
 function syncReducedMotion(announce = false) {
@@ -825,11 +851,7 @@ showcaseButton?.addEventListener("click", () => {
     announceMotion("Automatic 742 mechanism showcase stopped. Manual controls remain available.");
     return;
   }
-  showcaseStarted = performance.now();
-  const sample = sampleFigureEight(showcaseRoute.phase, JLG742_FIGURE_EIGHT);
-  rig.driveCarrier.position.set(sample.x, 0, sample.z);
-  rig.driveCarrier.rotation.set(0, sample.heading, 0);
-  syncShowcaseControls();
+  startShowcase();
   announceMotion("Automatic 742 figure-eight showcase started.");
 });
 const handleMotionPreferenceChange = () => syncReducedMotion(true);
@@ -1019,6 +1041,7 @@ function loadMachineAsset() {
         loaderStatus.textContent = `${machine.identity.model} ready`;
         loaderDetail.textContent = `${machine.configurationId} validated`;
         loader.classList.add("done");
+        if (autoRequested) startShowcase();
         updateDiagnostics();
       } catch (error) {
         if (model) scene.remove(model);
@@ -1063,17 +1086,19 @@ function animate(now) {
     orbit.velocityPolar *= 0.88;
   }
   if (showcaseStarted !== null && machine.showcase && !reducedMotion) {
-    const elapsed = (now - showcaseStarted) / (machine.showcaseDurationMs ?? 14000);
-    if (elapsed >= 1) showcaseStarted = now;
-    const loopProgress = elapsed % 1;
-    const showcaseState = { ...machine.showcase(loopProgress) };
+    showcaseProgress = (showcaseProgress + delta / ((machine.showcaseDurationMs ?? 14000) / 1000)) % 1;
+    const showcaseState = { ...machine.showcase(showcaseProgress) };
     const route = advanceFigureEight(showcaseRoute.phase, delta, JLG742_FIGURE_EIGHT);
     showcaseRoute.phase = route.phase;
     showcaseRoute.distanceM += JLG742_FIGURE_EIGHT.speedMps * delta;
     showcaseState.steer = route.sample.steer;
     showcaseState.steerMode = "circle";
-    Object.assign(state, showcaseState);
-    for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
+    const overrideIds = activeAutoOverrides(controlOverrides, now);
+    for (const control of machine.controls) {
+      if (!overrideIds.includes(control.id)) state[control.id] = dampMotion(state[control.id], showcaseState[control.id], control.id === "steer" ? 8 : 3.2, delta);
+      document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
+    }
+    state.steerMode = "circle";
     document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
     applyControls();
     rig.driveCarrier.position.set(route.sample.x, 0, route.sample.z);
@@ -1082,17 +1107,21 @@ function animate(now) {
       showcaseRoute.wheelRotations[corner] -= JLG742_FIGURE_EIGHT.speedMps * route.sample.wheelSpeedScales[index] * delta / JLG742_FIGURE_EIGHT.wheelRadiusM;
       rig.wheelRollPivots[corner].rotation.y = showcaseRoute.wheelRotations[corner];
     });
-    orbit.desiredTarget.set(route.sample.x, Math.max(1.05, orbit.desiredTarget.y), route.sample.z);
+    const follow = adaptView(machine.followView(state, compact, "showcase"), "follow");
+    const followLocalX = follow.target[0] || 0;
+    orbit.desiredTarget.set(
+      route.sample.x + Math.cos(route.sample.heading) * followLocalX,
+      dampMotion(orbit.desiredTarget.y, Math.max(1.05, follow.target[1]), 2.4, delta),
+      route.sample.z - Math.sin(route.sample.heading) * followLocalX,
+    );
+    setProgrammaticViewDistance(dampMotion(orbit.desiredDistance, follow.distance, 2.2, delta));
     showcaseLoop.textContent = `${Math.round((route.phase / (Math.PI * 2)) * 100)}%`;
     document.body.dataset.driveX = route.sample.x.toFixed(2);
     document.body.dataset.driveZ = route.sample.z.toFixed(2);
     document.body.dataset.driveHeading = String(Math.round(((THREE.MathUtils.radToDeg(route.sample.heading) % 360) + 360) % 360));
     document.body.dataset.driveLoop = String(Math.round((route.phase / (Math.PI * 2)) * 100));
     document.body.dataset.wheelRotationsRad = ["FL", "FR", "RL", "RR"].map((corner) => showcaseRoute.wheelRotations[corner].toFixed(3)).join(",");
-    if (machine.followView && now - lastShowcaseFrameAt > 100) {
-      updateFollowView("showcase");
-      lastShowcaseFrameAt = now;
-    }
+    syncShowcaseControls();
   }
   updateCamera(delta);
   renderer.render(scene, camera);

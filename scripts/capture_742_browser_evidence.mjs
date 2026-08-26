@@ -118,6 +118,21 @@ async function withCollapsedModeControl(page, selector, action) {
   }
   return result;
 }
+
+async function ensure742AutoActive(page) {
+  if (await page.locator("body").getAttribute("data-showcase-active") === "true") return;
+  await withCollapsedModeControl(page, "#showcase", (mode) => mode.click());
+  await page.waitForFunction(() => document.body.dataset.showcaseActive === "true");
+}
+
+async function ensure742ManualStow(page) {
+  if (await page.locator("body").getAttribute("data-showcase-active") === "true") {
+    await withCollapsedModeControl(page, "#showcase", (mode) => mode.click());
+    await page.waitForFunction(() => document.body.dataset.showcaseActive === "false");
+  }
+  await page.locator("#stow").click();
+  await page.waitForTimeout(120);
+}
 function sha(buffer) { return createHash("sha256").update(buffer).digest("hex"); }
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
@@ -422,7 +437,7 @@ async function projectedStowMachineBounds(page, model, minimumEdgeMarginCssPx, {
       },
       es1930m: {
         asset: "/assets/models/es1930m.glb",
-        machineModule: "/machines/es1930m/machine.js?v=1.0.9",
+        machineModule: "/machines/es1930m/machine.js?v=1.1.0",
         cameraKind: "azimuth-polar",
       },
       "600s": {
@@ -642,9 +657,7 @@ async function reduced742() {
     drive_loop: document.body.dataset.driveLoop || null,
     wheel_rotations_rad: document.body.dataset.wheelRotationsRad || null,
   }));
-  const showcase = opened.page.locator("#showcase");
-  await withCollapsedModeControl(opened.page, "#showcase", (mode) => mode.click());
-  await opened.page.waitForFunction(() => document.body.dataset.showcaseActive === "true");
+  await ensure742AutoActive(opened.page);
   const movingStart = await sample();
   await opened.page.waitForTimeout(300);
   const before = await sample();
@@ -717,7 +730,7 @@ async function capture742Fault(fault) {
       controls: Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
       runtime_frame_count: Number(document.body.dataset.runtimeFrameCount),
     }));
-    await withCollapsedModeControl(page, "#showcase", (mode) => mode.click());
+    await ensure742AutoActive(page);
     const start = await sample();
     await page.waitForFunction((before) => {
       const controls = Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value]));
@@ -756,6 +769,7 @@ async function captureDesktop742() {
   const opened = await openPage([1280, 720], "/742/?diagnostics=1");
   const { page, errors } = opened;
   await waitLoaded(page, "glb-validated", "selection 6/6 ready");
+  await ensure742ManualStow(page);
   const stowed = await snapshot(page);
   const desktopControlsToggle = page.locator("#controls-toggle");
   assert((await desktopControlsToggle.getAttribute("aria-expanded")) === "true", "desktop controls not expanded");
@@ -838,6 +852,7 @@ async function captureMobile742() {
   const screenshots = [];
   const portrait = await openPage([390, 844], "/742/?diagnostics=1&controls=1", { touch: true });
   await waitLoaded(portrait.page, "glb-validated", "selection 6/6 ready");
+  await ensure742ManualStow(portrait.page);
   assert((await portrait.page.locator("#controls-toggle").getAttribute("aria-expanded")) === "true", "portrait controls not expanded");
   const portraitControls = await portrait.page.locator('input[type="range"]').evaluateAll((nodes) => nodes.map((node) => ({ id: node.id, disabled: node.disabled, box: node.getBoundingClientRect().toJSON() })));
   assert(portraitControls.length === 5 && portraitControls.every((record) => !record.disabled && record.box.width > 0 && record.box.height > 0), "portrait controls not reachable");
@@ -850,6 +865,7 @@ async function captureMobile742() {
 
   const landscape = await openPage([844, 390], "/742/?diagnostics=1&controls=1", { touch: true });
   await waitLoaded(landscape.page, "glb-validated", "selection 6/6 ready");
+  await ensure742ManualStow(landscape.page);
   assert((await landscape.page.locator("#controls-toggle").getAttribute("aria-expanded")) === "true", "landscape controls not expanded");
   const landscapeControls = await landscape.page.locator('input[type="range"]').evaluateAll((nodes) => nodes.map((node) => ({ id: node.id, disabled: node.disabled, box: node.getBoundingClientRect().toJSON() })));
   assert(landscapeControls.length === 5 && landscapeControls.every((record) => !record.disabled && record.box.width > 0 && record.box.height > 0), "landscape controls not reachable");
@@ -881,6 +897,7 @@ async function captureAccessibility742() {
   const opened = await openPage([1280, 720], "/742/?diagnostics=1");
   const { page, errors } = opened;
   await waitLoaded(page, "glb-validated", "selection 6/6 ready");
+  await ensure742ManualStow(page);
   const dom = await snapshot(page, [...BASE_SELECTORS, ...SLIDER_SELECTORS]);
   const values = Object.fromEntries(await Promise.all(SLIDER_SELECTORS.map(async (selector) => [selector, await page.locator(selector).getAttribute("aria-valuetext")])));
   assert(JSON.stringify(values) === JSON.stringify({ "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°", "#steer-control": "All wheel headings centered", "#level-control": "Level" }), `stow aria values drift: ${JSON.stringify(values)}`);
@@ -917,6 +934,7 @@ async function captureSelection742() {
   const opened = await openPage([1280, 720], "/742/?diagnostics=1");
   const { page, errors } = opened;
   await waitLoaded(page, "glb-validated", "selection 6/6 ready");
+  await ensure742ManualStow(page);
   const visibleCanvasClicks = [];
   for (const probe of SEMANTIC_CANVAS_PROBES) {
     if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) {

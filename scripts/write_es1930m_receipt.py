@@ -33,6 +33,7 @@ RUNTIME_FILES = [
     ROOT / "viewer/multi-machine.css",
     ROOT / "viewer/machine-tabs.css",
     ROOT / "viewer/runtime.js",
+    ROOT / "viewer/auto-override.mjs",
     ROOT / "viewer/pointer-gestures.mjs",
     ROOT / "viewer/presentation-route.mjs",
     ROOT / "machines/es1930m/machine.js",

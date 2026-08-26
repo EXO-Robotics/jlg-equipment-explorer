@@ -77,6 +77,7 @@ RUNTIME_FILES = [
     ROOT / "viewer.css",
     ROOT / "viewer/742.css",
     ROOT / "viewer/742-runtime.js",
+    ROOT / "viewer/auto-override.mjs",
     ROOT / "viewer/presentation-route.mjs",
     ROOT / "machines/742/machine.js",
     ROOT / "machines/742/articulation.js",

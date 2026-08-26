@@ -175,7 +175,7 @@ research = {
 }
 required = {
     "index.html", "favicon.ico", "600s/index.html", "es1930m/index.html", "742/index.html", "viewer.css",
-    "viewer/runtime.js", "viewer/742-runtime.js", "viewer/742.css", "viewer/presentation-route.mjs",
+    "viewer/runtime.js", "viewer/742-runtime.js", "viewer/742.css", "viewer/auto-override.mjs", "viewer/presentation-route.mjs",
     "machines/742/machine.js", "machines/742/articulation.js", "machines/742/inspector.js",
     "machines/742/cameras.js", "machines/742/version.js", "machines/742/742.configuration.json",
     "machines/742/mechanism.json", "machines/742/solver.js", "assets/models/600s.glb", "assets/models/es1930m.glb",

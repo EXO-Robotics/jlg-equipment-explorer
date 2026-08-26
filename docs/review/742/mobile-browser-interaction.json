@@ -2036,36 +2036,36 @@
         ]
       }
     },
-    "captured_at_utc": "2026-08-26T17:54:26.970Z",
+    "captured_at_utc": "2026-08-26T18:29:42.652Z",
     "physical_device_session": false,
     "assistive_technology_session": false
   },
   "capture_runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
-    "bytes": 92425
+    "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e",
+    "bytes": 93062
   },
   "capture_artifacts": {
     "screenshots": [
       {
         "path": "docs/review/742/browser-captures/742-mobile-portrait.png",
-        "sha256": "f55080adaeea6ff3fa8f7d318708c44ffb6f59d3defbf444049971b1dac3f126",
-        "bytes": 83653,
+        "sha256": "230e751f7350fbd11d4bd625fe0d624c62bd091d2af65b44e9e3900acbdf1ced",
+        "bytes": 83646,
         "width_px": 390,
         "height_px": 844
       },
       {
         "path": "docs/review/742/browser-captures/742-mobile-short-landscape.png",
-        "sha256": "87e48235bfd807c86cb686f759571cae88809df791eb654029ee4d794742880c",
-        "bytes": 83624,
+        "sha256": "85da81ea1fe338f27f4eade18c2c4526cf856454a1fce784cb9bab18c8c4e3d4",
+        "bytes": 83660,
         "width_px": 844,
         "height_px": 390
       }
     ],
     "automation_trace": {
       "path": "docs/review/742/browser-captures/mobile-browser-interaction-trace.json",
-      "sha256": "756292c546487adaf0878c1d33e566b0a2d18c84db251c5e8afd687c1bc4b144",
-      "bytes": 110996,
+      "sha256": "2a0edc6694ed58e84ced6fabf94433fc3272e1d39d9d53c95251ffbb815d1e3f",
+      "bytes": 111175,
       "width_px": null,
       "height_px": null
     }
@@ -2081,10 +2081,11 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsStowedClose\n        Manual\n      \n      \n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop0%\n          \n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 41 ms · 59 fps · samples 90 · p95 16.8 ms · worst 33.4 ms · visible stalls 0 · profile portrait · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsStowedClose\n        Manual\n      \n      Stowed\n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop1%\n          \n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 43 ms · 59 fps · samples 89 · p95 16.7 ms · worst 50.1 ms · visible stalls 0 · profile portrait · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
             "attributes": {
               "data-machine": "742",
-              "data-runtime-release": "1.7.2",
+              "data-runtime-release": "1.8.0",
+              "data-boot-frame-count": "2",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
               "data-viewer-runtime-active": "true",
@@ -2098,17 +2099,19 @@
               "data-pixel-ratio": "1.00",
               "data-orbit-base-max-distance-m": "24.00",
               "data-orbit-min-distance-m": "4.40",
-              "data-orbit-effective-max-distance-m": "32.34",
-              "data-orbit-desired-distance-m": "11.44",
-              "data-orbit-camera-distance-m": "11.455",
+              "data-orbit-effective-max-distance-m": "24.00",
+              "data-orbit-desired-distance-m": "7.00",
+              "data-orbit-camera-distance-m": "7.014",
               "data-orbit-azimuth-rad": "-1.100000",
               "data-orbit-polar-rad": "1.180000",
+              "data-autonomy-mode": "manual",
+              "data-autonomy-overrides": "none",
               "class": "mobile-controls-open",
-              "data-frame-p95-ms": "16.8 ms",
-              "data-frame-worst-ms": "33.4 ms",
+              "data-frame-p95-ms": "16.7 ms",
+              "data-frame-worst-ms": "50.1 ms",
               "data-visible-stall-count": "0",
-              "data-frame-sample-count": "90",
-              "data-performance-window-ms": "1533",
+              "data-frame-sample-count": "89",
+              "data-performance-window-ms": "1517",
               "data-performance-window-reason": "startup",
               "data-wheel-angles-deg": "FL:0.000,FR:0.000,RL:0.000,RR:0.000",
               "data-crab-residual-deg": "0.000",
@@ -2116,8 +2119,8 @@
               "data-rear-toe-deg": "0.000",
               "data-zone": "stowed",
               "data-steer-mode-alignment": "centered",
-              "data-runtime-frame-count": "94",
-              "data-runtime-last-frame-ms": "1637.100",
+              "data-runtime-frame-count": "133",
+              "data-runtime-last-frame-ms": "2310.800",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2127,7 +2130,12 @@
               "data-selection-nearest-rays": "15",
               "data-selection-overlap-outcomes": "[{\"ray\":1,\"pairComponents\":[\"chassis\",\"cab\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"cab\"],\"hitDistancesM\":[47.7938,48.5559,49.2512,50.1655],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":2,\"pairComponents\":[\"chassis\",\"boom\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.3535,49.0621,49.7769,50.3654],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":3,\"pairComponents\":[\"chassis\",\"carriage\"],\"hitComponents\":[\"chassis\",\"steering\",\"hydraulics\",\"carriage\"],\"hitDistancesM\":[47.1627,47.8406,49.0795,53.1668],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":4,\"pairComponents\":[\"chassis\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.887,49.05,49.325,49.835],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":5,\"pairComponents\":[\"chassis\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"cab\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.2336,48.4544,49.3597,49.897,50.7485],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":6,\"pairComponents\":[\"cab\",\"boom\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.4283,49.5738,50.5093,50.5925],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":7,\"pairComponents\":[\"cab\",\"carriage\"],\"hitComponents\":[\"cab\",\"chassis\",\"carriage\"],\"hitDistancesM\":[49.1147,49.4529,52.5036],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":8,\"pairComponents\":[\"cab\",\"steering\"],\"hitComponents\":[\"cab\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.9142,49.8249,50.5394],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":9,\"pairComponents\":[\"cab\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.1653,49.3778,50.7436,50.865],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":10,\"pairComponents\":[\"boom\",\"carriage\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"carriage\"],\"hitDistancesM\":[48.3683,48.9941,50.0499,52.6526],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":11,\"pairComponents\":[\"boom\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.5141,49.7005,50.0149,50.5979],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":12,\"pairComponents\":[\"boom\",\"hydraulics\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.6437,49.8016,50.0415,51.669],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":13,\"pairComponents\":[\"carriage\",\"steering\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.2205,51.1094,51.7883],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":14,\"pairComponents\":[\"carriage\",\"hydraulics\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[49.2184,51.1123,51.793,53.1797,54.1895],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":15,\"pairComponents\":[\"steering\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[49.0517,49.7682,50.2248,51.086],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true}]",
               "data-machine-source": "glb-validated",
-              "data-machine-visible-meshes": "418"
+              "data-machine-visible-meshes": "418",
+              "data-drive-x": "0.00",
+              "data-drive-z": "0.00",
+              "data-drive-heading": "327",
+              "data-drive-loop": "0",
+              "data-wheel-rotations-rad": "0.000,0.000,0.000,0.000"
             }
           },
           {
@@ -2139,7 +2147,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 41 ms · 59 fps · samples 90 · p95 16.8 ms · worst 33.4 ms · visible stalls 0 · profile portrait · motion full",
+            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 43 ms · 59 fps · samples 89 · p95 16.7 ms · worst 50.1 ms · visible stalls 0 · profile portrait · motion full",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2181,10 +2189,10 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsStowedClose\n        Manual\n      \n      \n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop0%\n          \n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 41 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile short-landscape · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
+            "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      \n        \n          600S\n          742\n          ES1930M\n        \n        PVC 2411 accuracy reconstruction / 1.4.0\n      \n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controlsStowedClose\n        Manual\n      \n      Stowed\n      \n        \n          \n            Showcase mode\n            Manual\n            Visualization only - drive and mechanism motion are reconstructed; not a machine capability.\n          \n          \n            PhaseStowed\n            Loop1%\n          \n        \n        Boom lift0°0°\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0°0°\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Stow machineReset view\n        Visual mechanism reconstruction. Center steering before changing modes. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 43 ms · sampling · samples 62 · p95 sampling · worst sampling · visible stalls 0 · profile short-landscape · motion full\n  \n\n  \n  \n    ×\n    Evidence boundary\n    Owned 742,documented honestly.\n    The matched PVC 2411 publication family, current specifications, official gallery views and temporary BIM references inform this independently authored reconstruction. Manufacturer source geometry and artwork are not shipped.\n    Configuration72 hp · open cab · standard 370/75-28 tiresAttachment50 in floating carriage · 48 in pallet forksPrimary set3122332100 · 3122331300 · 3122329900BoundaryVisual reconstruction only\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);",
             "attributes": {
               "data-machine": "742",
-              "data-runtime-release": "1.7.2",
+              "data-runtime-release": "1.8.0",
               "data-boot-frame-count": "2",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
@@ -2200,10 +2208,12 @@
               "data-orbit-base-max-distance-m": "24.00",
               "data-orbit-min-distance-m": "4.40",
               "data-orbit-effective-max-distance-m": "24.00",
-              "data-orbit-desired-distance-m": "13.89",
-              "data-orbit-camera-distance-m": "13.888",
+              "data-orbit-desired-distance-m": "15.71",
+              "data-orbit-camera-distance-m": "15.699",
               "data-orbit-azimuth-rad": "-1.100000",
               "data-orbit-polar-rad": "1.180000",
+              "data-autonomy-mode": "manual",
+              "data-autonomy-overrides": "none",
               "class": "mobile-controls-open",
               "data-frame-p95-ms": "sampling",
               "data-frame-worst-ms": "sampling",
@@ -2217,8 +2227,8 @@
               "data-rear-toe-deg": "0.000",
               "data-zone": "stowed",
               "data-steer-mode-alignment": "centered",
-              "data-runtime-frame-count": "30",
-              "data-runtime-last-frame-ms": "579.400",
+              "data-runtime-frame-count": "70",
+              "data-runtime-last-frame-ms": "1259.400",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2228,7 +2238,12 @@
               "data-selection-nearest-rays": "15",
               "data-selection-overlap-outcomes": "[{\"ray\":1,\"pairComponents\":[\"chassis\",\"cab\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"cab\"],\"hitDistancesM\":[47.7938,48.5559,49.2512,50.1655],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":2,\"pairComponents\":[\"chassis\",\"boom\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.3535,49.0621,49.7769,50.3654],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":3,\"pairComponents\":[\"chassis\",\"carriage\"],\"hitComponents\":[\"chassis\",\"steering\",\"hydraulics\",\"carriage\"],\"hitDistancesM\":[47.1627,47.8406,49.0795,53.1668],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":4,\"pairComponents\":[\"chassis\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.887,49.05,49.325,49.835],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":5,\"pairComponents\":[\"chassis\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"cab\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.2336,48.4544,49.3597,49.897,50.7485],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":6,\"pairComponents\":[\"cab\",\"boom\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.4283,49.5738,50.5093,50.5925],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":7,\"pairComponents\":[\"cab\",\"carriage\"],\"hitComponents\":[\"cab\",\"chassis\",\"carriage\"],\"hitDistancesM\":[49.1147,49.4529,52.5036],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":8,\"pairComponents\":[\"cab\",\"steering\"],\"hitComponents\":[\"cab\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.9142,49.8249,50.5394],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":9,\"pairComponents\":[\"cab\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.1653,49.3778,50.7436,50.865],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":10,\"pairComponents\":[\"boom\",\"carriage\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"carriage\"],\"hitDistancesM\":[48.3683,48.9941,50.0499,52.6526],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":11,\"pairComponents\":[\"boom\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.5141,49.7005,50.0149,50.5979],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":12,\"pairComponents\":[\"boom\",\"hydraulics\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.6437,49.8016,50.0415,51.669],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":13,\"pairComponents\":[\"carriage\",\"steering\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.2205,51.1094,51.7883],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":14,\"pairComponents\":[\"carriage\",\"hydraulics\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[49.2184,51.1123,51.793,53.1797,54.1895],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":15,\"pairComponents\":[\"steering\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[49.0517,49.7682,50.2248,51.086],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true}]",
               "data-machine-source": "glb-validated",
-              "data-machine-visible-meshes": "418"
+              "data-machine-visible-meshes": "418",
+              "data-drive-x": "0.00",
+              "data-drive-z": "0.00",
+              "data-drive-heading": "327",
+              "data-drive-loop": "0",
+              "data-wheel-rotations-rad": "0.000,0.000,0.000,0.000"
             }
           },
           {
@@ -2240,7 +2255,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 41 ms · sampling · samples 1 · p95 sampling · worst sampling · visible stalls 0 · profile short-landscape · motion full",
+            "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 43 ms · sampling · samples 62 · p95 sampling · worst sampling · visible stalls 0 · profile short-landscape · motion full",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics"
@@ -2366,12 +2381,12 @@
             "disabled": false,
             "box": {
               "x": 27,
-              "y": 161,
+              "y": 104,
               "width": 350,
               "height": 12,
-              "top": 161,
+              "top": 104,
               "right": 377,
-              "bottom": 173,
+              "bottom": 116,
               "left": 27
             }
           },
@@ -2380,12 +2395,12 @@
             "disabled": false,
             "box": {
               "x": 27,
-              "y": 196,
+              "y": 139,
               "width": 350,
               "height": 12,
-              "top": 196,
+              "top": 139,
               "right": 377,
-              "bottom": 208,
+              "bottom": 151,
               "left": 27
             }
           },
@@ -2394,12 +2409,12 @@
             "disabled": false,
             "box": {
               "x": 27,
-              "y": 231,
+              "y": 174,
               "width": 350,
               "height": 12,
-              "top": 231,
+              "top": 174,
               "right": 377,
-              "bottom": 243,
+              "bottom": 186,
               "left": 27
             }
           },
@@ -2408,12 +2423,12 @@
             "disabled": false,
             "box": {
               "x": 27,
-              "y": 266,
+              "y": 209,
               "width": 350,
               "height": 12,
-              "top": 266,
+              "top": 209,
               "right": 377,
-              "bottom": 278,
+              "bottom": 221,
               "left": 27
             }
           },
@@ -2422,12 +2437,12 @@
             "disabled": false,
             "box": {
               "x": 27,
-              "y": 341,
+              "y": 284,
               "width": 350,
               "height": 12,
-              "top": 341,
+              "top": 284,
               "right": 377,
-              "bottom": 353,
+              "bottom": 296,
               "left": 27
             }
           }
@@ -2475,89 +2490,101 @@
         ],
         "all_points_on_canvas": true,
         "baseline": {
-          "camera_distance_m": 30.8,
-          "desired_distance_m": 30.8,
+          "camera_distance_m": 18.854,
+          "desired_distance_m": 18.84,
           "stable_frames": 6,
           "samples_camera_distance_m": [
-            30.8,
-            30.8,
-            30.8,
-            30.8,
-            30.8,
-            30.8
+            19.075,
+            19.048,
+            19.023,
+            19.002,
+            18.983,
+            18.966,
+            18.951,
+            18.938,
+            18.926,
+            18.916,
+            18.907,
+            18.899,
+            18.892,
+            18.886,
+            18.88,
+            18.875,
+            18.871,
+            18.867,
+            18.864,
+            18.861,
+            18.858,
+            18.856,
+            18.854
           ]
         },
         "after": {
-          "camera_distance_m": 11.455,
-          "desired_distance_m": 11.44,
+          "camera_distance_m": 7.014,
+          "desired_distance_m": 7,
           "stable_frames": 6,
           "samples_camera_distance_m": [
-            28.55,
-            26.538,
-            24.784,
-            23.224,
-            21.846,
-            20.637,
-            19.562,
-            18.618,
-            17.779,
-            17.038,
-            16.388,
-            15.809,
-            15.298,
-            14.85,
-            14.451,
-            14.102,
-            13.79,
-            13.516,
-            13.273,
-            13.06,
-            12.871,
-            12.704,
-            12.557,
-            12.426,
-            12.311,
-            12.21,
-            12.12,
-            12.041,
-            11.97,
-            11.908,
-            11.854,
-            11.806,
-            11.763,
-            11.725,
-            11.692,
-            11.663,
-            11.637,
-            11.614,
-            11.593,
-            11.575,
-            11.56,
-            11.546,
-            11.533,
-            11.523,
-            11.513,
-            11.504,
-            11.497,
-            11.49,
-            11.484,
-            11.479,
-            11.475,
-            11.471,
-            11.467,
-            11.464,
-            11.461,
-            11.459,
-            11.456,
-            11.455
+            17.476,
+            16.251,
+            15.176,
+            14.22,
+            13.375,
+            12.634,
+            11.975,
+            11.393,
+            10.882,
+            10.428,
+            10.027,
+            9.675,
+            9.362,
+            9.085,
+            8.843,
+            8.627,
+            8.436,
+            8.269,
+            8.121,
+            7.99,
+            7.874,
+            7.771,
+            7.681,
+            7.601,
+            7.531,
+            7.468,
+            7.414,
+            7.365,
+            7.322,
+            7.284,
+            7.251,
+            7.221,
+            7.195,
+            7.172,
+            7.151,
+            7.133,
+            7.118,
+            7.103,
+            7.091,
+            7.08,
+            7.07,
+            7.062,
+            7.054,
+            7.048,
+            7.042,
+            7.036,
+            7.032,
+            7.028,
+            7.024,
+            7.021,
+            7.018,
+            7.016,
+            7.014
           ]
         },
-        "intermediate_desired_distance_m": 16.68,
-        "final_gesture_desired_distance_m": 11.44,
-        "camera_distance_delta_m": -19.345,
-        "desired_distance_delta_m": -19.36,
-        "absolute_camera_distance_delta_m": 19.345,
-        "minimum_required_delta_m": 0.616,
+        "intermediate_desired_distance_m": 10.2,
+        "final_gesture_desired_distance_m": 7,
+        "camera_distance_delta_m": -11.84,
+        "desired_distance_delta_m": -11.84,
+        "absolute_camera_distance_delta_m": 11.84,
+        "minimum_required_delta_m": 0.5,
         "expected_direction": "decrease",
         "actual_direction": "decrease",
         "monotonic_camera_change": true,
@@ -2574,66 +2601,66 @@
             "controls": {
               "lift-control": "0",
               "telescope-control": "0",
-              "tilt-control": "0",
+              "tilt-control": "1",
               "steer-control": "0",
-              "level-control": "0"
+              "level-control": "1"
             },
-            "drive_x": "0.03",
-            "drive_z": "0.02",
+            "drive_x": "0.28",
+            "drive_z": "0.18",
             "drive_loop": "0",
-            "wheel_rotations_rad": "-0.056,-0.056,-0.056,-0.056"
+            "wheel_rotations_rad": "-0.522,-0.523,-0.522,-0.523"
           },
           "before_reduce": {
             "controls": {
               "lift-control": "0",
               "telescope-control": "0",
               "tilt-control": "2",
-              "steer-control": "0",
-              "level-control": "2"
+              "steer-control": "1",
+              "level-control": "3"
             },
-            "drive_x": "0.21",
-            "drive_z": "0.14",
-            "drive_loop": "0",
-            "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392"
+            "drive_x": "0.48",
+            "drive_z": "0.30",
+            "drive_loop": "1",
+            "wheel_rotations_rad": "-0.875,-0.879,-0.875,-0.879"
           },
           "reduced_start": {
             "controls": {
               "lift-control": "0",
               "telescope-control": "0",
               "tilt-control": "2",
-              "steer-control": "0",
-              "level-control": "2"
+              "steer-control": "1",
+              "level-control": "3"
             },
-            "drive_x": "0.21",
-            "drive_z": "0.14",
-            "drive_loop": "0",
-            "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392"
+            "drive_x": "0.49",
+            "drive_z": "0.31",
+            "drive_loop": "1",
+            "wheel_rotations_rad": "-0.894,-0.898,-0.894,-0.898"
           },
           "reduced_end": {
             "controls": {
               "lift-control": "0",
               "telescope-control": "0",
               "tilt-control": "2",
-              "steer-control": "0",
-              "level-control": "2"
+              "steer-control": "1",
+              "level-control": "3"
             },
-            "drive_x": "0.21",
-            "drive_z": "0.14",
-            "drive_loop": "0",
-            "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392"
+            "drive_x": "0.49",
+            "drive_z": "0.31",
+            "drive_loop": "1",
+            "wheel_rotations_rad": "-0.894,-0.898,-0.894,-0.898"
           },
           "relaxed": {
             "controls": {
               "lift-control": "0",
               "telescope-control": "0",
               "tilt-control": "2",
-              "steer-control": "0",
-              "level-control": "2"
+              "steer-control": "1",
+              "level-control": "3"
             },
-            "drive_x": "0.21",
-            "drive_z": "0.14",
-            "drive_loop": "0",
-            "wheel_rotations_rad": "-0.392,-0.392,-0.392,-0.392",
+            "drive_x": "0.49",
+            "drive_z": "0.31",
+            "drive_loop": "1",
+            "wheel_rotations_rad": "-0.894,-0.898,-0.894,-0.898",
             "control_pressed": "false",
             "manual": true
           }

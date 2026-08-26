@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "performance_profile",
-  "captured_at_utc": "2026-08-26T17:54:41.524Z",
+  "captured_at_utc": "2026-08-26T18:29:58.916Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "1c3c9a2e211794f00853c0399a433199774ff9bc2ab3724f0e20de47452c9462",
-    "bytes": 92425
+    "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e",
+    "bytes": 93062
   },
-  "outcomes_sha256": "6a80ee216d4312f7027b06eb05292365bf3eb7be1dc588b7ea22f1ee3ecc0b43",
+  "outcomes_sha256": "84079059befeefa2ef0de898df46f1ba22fc394f8958ffd07ef81cfed6270f78",
   "outcomes": {
     "desktop": {
       "outcome": "pass",
@@ -2057,7 +2057,7 @@
       ],
       "summary": {
         "sample_count": 180,
-        "p95_ms": 16.7,
+        "p95_ms": 16.8,
         "worst_ms": 16.8,
         "visible_stall_count_gte_250ms": 0
       }

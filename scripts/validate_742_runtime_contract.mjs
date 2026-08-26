@@ -51,10 +51,15 @@ requireTokens(runtime, [
   "const windowMs = sorted.reduce((sum, sample) => sum + sample, 0)",
   "sorted.filter((sample) => sample >= 250).length",
   'showcaseStarted !== null && !reducedMotion',
+  'activeAutoOverrides(controlOverrides, now)',
+  'holdAutoOverride(controlOverrides, control.id)',
+  'dampMotion(state[control.id], showcaseState[control.id]',
+  'setProgrammaticViewDistance(dampMotion(orbit.desiredDistance, follow.distance, 2.2, delta))',
+  'query.get("auto") !== "0"',
   '? "Autonomous"',
-  'const ROUTE_RELEASE = "1.7.2"',
+  'const ROUTE_RELEASE = "1.8.0"',
   'showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Auto" : "Manual"',
-  'autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual"',
+  'autonomyMode.value = reducedMotion ? "Reduced motion" : active ? overrideIds.length ? `Override · ${overrideLabel}` : "Auto loop" : "Manual"',
   'showcaseLoop.textContent = `${Math.round((route.phase / (Math.PI * 2)) * 100)}%`',
 ], "runtime");
 requireTokens(index, [
@@ -68,9 +73,9 @@ requireTokens(index, [
   '<output id="tilt-value" aria-hidden="true">',
   '<output id="steer-value" aria-hidden="true">',
   '<output id="level-value" aria-hidden="true">',
-  'data-runtime-release="1.7.2"',
-  '../viewer/742-runtime.js?v=1.7.2',
-  '../viewer/742.css?v=1.7.2',
+  'data-runtime-release="1.8.0"',
+  '../viewer/742-runtime.js?v=1.8.0',
+  '../viewer/742.css?v=1.8.0',
   'class="autonomy-bar" aria-label="Automatic mechanism presentation"',
   'id="autonomy-mode" aria-live="polite" aria-atomic="true"',
   'id="showcase-phase"', 'id="showcase-loop"',
@@ -104,6 +109,7 @@ requireTokens(articulation, [
 if (/renderedInterval\s*<\s*250/.test(runtime)) throw new Error("Visible stalls are excluded from the performance window");
 if (runtime.includes("rig.root.rotation.y") || runtime.includes("rig.root.position.set")) throw new Error("Route motion overwrites the authored 742 GLB root transform");
 if (runtime.includes("orbit.desiredDistance = view.distance")) throw new Error("Pose framing bypasses the dynamic zoom cap");
+if (runtime.includes("lastShowcaseFrameAt")) throw new Error("742 auto camera returned to stepped interval reframing");
 
 const selectionStart = runtime.indexOf("const SELECTION_TIE_DISTANCE_M");
 const selectionEnd = runtime.indexOf("function prepareInteractionVolumes", selectionStart);
