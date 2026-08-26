@@ -26,12 +26,13 @@ The render hashes identify one local review run, not release artifacts. Regenera
 - fixed-rail standard platform, entry gate, main deck and extension-deck separation;
 - platform control box, ground-control area, compartment doors, four-wheel layout and pothole-protection members;
 - tan scissor members, orange platform/rails, dark chassis and nonmarking tire presentation;
+- PVC 2404 Figure 8-7 model badges on both long platform toe boards, JLG identity marks on both platform end boards, and JLG door marks on both chassis access panels; all marks are independently typeset rather than copied decal artwork;
 - raised platform remains level while link span contracts continuously.
 
 ## Known visual deviations and authority limits
 
 - The authored equal-link pantograph is a closure-preserving reconstruction. JLG imagery shows more varied arm profiles, gussets, pin bosses and stacked offsets than this presentation asset.
-- Chassis shells, door seams, wheel hubs/tread, welds, fasteners, labels, decals, hoses and wiring are simplified. Their placement must not be used as parts or service authority.
+- Chassis shells, door seams, wheel hubs/tread, welds, fasteners, non-brand safety labels, hoses and wiring are simplified. Brand/model placement is now bound to PVC 2404 Parts Figure 8-7 and the standard-machine gallery, but the typography, backing shapes and exact dimensions remain an owned visual approximation and must not be used as decal or service authority.
 - Platform rails are square-profile presentation geometry and do not claim measured tube section, weld geometry or exact gate hardware.
 - The lift-cylinder/kicker installation follows verified topology and published cylinder stroke, but its anchor coordinates and leverage are reconstructed.
 - Blind-side compartment interiors lack enough first-party photography for photogrammetric acceptance. Their system identity is sourced from manuals; their exact spatial placement is not.

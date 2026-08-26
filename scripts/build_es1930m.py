@@ -122,11 +122,16 @@ def text_label(name, text, location, mat, parent=None, rotation=(math.pi / 2, 0,
     obj.data.align_x = "CENTER"
     obj.data.align_y = "CENTER"
     obj.data.size = size
-    obj.data.extrude = 0.0015
-    obj.data.bevel_depth = 0.0005
+    # Keep the independently typeset markings as shallow applied films.  The
+    # earlier rounded extrusion multiplied the glyph triangulation enough to
+    # break the mobile GLB budget without adding visible accuracy at this size.
+    obj.data.resolution_u = 1
+    obj.data.extrude = 0.00025
+    obj.data.bevel_depth = 0.0
     obj.data.materials.append(mat)
     if parent:
         parent_keep_transform(obj, parent)
+    obj["marking_authority"] = "independently_typeset_nominative_mark"
     return obj
 
 
@@ -184,6 +189,7 @@ def build():
         "green": material("Indicator Green", (0.035, 0.56, 0.12, 1), 0.0, 0.30),
         "yellow": material("Indicator Amber", (0.96, 0.52, 0.025, 1), 0.0, 0.32),
         "blue": material("Display Blue Black", (0.018, 0.075, 0.105, 1), 0.05, 0.25),
+        "teal": material("Model Badge Teal", (0.025, 0.56, 0.66, 1), 0.02, 0.34),
         "rubber": material("Control Rubber", (0.012, 0.014, 0.013, 1), 0.0, 0.88),
         "white": material("Marking White", (0.82, 0.83, 0.77, 1), 0.02, 0.65),
         "battery": material("Battery Case", (0.12, 0.14, 0.15, 1), 0.05, 0.74),
@@ -194,7 +200,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.4"
+    root["release"] = "1.0.5"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
@@ -210,12 +216,32 @@ def build():
     bevelled_box("FrontNoseCrossmember", (0.27, 0.69, 0.075), (0.60, 0, 0.49), MAT["black"], chassis, 0.025, "steering")
     bevelled_box("FrontLowerBumper", (0.27, 0.69, 0.055), (0.60, 0, 0.23), MAT["black"], chassis, 0.022, "steering")
 
-    for side in (-1, 1):
-        panel_y = side * 0.374
-        bevelled_box(f"ModelBadgePlate_{side}", (0.34, 0.006, 0.12), (0.18, panel_y, 0.40), MAT["black"], chassis, 0.006, "chassis")
+    # PVC 2404 parts Fig. 8-7 (items 825A, 1001256675/1001256676
+    # and door treatments 1001304321/1001304322) places the JLG identity on
+    # both chassis access-door faces. The deployed marks are independently
+    # typeset text and simple owned backing geometry, not copied decal artwork.
+    for side, suffix in ((-1, "RH"), (1, "LH")):
+        # The access-door skin ends at +/-0.3795 m. Model these as thin applied
+        # films just outside the skin; thicker plaques incorrectly broaden the
+        # published 30-inch machine envelope.
+        panel_y = side * 0.3802
+        badge = bevelled_box(f"ChassisJLGPlate_{suffix}", (0.22, 0.0010, 0.105), (0.20, panel_y, 0.40), MAT["black"], chassis, 0.0002, "chassis")
+        badge["marking_source"] = "PVC2404_parts_fig_8_7_items_825A"
         facing_rotation = (math.pi / 2, 0, 0) if side < 0 else (math.pi / 2, 0, math.pi)
-        text_label(f"ES1930M_Label_{side}", "ES1930M", (0.18, side * 0.378, 0.41), MAT["white"], chassis, facing_rotation, 0.055)
-        bevelled_box(f"SafetyLabel_{side}", (0.13, 0.006, 0.065), (-0.10, panel_y, 0.42), MAT["white"], chassis, 0.003, "chassis")
+        mark = text_label(f"ChassisJLGMark_{suffix}", "JLG", (0.20, side * 0.3808, 0.405), MAT["white"], chassis, facing_rotation, 0.068)
+        mark["marking_source"] = "PVC2404_parts_fig_8_7_items_825A"
+        accent = bevelled_box(
+            f"ChassisJLGAccent_{suffix}",
+            (0.075, 0.0010, 0.024),
+            (0.286, side * 0.3807, 0.355),
+            MAT["teal"],
+            chassis,
+            0.0002,
+            "chassis",
+            rotation=(0, side * 0.25, 0),
+        )
+        accent["marking_source"] = "official_standard_machine_gallery_V01_V02"
+        bevelled_box(f"SafetyLabel_{side}", (0.13, 0.0010, 0.065), (-0.10, panel_y, 0.42), MAT["white"], chassis, 0.0002, "chassis")
 
     batteries = empty("BatteryCompartments", parent=chassis)
     for side in (-1, 1):
@@ -357,6 +383,12 @@ def build():
         toe["guard_branch"] = "moving_inner"
         toe["authored_rear_x_m"] = moving_rear
     bevelled_box("ExtensionFrontToeBoard", (0.035, moving_lateral * 2, 0.25), (moving_front, 0, deck_y + 0.125), MAT["jlg_orange"], extension, 0.012, "extension_deck")
+    # The official standard-machine gallery shows the end-board wordmark
+    # applied directly to orange, with a dark outline rather than a plaque.
+    front_outline = text_label("PlatformJLGOutline_Front", "JLG", (moving_front + 0.022, 0, deck_y + 0.128), MAT["black"], extension, (math.pi / 2, 0, math.pi / 2), 0.104)
+    front_outline["marking_source"] = "official_standard_machine_gallery_V01"
+    front_mark = text_label("PlatformJLGMark_Front", "JLG", (moving_front + 0.024, 0, deck_y + 0.128), MAT["white"], extension, (math.pi / 2, 0, math.pi / 2), 0.090)
+    front_mark["marking_source"] = "PVC2404_parts_fig_8_7_item_825A"
     for side in (-1, 1):
         for x in (0.18, 0.56):
             cylinder(f"ExtensionRoller_{side}_{x}", 0.025, 0.036, (x, side * 0.315, deck_y - 0.035), MAT["zinc"], extension, rotation=(math.pi / 2, 0, 0), component="extension_deck")
@@ -370,7 +402,22 @@ def build():
         toe = bevelled_box(f"MainToeBoard_{side}", (fixed_length, 0.035, 0.25), (fixed_center, side * fixed_lateral, deck_y + 0.125), MAT["jlg_orange"], rails, 0.012, "platform")
         toe["guard_branch"] = "fixed_outer"
         toe["authored_front_x_m"] = x_max
+        suffix = "RH" if side < 0 else "LH"
+        facing_rotation = (math.pi / 2, 0, 0) if side < 0 else (math.pi / 2, 0, math.pi)
+        badge_x = 0.27
+        plate = bevelled_box(f"PlatformModelBadgePlate_{suffix}", (0.38, 0.007, 0.125), (badge_x, side * (fixed_lateral + 0.020), deck_y + 0.128), MAT["black"], rails, 0.006, "platform")
+        plate["marking_source"] = f"PVC2404_parts_fig_8_7_item_822{'A' if side < 0 else 'B'}"
+        accent = bevelled_box(f"PlatformModelBadgeAccent_{suffix}", (0.040, 0.008, 0.142), (badge_x - 0.176, side * (fixed_lateral + 0.022), deck_y + 0.128), MAT["teal"], rails, 0.004, "platform", rotation=(0, side * 0.52, 0))
+        accent["marking_source"] = f"PVC2404_parts_fig_8_7_item_822{'A' if side < 0 else 'B'}"
+        model_mark = text_label(f"PlatformModelMark_{suffix}", "ES1930M", (badge_x + 0.025, side * (fixed_lateral + 0.025), deck_y + 0.148), MAT["white"], rails, facing_rotation, 0.056)
+        model_mark["marking_source"] = f"PVC2404_parts_fig_8_7_item_822{'A' if side < 0 else 'B'}"
+        family_mark = text_label(f"PlatformFamilyMark_{suffix}", "MICRO-SIZED", (badge_x + 0.025, side * (fixed_lateral + 0.025), deck_y + 0.104), MAT["white"], rails, facing_rotation, 0.022)
+        family_mark["marking_source"] = "official_standard_machine_gallery_V01_V02"
     bevelled_box("RearToeBoard", (0.035, 0.67, 0.25), (x_min, 0, deck_y + 0.125), MAT["jlg_orange"], rails, 0.012, "platform")
+    rear_outline = text_label("PlatformJLGOutline_Rear", "JLG", (x_min - 0.022, 0, deck_y + 0.128), MAT["black"], rails, (math.pi / 2, 0, -math.pi / 2), 0.104)
+    rear_outline["marking_source"] = "official_standard_machine_gallery_V01"
+    rear_mark = text_label("PlatformJLGMark_Rear", "JLG", (x_min - 0.024, 0, deck_y + 0.128), MAT["white"], rails, (math.pi / 2, 0, -math.pi / 2), 0.090)
+    rear_mark["marking_source"] = "PVC2404_parts_fig_8_7_item_825A"
     for side in (-1, 1):
         y = side * fixed_lateral
         top_rail = square_beam_between(f"TopRail_{side}", (x_min, y, top), (x_max, y, top), rail_size, MAT["jlg_orange"], rails, "platform")

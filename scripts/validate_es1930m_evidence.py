@@ -18,6 +18,8 @@ CONFIG_PATH = PROJECT_ROOT / "machines/es1930m/es1930m.configuration.json"
 EXPECTED_PRIMARY = {"3122602400", "3122602300", "3122602200"}
 EXPECTED_QUARANTINED = {"3122602600", "3122602500"}
 EXPECTED_CONFIGURATION = "ES1930M-PVC2404-US-STD-FR-FLA130-NM"
+EXPECTED_BRANDING_CLAIMS = {"BR-001", "BR-002"}
+EXPECTED_BRANDING_PARTS = {"1001322860", "1001322861", "1001304327", "1001256675", "1001256676", "1001304321", "1001304322"}
 
 
 def sha256_file(path: Path) -> str:
@@ -83,6 +85,16 @@ def main() -> None:
     claim_ids = [claim.get("id") for claim in claims]
     if not claims or len(claim_ids) != len(set(claim_ids)):
         fail("Mechanism evidence claims are missing or have duplicate IDs")
+    if missing := sorted(EXPECTED_BRANDING_CLAIMS - set(claim_ids)):
+        fail(f"PVC 2404 brand/model evidence claims are missing: {missing}")
+    branding_parts = {
+        part
+        for claim in claims
+        if claim.get("id") in EXPECTED_BRANDING_CLAIMS
+        for part in claim.get("part_numbers", [])
+    }
+    if branding_parts != EXPECTED_BRANDING_PARTS:
+        fail(f"PVC 2404 brand/model part-number binding drift: {sorted(branding_parts)}")
 
     required = {
         "id", "statement", "source", "pvc", "pages", "components",
@@ -128,6 +140,7 @@ def main() -> None:
         "status": "PASS",
         "configuration_id": EXPECTED_CONFIGURATION,
         "claims": len(claims),
+        "branding_claims": sorted(EXPECTED_BRANDING_CLAIMS),
         "primary_pvc2404_sources": sorted(EXPECTED_PRIMARY),
         "quarantined_pvc1001_sources": sorted(EXPECTED_QUARANTINED),
         "local_binaries_verified": sorted(local_checks),

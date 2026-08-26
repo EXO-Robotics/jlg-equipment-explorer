@@ -92,7 +92,7 @@ def main():
         "schema_version": "1.0.0",
         # Artifact identity is stable across deployment review; release_status
         # alone records whether the exact public bytes have been approved.
-        "release": "1.0.4",
+        "release": "1.0.5",
         "release_status": "release" if release_ready else "candidate_not_deployable",
         "written": str(date.today()),
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",

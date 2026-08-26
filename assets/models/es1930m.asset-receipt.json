@@ -1,23 +1,23 @@
 {
   "asset_metrics": {
     "explicit_scissor_link_groups": 20,
-    "meshes": 282,
-    "nodes": 407,
+    "meshes": 296,
+    "nodes": 421,
     "pivot_markers": 71,
     "stowed_envelope_xyz_m": [
-      1.4804999846965075,
+      1.4872499736666214,
       1.978000014089048,
       0.7660000175237656
     ],
-    "triangles": 35344
+    "triangles": 12016
   },
   "boundary": "Visual reconstruction only; not service, training, fabrication, load, stability, or safety authority.",
   "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
   "files": {
     "asset": {
-      "bytes": 1370444,
+      "bytes": 908464,
       "path": "assets/models/es1930m.glb",
-      "sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af"
+      "sha256": "bd1322dec96ae734a67cde145e61ed537641600ac550727b2fe215004ac4cd90"
     },
     "configuration": {
       "bytes": 2570,
@@ -30,14 +30,14 @@
       "sha256": "5b7ea528503029eae38acac9c6689a00f889ab38446f81461b17c09ac1d09a3c"
     },
     "mechanism_evidence": {
-      "bytes": 9629,
+      "bytes": 11203,
       "path": "docs/research/es1930m/MECHANISM_EVIDENCE.json",
-      "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
+      "sha256": "df91f6722a966ec4a550cbb3dac3f7448e514b6cddf4c466789e04f0d199da13"
     },
     "review_evidence": {
-      "bytes": 8706,
+      "bytes": 9877,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "28abb4f6bb04a0c30d5c81be79fa9e4969dcaffcfeadb42c7ed95c1b3a3ddfd4"
+      "sha256": "8165bd232ebb283ec8abf491e5a8942822d81f576a30700cc09f41ab7fd0cc1f"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -45,9 +45,9 @@
       "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
-      "bytes": 269311,
+      "bytes": 271503,
       "path": "source/blender/es1930m-showcase-v1.0.blend",
-      "sha256": "6084a98bdab181f38a3e9b536b70789a49b15a7ea7e5ff44d9a2f55c9012e186"
+      "sha256": "3b9dc06b1b94763ab950d22e6b64513b6c86787291b2d0d1a5ef4b9e3e0c3743"
     },
     "source_manifest": {
       "bytes": 4860,
@@ -55,9 +55,9 @@
       "sha256": "3ebf4f79a8bd9ea16e9314f937d14e59beeccc6310f0d7048d4b01686402c6c8"
     },
     "visual_comparison": {
-      "bytes": 3820,
+      "bytes": 4245,
       "path": "docs/research/es1930m/VISUAL_COMPARISON.md",
-      "sha256": "0adc7707e26eb09dfa3da9536925473ed74e35ec3cb1f1150a0f58aaa6632aac"
+      "sha256": "7362b30d76aec6bb7c5602bd5d853bb6b183349f13653118946830cb3646f61e"
     }
   },
   "mechanism_metrics": {
@@ -71,22 +71,23 @@
     "maximum_translation_per_0_01_sample_m": 0.05411392820809057,
     "sampled_lift_states": 101
   },
-  "release": "1.0.4",
-  "release_status": "release",
+  "release": "1.0.5",
+  "release_status": "candidate_not_deployable",
   "review_flags": {
     "600s_regression_suite_pass": true,
-    "accessibility_reviewed": true,
-    "deployed_pages_reviewed": true,
-    "desktop_browser_zero_errors": true,
-    "extension_browser_reviewed": true,
-    "figure_eight_presentation_reviewed": true,
-    "mobile_and_pinch_reviewed": true,
-    "mobile_drag_direction_reviewed": true,
-    "performance_reviewed": true,
-    "platform_controls_visual_reviewed": true,
-    "raised_pose_browser_reviewed": true,
-    "selection_and_focus_reviewed": true,
-    "steering_boundary_reviewed": true,
+    "accessibility_reviewed": false,
+    "branding_placement_reviewed": true,
+    "deployed_pages_reviewed": false,
+    "desktop_browser_zero_errors": false,
+    "extension_browser_reviewed": false,
+    "figure_eight_presentation_reviewed": false,
+    "mobile_and_pinch_reviewed": false,
+    "mobile_drag_direction_reviewed": false,
+    "performance_reviewed": false,
+    "platform_controls_visual_reviewed": false,
+    "raised_pose_browser_reviewed": false,
+    "selection_and_focus_reviewed": false,
+    "steering_boundary_reviewed": false,
     "stowed_silhouette_reviewed": true
   },
   "runtime": {
@@ -103,8 +104,8 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "78529f247708604f0222a61182367459f0c91ce81f4e7930d2c63d67c836d937"
+    "sha256": "2d939712f7809e543890e7114a93852f563d0609e173ba83a353819e9de84f40"
   },
   "schema_version": "1.0.0",
-  "written": "2026-08-25"
+  "written": "2026-08-26"
 }
