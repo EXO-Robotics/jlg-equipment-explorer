@@ -887,22 +887,23 @@ def validate_complete_browser_artifact(
             raise RuntimeError("742 semantic-selection structured outcome set drift")
         probes = assertions["visible_canvas_selection"].get("independently_labeled_probes")
         expected_probes = {
-            "chassis-framed-visible-surface": "chassis",
-            "cab-framed-visible-surface": "cab",
-            "boom-framed-visible-surface": "boom",
-            "carriage-framed-visible-surface": "carriage",
-            "steering-framed-visible-surface": "steering",
-            "hydraulics-framed-visible-surface": "hydraulics",
+            "chassis-frame-rail-visible-surface": ("chassis", 800, 360),
+            "cab-roof-visible-surface": ("cab", 640, 180),
+            "boom-base-visible-surface": ("boom", 820, 240),
+            "carriage-coupler-visible-surface": ("carriage", 680, 280),
+            "steering-front-tire-visible-surface": ("steering", 900, 440),
+            "hydraulics-engine-hood-visible-surface": ("hydraulics", 540, 280),
         }
         if not isinstance(probes, list) or len(probes) != len(expected_probes):
             raise RuntimeError("742 semantic visible-canvas probe count drift")
         for probe in probes:
+            expected = expected_probes.get(probe.get("id"))
             if (
-                probe.get("outcome") != "pass" or expected_probes.get(probe.get("id")) != probe.get("expected_component")
+                probe.get("outcome") != "pass" or expected is None or expected[0] != probe.get("expected_component")
                 or probe.get("hit_test_target") != "CANVAS" or probe.get("selected_component") != probe.get("expected_component")
                 or probe.get("rendered_surface_component") != probe.get("expected_component")
                 or probe.get("resolution_basis") != "visible-surface" or not probe.get("rendered_surface_mesh")
-                or probe.get("x") != 640 or probe.get("y") != 360
+                or probe.get("x") != expected[1] or probe.get("y") != expected[2]
             ):
                 raise RuntimeError("742 semantic visible-canvas frontmost-surface outcome failed")
         if {probe["expected_component"] for probe in probes} != set(EXPECTED_SELECTION_PRIORITY):

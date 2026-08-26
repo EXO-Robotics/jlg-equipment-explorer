@@ -79,12 +79,12 @@ const RUNNER_RELATIVE = "scripts/capture_742_browser_evidence.mjs";
 const BASE_SELECTORS = ["body", "#machine-title", "#diagnostics", "#controls-toggle", "#inspector"];
 const SLIDER_SELECTORS = ["#lift-control", "#telescope-control", "#tilt-control", "#steer-control", "#level-control"];
 const SEMANTIC_CANVAS_PROBES = Object.freeze([
-  { id: "chassis-framed-visible-surface", x: 640, y: 360, expected_component: "chassis" },
-  { id: "cab-framed-visible-surface", x: 640, y: 360, expected_component: "cab" },
-  { id: "boom-framed-visible-surface", x: 640, y: 360, expected_component: "boom" },
-  { id: "carriage-framed-visible-surface", x: 640, y: 360, expected_component: "carriage" },
-  { id: "steering-framed-visible-surface", x: 640, y: 360, expected_component: "steering" },
-  { id: "hydraulics-framed-visible-surface", x: 640, y: 360, expected_component: "hydraulics" },
+  { id: "chassis-frame-rail-visible-surface", x: 800, y: 360, expected_component: "chassis" },
+  { id: "cab-roof-visible-surface", x: 640, y: 180, expected_component: "cab" },
+  { id: "boom-base-visible-surface", x: 820, y: 240, expected_component: "boom" },
+  { id: "carriage-coupler-visible-surface", x: 680, y: 280, expected_component: "carriage" },
+  { id: "steering-front-tire-visible-surface", x: 900, y: 440, expected_component: "steering" },
+  { id: "hydraulics-engine-hood-visible-surface", x: 540, y: 280, expected_component: "hydraulics" },
 ]);
 const GATE_FILES = {
   desktop_browser_interaction: "desktop-browser-interaction.json",
@@ -525,11 +525,19 @@ async function captureSelection742() {
   await waitLoaded(page, "glb-validated", "selection 6/6 ready");
   const visibleCanvasClicks = [];
   for (const probe of SEMANTIC_CANVAS_PROBES) {
+    if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) {
+      await page.keyboard.press("Escape");
+    }
+    await page.waitForFunction(() => !document.body.classList.contains("inspector-open") && getComputedStyle(document.querySelector("#scrim")).visibility === "hidden");
     const framed = await page.evaluate((component) => globalThis.__EQUIPMENT_EXPLORER_EVIDENCE__?.frameComponent(component) === true, probe.expected_component);
     assert(framed, `semantic probe ${probe.id} could not establish its committed component framing preset`);
     await settle742Camera(page);
-    const target = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.tagName || null, probe);
-    assert(target === "CANVAS", `semantic probe ${probe.id} is obstructed by ${target}`);
+    const targetInfo = await page.evaluate(({ x, y }) => {
+      const node = document.elementFromPoint(x, y);
+      return node ? { tag: node.tagName, id: node.id || null, class_name: node.className || null } : null;
+    }, probe);
+    const target = targetInfo?.tag || null;
+    assert(target === "CANVAS", `semantic probe ${probe.id} is obstructed by ${JSON.stringify(targetInfo)}`);
     await page.mouse.click(probe.x, probe.y);
     await page.waitForTimeout(100);
     const observed = await page.locator("body").evaluate((node) => ({
