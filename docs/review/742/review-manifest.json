@@ -1,59 +1,110 @@
 {
-  "candidate_tree_sha256": "PENDING",
+  "candidate_tree_sha256": "af100f0bc69208a48ffacd192b9a836cd97ffaac0ff1ea90190206a7f3567abd",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": null,
-  "gates": {
-    "600s_browser_regression": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 600S regression capture; binding remains pending until candidate identity is computed.",
-      "status": "pending"
+  "environment": {
+    "browser": {
+      "name": "Chromium",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+      "version": "151.0.7922.34"
     },
-    "accessibility_semantics_and_keyboard": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 DOM, accessibility-tree, and keyboard capture; no physical AT session is claimed.",
-      "status": "pending"
-    },
-    "cab_closeup_fidelity": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact frozen Wave6 cab close-up render.",
-      "status": "pending"
-    },
-    "desktop_browser_interaction": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 desktop browser capture and terminal/reset evidence.",
-      "status": "pending"
-    },
-    "es1930m_browser_regression": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 ES1930M 1.0.6 regression capture and fatal-path evidence.",
-      "status": "pending"
-    },
-    "extended_visual_fidelity": {
-      "artifact": null,
-      "notes": "Root directly reviewed all ten named, hash-bound Wave6 mechanism render claims.",
-      "status": "pending"
-    },
-    "mobile_browser_interaction": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 portrait and short-landscape captures with distance-bound pinch proof.",
-      "status": "pending"
-    },
-    "performance_profile": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 local performance screenshots; raw visible-frame arrays remain local-browser evidence only.",
-      "status": "pending"
-    },
-    "semantic_selection": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact Wave6 six-component visible-canvas capture and independent selection outcomes.",
-      "status": "pending"
-    },
-    "stowed_visual_fidelity": {
-      "artifact": null,
-      "notes": "Root directly reviewed the exact frozen Wave6 stowed render.",
-      "status": "pending"
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
     }
   },
-  "reviewed_source_commit": "PENDING",
+  "gates": {
+    "600s_browser_regression": {
+      "artifact": {
+        "bytes": 45073,
+        "path": "docs/review/742/600s-browser-regression.json",
+        "sha256": "1af7d4ddf9c0a041894da0312a2b59f2e85fcfc6be0e97b8400e747dc01a7cb2"
+      },
+      "notes": "Root directly reviewed the exact Wave6 600S regression capture; binding remains pending until candidate identity is computed.",
+      "status": "pass"
+    },
+    "accessibility_semantics_and_keyboard": {
+      "artifact": {
+        "bytes": 26693,
+        "path": "docs/review/742/accessibility-semantics-keyboard.json",
+        "sha256": "2401180f24952d076cf6b1704a7430be7df26abeea20051833ce1a971ce33445"
+      },
+      "notes": "Root directly reviewed the exact Wave6 DOM, accessibility-tree, and keyboard capture; no physical AT session is claimed.",
+      "status": "pass"
+    },
+    "cab_closeup_fidelity": {
+      "artifact": {
+        "bytes": 1505832,
+        "path": "docs/review/742/cab-close.png",
+        "sha256": "9e5b2bf74b7f2cac6841021a73fe555d9cac4998c56d72124a2efd2c0877de69"
+      },
+      "notes": "Root directly reviewed the exact frozen Wave6 cab close-up render.",
+      "status": "pass"
+    },
+    "desktop_browser_interaction": {
+      "artifact": {
+        "bytes": 53647,
+        "path": "docs/review/742/desktop-browser-interaction.json",
+        "sha256": "7fd5780655bb63f329e30fbc826586e315d0719e8f978347fe554a33387b73b8"
+      },
+      "notes": "Root directly reviewed the exact Wave6 desktop browser capture and terminal/reset evidence.",
+      "status": "pass"
+    },
+    "es1930m_browser_regression": {
+      "artifact": {
+        "bytes": 52673,
+        "path": "docs/review/742/es1930m-browser-regression.json",
+        "sha256": "7a6ef544a752a67cba7d1360a9374a702b19beab88fff5ee78c490f5360cdd63"
+      },
+      "notes": "Root directly reviewed the exact Wave6 ES1930M 1.0.6 regression capture and fatal-path evidence.",
+      "status": "pass"
+    },
+    "extended_visual_fidelity": {
+      "artifact": {
+        "bytes": 4811,
+        "path": "docs/review/742/extended-visual-fidelity.json",
+        "sha256": "c02055a9e0b43fce4ecee0b256606f80b4f46487fca4160ccdec0d4b29d701fd"
+      },
+      "notes": "Root directly reviewed all ten named, hash-bound Wave6 mechanism render claims.",
+      "status": "pass"
+    },
+    "mobile_browser_interaction": {
+      "artifact": {
+        "bytes": 41278,
+        "path": "docs/review/742/mobile-browser-interaction.json",
+        "sha256": "f53aac7fc744ba0bdd92b18511f90f01b0f916d32d353ccd36dae9ce80828a9e"
+      },
+      "notes": "Root directly reviewed the exact Wave6 portrait and short-landscape captures with distance-bound pinch proof.",
+      "status": "pass"
+    },
+    "performance_profile": {
+      "artifact": {
+        "bytes": 12639,
+        "path": "docs/review/742/performance-profile.json",
+        "sha256": "f0d7986ea7e60571488dfefbf54dd024767a056befea26c690a23ca193d942f1"
+      },
+      "notes": "Root directly reviewed the exact Wave6 local performance screenshots; raw visible-frame arrays remain local-browser evidence only.",
+      "status": "pass"
+    },
+    "semantic_selection": {
+      "artifact": {
+        "bytes": 37010,
+        "path": "docs/review/742/semantic-selection.json",
+        "sha256": "036386dd8eddd24393dccb85ef16ded16e16c665df8f88ada4662bf1d52296de"
+      },
+      "notes": "Root directly reviewed the exact Wave6 six-component visible-canvas capture and independent selection outcomes.",
+      "status": "pass"
+    },
+    "stowed_visual_fidelity": {
+      "artifact": {
+        "bytes": 1278204,
+        "path": "docs/review/742/stowed-front-left.png",
+        "sha256": "9685042f41b8ad146df51078402f2d53b097037377442753ba84cc1c17803e98"
+      },
+      "notes": "Root directly reviewed the exact frozen Wave6 stowed render.",
+      "status": "pass"
+    }
+  },
+  "reviewed_source_commit": "749fb02021a44130ddfa0d3fce64d72ca9e79681",
   "schema_version": "3.0.0"
 }

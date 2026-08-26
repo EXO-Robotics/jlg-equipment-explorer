@@ -1,831 +1,94 @@
 {
-  "schema_version": "2.0.0",
-  "kind": "742-browser-gate-capture",
-  "gate": "semantic_selection",
-  "capture_status": "complete",
-  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "candidate_tree_sha256": "PENDING",
-  "reviewed_source_commit": "PENDING",
-  "environment": {
-    "browser": {
-      "name": "Chromium",
-      "version": "151.0.7922.34",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
-    },
-    "os": {
-      "name": "macOS",
-      "version": "26.5.2",
-      "build": "25F84"
-    },
-    "gpu": {
-      "status": "observed",
-      "vendor": "Google Inc. (Apple)",
-      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Ultra, Unspecified Version)",
-      "api": "WebGL 2",
-      "collection_method": "WEBGL_debug_renderer_info",
-      "reason": null
-    },
-    "automation": {
-      "tool": "Playwright",
-      "version": "1.62.1",
-      "source": "repo-locked-default",
-      "lockfile": {
-        "path": "package-lock.json",
-        "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9",
-        "bytes": 1786
-      },
-      "browser_executable": {
-        "product": "chromium",
-        "revision": "1234",
-        "browser_version": "151.0.7922.34",
-        "executable_basename": "Google Chrome for Testing",
-        "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e",
-        "bytes": 52112
-      }
-    },
-    "captured_at_utc": "2026-08-26T06:54:11.488Z",
-    "physical_device_session": false,
-    "assistive_technology_session": false
-  },
-  "capture_runner": {
-    "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e",
-    "bytes": 60044
-  },
+  "boundary": "Selection evidence covers the local visual interaction policy only; it is not an operational, safety, collision, or manufacturer-equivalence claim.",
+  "candidate_tree_sha256": "af100f0bc69208a48ffacd192b9a836cd97ffaac0ff1ea90190206a7f3567abd",
   "capture_artifacts": {
-    "screenshots": [
-      {
-        "path": "docs/review/742/browser-captures/742-semantic-selection-boom.png",
-        "sha256": "b9d9e7690f34eae575d77953cdebb8eb90e2ee1afff6f26d581cd5ac2072cd1f",
-        "bytes": 209320,
-        "width_px": 1280,
-        "height_px": 720
-      }
-    ],
     "automation_trace": {
+      "bytes": 7013,
+      "height_px": null,
       "path": "docs/review/742/browser-captures/semantic-selection-trace.json",
       "sha256": "83d14c28423bb87e155848a19b3af2a1459b816c6c61c1a8b99e8289e37ae1f6",
-      "bytes": 7013,
-      "width_px": null,
-      "height_px": null
-    }
-  },
-  "observations": {
-    "dom_snapshot": {
-      "viewport_css_px": [
-        1280,
-        720
-      ],
-      "url": "http://127.0.0.1:8111/742/?diagnostics=1",
-      "nodes": [
-        {
-          "selector": "body",
-          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2411 accuracy reconstruction / 1.3.0\n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperatePresentation controls\n        Stowed studyClose\n        View reset to frame the current machine pose.\n      \n      \n        Boom lift0°\n        Telescope0.00 m visual\n        Carriage tilt0°\n        SteeringCenter\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevel\n        Run showcaseStowReset view\n        Presentation-only mechanism limits. Crab/front are reconstructed 15% rack studies; displayed wheel headings and crab residual are not factory controller calibration. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More →\n    \n    Drag to orbit / Pinch or scroll to zoom / Select a component\n    machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 39 ms · 60 fps · samples 180 · p95 16.7 ms · worst 16.8 ms · visible stalls 0 · profile desktop · motion full\n  \n\n  \n  \n    ×\n    PVC 2411 topology\n    Visible hydraulic systems\n    Lift, telescope, steering, carriage and frame-level cylinder cues are separated from hose and valve-bank materials. Routing, bore, pressure, timing and interlocks are outside this visual study.\n    RepresentedLift · telescope · steer · tilt · frame levelVisual cuesCylinder bodies · rods · hoses · valve bankExcludedPressure · timing · interlocks · service routing\n    Read the evidence boundary\n  \n\n  \n    window.__show742ModuleFailure = function () {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.machineSource = \"module-load-failed\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\";\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };",
-          "attributes": {
-            "data-machine": "742",
-            "data-runtime-release": "1.6.2",
-            "data-runtime-error-count": "0",
-            "data-viewer-started": "true",
-            "data-configuration-id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-            "data-motion-profile": "full",
-            "data-shadow-profile": "1024px-14m",
-            "data-render-profile": "desktop",
-            "data-viewport-css-px": "1280x720",
-            "data-pixel-ratio": "1.00",
-            "data-orbit-base-max-distance-m": "24.00",
-            "data-orbit-min-distance-m": "4.40",
-            "data-orbit-effective-max-distance-m": "24.00",
-            "data-orbit-desired-distance-m": "8.80",
-            "data-orbit-camera-distance-m": "8.784",
-            "data-frame-p95-ms": "16.7 ms",
-            "data-frame-worst-ms": "16.8 ms",
-            "data-visible-stall-count": "0",
-            "data-frame-sample-count": "180",
-            "data-performance-window-ms": "3000",
-            "data-performance-window-reason": "startup",
-            "data-wheel-angles-deg": "FL:0.000,FR:0.000,RL:0.000,RR:0.000",
-            "data-crab-residual-deg": "0.000",
-            "data-zone": "stowed",
-            "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
-            "data-selection-fixture-cases": "5/5",
-            "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
-            "data-selection-selftest": "pass",
-            "data-selection-volume-count": "6",
-            "data-selection-overlap-rays": "15",
-            "data-selection-nearest-rays": "15",
-            "data-selection-overlap-outcomes": "[{\"ray\":1,\"pairComponents\":[\"chassis\",\"cab\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"cab\",\"boom\"],\"hitDistancesM\":[47.7938,48.5559,49.2512,50.1655,50.5627],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":2,\"pairComponents\":[\"chassis\",\"boom\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.4367,49.1095,49.5383,50.347],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":3,\"pairComponents\":[\"chassis\",\"carriage\"],\"hitComponents\":[\"chassis\",\"steering\",\"hydraulics\",\"carriage\"],\"hitDistancesM\":[47.1709,47.8469,48.1223,53.1576],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":4,\"pairComponents\":[\"chassis\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.887,49.05,49.325,49.835],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":5,\"pairComponents\":[\"chassis\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"cab\",\"hydraulics\"],\"hitDistancesM\":[48.2336,48.4544,49.3597,49.897],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":6,\"pairComponents\":[\"cab\",\"boom\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.4042,49.5559,50.2058,50.6174],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":7,\"pairComponents\":[\"cab\",\"carriage\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"carriage\"],\"hitDistancesM\":[49.1337,49.4647,50.9688,52.4497],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":8,\"pairComponents\":[\"cab\",\"steering\"],\"hitComponents\":[\"cab\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.9142,49.8249,50.5394],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":9,\"pairComponents\":[\"cab\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.1653,49.3778,50.2883,50.865],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":10,\"pairComponents\":[\"boom\",\"carriage\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"carriage\"],\"hitDistancesM\":[48.3683,48.9941,50.0499,52.6526],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":11,\"pairComponents\":[\"boom\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.5259,49.7078,50.0145,50.5834],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":12,\"pairComponents\":[\"boom\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.766,48.9616,49.8385,50.0448,51.804],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":13,\"pairComponents\":[\"carriage\",\"steering\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.2228,51.1062,51.7831],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":14,\"pairComponents\":[\"carriage\",\"hydraulics\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\",\"hydraulics\"],\"hitDistancesM\":[49.2135,51.1193,51.8043,53.1997],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":15,\"pairComponents\":[\"steering\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\"],\"hitDistancesM\":[49.0517,49.7682,50.2248],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true}]",
-            "data-machine-source": "glb-validated",
-            "data-machine-visible-meshes": "413",
-            "data-last-rendered-surface-component": "hydraulics",
-            "data-last-rendered-surface-mesh": "EngineHoodUpper",
-            "data-last-selection-resolution-basis": "visible-surface",
-            "class": "",
-            "data-pose-bounds-m": "6.98x2.42x2.58",
-            "data-pose-frame-distance-m": "8.80"
-          }
-        },
-        {
-          "selector": "#machine-title",
-          "text": "742",
-          "attributes": {
-            "id": "machine-title"
-          }
-        },
-        {
-          "selector": "#diagnostics",
-          "text": "machine 742 · config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 · source glb-validated · selection 6/6 ready · errors 0 · load 39 ms · 60 fps · samples 180 · p95 16.7 ms · worst 16.8 ms · visible stalls 0 · profile desktop · motion full",
-          "attributes": {
-            "class": "diagnostics",
-            "id": "diagnostics"
-          }
-        },
-        {
-          "selector": "#controls-toggle",
-          "text": "Close",
-          "attributes": {
-            "class": "controls-toggle",
-            "id": "controls-toggle",
-            "type": "button",
-            "aria-controls": "machine-controls-body",
-            "aria-expanded": "true",
-            "hidden": ""
-          }
-        },
-        {
-          "selector": "#inspector",
-          "text": "×\n    PVC 2411 topology\n    Visible hydraulic systems\n    Lift, telescope, steering, carriage and frame-level cylinder cues are separated from hose and valve-bank materials. Routing, bore, pressure, timing and interlocks are outside this visual study.\n    RepresentedLift · telescope · steer · tilt · frame levelVisual cuesCylinder bodies · rods · hoses · valve bankExcludedPressure · timing · interlocks · service routing\n    Read the evidence boundary",
-          "attributes": {
-            "class": "inspector",
-            "id": "inspector",
-            "role": "dialog",
-            "aria-modal": "true",
-            "aria-labelledby": "inspector-title",
-            "aria-describedby": "inspector-copy",
-            "inert": ""
-          }
-        }
-      ]
+      "width_px": null
     },
-    "raw_overlap_rays": [
+    "screenshots": [
       {
-        "ray": 1,
-        "pairComponents": [
-          "chassis",
-          "cab"
-        ],
-        "hitComponents": [
-          "steering",
-          "chassis",
-          "hydraulics",
-          "cab",
-          "boom"
-        ],
-        "hitDistancesM": [
-          47.7938,
-          48.5559,
-          49.2512,
-          50.1655,
-          50.5627
-        ],
-        "visibleSurfaceComponent": "steering",
-        "expectedComponent": "steering",
-        "resolvedComponent": "steering",
-        "expectedVolume": "Steering_Hit",
-        "resolvedVolume": "Steering_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 2,
-        "pairComponents": [
-          "chassis",
-          "boom"
-        ],
-        "hitComponents": [
-          "steering",
-          "chassis",
-          "hydraulics",
-          "boom"
-        ],
-        "hitDistancesM": [
-          48.4367,
-          49.1095,
-          49.5383,
-          50.347
-        ],
-        "visibleSurfaceComponent": "chassis",
-        "expectedComponent": "chassis",
-        "resolvedComponent": "chassis",
-        "expectedVolume": "Chassis_Hit",
-        "resolvedVolume": "Chassis_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 3,
-        "pairComponents": [
-          "chassis",
-          "carriage"
-        ],
-        "hitComponents": [
-          "chassis",
-          "steering",
-          "hydraulics",
-          "carriage"
-        ],
-        "hitDistancesM": [
-          47.1709,
-          47.8469,
-          48.1223,
-          53.1576
-        ],
-        "visibleSurfaceComponent": "chassis",
-        "expectedComponent": "chassis",
-        "resolvedComponent": "chassis",
-        "expectedVolume": "Chassis_Hit",
-        "resolvedVolume": "Chassis_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 4,
-        "pairComponents": [
-          "chassis",
-          "steering"
-        ],
-        "hitComponents": [
-          "boom",
-          "hydraulics",
-          "chassis",
-          "steering"
-        ],
-        "hitDistancesM": [
-          48.887,
-          49.05,
-          49.325,
-          49.835
-        ],
-        "visibleSurfaceComponent": "boom",
-        "expectedComponent": "boom",
-        "resolvedComponent": "boom",
-        "expectedVolume": "Boom_Hit",
-        "resolvedVolume": "Boom_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 5,
-        "pairComponents": [
-          "chassis",
-          "hydraulics"
-        ],
-        "hitComponents": [
-          "steering",
-          "chassis",
-          "cab",
-          "hydraulics"
-        ],
-        "hitDistancesM": [
-          48.2336,
-          48.4544,
-          49.3597,
-          49.897
-        ],
-        "visibleSurfaceComponent": "steering",
-        "expectedComponent": "steering",
-        "resolvedComponent": "steering",
-        "expectedVolume": "Steering_Hit",
-        "resolvedVolume": "Steering_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 6,
-        "pairComponents": [
-          "cab",
-          "boom"
-        ],
-        "hitComponents": [
-          "cab",
-          "chassis",
-          "boom",
-          "hydraulics"
-        ],
-        "hitDistancesM": [
-          49.4042,
-          49.5559,
-          50.2058,
-          50.6174
-        ],
-        "visibleSurfaceComponent": "boom",
-        "expectedComponent": "boom",
-        "resolvedComponent": "boom",
-        "expectedVolume": "Boom_Hit",
-        "resolvedVolume": "Boom_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 7,
-        "pairComponents": [
-          "cab",
-          "carriage"
-        ],
-        "hitComponents": [
-          "cab",
-          "chassis",
-          "boom",
-          "carriage"
-        ],
-        "hitDistancesM": [
-          49.1337,
-          49.4647,
-          50.9688,
-          52.4497
-        ],
-        "visibleSurfaceComponent": "cab",
-        "expectedComponent": "cab",
-        "resolvedComponent": "cab",
-        "expectedVolume": "Cab_Hit",
-        "resolvedVolume": "Cab_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 8,
-        "pairComponents": [
-          "cab",
-          "steering"
-        ],
-        "hitComponents": [
-          "cab",
-          "chassis",
-          "steering"
-        ],
-        "hitDistancesM": [
-          48.9142,
-          49.8249,
-          50.5394
-        ],
-        "visibleSurfaceComponent": "cab",
-        "expectedComponent": "cab",
-        "resolvedComponent": "cab",
-        "expectedVolume": "Cab_Hit",
-        "resolvedVolume": "Cab_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 9,
-        "pairComponents": [
-          "cab",
-          "hydraulics"
-        ],
-        "hitComponents": [
-          "cab",
-          "chassis",
-          "boom",
-          "hydraulics"
-        ],
-        "hitDistancesM": [
-          49.1653,
-          49.3778,
-          50.2883,
-          50.865
-        ],
-        "visibleSurfaceComponent": "cab",
-        "expectedComponent": "cab",
-        "resolvedComponent": "cab",
-        "expectedVolume": "Cab_Hit",
-        "resolvedVolume": "Cab_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 10,
-        "pairComponents": [
-          "boom",
-          "carriage"
-        ],
-        "hitComponents": [
-          "boom",
-          "hydraulics",
-          "chassis",
-          "carriage"
-        ],
-        "hitDistancesM": [
-          48.3683,
-          48.9941,
-          50.0499,
-          52.6526
-        ],
-        "visibleSurfaceComponent": "boom",
-        "expectedComponent": "boom",
-        "resolvedComponent": "boom",
-        "expectedVolume": "Boom_Hit",
-        "resolvedVolume": "Boom_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 11,
-        "pairComponents": [
-          "boom",
-          "steering"
-        ],
-        "hitComponents": [
-          "boom",
-          "hydraulics",
-          "chassis",
-          "steering"
-        ],
-        "hitDistancesM": [
-          49.5259,
-          49.7078,
-          50.0145,
-          50.5834
-        ],
-        "visibleSurfaceComponent": "boom",
-        "expectedComponent": "boom",
-        "resolvedComponent": "boom",
-        "expectedVolume": "Boom_Hit",
-        "resolvedVolume": "Boom_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 12,
-        "pairComponents": [
-          "boom",
-          "hydraulics"
-        ],
-        "hitComponents": [
-          "cab",
-          "boom",
-          "hydraulics",
-          "chassis",
-          "steering"
-        ],
-        "hitDistancesM": [
-          48.766,
-          48.9616,
-          49.8385,
-          50.0448,
-          51.804
-        ],
-        "visibleSurfaceComponent": "cab",
-        "expectedComponent": "cab",
-        "resolvedComponent": "cab",
-        "expectedVolume": "Cab_Hit",
-        "resolvedVolume": "Cab_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 13,
-        "pairComponents": [
-          "carriage",
-          "steering"
-        ],
-        "hitComponents": [
-          "carriage",
-          "chassis",
-          "steering"
-        ],
-        "hitDistancesM": [
-          49.2228,
-          51.1062,
-          51.7831
-        ],
-        "visibleSurfaceComponent": "carriage",
-        "expectedComponent": "carriage",
-        "resolvedComponent": "carriage",
-        "expectedVolume": "Carriage_Hit",
-        "resolvedVolume": "Carriage_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 14,
-        "pairComponents": [
-          "carriage",
-          "hydraulics"
-        ],
-        "hitComponents": [
-          "carriage",
-          "chassis",
-          "steering",
-          "hydraulics"
-        ],
-        "hitDistancesM": [
-          49.2135,
-          51.1193,
-          51.8043,
-          53.1997
-        ],
-        "visibleSurfaceComponent": "carriage",
-        "expectedComponent": "carriage",
-        "resolvedComponent": "carriage",
-        "expectedVolume": "Carriage_Hit",
-        "resolvedVolume": "Carriage_Hit",
-        "basis": "visible-surface",
-        "pass": true
-      },
-      {
-        "ray": 15,
-        "pairComponents": [
-          "steering",
-          "hydraulics"
-        ],
-        "hitComponents": [
-          "steering",
-          "chassis",
-          "hydraulics"
-        ],
-        "hitDistancesM": [
-          49.0517,
-          49.7682,
-          50.2248
-        ],
-        "visibleSurfaceComponent": "chassis",
-        "expectedComponent": "chassis",
-        "resolvedComponent": "chassis",
-        "expectedVolume": "Chassis_Hit",
-        "resolvedVolume": "Chassis_Hit",
-        "basis": "visible-surface",
-        "pass": true
+        "bytes": 209320,
+        "height_px": 720,
+        "path": "docs/review/742/browser-captures/742-semantic-selection-boom.png",
+        "sha256": "b9d9e7690f34eae575d77953cdebb8eb90e2ee1afff6f26d581cd5ac2072cd1f",
+        "width_px": 1280
       }
-    ],
-    "raw_fixture_outcomes": [
-      {
-        "case": 1,
-        "hits": [
-          {
-            "volume": "rear",
-            "component": "rear",
-            "distanceM": 2,
-            "priority": 5
-          },
-          {
-            "volume": "front",
-            "component": "front",
-            "distanceM": 1,
-            "priority": 0
-          }
-        ],
-        "visibleSurfaceComponent": null,
-        "basis": "nearest-distance",
-        "expectedComponent": "front",
-        "observedComponent": "front",
-        "expectedVolume": "front",
-        "observedVolume": "front",
-        "pass": true
+    ]
+  },
+  "capture_runner": {
+    "bytes": 60044,
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e"
+  },
+  "capture_status": "complete",
+  "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "environment": {
+    "assistive_technology_session": false,
+    "automation": {
+      "browser_executable": {
+        "browser_version": "151.0.7922.34",
+        "bytes": 52112,
+        "executable_basename": "Google Chrome for Testing",
+        "product": "chromium",
+        "revision": "1234",
+        "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e"
       },
-      {
-        "case": 2,
-        "hits": [
-          {
-            "volume": "low-tie",
-            "component": "low-tie",
-            "distanceM": 1,
-            "priority": 1
-          },
-          {
-            "volume": "high-tie",
-            "component": "high-tie",
-            "distanceM": 1.01,
-            "priority": 4
-          }
-        ],
-        "visibleSurfaceComponent": null,
-        "basis": "distance-tie",
-        "expectedComponent": "high-tie",
-        "observedComponent": "high-tie",
-        "expectedVolume": "high-tie",
-        "observedVolume": "high-tie",
-        "pass": true
+      "lockfile": {
+        "bytes": 1786,
+        "path": "package-lock.json",
+        "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9"
       },
-      {
-        "case": 3,
-        "hits": [
-          {
-            "volume": "front",
-            "component": "front",
-            "distanceM": 1,
-            "priority": 0
-          },
-          {
-            "volume": "front",
-            "component": "front",
-            "distanceM": 1.8,
-            "priority": 0
-          },
-          {
-            "volume": "rear",
-            "component": "rear",
-            "distanceM": 2,
-            "priority": 5
-          }
-        ],
-        "visibleSurfaceComponent": null,
-        "basis": "nearest-distance",
-        "expectedComponent": "front",
-        "observedComponent": "front",
-        "expectedVolume": "front",
-        "observedVolume": "front",
-        "pass": true
-      },
-      {
-        "case": 4,
-        "hits": [
-          {
-            "volume": "rear",
-            "component": "rear",
-            "distanceM": 0.8,
-            "priority": 5
-          },
-          {
-            "volume": "front",
-            "component": "front",
-            "distanceM": 1,
-            "priority": 0
-          }
-        ],
-        "visibleSurfaceComponent": "front",
-        "basis": "visible-surface",
-        "expectedComponent": "front",
-        "observedComponent": "front",
-        "expectedVolume": "front",
-        "observedVolume": "front",
-        "pass": true
-      },
-      {
-        "case": 5,
-        "hits": [
-          {
-            "volume": "rear",
-            "component": "rear",
-            "distanceM": 0.8,
-            "priority": 5
-          }
-        ],
-        "visibleSurfaceComponent": "front",
-        "basis": "visible-surface",
-        "expectedComponent": null,
-        "observedComponent": null,
-        "expectedVolume": null,
-        "observedVolume": null,
-        "pass": true
-      }
-    ],
+      "source": "repo-locked-default",
+      "tool": "Playwright",
+      "version": "1.62.1"
+    },
+    "browser": {
+      "name": "Chromium",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+      "version": "151.0.7922.34"
+    },
+    "captured_at_utc": "2026-08-26T06:54:11.488Z",
+    "gpu": {
+      "api": "WebGL 2",
+      "collection_method": "WEBGL_debug_renderer_info",
+      "reason": null,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Ultra, Unspecified Version)",
+      "status": "observed",
+      "vendor": "Google Inc. (Apple)"
+    },
+    "os": {
+      "build": "25F84",
+      "name": "macOS",
+      "version": "26.5.2"
+    },
+    "physical_device_session": false
+  },
+  "gate": "semantic_selection",
+  "kind": "742-browser-gate-capture",
+  "observations": {
     "assertions": {
-      "visible_canvas_selection": {
-        "outcome": "pass",
-        "viewport_css_px": [
-          1280,
-          720
-        ],
-        "independently_labeled_probes": [
-          {
-            "outcome": "pass",
-            "id": "chassis-frame-rail-visible-surface",
-            "x": 800,
-            "y": 360,
-            "expected_component": "chassis",
-            "hit_test_target": "CANVAS",
-            "selected_component": "chassis",
-            "rendered_surface_component": "chassis",
-            "rendered_surface_mesh": "FrameRail_-1",
-            "resolution_basis": "visible-surface"
-          },
-          {
-            "outcome": "pass",
-            "id": "cab-roof-visible-surface",
-            "x": 640,
-            "y": 180,
-            "expected_component": "cab",
-            "hit_test_target": "CANVAS",
-            "selected_component": "cab",
-            "rendered_surface_component": "cab",
-            "rendered_surface_mesh": "ROPSRoof",
-            "resolution_basis": "visible-surface"
-          },
-          {
-            "outcome": "pass",
-            "id": "boom-base-visible-surface",
-            "x": 820,
-            "y": 240,
-            "expected_component": "boom",
-            "hit_test_target": "CANVAS",
-            "selected_component": "boom",
-            "rendered_surface_component": "boom",
-            "rendered_surface_mesh": "BaseBoomWeldment",
-            "resolution_basis": "visible-surface"
-          },
-          {
-            "outcome": "pass",
-            "id": "carriage-coupler-visible-surface",
-            "x": 680,
-            "y": 280,
-            "expected_component": "carriage",
-            "hit_test_target": "CANVAS",
-            "selected_component": "carriage",
-            "rendered_surface_component": "carriage",
-            "rendered_surface_mesh": "QuickCoupler",
-            "resolution_basis": "visible-surface"
-          },
-          {
-            "outcome": "pass",
-            "id": "steering-front-tire-visible-surface",
-            "x": 900,
-            "y": 440,
-            "expected_component": "steering",
-            "hit_test_target": "CANVAS",
-            "selected_component": "steering",
-            "rendered_surface_component": "steering",
-            "rendered_surface_mesh": "Tread_FL_03",
-            "resolution_basis": "visible-surface"
-          },
-          {
-            "outcome": "pass",
-            "id": "hydraulics-engine-hood-visible-surface",
-            "x": 540,
-            "y": 280,
-            "expected_component": "hydraulics",
-            "hit_test_target": "CANVAS",
-            "selected_component": "hydraulics",
-            "rendered_surface_component": "hydraulics",
-            "rendered_surface_mesh": "EngineHoodUpper",
-            "resolution_basis": "visible-surface"
-          }
-        ]
-      },
       "clear_selection": {
         "outcome": "pass",
         "selected_component_after_reset": null
       },
-      "pinch_suppression": {
+      "overlap_self_test": {
+        "fixture_case_count": 5,
         "outcome": "pass",
-        "selected_component_after_pinch": null,
+        "overlap_ray_count": 15
+      },
+      "pinch_suppression": {
         "modal_open_after_pinch": false,
+        "outcome": "pass",
         "pinch_zoom": {
-          "schema_version": "1.0.0",
-          "gesture": "pinch-out",
-          "target_selector": "#app canvas",
-          "viewport_css_px": [
-            1280,
-            720
-          ],
-          "canvas_rect_css_px": {
-            "x": 0,
-            "y": 0,
-            "width": 1280,
-            "height": 720
-          },
-          "start_points_css_px": [
-            [
-              600,
-              302.4
-            ],
-            [
-              680,
-              302.4
-            ]
-          ],
-          "end_points_css_px": [
-            [
-              535,
-              302.4
-            ],
-            [
-              745,
-              302.4
-            ]
-          ],
-          "hit_test_targets": [
-            "CANVAS",
-            "CANVAS",
-            "CANVAS",
-            "CANVAS"
-          ],
-          "all_points_on_canvas": true,
-          "baseline": {
-            "camera_distance_m": 8.791,
-            "desired_distance_m": 8.8,
-            "stable_frames": 6,
-            "samples_camera_distance_m": [
-              8.785,
-              8.787,
-              8.788,
-              8.789,
-              8.79,
-              8.791
-            ]
-          },
+          "absolute_camera_distance_delta_m": 4.376,
+          "actual_direction": "decrease",
           "after": {
             "camera_distance_m": 4.415,
             "desired_distance_m": 4.4,
-            "stable_frames": 6,
             "samples_camera_distance_m": [
               8.278,
               7.827,
@@ -873,37 +136,774 @@
               4.419,
               4.417,
               4.415
-            ]
+            ],
+            "stable_frames": 6
           },
-          "intermediate_desired_distance_m": 4.85,
-          "final_gesture_desired_distance_m": 4.4,
+          "all_points_on_canvas": true,
+          "baseline": {
+            "camera_distance_m": 8.791,
+            "desired_distance_m": 8.8,
+            "samples_camera_distance_m": [
+              8.785,
+              8.787,
+              8.788,
+              8.789,
+              8.79,
+              8.791
+            ],
+            "stable_frames": 6
+          },
           "camera_distance_delta_m": -4.376,
+          "canvas_rect_css_px": {
+            "height": 720,
+            "width": 1280,
+            "x": 0,
+            "y": 0
+          },
           "desired_distance_delta_m": -4.4,
-          "absolute_camera_distance_delta_m": 4.376,
-          "minimum_required_delta_m": 0.5,
+          "end_points_css_px": [
+            [
+              535,
+              302.4
+            ],
+            [
+              745,
+              302.4
+            ]
+          ],
           "expected_direction": "decrease",
-          "actual_direction": "decrease",
+          "final_gesture_desired_distance_m": 4.4,
+          "gesture": "pinch-out",
+          "hit_test_targets": [
+            "CANVAS",
+            "CANVAS",
+            "CANVAS",
+            "CANVAS"
+          ],
+          "intermediate_desired_distance_m": 4.85,
+          "minimum_required_delta_m": 0.5,
           "monotonic_camera_change": true,
-          "settled_before": true,
+          "outcome": "pass",
+          "schema_version": "1.0.0",
           "settled_after": true,
-          "outcome": "pass"
-        }
-      },
-      "overlap_self_test": {
-        "outcome": "pass",
-        "overlap_ray_count": 15,
-        "fixture_case_count": 5
+          "settled_before": true,
+          "start_points_css_px": [
+            [
+              600,
+              302.4
+            ],
+            [
+              680,
+              302.4
+            ]
+          ],
+          "target_selector": "#app canvas",
+          "viewport_css_px": [
+            1280,
+            720
+          ]
+        },
+        "selected_component_after_pinch": null
       },
       "screenshot_framing": {
-        "outcome": "pass",
-        "reset_pressed": true,
-        "reset_after_pinch": true,
-        "selected_component": null,
         "camera_distance_m": 8.784,
         "desired_distance_m": 8.8,
-        "pose_min_distance_m": 4.4
+        "outcome": "pass",
+        "pose_min_distance_m": 4.4,
+        "reset_after_pinch": true,
+        "reset_pressed": true,
+        "selected_component": null
+      },
+      "visible_canvas_selection": {
+        "independently_labeled_probes": [
+          {
+            "expected_component": "chassis",
+            "hit_test_target": "CANVAS",
+            "id": "chassis-frame-rail-visible-surface",
+            "outcome": "pass",
+            "rendered_surface_component": "chassis",
+            "rendered_surface_mesh": "FrameRail_-1",
+            "resolution_basis": "visible-surface",
+            "selected_component": "chassis",
+            "x": 800,
+            "y": 360
+          },
+          {
+            "expected_component": "cab",
+            "hit_test_target": "CANVAS",
+            "id": "cab-roof-visible-surface",
+            "outcome": "pass",
+            "rendered_surface_component": "cab",
+            "rendered_surface_mesh": "ROPSRoof",
+            "resolution_basis": "visible-surface",
+            "selected_component": "cab",
+            "x": 640,
+            "y": 180
+          },
+          {
+            "expected_component": "boom",
+            "hit_test_target": "CANVAS",
+            "id": "boom-base-visible-surface",
+            "outcome": "pass",
+            "rendered_surface_component": "boom",
+            "rendered_surface_mesh": "BaseBoomWeldment",
+            "resolution_basis": "visible-surface",
+            "selected_component": "boom",
+            "x": 820,
+            "y": 240
+          },
+          {
+            "expected_component": "carriage",
+            "hit_test_target": "CANVAS",
+            "id": "carriage-coupler-visible-surface",
+            "outcome": "pass",
+            "rendered_surface_component": "carriage",
+            "rendered_surface_mesh": "QuickCoupler",
+            "resolution_basis": "visible-surface",
+            "selected_component": "carriage",
+            "x": 680,
+            "y": 280
+          },
+          {
+            "expected_component": "steering",
+            "hit_test_target": "CANVAS",
+            "id": "steering-front-tire-visible-surface",
+            "outcome": "pass",
+            "rendered_surface_component": "steering",
+            "rendered_surface_mesh": "Tread_FL_03",
+            "resolution_basis": "visible-surface",
+            "selected_component": "steering",
+            "x": 900,
+            "y": 440
+          },
+          {
+            "expected_component": "hydraulics",
+            "hit_test_target": "CANVAS",
+            "id": "hydraulics-engine-hood-visible-surface",
+            "outcome": "pass",
+            "rendered_surface_component": "hydraulics",
+            "rendered_surface_mesh": "EngineHoodUpper",
+            "resolution_basis": "visible-surface",
+            "selected_component": "hydraulics",
+            "x": 540,
+            "y": 280
+          }
+        ],
+        "outcome": "pass",
+        "viewport_css_px": [
+          1280,
+          720
+        ]
       }
-    }
+    },
+    "dom_snapshot": {
+      "nodes": [
+        {
+          "attributes": {
+            "class": "",
+            "data-configuration-id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+            "data-crab-residual-deg": "0.000",
+            "data-frame-p95-ms": "16.7 ms",
+            "data-frame-sample-count": "180",
+            "data-frame-worst-ms": "16.8 ms",
+            "data-last-rendered-surface-component": "hydraulics",
+            "data-last-rendered-surface-mesh": "EngineHoodUpper",
+            "data-last-selection-resolution-basis": "visible-surface",
+            "data-machine": "742",
+            "data-machine-source": "glb-validated",
+            "data-machine-visible-meshes": "413",
+            "data-motion-profile": "full",
+            "data-orbit-base-max-distance-m": "24.00",
+            "data-orbit-camera-distance-m": "8.784",
+            "data-orbit-desired-distance-m": "8.80",
+            "data-orbit-effective-max-distance-m": "24.00",
+            "data-orbit-min-distance-m": "4.40",
+            "data-performance-window-ms": "3000",
+            "data-performance-window-reason": "startup",
+            "data-pixel-ratio": "1.00",
+            "data-pose-bounds-m": "6.98x2.42x2.58",
+            "data-pose-frame-distance-m": "8.80",
+            "data-render-profile": "desktop",
+            "data-runtime-error-count": "0",
+            "data-runtime-release": "1.6.2",
+            "data-selection-fixture-cases": "5/5",
+            "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
+            "data-selection-nearest-rays": "15",
+            "data-selection-overlap-outcomes": "[{\"ray\":1,\"pairComponents\":[\"chassis\",\"cab\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"cab\",\"boom\"],\"hitDistancesM\":[47.7938,48.5559,49.2512,50.1655,50.5627],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":2,\"pairComponents\":[\"chassis\",\"boom\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\",\"boom\"],\"hitDistancesM\":[48.4367,49.1095,49.5383,50.347],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":3,\"pairComponents\":[\"chassis\",\"carriage\"],\"hitComponents\":[\"chassis\",\"steering\",\"hydraulics\",\"carriage\"],\"hitDistancesM\":[47.1709,47.8469,48.1223,53.1576],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":4,\"pairComponents\":[\"chassis\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.887,49.05,49.325,49.835],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":5,\"pairComponents\":[\"chassis\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"cab\",\"hydraulics\"],\"hitDistancesM\":[48.2336,48.4544,49.3597,49.897],\"visibleSurfaceComponent\":\"steering\",\"expectedComponent\":\"steering\",\"resolvedComponent\":\"steering\",\"expectedVolume\":\"Steering_Hit\",\"resolvedVolume\":\"Steering_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":6,\"pairComponents\":[\"cab\",\"boom\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.4042,49.5559,50.2058,50.6174],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":7,\"pairComponents\":[\"cab\",\"carriage\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"carriage\"],\"hitDistancesM\":[49.1337,49.4647,50.9688,52.4497],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":8,\"pairComponents\":[\"cab\",\"steering\"],\"hitComponents\":[\"cab\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.9142,49.8249,50.5394],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":9,\"pairComponents\":[\"cab\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"chassis\",\"boom\",\"hydraulics\"],\"hitDistancesM\":[49.1653,49.3778,50.2883,50.865],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":10,\"pairComponents\":[\"boom\",\"carriage\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"carriage\"],\"hitDistancesM\":[48.3683,48.9941,50.0499,52.6526],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":11,\"pairComponents\":[\"boom\",\"steering\"],\"hitComponents\":[\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.5259,49.7078,50.0145,50.5834],\"visibleSurfaceComponent\":\"boom\",\"expectedComponent\":\"boom\",\"resolvedComponent\":\"boom\",\"expectedVolume\":\"Boom_Hit\",\"resolvedVolume\":\"Boom_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":12,\"pairComponents\":[\"boom\",\"hydraulics\"],\"hitComponents\":[\"cab\",\"boom\",\"hydraulics\",\"chassis\",\"steering\"],\"hitDistancesM\":[48.766,48.9616,49.8385,50.0448,51.804],\"visibleSurfaceComponent\":\"cab\",\"expectedComponent\":\"cab\",\"resolvedComponent\":\"cab\",\"expectedVolume\":\"Cab_Hit\",\"resolvedVolume\":\"Cab_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":13,\"pairComponents\":[\"carriage\",\"steering\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\"],\"hitDistancesM\":[49.2228,51.1062,51.7831],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":14,\"pairComponents\":[\"carriage\",\"hydraulics\"],\"hitComponents\":[\"carriage\",\"chassis\",\"steering\",\"hydraulics\"],\"hitDistancesM\":[49.2135,51.1193,51.8043,53.1997],\"visibleSurfaceComponent\":\"carriage\",\"expectedComponent\":\"carriage\",\"resolvedComponent\":\"carriage\",\"expectedVolume\":\"Carriage_Hit\",\"resolvedVolume\":\"Carriage_Hit\",\"basis\":\"visible-surface\",\"pass\":true},{\"ray\":15,\"pairComponents\":[\"steering\",\"hydraulics\"],\"hitComponents\":[\"steering\",\"chassis\",\"hydraulics\"],\"hitDistancesM\":[49.0517,49.7682,50.2248],\"visibleSurfaceComponent\":\"chassis\",\"expectedComponent\":\"chassis\",\"resolvedComponent\":\"chassis\",\"expectedVolume\":\"Chassis_Hit\",\"resolvedVolume\":\"Chassis_Hit\",\"basis\":\"visible-surface\",\"pass\":true}]",
+            "data-selection-overlap-rays": "15",
+            "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
+            "data-selection-selftest": "pass",
+            "data-selection-volume-count": "6",
+            "data-shadow-profile": "1024px-14m",
+            "data-viewer-started": "true",
+            "data-viewport-css-px": "1280x720",
+            "data-visible-stall-count": "0",
+            "data-wheel-angles-deg": "FL:0.000,FR:0.000,RL:0.000,RR:0.000",
+            "data-zone": "stowed"
+          },
+          "selector": "body",
+          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2411 accuracy reconstruction / 1.3.0\n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperatePresentation controls\n        Stowed studyClose\n        View reset to frame the current machine pose.\n      \n      \n        Boom lift0\u00b0\n        Telescope0.00 m visual\n        Carriage tilt0\u00b0\n        SteeringCenter\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevel\n        Run showcaseStowReset view\n        Presentation-only mechanism limits. Crab/front are reconstructed 15% rack studies; displayed wheel headings and crab residual are not factory controller calibration. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More \u2192\n    \n    Drag to orbit / Pinch or scroll to zoom / Select a component\n    machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 39 ms \u00b7 60 fps \u00b7 samples 180 \u00b7 p95 16.7 ms \u00b7 worst 16.8 ms \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full\n  \n\n  \n  \n    \u00d7\n    PVC 2411 topology\n    Visible hydraulic systems\n    Lift, telescope, steering, carriage and frame-level cylinder cues are separated from hose and valve-bank materials. Routing, bore, pressure, timing and interlocks are outside this visual study.\n    RepresentedLift \u00b7 telescope \u00b7 steer \u00b7 tilt \u00b7 frame levelVisual cuesCylinder bodies \u00b7 rods \u00b7 hoses \u00b7 valve bankExcludedPressure \u00b7 timing \u00b7 interlocks \u00b7 service routing\n    Read the evidence boundary\n  \n\n  \n    window.__show742ModuleFailure = function () {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.machineSource = \"module-load-failed\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\";\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };"
+        },
+        {
+          "attributes": {
+            "id": "machine-title"
+          },
+          "selector": "#machine-title",
+          "text": "742"
+        },
+        {
+          "attributes": {
+            "class": "diagnostics",
+            "id": "diagnostics"
+          },
+          "selector": "#diagnostics",
+          "text": "machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 39 ms \u00b7 60 fps \u00b7 samples 180 \u00b7 p95 16.7 ms \u00b7 worst 16.8 ms \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full"
+        },
+        {
+          "attributes": {
+            "aria-controls": "machine-controls-body",
+            "aria-expanded": "true",
+            "class": "controls-toggle",
+            "hidden": "",
+            "id": "controls-toggle",
+            "type": "button"
+          },
+          "selector": "#controls-toggle",
+          "text": "Close"
+        },
+        {
+          "attributes": {
+            "aria-describedby": "inspector-copy",
+            "aria-labelledby": "inspector-title",
+            "aria-modal": "true",
+            "class": "inspector",
+            "id": "inspector",
+            "inert": "",
+            "role": "dialog"
+          },
+          "selector": "#inspector",
+          "text": "\u00d7\n    PVC 2411 topology\n    Visible hydraulic systems\n    Lift, telescope, steering, carriage and frame-level cylinder cues are separated from hose and valve-bank materials. Routing, bore, pressure, timing and interlocks are outside this visual study.\n    RepresentedLift \u00b7 telescope \u00b7 steer \u00b7 tilt \u00b7 frame levelVisual cuesCylinder bodies \u00b7 rods \u00b7 hoses \u00b7 valve bankExcludedPressure \u00b7 timing \u00b7 interlocks \u00b7 service routing\n    Read the evidence boundary"
+        }
+      ],
+      "url": "http://127.0.0.1:8111/742/?diagnostics=1",
+      "viewport_css_px": [
+        1280,
+        720
+      ]
+    },
+    "raw_fixture_outcomes": [
+      {
+        "basis": "nearest-distance",
+        "case": 1,
+        "expectedComponent": "front",
+        "expectedVolume": "front",
+        "hits": [
+          {
+            "component": "rear",
+            "distanceM": 2,
+            "priority": 5,
+            "volume": "rear"
+          },
+          {
+            "component": "front",
+            "distanceM": 1,
+            "priority": 0,
+            "volume": "front"
+          }
+        ],
+        "observedComponent": "front",
+        "observedVolume": "front",
+        "pass": true,
+        "visibleSurfaceComponent": null
+      },
+      {
+        "basis": "distance-tie",
+        "case": 2,
+        "expectedComponent": "high-tie",
+        "expectedVolume": "high-tie",
+        "hits": [
+          {
+            "component": "low-tie",
+            "distanceM": 1,
+            "priority": 1,
+            "volume": "low-tie"
+          },
+          {
+            "component": "high-tie",
+            "distanceM": 1.01,
+            "priority": 4,
+            "volume": "high-tie"
+          }
+        ],
+        "observedComponent": "high-tie",
+        "observedVolume": "high-tie",
+        "pass": true,
+        "visibleSurfaceComponent": null
+      },
+      {
+        "basis": "nearest-distance",
+        "case": 3,
+        "expectedComponent": "front",
+        "expectedVolume": "front",
+        "hits": [
+          {
+            "component": "front",
+            "distanceM": 1,
+            "priority": 0,
+            "volume": "front"
+          },
+          {
+            "component": "front",
+            "distanceM": 1.8,
+            "priority": 0,
+            "volume": "front"
+          },
+          {
+            "component": "rear",
+            "distanceM": 2,
+            "priority": 5,
+            "volume": "rear"
+          }
+        ],
+        "observedComponent": "front",
+        "observedVolume": "front",
+        "pass": true,
+        "visibleSurfaceComponent": null
+      },
+      {
+        "basis": "visible-surface",
+        "case": 4,
+        "expectedComponent": "front",
+        "expectedVolume": "front",
+        "hits": [
+          {
+            "component": "rear",
+            "distanceM": 0.8,
+            "priority": 5,
+            "volume": "rear"
+          },
+          {
+            "component": "front",
+            "distanceM": 1,
+            "priority": 0,
+            "volume": "front"
+          }
+        ],
+        "observedComponent": "front",
+        "observedVolume": "front",
+        "pass": true,
+        "visibleSurfaceComponent": "front"
+      },
+      {
+        "basis": "visible-surface",
+        "case": 5,
+        "expectedComponent": null,
+        "expectedVolume": null,
+        "hits": [
+          {
+            "component": "rear",
+            "distanceM": 0.8,
+            "priority": 5,
+            "volume": "rear"
+          }
+        ],
+        "observedComponent": null,
+        "observedVolume": null,
+        "pass": true,
+        "visibleSurfaceComponent": "front"
+      }
+    ],
+    "raw_overlap_rays": [
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "steering",
+        "expectedVolume": "Steering_Hit",
+        "hitComponents": [
+          "steering",
+          "chassis",
+          "hydraulics",
+          "cab",
+          "boom"
+        ],
+        "hitDistancesM": [
+          47.7938,
+          48.5559,
+          49.2512,
+          50.1655,
+          50.5627
+        ],
+        "pairComponents": [
+          "chassis",
+          "cab"
+        ],
+        "pass": true,
+        "ray": 1,
+        "resolvedComponent": "steering",
+        "resolvedVolume": "Steering_Hit",
+        "visibleSurfaceComponent": "steering"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "chassis",
+        "expectedVolume": "Chassis_Hit",
+        "hitComponents": [
+          "steering",
+          "chassis",
+          "hydraulics",
+          "boom"
+        ],
+        "hitDistancesM": [
+          48.4367,
+          49.1095,
+          49.5383,
+          50.347
+        ],
+        "pairComponents": [
+          "chassis",
+          "boom"
+        ],
+        "pass": true,
+        "ray": 2,
+        "resolvedComponent": "chassis",
+        "resolvedVolume": "Chassis_Hit",
+        "visibleSurfaceComponent": "chassis"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "chassis",
+        "expectedVolume": "Chassis_Hit",
+        "hitComponents": [
+          "chassis",
+          "steering",
+          "hydraulics",
+          "carriage"
+        ],
+        "hitDistancesM": [
+          47.1709,
+          47.8469,
+          48.1223,
+          53.1576
+        ],
+        "pairComponents": [
+          "chassis",
+          "carriage"
+        ],
+        "pass": true,
+        "ray": 3,
+        "resolvedComponent": "chassis",
+        "resolvedVolume": "Chassis_Hit",
+        "visibleSurfaceComponent": "chassis"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "boom",
+        "expectedVolume": "Boom_Hit",
+        "hitComponents": [
+          "boom",
+          "hydraulics",
+          "chassis",
+          "steering"
+        ],
+        "hitDistancesM": [
+          48.887,
+          49.05,
+          49.325,
+          49.835
+        ],
+        "pairComponents": [
+          "chassis",
+          "steering"
+        ],
+        "pass": true,
+        "ray": 4,
+        "resolvedComponent": "boom",
+        "resolvedVolume": "Boom_Hit",
+        "visibleSurfaceComponent": "boom"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "steering",
+        "expectedVolume": "Steering_Hit",
+        "hitComponents": [
+          "steering",
+          "chassis",
+          "cab",
+          "hydraulics"
+        ],
+        "hitDistancesM": [
+          48.2336,
+          48.4544,
+          49.3597,
+          49.897
+        ],
+        "pairComponents": [
+          "chassis",
+          "hydraulics"
+        ],
+        "pass": true,
+        "ray": 5,
+        "resolvedComponent": "steering",
+        "resolvedVolume": "Steering_Hit",
+        "visibleSurfaceComponent": "steering"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "boom",
+        "expectedVolume": "Boom_Hit",
+        "hitComponents": [
+          "cab",
+          "chassis",
+          "boom",
+          "hydraulics"
+        ],
+        "hitDistancesM": [
+          49.4042,
+          49.5559,
+          50.2058,
+          50.6174
+        ],
+        "pairComponents": [
+          "cab",
+          "boom"
+        ],
+        "pass": true,
+        "ray": 6,
+        "resolvedComponent": "boom",
+        "resolvedVolume": "Boom_Hit",
+        "visibleSurfaceComponent": "boom"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "cab",
+        "expectedVolume": "Cab_Hit",
+        "hitComponents": [
+          "cab",
+          "chassis",
+          "boom",
+          "carriage"
+        ],
+        "hitDistancesM": [
+          49.1337,
+          49.4647,
+          50.9688,
+          52.4497
+        ],
+        "pairComponents": [
+          "cab",
+          "carriage"
+        ],
+        "pass": true,
+        "ray": 7,
+        "resolvedComponent": "cab",
+        "resolvedVolume": "Cab_Hit",
+        "visibleSurfaceComponent": "cab"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "cab",
+        "expectedVolume": "Cab_Hit",
+        "hitComponents": [
+          "cab",
+          "chassis",
+          "steering"
+        ],
+        "hitDistancesM": [
+          48.9142,
+          49.8249,
+          50.5394
+        ],
+        "pairComponents": [
+          "cab",
+          "steering"
+        ],
+        "pass": true,
+        "ray": 8,
+        "resolvedComponent": "cab",
+        "resolvedVolume": "Cab_Hit",
+        "visibleSurfaceComponent": "cab"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "cab",
+        "expectedVolume": "Cab_Hit",
+        "hitComponents": [
+          "cab",
+          "chassis",
+          "boom",
+          "hydraulics"
+        ],
+        "hitDistancesM": [
+          49.1653,
+          49.3778,
+          50.2883,
+          50.865
+        ],
+        "pairComponents": [
+          "cab",
+          "hydraulics"
+        ],
+        "pass": true,
+        "ray": 9,
+        "resolvedComponent": "cab",
+        "resolvedVolume": "Cab_Hit",
+        "visibleSurfaceComponent": "cab"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "boom",
+        "expectedVolume": "Boom_Hit",
+        "hitComponents": [
+          "boom",
+          "hydraulics",
+          "chassis",
+          "carriage"
+        ],
+        "hitDistancesM": [
+          48.3683,
+          48.9941,
+          50.0499,
+          52.6526
+        ],
+        "pairComponents": [
+          "boom",
+          "carriage"
+        ],
+        "pass": true,
+        "ray": 10,
+        "resolvedComponent": "boom",
+        "resolvedVolume": "Boom_Hit",
+        "visibleSurfaceComponent": "boom"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "boom",
+        "expectedVolume": "Boom_Hit",
+        "hitComponents": [
+          "boom",
+          "hydraulics",
+          "chassis",
+          "steering"
+        ],
+        "hitDistancesM": [
+          49.5259,
+          49.7078,
+          50.0145,
+          50.5834
+        ],
+        "pairComponents": [
+          "boom",
+          "steering"
+        ],
+        "pass": true,
+        "ray": 11,
+        "resolvedComponent": "boom",
+        "resolvedVolume": "Boom_Hit",
+        "visibleSurfaceComponent": "boom"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "cab",
+        "expectedVolume": "Cab_Hit",
+        "hitComponents": [
+          "cab",
+          "boom",
+          "hydraulics",
+          "chassis",
+          "steering"
+        ],
+        "hitDistancesM": [
+          48.766,
+          48.9616,
+          49.8385,
+          50.0448,
+          51.804
+        ],
+        "pairComponents": [
+          "boom",
+          "hydraulics"
+        ],
+        "pass": true,
+        "ray": 12,
+        "resolvedComponent": "cab",
+        "resolvedVolume": "Cab_Hit",
+        "visibleSurfaceComponent": "cab"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "carriage",
+        "expectedVolume": "Carriage_Hit",
+        "hitComponents": [
+          "carriage",
+          "chassis",
+          "steering"
+        ],
+        "hitDistancesM": [
+          49.2228,
+          51.1062,
+          51.7831
+        ],
+        "pairComponents": [
+          "carriage",
+          "steering"
+        ],
+        "pass": true,
+        "ray": 13,
+        "resolvedComponent": "carriage",
+        "resolvedVolume": "Carriage_Hit",
+        "visibleSurfaceComponent": "carriage"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "carriage",
+        "expectedVolume": "Carriage_Hit",
+        "hitComponents": [
+          "carriage",
+          "chassis",
+          "steering",
+          "hydraulics"
+        ],
+        "hitDistancesM": [
+          49.2135,
+          51.1193,
+          51.8043,
+          53.1997
+        ],
+        "pairComponents": [
+          "carriage",
+          "hydraulics"
+        ],
+        "pass": true,
+        "ray": 14,
+        "resolvedComponent": "carriage",
+        "resolvedVolume": "Carriage_Hit",
+        "visibleSurfaceComponent": "carriage"
+      },
+      {
+        "basis": "visible-surface",
+        "expectedComponent": "chassis",
+        "expectedVolume": "Chassis_Hit",
+        "hitComponents": [
+          "steering",
+          "chassis",
+          "hydraulics"
+        ],
+        "hitDistancesM": [
+          49.0517,
+          49.7682,
+          50.2248
+        ],
+        "pairComponents": [
+          "steering",
+          "hydraulics"
+        ],
+        "pass": true,
+        "ray": 15,
+        "resolvedComponent": "chassis",
+        "resolvedVolume": "Chassis_Hit",
+        "visibleSurfaceComponent": "chassis"
+      }
+    ]
   },
-  "boundary": "Selection evidence covers the local visual interaction policy only; it is not an operational, safety, collision, or manufacturer-equivalence claim."
+  "reviewed_source_commit": "749fb02021a44130ddfa0d3fce64d72ca9e79681",
+  "schema_version": "2.0.0"
 }
