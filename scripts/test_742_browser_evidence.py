@@ -308,12 +308,18 @@ def main() -> None:
     showcase_reduced = json.loads(json.dumps(reduced))
     showcase_reduced["controller"] = "showcase"
     showcase_reduced["raw_samples"] = {
-        "moving_start": {"lift": "0", "telescope": "0", "tilt": "0", "steer": "0", "level": "0"},
-        "before_reduce": {"lift": "12", "telescope": "4", "tilt": "2", "steer": "1", "level": "1"},
-        "reduced_start": {"lift": "12", "telescope": "4", "tilt": "2", "steer": "1", "level": "1"},
-        "reduced_end": {"lift": "12", "telescope": "4", "tilt": "2", "steer": "1", "level": "1"},
-        "relaxed": {"lift": "12", "telescope": "4", "tilt": "2", "steer": "1", "level": "1", "control_pressed": "false", "manual": True},
+        "moving_start": {"controls": {"lift-control": "0", "tilt-control": "0"}, "drive_x": "0.0", "drive_z": "0.0", "drive_loop": "0", "wheel_rotations_rad": "0,0,0,0"},
+        "before_reduce": {"controls": {"lift-control": "2", "tilt-control": "1"}, "drive_x": "0.2", "drive_z": "0.1", "drive_loop": "1", "wheel_rotations_rad": "-0.3,-0.3,-0.3,-0.3"},
+        "reduced_start": {"controls": {"lift-control": "2", "tilt-control": "1"}, "drive_x": "0.2", "drive_z": "0.1", "drive_loop": "1", "wheel_rotations_rad": "-0.3,-0.3,-0.3,-0.3"},
+        "reduced_end": {"controls": {"lift-control": "2", "tilt-control": "1"}, "drive_x": "0.2", "drive_z": "0.1", "drive_loop": "1", "wheel_rotations_rad": "-0.3,-0.3,-0.3,-0.3"},
+        "relaxed": {"controls": {"lift-control": "2", "tilt-control": "1"}, "drive_x": "0.2", "drive_z": "0.1", "drive_loop": "1", "wheel_rotations_rad": "-0.3,-0.3,-0.3,-0.3", "control_pressed": "false", "manual": True},
     }
+    showcase_reduced.pop("moving_before")
+    showcase_reduced.update({
+        "mechanism_moving_before": True,
+        "route_moving_before": True,
+        "wheels_rolling_before": True,
+    })
     _validate_live_reduced_motion(showcase_reduced, "742 fixture")
 
     def projected_bounds(viewport, camera_distance, margin=20):

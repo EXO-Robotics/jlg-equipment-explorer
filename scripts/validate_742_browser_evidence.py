@@ -860,14 +860,19 @@ def _validate_742_terminal_failure_matrix(assertion: dict) -> None:
 
 
 def _validate_live_reduced_motion(record: dict, gate: str) -> None:
-    fields = {
-        "transition", "controller", "raw_samples", "moving_before", "frozen_while_reduced",
+    common_fields = {
+        "transition", "controller", "raw_samples", "frozen_while_reduced",
         "did_not_auto_resume", "manual_controls_enabled",
     }
+    controller = record.get("controller") if isinstance(record, dict) else None
+    motion_fields = (
+        {"mechanism_moving_before", "route_moving_before", "wheels_rolling_before"}
+        if controller == "showcase" else {"moving_before"}
+    )
     if (
-        set(record or {}) != fields
+        set(record or {}) != common_fields | motion_fields
         or record["transition"] != "no-preference->reduce->no-preference"
-        or record["controller"] not in {"autonomy", "showcase"}
+        or controller not in {"autonomy", "showcase"}
     ):
         raise RuntimeError(f"742 upstream live reduced-motion schema/transition drift: {gate}")
     raw = record["raw_samples"]
@@ -880,7 +885,15 @@ def _validate_live_reduced_motion(record: dict, gate: str) -> None:
     for name in ("moving_start", "before_reduce", "reduced_start", "reduced_end"):
         if set(raw[name] or {}) != position_keys:
             raise RuntimeError(f"742 upstream live reduced-motion raw position schema drift: {gate}:{name}")
-        if any(value is None or isinstance(value, (dict, list, bool)) for value in raw[name].values()):
+        if controller == "showcase":
+            controls = raw[name].get("controls")
+            if (
+                position_keys != {"controls", "drive_x", "drive_z", "drive_loop", "wheel_rotations_rad"}
+                or not isinstance(controls, dict) or not controls
+                or any(value is None or isinstance(value, (dict, list, bool)) for key, value in raw[name].items() if key != "controls")
+            ):
+                raise RuntimeError(f"742 live reduced-motion showcase sample drift: {gate}:{name}")
+        elif any(value is None or isinstance(value, (dict, list, bool)) for value in raw[name].values()):
             raise RuntimeError(f"742 upstream live reduced-motion position is null/non-scalar: {gate}:{name}")
     if set(raw["relaxed"] or {}) != position_keys | {"control_pressed", "manual"}:
         raise RuntimeError(f"742 upstream live reduced-motion relaxed-state schema drift: {gate}")
@@ -892,12 +905,24 @@ def _validate_live_reduced_motion(record: dict, gate: str) -> None:
         raw["relaxed"]["control_pressed"] == "false"
         and all(raw["reduced_end"][key] == raw["relaxed"][key] for key in position_keys)
     )
+    if controller == "showcase":
+        mechanism_moving = raw["moving_start"]["controls"] != raw["before_reduce"]["controls"]
+        route_moving = any(raw["moving_start"][key] != raw["before_reduce"][key] for key in ("drive_x", "drive_z", "drive_loop"))
+        wheels_rolling = raw["moving_start"]["wheel_rotations_rad"] != raw["before_reduce"]["wheel_rotations_rad"]
+        motion_matches = (
+            record["mechanism_moving_before"] is mechanism_moving
+            and record["route_moving_before"] is route_moving
+            and record["wheels_rolling_before"] is wheels_rolling
+            and all((mechanism_moving, route_moving, wheels_rolling))
+        )
+    else:
+        motion_matches = record["moving_before"] is moving and moving
     if (
-        record["moving_before"] is not moving
+        not motion_matches
         or record["frozen_while_reduced"] is not frozen
         or record["did_not_auto_resume"] is not no_resume
         or record["manual_controls_enabled"] is not raw["relaxed"]["manual"]
-        or not all((moving, frozen, no_resume, raw["relaxed"]["manual"] is True))
+        or not all((frozen, no_resume, raw["relaxed"]["manual"] is True))
     ):
         raise RuntimeError(f"742 upstream live reduced-motion outcome disagrees with raw samples: {gate}")
 
@@ -1146,7 +1171,7 @@ def _validate_regression(gate: str, observations: dict) -> None:
         parsed = page["parsed_status"]
         fields = {"source", "meshes", "selection", "errors", "load_ms", "render_profile", "fps", "p95_ms", "reduced_motion"}
         if set(parsed or {}) != fields or any((
-            parsed["source"] != "blender-showcase-v1.1.0", parsed["meshes"] != 92,
+            parsed["source"] != "blender-showcase-v1.1.0", parsed["meshes"] != 98,
             parsed["selection"] != "5/5 pass", parsed["errors"] != 0,
             parsed["render_profile"] != "desktop", parsed["reduced_motion"] != "off",
             not isinstance(parsed["load_ms"], (int, float)) or parsed["load_ms"] < 0,

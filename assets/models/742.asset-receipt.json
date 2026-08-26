@@ -1405,9 +1405,9 @@
       "result_sha256": "3e021c8f6f6815a561994b4c8617e8d88e0e2a6cb2ac4f2b96e4801416a6c136",
       "status": "pass",
       "validator": {
-        "bytes": 32201,
+        "bytes": 32806,
         "path": "scripts/test_742_browser_evidence.py",
-        "sha256": "71c80ed6770d22856589c4364cdcf356fef08571d3608956cf4aaa0867cee3f6"
+        "sha256": "77a2fb23538f67c51a97163369b8f1225a2ea7d577f73f2721929f6f93893f8c"
       }
     },
     "review_visual_semantics_parser": {
@@ -1473,7 +1473,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "c5740506da8bc6601db82b5718d96c6ac9c03edfbf18fba67f65e5252c8cff8c",
+  "candidate_tree_sha256": "93fafde488ca6e26b8d00df096e099130ad91b590912d3450660eec3ca78b756",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1506,9 +1506,9 @@
       "sha256": "8abd00341089c7623b39e4a1a6f16c19d75567ac03f73fa9194f1e8998e89c4e"
     },
     "browser_capture_parser_tests": {
-      "bytes": 32201,
+      "bytes": 32806,
       "path": "scripts/test_742_browser_evidence.py",
-      "sha256": "71c80ed6770d22856589c4364cdcf356fef08571d3608956cf4aaa0867cee3f6"
+      "sha256": "77a2fb23538f67c51a97163369b8f1225a2ea7d577f73f2721929f6f93893f8c"
     },
     "browser_capture_probe": {
       "bytes": 10866,
@@ -1526,9 +1526,9 @@
       "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e"
     },
     "browser_capture_validator": {
-      "bytes": 89416,
+      "bytes": 90924,
       "path": "scripts/validate_742_browser_evidence.py",
-      "sha256": "9ada41703f368e269afa279a1dcebc0d1223531fa3a8bc4cfc2ccb234ab51dfa"
+      "sha256": "d885159ba9d65271fb2d046731178889de1e96a2a07965d0fede0bc82ac6ce17"
     },
     "builder": {
       "bytes": 32454,
