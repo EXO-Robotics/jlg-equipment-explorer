@@ -2,8 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.11";
 import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
+import { advanceFigureEight, JLG742_FIGURE_EIGHT, sampleFigureEight } from "./presentation-route.mjs?v=1.0.10";
 
-const ROUTE_RELEASE = "1.6.9";
+const ROUTE_RELEASE = "1.7.0";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -53,6 +54,12 @@ let motionAnnouncementTimer = null;
 let skipNextVisibleFrame = true;
 let animationFrameId = null;
 let runtimeFrameCount = 0;
+const showcaseRoute = {
+  phase: 0,
+  distanceM: 0,
+  wheelRotations: Object.fromEntries(["FL", "FR", "RL", "RR"].map((corner) => [corner, 0])),
+};
+const routeWheelCorners = Object.freeze(["FR", "FL", "RR", "RL"]);
 
 function recordError(error) {
   runtime.errors += 1;
@@ -638,11 +645,11 @@ function setControlOutputs(solved = machine.solveState(state)) {
   document.body.dataset.zone = presentation.zone;
   const centered = Math.abs(state.steer) <= 0.01;
   document.body.dataset.steerModeAlignment = centered ? "centered" : "center-required";
-  const status = showcaseStarted !== null && !reducedMotion && presentation.status !== "Stowed"
-    ? "Positioning"
+  const status = showcaseStarted !== null && !reducedMotion
+    ? "Autonomous"
     : presentation.status;
   motionStatus.value = status;
-  showcasePhase.textContent = status;
+  showcasePhase.textContent = showcaseStarted !== null && !reducedMotion ? "Figure 8" : status;
   return Object.freeze({ ...presentation, status });
 }
 function applyControls() {
@@ -739,6 +746,7 @@ for (const control of machine.controls) {
 }
 document.querySelector("#stow").addEventListener("click", () => {
   stopShowcase();
+  resetShowcaseRoute();
   Object.assign(state, machine.stowState);
   for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
   document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
@@ -770,9 +778,22 @@ function syncShowcaseControls() {
   showcaseButton.textContent = reducedMotion ? "Auto off" : active ? "Stop auto" : "Start auto";
   autonomyMode.value = reducedMotion ? "Reduced motion" : active ? "Auto loop" : "Manual";
   autonomyNote.textContent = active
-    ? "Move a mechanism control to return to manual."
-    : "Visualization only - mechanism motion is reconstructed; not a machine capability.";
-  if (!active) showcaseLoop.textContent = "0%";
+    ? "Driving a full figure-eight with reconstructed steering and mechanism motion."
+    : "Visualization only - drive and mechanism motion are reconstructed; not a machine capability.";
+  showcaseLoop.textContent = `${Math.round((showcaseRoute.phase / (Math.PI * 2)) * 100)}%`;
+}
+function resetShowcaseRoute() {
+  showcaseRoute.phase = 0;
+  showcaseRoute.distanceM = 0;
+  for (const corner of Object.keys(showcaseRoute.wheelRotations)) showcaseRoute.wheelRotations[corner] = 0;
+  if (!rig) return;
+  rig.root.position.set(0, 0, 0);
+  rig.root.rotation.y = 0;
+  for (const pivot of Object.values(rig.wheelRollPivots)) pivot.rotation.y = 0;
+  document.body.dataset.driveX = "0.00";
+  document.body.dataset.driveZ = "0.00";
+  document.body.dataset.driveLoop = "0";
+  document.body.dataset.wheelRotationsRad = "0.000,0.000,0.000,0.000";
 }
 function stopShowcase() {
   showcaseStarted = null;
@@ -804,8 +825,11 @@ showcaseButton?.addEventListener("click", () => {
     return;
   }
   showcaseStarted = performance.now();
+  const sample = sampleFigureEight(showcaseRoute.phase, JLG742_FIGURE_EIGHT);
+  rig.root.position.set(sample.x, 0, sample.z);
+  rig.root.rotation.y = sample.heading;
   syncShowcaseControls();
-  announceMotion("Automatic 742 mechanism showcase started.");
+  announceMotion("Automatic 742 figure-eight showcase started.");
 });
 const handleMotionPreferenceChange = () => syncReducedMotion(true);
 if (motionPreference.addEventListener) motionPreference.addEventListener("change", handleMotionPreferenceChange);
@@ -1061,12 +1085,28 @@ function animate(now) {
     if (elapsed >= 1) showcaseStarted = now;
     const loopProgress = elapsed % 1;
     const showcaseState = { ...machine.showcase(loopProgress) };
-    showcaseLoop.textContent = `${Math.round(loopProgress * 100)}%`;
-    if (showcaseState.steerMode !== state.steerMode && Math.abs(showcaseState.steer) > 0.01) showcaseState.steerMode = state.steerMode;
+    const route = advanceFigureEight(showcaseRoute.phase, delta, JLG742_FIGURE_EIGHT);
+    showcaseRoute.phase = route.phase;
+    showcaseRoute.distanceM += JLG742_FIGURE_EIGHT.speedMps * delta;
+    showcaseState.steer = route.sample.steer;
+    showcaseState.steerMode = "circle";
     Object.assign(state, showcaseState);
     for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
     document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
     applyControls();
+    rig.root.position.set(route.sample.x, 0, route.sample.z);
+    rig.root.rotation.y = route.sample.heading;
+    routeWheelCorners.forEach((corner, index) => {
+      showcaseRoute.wheelRotations[corner] -= JLG742_FIGURE_EIGHT.speedMps * route.sample.wheelSpeedScales[index] * delta / JLG742_FIGURE_EIGHT.wheelRadiusM;
+      rig.wheelRollPivots[corner].rotation.y = showcaseRoute.wheelRotations[corner];
+    });
+    orbit.desiredTarget.set(route.sample.x, Math.max(1.05, orbit.desiredTarget.y), route.sample.z);
+    showcaseLoop.textContent = `${Math.round((route.phase / (Math.PI * 2)) * 100)}%`;
+    document.body.dataset.driveX = route.sample.x.toFixed(2);
+    document.body.dataset.driveZ = route.sample.z.toFixed(2);
+    document.body.dataset.driveHeading = String(Math.round(((THREE.MathUtils.radToDeg(route.sample.heading) % 360) + 360) % 360));
+    document.body.dataset.driveLoop = String(Math.round((route.phase / (Math.PI * 2)) * 100));
+    document.body.dataset.wheelRotationsRad = ["FL", "FR", "RL", "RR"].map((corner) => showcaseRoute.wheelRotations[corner].toFixed(3)).join(",");
     if (machine.followView && now - lastShowcaseFrameAt > 100) {
       updateFollowView("showcase");
       lastShowcaseFrameAt = now;

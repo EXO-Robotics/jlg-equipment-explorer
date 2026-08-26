@@ -618,7 +618,13 @@ function baseArtifact(gate, capturedAt, observations, boundary, upstreamIdentity
 async function reduced742() {
   const opened = await openPage([1280, 720], "/742/?diagnostics=1");
   await waitLoaded(opened.page, "glb-validated", "selection 6/6 ready");
-  const sample = () => opened.page.evaluate(() => Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])));
+  const sample = () => opened.page.evaluate(() => ({
+    controls: Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
+    drive_x: document.body.dataset.driveX || null,
+    drive_z: document.body.dataset.driveZ || null,
+    drive_loop: document.body.dataset.driveLoop || null,
+    wheel_rotations_rad: document.body.dataset.wheelRotationsRad || null,
+  }));
   const showcase = opened.page.locator("#showcase");
   await showcase.click();
   await opened.page.waitForFunction(() => document.body.dataset.showcaseActive === "true");
@@ -634,7 +640,11 @@ async function reduced742() {
   await opened.page.waitForFunction(() => document.body.dataset.motionProfile === "full" && !document.querySelector("#showcase").disabled);
   await opened.page.waitForTimeout(250);
   const relaxed = await opened.page.evaluate(() => ({
-    ...Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
+    controls: Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
+    drive_x: document.body.dataset.driveX || null,
+    drive_z: document.body.dataset.driveZ || null,
+    drive_loop: document.body.dataset.driveLoop || null,
+    wheel_rotations_rad: document.body.dataset.wheelRotationsRad || null,
     control_pressed: document.body.dataset.showcaseActive,
     manual: [...document.querySelectorAll('#machine-controls-body input[type="range"]')].every((node) => !node.disabled),
   }));
@@ -642,12 +652,20 @@ async function reduced742() {
     transition: "no-preference->reduce->no-preference",
     controller: "showcase",
     raw_samples: { moving_start: movingStart, before_reduce: before, reduced_start: reducedStart, reduced_end: reducedEnd, relaxed },
-    moving_before: JSON.stringify(movingStart) !== JSON.stringify(before),
+    mechanism_moving_before: JSON.stringify(movingStart.controls) !== JSON.stringify(before.controls),
+    route_moving_before: movingStart.drive_x !== before.drive_x || movingStart.drive_z !== before.drive_z,
+    wheels_rolling_before: movingStart.wheel_rotations_rad !== before.wheel_rotations_rad,
     frozen_while_reduced: JSON.stringify(reducedStart) === JSON.stringify(reducedEnd),
-    did_not_auto_resume: relaxed.control_pressed === "false" && Object.keys(reducedEnd).every((key) => reducedEnd[key] === relaxed[key]),
+    did_not_auto_resume: relaxed.control_pressed === "false" && JSON.stringify(reducedEnd) === JSON.stringify({
+      controls: relaxed.controls,
+      drive_x: relaxed.drive_x,
+      drive_z: relaxed.drive_z,
+      drive_loop: relaxed.drive_loop,
+      wheel_rotations_rad: relaxed.wheel_rotations_rad,
+    }),
     manual_controls_enabled: relaxed.manual,
   };
-  assert(state.moving_before && state.frozen_while_reduced && state.did_not_auto_resume && state.manual_controls_enabled, `742 live reduced-motion state failed: ${JSON.stringify(state)}`);
+  assert(state.mechanism_moving_before && state.route_moving_before && state.wheels_rolling_before && state.frozen_while_reduced && state.did_not_auto_resume && state.manual_controls_enabled, `742 live reduced-motion state failed: ${JSON.stringify(state)}`);
   assert(opened.errors.length === 0, `742 reduced-motion console errors: ${opened.errors.join(" | ")}`);
   await opened.context.close();
   return state;

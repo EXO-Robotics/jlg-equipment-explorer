@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T15:45:44.348Z",
+  "captured_at_utc": "2026-08-26T16:33:42.352Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4",
-    "bytes": 90441
+    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
+    "bytes": 91407
   },
-  "outcomes_sha256": "1a848b75ad40b27d15735d85c6e641cf864f0a09b83c8d4e6402d8fbfc2697ee",
+  "outcomes_sha256": "62b585a7def1fe495a454056d7500ed9f98bb3e7bdf602fb26ad7bef121322cd",
   "outcomes": {
     "application_instructions": {
       "outcome": "pass",
@@ -2055,44 +2055,76 @@
       "controller": "showcase",
       "raw_samples": {
         "moving_start": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "0",
-          "steer-control": "0",
-          "level-control": "0"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "0",
+            "steer-control": "0",
+            "level-control": "0"
+          },
+          "drive_x": null,
+          "drive_z": null,
+          "drive_loop": null,
+          "wheel_rotations_rad": null
         },
         "before_reduce": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
         },
         "reduced_start": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
         },
         "reduced_end": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
         },
         "relaxed": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1",
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336",
           "control_pressed": "false",
           "manual": true
         }
       },
-      "moving_before": true,
+      "mechanism_moving_before": true,
+      "route_moving_before": true,
+      "wheels_rolling_before": true,
       "frozen_while_reduced": true,
       "did_not_auto_resume": true,
       "manual_controls_enabled": true

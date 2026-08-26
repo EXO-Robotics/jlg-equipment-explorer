@@ -43,6 +43,7 @@ jobs:
           python3 -B scripts/validate_es1930m_kinematics.py
           python3 -B scripts/validate_es1930m_glb.py
           node --check viewer/742-runtime.js
+          node scripts/validate_742_figure_eight.mjs
           node scripts/validate_742_runtime_contract.mjs
           python3 -B scripts/validate_742_glb.py
           python3 -B scripts/validate_742_actual_glb_clearance_sweep.py

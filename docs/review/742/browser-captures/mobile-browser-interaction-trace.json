@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "mobile_browser_interaction",
-  "captured_at_utc": "2026-08-26T15:45:38.025Z",
+  "captured_at_utc": "2026-08-26T16:33:36.049Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4",
-    "bytes": 90441
+    "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e",
+    "bytes": 91407
   },
-  "outcomes_sha256": "f173f522e34dc490650beaa532d4cfbbfc152e373da9af9fd5b7fd7c457ad2d5",
+  "outcomes_sha256": "3ba2b9030056b26cfc58a8944c00512b906c44f5a064d6a0a4aac7e22493e243",
   "outcomes": {
     "portrait_controls": {
       "outcome": "pass",
@@ -2240,36 +2240,36 @@
         "desired_distance_m": 11.44,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          28.55,
-          26.562,
-          24.794,
-          23.233,
+          28.537,
+          26.538,
+          24.784,
+          23.224,
           21.855,
-          20.644,
-          19.568,
-          18.618,
-          17.784,
+          20.637,
+          19.562,
+          18.613,
+          17.779,
           17.042,
-          16.388,
-          15.813,
-          15.305,
-          14.853,
-          14.454,
-          14.104,
-          13.792,
+          16.384,
+          15.809,
+          15.301,
+          14.85,
+          14.451,
+          14.099,
+          13.79,
           13.516,
-          13.274,
+          13.273,
           13.06,
-          12.872,
-          12.704,
-          12.557,
-          12.427,
+          12.871,
+          12.703,
+          12.556,
+          12.426,
           12.311,
           12.21,
           12.12,
           12.041,
-          11.971,
-          11.909,
+          11.97,
+          11.908,
           11.854,
           11.806,
           11.763,
@@ -2279,7 +2279,7 @@
           11.637,
           11.614,
           11.593,
-          11.576,
+          11.575,
           11.56,
           11.546,
           11.533,
@@ -2319,44 +2319,76 @@
       "controller": "showcase",
       "raw_samples": {
         "moving_start": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "0",
-          "steer-control": "0",
-          "level-control": "0"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "0",
+            "steer-control": "0",
+            "level-control": "0"
+          },
+          "drive_x": null,
+          "drive_z": null,
+          "drive_loop": null,
+          "wheel_rotations_rad": null
         },
         "before_reduce": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
         },
         "reduced_start": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
         },
         "reduced_end": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1"
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336"
         },
         "relaxed": {
-          "lift-control": "0",
-          "telescope-control": "0",
-          "tilt-control": "1",
-          "steer-control": "4",
-          "level-control": "1",
+          "controls": {
+            "lift-control": "0",
+            "telescope-control": "0",
+            "tilt-control": "1",
+            "steer-control": "0",
+            "level-control": "1"
+          },
+          "drive_x": "0.18",
+          "drive_z": "0.12",
+          "drive_loop": "0",
+          "wheel_rotations_rad": "-0.336,-0.336,-0.336,-0.336",
           "control_pressed": "false",
           "manual": true
         }
       },
-      "moving_before": true,
+      "mechanism_moving_before": true,
+      "route_moving_before": true,
+      "wheels_rolling_before": true,
       "frozen_while_reduced": true,
       "did_not_auto_resume": true,
       "manual_controls_enabled": true

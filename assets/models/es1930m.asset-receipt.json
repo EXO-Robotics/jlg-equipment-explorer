@@ -35,9 +35,9 @@
       "sha256": "df91f6722a966ec4a550cbb3dac3f7448e514b6cddf4c466789e04f0d199da13"
     },
     "review_evidence": {
-      "bytes": 223690,
+      "bytes": 223689,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "8129f8ed332ba7fc38b9452495c538a91bc4ed56b387ab31e84a48c73589a882"
+      "sha256": "642af1bb65806ba780690d77d55b6269262db441d150ded8c442b7ac5387094e"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -74,25 +74,25 @@
   "release": "1.0.5",
   "release_status": "candidate_not_deployable",
   "review_binding": {
-    "error": "ES immutable browser evidence binding drift",
-    "predeploy_gates": 0,
-    "status": "pending_or_stale"
+    "error": null,
+    "predeploy_gates": 13,
+    "status": "exact_executable_predeploy_evidence"
   },
   "review_flags": {
-    "600s_regression_suite_pass": false,
-    "accessibility_reviewed": false,
+    "600s_regression_suite_pass": true,
+    "accessibility_reviewed": true,
     "deployed_pages_reviewed": false,
-    "desktop_browser_zero_errors": false,
-    "extension_browser_reviewed": false,
-    "figure_eight_presentation_reviewed": false,
-    "mobile_and_pinch_reviewed": false,
-    "mobile_drag_direction_reviewed": false,
-    "performance_reviewed": false,
-    "platform_controls_visual_reviewed": false,
-    "raised_pose_browser_reviewed": false,
-    "selection_and_focus_reviewed": false,
-    "steering_boundary_reviewed": false,
-    "stowed_silhouette_reviewed": false
+    "desktop_browser_zero_errors": true,
+    "extension_browser_reviewed": true,
+    "figure_eight_presentation_reviewed": true,
+    "mobile_and_pinch_reviewed": true,
+    "mobile_drag_direction_reviewed": true,
+    "performance_reviewed": true,
+    "platform_controls_visual_reviewed": true,
+    "raised_pose_browser_reviewed": true,
+    "selection_and_focus_reviewed": true,
+    "steering_boundary_reviewed": true,
+    "stowed_silhouette_reviewed": true
   },
   "runtime": {
     "files": [
@@ -109,7 +109,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "25187cd5225fa7b0c36290f4138820585ec407a9e8145101fee4dcf260b74426"
+    "sha256": "54e36c74a4e8236db0c84fe2774bc73d840e26321971839924d6e1045acd9fa0"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"

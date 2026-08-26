@@ -77,6 +77,7 @@ RUNTIME_FILES = [
     ROOT / "viewer.css",
     ROOT / "viewer/742.css",
     ROOT / "viewer/742-runtime.js",
+    ROOT / "viewer/presentation-route.mjs",
     ROOT / "machines/742/machine.js",
     ROOT / "machines/742/articulation.js",
     ROOT / "machines/742/inspector.js",
@@ -97,6 +98,7 @@ AUTOMATED_CHECKS = {
     "mechanical_kinematics": ("validate_742_kinematics.py", []),
     "actual_posed_glb": ("validate_742_portable_posed_glb.py", []),
     "route_contract": ("validate_742_route.py", []),
+    "figure_eight_contract": ("validate_742_figure_eight.mjs", []),
     "review_evidence_parser": ("test_742_browser_evidence.py", []),
     "review_visual_semantics_parser": ("test_742_review_semantics.py", []),
     "posed_glb_portability_parser": ("test_742_posed_glb_portability.py", []),
@@ -141,7 +143,7 @@ def solver_stroke_usage(result: dict) -> dict:
 
 def run_check(script: str, extra_args: list[str]) -> dict:
     path = ROOT / "scripts" / script
-    command = [sys.executable, "-B", str(path), *extra_args]
+    command = ["node", str(path), *extra_args] if path.suffix == ".mjs" else [sys.executable, "-B", str(path), *extra_args]
     completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
     if completed.returncode:
         raise RuntimeError(

@@ -85,6 +85,10 @@ def main():
         'handleMotionPreferenceChange', 'motionPreference.addEventListener("change"', 'motionPreference.addListener?.(', 'syncReducedMotion(true)', 'showcaseStarted = null',
         'controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Open machine controls")',
         'scheduleMotionAnnouncement', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
+        'advanceFigureEight(showcaseRoute.phase, delta, JLG742_FIGURE_EIGHT)', 'showcaseState.steerMode = "circle"',
+        'rig.root.position.set(route.sample.x, 0, route.sample.z)', 'rig.root.rotation.y = route.sample.heading',
+        'const routeWheelCorners = Object.freeze(["FR", "FL", "RR", "RL"])',
+        'rig.wheelRollPivots[corner].rotation.y = showcaseRoute.wheelRotations[corner]',
         'if (!skipNextVisibleFrame && renderedInterval > 0)', 'sorted.filter((sample) => sample >= 250).length',
         'const windowMs = sorted.reduce((sum, sample) => sum + sample, 0)', 'frameTimes.length * 1000 / windowMs',
         'Math.ceil(sorted.length * 0.95) - 1',
@@ -143,6 +147,7 @@ def main():
         '"BoomAngleSensorCrankJoint"', '"BoomAngleSensorBoomJoint"',
         '...["L","R"].flatMap', 'Array.from({length:8}', '"RetractChain_C"', '"RetractChain_C_Moving"',
         'Object.entries(geometry.beams)', 'Object.entries(geometry.points)',
+        'wheelRollPivots', '`WheelRoll_${corner}`',
     ], "742 articulation consumer")
     require(STYLE, ['body[data-machine="742"]', '.mode-row', '.component-nav-seven', '.nav-overflow-cue', 'button[data-focus][aria-pressed="true"]'], "742 style")
     if not ASSET.is_file():

@@ -71,6 +71,7 @@ CANONICAL_RUNTIME = [
     "viewer.css",
     "viewer/742.css",
     "viewer/742-runtime.js",
+    "viewer/presentation-route.mjs",
     "machines/742/machine.js",
     "machines/742/articulation.js",
     "machines/742/inspector.js",
@@ -91,6 +92,7 @@ AUTOMATED_CHECKS = {
     "mechanical_kinematics": ("scripts/validate_742_kinematics.py", []),
     "actual_posed_glb": ("scripts/validate_742_portable_posed_glb.py", []),
     "route_contract": ("scripts/validate_742_route.py", []),
+    "figure_eight_contract": ("scripts/validate_742_figure_eight.mjs", []),
     "review_evidence_parser": ("scripts/test_742_browser_evidence.py", []),
     "review_visual_semantics_parser": ("scripts/test_742_review_semantics.py", []),
     "posed_glb_portability_parser": ("scripts/test_742_posed_glb_portability.py", []),
@@ -171,8 +173,9 @@ def replay_check(name: str, record: dict) -> Path:
     if set(record) != expected_fields or record["status"] != "pass" or record["arguments"] != expected_args:
         raise RuntimeError(f"742 automated check schema/status drift: {name}")
     validator = verify_record(record["validator"], expected_script)
+    command = ["node", str(validator), *expected_args] if validator.suffix == ".mjs" else [sys.executable, "-B", str(validator), *expected_args]
     completed = subprocess.run(
-        [sys.executable, "-B", str(validator), *expected_args],
+        command,
         cwd=ROOT,
         text=True,
         capture_output=True,

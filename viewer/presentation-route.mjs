@@ -9,6 +9,18 @@ export const ES1930M_FIGURE_EIGHT = Object.freeze({
   maximumVisualSteerRadians: 0.58,
 });
 
+export const JLG742_FIGURE_EIGHT = Object.freeze({
+  radiusX: 12.5,
+  radiusZ: 8.0,
+  speedMps: 0.72,
+  steeringResponse: 2.65,
+  wheelbaseM: 3.42,
+  trackM: 2.1005,
+  wheelRadiusM: 0.643,
+  maximumVisualSteerRadians: 55 * Math.PI / 180,
+  fourWheelSteer: true,
+});
+
 export function wrapPhase(phase) {
   const turn = Math.PI * 2;
   return ((phase % turn) + turn) % turn;
@@ -28,12 +40,17 @@ export function sampleFigureEight(phase, route = ES1930M_FIGURE_EIGHT) {
   // positive yaw. Negate the X/Z planar determinant so positive steering
   // follows positive machine yaw, matching the 600S route convention.
   const curvature = -planarCurvature;
-  const steerForSide = (side) => Math.max(
+  const axleOffsetM = route.fourWheelSteer ? route.wheelbaseM / 2 : route.wheelbaseM;
+  const steerForSide = (side, axleDirection = 1) => Math.max(
     -route.maximumVisualSteerRadians,
     Math.min(
       route.maximumVisualSteerRadians,
-      Math.atan((route.wheelbaseM * curvature) / (1 - side * curvature * route.trackM / 2)),
+      Math.atan((axleDirection * axleOffsetM * curvature) / (1 - side * curvature * route.trackM / 2)),
     ),
+  );
+  const wheelSpeedScale = (side, axleDirection = 1) => Math.hypot(
+    1 + side * curvature * route.trackM / 2,
+    curvature * axleOffsetM * axleDirection,
   );
   return Object.freeze({
     phase: t,
@@ -45,12 +62,14 @@ export function sampleFigureEight(phase, route = ES1930M_FIGURE_EIGHT) {
     steer: Math.tanh(curvature * route.steeringResponse),
     steerLeft: steerForSide(1),
     steerRight: steerForSide(-1),
+    steerRearLeft: route.fourWheelSteer ? steerForSide(1, -1) : 0,
+    steerRearRight: route.fourWheelSteer ? steerForSide(-1, -1) : 0,
     tangentLength,
     wheelSpeedScales: Object.freeze([
-      Math.hypot(1 + curvature * route.trackM / 2, curvature * route.wheelbaseM),
-      Math.hypot(1 - curvature * route.trackM / 2, curvature * route.wheelbaseM),
-      1 + curvature * route.trackM / 2,
-      1 - curvature * route.trackM / 2,
+      wheelSpeedScale(1),
+      wheelSpeedScale(-1),
+      wheelSpeedScale(1, route.fourWheelSteer ? -1 : 0),
+      wheelSpeedScale(-1, route.fourWheelSteer ? -1 : 0),
     ]),
   });
 }

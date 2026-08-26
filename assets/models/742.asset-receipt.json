@@ -901,20 +901,7 @@
       "result": {
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
         "incomplete_review_gates": [
-          "600s_regression_suite_pass",
-          "accessibility_reviewed",
-          "deployed_pages_reviewed",
-          "desktop_browser_zero_errors",
-          "extension_browser_reviewed",
-          "figure_eight_presentation_reviewed",
-          "mobile_and_pinch_reviewed",
-          "mobile_drag_direction_reviewed",
-          "performance_reviewed",
-          "platform_controls_visual_reviewed",
-          "raised_pose_browser_reviewed",
-          "selection_and_focus_reviewed",
-          "steering_boundary_reviewed",
-          "stowed_silhouette_reviewed"
+          "deployed_pages_reviewed"
         ],
         "release_status": "candidate_not_deployable",
         "review_gates_complete": false,
@@ -931,7 +918,7 @@
           "source/blender/es1930m-showcase-v1.0.blend"
         ]
       },
-      "result_sha256": "3c07917246178264f222c8cf8cc30b7795ae2eff4152948a3e63752e59ce0b6e",
+      "result_sha256": "58e321da0b3d52c78ed6148534ba378a01658607dcca11844b31f1b617a6677a",
       "status": "pass",
       "validator": {
         "bytes": 4226,
@@ -984,6 +971,29 @@
         "bytes": 23603,
         "path": "scripts/validate_742_evidence.py",
         "sha256": "4efed569ebf4cb571858cb26dba6640f42f66621752477992e1e573932fe15c6"
+      }
+    },
+    "figure_eight_contract": {
+      "arguments": [],
+      "result": {
+        "completed_loops": 2,
+        "final_phase_rad": 0.0004937889711902343,
+        "maximum_center_radius_m": 12.499999759952509,
+        "maximum_heading_step_rad": 0.003817057186926931,
+        "maximum_steering_fit_error_deg": 2.745354676403089,
+        "maximum_step_m": 0.012008167840710262,
+        "maximum_target_wheel_angle_deg": 39.23538005752783,
+        "maximum_wheel_angle_deg": 36.49002538112474,
+        "minimum_step_m": 0.01199184147714411,
+        "samples": 10610,
+        "status": "PASS"
+      },
+      "result_sha256": "46c5b8430e4078315cc343629aed6ec46a749667a2917ea0e54e4c7cd61a1b56",
+      "status": "pass",
+      "validator": {
+        "bytes": 4838,
+        "path": "scripts/validate_742_figure_eight.mjs",
+        "sha256": "a9a8313b96a8f6611009aef921e72c2de237556c07b1f278112da75fd419117b"
       }
     },
     "mechanical_kinematics": {
@@ -1443,7 +1453,7 @@
         "pose_aware_reset": true,
         "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.6.9",
+        "runtime_release": "1.7.0",
         "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "settled_motion_live_region": true,
@@ -1453,17 +1463,17 @@
         "terminal_accessible_failure_ui": true,
         "visible_stalls_included": true
       },
-      "result_sha256": "6a1eed44862da56bc96d9f72b1e0cebd51380250578387ddb0250410f10af593",
+      "result_sha256": "54d3270af5c3eb1741c72691c2703cdcbf920495badffe8f301079484d38bbe4",
       "status": "pass",
       "validator": {
-        "bytes": 13283,
+        "bytes": 13732,
         "path": "scripts/validate_742_route.py",
-        "sha256": "30e6d58793057d70cd2f3bb00184ed24340d859910442fa8888a6ceaf8b18e9c"
+        "sha256": "320e06e0388db60df1bf0bb13cf1b601c20eff869da8e13d8ef7225d7b33172d"
       }
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "6802000b76e6219fa0c94f6b418f40affc5ef4776968bc00e43d64f1e4a7b081",
+  "candidate_tree_sha256": "c874e9b9d8c6ea6f7e19ed0f3825af72265825713c58dcf259f2105c312fa9bf",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1511,9 +1521,9 @@
       "sha256": "1da0373419e8c4532fb8677fb620e5795794249937a136f64e76422982748b13"
     },
     "browser_capture_runner": {
-      "bytes": 90441,
+      "bytes": 91407,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4"
+      "sha256": "f2397f2b547ee8220f7ac43bb976f48cf7a630b1de975d65d9c008f078f3479e"
     },
     "browser_capture_validator": {
       "bytes": 88460,
@@ -1581,9 +1591,9 @@
       "sha256": "f0e8e19509771d49c9a2ef88d340c22ff3945c2c98b4ac9091a7f560747d87c7"
     },
     "package_manifest": {
-      "bytes": 2819,
+      "bytes": 2865,
       "path": "package.json",
-      "sha256": "657dd8bb34f177cb3f1c97f8d38a0385684d37ff8ccef3e0e3c8ed5258204970"
+      "sha256": "df0e49b0a7347f9cecae6ba6525cd6d2676711bafd4a9484dc94868f215127da"
     },
     "pages_assembler": {
       "bytes": 1485,
@@ -1606,9 +1616,9 @@
       "sha256": "d9fac6e831262ee8c9ec50015ebf837fbdc4307d7a92be9230e1596f72ca4de6"
     },
     "pages_workflow": {
-      "bytes": 3067,
+      "bytes": 3120,
       "path": ".github/workflows/pages.yml",
-      "sha256": "2f92dd635aab80a93aace64237e19630b4253463bd19239a1f843e359ac9a112"
+      "sha256": "3e955034c0d00ac5d5d694a9e64f2bd39f46c572a219d132ee08f0287e0164d3"
     },
     "portable_posed_glb_validator": {
       "bytes": 31726,
@@ -1621,14 +1631,14 @@
       "sha256": "8a7ca48c58304dd5c2860a4cbed6f407acc8ea6e71984d8dbdd88061b3b15686"
     },
     "receipt_validator": {
-      "bytes": 53018,
+      "bytes": 53229,
       "path": "scripts/validate_742_receipt.py",
-      "sha256": "2f124fa7370b5fe96237caaef4e1802c3f38f0083879418c4fa2ccfa8b446ee8"
+      "sha256": "ab4ec840ae0bd6365b10860f58233c9a6936cfc859478582dc2e207583677f1d"
     },
     "receipt_writer": {
-      "bytes": 32228,
+      "bytes": 32403,
       "path": "scripts/write_742_receipt.py",
-      "sha256": "bad72125a9a450802c2908c06ac2d579786d1e6ff13407cfff629c455e11d5e5"
+      "sha256": "41358afa4ed379e063305a1269bf6262f1a737bb9463e76b900bd58ffaf6d8bd"
     },
     "reference_board_boundary": {
       "bytes": 481,
@@ -2150,6 +2160,7 @@
       "viewer.css",
       "viewer/742.css",
       "viewer/742-runtime.js",
+      "viewer/presentation-route.mjs",
       "machines/742/machine.js",
       "machines/742/articulation.js",
       "machines/742/inspector.js",
@@ -2157,7 +2168,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "5cc1acca42e9b7bc4122c17a45e1ad02e0efa155b6f5b42959009cbf11ceb0bb"
+    "sha256": "36582defd2f5afce9ee8f887badb683aed5eb0398591b82f20421bd8f0d8ecee"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"
