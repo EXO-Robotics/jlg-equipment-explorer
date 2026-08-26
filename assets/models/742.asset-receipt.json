@@ -842,8 +842,8 @@
         "meshes": 296,
         "nodes": 421,
         "pivot_markers": 71,
-        "sha256": "bd1322dec96ae734a67cde145e61ed537641600ac550727b2fe215004ac4cd90",
-        "source_blend_sha256": "3b9dc06b1b94763ab950d22e6b64513b6c86787291b2d0d1a5ef4b9e3e0c3743",
+        "sha256": "5ae982b6d55aaccf4f33bc05ed070308de3922136757c3ceeb7701e129c75ea0",
+        "source_blend_sha256": "5e6d67bda6d6b6d3bbab9bd579d1fe384f0d2de5c8295a1770a4884094de9956",
         "status": "PASS",
         "triangles": 12016,
         "visible_bounds_max_m": [
@@ -862,12 +862,12 @@
           0.7660000175237656
         ]
       },
-      "result_sha256": "4466ce8858c5ac19fc82b4f3d7643149050f1659fc5003762c7e8cee1a9aa597",
+      "result_sha256": "5c7ad3ee7bb03511d08f48834857bfdf69bed026a666ea1d389eb4292c520f0d",
       "status": "pass",
       "validator": {
-        "bytes": 20009,
+        "bytes": 21070,
         "path": "scripts/validate_es1930m_glb.py",
-        "sha256": "eb46e542278fef93507548b070076b85734ec467c7bc7450f1e38ec7908ac7ae"
+        "sha256": "0df5b04860e532b1e8689570bb97d6a7c36f969a24cfb9e266ed4b1009cc89a5"
       }
     },
     "es1930m_kinematics_contract": {
@@ -879,8 +879,8 @@
         "cylinder_observed_stroke_m": 0.6855000428797274,
         "indoor_raised_span_m": 0.3657813554570545,
         "levels": 5,
+        "maximum_front_fixed_anchor_error_m": 0.0,
         "maximum_link_length_error_m": 4.440892098500626e-16,
-        "maximum_rear_fixed_anchor_error_m": 0.0,
         "maximum_shared_pivot_error_m": 0.0,
         "maximum_translation_per_0_01_sample_m": 0.05411392820809057,
         "outdoor_lift_ratio": 0.7742616033755276,
@@ -888,12 +888,12 @@
         "status": "PASS",
         "stowed_span_m": 1.105486318323298
       },
-      "result_sha256": "17ce35810415ee0b6305042a9bdb544508151968ad120ad35ab571fefdbd9e0f",
+      "result_sha256": "0a7fc3a0997fe056eaea0838a4fdb33b33f7a5f8b7eee91e6aaa6d161f9952a7",
       "status": "pass",
       "validator": {
-        "bytes": 10674,
+        "bytes": 10688,
         "path": "scripts/validate_es1930m_kinematics.py",
-        "sha256": "60ad5b0e80ccd712d9c503ef204f6f5cda2dbdd5ede015de9c36728c572c3ed2"
+        "sha256": "91fc4c102b66fa71de95091c7ecac664704cd4a2ffd66167f3b320e792f3e96e"
       }
     },
     "es1930m_release_receipt": {
@@ -1473,7 +1473,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "93fafde488ca6e26b8d00df096e099130ad91b590912d3450660eec3ca78b756",
+  "candidate_tree_sha256": "05ed8f474a9626f56835dd1d0ab0cdac033d71689523f64a7efd11d3258c1618",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1523,7 +1523,7 @@
     "browser_capture_runner": {
       "bytes": 93062,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e"
+      "sha256": "094f6ced2410b2e33f0388d7e97373890a7f6bad2ee081a01f8260fc670cc1e3"
     },
     "browser_capture_validator": {
       "bytes": 90924,
@@ -1711,9 +1711,9 @@
       "browser_capture_allowlist": {
         "bytes": 8829,
         "path": "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
-        "sha256": "ed48ab88b801fa611db26005f5b1a6e5049befe9352ed9c5071c2d7b6ee8079a"
+        "sha256": "101d9bd33fadbda486be2c88c681d25f0bd8ea8372ff7f62b54b4515e7c3de1d"
       },
-      "candidate_tree_sha256": "93fafde488ca6e26b8d00df096e099130ad91b590912d3450660eec3ca78b756",
+      "candidate_tree_sha256": "05ed8f474a9626f56835dd1d0ab0cdac033d71689523f64a7efd11d3258c1618",
       "environment": {
         "browser": {
           "name": "Chromium",
@@ -1729,16 +1729,16 @@
       "manifest": {
         "bytes": 4648,
         "path": "docs/review/742/review-manifest.json",
-        "sha256": "0bf4ccb9b12b7d5c20225131db27bbd85c04806d35d7435efa63f6249256ea44"
+        "sha256": "a781d702a5141920f618b13fc007181d830984858573fb16252f113499f59bda"
       },
-      "reviewed_source_commit": "b75e524ed4ebb0afcd9ef4faf305a2472725f577"
+      "reviewed_source_commit": "825c15e7ef988e2413cc96969b1fade5701cb444"
     },
     "gates": {
       "600s_browser_regression": {
         "artifact": {
-          "bytes": 413565,
+          "bytes": 413971,
           "path": "docs/review/742/600s-browser-regression.json",
-          "sha256": "a094483a851a3d387ca3d1a293f11c539401fcfcb3e40d6e6d2cbbb91a0a46d6"
+          "sha256": "456f27765cac00359c3336955b4a0c2074f9d691fa5ca8feee23a4afa5ce2df5"
         },
         "status": "pass"
       },
@@ -1746,7 +1746,7 @@
         "artifact": {
           "bytes": 277863,
           "path": "docs/review/742/accessibility-semantics-keyboard.json",
-          "sha256": "857b9f866e084149d01cae9bd5c3cdc7d3429276f3ba8bb8eb3bb04d476bcf00"
+          "sha256": "1cca5a198470209dc652de57f31648247c3473ecd9812be4a52ccc258321f97a"
         },
         "status": "pass"
       },
@@ -1760,17 +1760,17 @@
       },
       "desktop_browser_interaction": {
         "artifact": {
-          "bytes": 203380,
+          "bytes": 203616,
           "path": "docs/review/742/desktop-browser-interaction.json",
-          "sha256": "193a2018d0a82e2d02028c294eabd95a1d728cb56197e3e369ad9302ffd11035"
+          "sha256": "94518eeae7202b6951b1a889932f945810e929b42d448447fa415af6362057a0"
         },
         "status": "pass"
       },
       "es1930m_browser_regression": {
         "artifact": {
-          "bytes": 409298,
+          "bytes": 409563,
           "path": "docs/review/742/es1930m-browser-regression.json",
-          "sha256": "c385e80d6b82a716ee74fdfaef0510c6e68ecdbfbff003e57b4c6c922ab8b61d"
+          "sha256": "78970e7a77cedd6ba915e65af20ab61597121a02b7b8e3d7be3c6479e294e7ac"
         },
         "status": "pass"
       },
@@ -1778,15 +1778,15 @@
         "artifact": {
           "bytes": 6199,
           "path": "docs/review/742/extended-visual-fidelity.json",
-          "sha256": "79e3a73a05eed6c18685bcf3dba6ea1577880aa3b8e677100b435ba93901d767"
+          "sha256": "cfc1befdfca42aaf384fd093cb0a704079f0e7a75caaadeca0a46215a628b8bd"
         },
         "status": "pass"
       },
       "mobile_browser_interaction": {
         "artifact": {
-          "bytes": 154327,
+          "bytes": 154305,
           "path": "docs/review/742/mobile-browser-interaction.json",
-          "sha256": "579c710eb9ec1421bac0cc3c9c16873c440161e34e6d23dec58d6472ee6beeac"
+          "sha256": "9cac2a0f48926fdd92acecc5b34fb1a7cc7de24f835a863422f0728f303cd6ee"
         },
         "status": "pass"
       },
@@ -1794,15 +1794,15 @@
         "artifact": {
           "bytes": 114583,
           "path": "docs/review/742/performance-profile.json",
-          "sha256": "4b9cef6e611ac5b3e41ad69e7b95d1315d2c27c7bcfd673a80dea05b0ba0bdf3"
+          "sha256": "90eacc12ca4cb06ec07b2e86ca467ccbc5a96c45025391280a1368c59fcdbf6f"
         },
         "status": "pass"
       },
       "semantic_selection": {
         "artifact": {
-          "bytes": 142152,
+          "bytes": 142153,
           "path": "docs/review/742/semantic-selection.json",
-          "sha256": "b9b79147596eafa862fb7389ee34570b6e9ab612069439dd57ea411d33b796ec"
+          "sha256": "2f3645c46fe0819d4ba2b5ef407bbb7bf19e664dc9b67a5094ed93445a8f14a4"
         },
         "status": "pass"
       },

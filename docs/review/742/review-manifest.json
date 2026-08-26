@@ -1,5 +1,5 @@
 {
-  "candidate_tree_sha256": "93fafde488ca6e26b8d00df096e099130ad91b590912d3450660eec3ca78b756",
+  "candidate_tree_sha256": "05ed8f474a9626f56835dd1d0ab0cdac033d71689523f64a7efd11d3258c1618",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
     "browser": {
@@ -16,9 +16,9 @@
   "gates": {
     "600s_browser_regression": {
       "artifact": {
-        "bytes": 413565,
+        "bytes": 413971,
         "path": "docs/review/742/600s-browser-regression.json",
-        "sha256": "a094483a851a3d387ca3d1a293f11c539401fcfcb3e40d6e6d2cbbb91a0a46d6"
+        "sha256": "456f27765cac00359c3336955b4a0c2074f9d691fa5ca8feee23a4afa5ce2df5"
       },
       "notes": "Exact-current 600S desktop and mobile regression capture reviewed; navigation, controls, selection, and zero-error assertions passed.",
       "status": "pass"
@@ -27,7 +27,7 @@
       "artifact": {
         "bytes": 277863,
         "path": "docs/review/742/accessibility-semantics-keyboard.json",
-        "sha256": "857b9f866e084149d01cae9bd5c3cdc7d3429276f3ba8bb8eb3bb04d476bcf00"
+        "sha256": "1cca5a198470209dc652de57f31648247c3473ecd9812be4a52ccc258321f97a"
       },
       "notes": "Chromium accessibility tree, engineering value text, live-region behavior, modal focus, and keyboard interactions reviewed and passed; no physical assistive-technology session is claimed.",
       "status": "pass"
@@ -43,18 +43,18 @@
     },
     "desktop_browser_interaction": {
       "artifact": {
-        "bytes": 203380,
+        "bytes": 203616,
         "path": "docs/review/742/desktop-browser-interaction.json",
-        "sha256": "193a2018d0a82e2d02028c294eabd95a1d728cb56197e3e369ad9302ffd11035"
+        "sha256": "94518eeae7202b6951b1a889932f945810e929b42d448447fa415af6362057a0"
       },
       "notes": "Desktop controls, steering boundary, terminal faults, reset framing, and settled machine states reviewed and passed.",
       "status": "pass"
     },
     "es1930m_browser_regression": {
       "artifact": {
-        "bytes": 409298,
+        "bytes": 409563,
         "path": "docs/review/742/es1930m-browser-regression.json",
-        "sha256": "c385e80d6b82a716ee74fdfaef0510c6e68ecdbfbff003e57b4c6c922ab8b61d"
+        "sha256": "78970e7a77cedd6ba915e65af20ab61597121a02b7b8e3d7be3c6479e294e7ac"
       },
       "notes": "Exact-current ES1930M desktop, mobile, and maximum-pose regression capture reviewed; all assertions passed.",
       "status": "pass"
@@ -63,16 +63,16 @@
       "artifact": {
         "bytes": 6199,
         "path": "docs/review/742/extended-visual-fidelity.json",
-        "sha256": "79e3a73a05eed6c18685bcf3dba6ea1577880aa3b8e677100b435ba93901d767"
+        "sha256": "cfc1befdfca42aaf384fd093cb0a704079f0e7a75caaadeca0a46215a628b8bd"
       },
       "notes": "All twelve named, hash-bound mechanism render claims directly reviewed and passed.",
       "status": "pass"
     },
     "mobile_browser_interaction": {
       "artifact": {
-        "bytes": 154327,
+        "bytes": 154305,
         "path": "docs/review/742/mobile-browser-interaction.json",
-        "sha256": "579c710eb9ec1421bac0cc3c9c16873c440161e34e6d23dec58d6472ee6beeac"
+        "sha256": "9cac2a0f48926fdd92acecc5b34fb1a7cc7de24f835a863422f0728f303cd6ee"
       },
       "notes": "Portrait and short-landscape controls, pinch zoom, reduced motion, and framing directly reviewed and passed.",
       "status": "pass"
@@ -81,16 +81,16 @@
       "artifact": {
         "bytes": 114583,
         "path": "docs/review/742/performance-profile.json",
-        "sha256": "4b9cef6e611ac5b3e41ad69e7b95d1315d2c27c7bcfd673a80dea05b0ba0bdf3"
+        "sha256": "90eacc12ca4cb06ec07b2e86ca467ccbc5a96c45025391280a1368c59fcdbf6f"
       },
       "notes": "Local visible-frame performance windows and exact diagnostic screenshots reviewed; recorded thresholds passed.",
       "status": "pass"
     },
     "semantic_selection": {
       "artifact": {
-        "bytes": 142152,
+        "bytes": 142153,
         "path": "docs/review/742/semantic-selection.json",
-        "sha256": "b9b79147596eafa862fb7389ee34570b6e9ab612069439dd57ea411d33b796ec"
+        "sha256": "2f3645c46fe0819d4ba2b5ef407bbb7bf19e664dc9b67a5094ed93445a8f14a4"
       },
       "notes": "Six-component visible-surface selection behavior and independent selection outcomes directly reviewed and passed.",
       "status": "pass"
@@ -105,6 +105,6 @@
       "status": "pass"
     }
   },
-  "reviewed_source_commit": "b75e524ed4ebb0afcd9ef4faf305a2472725f577",
+  "reviewed_source_commit": "825c15e7ef988e2413cc96969b1fade5701cb444",
   "schema_version": "3.0.0"
 }

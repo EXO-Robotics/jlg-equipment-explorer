@@ -1,6 +1,6 @@
 {
   "boundary": "Owned rendered presentation geometry only; no manufacturer geometry; reconstructed steering evidence is not factory steering or crab calibration. No load, stability, hydraulic response, service, or safety claim.",
-  "candidate_tree_sha256": "93fafde488ca6e26b8d00df096e099130ad91b590912d3450660eec3ca78b756",
+  "candidate_tree_sha256": "05ed8f474a9626f56835dd1d0ab0cdac033d71689523f64a7efd11d3258c1618",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
     "os": {
@@ -134,6 +134,6 @@
       "semantic_id": "boom_hose_valve_bank_clearance_datum"
     }
   ],
-  "reviewed_source_commit": "b75e524ed4ebb0afcd9ef4faf305a2472725f577",
+  "reviewed_source_commit": "825c15e7ef988e2413cc96969b1fade5701cb444",
   "schema_version": "2.0.0"
 }
