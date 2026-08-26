@@ -127,6 +127,133 @@
         "sha256": "d2af1af92dfc50295181737a9af84efa3a37274f2e1728325cc988808d4a78b0"
       }
     },
+    "actual_glb_clearance_sweep": {
+      "arguments": [],
+      "result": {
+        "authority": "actual exported GLB mesh vertices posed through the production lift/telescope transform; owned reconstruction, not manufacturer clearance authority",
+        "boom_nodes": [
+          "BaseBoomWeldment",
+          "BaseBoomLowerWear",
+          "MidBoomWeldment",
+          "MidBoomTopPlate",
+          "FlyBoomWeldment"
+        ],
+        "cab_limiting_pair": {
+          "boom_node": "BaseBoomWeldment",
+          "lift": 0.0,
+          "target_node": "CabHandrail_inner",
+          "telescope": 0.0
+        },
+        "engine_limiting_pair": {
+          "boom_node": "BaseBoomWeldment",
+          "lift": 0.0,
+          "target_node": "EngineHoodSpine",
+          "telescope": 0.0
+        },
+        "gate_kind": "actual_exported_glb_dense_rigid_boom_clearance_sweep",
+        "lift_samples": 201,
+        "minimum_cab_surface_clearance_m": 0.04502725657583617,
+        "minimum_engine_surface_clearance_m": 0.04999990042840052,
+        "obstacle_nodes": {
+          "cab": [
+            "AcceleratorPedal",
+            "BrakePedal",
+            "CabFloor",
+            "CabHandrail_inner",
+            "CabHandrail_outer",
+            "CabStep_0",
+            "CabStep_1",
+            "Dashboard",
+            "FrameLevelIndicator",
+            "FrontWindshield",
+            "InstrumentDisplay",
+            "Joystick",
+            "JoystickConsole",
+            "MirrorArm_L",
+            "MirrorArm_R",
+            "Mirror_L",
+            "Mirror_R",
+            "OperatorSeat",
+            "ROPSPost_0.18_-0.2",
+            "ROPSPost_0.18_-1.08",
+            "ROPSPost_1.46_-0.2",
+            "ROPSPost_1.46_-1.08",
+            "ROPSRoof",
+            "RearCabGlass",
+            "RoofGlass",
+            "RoofGuard_0",
+            "RoofGuard_1",
+            "RoofGuard_2",
+            "RoofGuard_3",
+            "SeatBase",
+            "SteeringColumn",
+            "SteeringWheel"
+          ],
+          "engine": [
+            "EngineGrilleSlot_00",
+            "EngineGrilleSlot_01",
+            "EngineGrilleSlot_02",
+            "EngineGrilleSlot_03",
+            "EngineGrilleSlot_04",
+            "EngineGrilleSlot_05",
+            "EngineGrilleSlot_06",
+            "EngineGrilleSlot_07",
+            "EngineGrilleSlot_08",
+            "EngineHoodLower",
+            "EngineHoodSpine",
+            "EngineHoodUpper",
+            "FuelTankCue",
+            "GrilleHole_0_0",
+            "GrilleHole_0_1",
+            "GrilleHole_0_2",
+            "GrilleHole_0_3",
+            "GrilleHole_0_4",
+            "GrilleHole_0_5",
+            "GrilleHole_0_6",
+            "GrilleHole_1_0",
+            "GrilleHole_1_1",
+            "GrilleHole_1_2",
+            "GrilleHole_1_3",
+            "GrilleHole_1_4",
+            "GrilleHole_1_5",
+            "GrilleHole_1_6",
+            "GrilleHole_2_0",
+            "GrilleHole_2_1",
+            "GrilleHole_2_2",
+            "GrilleHole_2_3",
+            "GrilleHole_2_4",
+            "GrilleHole_2_5",
+            "GrilleHole_2_6",
+            "GrilleHole_3_0",
+            "GrilleHole_3_1",
+            "GrilleHole_3_2",
+            "GrilleHole_3_3",
+            "GrilleHole_3_4",
+            "GrilleHole_3_5",
+            "GrilleHole_3_6",
+            "HydraulicTankCue",
+            "MainValveBank",
+            "RadiatorGrille",
+            "ValveSolenoid_0",
+            "ValveSolenoid_1",
+            "ValveSolenoid_2",
+            "ValveSolenoid_3",
+            "ValveSolenoid_4",
+            "ValveSolenoid_5"
+          ]
+        },
+        "samples": 40401,
+        "status": "PASS",
+        "telescope_samples": 201
+      },
+      "result_sha256": "0fa5ed5d173513e4545bca49703457a11b764ee2359589e49329ae1d1f996220",
+      "status": "pass",
+      "validator": {
+        "bytes": 5669,
+        "path": "scripts/validate_742_actual_glb_clearance_sweep.py",
+        "sha256": "95f6a692f08da6f808e4f22a850863a8e130c755d22ae10f65eb7a9cb8ae43dd"
+      }
+    },
     "actual_posed_glb": {
       "arguments": [],
       "result": {
@@ -360,6 +487,23 @@
           0.3000002693778553
         ],
         "bytes": 1771216,
+        "clearance_obstacle_fixture": {
+          "nodes": [
+            "CabHandrail_inner",
+            "EngineHoodLower",
+            "EngineHoodUpper",
+            "EngineHoodSpine",
+            "MainValveBank",
+            "ValveSolenoid_0",
+            "ValveSolenoid_1",
+            "ValveSolenoid_2",
+            "ValveSolenoid_3",
+            "ValveSolenoid_4",
+            "ValveSolenoid_5"
+          ],
+          "path": "machines/742/clearance-obstacles.json",
+          "sha256": "c6160d86512bc57f86794518c14a9174ed653fb50a8c3f79c1ca32c09cda97b6"
+        },
         "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
         "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor",
         "evidence_components_resolved_to_exact_nodes": [
@@ -578,12 +722,12 @@
           2.5886866727537887
         ]
       },
-      "result_sha256": "1c18ad72f193abac7f728d131fbb4d71480fa63f8a409aea6f8245955b7e45e0",
+      "result_sha256": "0cf0bf6f6c7889c2cb0869cdd686468518103603c73b33c84dafb5ff7e001de9",
       "status": "pass",
       "validator": {
-        "bytes": 17344,
+        "bytes": 18932,
         "path": "scripts/validate_742_glb.py",
-        "sha256": "1d10e053e76161992de5eab2697d2d4725e9bd12d12aa24554ce33cd9abb4454"
+        "sha256": "d038527b52e603e3e805f17546fb0739e2eabf7b375be080796c0cde14c16935"
       }
     },
     "deployment_proof_parser": {
@@ -789,7 +933,7 @@
         ],
         "local_binaries_verified": [],
         "local_binaries_verified_count": 0,
-        "owned_review_renders_verified": 12,
+        "owned_review_renders_verified": 14,
         "primary_publications": [
           "3122329900",
           "3122331300",
@@ -802,7 +946,7 @@
         "source_expressions_resolved": true,
         "status": "PASS"
       },
-      "result_sha256": "8d86dc053a80d448c3211c0537fe106bf171ec04039bac16096123d4aecc423a",
+      "result_sha256": "cc9878f5c662e3ee7306f127087cbea6db423f26321f0ed19561cd7c73782d75",
       "status": "pass",
       "validator": {
         "bytes": 23533,
@@ -1109,21 +1253,38 @@
           "tilt": 7
         },
         "service_line_chassis_clearance_sweep": {
-          "authority": "owned reconstructed chassis proxies; not manufacturer clearance authority",
+          "authority": "dense sweep against exact named obstacle AABBs measured from the bound exported GLB; owned reconstruction, not manufacturer clearance authority",
           "cab_limiting_pair": {
             "lift": 0,
             "node": "ExtendChain_L",
+            "obstacle": "CabHandrail_inner",
             "telescope": 0
           },
           "engine_limiting_pair": {
             "lift": 0,
-            "node": "BoomHose_2_9",
+            "node": "BoomHose_3_9",
             "obstacle": "MainValveBank",
             "telescope": 0
           },
           "lift_samples": 201,
-          "minimum_cab_surface_clearance_m": 0.153,
-          "minimum_engine_proxy_surface_clearance_m": 0.034000000000000266,
+          "minimum_cab_surface_clearance_m": 0.15302709152353172,
+          "minimum_engine_proxy_surface_clearance_m": 0.033999866388686475,
+          "obstacle_asset_sha256": "a4c7617fa880117a25fc65ee186ccb5081b65a631dbeacfdf8e22afd0e797eb8",
+          "obstacle_fixture_path": "machines/742/clearance-obstacles.json",
+          "obstacle_fixture_sha256": "c6160d86512bc57f86794518c14a9174ed653fb50a8c3f79c1ca32c09cda97b6",
+          "obstacle_nodes": [
+            "CabHandrail_inner",
+            "EngineHoodLower",
+            "EngineHoodUpper",
+            "EngineHoodSpine",
+            "MainValveBank",
+            "ValveSolenoid_0",
+            "ValveSolenoid_1",
+            "ValveSolenoid_2",
+            "ValveSolenoid_3",
+            "ValveSolenoid_4",
+            "ValveSolenoid_5"
+          ],
           "samples": 40401,
           "segments": "every BoomHose, ExtendChain, and RetractChain segment",
           "telescope_samples": 201
@@ -1160,7 +1321,7 @@
         "unique_multidimensional_state_samples": 416745,
         "visual_circle_outside_wheel_center_radius_m": 3.714827974177304
       },
-      "result_sha256": "3efb68717c89c87a320567efeb90a707c28d14e27220e7e9165f13c996f25253",
+      "result_sha256": "68312a856f7db43c76a43be1c242a2e0b4a594e3fc13397cf8e4a2fda6d1d989",
       "status": "pass",
       "validator": {
         "bytes": 13237,
@@ -1210,11 +1371,11 @@
     "review_visual_semantics_parser": {
       "arguments": [],
       "result": {
-        "mechanical_render_claims": 10,
+        "mechanical_render_claims": 12,
         "status": "PASS",
         "tests": 23
       },
-      "result_sha256": "290dac70090826a76d196e187c8db4740b34e5e10acdae253613f2d28fe81de5",
+      "result_sha256": "766079527546bdb2bbf3dfbb83d199fc92197fa8da7231719bc31700dceba0d5",
       "status": "pass",
       "validator": {
         "bytes": 12368,
@@ -1250,7 +1411,7 @@
         "pose_aware_reset": true,
         "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.6.4",
+        "runtime_release": "1.6.5",
         "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "settled_motion_live_region": true,
@@ -1260,23 +1421,28 @@
         "terminal_accessible_failure_ui": true,
         "visible_stalls_included": true
       },
-      "result_sha256": "57ad79221b4280cdac967e6640d7e3f781bc786127fde56f7d22fb52514d013c",
+      "result_sha256": "f48d95f7c914b8c536ffd0e771a4c920960ded1f8ec2c5569ac7b6b24b09227e",
       "status": "pass",
       "validator": {
-        "bytes": 12344,
+        "bytes": 12359,
         "path": "scripts/validate_742_route.py",
-        "sha256": "131412666512395226e49ec2c90868fe30131ed8c09901d8752a8d6a86398750"
+        "sha256": "6254cb3c41978b56dda98705de7b427cf4ab564936d18dd54e8d8cba58a8fcd2"
       }
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "26551797785e34ec20503778e93cbcd3fa845b35f2e2a342672481b3dd0f91b7",
+  "candidate_tree_sha256": "74ebfd02d588d29df86883d0584c294066a724a6801ae3791591a991f1b3adec",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
     "status": "not_attested"
   },
   "files": {
+    "actual_glb_clearance_validator": {
+      "bytes": 5669,
+      "path": "scripts/validate_742_actual_glb_clearance_sweep.py",
+      "sha256": "95f6a692f08da6f808e4f22a850863a8e130c755d22ae10f65eb7a9cb8ae43dd"
+    },
     "articulation_notes": {
       "bytes": 7571,
       "path": "docs/research/742/ARTICULATION.md",
@@ -1308,14 +1474,14 @@
       "sha256": "69a082d770a137ceec5058c4192bc7633330cc5bf83d5496e759cb88c52f438e"
     },
     "browser_capture_requirements": {
-      "bytes": 16000,
+      "bytes": 16533,
       "path": "docs/review/742/CAPTURE_REQUIREMENTS.json",
-      "sha256": "9392a8c7b6cebc91a202dea3eb8237cfc60b4d86a026e39dd833f9840d339984"
+      "sha256": "1da0373419e8c4532fb8677fb620e5795794249937a136f64e76422982748b13"
     },
     "browser_capture_runner": {
       "bytes": 88402,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "9cc9bb068bd6742820eae92297e7b3b9660476e8f18f719f2b35bea59c627fa3"
+      "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb"
     },
     "browser_capture_validator": {
       "bytes": 88460,
@@ -1326,6 +1492,11 @@
       "bytes": 30417,
       "path": "scripts/build_742.py",
       "sha256": "e0fae051e6eb5111eea67b6ea0af34d20310e7c2b76fd443bd9e5a5c05d8b8c8"
+    },
+    "clearance_obstacles": {
+      "bytes": 2282,
+      "path": "machines/742/clearance-obstacles.json",
+      "sha256": "c6160d86512bc57f86794518c14a9174ed653fb50a8c3f79c1ca32c09cda97b6"
     },
     "comparison_matrix": {
       "bytes": 1267,
@@ -1368,9 +1539,9 @@
       "sha256": "a8aba239204fe6dc58b82e1593bb7aa7f09b361cf40eec2e29f7019ecd59ba7e"
     },
     "owned_review_render_allowlist": {
-      "bytes": 4115,
+      "bytes": 4801,
       "path": "docs/review/742/OWNED_RENDER_ALLOWLIST.json",
-      "sha256": "96377801d209d45b64a8fa0857d7d738dd2726a4ccea246b7f6bd7bef4d6b0ba"
+      "sha256": "7ef35e81478a37b567791813328be130d9ad6430718b9d8db2b6cefb290d3bdc"
     },
     "package_lock": {
       "bytes": 1786,
@@ -1378,9 +1549,9 @@
       "sha256": "2ef1cc05948a5f57e656b278dce3896cc5a73c7f3fcf9131b75d3b068f840315"
     },
     "package_manifest": {
-      "bytes": 2712,
+      "bytes": 2777,
       "path": "package.json",
-      "sha256": "a6290bb23a4dcbd7ed27756ccab73309a0b4ee0e9e78e81f40cd98357a38da3d"
+      "sha256": "f2c03a7ce8badf466e52e9d18cf05bf148ea05af48e887e94bc12fb9529fda7e"
     },
     "pages_assembler": {
       "bytes": 1468,
@@ -1418,14 +1589,14 @@
       "sha256": "21bb076335e38fdbba655cad1bda7dcd93c9f70a7dbbb40c78658ed2091eed40"
     },
     "receipt_validator": {
-      "bytes": 51623,
+      "bytes": 53018,
       "path": "scripts/validate_742_receipt.py",
-      "sha256": "9ff632044f62240fba388936f1d5f1799009ef3b9604a7d2954e4154f3138a9a"
+      "sha256": "2f124fa7370b5fe96237caaef4e1802c3f38f0083879418c4fa2ccfa8b446ee8"
     },
     "receipt_writer": {
-      "bytes": 30862,
+      "bytes": 32228,
       "path": "scripts/write_742_receipt.py",
-      "sha256": "754a0ea604f771233319659189b8b649f96d6d95aff737f93a17f277db6716ce"
+      "sha256": "bad72125a9a450802c2908c06ac2d579786d1e6ff13407cfff629c455e11d5e5"
     },
     "reference_board_boundary": {
       "bytes": 481,
@@ -1443,19 +1614,19 @@
       "sha256": "824797ad1707de4f12928b32669d705767b61303e486a82a37e130a135bb3812"
     },
     "review_binder": {
-      "bytes": 7952,
+      "bytes": 9587,
       "path": "scripts/bind_742_review.py",
-      "sha256": "d26adb4ca4c87630ed460a0d80f108877da9383c08d76ec9ee020e8f27785a49"
+      "sha256": "6de20982efec6866a8f924fcbc8700e489d7d6b88f4666218695c49393bfef40"
     },
     "review_renderer": {
-      "bytes": 26320,
+      "bytes": 29791,
       "path": "scripts/render_742_preview.py",
-      "sha256": "393c0bbbc652bf2ed89d3f4e08ecbe7c7e9fd480b0b49c17851732ae387a1916"
+      "sha256": "8cd911a5c16588fd262a31b25a4c9830dd7c6f7fdaf4cd658c9dd1f378af628a"
     },
     "review_validator": {
-      "bytes": 24348,
+      "bytes": 25098,
       "path": "scripts/validate_742_review.py",
-      "sha256": "c302f9feacb518228e18d293a8888011b52ee9e2df31be5f8fe9d5fa7018a79c"
+      "sha256": "66e6f904c63f8f7e271ac2b56207611b0546a5526dc8b9faa7aa79afb3d07159"
     },
     "rights_boundary": {
       "bytes": 2162,
@@ -1468,9 +1639,9 @@
       "sha256": "b8de30e1a7eddfe38bc32e5316783d1352787ec647efccd7c39704b535deddc4"
     },
     "solver_validator": {
-      "bytes": 21502,
+      "bytes": 22065,
       "path": "scripts/validate_742_solver.mjs",
-      "sha256": "275a7cb8a003ea30f944c6b285af94e9c90204ab75c581e34dea1f06cc0a96ce"
+      "sha256": "313c11dab5a10e56d3562042799f54446b14be59efbea69530d886433595ed74"
     },
     "source_blend": {
       "bytes": 336536,
@@ -1498,9 +1669,9 @@
       "browser_capture_allowlist": {
         "bytes": 8829,
         "path": "docs/review/742/BROWSER_CAPTURE_ALLOWLIST.json",
-        "sha256": "08d8ef96c6b7ef01ac85a5a5ef009ea979854dc9baec8517e34fbc202fcb4be0"
+        "sha256": "6e5c5348b4b98a38a78fc68cfa2cf5320e22cad7cdf4c0622fd775c548439b93"
       },
-      "candidate_tree_sha256": "26551797785e34ec20503778e93cbcd3fa845b35f2e2a342672481b3dd0f91b7",
+      "candidate_tree_sha256": "74ebfd02d588d29df86883d0584c294066a724a6801ae3791591a991f1b3adec",
       "environment": {
         "browser": {
           "name": "Chromium",
@@ -1514,26 +1685,26 @@
         }
       },
       "manifest": {
-        "bytes": 4443,
+        "bytes": 4648,
         "path": "docs/review/742/review-manifest.json",
-        "sha256": "2ab4b4bcdff8eb7118dace851e57c7165248f9845e4a3c9121eed5acf7420bed"
+        "sha256": "06df2935feae1df47c161e53e7e9b0a3cb76737d010d4abc38c9e75ce4ba8cb3"
       },
-      "reviewed_source_commit": "67dd7515147b1982305700620e66644c9601e236"
+      "reviewed_source_commit": "4d857635d8a325cc2a49f164cae292c4e92192f1"
     },
     "gates": {
       "600s_browser_regression": {
         "artifact": {
-          "bytes": 466773,
+          "bytes": 466677,
           "path": "docs/review/742/600s-browser-regression.json",
-          "sha256": "96c9343e6b6af1efe5c6a51b81652a4d4247a6093c374b3d8a6ba84bfd0fed92"
+          "sha256": "9b8483f03fdebade592bfd161d2cf80821ea46fdaf56d06e4790c988ced60748"
         },
         "status": "pass"
       },
       "accessibility_semantics_and_keyboard": {
         "artifact": {
-          "bytes": 324641,
+          "bytes": 305294,
           "path": "docs/review/742/accessibility-semantics-keyboard.json",
-          "sha256": "c66a921465444e4ab630a4e30c0c943e6de9fa4ddcee4f462fdbcfe319ca508f"
+          "sha256": "beebe6b0a6fbe5483fb54fa69e4cbc97d1788a803fedf919d5f83e50dfbb1bb6"
         },
         "status": "pass"
       },
@@ -1547,33 +1718,33 @@
       },
       "desktop_browser_interaction": {
         "artifact": {
-          "bytes": 180775,
+          "bytes": 180639,
           "path": "docs/review/742/desktop-browser-interaction.json",
-          "sha256": "6c66f75ae88e705531825ee8569895979bff735af412582bbd05912335470ce7"
+          "sha256": "2e6b6ba249770751e2c9f96de0fcf0ed6a27244bcf0631723b65ebf58c89cd4d"
         },
         "status": "pass"
       },
       "es1930m_browser_regression": {
         "artifact": {
-          "bytes": 457486,
+          "bytes": 458504,
           "path": "docs/review/742/es1930m-browser-regression.json",
-          "sha256": "f8c04a04d14e9c0773bd7adee1403aa75cc609fa4a8bc427bd3538b79aa4ef97"
+          "sha256": "33eced26805f03cc7e2228d77c1a93c11b8eea879e705b20c88b19107fcfbf35"
         },
         "status": "pass"
       },
       "extended_visual_fidelity": {
         "artifact": {
-          "bytes": 5354,
+          "bytes": 6199,
           "path": "docs/review/742/extended-visual-fidelity.json",
-          "sha256": "c38c2f658d308f825c16994aa01113aeb4bd67e75c20f4386d752d1667c63b03"
+          "sha256": "3a4e8be398dff7b3023fbf6e2fcb93717cff6d61aee5f8b159022e8d205cc5b3"
         },
         "status": "pass"
       },
       "mobile_browser_interaction": {
         "artifact": {
-          "bytes": 152654,
+          "bytes": 152655,
           "path": "docs/review/742/mobile-browser-interaction.json",
-          "sha256": "38e43677850960e134c83ec48d65d444e197c89428c7ce1015c42d5a9f5649eb"
+          "sha256": "aa79eb32d99cab03d18f8b9ec4c532890a910be319b2ca07496fd4747c44435c"
         },
         "status": "pass"
       },
@@ -1581,15 +1752,15 @@
         "artifact": {
           "bytes": 114583,
           "path": "docs/review/742/performance-profile.json",
-          "sha256": "64639ed50d594bee086bfdaf2fe6b891dd6fb1acee15be0a2a8ddd70ea952d86"
+          "sha256": "7c8406b2f8cd90310da43285d63e5031d34dd76c4f64938d31f3ddac084dc608"
         },
         "status": "pass"
       },
       "semantic_selection": {
         "artifact": {
-          "bytes": 142015,
+          "bytes": 141972,
           "path": "docs/review/742/semantic-selection.json",
-          "sha256": "9273290c4f9198603470fa972cf457467afff2f938cac478acb56c22cfbe4cb2"
+          "sha256": "ba8bd213b15b7855c78e05fa69335e238900465d9c968a9849a0d0a1c55b6d37"
         },
         "status": "pass"
       },
@@ -1607,6 +1778,123 @@
   "mechanical_proof": {
     "actual_glb_front_tire_tread_plane_x_m": 2.3529066470621665,
     "actual_glb_minimum_named_rigid_underbody_clearance_m": 0.4600000217805351,
+    "actual_glb_rigid_boom_clearance_sweep": {
+      "authority": "actual exported GLB mesh vertices posed through the production lift/telescope transform; owned reconstruction, not manufacturer clearance authority",
+      "boom_nodes": [
+        "BaseBoomWeldment",
+        "BaseBoomLowerWear",
+        "MidBoomWeldment",
+        "MidBoomTopPlate",
+        "FlyBoomWeldment"
+      ],
+      "cab_limiting_pair": {
+        "boom_node": "BaseBoomWeldment",
+        "lift": 0.0,
+        "target_node": "CabHandrail_inner",
+        "telescope": 0.0
+      },
+      "engine_limiting_pair": {
+        "boom_node": "BaseBoomWeldment",
+        "lift": 0.0,
+        "target_node": "EngineHoodSpine",
+        "telescope": 0.0
+      },
+      "gate_kind": "actual_exported_glb_dense_rigid_boom_clearance_sweep",
+      "lift_samples": 201,
+      "minimum_cab_surface_clearance_m": 0.04502725657583617,
+      "minimum_engine_surface_clearance_m": 0.04999990042840052,
+      "obstacle_nodes": {
+        "cab": [
+          "AcceleratorPedal",
+          "BrakePedal",
+          "CabFloor",
+          "CabHandrail_inner",
+          "CabHandrail_outer",
+          "CabStep_0",
+          "CabStep_1",
+          "Dashboard",
+          "FrameLevelIndicator",
+          "FrontWindshield",
+          "InstrumentDisplay",
+          "Joystick",
+          "JoystickConsole",
+          "MirrorArm_L",
+          "MirrorArm_R",
+          "Mirror_L",
+          "Mirror_R",
+          "OperatorSeat",
+          "ROPSPost_0.18_-0.2",
+          "ROPSPost_0.18_-1.08",
+          "ROPSPost_1.46_-0.2",
+          "ROPSPost_1.46_-1.08",
+          "ROPSRoof",
+          "RearCabGlass",
+          "RoofGlass",
+          "RoofGuard_0",
+          "RoofGuard_1",
+          "RoofGuard_2",
+          "RoofGuard_3",
+          "SeatBase",
+          "SteeringColumn",
+          "SteeringWheel"
+        ],
+        "engine": [
+          "EngineGrilleSlot_00",
+          "EngineGrilleSlot_01",
+          "EngineGrilleSlot_02",
+          "EngineGrilleSlot_03",
+          "EngineGrilleSlot_04",
+          "EngineGrilleSlot_05",
+          "EngineGrilleSlot_06",
+          "EngineGrilleSlot_07",
+          "EngineGrilleSlot_08",
+          "EngineHoodLower",
+          "EngineHoodSpine",
+          "EngineHoodUpper",
+          "FuelTankCue",
+          "GrilleHole_0_0",
+          "GrilleHole_0_1",
+          "GrilleHole_0_2",
+          "GrilleHole_0_3",
+          "GrilleHole_0_4",
+          "GrilleHole_0_5",
+          "GrilleHole_0_6",
+          "GrilleHole_1_0",
+          "GrilleHole_1_1",
+          "GrilleHole_1_2",
+          "GrilleHole_1_3",
+          "GrilleHole_1_4",
+          "GrilleHole_1_5",
+          "GrilleHole_1_6",
+          "GrilleHole_2_0",
+          "GrilleHole_2_1",
+          "GrilleHole_2_2",
+          "GrilleHole_2_3",
+          "GrilleHole_2_4",
+          "GrilleHole_2_5",
+          "GrilleHole_2_6",
+          "GrilleHole_3_0",
+          "GrilleHole_3_1",
+          "GrilleHole_3_2",
+          "GrilleHole_3_3",
+          "GrilleHole_3_4",
+          "GrilleHole_3_5",
+          "GrilleHole_3_6",
+          "HydraulicTankCue",
+          "MainValveBank",
+          "RadiatorGrille",
+          "ValveSolenoid_0",
+          "ValveSolenoid_1",
+          "ValveSolenoid_2",
+          "ValveSolenoid_3",
+          "ValveSolenoid_4",
+          "ValveSolenoid_5"
+        ]
+      },
+      "samples": 40401,
+      "status": "PASS",
+      "telescope_samples": 201
+    },
     "actual_glb_stowed_boom_to_cab_clearance_m": 0.04502725657583617,
     "actual_glb_stowed_boom_to_engine_hood_clearance_m": 0.04999990042840052,
     "actual_glb_stowed_service_line_to_cab_clearance_m": 0.15361462048608182,
@@ -1845,21 +2133,38 @@
     },
     "solver_scrub_boundary": "front/circle ICR residuals are reconstructed diagnostics, not Ackermann acceptance gates; exact pickup coordinates and factory toe are unresolved",
     "solver_service_line_chassis_clearance_sweep": {
-      "authority": "owned reconstructed chassis proxies; not manufacturer clearance authority",
+      "authority": "dense sweep against exact named obstacle AABBs measured from the bound exported GLB; owned reconstruction, not manufacturer clearance authority",
       "cab_limiting_pair": {
         "lift": 0,
         "node": "ExtendChain_L",
+        "obstacle": "CabHandrail_inner",
         "telescope": 0
       },
       "engine_limiting_pair": {
         "lift": 0,
-        "node": "BoomHose_2_9",
+        "node": "BoomHose_3_9",
         "obstacle": "MainValveBank",
         "telescope": 0
       },
       "lift_samples": 201,
-      "minimum_cab_surface_clearance_m": 0.153,
-      "minimum_engine_proxy_surface_clearance_m": 0.034000000000000266,
+      "minimum_cab_surface_clearance_m": 0.15302709152353172,
+      "minimum_engine_proxy_surface_clearance_m": 0.033999866388686475,
+      "obstacle_asset_sha256": "a4c7617fa880117a25fc65ee186ccb5081b65a631dbeacfdf8e22afd0e797eb8",
+      "obstacle_fixture_path": "machines/742/clearance-obstacles.json",
+      "obstacle_fixture_sha256": "c6160d86512bc57f86794518c14a9174ed653fb50a8c3f79c1ca32c09cda97b6",
+      "obstacle_nodes": [
+        "CabHandrail_inner",
+        "EngineHoodLower",
+        "EngineHoodUpper",
+        "EngineHoodSpine",
+        "MainValveBank",
+        "ValveSolenoid_0",
+        "ValveSolenoid_1",
+        "ValveSolenoid_2",
+        "ValveSolenoid_3",
+        "ValveSolenoid_4",
+        "ValveSolenoid_5"
+      ],
       "samples": 40401,
       "segments": "every BoomHose, ExtendChain, and RetractChain segment",
       "telescope_samples": 201
@@ -1885,7 +2190,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "c4c81f91634f7bf6d1eed64466b5c2d65515d4e4cc0f7a1bbb86a54b3653042b"
+    "sha256": "caa951d252c0fb59e90d21af7ebb6ff9231fe797f5fa9e49fde51f12125cb75f"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"

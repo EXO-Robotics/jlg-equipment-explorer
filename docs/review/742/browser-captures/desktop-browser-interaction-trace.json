@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "desktop_browser_interaction",
-  "captured_at_utc": "2026-08-26T11:38:19.643Z",
+  "captured_at_utc": "2026-08-26T12:16:06.532Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "9cc9bb068bd6742820eae92297e7b3b9660476e8f18f719f2b35bea59c627fa3",
+    "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb",
     "bytes": 88402
   },
-  "outcomes_sha256": "d904454fbe14651b900316b2e87a7448817ea57262f5ceb573c238f76e3e04bd",
+  "outcomes_sha256": "b384e7960c9ea86dd218537d5fb46817c786a2cfbc8acd595af974a8be698018",
   "outcomes": {
     "load_stowed": {
       "outcome": "pass",
@@ -2107,33 +2107,33 @@
         "desired_distance_m": 37.58,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          36.645,
-          36.755,
-          36.85,
-          36.935,
-          37.01,
-          37.077,
-          37.136,
-          37.188,
-          37.233,
-          37.273,
-          37.309,
-          37.341,
-          37.369,
-          37.393,
-          37.415,
-          37.434,
-          37.451,
-          37.466,
-          37.479,
-          37.491,
-          37.501,
-          37.511,
-          37.519,
-          37.526,
-          37.532,
+          36.661,
+          36.768,
+          36.863,
+          36.946,
+          37.02,
+          37.086,
+          37.143,
+          37.194,
+          37.239,
+          37.279,
+          37.314,
+          37.345,
+          37.372,
+          37.396,
+          37.418,
+          37.437,
+          37.453,
+          37.468,
+          37.481,
+          37.493,
+          37.503,
+          37.512,
+          37.52,
+          37.527,
+          37.533,
           37.538,
-          37.542,
+          37.543,
           37.547,
           37.551,
           37.554,
@@ -2164,47 +2164,42 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 35.1
+                "at_ms": 39.2
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 47.6
+                "at_ms": 54.9
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 52
+                "at_ms": 73.2
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 68.6
+                "at_ms": 89.2
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 86
+                "at_ms": 105.7
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 102.3
+                "at_ms": 121.9
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 119.2
+                "at_ms": 138.3
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 135.9
-              },
-              {
-                "counter": "boot",
-                "value": 9,
-                "at_ms": 152.4
+                "at_ms": 155.1
               }
             ]
           },
@@ -2222,9 +2217,9 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "9",
+            "boot_frame_count": "8",
             "runtime_frame_count": null,
-            "terminal_frame_count": "9",
+            "terminal_frame_count": "8",
             "terminal_frame_source": "boot"
           },
           "terminal_after_250ms": {
@@ -2240,9 +2235,9 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "9",
+            "boot_frame_count": "8",
             "runtime_frame_count": null,
-            "terminal_frame_count": "9",
+            "terminal_frame_count": "8",
             "terminal_frame_source": "boot"
           },
           "animation_state_stable_250ms": true
@@ -2258,42 +2253,42 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 92.7
+                "at_ms": 87.1
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 97.8
+                "at_ms": 92.3
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 102.7
+                "at_ms": 104.5
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 118.1
+                "at_ms": 121.2
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 135.8
+                "at_ms": 138
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 152.4
+                "at_ms": 154.5
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 169
+                "at_ms": 171.1
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 185.7
+                "at_ms": 187.7
               }
             ]
           },
@@ -2347,12 +2342,12 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 79.7
+                "at_ms": 81.3
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 84.9
+                "at_ms": 86.5
               }
             ]
           },
@@ -2406,132 +2401,132 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 86.5
+                "at_ms": 82.7
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 92.1
+                "at_ms": 88.5
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 144.5
+                "at_ms": 141.5
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 149.4
+                "at_ms": 145.7
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 165.2
+                "at_ms": 148.7
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 181.3
+                "at_ms": 164.6
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 198.2
+                "at_ms": 180.9
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 215
+                "at_ms": 198.6
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 231.5
+                "at_ms": 215.4
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 248.4
+                "at_ms": 231.9
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 265.1
+                "at_ms": 248.8
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 281.7
+                "at_ms": 265.5
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 298.4
+                "at_ms": 282
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 315.1
+                "at_ms": 298.9
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 335.3
+                "at_ms": 315.6
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 348.2
+                "at_ms": 332.5
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 365.2
+                "at_ms": 348.3
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 381.5
+                "at_ms": 364.4
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 398.2
+                "at_ms": 382.2
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 414.7
+                "at_ms": 397.5
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 431.3
+                "at_ms": 414.6
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 448
+                "at_ms": 431
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 464.9
+                "at_ms": 448.6
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 483.9
+                "at_ms": 467.7
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 530.2
+                "at_ms": 506.1
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 532.1
+                "at_ms": 508
               }
             ]
           },
@@ -2606,132 +2601,132 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 82.6
+                "at_ms": 82.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 88.5
+                "at_ms": 88.6
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 139.9
+                "at_ms": 141.1
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 144
+                "at_ms": 145.3
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 151.8
+                "at_ms": 148.6
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 168.2
+                "at_ms": 164.1
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 184.2
+                "at_ms": 181.2
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 201.6
+                "at_ms": 198.8
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 218.3
+                "at_ms": 215.5
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 235.1
+                "at_ms": 232.1
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 251.9
+                "at_ms": 248.8
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 268.6
+                "at_ms": 265.6
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 285.2
+                "at_ms": 281.8
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 301.9
+                "at_ms": 298.9
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 318.8
+                "at_ms": 316
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 335
+                "at_ms": 332.6
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 352.1
+                "at_ms": 348.7
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 368.7
+                "at_ms": 365.4
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 385.3
+                "at_ms": 382.1
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 402
+                "at_ms": 398.5
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 418.7
+                "at_ms": 414.6
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 434.5
+                "at_ms": 430.7
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 451.6
+                "at_ms": 448.5
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 470.8
+                "at_ms": 467.3
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 506.3
+                "at_ms": 506.4
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 508
+                "at_ms": 508.1
               }
             ]
           },

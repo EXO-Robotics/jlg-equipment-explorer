@@ -1,20 +1,20 @@
 {
   "boundary": "Selection evidence covers the local visual interaction policy only; it is not an operational, safety, collision, or manufacturer-equivalence claim.",
-  "candidate_tree_sha256": "26551797785e34ec20503778e93cbcd3fa845b35f2e2a342672481b3dd0f91b7",
+  "candidate_tree_sha256": "74ebfd02d588d29df86883d0584c294066a724a6801ae3791591a991f1b3adec",
   "capture_artifacts": {
     "automation_trace": {
-      "bytes": 105972,
+      "bytes": 105971,
       "height_px": null,
       "path": "docs/review/742/browser-captures/semantic-selection-trace.json",
-      "sha256": "9fbeb4982b5d90861c3fccaddb5c4a00ec4a04853976cc7ef6a1f7ad326e302b",
+      "sha256": "8f2a66ab244224501d4820385e80e5bd9c423c39d2516b258b701cf895b1f696",
       "width_px": null
     },
     "screenshots": [
       {
-        "bytes": 147930,
+        "bytes": 147826,
         "height_px": 720,
         "path": "docs/review/742/browser-captures/742-semantic-selection-boom.png",
-        "sha256": "360041f324dc0b6c371d887ac8ff75857b3371f6b5056085f53cfa053c537ffb",
+        "sha256": "4f267c8ad812ab717f5dfa95c6b07f5fe12bd4c98c1b1dbfcdb588e0aee39016",
         "width_px": 1280
       }
     ]
@@ -22,7 +22,7 @@
   "capture_runner": {
     "bytes": 88402,
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "9cc9bb068bd6742820eae92297e7b3b9660476e8f18f719f2b35bea59c627fa3"
+    "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb"
   },
   "capture_status": "complete",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
@@ -2044,7 +2044,7 @@
       "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
       "version": "151.0.7922.34"
     },
-    "captured_at_utc": "2026-08-26T11:38:34.186Z",
+    "captured_at_utc": "2026-08-26T12:16:21.124Z",
     "gpu": {
       "api": "WebGL 2",
       "collection_method": "WEBGL_debug_renderer_info",
@@ -2083,25 +2083,25 @@
             "camera_distance_m": 4.415,
             "desired_distance_m": 4.4,
             "samples_camera_distance_m": [
-              8.283,
-              7.832,
+              8.289,
+              7.834,
               7.433,
-              7.078,
-              6.765,
-              6.489,
-              6.245,
-              6.03,
+              7.08,
+              6.767,
+              6.49,
+              6.247,
+              6.031,
               5.841,
               5.672,
-              5.524,
-              5.393,
-              5.276,
-              5.174,
-              5.084,
-              5.004,
+              5.525,
+              5.394,
+              5.278,
+              5.176,
+              5.085,
+              5.005,
               4.934,
-              4.871,
-              4.816,
+              4.872,
+              4.817,
               4.768,
               4.725,
               4.687,
@@ -2109,10 +2109,10 @@
               4.624,
               4.598,
               4.575,
-              4.554,
-              4.536,
-              4.52,
-              4.506,
+              4.555,
+              4.537,
+              4.521,
+              4.507,
               4.494,
               4.483,
               4.473,
@@ -2120,7 +2120,7 @@
               4.457,
               4.451,
               4.445,
-              4.439,
+              4.44,
               4.435,
               4.431,
               4.427,
@@ -2382,10 +2382,9 @@
         {
           "attributes": {
             "class": "",
-            "data-boot-frame-count": "3",
             "data-configuration-id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
             "data-crab-residual-deg": "0.000",
-            "data-frame-p95-ms": "16.8 ms",
+            "data-frame-p95-ms": "16.7 ms",
             "data-frame-sample-count": "180",
             "data-frame-worst-ms": "16.8 ms",
             "data-front-toe-deg": "0.000",
@@ -2409,9 +2408,9 @@
             "data-rear-toe-deg": "0.000",
             "data-render-profile": "desktop",
             "data-runtime-error-count": "0",
-            "data-runtime-frame-count": "315",
-            "data-runtime-last-frame-ms": "5352.000",
-            "data-runtime-release": "1.6.4",
+            "data-runtime-frame-count": "313",
+            "data-runtime-last-frame-ms": "5303.200",
+            "data-runtime-release": "1.6.5",
             "data-selection-fixture-cases": "5/5",
             "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
             "data-selection-nearest-rays": "15",
@@ -2432,7 +2431,7 @@
             "data-zone": "stowed"
           },
           "selector": "body",
-          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2411 accuracy reconstruction / 1.4.0\n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controls\n        StowedClose\n        View reset to frame the current machine pose.\n      \n      \n        Boom lift0\u00b00\u00b0\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0\u00b00\u00b0\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Run showcaseStow machineReset view\n        Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More \u2192\n    \n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 23 ms \u00b7 60 fps \u00b7 samples 180 \u00b7 p95 16.8 ms \u00b7 worst 16.8 ms \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full\n  \n\n  \n  \n    \u00d7\n    PVC 2411 topology\n    Visible hydraulic systems\n    Lift, telescope, steering, carriage and frame-level cylinder cues are separated from hose and valve-bank materials. Routing, bore, pressure, timing and interlocks are outside this visual study.\n    RepresentedLift \u00b7 telescope \u00b7 steer \u00b7 tilt \u00b7 frame levelVisual cuesCylinder bodies \u00b7 rods \u00b7 hoses \u00b7 valve bankExcludedPressure \u00b7 timing \u00b7 interlocks \u00b7 service routing\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);"
+          "text": "Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.\n\n  742 ready742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 validated\n  Viewer unavailable.This interactive study needs WebGL and a valid owned 742 asset.\n\n  \n    \n      EquipmentExplorer\n      PVC 2411 accuracy reconstruction / 1.4.0\n      About\n    \n\n    \n      Flagship telehandler study\n      742\n      All-wheel-steer telehandler PVC 2411\n    \n\n    \n      7,000 lbRated capacity\n      42 ftMaximum lift height\n      29 ft 1 inMaximum forward reach\n      Unofficial visualization. No load, stability, service, training, or safety behavior is simulated.\n    \n\n    \n      \n        OperateMachine controls\n        StowedClose\n        View reset to frame the current machine pose.\n      \n      \n        Boom lift0\u00b00\u00b0\n        Telescope0.00 m visual0.00 m visual\n        Carriage tilt0\u00b00\u00b0\n        SteeringCenterAll wheel headings centered\n        \n          Steer mode\n          Circle\n          Crab\n          Front\n        \n        Frame levelLevelLevel\n        Run showcaseStow machineReset view\n        Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.\n        The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Cab\n      03Boom\n      04Carriage\n      05Steering\n      06Hydraulics\n      07Frame level\n      More \u2192\n    \n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 38 ms \u00b7 60 fps \u00b7 samples 180 \u00b7 p95 16.7 ms \u00b7 worst 16.8 ms \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full\n  \n\n  \n  \n    \u00d7\n    PVC 2411 topology\n    Visible hydraulic systems\n    Lift, telescope, steering, carriage and frame-level cylinder cues are separated from hose and valve-bank materials. Routing, bore, pressure, timing and interlocks are outside this visual study.\n    RepresentedLift \u00b7 telescope \u00b7 steer \u00b7 tilt \u00b7 frame levelVisual cuesCylinder bodies \u00b7 rods \u00b7 hoses \u00b7 valve bankExcludedPressure \u00b7 timing \u00b7 interlocks \u00b7 service routing\n    Read the evidence boundary\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show742ModuleFailure = function (message = \"The dedicated 742 viewer runtime could not be loaded. No substitute was shown.\", source = \"module-load-failed\") {\n      if (document.body.dataset.viewerStarted === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.setAttribute(\"tabindex\", \"-1\");\n      failure.focus({ preventScroll: true });\n    };\n    const testFault = new URLSearchParams(location.search).get(\"ee-test-fault\");\n    const loopbackTestHost = [\"127.0.0.1\", \"localhost\", \"::1\"].includes(location.hostname);\n    const bootTimeoutMs = loopbackTestHost && testFault === \"bootstrap-timeout\" ? 120 : 8000;\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show742ModuleFailure(\"The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, bootTimeoutMs);"
         },
         {
           "attributes": {
@@ -2447,7 +2446,7 @@
             "id": "diagnostics"
           },
           "selector": "#diagnostics",
-          "text": "machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 23 ms \u00b7 60 fps \u00b7 samples 180 \u00b7 p95 16.8 ms \u00b7 worst 16.8 ms \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full"
+          "text": "machine 742 \u00b7 config 742-PVC2411-US-STD-OC-D36-FF370-C50-PF481 \u00b7 source glb-validated \u00b7 selection 6/6 ready \u00b7 errors 0 \u00b7 load 38 ms \u00b7 60 fps \u00b7 samples 180 \u00b7 p95 16.7 ms \u00b7 worst 16.8 ms \u00b7 visible stalls 0 \u00b7 profile desktop \u00b7 motion full"
         },
         {
           "attributes": {
@@ -2995,6 +2994,6 @@
       }
     ]
   },
-  "reviewed_source_commit": "67dd7515147b1982305700620e66644c9601e236",
+  "reviewed_source_commit": "4d857635d8a325cc2a49f164cae292c4e92192f1",
   "schema_version": "2.0.0"
 }

@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "600s_browser_regression",
-  "captured_at_utc": "2026-08-26T11:38:51.030Z",
+  "captured_at_utc": "2026-08-26T12:16:37.911Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "9cc9bb068bd6742820eae92297e7b3b9660476e8f18f719f2b35bea59c627fa3",
+    "sha256": "666af5fc1bcf936ce642572ee527be9d0867ffadcada78adfc2df1a63847d0bb",
     "bytes": 88402
   },
-  "outcomes_sha256": "86bbf321d2f28bccfd08f70bba1d26a2eab6dba64927f96fa2464f9bc3d9ca2f",
+  "outcomes_sha256": "57d4c8ef5fcb6b1fc4f7e724e7759f3ec91db57e6b338f1f0dafe1dc5705d1ea",
   "outcomes": {
     "load_exact_release": {
       "outcome": "pass",
@@ -2031,7 +2031,7 @@
         "meshes": 92,
         "selection": "5/5 pass",
         "errors": 0,
-        "load_ms": 124,
+        "load_ms": 130,
         "render_profile": "desktop",
         "fps": 60,
         "p95_ms": 16.8,
@@ -2063,8 +2063,8 @@
     },
     "drag_orbit": {
       "outcome": "pass",
-      "before_canvas_sha256": "dcb246d300ec3898313753fa21c7950d74f5c4a86acded6771b1e03d52e83935",
-      "after_canvas_sha256": "21d044d8c87e6ce38780ce171e187a66ddf14da35896d5f1bfa8f6372d84a0b7"
+      "before_canvas_sha256": "73df2110e2ae73c36370f44856b7bbe15b390bd9edac566fd632d8c4f13cca68",
+      "after_canvas_sha256": "8b5322ad585eca0864393f90609331ac37fdff9418fc096b39ca42c5f328eed2"
     },
     "pinch_zoom": {
       "outcome": "pass",
@@ -2094,8 +2094,8 @@
         "CANVAS",
         "CANVAS"
       ],
-      "before_canvas_sha256": "5b98139ca99fd860411c948ce8bc5bcb888194d5613b462bb8898c4f1cfb28b3",
-      "after_canvas_sha256": "80f298284b717d4105c5426d4d99641c6ae098be7cba8e920d91c7ee7fb248c6",
+      "before_canvas_sha256": "d2461d0c56d96427c116bad2154faf04a615e4b5c1f0cd9e63777dc1b4207f25",
+      "after_canvas_sha256": "34406c1712d1fc40bca717bc80e32a7761d58a3c8dba8917cc663ad4a3b05384",
       "before_desired_distance_m": "24.000",
       "after_desired_distance_m": "8.400",
       "observable_render_or_distance_change": true
@@ -2146,62 +2146,62 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 40.9
+                "at_ms": 40.8
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 51.3
+                "at_ms": 49.2
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 68.5
+                "at_ms": 61.1
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 84.9
+                "at_ms": 78.3
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 100.8
+                "at_ms": 95
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 118.5
+                "at_ms": 111.2
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 135.1
+                "at_ms": 127.5
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 151.9
+                "at_ms": 144.3
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 168.5
+                "at_ms": 160.9
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 185.2
+                "at_ms": 178.5
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 202
+                "at_ms": 195.1
               },
               {
                 "counter": "boot",
                 "value": 12,
-                "at_ms": 218.6
+                "at_ms": 211.8
               }
             ]
           },
@@ -2253,62 +2253,62 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 41.4
+                "at_ms": 41.1
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 52.3
+                "at_ms": 49.8
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 69.3
+                "at_ms": 62.3
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 86
+                "at_ms": 78.7
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 102.5
+                "at_ms": 95.4
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 119.2
+                "at_ms": 112.9
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 135.9
+                "at_ms": 129.7
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 152.6
+                "at_ms": 146.2
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 168.9
+                "at_ms": 163.1
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 185.1
+                "at_ms": 179.7
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 202.2
+                "at_ms": 195.9
               },
               {
                 "counter": "boot",
                 "value": 12,
-                "at_ms": 219.3
+                "at_ms": 213
               }
             ]
           },
@@ -2360,52 +2360,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 88.7
+                "at_ms": 93.4
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 90.2
+                "at_ms": 94.9
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 98.7
+                "at_ms": 105.5
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 115.4
+                "at_ms": 122.4
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 132
+                "at_ms": 139
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 148.2
+                "at_ms": 155.7
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 165.2
+                "at_ms": 172.2
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 182.3
+                "at_ms": 188.3
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 198.7
+                "at_ms": 205.2
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 215.3
+                "at_ms": 222.4
               }
             ]
           },
@@ -2422,7 +2422,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
+            "boot_frame_count": "1",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2440,7 +2440,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
+            "boot_frame_count": "1",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2457,52 +2457,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 86.4
+                "at_ms": 87.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 87.9
+                "at_ms": 89.3
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 98.2
+                "at_ms": 100.6
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 114.6
+                "at_ms": 117
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 130.4
+                "at_ms": 133.6
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 147.6
+                "at_ms": 150.2
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 163.5
+                "at_ms": 166.9
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 181.2
+                "at_ms": 183.7
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 198.4
+                "at_ms": 200.4
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 213.7
+                "at_ms": 217
               }
             ]
           },
@@ -2519,7 +2519,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
+            "boot_frame_count": "1",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
@@ -2537,7 +2537,7 @@
             "total_control_count": 8,
             "drive_x": "0.09",
             "drive_z": "-0.00",
-            "boot_frame_count": "2",
+            "boot_frame_count": "1",
             "runtime_frame_count": "10",
             "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
