@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 5484,
+      "bytes": 6081,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "156fe0cdfe99b82931bc40627cc359a3915e231921430be70cd2e2259349b963"
+      "sha256": "bb1467be30ce49395ea3e49bad01ec4b4777be2694f4df87e278d24502a6ad6b"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -72,11 +72,11 @@
     "sampled_lift_states": 101
   },
   "release": "1.0.2",
-  "release_status": "candidate_not_deployable",
+  "release_status": "release",
   "review_flags": {
     "600s_regression_suite_pass": true,
     "accessibility_reviewed": true,
-    "deployed_pages_reviewed": false,
+    "deployed_pages_reviewed": true,
     "desktop_browser_zero_errors": true,
     "extension_browser_reviewed": true,
     "mobile_and_pinch_reviewed": true,
