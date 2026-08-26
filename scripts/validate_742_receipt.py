@@ -59,6 +59,7 @@ CANONICAL_FILES = {
     "browser_capture_requirements": "docs/review/742/CAPTURE_REQUIREMENTS.json",
 }
 CANONICAL_RUNTIME = [
+    "favicon.ico",
     "742/index.html",
     "viewer.css",
     "viewer/742.css",

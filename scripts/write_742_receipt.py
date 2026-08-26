@@ -65,6 +65,7 @@ FILES = {
     "browser_capture_requirements": ROOT / "docs/review/742/CAPTURE_REQUIREMENTS.json",
 }
 RUNTIME_FILES = [
+    ROOT / "favicon.ico",
     ROOT / "742/index.html",
     ROOT / "viewer.css",
     ROOT / "viewer/742.css",

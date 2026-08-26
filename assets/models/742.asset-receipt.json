@@ -865,7 +865,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "e88700723e83ef4cf5e4f5f0f2afdf6870f571bbe6ea9dc62f3d75389a1ddbb3",
+  "candidate_tree_sha256": "f6eb1f8e7c3e67d3f568fbdb85b8ace3620d5f8edeac524cf4632b895e000b14",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -963,14 +963,14 @@
       "sha256": "6a74be147c71289a1a2c3a30ef4caa256737783d8e0113c86f3ccbdd4f327c9f"
     },
     "pages_assembler": {
-      "bytes": 1453,
+      "bytes": 1468,
       "path": "scripts/assemble_pages.py",
-      "sha256": "bd34d1123c2697c25a85c85122daa16831b88f834f7687cbcf16d9b9bd840c70"
+      "sha256": "93dab593a317797425a71a0b3af3a30346de470b0a04fe68a1df21b7cd42082b"
     },
     "pages_bundle_validator": {
-      "bytes": 4822,
+      "bytes": 4837,
       "path": "scripts/validate_pages_bundle.py",
-      "sha256": "fe9e00bbebb52a4c341a0ba2967a0e445a6e4a76d3907ce35942d107b7e7f1d6"
+      "sha256": "975d813e76ceac7916017abbfab384f0c3f5b4b530ca021d3fa9174ccd893ebc"
     },
     "pages_deployment_verifier": {
       "bytes": 10737,
@@ -993,14 +993,14 @@
       "sha256": "9ef2402f5158b3fef5f4328eadeb4fe6c95986f2b46a458d1912f5f177102387"
     },
     "receipt_validator": {
-      "bytes": 38315,
+      "bytes": 38334,
       "path": "scripts/validate_742_receipt.py",
-      "sha256": "bc3bb934443d9ccc77f55a286716a35a6bf7e9d9ff332f7127d3805811f5478e"
+      "sha256": "9736726858f4e4eb3b7076f205912d1a6cd45d7a0ad595738df84c89ab2b7d7d"
     },
     "receipt_writer": {
-      "bytes": 18781,
+      "bytes": 18807,
       "path": "scripts/write_742_receipt.py",
-      "sha256": "79e8801f0896032e7719c2820aff01cab1b7f345f53b727533b89b7ab1938f70"
+      "sha256": "409daae2a57d74d27758fb318f45fb026ccea8b0d8b4d4bd3dd6ff4028c735f5"
     },
     "reference_board_boundary": {
       "bytes": 481,
@@ -1252,6 +1252,7 @@
   "release_status": "candidate_review_pending",
   "runtime": {
     "files": [
+      "favicon.ico",
       "742/index.html",
       "viewer.css",
       "viewer/742.css",
@@ -1263,8 +1264,8 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "f5748155aa8487e93b57d79421f4db0f82f7c48863edee9309c54503d7c5e1c1"
+    "sha256": "11c6ab1f53623107d4a001c4a9d27509ea72a4bef39ed1e282b066dd305fff56"
   },
   "schema_version": "2.0.0",
-  "written": "2026-08-25"
+  "written": "2026-08-26"
 }

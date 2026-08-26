@@ -7,7 +7,7 @@ import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "_site"
-FILES = ["index.html", "viewer.css", "viewer.js"]
+FILES = ["index.html", "favicon.ico", "viewer.css", "viewer.js"]
 TREES = ["600s", "es1930m", "742", "machines", "viewer", "vendor/three-r160"]
 MODEL_FILES = [
     "600s.glb", "600s.version.js", "600s.configuration.json", "600s.asset-receipt.json",
