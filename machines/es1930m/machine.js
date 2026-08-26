@@ -1,7 +1,7 @@
-import { ES1930M_CAMERAS, es1930mComponentView, es1930mFollowView } from "./cameras.js?v=1.0.1-candidate";
-import { ES1930M_COMPONENTS } from "./inspector.js?v=1.0.1-candidate";
-import { applyES1930MState, createES1930MRig, selfTestES1930MRig, solveES1930MState } from "./articulation.js?v=1.0.1-candidate";
-import { ES1930M_GLB_URL, ES1930M_RELEASE } from "./version.js?v=1.0.1-candidate";
+import { ES1930M_CAMERAS, es1930mComponentView, es1930mFollowView } from "./cameras.js?v=1.0.1";
+import { ES1930M_COMPONENTS } from "./inspector.js?v=1.0.1";
+import { applyES1930MState, createES1930MRig, selfTestES1930MRig, solveES1930MState } from "./articulation.js?v=1.0.1";
+import { ES1930M_GLB_URL, ES1930M_RELEASE } from "./version.js?v=1.0.1";
 
 export const ES1930M_MACHINE = Object.freeze({
   id: "es1930m",

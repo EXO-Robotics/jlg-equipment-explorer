@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.1-candidate";
-import { pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.1-candidate";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.1";
+import { pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.1";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];

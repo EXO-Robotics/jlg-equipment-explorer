@@ -89,7 +89,9 @@ def main():
     release_ready = bool(review_flags) and all(review_flags.values())
     receipt = {
         "schema_version": "1.0.0",
-        "release": "1.0.1" if release_ready else "1.0.1-candidate",
+        # Artifact identity is stable across deployment review; release_status
+        # alone records whether the exact public bytes have been approved.
+        "release": "1.0.1",
         "release_status": "release" if release_ready else "candidate_not_deployable",
         "written": str(date.today()),
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",

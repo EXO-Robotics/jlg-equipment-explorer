@@ -15,9 +15,9 @@
   "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
   "files": {
     "asset": {
-      "bytes": 981344,
+      "bytes": 981336,
       "path": "assets/models/es1930m.glb",
-      "sha256": "07d42ccf5e985fd8b2232715a1ac3448e68ea4f80d158c4b6d8d8657d70d5255"
+      "sha256": "e11c141d2c676c5db4d8e5df75a3e160d3b07b138d17b879eab3adf3b6e4badb"
     },
     "configuration": {
       "bytes": 2570,
@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 5040,
+      "bytes": 5057,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "383ae6305255068dab59fde07e782eea1f7cdc92a3773a5908594a5bdaa0ff61"
+      "sha256": "c80574a6a1e2ac87494f4d7943b811f7e07aa51e0258a8c93029b880b531f386"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -45,9 +45,9 @@
       "sha256": "048f14f6ec73364e59dde661582d03c5d6ca593601d7de0539eae0b335808788"
     },
     "source_blend": {
-      "bytes": 188817,
+      "bytes": 188834,
       "path": "source/blender/es1930m-showcase-v1.0.blend",
-      "sha256": "7b7dca3a112fdea07e6f6ef00d0713ab9e7079dd2f5620f2099705cc6468bf4d"
+      "sha256": "ec7ce72a28f747f9dc2909c2c8efc7abad618845a948a9c1a3e575d2cfcd7d58"
     },
     "source_manifest": {
       "bytes": 4860,
@@ -71,7 +71,7 @@
     "maximum_translation_per_0_01_sample_m": 0.05411392820809057,
     "sampled_lift_states": 101
   },
-  "release": "1.0.1-candidate",
+  "release": "1.0.1",
   "release_status": "candidate_not_deployable",
   "review_flags": {
     "600s_regression_suite_pass": true,
@@ -99,7 +99,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "0f61ad459f94ff2895a905f313c272feeb6ac85e31ddb615a74f0a5efcf03415"
+    "sha256": "fdc73d41d8b1057a6d9d54c4a8cf97f9dafd41b67aad4d6a3836350cfbff56ed"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-25"

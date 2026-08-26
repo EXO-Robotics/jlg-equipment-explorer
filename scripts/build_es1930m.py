@@ -171,7 +171,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.1-candidate"
+    root["release"] = "1.0.1"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
