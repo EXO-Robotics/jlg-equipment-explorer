@@ -1366,8 +1366,26 @@ def validate_complete_browser_artifact(
         for snapshot in observations["dom_snapshots"].values():
             _validate_dom_snapshot(snapshot, [1280, 720])
             _require_loaded_zero_error_snapshot(snapshot)
-        if set(assertions) != {"load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "about_modal", "terminal_failure_matrix"}:
+        if set(assertions) != {"load_stowed", "desktop_panel_close", "manual_controls", "steering_modes", "maximum_pose_reset", "about_modal", "terminal_failure_matrix"}:
             raise RuntimeError("742 desktop structured outcome set drift")
+        panel_close = assertions["desktop_panel_close"]
+        collapsed = panel_close.get("collapsed_snapshot") or {}
+        if (
+            panel_close.get("outcome") != "pass"
+            or panel_close.get("reopen_available") is not True
+            or panel_close.get("reopened") is not True
+        ):
+            raise RuntimeError("742 desktop panel close/reopen assertion did not pass")
+        _validate_dom_snapshot(collapsed, [1280, 720])
+        _require_loaded_zero_error_snapshot(collapsed)
+        collapsed_toggle = _snapshot_node(collapsed, "#controls-toggle")
+        collapsed_body = _snapshot_node(collapsed, "#machine-controls-body")
+        if (
+            collapsed_toggle["attributes"].get("aria-expanded") != "false"
+            or "hidden" not in collapsed_body["attributes"]
+            or "inert" not in collapsed_body["attributes"]
+        ):
+            raise RuntimeError("742 desktop panel collapsed DOM state drift")
         reset = assertions["maximum_pose_reset"]
         before, after = reset.get("before_reset", {}), reset.get("after_reset", {})
         if (

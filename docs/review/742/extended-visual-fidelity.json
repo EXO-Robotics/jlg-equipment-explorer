@@ -1,13 +1,9 @@
 {
   "boundary": "Owned rendered presentation geometry only; no manufacturer geometry; reconstructed steering evidence is not factory steering or crab calibration. No load, stability, hydraulic response, service, or safety claim.",
-  "candidate_tree_sha256": "74ebfd02d588d29df86883d0584c294066a724a6801ae3791591a991f1b3adec",
+  "candidate_tree_sha256": "PENDING",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
-    "os": {
-      "build": "25F84",
-      "name": "macOS",
-      "version": "26.5.2"
-    },
+    "os": null,
     "renderer": "Blender 5.1.1 deterministic review renderer"
   },
   "gate": "extended_visual_fidelity",
@@ -20,7 +16,7 @@
         "sha256": "1d2868abb853cfa1f39ffcfe066485f57a9cdc645a779371ffb9718012cbad12"
       },
       "claim": "Level fork load surface is visible at the selected reconstructed maximum-lift pose.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "maximum_lift_level_attachment"
     },
     {
@@ -30,7 +26,7 @@
         "sha256": "c6c7ba4bc1f0a69ddba9bdcd867aa2bc43e41bbbc38ff83de66d1a2f47d34baf"
       },
       "claim": "Fork heels, blades, and the red validated posed-GLB fork-top/load-surface datum with exact contact markers are fully framed at maximum lift.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "maximum_lift_fork_closeup"
     },
     {
@@ -40,7 +36,7 @@
         "sha256": "13953b29ededdf8db06159accd574dbddab3ca87d796fce149ce565a8fa1cd10"
       },
       "claim": "The selected 3 degree maximum-reach pose and 24 inch load-center reference are visible.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "maximum_reach_load_center_pose"
     },
     {
@@ -50,7 +46,7 @@
         "sha256": "91642702a74cc7a206b76d6d36506d6f34b2b4e4b140530db24f7154658aa184"
       },
       "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "retract_chain_tangent_sheave_routing"
     },
     {
@@ -60,7 +56,7 @@
         "sha256": "11f7d5aa1ac87984f9e1f84a0c3811f2f3e568c48dd14648e33e44b6a7b5764d"
       },
       "claim": "One through-rod steering cylinder with two visible rod ends, two rigid tie bars, and four highlighted pivots is visible.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "through_rod_two_tie_bars_four_pivots"
     },
     {
@@ -70,7 +66,7 @@
         "sha256": "2deabde9d3a4f50344a783905d72357f527f9cc9ca31c8d15d872794806e1baf"
       },
       "claim": "The unobstructed REAR AXLE / FIXED THROUGH-ROD RACK caption identifies the rear state; the through-rod rack, two rigid tie bars, and all four highlighted joints are visible without label overlap.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "rear_through_rod_two_tie_bars_four_joints"
     },
     {
@@ -80,7 +76,7 @@
         "sha256": "df69a12331d5cb0d084b80357d90f8991c199d557649db5bea4c50e033895fb8"
       },
       "claim": "The visible CIRCLE label reports reconstructed headings FL 55.000 / FR 54.914 / RL -55.000 / RR -54.914 deg, TWO ACTUAL ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 93.466% \u2014 NOT FACTORY ACKERMANN; both ICR constructions are drawn.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "circle_headings_two_actual_icrs_scrub"
     },
     {
@@ -90,7 +86,7 @@
         "sha256": "dd982b0bde645a355a56347cfdc4af340f76fde69b4c6c8e65d42d9f8e915380"
       },
       "claim": "The visible CRAB label reports reconstructed headings FL 55.000 / FR 54.914 / RL 54.914 / RR 55.000 deg, FULL-POSE TOE 0.086 deg, and DENSE MAX 0.753 deg.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "crab_headings_toe_diagnostics"
     },
     {
@@ -100,7 +96,7 @@
         "sha256": "e9cf940c2983c9aec1a183e920f1dc9a833d9e18858d93d3b017a4fac631fee0"
       },
       "claim": "The visible FRONT label reports reconstructed headings FL 55.000 / FR 54.914 deg, REAR HELD ALIGNED, ACTUAL FRONT ICR CONSTRUCTIONS, and SCRUB DIAGNOSTIC 61.060% \u2014 NOT FACTORY ACKERMANN; the front ICR construction lines are drawn.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "front_headings_rear_aligned_actual_icrs_scrub"
     },
     {
@@ -110,7 +106,7 @@
         "sha256": "7e4f683d7f6dcff902e3570c4be26f12fc99c76c21589a993ef3636bfc7aa3aa"
       },
       "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "rigid_boom_angle_sensor_crank_and_link"
     },
     {
@@ -120,7 +116,7 @@
         "sha256": "ad5d2f29f2b05f29d92cae7e72d438ba39749e8d53e1597a4cbdb2b82f3435ab"
       },
       "claim": "The exact exported-GLB limiting boom-to-inner-cab-handrail clearance datum is visible and labeled 45.027 mm.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "rigid_boom_cab_clearance_datum"
     },
     {
@@ -130,10 +126,10 @@
         "sha256": "918b934eb93db06c427423e3e00e53e07570871a695b3ad79823ed1d7e2ce069"
       },
       "claim": "The exact exported-GLB boom-hose-to-main-valve-bank clearance datum is visible and labeled 34.000 mm.",
-      "observed": true,
+      "observed": false,
       "semantic_id": "boom_hose_valve_bank_clearance_datum"
     }
   ],
-  "reviewed_source_commit": "4d857635d8a325cc2a49f164cae292c4e92192f1",
+  "reviewed_source_commit": "PENDING",
   "schema_version": "2.0.0"
 }
