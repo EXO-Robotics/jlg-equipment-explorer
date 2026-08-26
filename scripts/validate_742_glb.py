@@ -48,7 +48,7 @@ STOWED_BOOM_ENVELOPE_NODES = {
     "BaseBoomWeldment", "BaseBoomLowerWear", "MidBoomWeldment",
     "MidBoomTopPlate", "FlyBoomWeldment",
 }
-STOWED_SERVICE_ENVELOPE_PREFIXES = ("BoomHose_", "RetractChain_")
+STOWED_SERVICE_ENVELOPE_PREFIXES = ("BoomHose_", "RetractChain_", "ExtendChain_")
 
 
 def digest(path: Path) -> str:

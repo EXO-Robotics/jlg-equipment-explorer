@@ -902,6 +902,7 @@ function setMobileControls(open) {
   controlsBody.inert = !expanded;
   controlsToggle.hidden = !mobileQuery.matches;
   controlsToggle.setAttribute("aria-expanded", String(expanded));
+  controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Adjust machine controls");
   controlsToggle.textContent = expanded ? "Close" : "Adjust";
   document.body.classList.toggle("mobile-controls-open", mobileQuery.matches && expanded);
   requestAnimationFrame(syncMobileControlHeight);

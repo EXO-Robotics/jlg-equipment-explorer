@@ -56,7 +56,7 @@ export const JLG742_MACHINE = Object.freeze({
         level: Math.abs(state.level) < 0.01 ? "Level" : `${Math.round(Math.abs(state.level) * degrees(JLG742_MECHANISM.frameLevelMaximum))}° ${state.level < 0 ? "L" : "R"}`,
       }),
       zone: stowed ? "stowed" : state.telescope > 0.75 ? "extended" : "active",
-      status: stowed ? "Stowed" : `${state.steerMode} steer · full static-linkage study`,
+      status: stowed ? "Stowed" : "Positioning",
     });
   },
   showcase(t) {

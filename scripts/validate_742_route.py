@@ -30,7 +30,7 @@ def main():
     require(INDEX, [
         '<link rel="icon" href="../favicon.ico" type="image/x-icon">',
         'body data-machine="742"', 'id="app" role="application" tabindex="0"', 'aria-describedby="viewer-instructions"',
-        'id="motion-status"', 'id="motion-announcement" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'id="machine-controls-body"',
+        'id="motion-status"', 'id="motion-announcement" aria-live="polite" aria-atomic="true"', 'id="controls-toggle"', 'aria-label="Adjust machine controls"', 'id="machine-controls-body"',
         'id="lift-control"', 'id="telescope-control"', 'id="tilt-control"', 'id="steer-control"', 'id="level-control"',
         'data-steer-mode="circle"', 'data-steer-mode="crab"', 'data-steer-mode="front"', 'id="showcase"', 'id="stow"',
         'id="inspector" role="dialog" aria-modal="true"', 'aria-describedby="inspector-copy" inert',
@@ -72,6 +72,7 @@ def main():
         'function showTerminalError(', 'viewer-terminal-error', 'identity-failed', 'contract-failed', 'load-failed', 'loader-start-failed',
         'controlPanel.querySelectorAll("button, input")', 'document.body.dataset.viewerTerminal = "true"',
         'handleMotionPreferenceChange', 'motionPreference.addEventListener("change"', 'motionPreference.addListener?.(', 'syncReducedMotion(true)', 'showcaseStarted = null',
+        'controlsToggle.setAttribute("aria-label", expanded ? "Close machine controls" : "Adjust machine controls")',
         'scheduleMotionAnnouncement', 'showcaseStarted !== null && machine.showcase && !reducedMotion',
         'if (!skipNextVisibleFrame && renderedInterval > 0)', 'sorted.filter((sample) => sample >= 250).length',
         'const windowMs = sorted.reduce((sum, sample) => sum + sample, 0)', 'frameTimes.length * 1000 / windowMs',
@@ -122,7 +123,7 @@ def main():
         raise RuntimeError("742 implementation leaked back into ES1930M shared runtime/style")
     require(MACHINE, [
         '742-PVC2411-US-STD-OC-D36-FF370-C50-PF481', 'interactionVolumes', 'showcase(t)',
-        'steerMode: "circle"', 'JLG742_GLB_URL',
+        'steerMode: "circle"', 'JLG742_GLB_URL', 'status: stowed ? "Stowed" : "Positioning"',
     ], "742 machine module")
     require(ARTICULATION, [
         '"BoomAngleSensorCrank"', '"BoomAngleSensorLink"', '"BoomAngleSensorFrameJoint"',

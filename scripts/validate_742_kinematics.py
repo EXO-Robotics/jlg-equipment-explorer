@@ -129,6 +129,16 @@ def main() -> None:
         failures.append("boom-hose route exceeds its maximum adjacent chord angle")
     if abs(result["boom_hose_nominal_centerline_length_m"] - 5.0) > 1e-12:
         failures.append("boom-hose nominal centerline contract drifted")
+    service_sweep = result["service_line_chassis_clearance_sweep"]
+    service_contract = MECH["collision_proxies"]["service_line_clearance_sweep"]
+    if (
+        service_sweep["samples"] != service_contract["lift_samples"] * service_contract["telescope_samples"]
+        or service_sweep["lift_samples"] != service_contract["lift_samples"]
+        or service_sweep["telescope_samples"] != service_contract["telescope_samples"]
+        or min(service_sweep["minimum_cab_surface_clearance_m"], service_sweep["minimum_engine_proxy_surface_clearance_m"])
+        < service_contract["minimum_clearance_m"]
+    ):
+        failures.append("dense boom-service/chassis clearance sweep drifted or fell below its owned boundary")
     if result["minimum_fork_blade_y_m"] < MECH["collision_proxies"]["minimum_fork_y_m"] - 1e-6:
         failures.append("fork blade crossed the flat-floor proxy")
     target_height = CONFIG["published_performance"]["maximum_lift_height_m"]
