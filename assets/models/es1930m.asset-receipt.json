@@ -74,7 +74,7 @@
   "release": "1.0.5",
   "release_status": "candidate_not_deployable",
   "review_binding": {
-    "error": "es1930m browser identity drift: runtime_sha256",
+    "error": "ES immutable browser evidence binding drift",
     "predeploy_gates": 0,
     "status": "pending_or_stale"
   },
@@ -109,7 +109,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "1abd0247c41181406b7a8e5e858da051713ad6e8231aa1a04720139750d5b6ef"
+    "sha256": "25187cd5225fa7b0c36290f4138820585ec407a9e8145101fee4dcf260b74426"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"

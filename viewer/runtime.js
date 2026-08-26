@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.9";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.9";
+import { directOrbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.11";
 import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.9";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
@@ -188,7 +188,7 @@ renderer.domElement.addEventListener("pointermove", (event) => {
     for (const active of pointers.values()) active.moved += Math.abs(dx) + Math.abs(dy) + 8;
     return;
   }
-  const drag = orbitDragDelta(dx, dy, pointer.pointerType);
+  const drag = directOrbitDragDelta(dx, dy, pointer.pointerType);
   orbit.azimuth += drag.azimuth;
   orbit.polar = THREE.MathUtils.clamp(orbit.polar + drag.polar, 0.25, 1.52);
 });

@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "desktop_browser_interaction",
-  "captured_at_utc": "2026-08-26T14:49:06.052Z",
+  "captured_at_utc": "2026-08-26T15:28:11.023Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2021,7 +2021,7 @@
     "sha256": "523b66ce756f9396878f91e9973b5be37d325b08e703b0e2e49f8bf4da7b92f4",
     "bytes": 90441
   },
-  "outcomes_sha256": "cdfdf7fc64229fe5f056869de03f7467d85647bb75bf3216bc0653dfb46b672c",
+  "outcomes_sha256": "f270efc691c10a01987dc51958dd9154cc6185825d4a5837a96e376d5182803b",
   "outcomes": {
     "load_stowed": {
       "outcome": "pass",
@@ -2044,7 +2044,7 @@
             "attributes": {
               "data-machine": "742",
               "data-runtime-release": "1.6.8",
-              "data-boot-frame-count": "3",
+              "data-boot-frame-count": "2",
               "data-runtime-error-count": "0",
               "data-viewer-started": "true",
               "data-viewer-runtime-active": "true",
@@ -2075,8 +2075,8 @@
               "data-rear-toe-deg": "0.000",
               "data-zone": "stowed",
               "data-steer-mode-alignment": "centered",
-              "data-runtime-frame-count": "32",
-              "data-runtime-last-frame-ms": "624.600",
+              "data-runtime-frame-count": "33",
+              "data-runtime-last-frame-ms": "636.600",
               "data-selection-policy": "frontmost-rendered-component-then-nearest-proxy-0.025m-semantic-tie",
               "data-selection-fixture-cases": "5/5",
               "data-selection-fixture-outcomes": "[{\"case\":1,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":2,\"hits\":[{\"volume\":\"low-tie\",\"component\":\"low-tie\",\"distanceM\":1,\"priority\":1},{\"volume\":\"high-tie\",\"component\":\"high-tie\",\"distanceM\":1.01,\"priority\":4}],\"visibleSurfaceComponent\":null,\"basis\":\"distance-tie\",\"expectedComponent\":\"high-tie\",\"observedComponent\":\"high-tie\",\"expectedVolume\":\"high-tie\",\"observedVolume\":\"high-tie\",\"pass\":true},{\"case\":3,\"hits\":[{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1.8,\"priority\":0},{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":2,\"priority\":5}],\"visibleSurfaceComponent\":null,\"basis\":\"nearest-distance\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":4,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5},{\"volume\":\"front\",\"component\":\"front\",\"distanceM\":1,\"priority\":0}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":\"front\",\"observedComponent\":\"front\",\"expectedVolume\":\"front\",\"observedVolume\":\"front\",\"pass\":true},{\"case\":5,\"hits\":[{\"volume\":\"rear\",\"component\":\"rear\",\"distanceM\":0.8,\"priority\":5}],\"visibleSurfaceComponent\":\"front\",\"basis\":\"visible-surface\",\"expectedComponent\":null,\"observedComponent\":null,\"expectedVolume\":null,\"observedVolume\":null,\"pass\":true}]",
@@ -2224,18 +2224,18 @@
         "stable_frames": 6,
         "samples_camera_distance_m": [
           36.644,
-          36.754,
+          36.753,
           36.85,
-          36.936,
+          36.935,
           37.01,
           37.077,
-          37.136,
+          37.135,
           37.187,
           37.233,
           37.273,
           37.309,
-          37.341,
-          37.369,
+          37.34,
+          37.368,
           37.393,
           37.415,
           37.434,
@@ -2244,7 +2244,7 @@
           37.479,
           37.491,
           37.501,
-          37.511,
+          37.51,
           37.519,
           37.526,
           37.532,
@@ -2280,42 +2280,42 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 37.4
+                "at_ms": 37.2
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 50.5
+                "at_ms": 50.6
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 63.8
+                "at_ms": 67
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 78.7
+                "at_ms": 81.2
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 94.6
+                "at_ms": 97.6
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 112.8
+                "at_ms": 114
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 127.8
+                "at_ms": 130.2
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 145.6
+                "at_ms": 146.9
               }
             ]
           },
@@ -2369,42 +2369,42 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 92.1
+                "at_ms": 95.1
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 97.4
+                "at_ms": 101.4
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 113.4
+                "at_ms": 110.3
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 130.6
+                "at_ms": 126.3
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 147.5
+                "at_ms": 143.7
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 163
+                "at_ms": 160.2
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 180.6
+                "at_ms": 176.4
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 197.1
+                "at_ms": 193.5
               }
             ]
           },
@@ -2422,7 +2422,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "3",
+            "boot_frame_count": null,
             "runtime_frame_count": "8",
             "terminal_frame_count": "8",
             "terminal_frame_source": "runtime"
@@ -2440,7 +2440,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "3",
+            "boot_frame_count": null,
             "runtime_frame_count": "8",
             "terminal_frame_count": "8",
             "terminal_frame_source": "runtime"
@@ -2458,12 +2458,12 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 86.5
+                "at_ms": 90.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 91.4
+                "at_ms": 95.8
               }
             ]
           },
@@ -2517,137 +2517,137 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 91.4
+                "at_ms": 88.5
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 97.3
+                "at_ms": 94.2
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 151.5
+                "at_ms": 148.7
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 155.7
+                "at_ms": 153.1
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 167.2
+                "at_ms": 162.4
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 183.4
+                "at_ms": 178.7
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 200.2
+                "at_ms": 195.9
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 217.9
+                "at_ms": 212.3
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 233.6
+                "at_ms": 229
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 250.6
+                "at_ms": 245.8
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 267.6
+                "at_ms": 261.6
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 283.7
+                "at_ms": 278.5
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 300.3
+                "at_ms": 295.7
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 317.4
+                "at_ms": 311.9
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 334.2
+                "at_ms": 331.1
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 350.6
+                "at_ms": 345.2
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 367.3
+                "at_ms": 361.8
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 384.1
+                "at_ms": 379.3
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 400.7
+                "at_ms": 395.6
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 417.2
+                "at_ms": 412.4
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 434.1
+                "at_ms": 429.1
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 450.8
+                "at_ms": 445.8
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 467.4
+                "at_ms": 461.8
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 484.2
+                "at_ms": 481.6
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 503.2
+                "at_ms": 524.3
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 554.6
+                "at_ms": 526.1
               },
               {
                 "counter": "runtime",
                 "value": 27,
-                "at_ms": 556.4
+                "at_ms": 528
               }
             ]
           },
@@ -2660,7 +2660,7 @@
                 "steer-control": "0",
                 "level-control": "0"
               },
-              "runtime_frame_count": 24
+              "runtime_frame_count": 23
             },
             "end": {
               "controls": {
@@ -2722,137 +2722,132 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 86.2
+                "at_ms": 92.8
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 91.9
+                "at_ms": 98.5
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 145.8
+                "at_ms": 153.7
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 150.2
+                "at_ms": 157.9
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 153.8
+                "at_ms": 168.2
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 169.8
+                "at_ms": 184.5
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 186.2
+                "at_ms": 201.2
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 203.8
+                "at_ms": 217.9
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 218.4
+                "at_ms": 234.5
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 237
+                "at_ms": 251.2
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 252.2
+                "at_ms": 267.9
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 269.4
+                "at_ms": 284.6
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 287.1
+                "at_ms": 301.4
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 304.1
+                "at_ms": 318.1
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 320.8
+                "at_ms": 339.4
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 336.7
+                "at_ms": 351.2
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 353.8
+                "at_ms": 367.8
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 368.5
+                "at_ms": 384.7
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 385.3
+                "at_ms": 401.5
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 403.6
+                "at_ms": 417.8
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 420.6
+                "at_ms": 434.8
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 436.2
+                "at_ms": 451
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 453.6
+                "at_ms": 468
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 470.6
+                "at_ms": 487.1
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 489.1
+                "at_ms": 538.2
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 526.1
-              },
-              {
-                "counter": "runtime",
-                "value": 27,
-                "at_ms": 527.9
+                "at_ms": 539.9
               }
             ]
           },
@@ -2865,7 +2860,7 @@
                 "steer-control": "0",
                 "level-control": "0"
               },
-              "runtime_frame_count": 24
+              "runtime_frame_count": 23
             },
             "end": {
               "controls": {
@@ -2875,7 +2870,7 @@
                 "steer-control": "1",
                 "level-control": "0"
               },
-              "runtime_frame_count": 27
+              "runtime_frame_count": 26
             }
           },
           "terminal_first": {
@@ -2892,8 +2887,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "27",
-            "terminal_frame_count": "27",
+            "runtime_frame_count": "26",
+            "terminal_frame_count": "26",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2910,8 +2905,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "27",
-            "terminal_frame_count": "27",
+            "runtime_frame_count": "26",
+            "terminal_frame_count": "26",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true

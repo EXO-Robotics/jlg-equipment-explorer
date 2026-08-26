@@ -15,8 +15,13 @@ export function orbitDragDelta(dx, dy, pointerType = "mouse", sensitivity = 0.00
   });
 }
 
-// The 742 is presented as a direct-manipulation turntable on both inputs.
-// Touch already has the desired mapping; desktop mouse drag adopts it too.
-export function telehandlerDragDelta(dx, dy, pointerType = "mouse", sensitivity = 0.006) {
+// Present equipment as a direct-manipulation turntable regardless of input.
+// Touch already uses this mapping; desktop mouse drag adopts it too.
+export function directOrbitDragDelta(dx, dy, pointerType = "mouse", sensitivity = 0.006) {
   return orbitDragDelta(dx, dy, pointerType === "mouse" ? "touch" : pointerType, sensitivity);
+}
+
+// The 742 is presented as a direct-manipulation turntable on both inputs.
+export function telehandlerDragDelta(dx, dy, pointerType = "mouse", sensitivity = 0.006) {
+  return directOrbitDragDelta(dx, dy, pointerType, sensitivity);
 }
