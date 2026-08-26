@@ -1,11 +1,17 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.6";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.7";
 
-const ROUTE_RELEASE = "1.6.2";
-const ASSET_LOAD_TIMEOUT_MS = 15000;
+const ROUTE_RELEASE = "1.6.3";
+const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
+const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
 const query = new URLSearchParams(location.search);
+const loopbackTestHost = ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+const requestedTestFault = query.get("ee-test-fault");
+const testFault = loopbackTestHost && TEST_FAULTS.has(requestedTestFault) ? requestedTestFault : null;
+const assetLoadTimeoutMs = testFault === "asset-timeout" ? 120 : DEFAULT_ASSET_LOAD_TIMEOUT_MS;
+if (testFault === "bootstrap-timeout") await new Promise(() => {});
 const forceReducedMotion = query.get("reduce") === "1";
 const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
 let reducedMotion = forceReducedMotion || motionPreference.matches;
@@ -38,6 +44,8 @@ let showcaseStarted = null;
 let terminalFailure = false;
 let motionAnnouncementTimer = null;
 let skipNextVisibleFrame = true;
+let animationFrameId = null;
+let runtimeFrameCount = 0;
 
 function recordError(error) {
   runtime.errors += 1;
@@ -49,8 +57,16 @@ function showTerminalError(error, message, source = "runtime-failed") {
   if (terminalFailure) return;
   terminalFailure = true;
   showcaseStarted = null;
+  document.body.dataset.showcaseActive = "false";
   clearTimeout(motionAnnouncementTimer);
+  if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+  animationFrameId = null;
   document.body.dataset.machineSource = source;
+  document.body.dataset.viewerRuntimeActive = "false";
+  const useRuntimeFrameCount = runtimeFrameCount >= 2;
+  const terminalFrameCount = useRuntimeFrameCount ? runtimeFrameCount : Number(document.body.dataset.bootFrameCount || 0);
+  document.body.dataset.terminalFrameCount = String(terminalFrameCount);
+  document.body.dataset.terminalFrameSource = useRuntimeFrameCount ? "runtime" : "boot";
   recordError(error);
   document.body.classList.remove("inspector-open", "mobile-controls-open");
   document.body.classList.add("viewer-terminal-error");
@@ -65,13 +81,33 @@ function showTerminalError(error, message, source = "runtime-failed") {
   controlPanel.setAttribute("aria-disabled", "true");
   controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
   errorPanel.setAttribute("tabindex", "-1");
-  requestAnimationFrame(() => errorPanel.focus({ preventScroll: true }));
+  errorPanel.focus({ preventScroll: true });
 }
-addEventListener("error", (event) => showTerminalError(event.error, "The 742 viewer stopped after an unexpected runtime error. No substitute was shown."));
-addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The 742 viewer stopped after an unexpected runtime error. No substitute was shown."));
+addEventListener("error", (event) => showTerminalError(event.error, "The 742 viewer stopped after an unexpected runtime error. No substitute was shown.", "unexpected-runtime-error"));
+addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The 742 viewer stopped after an unexpected runtime error. No substitute was shown.", "unhandled-rejection"));
 document.body.dataset.runtimeErrorCount = "0";
 document.body.dataset.viewerStarted = "true";
+document.body.dataset.viewerRuntimeActive = "true";
 document.body.dataset.configurationId = machine.configurationId;
+document.body.dataset.testFault = testFault || "none";
+document.body.dataset.showcaseActive = "false";
+let testFaultTriggered = false;
+if (testFault === "runtime-error" || testFault === "unhandled-rejection") {
+  globalThis.__EQUIPMENT_EXPLORER_TEST_HOOK__ = Object.freeze({
+    fault: testFault,
+    trigger() {
+      if (terminalFailure || testFaultTriggered) return false;
+      testFaultTriggered = true;
+      document.body.dataset.testFaultTriggered = "true";
+      if (testFault === "runtime-error") {
+        setTimeout(() => { throw new Error("Injected 742 unexpected runtime error"); }, 0);
+      } else {
+        setTimeout(() => { Promise.reject(new Error("Injected 742 unhandled rejection")); }, 0);
+      }
+      return true;
+    },
+  });
+}
 
 try {
   if (document.body.dataset.machine !== machine.id) throw new Error(`Equipment route identity mismatch: ${document.body.dataset.machine}`);
@@ -538,6 +574,19 @@ function scheduleMotionAnnouncement(message) {
   clearTimeout(motionAnnouncementTimer);
   motionAnnouncementTimer = setTimeout(() => announceMotion(message), 350);
 }
+function setEngineeringValueText(input, value) {
+  const detailId = `${input.id}-engineering-detail`;
+  let detail = document.getElementById(detailId);
+  if (!detail) {
+    detail = document.createElement("span");
+    detail.id = detailId;
+    detail.className = "sr-only";
+    input.insertAdjacentElement("afterend", detail);
+  }
+  if (detail.textContent !== value) detail.textContent = value;
+  if (input.getAttribute("aria-valuetext") !== value) input.setAttribute("aria-valuetext", value);
+  if (input.getAttribute("aria-details") !== detailId) input.setAttribute("aria-details", detailId);
+}
 function setControlOutputs(solved = machine.solveState(state)) {
   const presentation = machine.presentState(state);
   for (const control of machine.controls) {
@@ -548,6 +597,8 @@ function setControlOutputs(solved = machine.solveState(state)) {
       const magnitudes = Object.values(degrees).map(Math.abs);
       const maximum = Math.max(...magnitudes);
       const residual = Math.max(...magnitudes) - Math.min(...magnitudes);
+      const frontToe = Math.abs(Math.abs(degrees.FL) - Math.abs(degrees.FR));
+      const rearToe = Math.abs(Math.abs(degrees.RL) - Math.abs(degrees.RR));
       const direction = state.steer < 0 ? "left" : "right";
       const shortDirection = state.steer < 0 ? "L" : "R";
       if (Math.abs(state.steer) < 0.01) {
@@ -557,21 +608,27 @@ function setControlOutputs(solved = machine.solveState(state)) {
         value = `${maximum.toFixed(1)}° ${shortDirection} inner`;
         ariaValue = `Circle steer ${direction}; actual wheel headings FL ${degrees.FL.toFixed(1)} degrees, FR ${degrees.FR.toFixed(1)} degrees, RL ${degrees.RL.toFixed(1)} degrees, RR ${degrees.RR.toFixed(1)} degrees; published service steering limit 55 degrees`;
       } else if (state.steerMode === "crab") {
-        value = `${maximum.toFixed(1)}° ${shortDirection} · crab approx`;
-        ariaValue = `Reconstructed crab steer ${direction}; maximum actual wheel heading ${maximum.toFixed(1)} degrees with ${residual.toFixed(1)} degree wheel-heading residual; 15 percent reconstructed rack command, not factory controller calibration`;
+        value = `${maximum.toFixed(1)}° ${shortDirection} · spread ${residual.toFixed(1)}°`;
+        ariaValue = `Reconstructed crab steer ${direction}; actual wheel headings FL ${degrees.FL.toFixed(1)} degrees, FR ${degrees.FR.toFixed(1)} degrees, RL ${degrees.RL.toFixed(1)} degrees, RR ${degrees.RR.toFixed(1)} degrees; wheel-heading spread ${residual.toFixed(1)} degrees; fixed-linkage result, not factory controller calibration`;
       } else {
-        value = `${maximum.toFixed(1)}° ${shortDirection} front · approx`;
-        ariaValue = `Reconstructed front steer ${direction}; maximum actual front wheel heading ${maximum.toFixed(1)} degrees and rear wheels centered; 15 percent reconstructed rack command, not factory controller calibration`;
+        value = `${maximum.toFixed(1)}° ${shortDirection} front`;
+        ariaValue = `Reconstructed front steer ${direction}; actual front wheel headings FL ${degrees.FL.toFixed(1)} degrees and FR ${degrees.FR.toFixed(1)} degrees; rear wheels held aligned at RL ${degrees.RL.toFixed(1)} degrees and RR ${degrees.RR.toFixed(1)} degrees; fixed-linkage result, not factory controller calibration`;
       }
       document.body.dataset.wheelAnglesDeg = Object.entries(degrees).map(([wheel, angle]) => `${wheel}:${angle.toFixed(3)}`).join(",");
       document.body.dataset.crabResidualDeg = residual.toFixed(3);
+      document.body.dataset.frontToeDeg = frontToe.toFixed(3);
+      document.body.dataset.rearToeDeg = rearToe.toFixed(3);
     }
-    document.querySelector(`#${control.outputId}`).value = value;
-    document.querySelector(`#${control.inputId}`).setAttribute("aria-valuetext", ariaValue);
+    const output = document.querySelector(`#${control.outputId}`);
+    const input = document.querySelector(`#${control.inputId}`);
+    output.value = value;
+    setEngineeringValueText(input, ariaValue);
   }
   document.body.dataset.zone = presentation.zone;
-  motionStatus.value = state.steerMode === "crab" && Math.abs(state.steer) >= 0.01
-    ? `${presentation.status} · reconstructed wheel spread ${document.body.dataset.crabResidualDeg}°`
+  const centered = Math.abs(state.steer) <= 0.01;
+  document.body.dataset.steerModeAlignment = centered ? "centered" : "center-required";
+  motionStatus.value = !centered
+    ? `${presentation.status} · axle heading spread F ${document.body.dataset.frontToeDeg}° / R ${document.body.dataset.rearToeDeg}° · center steering before changing mode`
     : presentation.status;
   return presentation;
 }
@@ -668,6 +725,7 @@ for (const control of machine.controls) {
 }
 document.querySelector("#stow").addEventListener("click", () => {
   showcaseStarted = null;
+  document.body.dataset.showcaseActive = "false";
   Object.assign(state, machine.stowState);
   for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
   document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
@@ -677,6 +735,13 @@ document.querySelector("#stow").addEventListener("click", () => {
 });
 
 document.querySelectorAll("[data-steer-mode]").forEach((button) => button.addEventListener("click", () => {
+  if (Math.abs(state.steer) > 0.01) {
+    document.body.dataset.steerModeAlignment = "center-required";
+    document.querySelectorAll("[data-steer-mode]").forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate.dataset.steerMode === state.steerMode)));
+    motionStatus.value = `${machine.presentState(state).status} · axle heading spread F ${document.body.dataset.frontToeDeg}° / R ${document.body.dataset.rearToeDeg}° · center steering before changing mode`;
+    announceMotion("Center all wheel headings before changing steering mode.");
+    return;
+  }
   state.steerMode = button.dataset.steerMode;
   document.querySelectorAll("[data-steer-mode]").forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate === button)));
   const presentation = applyControls();
@@ -694,6 +759,7 @@ function syncReducedMotion(announce = false) {
   showcaseButton.textContent = reducedMotion ? "Showcase off" : "Run showcase";
   if (reducedMotion) {
     showcaseStarted = null;
+    document.body.dataset.showcaseActive = "false";
     orbit.velocityAzimuth = 0;
     orbit.velocityPolar = 0;
     showcaseButton.setAttribute("aria-describedby", "motion-boundary reduced-motion-note");
@@ -706,6 +772,7 @@ function syncReducedMotion(announce = false) {
 showcaseButton?.addEventListener("click", () => {
   if (!reducedMotion) {
     showcaseStarted = performance.now();
+    document.body.dataset.showcaseActive = "true";
     announceMotion("Automatic 742 mechanism showcase started.");
   }
 });
@@ -879,9 +946,10 @@ app.addEventListener("keydown", (event) => {
 function loadMachineAsset() {
   const loadStarted = performance.now();
   const loadTimeout = setTimeout(() => {
-    showTerminalError(new Error(`742 asset load exceeded ${ASSET_LOAD_TIMEOUT_MS} ms`), "The evidence-bound 742 asset did not finish loading in time. No substitute was shown.", "load-timeout");
-  }, ASSET_LOAD_TIMEOUT_MS);
+    showTerminalError(new Error(`742 asset load exceeded ${assetLoadTimeoutMs} ms`), "The evidence-bound 742 asset did not finish loading in time. No substitute was shown.", "load-timeout");
+  }, assetLoadTimeoutMs);
   try {
+    if (testFault === "loader-start") throw new Error("Injected 742 loader-start failure");
     new GLTFLoader().load(machine.assetUrl, (gltf) => {
       clearTimeout(loadTimeout);
       if (terminalFailure) return;
@@ -929,11 +997,13 @@ function loadMachineAsset() {
     showTerminalError(error, `The evidence-bound ${machine.identity.model} asset loader could not start. No procedural substitute was used.`, "loader-start-failed");
   }
 }
-if (!terminalFailure) loadMachineAsset();
 
 function animate(now) {
   if (terminalFailure) return;
-  requestAnimationFrame(animate);
+  animationFrameId = requestAnimationFrame(animate);
+  runtimeFrameCount += 1;
+  document.body.dataset.runtimeFrameCount = String(runtimeFrameCount);
+  document.body.dataset.runtimeLastFrameMs = Number(now).toFixed(3);
   if (document.hidden) {
     lastFrame = now;
     fpsStart = now;
@@ -956,7 +1026,9 @@ function animate(now) {
   if (showcaseStarted !== null && machine.showcase && !reducedMotion) {
     const elapsed = (now - showcaseStarted) / (machine.showcaseDurationMs ?? 14000);
     if (elapsed >= 1) showcaseStarted = now;
-    Object.assign(state, machine.showcase(elapsed % 1));
+    const showcaseState = { ...machine.showcase(elapsed % 1) };
+    if (showcaseState.steerMode !== state.steerMode && Math.abs(showcaseState.steer) > 0.01) showcaseState.steerMode = state.steerMode;
+    Object.assign(state, showcaseState);
     for (const control of machine.controls) document.querySelector(`#${control.inputId}`).value = state[control.id] * control.inputDivisor;
     document.querySelectorAll("[data-steer-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.steerMode === state.steerMode)));
     applyControls();
@@ -986,8 +1058,20 @@ function animate(now) {
     updateDiagnostics();
   }
 }
+function startInjectedLoaderAfterFrames(remainingFrames = 2) {
+  if (terminalFailure) return;
+  if (remainingFrames > 0) {
+    requestAnimationFrame(() => startInjectedLoaderAfterFrames(remainingFrames - 1));
+    return;
+  }
+  loadMachineAsset();
+}
 resetPerformanceWindow("startup");
-requestAnimationFrame(animate);
+animationFrameId = requestAnimationFrame(animate);
+if (!terminalFailure) {
+  if (testFault === "loader-start") startInjectedLoaderAfterFrames();
+  else loadMachineAsset();
+}
 addEventListener("resize", () => {
   compact = mobileQuery.matches;
   camera.aspect = innerWidth / innerHeight;

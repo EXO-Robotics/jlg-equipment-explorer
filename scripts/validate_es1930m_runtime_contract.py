@@ -68,7 +68,11 @@ required_presentation = [
     "function syncReducedMotion(announce = false)",
     'motionPreference.addEventListener("change", handleMotionPreferenceChange)',
     "setPresentationRouteEnabled(false)",
-    'input.setAttribute("aria-valuetext", ariaValue)',
+    "setEngineeringValueText(input, ariaValue)",
+    'input.setAttribute("aria-details", detailId)',
+    "document.body.dataset.runtimeFrameCount",
+    "document.body.dataset.terminalFrameCount",
+    "document.body.dataset.terminalFrameSource",
     'metres platform height',
     "function setOutputValue(output, value)",
     'document.body.dataset.viewerRuntimeActive = "true"',
@@ -80,7 +84,7 @@ for snippet in required_presentation:
 for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "const curvature = -planarCurvature", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
     if snippet not in route_source:
         raise RuntimeError(f"Figure-eight math contract missing: {snippet}")
-for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.0.6', '../viewer.css?v=1.0.6', '../viewer/multi-machine.css?v=1.0.6', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
+for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.0.7', '../viewer.css?v=1.0.7', '../viewer/multi-machine.css?v=1.0.7', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', "countBootFrame", "dataset.terminalFrameCount", "dataset.terminalFrameSource", 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
     if snippet not in html_source:
         raise RuntimeError(f"600S-aligned control-board naming missing: {snippet}")
 if '<link rel="icon" href="../favicon.ico" type="image/x-icon">' not in html_source:
@@ -93,6 +97,6 @@ if 'id="diagnostics" hidden aria-live=' in html_source:
 if "const reducedMotion = query.get" in viewer_source:
     raise RuntimeError("Reduced-motion preference must remain live after startup")
 for import_path in ("machine.js", "pointer-gestures.mjs", "presentation-route.mjs"):
-    if f'{import_path}?v=1.0.6' not in viewer_source:
+    if f'{import_path}?v=1.0.7' not in viewer_source:
         raise RuntimeError(f"ES1930M runtime cache identity drift: {import_path}")
 print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion), "presentation_contracts_checked": len(required_presentation) + 7, "control_board_names_checked": 7}, indent=2))

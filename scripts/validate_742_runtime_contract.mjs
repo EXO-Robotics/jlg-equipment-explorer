@@ -21,9 +21,16 @@ requireTokens(runtime, [
   "const interactionMinDistance = Math.max(distanceLimits.minDistance, 4.4)",
   "__EQUIPMENT_EXPLORER_EVIDENCE__", "frameComponent(component)",
   "return ordered.find((hit) => hit.object.userData.component === visibleSurfaceHit.semanticComponent) || null",
-  "solved.wheelAngles", "crabResidualDeg", "15 percent reconstructed rack command",
+  "solved.wheelAngles", "crabResidualDeg", "frontToeDeg", "rearToeDeg",
+  'dataset.steerModeAlignment', 'Center all wheel headings before changing steering mode.',
+  'showcaseState.steerMode !== state.steerMode && Math.abs(showcaseState.steer) > 0.01',
   "showTerminalError", "identity-failed", "contract-failed", "load-failed", "loader-start-failed",
-  "const ASSET_LOAD_TIMEOUT_MS = 15000", "load-timeout", "clearTimeout(loadTimeout)",
+  "const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000", "assetLoadTimeoutMs", "load-timeout", "clearTimeout(loadTimeout)",
+  'query.get("ee-test-fault")', "loopbackTestHost", "__EQUIPMENT_EXPLORER_TEST_HOOK__",
+  '"bootstrap-timeout"', '"asset-timeout"', '"loader-start"', '"runtime-error"', '"unhandled-rejection"',
+  "startInjectedLoaderAfterFrames(remainingFrames = 2)",
+  'dataset.runtimeFrameCount', 'dataset.terminalFrameCount', 'dataset.terminalFrameSource', 'dataset.testFaultTriggered',
+  "setEngineeringValueText", 'input.setAttribute("aria-details", detailId)',
   "controlPanel.querySelectorAll(\"button, input\")", "if (terminalFailure) return;",
   "handleMotionPreferenceChange", "syncReducedMotion(true)", "scheduleMotionAnnouncement",
   "resetPerformanceWindow", "visibility-hidden", "visibility-visible",
@@ -34,6 +41,7 @@ requireTokens(index, [
   'id="motion-announcement" aria-live="polite" aria-atomic="true"',
   'id="error" role="alert" aria-live="assertive" tabindex="-1"',
   "window.__show742ModuleFailure", "module-load-failed", 'onerror="window.__show742ModuleFailure()"',
+  "countBootFrame", "bootTimeoutMs", '"bootstrap-timeout"', "dataset.terminalFrameCount", "dataset.terminalFrameSource",
 ]);
 if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
   throw new Error("Per-frame outputs must not be live regions");

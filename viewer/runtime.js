@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.6";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.6";
-import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.6";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.7";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.7";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.7";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -44,6 +44,7 @@ let fpsStart = lastFrame;
 let terminalFailure = false;
 let animationFrameId = null;
 let assetLoadTimeout = null;
+let runtimeFrameCount = 0;
 const presentationRoute = {
   enabled: !reducedMotion && query.get("auto") === "1",
   phase: 0,
@@ -70,7 +71,13 @@ function showTerminalError(error, message, source = "runtime-failed") {
   presentationRoute.enabled = false;
   clearTimeout(assetLoadTimeout);
   if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+  animationFrameId = null;
   document.body.dataset.machineSource = source;
+  document.body.dataset.viewerRuntimeActive = "false";
+  const useRuntimeFrameCount = runtimeFrameCount >= 2;
+  const terminalFrameCount = useRuntimeFrameCount ? runtimeFrameCount : Number(document.body.dataset.bootFrameCount || 0);
+  document.body.dataset.terminalFrameCount = String(terminalFrameCount);
+  document.body.dataset.terminalFrameSource = useRuntimeFrameCount ? "runtime" : "boot";
   document.body.dataset.viewerTerminal = "true";
   document.body.classList.remove("inspector-open", "mobile-controls-open");
   document.body.classList.add("viewer-terminal-error");
@@ -84,7 +91,7 @@ function showTerminalError(error, message, source = "runtime-failed") {
   controlsBody.inert = true;
   controlPanel.setAttribute("aria-disabled", "true");
   controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
-  requestAnimationFrame(() => errorPanel.focus({ preventScroll: true }));
+  errorPanel.focus({ preventScroll: true });
 }
 
 addEventListener("error", (event) => showTerminalError(event.error, "The ES1930M viewer stopped after an unexpected runtime error. No substitute was shown."));
@@ -228,6 +235,20 @@ function setOutputValue(output, value) {
   if (output.value !== value) output.value = value;
 }
 
+function setEngineeringValueText(input, value) {
+  const detailId = `${input.id}-engineering-detail`;
+  let detail = document.getElementById(detailId);
+  if (!detail) {
+    detail = document.createElement("span");
+    detail.id = detailId;
+    detail.className = "sr-only";
+    input.insertAdjacentElement("afterend", detail);
+  }
+  if (detail.textContent !== value) detail.textContent = value;
+  if (input.getAttribute("aria-valuetext") !== value) input.setAttribute("aria-valuetext", value);
+  if (input.getAttribute("aria-details") !== detailId) input.setAttribute("aria-details", detailId);
+}
+
 function setControlOutputs() {
   const presentation = machine.presentState(state);
   for (const control of machine.controls) {
@@ -240,7 +261,7 @@ function setControlOutputs() {
       : control.id === "deck"
         ? `${value} extension; ${presentation.status}`
         : `${value} cylinder displacement; ${presentation.status}`;
-    if (input.getAttribute("aria-valuetext") !== ariaValue) input.setAttribute("aria-valuetext", ariaValue);
+    setEngineeringValueText(input, ariaValue);
   }
   document.body.dataset.zone = presentation.zone;
   if (!presentationRoute.enabled) setOutputValue(motionStatus, presentation.status);
@@ -564,6 +585,9 @@ try {
 function animate(now) {
   if (terminalFailure) return;
   animationFrameId = requestAnimationFrame(animate);
+  runtimeFrameCount += 1;
+  document.body.dataset.runtimeFrameCount = String(runtimeFrameCount);
+  document.body.dataset.runtimeLastFrameMs = Number(now).toFixed(3);
   const delta = Math.min((now - lastFrame) / 1000, 0.05);
   lastFrame = now;
   updatePresentationRoute(delta);

@@ -7,7 +7,7 @@
   <title>600S Interactive Equipment Study</title>
   <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="preload" href="assets/models/600s.glb?v=64b969d1b24f" as="fetch" type="model/gltf-binary" crossorigin>
-  <link rel="stylesheet" href="viewer.css?v=1.1.12">
+  <link rel="stylesheet" href="viewer.css?v=1.1.13">
   <style>
     @media (max-height: 670px) and (max-width: 800px) {
       .compact-control { display: grid; }
@@ -138,12 +138,23 @@
 
   <script>
     window.__showcaseBootAt = performance.now();
+    let bootFrameCount = 0;
+    function countBootFrame() {
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      bootFrameCount += 1;
+      document.body.dataset.bootFrameCount = String(bootFrameCount);
+      requestAnimationFrame(countBootFrame);
+    }
+    requestAnimationFrame(countBootFrame);
     window.__show600BootstrapFailure = function (message, source = "module-load-failed") {
       if (document.body.dataset.viewerTerminal === "true") return;
       const failure = document.querySelector("#error");
       document.body.classList.add("viewer-terminal-error");
       document.body.dataset.viewerTerminal = "true";
+      document.body.dataset.viewerRuntimeActive = "false";
       document.body.dataset.machineSource = source;
+      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || "0";
+      document.body.dataset.terminalFrameSource = "boot";
       document.body.dataset.runtimeErrorCount = "1";
       document.querySelector("#loader").hidden = true;
       document.querySelector("#error-copy").textContent = message;
@@ -158,6 +169,6 @@
       window.__show600BootstrapFailure("The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
     }, 8000);
   </script>
-  <script type="module" src="viewer.js?v=1.1.12" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__show600BootstrapFailure('The 600S rendering runtime could not be loaded. No substitute was shown.')"></script>
+  <script type="module" src="viewer.js?v=1.1.13" onload="document.body.dataset.viewerModuleLoaded='true'" onerror="window.__show600BootstrapFailure('The 600S rendering runtime could not be loaded. No substitute was shown.')"></script>
 </body>
 </html>

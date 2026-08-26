@@ -6,14 +6,14 @@
   <meta name="description" content="An unofficial, evidence-bounded interactive reconstruction of the JLG 742 telehandler.">
   <title>742 Interactive Telehandler Study</title>
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
-  <link rel="preload" href="../assets/models/742.glb?v=fefe033189b9" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="preload" href="../assets/models/742.glb?v=748bd776fe9f" as="fetch" type="model/gltf-binary" crossorigin>
   <link rel="stylesheet" href="../viewer.css?v=1.1.5">
-  <link rel="stylesheet" href="../viewer/742.css?v=1.6.2">
+  <link rel="stylesheet" href="../viewer/742.css?v=1.6.3">
   <script type="importmap">
     {"imports":{"three":"../vendor/three-r160/build/three.module.min.js","three/addons/":"../vendor/three-r160/examples/jsm/"}}
   </script>
 </head>
-<body data-machine="742" data-runtime-release="1.6.2">
+<body data-machine="742" data-runtime-release="1.6.3">
   <div id="app" role="application" tabindex="0" aria-label="Interactive 3D JLG 742 telehandler visualization" aria-describedby="viewer-instructions"></div>
   <p class="sr-only" id="viewer-instructions">Drag to orbit, scroll or pinch to zoom, use arrow keys to orbit, plus and minus to zoom, number keys one through seven to inspect components, and zero to reset the view.</p>
 
@@ -51,7 +51,7 @@
         <label class="control-row"><span>Telescope</span><output id="telescope-value">0.00 m visual</output><input id="telescope-control" type="range" min="0" max="100" value="0" step="1" aria-label="Boom telescope" aria-describedby="motion-boundary"></label>
         <label class="control-row"><span>Carriage tilt</span><output id="tilt-value">0°</output><input id="tilt-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Carriage tilt" aria-describedby="motion-boundary"></label>
         <label class="control-row compact-control"><span>Steering</span><output id="steer-value">Center</output><input id="steer-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Steering angle" aria-describedby="motion-boundary"></label>
-        <div class="mode-row" role="group" aria-label="Steering mode">
+        <div class="mode-row" role="group" aria-label="Steering mode" aria-describedby="motion-status motion-boundary">
           <span>Steer mode</span>
           <button type="button" data-steer-mode="circle" aria-pressed="true">Circle</button>
           <button type="button" data-steer-mode="crab" aria-pressed="false">Crab</button>
@@ -59,7 +59,7 @@
         </div>
         <label class="control-row compact-control"><span>Frame level</span><output id="level-value">Level</output><input id="level-control" type="range" min="-100" max="100" value="0" step="1" aria-label="Frame level" aria-describedby="motion-boundary"></label>
         <div class="action-row"><button class="primary-action" id="showcase" type="button">Run showcase</button><button class="secondary-action" id="stow" type="button">Stow</button><button class="secondary-action" id="reset-view" type="button">Reset view</button></div>
-        <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Crab/front are reconstructed 15% rack studies; displayed wheel headings and crab residual are not factory controller calibration. Not operational, load, stability, service, or safety data.</p>
+        <p class="motion-boundary" id="motion-boundary">Presentation-only mechanism limits. Center steering before changing modes. Displayed wheel headings and linkage residuals are reconstructed, not factory controller calibration. Not operational, load, stability, service, or safety data.</p>
         <p class="sr-only" id="reduced-motion-note">The automatic showcase is disabled when reduced motion is requested. Manual mechanism controls remain available.</p>
       </div>
     </section>
@@ -90,15 +90,27 @@
   </aside>
 
   <script>
-    window.__show742ModuleFailure = function () {
+    window.__showcaseBootAt = performance.now();
+    let bootFrameCount = 0;
+    function countBootFrame() {
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      bootFrameCount += 1;
+      document.body.dataset.bootFrameCount = String(bootFrameCount);
+      requestAnimationFrame(countBootFrame);
+    }
+    requestAnimationFrame(countBootFrame);
+    window.__show742ModuleFailure = function (message = "The dedicated 742 viewer runtime could not be loaded. No substitute was shown.", source = "module-load-failed") {
       if (document.body.dataset.viewerStarted === "true" || document.body.dataset.viewerTerminal === "true") return;
       const failure = document.querySelector("#error");
       document.body.classList.add("viewer-terminal-error");
       document.body.dataset.viewerTerminal = "true";
-      document.body.dataset.machineSource = "module-load-failed";
+      document.body.dataset.viewerRuntimeActive = "false";
+      document.body.dataset.machineSource = source;
+      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || "0";
+      document.body.dataset.terminalFrameSource = "boot";
       document.body.dataset.runtimeErrorCount = "1";
       document.querySelector("#loader").hidden = true;
-      document.querySelector("#error-copy").textContent = "The dedicated 742 viewer runtime could not be loaded. No substitute was shown.";
+      document.querySelector("#error-copy").textContent = message;
       failure.hidden = false;
       for (const selector of ["#app", ".interface", "#inspector", "#machine-controls-body"]) document.querySelector(selector)?.setAttribute("inert", "");
       document.querySelector(".control-panel")?.setAttribute("aria-disabled", "true");
@@ -106,7 +118,14 @@
       failure.setAttribute("tabindex", "-1");
       failure.focus({ preventScroll: true });
     };
+    const testFault = new URLSearchParams(location.search).get("ee-test-fault");
+    const loopbackTestHost = ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+    const bootTimeoutMs = loopbackTestHost && testFault === "bootstrap-timeout" ? 120 : 8000;
+    window.setTimeout(() => {
+      if (document.body.dataset.viewerRuntimeActive === "true" || document.body.dataset.viewerTerminal === "true") return;
+      window.__show742ModuleFailure("The dedicated 742 viewer runtime did not initialize in time. Reload the page or verify the deployed vendor files.", "bootstrap-timeout");
+    }, bootTimeoutMs);
   </script>
-  <script type="module" src="../viewer/742-runtime.js?v=1.6.2" onerror="window.__show742ModuleFailure()"></script>
+  <script type="module" src="../viewer/742-runtime.js?v=1.6.3" onerror="window.__show742ModuleFailure()"></script>
 </body>
 </html>

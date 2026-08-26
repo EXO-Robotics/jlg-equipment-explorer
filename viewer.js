@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.12";
+} from "./assets/models/600s.version.js?v=1.1.13";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -40,6 +40,7 @@ const runtimeDiagnostics = {
 };
 let terminalFailure = false;
 let animationFrameId = null;
+let runtimeFrameCount = 0;
 document.body.dataset.renderProfile = renderProfile;
 document.body.dataset.reducedMotion = String(reducedMotion);
 
@@ -83,10 +84,16 @@ function showTerminalError(error, message, source = "runtime-failed") {
   if (terminalFailure) return;
   terminalFailure = true;
   if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+  animationFrameId = null;
   document.body.classList.remove("inspector-open", "mobile-controls-open");
   document.body.classList.add("viewer-terminal-error");
   document.body.dataset.viewerTerminal = "true";
   document.body.dataset.machineSource = source;
+  document.body.dataset.viewerRuntimeActive = "false";
+  const useRuntimeFrameCount = runtimeFrameCount >= 2;
+  const terminalFrameCount = useRuntimeFrameCount ? runtimeFrameCount : Number(document.body.dataset.bootFrameCount || 0);
+  document.body.dataset.terminalFrameCount = String(terminalFrameCount);
+  document.body.dataset.terminalFrameSource = useRuntimeFrameCount ? "runtime" : "boot";
   recordRuntimeError(error);
   loader.hidden = true;
   document.querySelector("#error-copy").textContent = message;
@@ -97,7 +104,7 @@ function showTerminalError(error, message, source = "runtime-failed") {
   controlsBody.inert = true;
   controlPanel.setAttribute("aria-disabled", "true");
   controlPanel.querySelectorAll("button, input").forEach((control) => { control.disabled = true; });
-  requestAnimationFrame(() => errorPanel.focus({ preventScroll: true }));
+  errorPanel.focus({ preventScroll: true });
 }
 window.addEventListener("error", (event) => showTerminalError(event.error, "The 600S viewer stopped after an unexpected runtime error. No substitute was shown."));
 window.addEventListener("unhandledrejection", (event) => showTerminalError(event.reason, "The 600S viewer stopped after an unexpected runtime error. No substitute was shown."));
@@ -866,6 +873,20 @@ function setMotionStatus(value) {
   motionStatus.value = value;
 }
 
+function setEngineeringValueText(input, value) {
+  const detailId = `${input.id}-engineering-detail`;
+  let detail = document.getElementById(detailId);
+  if (!detail) {
+    detail = document.createElement("span");
+    detail.id = detailId;
+    detail.className = "sr-only";
+    input.insertAdjacentElement("afterend", detail);
+  }
+  if (detail.textContent !== value) detail.textContent = value;
+  if (input.getAttribute("aria-valuetext") !== value) input.setAttribute("aria-valuetext", value);
+  if (input.getAttribute("aria-details") !== detailId) input.setAttribute("aria-details", detailId);
+}
+
 Object.entries(inputs).forEach(([key, input]) => {
   input.addEventListener("pointerdown", () => { autonomy.activeControl = key; });
   const releaseControl = () => {
@@ -878,7 +899,7 @@ Object.entries(inputs).forEach(([key, input]) => {
     targets[key] = Number(input.value);
     if (autonomy.enabled) autonomy.overrideUntil[key] = performance.now() + AUTONOMY_OVERRIDE_MS;
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
-    input.setAttribute("aria-valuetext", outputs[key].value);
+    setEngineeringValueText(input, outputs[key].value);
     setMotionStatus(autonomy.enabled ? "Manual override" : "Positioning");
   });
 });
@@ -887,7 +908,7 @@ function syncInputs() {
   Object.entries(inputs).forEach(([key, input]) => {
     input.value = String(Math.round(targets[key]));
     outputs[key].value = `${Math.round(targets[key])}${suffixes[key]}`;
-    input.setAttribute("aria-valuetext", outputs[key].value);
+    setEngineeringValueText(input, outputs[key].value);
   });
 }
 
@@ -1544,6 +1565,9 @@ const frameSamples = [];
 function animate(now = 0) {
   if (terminalFailure) return;
   animationFrameId = requestAnimationFrame(animate);
+  runtimeFrameCount += 1;
+  document.body.dataset.runtimeFrameCount = String(runtimeFrameCount);
+  document.body.dataset.runtimeLastFrameMs = Number(now).toFixed(3);
   if (document.hidden) {
     clock.getDelta();
     return;
