@@ -38,7 +38,7 @@ ES1930M_ROOT
    |- ExtensionDeck
    |- FixedRails
    |- SelfClosingGate
-   `- PlatformControls
+   `- PlatformConsole
 ```
 
 For each level and both visible planes, author lower, center and upper pivot markers. Shared joints must resolve to one world-space point even when represented by markers under different link transforms. Lower and upper slide blocks must be explicit nodes constrained to authored track axes.

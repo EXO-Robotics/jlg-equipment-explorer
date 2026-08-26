@@ -23,7 +23,11 @@ export function sampleFigureEight(phase, route = ES1930M_FIGURE_EIGHT) {
   const ddx = -route.radiusX * sin;
   const ddz = -2 * route.radiusZ * Math.sin(2 * t);
   const tangentLength = Math.max(Math.hypot(dx, dz), 1e-6);
-  const curvature = (dx * ddz - dz * ddx) / (tangentLength ** 3);
+  const planarCurvature = (dx * ddz - dz * ddx) / (tangentLength ** 3);
+  // Three.js heading maps local machine-forward +X through world -Z for
+  // positive yaw. Negate the X/Z planar determinant so positive steering
+  // follows positive machine yaw, matching the 600S route convention.
+  const curvature = -planarCurvature;
   const steerForSide = (side) => Math.max(
     -route.maximumVisualSteerRadians,
     Math.min(
@@ -37,6 +41,7 @@ export function sampleFigureEight(phase, route = ES1930M_FIGURE_EIGHT) {
     z: route.radiusZ * sin * cos,
     heading: Math.atan2(-dz, dx),
     curvature,
+    planarCurvature,
     steer: Math.tanh(curvature * route.steeringResponse),
     steerLeft: steerForSide(1),
     steerRight: steerForSide(-1),

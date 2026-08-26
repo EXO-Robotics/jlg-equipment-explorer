@@ -7,6 +7,15 @@ assert.ok(Math.hypot(start.x - end.x, start.z - end.z) < 1e-9, "route must close
 assert.ok(start.tangentLength > 0.1, "center crossing tangent must not collapse");
 assert.ok(sampleFigureEight(Math.PI / 4).curvature * sampleFigureEight(Math.PI * 5 / 4).curvature < 0, "the two lobes must steer in opposite directions");
 
+for (const phaseSample of [0.3, 1.1, 2.4, 3.6, 4.9, 5.7]) {
+  const current = sampleFigureEight(phaseSample);
+  const later = sampleFigureEight(phaseSample + 1e-5);
+  const headingDelta = Math.atan2(Math.sin(later.heading - current.heading), Math.cos(later.heading - current.heading));
+  assert.equal(Math.sign(current.curvature), Math.sign(headingDelta), "steering curvature must follow machine yaw instead of the mirrored X/Z determinant");
+  assert.equal(Math.sign(current.steerLeft), Math.sign(headingDelta), "left wheel must steer into the route turn");
+  assert.equal(Math.sign(current.steerRight), Math.sign(headingDelta), "right wheel must steer into the route turn");
+}
+
 let phase = 0;
 let previous = sampleFigureEight(phase);
 let maximumStep = 0;

@@ -1,7 +1,7 @@
-import { ES1930M_CAMERAS, es1930mComponentView, es1930mFollowView } from "./cameras.js?v=1.0.3";
-import { ES1930M_COMPONENTS } from "./inspector.js?v=1.0.3";
-import { applyES1930MState, createES1930MRig, selfTestES1930MRig, solveES1930MState } from "./articulation.js?v=1.0.3";
-import { ES1930M_GLB_URL, ES1930M_RELEASE } from "./version.js?v=1.0.3";
+import { ES1930M_CAMERAS, es1930mComponentView, es1930mFollowView } from "./cameras.js?v=1.0.4";
+import { ES1930M_COMPONENTS } from "./inspector.js?v=1.0.4";
+import { applyES1930MState, createES1930MRig, selfTestES1930MRig, solveES1930MState } from "./articulation.js?v=1.0.4";
+import { ES1930M_GLB_URL, ES1930M_RELEASE } from "./version.js?v=1.0.4";
 
 export const ES1930M_MACHINE = Object.freeze({
   id: "es1930m",
@@ -23,7 +23,7 @@ export const ES1930M_MACHINE = Object.freeze({
     "TopRail_-1", "TopRail_1", "MidRail_-1", "MidRail_1", "ExtensionTopRail_-1", "ExtensionTopRail_1", "ExtensionMidRail_-1", "ExtensionMidRail_1",
     "MainToeBoard_-1", "MainToeBoard_1", "ExtensionToeBoard_-1", "ExtensionToeBoard_1",
     "FrontWheelRoll_R", "FrontWheelRoll_L", "RearWheelRoll_R", "RearWheelRoll_L",
-    "PlatformControls", "PlatformControlCarrier", "PlatformControlModule", "PlatformControlHousing", "PlatformControlFace", "PlatformJoystick", "PlatformJoystickGrip", "PlatformJoystickTopRocker", "PlatformJoystickTrigger", "PlatformEmergencyStop",
+    "PlatformConsole", "PlatformControlCarrier", "PlatformConsoleModule", "PlatformConsoleHousing", "PlatformConsoleFace", "PlatformJoystick", "PlatformJoystickGrip", "PlatformJoystickTopRocker", "PlatformJoystickTrigger", "PlatformEmergencyStop",
   ]),
   interactionVolumes: Object.freeze(["Chassis_Hit", "Scissor_Hit", "Platform_Hit", "Steering_Hit"]),
   stowState: Object.freeze({ lift: 0, deck: 0, steer: 0 }),

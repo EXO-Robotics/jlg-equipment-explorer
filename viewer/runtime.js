@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.3";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.3";
-import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.3";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.4";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.4";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.4";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -218,7 +218,7 @@ function resetPresentationPose() {
 function updatePresentationTelemetry(sample = sampleFigureEight(presentationRoute.phase)) {
   const locked = reducedMotion;
   const paused = !presentationRoute.enabled && presentationRoute.distanceM > 0;
-  const modeText = locked ? "Static presentation" : presentationRoute.enabled ? "Figure-eight running" : paused ? "Figure-eight paused" : "Ready";
+  const modeText = locked ? "Static pose" : presentationRoute.enabled ? "Auto loop" : paused ? "Auto paused" : "Manual";
   const noteText = locked
     ? "Motion disabled by reduced-motion preference."
     : "Visualization only - steering and wheel motion are reconstructed; this is not a machine capability.";
@@ -229,11 +229,12 @@ function updatePresentationTelemetry(sample = sampleFigureEight(presentationRout
   autonomyToggle.disabled = locked || !rig;
   const pressed = String(presentationRoute.enabled);
   if (autonomyToggle.getAttribute("aria-pressed") !== pressed) autonomyToggle.setAttribute("aria-pressed", pressed);
-  const buttonText = presentationRoute.enabled ? "Pause path" : paused ? "Resume path" : "Start path";
+  const buttonText = presentationRoute.enabled ? "Pause auto" : paused ? "Resume auto" : "Start auto";
   if (autonomyToggle.textContent !== buttonText) autonomyToggle.textContent = buttonText;
   document.body.dataset.presentationMode = locked ? "static" : presentationRoute.enabled ? "running" : paused ? "paused" : "ready";
-  if (presentationRoute.enabled) document.querySelector("#motion-status").value = "Showcase route";
-  else if (paused) document.querySelector("#motion-status").value = "Route paused";
+  document.body.dataset.autonomyMode = locked ? "static" : presentationRoute.enabled ? "auto" : paused ? "paused" : "manual";
+  if (presentationRoute.enabled) document.querySelector("#motion-status").value = "Autonomous";
+  else if (paused) document.querySelector("#motion-status").value = "Paused";
 }
 
 function applyPresentationVisualSample(sample) {

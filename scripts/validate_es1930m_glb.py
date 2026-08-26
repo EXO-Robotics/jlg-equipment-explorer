@@ -34,8 +34,8 @@ REQUIRED_MECHANISM_NODES = {
 REQUIRED_CONTROL_NODES = {
     "PlatformControlCarrier", "PlatformControlCarrierBack", "PlatformControlCarrierLeftGuard",
     "PlatformControlCarrierRightGuard", "PlatformControlCarrierFloor", "PlatformControlCarrierTopLip",
-    "PlatformControlCarrierRailHook", "PlatformControlModule", "PlatformControlHousing",
-    "PlatformControlFaceBezel", "PlatformControlFace", "PlatformIndicatorLegendPanel", "PlatformBatteryBarField",
+    "PlatformControlCarrierRailHook", "PlatformConsoleModule", "PlatformConsoleHousing",
+    "PlatformConsoleFaceBezel", "PlatformConsoleFace", "PlatformConsoleDisplay", "PlatformBatteryBarField",
     "PlatformIndoorCapacityIndicator", "PlatformOutdoorCapacityIndicator", "PlatformSystemFaultIndicator",
     "PlatformBatteryDischargeIndicatorRed", "PlatformBatteryDischargeIndicatorGreen1",
     "PlatformBatteryDischargeIndicatorGreen2", "PlatformTiltIndicator", "PlatformOverloadIndicator",
@@ -45,8 +45,8 @@ REQUIRED_CONTROL_NODES = {
     "PlatformAlarm", "PlatformAlarmBody", "PlatformAlarmGrille", "PlatformJoystick",
     "PlatformJoystickMountPlate", "PlatformJoystickBootRing_1", "PlatformJoystickBootRing_2",
     "PlatformJoystickBootRing_3", "PlatformJoystickGrip", "PlatformJoystickTopRocker",
-    "PlatformJoystickTrigger", "PlatformControlCable", "PlatformControlCableConnector",
-    "PlatformControlCableLead", "PlatformControlCableDrop", "PlatformPhoneCradle",
+    "PlatformJoystickTrigger", "PlatformConsoleCable", "PlatformConsoleCableConnector",
+    "PlatformConsoleCableLead", "PlatformConsoleCableDrop", "PlatformPhoneCradle",
     "PlatformPhoneCradleBack", "PlatformPhoneCradleBottom", "PlatformPhoneCradleLipLeft", "PlatformPhoneCradleLipRight",
 }
 REQUIRED_EDGES = {
@@ -62,13 +62,13 @@ REQUIRED_EDGES = {
     "FixedRails": "PlatformAssembly",
     "ExtensionRails": "ExtensionDeck",
     "SelfClosingGate": "ExtensionDeck",
-    "PlatformControls": "PlatformAssembly",
-    "PlatformControlCarrier": "PlatformControls",
-    "PlatformControlModule": "PlatformControls",
-    "PlatformEmergencyStop": "PlatformControlModule",
-    "PlatformAlarm": "PlatformControlModule",
-    "PlatformJoystick": "PlatformControlModule",
-    "PlatformControlCable": "PlatformControls",
+    "PlatformConsole": "PlatformAssembly",
+    "PlatformControlCarrier": "PlatformConsole",
+    "PlatformConsoleModule": "PlatformConsole",
+    "PlatformEmergencyStop": "PlatformConsoleModule",
+    "PlatformAlarm": "PlatformConsoleModule",
+    "PlatformJoystick": "PlatformConsoleModule",
+    "PlatformConsoleCable": "PlatformConsole",
     "PlatformPhoneCradle": "PlatformControlCarrier",
     "FrontWheelRoll_R": "SteerSpindle_R",
     "FrontWheelRoll_L": "SteerSpindle_L",
@@ -243,7 +243,7 @@ def main():
     if (
         root_extras.get("configuration_id") != CONFIGURATION_ID
         or root_extras.get("pvc") != "2404"
-        or root_extras.get("release") != "1.0.3"
+        or root_extras.get("release") != "1.0.4"
     ):
         raise RuntimeError("GLB root evidence identity mismatch")
     if missing := sorted(REQUIRED_MECHANISM_NODES - by_name.keys()):
@@ -271,7 +271,7 @@ def main():
         raise RuntimeError(f"Expected 20 explicit scissor link groups, found {len(link_groups)}")
     if len(pivot_markers) < 68:
         raise RuntimeError(f"Expected at least 68 pivot markers, found {len(pivot_markers)}")
-    controls_root = by_name["PlatformControls"]
+    controls_root = by_name["PlatformConsole"]
     control_meshes = [
         name for name, index in by_name.items()
         if "mesh" in nodes[index]
@@ -280,8 +280,15 @@ def main():
     ]
     if len(control_meshes) < 62:
         raise RuntimeError(f"Platform control detail regression: expected at least 62 tagged meshes, found {len(control_meshes)}")
-    if any(name.startswith("PlatformControlCableCoil") for name in by_name):
+    if any(name.startswith("PlatformConsoleCableCoil") for name in by_name):
         raise RuntimeError("Standard frozen configuration must not include the optional coiled control cable")
+    legacy_console_names = {
+        "PlatformControls", "PlatformControlModule", "PlatformControlHousing",
+        "PlatformControlFace", "PlatformIndicatorLegendPanel", "PlatformControlCable",
+    }
+    legacy_present = sorted(legacy_console_names.intersection(by_name))
+    if legacy_present:
+        raise RuntimeError(f"Legacy ES1930M control-board naming remains: {legacy_present}")
     for name in HIT_VOLUMES:
         if name not in by_name or not (nodes[by_name[name]].get("extras") or {}).get("is_hit_volume"):
             raise RuntimeError(f"Missing declared interaction volume: {name}")
