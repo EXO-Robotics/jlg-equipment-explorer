@@ -380,7 +380,7 @@ async function settle742Camera(page) {
   return page.evaluate(async () => (await import("/scripts/742_browser_capture_probe.js")).waitForOrbitCameraSettle());
 }
 
-async function settleOrbitCamera(page, tolerance = 0.05) {
+async function settleOrbitCamera(page, tolerance = 0.001) {
   await page.waitForFunction((maximumDelta) => {
     const actual = Number(document.body.dataset.orbitCameraDistanceM);
     const desired = Number(document.body.dataset.orbitDesiredDistanceM);

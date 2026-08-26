@@ -1230,7 +1230,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "dc9be1a3ab547cdd5bd46e4738e2f71510df6c5590f6d578098f16cf7e33e58f",
+  "candidate_tree_sha256": "bc04eb57946123e331cc18e7b7d7ce3d661005817aaf8e0f1648e7ed4dc0f842",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1273,9 +1273,9 @@
       "sha256": "9392a8c7b6cebc91a202dea3eb8237cfc60b4d86a026e39dd833f9840d339984"
     },
     "browser_capture_runner": {
-      "bytes": 88387,
+      "bytes": 88388,
       "path": "scripts/capture_742_browser_evidence.mjs",
-      "sha256": "883add8cf3ba3108bcc8e568ba55288dd90217d7cf1bd7b681294f1bc1ea1fa4"
+      "sha256": "4492438738d68b720f9c1d30a9665366090b46332285b53d985d1e2ce51df78c"
     },
     "browser_capture_validator": {
       "bytes": 88452,
