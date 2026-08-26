@@ -47,6 +47,7 @@ const browserDescriptor = browserDescriptors.find((item) => item.name === browse
 if (!browserDescriptor || !/^\d+$/.test(browserDescriptor.revision) || !/^\d+(?:\.\d+){3}$/.test(browserDescriptor.browserVersion)) {
   throw new Error("capture runner cannot resolve the Playwright Chromium revision");
 }
+const browserBundle = await chromiumBundleRecord(BROWSER_EXECUTABLE);
 const TOOLCHAIN_RECORD = Object.freeze({
   tool: "Playwright",
   version: PLAYWRIGHT_VERSION,
@@ -60,6 +61,7 @@ const TOOLCHAIN_RECORD = Object.freeze({
     sha256: await shaFile(BROWSER_EXECUTABLE),
     bytes: browserStat.size,
   },
+  browser_bundle: browserBundle,
 });
 if (options["verify-toolchain-only"] === "1") {
   console.log(JSON.stringify({ status: "PASS", toolchain: TOOLCHAIN_RECORD }, null, 2));
@@ -100,10 +102,57 @@ if (REQUESTED_GATE && !(REQUESTED_GATE in GATE_FILES)) throw new Error(`unsuppor
 
 function assert(value, message) { if (!value) throw new Error(message); }
 function sha(buffer) { return createHash("sha256").update(buffer).digest("hex"); }
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && typeof value === "object") return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(",")}}`;
+  return JSON.stringify(value);
+}
 async function shaFile(filename) {
   const hasher = createHash("sha256");
   for await (const chunk of createReadStream(filename)) hasher.update(chunk);
   return hasher.digest("hex");
+}
+function chromiumBundleRoot(executable) {
+  const parsed = path.parse(executable);
+  const segments = executable.slice(parsed.root.length).split(path.sep);
+  const appIndex = segments.findIndex((segment) => segment.endsWith(".app"));
+  if (appIndex >= 0) return path.join(parsed.root, ...segments.slice(0, appIndex + 1));
+  return path.dirname(executable);
+}
+async function chromiumBundleRecord(executable) {
+  const root = chromiumBundleRoot(executable);
+  const entries = [];
+  async function visit(directory) {
+    const children = await fs.readdir(directory, { withFileTypes: true });
+    children.sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0);
+    for (const child of children) {
+      const absolute = path.join(directory, child.name);
+      const relative = path.relative(root, absolute).split(path.sep).join("/");
+      if (child.isDirectory()) await visit(absolute);
+      else if (child.isSymbolicLink()) entries.push({ path: relative, type: "symlink", target: await fs.readlink(absolute) });
+      else if (child.isFile()) {
+        const stat = await fs.stat(absolute);
+        entries.push({ path: relative, type: "file", bytes: stat.size, sha256: await shaFile(absolute) });
+      }
+    }
+  }
+  await visit(root);
+  entries.sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
+  const executableRelativePath = path.relative(root, executable).split(path.sep).join("/");
+  const rootDigestPayload = entries.map((entry) => entry.type === "file"
+    ? `file\0${entry.path}\0${entry.bytes}\0${entry.sha256}\n`
+    : `symlink\0${entry.path}\0${entry.target}\n`).join("");
+  return {
+    schema_version: "1.0.0",
+    root_basename: path.basename(root),
+    executable_relative_path: executableRelativePath,
+    file_count: entries.filter((entry) => entry.type === "file").length,
+    symlink_count: entries.filter((entry) => entry.type === "symlink").length,
+    total_file_bytes: entries.filter((entry) => entry.type === "file").reduce((total, entry) => total + entry.bytes, 0),
+    manifest_sha256: sha(Buffer.from(canonicalJson(entries))),
+    root_digest_sha256: sha(Buffer.from(rootDigestPayload)),
+    entries,
+  };
 }
 function outcomeSha(value) { return sha(Buffer.from(JSON.stringify(value))); }
 function utcNow() { return new Date().toISOString(); }
@@ -202,30 +251,66 @@ async function snapshot(page, selectors = BASE_SELECTORS) {
   }), selectors);
 }
 
+function normalizeAXValue(value) {
+  const primitive = value?.value;
+  return {
+    type: value?.type || null,
+    value: primitive === null || ["string", "number", "boolean"].includes(typeof primitive) ? primitive ?? null : null,
+    related_nodes: (value?.relatedNodes || []).map((node) => ({
+      backend_dom_node_id: node.backendDOMNodeId ?? null,
+      idref: node.idref || null,
+      text: node.text || null,
+    })),
+  };
+}
+
 async function axNodes(page) {
   const session = await page.context().newCDPSession(page);
   const result = await session.send("Accessibility.getFullAXTree");
   await session.detach();
-  const accepted = new Set(["application", "dialog", "button", "slider"]);
   return result.nodes.flatMap((node) => {
     const role = node.role?.value;
-    if (!accepted.has(role) || node.ignored) return [];
-    const states = {};
-    for (const property of node.properties || []) {
-      if (["disabled", "focusable", "focused", "modal", "orientation", "settable", "valuetext"].includes(property.name)) states[property.name] = property.value?.value;
-    }
-    return [{ role, name: String(node.name?.value || ""), value: node.value?.value ?? null, states }];
+    if (!role || node.ignored) return [];
+    return [{
+      node_id: node.nodeId || null,
+      backend_dom_node_id: node.backendDOMNodeId ?? null,
+      role,
+      name: normalizeAXValue(node.name),
+      description: normalizeAXValue(node.description),
+      value: normalizeAXValue(node.value),
+      properties: (node.properties || []).map((property) => ({ name: property.name, value: normalizeAXValue(property.value) })),
+    }];
   });
 }
 
-async function axTwoStates(page, openSelector = "#info-toggle") {
+async function domSliderEvidence(page, selectors) {
+  return page.evaluate((wanted) => wanted.map((selector) => {
+    const node = document.querySelector(selector);
+    if (!(node instanceof HTMLInputElement)) throw new Error(`AX slider selector did not resolve: ${selector}`);
+    const detailsIds = (node.getAttribute("aria-details") || "").trim().split(/\s+/).filter(Boolean);
+    return {
+      selector,
+      name: node.getAttribute("aria-label") || "",
+      aria_valuetext: node.getAttribute("aria-valuetext") || "",
+      aria_details: detailsIds,
+      details_text: detailsIds.map((id) => ({ id, text: (document.getElementById(id)?.textContent || "").trim() })),
+    };
+  }), selectors);
+}
+
+async function axTwoStates(page, sliderSelectors, openSelector = "#info-toggle") {
   if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) await page.keyboard.press("Escape");
   const controls = await axNodes(page);
+  const domSliders = await domSliderEvidence(page, sliderSelectors);
   await page.locator(openSelector).click();
   await page.waitForFunction(() => document.body.classList.contains("inspector-open") && !document.querySelector("#inspector").hasAttribute("inert"));
   await page.waitForFunction(() => document.activeElement?.id === "inspector-close");
   const modal = await axNodes(page);
-  return { source: "Chromium CDP Accessibility.getFullAXTree", states: [{ state: "controls_open", nodes: controls }, { state: "modal_open", nodes: modal }] };
+  return {
+    source: "Chromium CDP Accessibility.getFullAXTree",
+    dom_sliders: domSliders,
+    states: [{ state: "controls_open", nodes: controls }, { state: "modal_open", nodes: modal }],
+  };
 }
 
 async function setRange(page, selector, value) {
@@ -337,45 +422,103 @@ function baseArtifact(gate, capturedAt, observations, boundary, upstreamIdentity
 }
 
 async function reduced742() {
-  const opened = await openPage([1280, 720], "/742/?diagnostics=1&reduce=1");
+  const opened = await openPage([1280, 720], "/742/?diagnostics=1");
   await waitLoaded(opened.page, "glb-validated", "selection 6/6 ready");
-  const observed = await opened.page.evaluate(() => ({ profile: document.body.dataset.motionProfile, showcaseDisabled: document.querySelector("#showcase").disabled, manual: [...document.querySelectorAll('input[type="range"]')].every((node) => !node.disabled) }));
-  assert(observed.profile === "reduced" && observed.showcaseDisabled && observed.manual, "742 reduced-motion state failed");
+  const sample = () => opened.page.evaluate(() => Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])));
+  const showcase = opened.page.locator("#showcase");
+  await showcase.click();
+  await opened.page.waitForFunction(() => document.body.dataset.showcaseActive === "true");
+  const movingStart = await sample();
+  await opened.page.waitForTimeout(300);
+  const before = await sample();
+  await opened.page.emulateMedia({ reducedMotion: "reduce" });
+  await opened.page.waitForFunction(() => document.body.dataset.motionProfile === "reduced" && document.querySelector("#showcase").disabled && document.body.dataset.showcaseActive === "false");
+  const reducedStart = await sample();
+  await opened.page.waitForTimeout(300);
+  const reducedEnd = await sample();
+  await opened.page.emulateMedia({ reducedMotion: "no-preference" });
+  await opened.page.waitForFunction(() => document.body.dataset.motionProfile === "full" && !document.querySelector("#showcase").disabled);
+  await opened.page.waitForTimeout(250);
+  const relaxed = await opened.page.evaluate(() => ({
+    ...Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
+    control_pressed: document.body.dataset.showcaseActive,
+    manual: [...document.querySelectorAll('#machine-controls-body input[type="range"]')].every((node) => !node.disabled),
+  }));
+  const state = {
+    transition: "no-preference->reduce->no-preference",
+    controller: "showcase",
+    raw_samples: { moving_start: movingStart, before_reduce: before, reduced_start: reducedStart, reduced_end: reducedEnd, relaxed },
+    moving_before: JSON.stringify(movingStart) !== JSON.stringify(before),
+    frozen_while_reduced: JSON.stringify(reducedStart) === JSON.stringify(reducedEnd),
+    did_not_auto_resume: relaxed.control_pressed === "false" && Object.keys(reducedEnd).every((key) => reducedEnd[key] === relaxed[key]),
+    manual_controls_enabled: relaxed.manual,
+  };
+  assert(state.moving_before && state.frozen_while_reduced && state.did_not_auto_resume && state.manual_controls_enabled, `742 live reduced-motion state failed: ${JSON.stringify(state)}`);
+  assert(opened.errors.length === 0, `742 reduced-motion console errors: ${opened.errors.join(" | ")}`);
   await opened.context.close();
-  return observed;
+  return state;
 }
 
-async function capture742LoadTimeout() {
+async function capture742Fault(fault) {
+  const expectedSource = {
+    "bootstrap-timeout": "bootstrap-timeout",
+    "asset-timeout": "load-timeout",
+    "loader-start": "loader-start-failed",
+    "runtime-error": "unexpected-runtime-error",
+    "unhandled-rejection": "unhandled-rejection",
+  }[fault];
+  assert(expectedSource, `unsupported 742 fault: ${fault}`);
   const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
+  await installFrameCounterObserver(context);
   const page = await context.newPage();
   const errors = [];
-  page.on("pageerror", (error) => errors.push(`pageerror:${error.message}`));
-  await page.route("**/assets/models/742.glb*", async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, 17000));
+  let upstreamRequestHeld = false;
+  page.on("pageerror", (error) => errors.push(error.message));
+  if (fault === "asset-timeout") await page.route("**/assets/models/742.glb*", async (route) => {
+    upstreamRequestHeld = true;
+    await new Promise((resolve) => setTimeout(resolve, 500));
     try { await route.abort("timedout"); } catch {}
   });
-  await page.goto(`${BASE}/742/?diagnostics=1`, { waitUntil: "domcontentloaded", timeout: 30000 });
-  await page.waitForFunction(() => document.body.dataset.machineSource === "load-timeout" && document.body.dataset.viewerTerminal === "true", null, { timeout: 18000 });
-  const observed = await page.evaluate(() => {
-    const error = document.querySelector("#error");
-    const controls = [...document.querySelectorAll(".control-panel button,.control-panel input")];
-    return {
-      source: document.body.dataset.machineSource || null,
-      viewer_terminal: document.body.dataset.viewerTerminal === "true",
-      error_role: error?.getAttribute("role") || null,
-      error_aria_live: error?.getAttribute("aria-live") || null,
-      error_visible: Boolean(error && !error.hidden && getComputedStyle(error).display !== "none"),
-      error_focused: document.activeElement === error,
-      app_inert: document.querySelector("#app")?.hasAttribute("inert") === true,
-      interface_inert: document.querySelector(".interface")?.hasAttribute("inert") === true,
-      disabled_control_count: controls.filter((node) => node.disabled).length,
-      total_control_count: controls.length,
-    };
-  });
-  assert(observed.source === "load-timeout" && observed.viewer_terminal && observed.error_role === "alert" && observed.error_aria_live === "assertive" && observed.error_visible && observed.error_focused && observed.app_inert && observed.interface_inert && observed.total_control_count > 0 && observed.disabled_control_count === observed.total_control_count, `742 stalled-load terminal contract failed: ${JSON.stringify(observed)}`);
-  assert(errors.length === 0, `742 stalled-load page errors: ${errors.join(" | ")}`);
+  const waitUntil = fault === "bootstrap-timeout" ? "commit" : "domcontentloaded";
+  await page.goto(`${BASE}/742/?diagnostics=1&ee-test-fault=${fault}`, { waitUntil, timeout: 30000 });
+  let showcaseMotion = null;
+  if (fault === "runtime-error" || fault === "unhandled-rejection") {
+    await waitLoaded(page, "glb-validated", "selection 6/6 ready");
+    const sample = () => page.evaluate(() => ({
+      controls: Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value])),
+      runtime_frame_count: Number(document.body.dataset.runtimeFrameCount),
+    }));
+    await page.locator("#showcase").click();
+    const start = await sample();
+    await page.waitForFunction((before) => {
+      const controls = Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [node.id, node.value]));
+      return document.body.dataset.showcaseActive === "true" && JSON.stringify(controls) !== JSON.stringify(before);
+    }, start.controls, { timeout: 5000 });
+    const end = await sample();
+    showcaseMotion = { start, end };
+    assert(end.runtime_frame_count > start.runtime_frame_count && JSON.stringify(end.controls) !== JSON.stringify(start.controls), `742 ${fault} did not establish measurable showcase/RAF motion`);
+    const triggered = await page.evaluate(() => globalThis.__EQUIPMENT_EXPLORER_TEST_HOOK__?.trigger());
+    assert(triggered === true, `742 ${fault} hook did not trigger`);
+  }
+  await page.waitForFunction((source) => document.body.dataset.viewerTerminal === "true" && document.body.dataset.machineSource === source, expectedSource, { timeout: 5000 });
+  await page.waitForTimeout(50);
+  const first = await terminalState(page);
+  const baseline = await frameCounterBaseline(page, first.terminal_frame_source);
+  await page.waitForTimeout(250);
+  const second = await terminalState(page);
+  assert(first.source === expectedSource && first.viewer_terminal && first.error_role === "alert" && first.error_aria_live === "assertive" && first.error_visible && first.error_focused && first.app_inert && first.interface_inert && first.total_control_count > 0 && first.disabled_control_count === first.total_control_count, `742 ${fault} terminal contract failed: ${JSON.stringify(first)}`);
+  assert(upstreamRequestHeld === (fault === "asset-timeout"), `742 ${fault} upstream-request hold evidence drift`);
+  assert(baseline.counter && baseline.samples.length >= 2 && baseline.samples.at(-1).value > baseline.samples[0].value, `742 ${fault} lacks a changing pre-terminal frame baseline: ${JSON.stringify(baseline)}`);
+  assert(first.terminal_frame_source === baseline.counter && Number(first.terminal_frame_count) > 0 && first.terminal_frame_count === second.terminal_frame_count && first.terminal_frame_source === second.terminal_frame_source && first.runtime_frame_count === second.runtime_frame_count && first.boot_frame_count === second.boot_frame_count, `742 ${fault} terminal frame state did not freeze: ${JSON.stringify({ first, second })}`);
+  assert(errors.length === (fault === "runtime-error" || fault === "unhandled-rejection" ? 1 : 0), `742 ${fault} unexpected page-error count: ${JSON.stringify(errors)}`);
   await context.close();
-  return pass(observed);
+  return pass({ fault, expected_source: expectedSource, upstream_request_held: upstreamRequestHeld, animation_baseline: baseline, showcase_motion: showcaseMotion, terminal_first: first, terminal_after_250ms: second, animation_state_stable_250ms: true });
+}
+
+async function capture742Faults() {
+  const cases = {};
+  for (const fault of ["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]) cases[fault] = await capture742Fault(fault);
+  return cases;
 }
 
 async function captureDesktop742() {
@@ -387,10 +530,19 @@ async function captureDesktop742() {
   const stowed = await snapshot(page);
   assert((await page.locator("#controls-toggle").getAttribute("aria-expanded")) === "true", "desktop controls not expanded");
   const values = {};
-  for (const [selector, value] of [["#lift-control", 100], ["#telescope-control", 100], ["#tilt-control", 25], ["#steer-control", 80], ["#level-control", 50]]) values[selector] = await setRange(page, selector, value);
+  for (const [selector, value] of [["#lift-control", 100], ["#telescope-control", 100], ["#tilt-control", 25], ["#level-control", 50]]) values[selector] = await setRange(page, selector, value);
   await page.waitForTimeout(500);
   assert(Object.values(values).every((value) => !value.disabled), "desktop manual control disabled");
-  const maximumPose = await snapshot(page);
+  await setRange(page, "#steer-control", 80);
+  await page.locator('[data-steer-mode="crab"]').click();
+  const centerRequiredRejection = await page.evaluate(() => ({
+    requested_mode: "crab",
+    active_mode: [...document.querySelectorAll("[data-steer-mode]")].find((node) => node.getAttribute("aria-pressed") === "true")?.dataset.steerMode || null,
+    alignment: document.body.dataset.steerModeAlignment || null,
+    visible_status: document.querySelector("#motion-status")?.value || "",
+  }));
+  assert(centerRequiredRejection.active_mode === "circle" && centerRequiredRejection.alignment === "center-required" && centerRequiredRejection.visible_status.includes("center steering"), `steering mode changed without centering: ${JSON.stringify(centerRequiredRejection)}`);
+  await setRange(page, "#steer-control", 0);
   const modes = [];
   for (const mode of ["circle", "crab", "front"]) {
     await page.locator(`[data-steer-mode="${mode}"]`).click();
@@ -398,6 +550,8 @@ async function captureDesktop742() {
     assert(pressed === "true", `steer mode ${mode} did not activate`);
     modes.push(mode);
   }
+  values["#steer-control"] = await setRange(page, "#steer-control", 80);
+  const maximumPose = await snapshot(page);
   const beforeReset = await page.evaluate(() => ({
     slider_values: Object.fromEntries([...document.querySelectorAll('#machine-controls-body input[type="range"]')].map((node) => [`#${node.id}`, node.value])),
     pose_frame_distance_m: Number(document.body.dataset.poseFrameDistanceM),
@@ -429,10 +583,10 @@ async function captureDesktop742() {
   const assertions = {
     load_stowed: pass({ source: "glb-validated", selection: "6/6 ready", runtime_error_count: 0 }),
     manual_controls: pass({ values }),
-    steering_modes: pass({ pressed_modes: modes }),
+    steering_modes: pass({ pressed_modes: modes, center_required_rejection: centerRequiredRejection }),
     maximum_pose_reset: pass({ reset_pressed_while_pose: "maximum", before_reset: beforeReset, after_reset: resetView, settle: resetSettle }),
     component_modal: pass({ initial_focus_id: "inspector-close", tab_trapped: true, restored_focus_component: "boom" }),
-    stalled_load_timeout: await capture742LoadTimeout(),
+    terminal_failure_matrix: pass({ cases: await capture742Faults() }),
   };
   const tracePath = await writeTrace(gate, capturedAt, assertions);
   return baseArtifact(gate, capturedAt, {
@@ -490,7 +644,7 @@ async function captureAccessibility742() {
   const dom = await snapshot(page, [...BASE_SELECTORS, ...SLIDER_SELECTORS]);
   const values = Object.fromEntries(await Promise.all(SLIDER_SELECTORS.map(async (selector) => [selector, await page.locator(selector).getAttribute("aria-valuetext")])));
   assert(JSON.stringify(values) === JSON.stringify({ "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°", "#steer-control": "All wheel headings centered", "#level-control": "Level" }), `stow aria values drift: ${JSON.stringify(values)}`);
-  const ax = await axTwoStates(page);
+  const ax = await axTwoStates(page, SLIDER_SELECTORS);
   assert((await page.evaluate(() => document.activeElement?.id)) === "inspector-close", "a11y modal did not focus close");
   const screenshotPath = await screenshot(page, "742-accessibility-modal.png");
   await page.keyboard.press("Tab");
@@ -609,6 +763,23 @@ async function frameCapture(page, viewport) {
   }, viewport);
 }
 
+async function exposePerformanceWindow(page, profile, summary) {
+  const label = `${profile} captured window · ${summary.sample_count} visible frames · p95 ${summary.p95_ms.toFixed(3)} ms · worst ${summary.worst_ms.toFixed(3)} ms · stalls ≥250 ms ${summary.visible_stall_count_gte_250ms}`;
+  return page.evaluate(({ text, capturedSummary }) => {
+    const existing = document.querySelector("#evidence-performance-window");
+    const node = existing || document.body.appendChild(document.createElement("output"));
+    node.id = "evidence-performance-window";
+    node.setAttribute("aria-label", "Captured performance evidence window");
+    node.textContent = text;
+    Object.assign(node.style, {
+      position: "fixed", left: "12px", bottom: "12px", zIndex: "9999", maxWidth: "calc(100vw - 24px)",
+      padding: "7px 9px", borderRadius: "6px", background: "rgba(8, 14, 20, 0.88)", color: "white",
+      font: "600 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace", pointerEvents: "none",
+    });
+    return { kind: "captured_visible_frame_window", label_text: node.textContent, summary: capturedSummary };
+  }, { text: label, capturedSummary: summary });
+}
+
 async function capturePerformance742() {
   const gate = "performance_profile";
   const capturedAt = utcNow();
@@ -619,6 +790,7 @@ async function capturePerformance742() {
     await waitLoaded(opened.page, "glb-validated", "selection 6/6 ready");
     captures[name] = await frameCapture(opened.page, viewport);
     assert(captures[name].summary.p95_ms <= 50 && captures[name].summary.visible_stall_count_gte_250ms === 0, `${name} performance threshold failed: ${JSON.stringify(captures[name].summary)}`);
+    captures[name].screenshot_diagnostic = await exposePerformanceWindow(opened.page, name, captures[name].summary);
     screenshots.push(await screenshot(opened.page, filename));
     assert(opened.errors.length === 0, `742 ${name} performance console errors: ${opened.errors.join(" | ")}`);
     await opened.context.close();
@@ -630,20 +802,15 @@ async function capturePerformance742() {
   return artifact;
 }
 
-function fileRecord(relative) {
-  const data = execFileSync("cat", [path.join(ROOT, relative)]);
-  return { sha256: sha(data), bytes: data.length };
-}
-
 function upstreamIdentity(model) {
   if (model === "600s") {
     const receiptPath = "assets/models/600s.asset-receipt.json";
     const receipt = JSON.parse(execFileSync("cat", [path.join(ROOT, receiptPath)], { encoding: "utf8" }));
-    return { route: "/", configuration_id: receipt.configuration_id, release: receipt.release, asset_sha256: receipt.sha256, runtime_sha256: receipt.runtime_sha256, receipt_sha256: fileRecord(receiptPath).sha256, receipt_bytes: fileRecord(receiptPath).bytes };
+    return { route: "/", configuration_id: receipt.configuration_id, release: receipt.release, asset_sha256: receipt.sha256, runtime_sha256: receipt.runtime_sha256 };
   }
   const receiptPath = "assets/models/es1930m.asset-receipt.json";
   const receipt = JSON.parse(execFileSync("cat", [path.join(ROOT, receiptPath)], { encoding: "utf8" }));
-  return { route: "/es1930m/", configuration_id: receipt.configuration_id, release: receipt.release, asset_sha256: receipt.files.asset.sha256, runtime_sha256: receipt.runtime.sha256, receipt_sha256: fileRecord(receiptPath).sha256, receipt_bytes: fileRecord(receiptPath).bytes };
+  return { route: "/es1930m/", configuration_id: receipt.configuration_id, release: receipt.release, asset_sha256: receipt.files.asset.sha256, runtime_sha256: receipt.runtime.sha256 };
 }
 
 async function captureReducedRegression(model) {
@@ -665,21 +832,58 @@ async function captureReducedRegression(model) {
   await opened.page.waitForTimeout(250);
   const relaxed = await opened.page.evaluate(() => ({
     x: document.body.dataset.driveX, z: document.body.dataset.driveZ,
-    autonomyPressed: document.querySelector("#autonomy-toggle").getAttribute("aria-pressed"),
+    control_pressed: document.querySelector("#autonomy-toggle").getAttribute("aria-pressed"),
     manual: [...document.querySelectorAll('input[type="range"]')].every((node) => !node.disabled),
   }));
   const state = {
     transition: "no-preference->reduce->no-preference",
+    controller: "autonomy",
     raw_samples: { moving_start: movingStart, before_reduce: before, reduced_start: reducedStart, reduced_end: reducedEnd, relaxed },
     moving_before: movingStart.x !== before.x || movingStart.z !== before.z,
     frozen_while_reduced: reducedStart.x === reducedEnd.x && reducedStart.z === reducedEnd.z,
-    did_not_auto_resume: relaxed.autonomyPressed === "false" && reducedEnd.x === relaxed.x && reducedEnd.z === relaxed.z,
+    did_not_auto_resume: relaxed.control_pressed === "false" && reducedEnd.x === relaxed.x && reducedEnd.z === relaxed.z,
     manual_controls_enabled: relaxed.manual,
   };
   assert(state.moving_before && state.frozen_while_reduced && state.did_not_auto_resume && state.manual_controls_enabled, `${model} live reduced-motion transition failed: ${JSON.stringify({ movingStart, before, reducedStart, reducedEnd, relaxed, state })}`);
   assert(opened.errors.length === 0, `${model} reduced console errors: ${opened.errors.join(" | ")}`);
   await opened.context.close();
   return state;
+}
+
+async function resetRegressionScreenshotFraming(page, model, { collapseControls = false } = {}) {
+  if (await page.locator("body").evaluate((node) => node.classList.contains("inspector-open"))) await page.keyboard.press("Escape");
+  const autonomy = page.locator("#autonomy-toggle");
+  if (await autonomy.count() && await autonomy.getAttribute("aria-pressed") === "true" && !(await autonomy.isDisabled())) await autonomy.click();
+  const stow = page.locator("#stow");
+  assert(await stow.count(), `${model} stow control is missing before screenshot reset`);
+  await stow.click();
+  await page.waitForTimeout(150);
+  const reset = page.locator("#reset-view");
+  assert(await reset.count(), `${model} Reset View control is missing before screenshot reset`);
+  await reset.click();
+  await page.waitForFunction(() => {
+    const actual = Number(document.body.dataset.orbitCameraDistanceM);
+    const desired = Number(document.body.dataset.orbitDesiredDistanceM);
+    return Number.isFinite(actual) && Number.isFinite(desired) && Math.abs(actual - desired) <= 0.05;
+  }, null, { timeout: 8000 });
+  const controls = page.locator("#controls-toggle");
+  if (collapseControls && await controls.getAttribute("aria-expanded") === "true") {
+    await controls.click();
+    await page.waitForFunction(() => {
+      const actual = Number(document.body.dataset.orbitCameraDistanceM);
+      const desired = Number(document.body.dataset.orbitDesiredDistanceM);
+      return Number.isFinite(actual) && Number.isFinite(desired) && Math.abs(actual - desired) <= 0.05;
+    }, null, { timeout: 8000 });
+  }
+  return page.evaluate(() => ({
+    reset_pressed: true,
+    stow_pressed: true,
+    controls_expanded: document.querySelector("#controls-toggle")?.getAttribute("aria-expanded") === "true",
+    camera_distance_m: Number(document.body.dataset.orbitCameraDistanceM),
+    desired_distance_m: Number(document.body.dataset.orbitDesiredDistanceM),
+    viewer_terminal: document.body.dataset.viewerTerminal === "true",
+    machine_source: document.body.dataset.machineSource || null,
+  }));
 }
 
 async function terminalState(page) {
@@ -699,12 +903,57 @@ async function terminalState(page) {
       total_control_count: controls.length,
       drive_x: document.body.dataset.driveX || null,
       drive_z: document.body.dataset.driveZ || null,
+      boot_frame_count: document.body.dataset.bootFrameCount || null,
+      runtime_frame_count: document.body.dataset.runtimeFrameCount || null,
+      terminal_frame_count: document.body.dataset.terminalFrameCount || null,
+      terminal_frame_source: document.body.dataset.terminalFrameSource || null,
     };
   });
 }
 
+async function installFrameCounterObserver(context) {
+  await context.addInitScript(() => {
+    globalThis.__EE_FRAME_COUNTER_SAMPLES__ = [];
+    const attach = () => {
+      const body = document.body;
+      if (!body || body.dataset.frameCounterObserved === "true") return;
+      body.dataset.frameCounterObserved = "true";
+      const record = () => {
+        for (const [counter, key] of [["boot", "bootFrameCount"], ["runtime", "runtimeFrameCount"]]) {
+          const value = Number(body.dataset[key]);
+          if (!Number.isInteger(value) || value < 0) continue;
+          const last = globalThis.__EE_FRAME_COUNTER_SAMPLES__.at(-1);
+          if (!last || last.counter !== counter || last.value !== value) {
+            globalThis.__EE_FRAME_COUNTER_SAMPLES__.push({ counter, value, at_ms: Number(performance.now().toFixed(3)) });
+          }
+        }
+      };
+      record();
+      new MutationObserver(record).observe(body, { attributes: true, attributeFilter: ["data-boot-frame-count", "data-runtime-frame-count"] });
+    };
+    if (document.body) attach();
+    else {
+      const bodyTimer = setInterval(() => {
+        if (!document.body) return;
+        clearInterval(bodyTimer);
+        attach();
+      }, 0);
+    }
+  });
+}
+
+async function frameCounterBaseline(page, preferredCounter) {
+  const all = await page.evaluate(() => globalThis.__EE_FRAME_COUNTER_SAMPLES__ || []);
+  for (const counter of preferredCounter ? [preferredCounter] : ["runtime", "boot"]) {
+    const samples = all.filter((sample) => sample.counter === counter);
+    if (samples.length >= 2 && samples.at(-1).value > samples[0].value) return { counter, samples };
+  }
+  return { counter: null, samples: all };
+}
+
 async function captureUpstreamFault(model, fault) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
+  await installFrameCounterObserver(context);
   if (fault === "webgl") await context.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (type, ...args) {
@@ -716,19 +965,23 @@ async function captureUpstreamFault(model, fault) {
   const page = await context.newPage();
   const modulePattern = model === "600s" ? "**/viewer.js*" : "**/viewer/runtime.js*";
   const assetPattern = model === "600s" ? "**/assets/models/600s.glb*" : "**/assets/models/es1930m.glb*";
-  if (fault === "module") await page.route(modulePattern, (route) => route.abort("failed"));
-  if (fault === "network") await page.route(assetPattern, (route) => route.abort("failed"));
+  if (fault === "module") await page.route(modulePattern, async (route) => { await new Promise((resolve) => setTimeout(resolve, 180)); await route.abort("failed"); });
+  if (fault === "webgl") await page.route(modulePattern, async (route) => { await new Promise((resolve) => setTimeout(resolve, 180)); await route.continue(); });
+  if (fault === "network") await page.route(assetPattern, async (route) => { await new Promise((resolve) => setTimeout(resolve, 180)); await route.abort("failed"); });
+  if (fault === "contract") await page.route(assetPattern, async (route) => { await new Promise((resolve) => setTimeout(resolve, 180)); await route.continue(); });
   await page.goto(`${BASE}${model === "600s" ? "/" : "/es1930m/"}?diagnostics=1`, { waitUntil: "domcontentloaded", timeout: 30000 });
   const expectedSource = { module: "module-load-failed", webgl: "webgl-unavailable", network: "load-failed", contract: "contract-failed" }[fault];
   await page.waitForFunction((source) => document.body.dataset.viewerTerminal === "true" && document.body.dataset.machineSource === source, expectedSource, { timeout: 30000 });
   await page.waitForTimeout(50);
   const first = await terminalState(page);
+  const baseline = await frameCounterBaseline(page, first.terminal_frame_source);
   await page.waitForTimeout(250);
   const second = await terminalState(page);
   assert(first.source === expectedSource && first.viewer_terminal && first.error_role === "alert" && first.error_aria_live === "assertive" && first.error_visible && first.error_focused && first.app_inert && first.interface_inert && first.total_control_count > 0 && first.disabled_control_count === first.total_control_count, `${model} ${fault} terminal contract failed: ${JSON.stringify(first)}`);
-  assert(first.drive_x === second.drive_x && first.drive_z === second.drive_z, `${model} ${fault} terminal state continued animating: ${JSON.stringify({ first, second })}`);
+  assert(baseline.counter && baseline.samples.length >= 2 && baseline.samples.at(-1).value > baseline.samples[0].value, `${model} ${fault} lacks a changing pre-terminal frame baseline: ${JSON.stringify(baseline)}`);
+  assert(first.terminal_frame_source === baseline.counter && Number(first.terminal_frame_count) > 0 && first.terminal_frame_count === second.terminal_frame_count && first.terminal_frame_source === second.terminal_frame_source && first.runtime_frame_count === second.runtime_frame_count && first.boot_frame_count === second.boot_frame_count && first.drive_x === second.drive_x && first.drive_z === second.drive_z, `${model} ${fault} terminal state continued animating: ${JSON.stringify({ first, second })}`);
   await context.close();
-  return pass({ fault, expected_source: expectedSource, terminal_first: first, terminal_after_250ms: second, animation_state_stable_250ms: true });
+  return pass({ fault, expected_source: expectedSource, animation_baseline: baseline, terminal_first: first, terminal_after_250ms: second, animation_state_stable_250ms: true });
 }
 
 async function captureUpstreamFaults(model) {
@@ -767,6 +1020,9 @@ async function captureRegression(model) {
   const statusText = await desktop.page.locator("#diagnostics").evaluate((node) => node.value);
   const title = await desktop.page.title();
   const sliderSelector = model === "600s" ? "#boom-control" : "#lift-control";
+  const regressionSliderSelectors = model === "600s"
+    ? ["#boom-control", "#extend-control", "#rotate-control", "#steer-control"]
+    : ["#lift-control", "#deck-control", "#steer-control"];
   const controlResult = await setRange(desktop.page, sliderSelector, model === "600s" ? 35 : 50);
   assert(!controlResult.disabled, `${model} desktop control disabled`);
   let engineeringControls = null;
@@ -789,6 +1045,7 @@ async function captureRegression(model) {
   await desktop.page.locator("#stow").click();
   const drag = await dragCanvas(desktop.page);
   const axControls = await axNodes(desktop.page);
+  const axDomSliders = await domSliderEvidence(desktop.page, regressionSliderSelectors);
   const modalOpener = model === "es1930m" ? desktop.page.locator('[data-focus="platform"]') : desktop.page.locator("[data-focus]").first();
   await modalOpener.click();
   await desktop.page.waitForFunction(() => document.body.classList.contains("inspector-open"));
@@ -817,6 +1074,7 @@ async function captureRegression(model) {
     const resumed = await desktop.page.locator("body").getAttribute("data-presentation-mode");
     autoObserved = `${started}->${paused}->${resumed}`;
   }
+  const desktopScreenshotFraming = await resetRegressionScreenshotFraming(desktop.page, model);
   screenshots.push(await screenshot(desktop.page, `${model}-regression-desktop.png`));
   assert(desktop.errors.length === 0, `${model} desktop console errors: ${desktop.errors.join(" | ")}`);
   await desktop.context.close();
@@ -832,6 +1090,7 @@ async function captureRegression(model) {
   }
   const mobileSnapshot = await snapshot(mobile.page);
   const pinch = await pinchCanvasRegression(mobile.page);
+  const mobileScreenshotFraming = await resetRegressionScreenshotFraming(mobile.page, model, { collapseControls: true });
   screenshots.push(await screenshot(mobile.page, `${model}-regression-mobile.png`));
   assert(mobile.errors.length === 0, `${model} mobile console errors: ${mobile.errors.join(" | ")}`);
   await mobile.context.close();
@@ -839,7 +1098,7 @@ async function captureRegression(model) {
   const fatalFailures = await captureUpstreamFaults(model);
   const parsed = model === "600s" ? parse600(statusText) : parseES(statusText);
   const sliderNames = model === "600s" ? ["Boom lift", "Extend", "Rotate", "Steering"] : ["Platform lift", "Extension deck", "Steering actuator; wheel angles deferred"];
-  assert(sliderNames.every((name) => axControls.some((node) => node.role === "slider" && node.name.startsWith(name))), `${model} AX controls missing sliders: ${JSON.stringify(axControls)}`);
+  assert(sliderNames.every((name) => axControls.some((node) => node.role === "slider" && String(node.name.value || "").startsWith(name))), `${model} AX controls missing sliders: ${JSON.stringify(axControls)}`);
   assert(axModal.some((node) => node.role === "dialog"), `${model} AX modal missing dialog`);
   const assertions = {
     load_exact_release: pass({ route: model === "600s" ? "/" : "/es1930m/", parsed_status: parsed }),
@@ -850,6 +1109,7 @@ async function captureRegression(model) {
     pinch_zoom: pinch,
     reduced_motion: pass(reduced),
     fatal_failures: pass({ cases: fatalFailures }),
+    screenshot_framing: pass({ desktop: desktopScreenshotFraming, mobile: mobileScreenshotFraming }),
   };
   if (model === "es1930m") {
     assertions.auto_start_pause_resume = pass({ observed: autoObserved });
@@ -859,7 +1119,7 @@ async function captureRegression(model) {
   const artifact = baseArtifact(gate, capturedAt, {
     page: { route: model === "600s" ? "/" : "/es1930m/", title, status_text: statusText, parsed_status: parsed },
     dom_snapshots: { desktop: desktopSnapshot, mobile: mobileSnapshot, modal_open: modalSnapshot },
-    accessibility_tree_snapshot: { source: "Chromium CDP Accessibility.getFullAXTree", states: [{ state: "controls_open", nodes: axControls }, { state: "modal_open", nodes: axModal }] },
+    accessibility_tree_snapshot: { source: "Chromium CDP Accessibility.getFullAXTree", dom_sliders: axDomSliders, states: [{ state: "controls_open", nodes: axControls }, { state: "modal_open", nodes: axModal }] },
     assertions, reduced_motion: reduced, fatal_failures: fatalFailures,
   }, "Exact current upstream release regression in local headless Chromium only; no deployment, physical-device, or manufacturer-equivalence claim.", upstreamIdentity(model));
   artifact._screenshots = screenshots; artifact._trace = tracePath;

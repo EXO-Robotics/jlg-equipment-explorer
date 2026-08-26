@@ -61,6 +61,14 @@ EXPECTED_STOW_SLIDER_VALUES = {
     "Steering angle": "All wheel headings centered",
     "Frame level": "Level",
 }
+EXPECTED_600S_AX_SLIDER_VALUES = {
+    "Boom lift": "0°", "Extend": "0%", "Rotate": "0°", "Steering": "0°",
+}
+EXPECTED_ES_AX_SLIDER_VALUES = {
+    "Platform lift": "0.90 metres platform height; Stowed",
+    "Extension deck": "0.00 m extension; Stowed",
+    "Steering actuator; wheel angles deferred": "Center cylinder displacement; Stowed",
+}
 CAPTURE_RUNNER_PATH = "scripts/capture_742_browser_evidence.mjs"
 PLAYWRIGHT_LOCK_PATH = "package-lock.json"
 EXPECTED_PLAYWRIGHT_VERSION = "1.62.1"
@@ -83,6 +91,81 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def canonical_digest(value: object) -> str:
+    encoded = json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _validate_browser_bundle(bundle: dict, executable: dict) -> None:
+    fields = {
+        "schema_version", "root_basename", "executable_relative_path", "file_count",
+        "symlink_count", "total_file_bytes", "manifest_sha256", "root_digest_sha256", "entries",
+    }
+    if set(bundle or {}) != fields or bundle.get("schema_version") != "1.0.0":
+        raise RuntimeError("742 Chromium bundle manifest schema drift")
+    if (
+        not isinstance(bundle["root_basename"], str) or not bundle["root_basename"]
+        or "/" in bundle["root_basename"] or "\\" in bundle["root_basename"]
+        or not isinstance(bundle["executable_relative_path"], str)
+        or not bundle["executable_relative_path"]
+    ):
+        raise RuntimeError("742 Chromium bundle root/executable identity drift")
+    entries = bundle["entries"]
+    if not isinstance(entries, list) or not entries:
+        raise RuntimeError("742 Chromium bundle manifest is empty")
+    paths = []
+    file_count = 0
+    symlink_count = 0
+    total_bytes = 0
+    root_chunks = []
+    executable_entry = None
+    for entry in entries:
+        entry_type = entry.get("type") if isinstance(entry, dict) else None
+        entry_path = entry.get("path") if isinstance(entry, dict) else None
+        if (
+            not isinstance(entry_path, str) or not entry_path or entry_path.startswith("/")
+            or "\\" in entry_path or any(part in {"", ".", ".."} for part in entry_path.split("/"))
+        ):
+            raise RuntimeError("742 Chromium bundle entry path is unsafe")
+        paths.append(entry_path)
+        if entry_type == "file":
+            if (
+                set(entry) != {"path", "type", "bytes", "sha256"}
+                or isinstance(entry.get("bytes"), bool) or not isinstance(entry.get("bytes"), int) or entry["bytes"] < 0
+                or not re.fullmatch(r"[0-9a-f]{64}", str(entry.get("sha256", "")))
+            ):
+                raise RuntimeError("742 Chromium bundle file entry drift")
+            file_count += 1
+            total_bytes += entry["bytes"]
+            root_chunks.append(f"file\0{entry_path}\0{entry['bytes']}\0{entry['sha256']}\n")
+            if entry_path == bundle["executable_relative_path"]:
+                executable_entry = entry
+        elif entry_type == "symlink":
+            if set(entry) != {"path", "type", "target"} or not isinstance(entry.get("target"), str) or not entry["target"]:
+                raise RuntimeError("742 Chromium bundle symlink entry drift")
+            symlink_count += 1
+            root_chunks.append(f"symlink\0{entry_path}\0{entry['target']}\n")
+        else:
+            raise RuntimeError("742 Chromium bundle entry type drift")
+    if paths != sorted(paths) or len(paths) != len(set(paths)):
+        raise RuntimeError("742 Chromium bundle manifest ordering/uniqueness drift")
+    if (
+        bundle["file_count"] != file_count
+        or bundle["symlink_count"] != symlink_count
+        or bundle["total_file_bytes"] != total_bytes or total_bytes <= 0
+        or bundle["manifest_sha256"] != canonical_digest(entries)
+        or bundle["root_digest_sha256"] != hashlib.sha256("".join(root_chunks).encode("utf-8")).hexdigest()
+    ):
+        raise RuntimeError("742 Chromium bundle manifest aggregate/digest drift")
+    if (
+        executable_entry is None
+        or executable_entry["sha256"] != executable["sha256"]
+        or executable_entry["bytes"] != executable["bytes"]
+        or Path(bundle["executable_relative_path"]).name != executable["executable_basename"]
+    ):
+        raise RuntimeError("742 Chromium launcher is not bound inside the full bundle manifest")
+
+
 def _validate_capture_runner(record: dict) -> None:
     if set(record or {}) != {"path", "sha256", "bytes"} or record.get("path") != CAPTURE_RUNNER_PATH:
         raise RuntimeError("742 committed capture-runner identity drift")
@@ -91,8 +174,13 @@ def _validate_capture_runner(record: dict) -> None:
         raise RuntimeError("742 committed capture-runner hash/size binding drift")
 
 
+def _validate_upstream_identity(observed: dict, expected: dict) -> None:
+    if set(observed or {}) != set(expected) or any(observed.get(key) != value for key, value in expected.items()):
+        raise RuntimeError("742 upstream regression exact-release binding drift")
+
+
 def _validate_repo_owned_toolchain(record: dict, browser_identity: dict) -> None:
-    fields = {"tool", "version", "source", "lockfile", "browser_executable"}
+    fields = {"tool", "version", "source", "lockfile", "browser_executable", "browser_bundle"}
     if set(record or {}) != fields:
         raise RuntimeError("742 browser automation toolchain schema drift")
     if (
@@ -143,6 +231,7 @@ def _validate_repo_owned_toolchain(record: dict, browser_identity: dict) -> None
         or executable["bytes"] <= 0
     ):
         raise RuntimeError("742 Playwright bundled Chromium identity/digest drift")
+    _validate_browser_bundle(record["browser_bundle"], executable)
 
 
 def _validate_structured_trace_outcomes(trace: dict, gate: str) -> None:
@@ -504,7 +593,7 @@ def _p95(samples: list[float]) -> float:
 
 
 def _validate_frame_capture(capture: dict, expected_viewport: list[int]) -> None:
-    if set(capture or {}) != {"viewport_css_px", "samples_ms", "summary", "background_samples_excluded"}:
+    if set(capture or {}) != {"viewport_css_px", "samples_ms", "summary", "background_samples_excluded", "screenshot_diagnostic"}:
         raise RuntimeError("742 raw frame-capture schema drift")
     if capture["viewport_css_px"] != expected_viewport or capture["background_samples_excluded"] is not True:
         raise RuntimeError("742 raw frame-capture viewport/background boundary drift")
@@ -527,11 +616,55 @@ def _validate_frame_capture(capture: dict, expected_viewport: list[int]) -> None
         raise RuntimeError("742 frame summary is not derivable from the raw samples")
     if summary["p95_ms"] > 50 or summary["visible_stall_count_gte_250ms"] != 0:
         raise RuntimeError("742 local browser performance threshold did not pass")
+    profile = {(1280, 720): "desktop", (390, 844): "portrait", (844, 390): "short_landscape"}.get(tuple(expected_viewport))
+    diagnostic = capture["screenshot_diagnostic"]
+    expected_label = (
+        f"{profile} captured window · {summary['sample_count']} visible frames · "
+        f"p95 {summary['p95_ms']:.3f} ms · worst {summary['worst_ms']:.3f} ms · "
+        f"stalls ≥250 ms {summary['visible_stall_count_gte_250ms']}"
+    )
+    if (
+        set(diagnostic or {}) != {"kind", "label_text", "summary"}
+        or diagnostic["kind"] != "captured_visible_frame_window"
+        or diagnostic["label_text"] != expected_label
+        or diagnostic["summary"] != summary
+    ):
+        raise RuntimeError("742 performance screenshot diagnostic does not bind the measured frame window")
 
 
-def _validate_accessibility_tree(snapshot: dict, slider_names: set[str]) -> None:
-    if set(snapshot or {}) != {"source", "states"} or snapshot["source"] != "Chromium CDP Accessibility.getFullAXTree":
+def _ax_value(record: dict, label: str) -> object:
+    if set(record or {}) != {"type", "value", "related_nodes"} or not isinstance(record["related_nodes"], list):
+        raise RuntimeError(f"742 accessibility-tree AX value schema drift: {label}")
+    for related in record["related_nodes"]:
+        if set(related or {}) != {"backend_dom_node_id", "idref", "text"}:
+            raise RuntimeError(f"742 accessibility-tree AX relation schema drift: {label}")
+    return record["value"]
+
+
+def _validate_accessibility_tree(snapshot: dict, slider_values: dict[str, str]) -> None:
+    if set(snapshot or {}) != {"source", "dom_sliders", "states"} or snapshot["source"] != "Chromium CDP Accessibility.getFullAXTree":
         raise RuntimeError("742 accessibility-tree snapshot schema drift")
+    dom_sliders = snapshot["dom_sliders"]
+    if not isinstance(dom_sliders, list) or len(dom_sliders) != len(slider_values):
+        raise RuntimeError("742 accessibility-tree DOM slider reconciliation set drift")
+    dom_by_name = {}
+    for record in dom_sliders:
+        if set(record or {}) != {"selector", "name", "aria_valuetext", "aria_details", "details_text"}:
+            raise RuntimeError("742 accessibility-tree DOM slider record schema drift")
+        if (
+            not isinstance(record["selector"], str) or not record["selector"].startswith("#")
+            or not isinstance(record["name"], str) or not record["name"]
+            or record["name"] in dom_by_name
+            or record["aria_valuetext"] != slider_values.get(record["name"])
+            or re.fullmatch(r"-?(?:\d+(?:\.\d+)?|\.\d+)", record["aria_valuetext"] or "")
+            or not isinstance(record["aria_details"], list) or not record["aria_details"]
+            or not isinstance(record["details_text"], list)
+        ):
+            raise RuntimeError(f"742 accessibility-tree DOM engineering value drift: {record.get('name')}")
+        details = {item.get("id"): item.get("text") for item in record["details_text"] if isinstance(item, dict) and set(item) == {"id", "text"}}
+        if set(details) != set(record["aria_details"]) or record["aria_valuetext"] not in details.values():
+            raise RuntimeError(f"742 accessibility-tree DOM details/value reconciliation drift: {record['name']}")
+        dom_by_name[record["name"]] = record
     states = snapshot["states"]
     if not isinstance(states, list) or [record.get("state") for record in states] != ["controls_open", "modal_open"]:
         raise RuntimeError("742 accessibility-tree state set drift")
@@ -544,35 +677,54 @@ def _validate_accessibility_tree(snapshot: dict, slider_names: set[str]) -> None
     roles_by_state = {}
     for state, nodes in state_nodes.items():
         roles = set()
+        live_region_observed = False
         for node in nodes:
-            if set(node or {}) != {"role", "name", "value", "states"} or not isinstance(node["states"], dict):
+            if set(node or {}) != {"node_id", "backend_dom_node_id", "role", "name", "description", "value", "properties"} or not isinstance(node["properties"], list):
                 raise RuntimeError("742 accessibility-tree node schema drift")
             roles.add(node["role"])
+            name = _ax_value(node["name"], f"{state}:name")
+            description = _ax_value(node["description"], f"{state}:description")
+            value = _ax_value(node["value"], f"{state}:value")
+            properties = {}
+            for prop in node["properties"]:
+                if set(prop or {}) != {"name", "value"} or not isinstance(prop["name"], str) or prop["name"] in properties:
+                    raise RuntimeError("742 accessibility-tree node property schema drift")
+                _ax_value(prop["value"], f"{state}:{prop['name']}")
+                properties[prop["name"]] = prop["value"]
+            live_value = properties.get("live", {}).get("value")
+            live_region_observed = live_region_observed or node["role"] == "status" or live_value in {"polite", "assertive"}
             if state == "controls_open" and node["role"] == "slider":
-                observed_sliders.append(node["name"])
-                value = node["value"]
-                value_text = node["states"].get("valuetext")
+                if not isinstance(name, str) or name not in dom_by_name:
+                    raise RuntimeError("742 accessibility-tree slider name does not reconcile to DOM")
+                observed_sliders.append(name)
+                native_value_text = properties.get("valuetext", {}).get("value")
+                details_relations = properties.get("details", {}).get("related_nodes", [])
+                detail_ids = {relation.get("idref") for relation in details_relations}
+                dom = dom_by_name[name]
+                direct_text = [candidate for candidate in (name, description, value, native_value_text) if isinstance(candidate, str)]
+                detail_exposed = bool(set(dom["aria_details"]) & detail_ids)
                 if (
                     isinstance(value, bool)
                     or not isinstance(value, (int, float))
                     or not math.isfinite(value)
-                    or not isinstance(value_text, str)
-                    or not re.fullmatch(r"-?(?:\d+(?:\.\d+)?|\.\d+)", value_text)
-                    or not math.isclose(float(value_text), float(value), rel_tol=0, abs_tol=1e-9)
                 ):
                     raise RuntimeError(f"742 accessibility-tree slider native numeric value drift: {node['name']}")
                 if (
-                    node["states"].get("focusable") is not True
-                    or node["states"].get("settable") is not True
-                    or node["states"].get("disabled") not in {None, False}
+                    properties.get("focusable", {}).get("value") is not True
+                    or properties.get("settable", {}).get("value") is not True
+                    or properties.get("disabled", {}).get("value") not in {None, False}
                 ):
-                    raise RuntimeError(f"742 accessibility-tree slider enabled/focusable/settable state drift: {node['name']}")
+                    raise RuntimeError(f"742 accessibility-tree slider enabled/focusable/settable state drift: {name}")
+                if dom["aria_valuetext"] not in direct_text and not detail_exposed:
+                    raise RuntimeError(f"742 accessibility-tree engineering units/state are not exposed through AX: {name}")
+        if state == "controls_open" and not live_region_observed:
+            raise RuntimeError(f"742 accessibility-tree state omits status/live-region semantics: {state}")
         roles_by_state[state] = roles
     if (
         not {"application", "button"}.issubset(roles_by_state["controls_open"])
         or not {"dialog", "button"}.issubset(roles_by_state["modal_open"])
-        or len(observed_sliders) != len(slider_names)
-        or set(observed_sliders) != slider_names
+        or len(observed_sliders) != len(slider_values)
+        or set(observed_sliders) != set(slider_values)
     ):
         raise RuntimeError("742 accessibility-tree snapshot omits required semantics")
 
@@ -581,7 +733,8 @@ def _validate_terminal_state(state: dict, expected_source: str) -> None:
     fields = {
         "source", "viewer_terminal", "error_role", "error_aria_live", "error_visible",
         "error_focused", "app_inert", "interface_inert", "disabled_control_count",
-        "total_control_count", "drive_x", "drive_z",
+        "total_control_count", "drive_x", "drive_z", "boot_frame_count",
+        "runtime_frame_count", "terminal_frame_count", "terminal_frame_source",
     }
     if set(state or {}) != fields:
         raise RuntimeError("742 upstream terminal-state raw record schema drift")
@@ -598,8 +751,34 @@ def _validate_terminal_state(state: dict, expected_source: str) -> None:
         or not isinstance(state["total_control_count"], int)
         or state["total_control_count"] <= 0
         or state["disabled_control_count"] != state["total_control_count"]
+        or state["terminal_frame_source"] not in {"boot", "runtime"}
+        or state["terminal_frame_count"] is None or not str(state["terminal_frame_count"]).isdigit()
+        or int(state["terminal_frame_count"]) <= 0
+        or any(value is not None and not str(value).isdigit() for value in (state["boot_frame_count"], state["runtime_frame_count"]))
+        or state[f"{state['terminal_frame_source']}_frame_count"] != state["terminal_frame_count"]
     ):
         raise RuntimeError(f"742 upstream accessible terminal contract failed: {expected_source}")
+
+
+def _validate_animation_baseline(record: dict, label: str) -> None:
+    if set(record or {}) != {"counter", "samples"} or record["counter"] not in {"boot", "runtime"}:
+        raise RuntimeError(f"742 fatal animation baseline schema drift: {label}")
+    samples = record["samples"]
+    if not isinstance(samples, list) or len(samples) < 2:
+        raise RuntimeError(f"742 fatal animation baseline is incomplete: {label}")
+    previous_value = None
+    previous_at = None
+    for sample in samples:
+        if (
+            set(sample or {}) != {"counter", "value", "at_ms"}
+            or sample["counter"] != record["counter"]
+            or isinstance(sample["value"], bool) or not isinstance(sample["value"], int) or sample["value"] < 0
+            or isinstance(sample["at_ms"], bool) or not isinstance(sample["at_ms"], (int, float)) or not math.isfinite(sample["at_ms"])
+            or (previous_value is not None and sample["value"] <= previous_value)
+            or (previous_at is not None and sample["at_ms"] < previous_at)
+        ):
+            raise RuntimeError(f"742 fatal animation baseline is not a monotonic non-null RAF sequence: {label}")
+        previous_value, previous_at = sample["value"], sample["at_ms"]
 
 
 def _validate_fatal_failures(failures: dict) -> None:
@@ -612,7 +791,7 @@ def _validate_fatal_failures(failures: dict) -> None:
     if set(failures or {}) != set(expected_sources):
         raise RuntimeError("742 upstream fatal-injection case set drift")
     fields = {
-        "outcome", "fault", "expected_source", "terminal_first",
+        "outcome", "fault", "expected_source", "animation_baseline", "terminal_first",
         "terminal_after_250ms", "animation_state_stable_250ms",
     }
     for fault, expected_source in expected_sources.items():
@@ -627,34 +806,91 @@ def _validate_fatal_failures(failures: dict) -> None:
             raise RuntimeError(f"742 upstream fatal-injection result drift: {fault}")
         first = case["terminal_first"]
         after = case["terminal_after_250ms"]
+        _validate_animation_baseline(case["animation_baseline"], fault)
         _validate_terminal_state(first, expected_source)
         _validate_terminal_state(after, expected_source)
-        if first["drive_x"] != after["drive_x"] or first["drive_z"] != after["drive_z"]:
+        if case["animation_baseline"]["counter"] != first["terminal_frame_source"] or any(first[key] != after[key] for key in ("drive_x", "drive_z", "boot_frame_count", "runtime_frame_count", "terminal_frame_count", "terminal_frame_source")):
             raise RuntimeError(f"742 upstream fatal state continued animating: {fault}")
+
+
+def _validate_742_terminal_failure_matrix(assertion: dict) -> None:
+    if set(assertion or {}) != {"outcome", "cases"} or assertion["outcome"] != "pass":
+        raise RuntimeError("742 terminal failure matrix assertion schema drift")
+    expected_sources = {
+        "bootstrap-timeout": "bootstrap-timeout",
+        "asset-timeout": "load-timeout",
+        "loader-start": "loader-start-failed",
+        "runtime-error": "unexpected-runtime-error",
+        "unhandled-rejection": "unhandled-rejection",
+    }
+    if set(assertion["cases"] or {}) != set(expected_sources):
+        raise RuntimeError("742 terminal failure matrix case set drift")
+    fields = {
+        "outcome", "fault", "expected_source", "upstream_request_held", "animation_baseline", "showcase_motion",
+        "terminal_first", "terminal_after_250ms", "animation_state_stable_250ms",
+    }
+    for fault, source in expected_sources.items():
+        case = assertion["cases"][fault]
+        if (
+            set(case or {}) != fields or case["outcome"] != "pass" or case["fault"] != fault
+            or case["expected_source"] != source or case["animation_state_stable_250ms"] is not True
+            or case["upstream_request_held"] is not (fault == "asset-timeout")
+        ):
+            raise RuntimeError(f"742 terminal failure case drift: {fault}")
+        _validate_animation_baseline(case["animation_baseline"], f"742:{fault}")
+        first, after = case["terminal_first"], case["terminal_after_250ms"]
+        _validate_terminal_state(first, source)
+        _validate_terminal_state(after, source)
+        if case["animation_baseline"]["counter"] != first["terminal_frame_source"] or any(first[key] != after[key] for key in ("drive_x", "drive_z", "boot_frame_count", "runtime_frame_count", "terminal_frame_count", "terminal_frame_source")):
+            raise RuntimeError(f"742 terminal failure state continued animating: {fault}")
+        motion = case["showcase_motion"]
+        if fault in {"runtime-error", "unhandled-rejection"}:
+            if (
+                set(motion or {}) != {"start", "end"}
+                or any(set(motion[name] or {}) != {"controls", "runtime_frame_count"} for name in ("start", "end"))
+                or not isinstance(motion["start"]["controls"], dict) or not motion["start"]["controls"]
+                or set(motion["start"]["controls"]) != set(motion["end"]["controls"])
+                or motion["start"]["controls"] == motion["end"]["controls"]
+                or not isinstance(motion["start"]["runtime_frame_count"], int)
+                or motion["end"]["runtime_frame_count"] <= motion["start"]["runtime_frame_count"]
+            ):
+                raise RuntimeError(f"742 runtime fault lacks measurable showcase/RAF motion: {fault}")
+        elif motion is not None:
+            raise RuntimeError(f"742 early fault improperly claims showcase motion: {fault}")
 
 
 def _validate_live_reduced_motion(record: dict, gate: str) -> None:
     fields = {
-        "transition", "raw_samples", "moving_before", "frozen_while_reduced",
+        "transition", "controller", "raw_samples", "moving_before", "frozen_while_reduced",
         "did_not_auto_resume", "manual_controls_enabled",
     }
-    if set(record or {}) != fields or record["transition"] != "no-preference->reduce->no-preference":
+    if (
+        set(record or {}) != fields
+        or record["transition"] != "no-preference->reduce->no-preference"
+        or record["controller"] not in {"autonomy", "showcase"}
+    ):
         raise RuntimeError(f"742 upstream live reduced-motion schema/transition drift: {gate}")
     raw = record["raw_samples"]
     raw_fields = {"moving_start", "before_reduce", "reduced_start", "reduced_end", "relaxed"}
     if set(raw or {}) != raw_fields:
         raise RuntimeError(f"742 upstream live reduced-motion raw sample set drift: {gate}")
+    position_keys = set(raw["moving_start"] or {})
+    if not position_keys:
+        raise RuntimeError(f"742 upstream live reduced-motion position set is empty: {gate}")
     for name in ("moving_start", "before_reduce", "reduced_start", "reduced_end"):
-        if set(raw[name] or {}) != {"x", "z"}:
+        if set(raw[name] or {}) != position_keys:
             raise RuntimeError(f"742 upstream live reduced-motion raw position schema drift: {gate}:{name}")
-    if set(raw["relaxed"] or {}) != {"x", "z", "autonomyPressed", "manual"}:
+        if any(value is None or isinstance(value, (dict, list, bool)) for value in raw[name].values()):
+            raise RuntimeError(f"742 upstream live reduced-motion position is null/non-scalar: {gate}:{name}")
+    if set(raw["relaxed"] or {}) != position_keys | {"control_pressed", "manual"}:
         raise RuntimeError(f"742 upstream live reduced-motion relaxed-state schema drift: {gate}")
+    if any(raw["relaxed"][key] is None for key in position_keys):
+        raise RuntimeError(f"742 upstream live reduced-motion relaxed position is null: {gate}")
     moving = raw["moving_start"] != raw["before_reduce"]
     frozen = raw["reduced_start"] == raw["reduced_end"]
     no_resume = (
-        raw["relaxed"]["autonomyPressed"] == "false"
-        and raw["reduced_end"]["x"] == raw["relaxed"]["x"]
-        and raw["reduced_end"]["z"] == raw["relaxed"]["z"]
+        raw["relaxed"]["control_pressed"] == "false"
+        and all(raw["reduced_end"][key] == raw["relaxed"][key] for key in position_keys)
     )
     if (
         record["moving_before"] is not moving
@@ -700,6 +936,35 @@ def _validate_es_maximum_pose_controls(assertion: dict) -> None:
             raise RuntimeError(f"742 ES maximum-pose DOM aria value drift: {selector}")
 
 
+def _validate_upstream_screenshot_framing(assertion: dict, expected_source: str) -> None:
+    if set(assertion or {}) != {"outcome", "desktop", "mobile"} or assertion.get("outcome") != "pass":
+        raise RuntimeError("742 upstream whole-machine screenshot framing assertion drift")
+    fields = {
+        "reset_pressed", "stow_pressed", "controls_expanded", "camera_distance_m",
+        "desired_distance_m", "viewer_terminal", "machine_source",
+    }
+    for profile in ("desktop", "mobile"):
+        record = assertion[profile]
+        if (
+            set(record or {}) != fields
+            or record["reset_pressed"] is not True
+            or record["stow_pressed"] is not True
+            or record["viewer_terminal"] is not False
+            or record["machine_source"] != expected_source
+            or isinstance(record["camera_distance_m"], bool)
+            or not isinstance(record["camera_distance_m"], (int, float))
+            or not math.isfinite(record["camera_distance_m"])
+            or record["camera_distance_m"] <= 0
+            or isinstance(record["desired_distance_m"], bool)
+            or not isinstance(record["desired_distance_m"], (int, float))
+            or not math.isfinite(record["desired_distance_m"])
+            or record["desired_distance_m"] <= 0
+            or abs(record["camera_distance_m"] - record["desired_distance_m"]) > 0.05
+            or (profile == "mobile" and record["controls_expanded"] is not False)
+        ):
+            raise RuntimeError(f"742 upstream whole-machine screenshot framing failed: {profile}")
+
+
 def _validate_regression(gate: str, observations: dict) -> None:
     fields = {
         "page", "dom_snapshots", "accessibility_tree_snapshot", "assertions",
@@ -734,9 +999,9 @@ def _validate_regression(gate: str, observations: dict) -> None:
             raise RuntimeError("742 600S regression route/title drift")
         required = {
             "load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard",
-            "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures",
+            "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures", "screenshot_framing",
         }
-        slider_names = {"Boom lift", "Extend", "Rotate", "Steering"}
+        slider_values = EXPECTED_600S_AX_SLIDER_VALUES
         parsed = page["parsed_status"]
         fields = {"source", "meshes", "selection", "errors", "load_ms", "render_profile", "fps", "p95_ms", "reduced_motion"}
         if set(parsed or {}) != fields or any((
@@ -754,9 +1019,9 @@ def _validate_regression(gate: str, observations: dict) -> None:
         required = {
             "load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard",
             "drag_orbit", "pinch_zoom", "auto_start_pause_resume", "maximum_pose_controls",
-            "reduced_motion", "fatal_failures",
+            "reduced_motion", "fatal_failures", "screenshot_framing",
         }
-        slider_names = {"Platform lift", "Extension deck", "Steering actuator; wheel angles deferred"}
+        slider_values = EXPECTED_ES_AX_SLIDER_VALUES
         parsed = page["parsed_status"]
         fields = {"machine", "configuration_id", "source", "selection", "errors", "load_ms", "fps", "p95_ms"}
         if set(parsed or {}) != fields or any((
@@ -778,7 +1043,11 @@ def _validate_regression(gate: str, observations: dict) -> None:
         raise RuntimeError(f"742 upstream reduced-motion assertion does not bind the raw transition: {gate}")
     if observations["assertions"]["fatal_failures"] != {"outcome": "pass", "cases": observations["fatal_failures"]}:
         raise RuntimeError(f"742 upstream fatal assertion does not bind the raw cases: {gate}")
-    _validate_accessibility_tree(observations["accessibility_tree_snapshot"], slider_names)
+    _validate_upstream_screenshot_framing(
+        observations["assertions"]["screenshot_framing"],
+        "blender-showcase-v1.1.0" if gate == "600s_browser_regression" else "glb",
+    )
+    _validate_accessibility_tree(observations["accessibility_tree_snapshot"], slider_values)
 
 
 def validate_complete_browser_artifact(
@@ -800,21 +1069,13 @@ def validate_complete_browser_artifact(
     if artifact.get("candidate_tree_sha256") != candidate_tree_sha256 or artifact.get("reviewed_source_commit") != reviewed_commit:
         raise RuntimeError(f"742 browser evidence candidate binding drift: {gate}")
     if expected_upstream_identity is not None:
-        upstream_identity = artifact.get("upstream_identity") or {}
-        if (
-            set(upstream_identity) != set(expected_upstream_identity) | {"receipt_sha256", "receipt_bytes"}
-            or any(upstream_identity.get(key) != value for key, value in expected_upstream_identity.items())
-            or not re.fullmatch(r"[0-9a-f]{64}", str(upstream_identity.get("receipt_sha256", "")))
-            or not isinstance(upstream_identity.get("receipt_bytes"), int)
-            or upstream_identity["receipt_bytes"] <= 0
-        ):
-            raise RuntimeError(f"742 upstream regression exact-release binding drift: {gate}")
+        _validate_upstream_identity(artifact.get("upstream_identity") or {}, expected_upstream_identity)
     if not isinstance(artifact.get("boundary"), str) or not artifact["boundary"].strip():
         raise RuntimeError(f"742 browser evidence boundary missing: {gate}")
     _validate_capture_runner(artifact["capture_runner"])
     _validate_environment(artifact["environment"])
     allowlist = _capture_allowlist()
-    minimum_screenshots = 3 if gate == "performance_profile" else 2 if "regression" in gate or gate == "mobile_browser_interaction" else 1
+    minimum_screenshots = 3 if gate in {"performance_profile", "es1930m_browser_regression"} else 2 if "regression" in gate or gate == "mobile_browser_interaction" else 1
     trace = _validate_capture_artifacts(
         artifact["capture_artifacts"], allowlist, minimum_screenshots,
         gate, artifact["environment"], artifact["capture_runner"],
@@ -947,7 +1208,7 @@ def validate_complete_browser_artifact(
             raise RuntimeError("742 accessibility evidence schema/boundary drift")
         _validate_dom_snapshot(observations["dom_snapshot"], [1280, 720])
         _require_loaded_zero_error_snapshot(observations["dom_snapshot"])
-        _validate_accessibility_tree(observations["accessibility_tree_snapshot"], set(EXPECTED_STOW_SLIDER_VALUES))
+        _validate_accessibility_tree(observations["accessibility_tree_snapshot"], EXPECTED_STOW_SLIDER_VALUES)
         for selector, expected in {
             "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°",
             "#steer-control": "All wheel headings centered", "#level-control": "Level",
@@ -962,7 +1223,7 @@ def validate_complete_browser_artifact(
         for snapshot in observations["dom_snapshots"].values():
             _validate_dom_snapshot(snapshot, [1280, 720])
             _require_loaded_zero_error_snapshot(snapshot)
-        if set(assertions) != {"load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "stalled_load_timeout"}:
+        if set(assertions) != {"load_stowed", "manual_controls", "steering_modes", "maximum_pose_reset", "component_modal", "terminal_failure_matrix"}:
             raise RuntimeError("742 desktop structured outcome set drift")
         reset = assertions["maximum_pose_reset"]
         before, after = reset.get("before_reset", {}), reset.get("after_reset", {})
@@ -976,9 +1237,17 @@ def validate_complete_browser_artifact(
             or after.get("selected_component") is not None
         ):
             raise RuntimeError("742 maximum-pose Reset View distance/limit proof failed")
-        timeout = assertions["stalled_load_timeout"]
-        if any((timeout.get("source") != "load-timeout", timeout.get("viewer_terminal") is not True, timeout.get("error_role") != "alert", timeout.get("error_aria_live") != "assertive", timeout.get("error_visible") is not True, timeout.get("error_focused") is not True, timeout.get("app_inert") is not True, timeout.get("interface_inert") is not True, timeout.get("disabled_control_count") != timeout.get("total_control_count"))):
-            raise RuntimeError("742 stalled-load accessible terminal proof failed")
+        steering = assertions["steering_modes"]
+        rejection = steering.get("center_required_rejection") or {}
+        if (
+            steering.get("outcome") != "pass" or steering.get("pressed_modes") != ["circle", "crab", "front"]
+            or set(rejection) != {"requested_mode", "active_mode", "alignment", "visible_status"}
+            or rejection["requested_mode"] != "crab" or rejection["active_mode"] != "circle"
+            or rejection["alignment"] != "center-required"
+            or not isinstance(rejection["visible_status"], str) or "center steering" not in rejection["visible_status"]
+        ):
+            raise RuntimeError("742 centered-steering mode-change boundary proof failed")
+        _validate_742_terminal_failure_matrix(assertions["terminal_failure_matrix"])
     elif gate == "mobile_browser_interaction":
         if set(observations or {}) != {"dom_snapshots", "assertions"} or set(observations["dom_snapshots"] or {}) != {"portrait", "short_landscape"}:
             raise RuntimeError("742 mobile browser evidence schema drift")

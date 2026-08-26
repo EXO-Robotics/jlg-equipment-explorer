@@ -7,6 +7,16 @@ import hashlib
 import json
 from pathlib import Path
 
+from validate_742_browser_evidence import (
+    EXPECTED_600S_AX_SLIDER_VALUES,
+    EXPECTED_ES_AX_SLIDER_VALUES,
+    _validate_accessibility_tree,
+    _validate_browser_bundle,
+    _validate_fatal_failures,
+    _validate_live_reduced_motion,
+    _validate_upstream_screenshot_framing,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 ES_ARTIFACT = ROOT / "docs/review/742/es1930m-browser-regression.json"
@@ -105,6 +115,7 @@ def validate_artifact(path: Path, *, receipt: dict, model: str) -> dict:
         and isinstance(browser_executable.get("bytes"), int) and browser_executable["bytes"] > 0,
         f"{model} pinned browser executable identity drift",
     )
+    _validate_browser_bundle(toolchain.get("browser_bundle") or {}, browser_executable)
     _require(trace.get("outcomes") == assertions, f"{model} trace/artifact outcomes differ")
     _require(trace.get("outcomes_sha256") == outcome_digest(trace["outcomes"]), f"{model} trace outcomes hash drift")
 
@@ -115,30 +126,24 @@ def validate_artifact(path: Path, *, receipt: dict, model: str) -> dict:
         expected = {"route": "/es1930m/", "configuration_id": receipt["configuration_id"], "release": receipt["release"], "asset_sha256": receipt["files"]["asset"]["sha256"], "runtime_sha256": receipt["runtime"]["sha256"]}
     for key, value in expected.items():
         _require(identity.get(key) == value, f"{model} browser identity drift: {key}")
-    for name in ("load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures"):
+    for name in ("load_exact_release", "desktop_controls", "mobile_controls", "modal_keyboard", "drag_orbit", "pinch_zoom", "reduced_motion", "fatal_failures", "screenshot_framing"):
         _passed(assertions, name)
     reduced = assertions["reduced_motion"]
-    samples = reduced.get("raw_samples") or {}
-    moving_start, before_reduce = samples.get("moving_start") or {}, samples.get("before_reduce") or {}
-    reduced_start, reduced_end, relaxed = samples.get("reduced_start") or {}, samples.get("reduced_end") or {}, samples.get("relaxed") or {}
-    recomputed_moving = moving_start.get("x") != before_reduce.get("x") or moving_start.get("z") != before_reduce.get("z")
-    recomputed_frozen = reduced_start.get("x") == reduced_end.get("x") and reduced_start.get("z") == reduced_end.get("z")
-    recomputed_no_resume = relaxed.get("autonomyPressed") == "false" and reduced_end.get("x") == relaxed.get("x") and reduced_end.get("z") == relaxed.get("z")
-    _require(reduced.get("transition") == "no-preference->reduce->no-preference" and reduced.get("moving_before") is True and reduced.get("frozen_while_reduced") is True and reduced.get("did_not_auto_resume") is True and reduced.get("manual_controls_enabled") is True, f"{model} live reduced-motion proof is incomplete")
-    _require(recomputed_moving and recomputed_frozen and recomputed_no_resume, f"{model} raw reduced-motion samples do not independently prove stop/no-resume")
+    _validate_live_reduced_motion({key: value for key, value in reduced.items() if key != "outcome"}, f"{model} predeploy")
     pinch = assertions["pinch_zoom"]
     before_distance = pinch.get("before_desired_distance_m")
     after_distance = pinch.get("after_desired_distance_m")
     _require(before_distance is not None and after_distance is not None and float(before_distance) != float(after_distance), f"{model} pinch lacks numeric camera-distance proof")
     fatal = (assertions["fatal_failures"].get("cases") or {})
-    _require(set(fatal) == {"module", "webgl", "network", "contract"}, f"{model} fatal fault case set is incomplete")
-    for fault, expected_source in {"module": "module-load-failed", "webgl": "webgl-unavailable", "network": "load-failed", "contract": "contract-failed"}.items():
-        case = fatal[fault]
-        terminal = case.get("terminal_first") or {}
-        terminal_after = case.get("terminal_after_250ms") or {}
-        _require(case.get("outcome") == "pass" and case.get("expected_source") == expected_source and case.get("animation_state_stable_250ms") is True, f"{model} {fault} fatal assertion failed")
-        _require(terminal.get("viewer_terminal") is True and terminal.get("error_role") == "alert" and terminal.get("error_aria_live") == "assertive" and terminal.get("error_visible") is True and terminal.get("error_focused") is True and terminal.get("app_inert") is True and terminal.get("interface_inert") is True and terminal.get("disabled_control_count") == terminal.get("total_control_count") and terminal.get("total_control_count", 0) > 0, f"{model} {fault} terminal accessibility contract failed")
-        _require(terminal_after.get("drive_x") == terminal.get("drive_x") and terminal_after.get("drive_z") == terminal.get("drive_z") and terminal_after.get("viewer_terminal") is True, f"{model} {fault} terminal animation state did not remain stable")
+    _validate_fatal_failures(fatal)
+    _validate_upstream_screenshot_framing(
+        assertions["screenshot_framing"],
+        "blender-showcase-v1.1.0" if model == "600s" else "glb",
+    )
+    _validate_accessibility_tree(
+        (artifact.get("observations") or {}).get("accessibility_tree_snapshot") or {},
+        EXPECTED_600S_AX_SLIDER_VALUES if model == "600s" else EXPECTED_ES_AX_SLIDER_VALUES,
+    )
 
     if model == "es1930m":
         _passed(assertions, "auto_start_pause_resume")
