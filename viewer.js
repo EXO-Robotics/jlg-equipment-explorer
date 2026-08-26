@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.8";
+} from "./assets/models/600s.version.js?v=1.1.9";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -958,6 +958,7 @@ const orbit = {
   pinchRadius: defaultOrbitRadius(),
 };
 const canvas = renderer.domElement;
+document.body.dataset.canvasInteraction = "navigation-only";
 const pointers = new Map();
 let focusedComponent = null;
 let hoveredHit = null;
@@ -989,7 +990,7 @@ canvas.addEventListener("pointermove", (event) => {
     const hit = hitComponentAt(event.clientX, event.clientY);
     hoveredHit = hit?.object ?? null;
     updateHitVolumeEmphasis(hoveredHit);
-    canvas.style.cursor = hit ? "pointer" : "grab";
+    canvas.style.cursor = "grab";
     return;
   }
   if (pointers.has(event.pointerId)) pointers.set(event.pointerId, [event.clientX, event.clientY]);
@@ -1014,19 +1015,13 @@ canvas.addEventListener("pointermove", (event) => {
 }, { passive: false });
 
 function endPointer(event) {
-  const wasClick = pointers.size === 1 && !orbit.moved;
   pointers.delete(event.pointerId);
   try { canvas.releasePointerCapture(event.pointerId); } catch {}
   orbit.dragging = false;
   orbit.pinch = 0;
-  const hit = wasClick ? hitComponentAt(event.clientX, event.clientY) : null;
-  hoveredHit = hit?.object ?? null;
-  updateHitVolumeEmphasis(hoveredHit);
-  if (hit) {
-    document.body.dataset.lastSelectionVolume = hit.object.name;
-    focusComponent(hit.component, { revealDetails: false });
-  }
-  canvas.style.cursor = hit ? "pointer" : "grab";
+  hoveredHit = null;
+  updateHitVolumeEmphasis();
+  canvas.style.cursor = "grab";
 }
 canvas.addEventListener("pointerup", endPointer);
 canvas.addEventListener("pointercancel", endPointer);
@@ -1170,7 +1165,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-function focusComponent(component, { revealDetails = true } = {}) {
+function focusComponent(component) {
   setAutonomyEnabled(false);
   focusedComponent = component;
   document.querySelectorAll("[data-focus]").forEach((button) => {
@@ -1187,7 +1182,7 @@ function focusComponent(component, { revealDetails = true } = {}) {
   orbit.radiusGoal = componentContent[component].radius;
   orbit.idle = 0;
   updateHitVolumeEmphasis(hoveredHit);
-  if (revealDetails) openInspector(component);
+  openInspector(component);
 }
 document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => focusComponent(button.dataset.focus)));
 

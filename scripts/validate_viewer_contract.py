@@ -80,10 +80,8 @@ def main() -> None:
         'window.addEventListener("unhandledrejection", recordRuntimeError)',
         "runSelectionVolumeSelfTest",
         'dataset.selectionSelftest = result',
-        'dataset.lastSelectionVolume = hit.object.name',
-        'focusComponent(hit.component, { revealDetails: false })',
-        'function focusComponent(component, { revealDetails = true } = {})',
-        'if (revealDetails) openInspector(component)',
+        'dataset.canvasInteraction = "navigation-only"',
+        'function focusComponent(component)',
         "prepareHitVolumes",
         "updateHitVolumeEmphasis",
         'focusKeys = { "1": "chassis", "2": "turntable", "3": "boom", "4": "platform" }',
@@ -127,6 +125,14 @@ def main() -> None:
         'dataset.steerRightDeg',
         'const visualLimit = THREE.MathUtils.degToRad(28)',
     ], "viewer runtime")
+
+    for forbidden in (
+        "focusComponent(hit.component",
+        "dataset.lastSelectionVolume",
+        'canvas.style.cursor = hit ? "pointer"',
+    ):
+        if forbidden in viewer:
+            raise RuntimeError(f"Canvas must remain navigation-only; found {forbidden!r}")
 
     print(json.dumps({
         "status": "PASS",

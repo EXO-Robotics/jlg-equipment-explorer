@@ -7,11 +7,11 @@
   "source_blend": "source/blender/600s-showcase-v1.1.blend",
   "builder": "scripts/build_600s_blockout.py",
   "validator": "scripts/validate_600s_glb.py",
-  "exported_at": "2026-08-26T01:09:58Z",
+  "exported_at": "2026-08-26T01:45:33Z",
   "sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
   "source_blend_sha256": "a88fefb921a5a34d7c71cf76a67a045cf1c21e0b9d7db61d879d1a253825c34e",
   "cache_key": "64b969d1b24f",
-  "runtime_sha256": "2516983ce27e34e058890bea3c99123bf3dc61008142a0bfab9c4397b206f64c",
+  "runtime_sha256": "27fab21dbd5f147f51d17e930674c82ccefaa8266ef90f047bb892199fd5319e",
   "units": "meters",
   "root_node": "600S_ROOT",
   "visible_envelope_m": [
@@ -65,10 +65,10 @@
     "mobile_view_reviewed": true,
     "provenance_reviewed": true,
     "evidence": {
-      "browser": "2026-08-25 local browser review of runtime 2516983ce27e and GLB 64b969d1b24f: Blender source active, five-volume self-test passed, runtime error count 0, and no console warnings/errors.",
+      "browser": "2026-08-25 local browser review of runtime 27fab21dbd5f and GLB 64b969d1b24f: Blender source active, five-volume self-test passed, runtime error count 0, and no console warnings/errors.",
       "motion": "Prior exact-GLB live review remains applicable because the GLB/source hashes are unchanged: full pose 20 deg lift / 100% extend / 28 deg steer stayed connected, Ackermann displayed 28.0/23.5 deg, and simultaneous Boom+Steering override moved 0.206 m in 1 s.",
-      "selection": "Fresh 390x844 local review: tapping Turntable_Hit selected/focused Turntable without opening the inspector; a deliberate Boom navigation-button click opened Telescopic boom; drag-orbit left the inspector closed and did not create a false selection.",
-      "silhouette_scope": "The unchanged exact GLB retains direct local stowed, autonomous, and full-travel silhouette acceptance; runtime 1.1.8 was freshly reviewed at 390x844 for scene-first tap and drag behavior. This is local presentation acceptance, not deployed Pages proof."
+      "selection": "Fresh 390x844 local review: tapping directly on the moving machine left autonomy in auto mode, selected no component, opened no inspector, created no last-selection state, and changed no camera focus; drag-orbit also retained the passive canvas state.",
+      "silhouette_scope": "The unchanged exact GLB retains direct local stowed, autonomous, and full-travel silhouette acceptance; runtime 1.1.9 was freshly reviewed at 390x844 for navigation-only tap and drag behavior. This is local presentation acceptance, not deployed Pages proof."
     }
   },
   "evidence_boundary": "Overall published envelopes are authoritative and approximate per JLG. MidBoom and FlyBoom use separate coupled visual transforms within a 0.90 m presentation cap; neither the cap nor the stage split is a published stroke or factory ratio. Wheel roll is separated from steer/axle transforms, while the inner/outer visual steering split remains reconstructed. Lift, steering, tower/tension, platform-level, and steering-hose endpoint linkages use visual solvers whose coordinates and strokes remain reconstructed. Powertrack link sampling, internal pivot offsets, hydraulic routing, electrical routing, and platform rotator dimensions remain visually reconstructed or unresolved."
