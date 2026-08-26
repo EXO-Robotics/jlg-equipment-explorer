@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 223690,
+      "bytes": 14247,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "2aee1c6ca5a674848596f9d374f45f5193f467a85f94669df72dfe4a8f35fc44"
+      "sha256": "b4daa0ce8c0a4add8d80a97ef1ddbb5b5439b03cefb6d8397bf7c36d4eae931e"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -74,25 +74,25 @@
   "release": "1.0.4",
   "release_status": "candidate_not_deployable",
   "review_binding": {
-    "error": null,
-    "predeploy_gates": 13,
-    "status": "exact_executable_predeploy_evidence"
+    "error": "es1930m browser capture is incomplete",
+    "predeploy_gates": 0,
+    "status": "pending_or_stale"
   },
   "review_flags": {
-    "600s_regression_suite_pass": true,
-    "accessibility_reviewed": true,
+    "600s_regression_suite_pass": false,
+    "accessibility_reviewed": false,
     "deployed_pages_reviewed": false,
-    "desktop_browser_zero_errors": true,
-    "extension_browser_reviewed": true,
-    "figure_eight_presentation_reviewed": true,
-    "mobile_and_pinch_reviewed": true,
-    "mobile_drag_direction_reviewed": true,
-    "performance_reviewed": true,
-    "platform_controls_visual_reviewed": true,
-    "raised_pose_browser_reviewed": true,
-    "selection_and_focus_reviewed": true,
-    "steering_boundary_reviewed": true,
-    "stowed_silhouette_reviewed": true
+    "desktop_browser_zero_errors": false,
+    "extension_browser_reviewed": false,
+    "figure_eight_presentation_reviewed": false,
+    "mobile_and_pinch_reviewed": false,
+    "mobile_drag_direction_reviewed": false,
+    "performance_reviewed": false,
+    "platform_controls_visual_reviewed": false,
+    "raised_pose_browser_reviewed": false,
+    "selection_and_focus_reviewed": false,
+    "steering_boundary_reviewed": false,
+    "stowed_silhouette_reviewed": false
   },
   "runtime": {
     "files": [

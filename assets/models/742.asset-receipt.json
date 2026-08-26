@@ -1172,14 +1172,14 @@
       "result": {
         "mechanical_render_claims": 10,
         "status": "PASS",
-        "tests": 19
+        "tests": 23
       },
-      "result_sha256": "8fff54b4f8d9e873d9713038fe10af685abe5044a29629baec9eb4a1ba9ab3c3",
+      "result_sha256": "290dac70090826a76d196e187c8db4740b34e5e10acdae253613f2d28fe81de5",
       "status": "pass",
       "validator": {
-        "bytes": 9140,
+        "bytes": 12368,
         "path": "scripts/test_742_review_semantics.py",
-        "sha256": "9869b0f7ac5acd33ac9e7c8dceed13e93d6c0ad76cf3b88f1d5d78bf9afada0b"
+        "sha256": "dc02668283ec3fdccd47dfbc651c609f9468d1ad0c44262fa5cdf8609d847b4a"
       }
     },
     "route_contract": {
@@ -1230,7 +1230,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "d67e27ca88ebb8088708a9f28025e267b0cc69c8ee23d911073fe570d88ecf9d",
+  "candidate_tree_sha256": "f6e56d3c7aa06f2d5fbbe273b33a35aef902e25fc07df8ba8c0e551f69fe6dcd",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
