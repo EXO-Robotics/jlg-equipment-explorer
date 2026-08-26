@@ -167,8 +167,8 @@ def solve_stowed():
     boundaries = []
     for index in range(solver["level_count"] + 1):
         height = solver["base_pivot_height_m"] + index * rise
-        rear = SPEC["slides"]["rear_fixed_x_m"]
-        boundaries.append({"rear": (rear, height), "front": (rear + span, height)})
+        front = SPEC["slides"]["front_fixed_x_m"]
+        boundaries.append({"rear": (front - span, height), "front": (front, height)})
     return rise, span, boundaries
 
 
@@ -200,7 +200,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.5"
+    root["release"] = "1.0.6"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
@@ -326,22 +326,22 @@ def build():
     front_x = boundaries[0]["front"][0]
     rear_x = boundaries[0]["rear"][0]
     for plane, lateral in (("RIGHT_PLANE", -0.27), ("LEFT_PLANE", 0.27)):
-        block = bevelled_box(f"LowerSlideBlock_{plane}", (0.12, 0.065, 0.06), (front_x, lateral, SPEC["solver"]["base_pivot_height_m"]), MAT["zinc"], scissor, 0.012, "scissor")
+        block = bevelled_box(f"LowerSlideBlock_{plane}", (0.12, 0.065, 0.06), (rear_x, lateral, SPEC["solver"]["base_pivot_height_m"]), MAT["zinc"], scissor, 0.012, "scissor")
         block["slide_axis"] = "X"
         pivot = empty(f"PIVOT_STACK_LOWER_FRONT_{plane}", (front_x, lateral, SPEC["solver"]["base_pivot_height_m"]), scissor, "SPHERE", 0.03)
         pivot["is_pivot_marker"] = True
         fixed = empty(f"PIVOT_STACK_LOWER_REAR_{plane}", (rear_x, lateral, SPEC["solver"]["base_pivot_height_m"]), scissor, "SPHERE", 0.03)
         fixed["is_pivot_marker"] = True
-        upper_block = bevelled_box(f"UpperSlideBlock_{plane}", (0.12, 0.065, 0.06), (boundaries[-1]["front"][0], lateral, boundaries[-1]["front"][1]), MAT["zinc"], scissor, 0.012, "scissor")
+        upper_block = bevelled_box(f"UpperSlideBlock_{plane}", (0.12, 0.065, 0.06), (boundaries[-1]["rear"][0], lateral, boundaries[-1]["rear"][1]), MAT["zinc"], scissor, 0.012, "scissor")
         upper_block["slide_axis"] = "X"
 
     cylinder_root = empty("LiftCylinder", parent=root)
     cylinder_spec = SPEC["lift_cylinder"]
     lower = Vector((cylinder_spec["reconstructed_lower_frame_pin_m"][0], 0, cylinder_spec["reconstructed_lower_frame_pin_m"][1]))
-    a_start = Vector((boundaries[0]["rear"][0], 0, boundaries[0]["rear"][1]))
-    a_end = Vector((boundaries[1]["front"][0], 0, boundaries[1]["front"][1]))
-    center = a_start.lerp(a_end, cylinder_spec["reconstructed_kicker_pivot_fraction_on_level01_a"])
-    arm_direction = (a_end - a_start).normalized()
+    b_start = Vector((boundaries[0]["front"][0], 0, boundaries[0]["front"][1]))
+    b_end = Vector((boundaries[1]["rear"][0], 0, boundaries[1]["rear"][1]))
+    center = b_start.lerp(b_end, cylinder_spec["reconstructed_kicker_pivot_fraction_on_level01_b"])
+    arm_direction = (b_end - b_start).normalized()
     arm_normal = Vector((-arm_direction.z, 0, arm_direction.x))
     cylinder_offset = cylinder_spec["reconstructed_cylinder_pin_offset_link_frame_m"]
     roller_offset = cylinder_spec["reconstructed_kicker_roller_offset_link_frame_m"]

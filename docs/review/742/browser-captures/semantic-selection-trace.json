@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "semantic_selection",
-  "captured_at_utc": "2026-08-26T18:46:24.409Z",
+  "captured_at_utc": "2026-08-26T22:55:30.960Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e",
+    "sha256": "094f6ced2410b2e33f0388d7e97373890a7f6bad2ee081a01f8260fc670cc1e3",
     "bytes": 93062
   },
-  "outcomes_sha256": "0e245db0f52e774bc42719756f70d5b4dc9f2062ba0ec55c0e99b6462f1b3f61",
+  "outcomes_sha256": "87b789a76a032c10a3eb83f7295140e051442263d5ce9c9da40607fa5d2fa850",
   "outcomes": {
     "visible_canvas_selection": {
       "outcome": "pass",
@@ -2177,8 +2177,8 @@
             7.078,
             6.767,
             6.49,
-            6.247,
-            6.03,
+            6.246,
+            6.031,
             5.841,
             5.672,
             5.524,
@@ -2198,7 +2198,7 @@
             4.598,
             4.575,
             4.554,
-            4.536,
+            4.537,
             4.52,
             4.506,
             4.494,

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.1.0";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.1.1";
 import { directOrbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.11";
 import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.9";
 import { activeAutoOverrides, beginAutoOverride, clearAutoOverrides, createAutoOverrideController, dampMotion, endAutoOverride, holdAutoOverride } from "./auto-override.mjs?v=1.0.0";

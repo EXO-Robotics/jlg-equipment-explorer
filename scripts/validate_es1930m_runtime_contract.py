@@ -36,7 +36,7 @@ expected = {
     "railMinimumLateralClearance": spec["deck_extension"]["minimum_nested_lateral_clearance_m"],
     "cylinderStroke": spec["lift_cylinder"]["published_stroke_m"],
     "steeringCylinderStrokeEachDirection": spec["steering"]["cylinder_stroke_each_direction_m"],
-    "rearFixedX": spec["slides"]["rear_fixed_x_m"],
+    "frontFixedX": spec["slides"]["front_fixed_x_m"],
 }
 for name, value in expected.items():
     match = re.search(rf"\b{name}:\s*(-?[0-9.]+)", source)
@@ -44,7 +44,10 @@ for name, value in expected.items():
         raise RuntimeError(f"Runtime/mechanism constant drift: {name}")
 
 required_motion = [
-    "slide.position.y = state.boundaries.at(-1).front.y",
+    "slide.position.y = state.boundaries.at(-1).rear.y",
+    "slide.position.x = state.boundaries[0].rear.x",
+    "front anchor drift",
+    "rear track mismatch",
     "for (const spindle of rig.steerSpindles) spindle.rotation.y = 0",
     "selfTestES1930MRig",
     "cylinderUpperOffset",
@@ -96,7 +99,7 @@ for snippet in required_presentation:
 for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "const curvature = -planarCurvature", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
     if snippet not in route_source:
         raise RuntimeError(f"Figure-eight math contract missing: {snippet}")
-for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Manual", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.1.0', '../viewer.css?v=1.0.12', '../viewer/multi-machine.css?v=1.0.9', '../viewer/machine-tabs.css?v=1.0.0', '<nav class="machine-tabs" aria-label="Machine showcases">', '<a href="../" aria-label="JLG 600S boom lift showcase">600S</a>', '<a href="../742/" aria-label="JLG 742 telehandler showcase">742</a>', '<a href="../es1930m/" aria-current="page" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', "countBootFrame", "dataset.terminalFrameCount", "dataset.terminalFrameSource", 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
+for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Manual", 'id="error" role="alert" aria-live="assertive" tabindex="-1"', '../viewer/runtime.js?v=1.1.1', '../viewer.css?v=1.0.12', '../viewer/multi-machine.css?v=1.0.9', '../viewer/machine-tabs.css?v=1.0.0', '<nav class="machine-tabs" aria-label="Machine showcases">', '<a href="../" aria-label="JLG 600S boom lift showcase">600S</a>', '<a href="../742/" aria-label="JLG 742 telehandler showcase">742</a>', '<a href="../es1930m/" aria-current="page" aria-label="JLG ES1930M scissor lift showcase">ES1930M</a>', "window.__showES1930MBootstrapFailure", 'dataset.viewerRuntimeActive === "true"', "countBootFrame", "dataset.terminalFrameCount", "dataset.terminalFrameSource", 'onerror="window.__showES1930MBootstrapFailure', "onload=\"document.body.dataset.viewerModuleLoaded='true'\""):
     if snippet not in html_source:
         raise RuntimeError(f"600S-aligned control-board naming missing: {snippet}")
 if '<link rel="icon" href="../favicon.ico" type="image/x-icon">' not in html_source:
@@ -112,7 +115,7 @@ if 'id="diagnostics" hidden aria-live=' in html_source:
     raise RuntimeError("Continuously sampled diagnostics must not be a live region")
 if "const reducedMotion = query.get" in viewer_source:
     raise RuntimeError("Reduced-motion preference must remain live after startup")
-for import_path, release in (("machine.js", "1.1.0"), ("pointer-gestures.mjs", "1.0.11"), ("presentation-route.mjs", "1.0.9"), ("auto-override.mjs", "1.0.0")):
+for import_path, release in (("machine.js", "1.1.1"), ("pointer-gestures.mjs", "1.0.11"), ("presentation-route.mjs", "1.0.9"), ("auto-override.mjs", "1.0.0")):
     if f'{import_path}?v={release}' not in viewer_source:
         raise RuntimeError(f"ES1930M runtime cache identity drift: {import_path}")
 for snippet in ("directOrbitDragDelta", "const drag = directOrbitDragDelta(dx, dy, pointer.pointerType)"):

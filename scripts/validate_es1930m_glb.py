@@ -259,7 +259,7 @@ def main():
     if (
         root_extras.get("configuration_id") != CONFIGURATION_ID
         or root_extras.get("pvc") != "2404"
-        or root_extras.get("release") != "1.0.5"
+        or root_extras.get("release") != "1.0.6"
     ):
         raise RuntimeError("GLB root evidence identity mismatch")
     if missing := sorted(REQUIRED_MECHANISM_NODES - by_name.keys()):
@@ -272,6 +272,24 @@ def main():
         actual_parent = nodes[parents[by_name[child]]].get("name") if by_name[child] in parents else None
         if actual_parent != expected_parent:
             raise RuntimeError(f"Parent mismatch for {child}: {actual_parent} != {expected_parent}")
+
+    def world_x(name):
+        return world_trs(nodes, parents, by_name[name])[0][0]
+
+    front_fixed_x = mechanism["slides"]["front_fixed_x_m"]
+    for plane in ("RIGHT_PLANE", "LEFT_PLANE"):
+        lower_slide_x = world_x(f"LowerSlideBlock_{plane}")
+        rear_joint_x = world_x(f"PIVOT_STACK_LOWER_REAR_{plane}")
+        front_anchor_x = world_x(f"PIVOT_STACK_LOWER_FRONT_{plane}")
+        if abs(front_anchor_x - front_fixed_x) > 1e-6:
+            raise RuntimeError(f"Front fixed-anchor drift in exported GLB: {plane}")
+        if abs(lower_slide_x - rear_joint_x) > 1e-6 or lower_slide_x >= front_anchor_x:
+            raise RuntimeError(f"Lower slide is not on the rear branch: {plane}")
+        upper_slide_x = world_x(f"UpperSlideBlock_{plane}")
+        if abs(upper_slide_x - world_x("Level05_PIN_UPPER_L")) > 1e-6:
+            raise RuntimeError(f"Upper slide is not on the rear branch: {plane}")
+        if upper_slide_x >= world_x("Level05_PIN_UPPER_R"):
+            raise RuntimeError(f"Upper rear slide crossed the fixed front end: {plane}")
 
     link_groups = []
     pivot_markers = []

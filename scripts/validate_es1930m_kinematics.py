@@ -48,13 +48,13 @@ def solve(spec: dict, lift: float) -> dict:
         raise RuntimeError(f"Lift {lift:.3f} is outside reconstructed arm geometry")
     span = math.sqrt(arm_length**2 - rise**2)
 
-    rear_x = spec["slides"]["rear_fixed_x_m"]
+    front_x = spec["slides"]["front_fixed_x_m"]
     boundaries = []
     for boundary in range(level_count + 1):
         y = base_y + boundary * rise
         boundaries.append({
-            "rear": (rear_x, y),
-            "front": (rear_x + span, y),
+            "rear": (front_x - span, y),
+            "front": (front_x, y),
         })
 
     levels = []
@@ -70,8 +70,8 @@ def solve(spec: dict, lift: float) -> dict:
 
     cylinder = spec["lift_cylinder"]
     lower_pin = tuple(cylinder["reconstructed_lower_frame_pin_m"][:2])
-    kicker_center = interpolate(levels[0]["a"][0], levels[0]["a"][1], cylinder["reconstructed_kicker_pivot_fraction_on_level01_a"])
-    direction = ((levels[0]["a"][1][0] - levels[0]["a"][0][0]) / arm_length, (levels[0]["a"][1][1] - levels[0]["a"][0][1]) / arm_length)
+    kicker_center = interpolate(levels[0]["b"][0], levels[0]["b"][1], cylinder["reconstructed_kicker_pivot_fraction_on_level01_b"])
+    direction = ((levels[0]["b"][1][0] - levels[0]["b"][0][0]) / arm_length, (levels[0]["b"][1][1] - levels[0]["b"][0][1]) / arm_length)
     offset = cylinder["reconstructed_cylinder_pin_offset_link_frame_m"]
     upper_pin = (kicker_center[0] + direction[0] * offset[0] - direction[1] * offset[1], kicker_center[1] + direction[1] * offset[0] + direction[0] * offset[1])
     pin_distance = distance(lower_pin, upper_pin)
@@ -100,7 +100,7 @@ def main() -> None:
 
     max_link_error = 0.0
     max_closure_error = 0.0
-    max_rear_anchor_error = 0.0
+    max_front_anchor_error = 0.0
     max_translation_step = 0.0
     collision_assertions = 0
     failures = []
@@ -112,7 +112,7 @@ def main() -> None:
                 max_link_error = max(max_link_error, error)
             center_error = distance(level["center_a"], level["center_b"])
             max_closure_error = max(max_closure_error, center_error)
-            max_rear_anchor_error = max(max_rear_anchor_error, abs(state["boundaries"][level_index]["rear"][0] - spec["slides"]["rear_fixed_x_m"]))
+            max_front_anchor_error = max(max_front_anchor_error, abs(state["boundaries"][level_index]["front"][0] - spec["slides"]["front_fixed_x_m"]))
             if level_index:
                 prior = state["levels"][level_index - 1]
                 for side in ("rear", "front"):
@@ -183,8 +183,8 @@ def main() -> None:
         failures.append(f"link length error {max_link_error}")
     if max_closure_error > closure_epsilon:
         failures.append(f"shared pivot closure error {max_closure_error}")
-    if max_rear_anchor_error > closure_epsilon:
-        failures.append(f"rear fixed-anchor drift {max_rear_anchor_error}")
+    if max_front_anchor_error > closure_epsilon:
+        failures.append(f"front fixed-anchor drift {max_front_anchor_error}")
     if max_translation_step > solver["continuity_max_translation_per_0_01_sample_m"]:
         failures.append(f"continuity step {max_translation_step}")
     if abs(observed_stroke - cylinder["published_stroke_m"]) > cylinder["stroke_tolerance_m"]:
@@ -206,7 +206,7 @@ def main() -> None:
         "levels": solver["level_count"],
         "maximum_link_length_error_m": max_link_error,
         "maximum_shared_pivot_error_m": max_closure_error,
-        "maximum_rear_fixed_anchor_error_m": max_rear_anchor_error,
+        "maximum_front_fixed_anchor_error_m": max_front_anchor_error,
         "maximum_translation_per_0_01_sample_m": max_translation_step,
         "cylinder_observed_stroke_m": observed_stroke,
         "outdoor_lift_ratio": outdoor_ratio,

@@ -8,7 +8,7 @@
     "z": "machine_lateral_positive_left"
   },
   "solver": {
-    "branch": "rear_fixed_front_track_five_level_pantograph",
+    "branch": "front_fixed_rear_track_five_level_pantograph",
     "level_count": 5,
     "arm_pin_center_length_m": 1.11,
     "base_pivot_height_m": 0.30,
@@ -25,12 +25,12 @@
     "platform_level_epsilon_rad": 0.000001
   },
   "slides": {
-    "lower_rear": "fixed_frame_pivot_pair",
-    "lower_front": "two_lateral_blocks_in_one_longitudinal_track",
-    "upper_rear": "fixed_platform_pivot_pair",
-    "upper_front": "two_lateral_blocks_in_one_longitudinal_track",
-    "rear_fixed_x_m": -0.552743210183,
-    "authority": "lower_arrangement_verified_pvc2404_service_196_197; upper_fore_aft_assignment_reconstructed_from_verified_pin_and_slide_topology"
+    "lower_rear": "two_lateral_blocks_in_one_longitudinal_track",
+    "lower_front": "fixed_frame_pivot_pair",
+    "upper_rear": "two_lateral_blocks_in_one_longitudinal_track",
+    "upper_front": "fixed_platform_pivot_pair",
+    "front_fixed_x_m": 0.552743210183,
+    "authority": "directional_branch_reconciled_from_pvc2404_service_figures_58_59_62_and_current_standard_machine_side_imagery; service_page_197_channel_wording_is_internally_inconsistent; coordinates_reconstructed"
   },
   "collision_proxies": {
     "arm_section_height_m": 0.105,
@@ -47,10 +47,10 @@
     "stroke_tolerance_m": 0.0015,
     "reconstructed_closed_pin_distance_m": 0.43,
     "reconstructed_open_pin_distance_m": 1.1155,
-    "reconstructed_lower_frame_pin_m": [0.082863611531, 0.134320145689, 0.0],
-    "reconstructed_kicker_pivot_fraction_on_level01_a": 0.5,
-    "reconstructed_cylinder_pin_offset_link_frame_m": [0.26, 0.16, 0.0],
-    "reconstructed_kicker_roller_offset_link_frame_m": [-0.12, 0.18, 0.0],
+    "reconstructed_lower_frame_pin_m": [-0.082863611531, 0.134320145689, 0.0],
+    "reconstructed_kicker_pivot_fraction_on_level01_b": 0.5,
+    "reconstructed_cylinder_pin_offset_link_frame_m": [0.26, -0.16, 0.0],
+    "reconstructed_kicker_roller_offset_link_frame_m": [-0.12, -0.18, 0.0],
     "authority": "published_stroke_and_verified_cylinder_to_kicker_to_scissor_graph; attachment_coordinates_are_reconstruction_hypothesis_h1"
   },
   "deck_extension": {
@@ -76,8 +76,8 @@
   },
   "authority_notes": [
     "Arm pin-center length and all attachment coordinates are reconstructed, not published JLG fabrication dimensions.",
-    "The rear fixed/front sliding lower topology is verified; the matching upper fore/aft assignment is reconstructed.",
-    "The cylinder-to-kicker-to-scissor graph is verified. Hypothesis H1 places its markers on Level01 so cylinder extension emerges from the scissor pose and matches the published endpoint stroke within tolerance.",
+    "The fore/aft branch is front-fixed and rear-sliding at both frame and platform. This direction reconciles PVC 2404 service Figures 58, 59 and 62 with current standard-machine side imagery; page 197 contains conflicting front/rear slide-channel wording, so fabrication coordinates remain reconstructed.",
+    "The cylinder-to-kicker-to-scissor graph is verified. Hypothesis H2 mirrors the earlier H1 marker construction onto Level01 branch B so cylinder extension emerges from the corrected scissor pose and matches the published endpoint stroke within tolerance.",
     "The fixed outer and moving inner platform rail topology is verified. Rail section dimensions, lateral nesting offset and longitudinal endpoints are reconstructed to maintain overlap through the published extension travel.",
     "This contract is for visual mechanism closure only and is not a stability, load, safety, or service simulation."
   ]

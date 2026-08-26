@@ -26,11 +26,11 @@
         },
         {
           "id": "SC-002",
-          "statement": "The stack includes two lower slide blocks and a distinct kicker arm; service assembly proceeds bottom-up and disassembly top-down.",
+          "statement": "The stack includes two lower slide blocks and a distinct kicker arm; service assembly proceeds bottom-up and disassembly top-down. Service Figures 58, 59 and 62 reconcile the presentation branch as front-fixed with lower and upper travel at the rear; p. 197 contains conflicting front/rear slide-channel wording, so exact track coordinates remain reconstructed.",
           "source": "3122602400+3122602300",
           "pvc": "2404",
           "pages": [70, 71, 217, 218, 219, 220, 221],
-          "components": ["lower_slide_blocks", "kicker_arm", "pivot_families"],
+          "components": ["lower_slide_blocks", "upper_slide_blocks", "front_fixed_pivots", "rear_slide_branch", "kicker_arm", "pivot_families"],
           "part_numbers": ["1001204311", "1001322659"],
           "evidence_type": "parts_and_service_relationship",
           "authority": "verified",

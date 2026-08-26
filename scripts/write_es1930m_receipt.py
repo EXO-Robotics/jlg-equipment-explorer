@@ -83,7 +83,7 @@ def main():
     current_asset = digest(FILES["asset"])
     receipt_identity = {
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
-        "release": "1.0.5",
+        "release": "1.0.6",
         "files": {"asset": {"sha256": current_asset}},
         "runtime": {"sha256": current_runtime},
     }
@@ -109,7 +109,7 @@ def main():
         "schema_version": "1.0.0",
         # Artifact identity is stable across deployment review; release_status
         # alone records whether the exact public bytes have been approved.
-        "release": "1.0.5",
+        "release": "1.0.6",
         "release_status": "release" if release_ready else "candidate_not_deployable",
         "written": str(date.today()),
         "configuration_id": "ES1930M-PVC2404-US-STD-FR-FLA130-NM",
@@ -134,7 +134,7 @@ def main():
             "levels": kinematics["levels"],
             "maximum_link_length_error_m": kinematics["maximum_link_length_error_m"],
             "maximum_shared_pivot_error_m": kinematics["maximum_shared_pivot_error_m"],
-            "maximum_rear_fixed_anchor_error_m": kinematics["maximum_rear_fixed_anchor_error_m"],
+            "maximum_front_fixed_anchor_error_m": kinematics["maximum_front_fixed_anchor_error_m"],
             "maximum_translation_per_0_01_sample_m": kinematics["maximum_translation_per_0_01_sample_m"],
             "cylinder_observed_stroke_m": kinematics["cylinder_observed_stroke_m"],
             "collision_proxy_assertions": kinematics["collision_proxy_assertions"],

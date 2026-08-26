@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "accessibility_semantics_and_keyboard",
-  "captured_at_utc": "2026-08-26T18:46:21.692Z",
+  "captured_at_utc": "2026-08-26T22:55:28.247Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e",
+    "sha256": "094f6ced2410b2e33f0388d7e97373890a7f6bad2ee081a01f8260fc670cc1e3",
     "bytes": 93062
   },
-  "outcomes_sha256": "5376b272d5ce30f78ed250b18a4a9d65eee12a879cb8af9ac5d88d5165aa43a9",
+  "outcomes_sha256": "bc94ef400733ce1886e78acc7e958d14f86d8cd36ad2d41729f04e822cabdbda",
   "outcomes": {
     "application_instructions": {
       "outcome": "pass",
@@ -2065,7 +2065,7 @@
           "drive_x": "0.30",
           "drive_z": "0.19",
           "drive_loop": "0",
-          "wheel_rotations_rad": "-0.559,-0.561,-0.559,-0.561"
+          "wheel_rotations_rad": "-0.559,-0.560,-0.559,-0.560"
         },
         "before_reduce": {
           "controls": {
@@ -2078,7 +2078,7 @@
           "drive_x": "0.49",
           "drive_z": "0.31",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.894,-0.898,-0.894,-0.898"
+          "wheel_rotations_rad": "-0.894,-0.897,-0.894,-0.897"
         },
         "reduced_start": {
           "controls": {
@@ -2091,7 +2091,7 @@
           "drive_x": "0.50",
           "drive_z": "0.32",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.913,-0.916,-0.913,-0.916"
+          "wheel_rotations_rad": "-0.912,-0.916,-0.912,-0.916"
         },
         "reduced_end": {
           "controls": {
@@ -2104,7 +2104,7 @@
           "drive_x": "0.50",
           "drive_z": "0.32",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.913,-0.916,-0.913,-0.916"
+          "wheel_rotations_rad": "-0.912,-0.916,-0.912,-0.916"
         },
         "relaxed": {
           "controls": {
@@ -2117,7 +2117,7 @@
           "drive_x": "0.50",
           "drive_z": "0.32",
           "drive_loop": "1",
-          "wheel_rotations_rad": "-0.913,-0.916,-0.913,-0.916",
+          "wheel_rotations_rad": "-0.912,-0.916,-0.912,-0.916",
           "control_pressed": "false",
           "manual": true
         }

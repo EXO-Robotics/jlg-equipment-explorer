@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "600s_browser_regression",
-  "captured_at_utc": "2026-08-26T18:46:41.669Z",
+  "captured_at_utc": "2026-08-26T22:55:48.391Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2018,10 +2018,10 @@
   },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "99df6561b3cd9e5de5d5f731d372a0560647296ee0f1cccfeeb065012298d38e",
+    "sha256": "094f6ced2410b2e33f0388d7e97373890a7f6bad2ee081a01f8260fc670cc1e3",
     "bytes": 93062
   },
-  "outcomes_sha256": "163468da19225d58f727c4dac7513d3e05aaaee94cb50d86de2f6095556df8f7",
+  "outcomes_sha256": "22ef7086a0c13252a1af1592c62f3dbf8a30b8c5afa455be5ef519e11b587ccf",
   "outcomes": {
     "load_exact_release": {
       "outcome": "pass",
@@ -2031,10 +2031,10 @@
         "meshes": 98,
         "selection": "5/5 pass",
         "errors": 0,
-        "load_ms": 141,
+        "load_ms": 128,
         "render_profile": "desktop",
         "fps": 60,
-        "p95_ms": 16.7,
+        "p95_ms": 16.8,
         "reduced_motion": "off"
       }
     },
@@ -2055,8 +2055,9 @@
         "nodes": [
           {
             "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        \n          Operate\n          Machine controls\n          Autonomous\n          Open\n        \n        Auto\n      \n\n      \n        \n          \n            Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend63%\n          63%\n        \n        \n          Rotate24°\n          24°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 141 ms · render desktop / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      \n        \n          600S\n          742\n          ES1930M\n        \n        Accuracy reconstruction / 1.1\n      \n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        \n          Operate\n          Machine controls\n          Autonomous\n          Open\n        \n        Auto\n      \n\n      \n        \n          \n            Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend65%\n          65%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    Drag to orbit / Scroll or pinch to zoom\n    source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 128 ms · render desktop / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    let bootFrameCount = 0;\n    function countBootFrame() {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      bootFrameCount += 1;\n      document.body.dataset.bootFrameCount = String(bootFrameCount);\n      requestAnimationFrame(countBootFrame);\n    }\n    requestAnimationFrame(countBootFrame);\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.viewerRuntimeActive = \"false\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.terminalFrameCount = document.body.dataset.bootFrameCount || \"0\";\n      document.body.dataset.terminalFrameSource = \"boot\";\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
             "attributes": {
+              "data-boot-frame-count": "2",
               "data-viewer-started": "true",
               "data-render-profile": "desktop",
               "data-reduced-motion": "false",
@@ -2069,21 +2070,21 @@
               "data-drive-loop": "1",
               "data-drive-route-error-m": "0.00",
               "data-canvas-interaction": "navigation-only",
-              "data-orbit-camera-distance-m": "18.626",
-              "data-orbit-desired-distance-m": "18.982",
+              "data-orbit-camera-distance-m": "18.671",
+              "data-orbit-desired-distance-m": "19.025",
               "data-viewer-module-loaded": "true",
-              "data-runtime-frame-count": "29",
-              "data-runtime-last-frame-ms": "592.400",
-              "data-drive-x": "0.36",
+              "data-runtime-frame-count": "31",
+              "data-runtime-last-frame-ms": "603.700",
+              "data-drive-x": "0.37",
               "data-drive-z": "-0.00",
-              "data-steer-left-deg": "23.1",
-              "data-steer-right-deg": "17.5",
+              "data-steer-left-deg": "23.6",
+              "data-steer-right-deg": "17.8",
               "data-machine-visible-meshes": "98",
               "data-machine-merged-buckets": "40",
               "data-wheel-roll-hierarchy": "separated",
               "data-hose-solver-count": "2",
               "data-telescope-layer-cue-count": "14",
-              "data-load-ms": "141",
+              "data-load-ms": "128",
               "data-selection-selftest": "pass",
               "class": "controls-panel-collapsed"
             }
@@ -2097,7 +2098,7 @@
           },
           {
             "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 141 ms · render desktop / sampling · reduced motion off",
+            "text": "source blender-showcase-v1.1.0 · meshes 98 · selection 5/5 pass · errors 0 · load 128 ms · render desktop / sampling · reduced motion off",
             "attributes": {
               "class": "diagnostics",
               "id": "diagnostics",
@@ -2131,7 +2132,7 @@
           },
           {
             "selector": "#machine-controls-body",
-            "text": "Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend63%\n          63%\n        \n        \n          Rotate24°\n          24°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.",
+            "text": "Drive mode\n            Auto loop\n            Move a slider for a 6 s override.\n          \n          \n            Heading002°\n            Loop1%\n          \n        \n\n        \n          Boom lift13°\n          13°\n        \n        \n          Extend65%\n          65%\n        \n        \n          Rotate25°\n          25°\n        \n        \n          Steering23°\n          23°\n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.",
             "attributes": {
               "class": "controls-body",
               "id": "machine-controls-body",
@@ -2160,8 +2161,8 @@
     },
     "drag_orbit": {
       "outcome": "pass",
-      "before_canvas_sha256": "f7cafa23b8640dea09e69859523cd2422fbcfedd11c36ac2208c59b5c0a4d91a",
-      "after_canvas_sha256": "6b9ff38e829f5234d11e9bc0706bc52dc60edbee22e5c599841446e3397edff9"
+      "before_canvas_sha256": "5dbec4a575cd659fe84f21a2fd81b3337b359133147309c1ace26d33140af25b",
+      "after_canvas_sha256": "c763fd3902741104a7d32469c825b71d44cb7a1b893b0a4cf2b8aaa151d872a0"
     },
     "pinch_zoom": {
       "outcome": "pass",
@@ -2191,10 +2192,10 @@
         "CANVAS",
         "CANVAS"
       ],
-      "before_canvas_sha256": "c37f14943c0a53af6b23094a83535c103747d2792aaabdaf08826ebc1597f60c",
-      "after_canvas_sha256": "b4ce4580d22a8caed73f55b4c3b880ee026c9bf91216d49ce33eaa4bcac7881b",
-      "before_desired_distance_m": "30.011",
-      "after_desired_distance_m": "10.545",
+      "before_canvas_sha256": "127a15bc50ac610ef2ceba36ac825cdd5bae1697b1d2e11a7e6ee677e5b48c56",
+      "after_canvas_sha256": "9098b02eba8edb4c2afc938507bd35645330df3c23cc890745c5adb152e74d83",
+      "before_desired_distance_m": "30.068",
+      "after_desired_distance_m": "10.562",
       "observable_render_or_distance_change": true
     },
     "reduced_motion": {
@@ -2207,7 +2208,7 @@
           "z": "-0.00"
         },
         "before_reduce": {
-          "x": "0.52",
+          "x": "0.53",
           "z": "-0.01"
         },
         "reduced_start": {
@@ -2243,62 +2244,62 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 44.3
+                "at_ms": 39.7
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 53.8
+                "at_ms": 49.6
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 69.4
+                "at_ms": 65.9
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 85
+                "at_ms": 84.1
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 100.9
+                "at_ms": 100.7
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 118.3
+                "at_ms": 115.5
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 134.9
+                "at_ms": 134
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 151.7
+                "at_ms": 150.8
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 168.3
+                "at_ms": 167.3
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 183.3
+                "at_ms": 182.4
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 201.6
+                "at_ms": 200.8
               },
               {
                 "counter": "boot",
                 "value": 12,
-                "at_ms": 218.2
+                "at_ms": 217.4
               }
             ]
           },
@@ -2350,27 +2351,27 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 44.3
+                "at_ms": 38
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 53.1
+                "at_ms": 46.9
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 63.7
+                "at_ms": 64.2
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 80.2
+                "at_ms": 80.8
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 96.1
+                "at_ms": 97.5
               },
               {
                 "counter": "boot",
@@ -2380,32 +2381,32 @@
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 129.7
+                "at_ms": 129.9
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 147
+                "at_ms": 147.6
               },
               {
                 "counter": "boot",
                 "value": 9,
-                "at_ms": 162.9
+                "at_ms": 164.3
               },
               {
                 "counter": "boot",
                 "value": 10,
-                "at_ms": 179.9
+                "at_ms": 181
               },
               {
                 "counter": "boot",
                 "value": 11,
-                "at_ms": 195.2
+                "at_ms": 200.7
               },
               {
                 "counter": "boot",
                 "value": 12,
-                "at_ms": 213.1
+                "at_ms": 214.4
               }
             ]
           },
@@ -2457,47 +2458,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 101.2
+                "at_ms": 86.2
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 107.5
+                "at_ms": 87.7
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 118
+                "at_ms": 98.1
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 134.6
+                "at_ms": 114.3
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 151.2
+                "at_ms": 130.9
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 168
+                "at_ms": 149.3
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 185
+                "at_ms": 166
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 201.2
+                "at_ms": 182.8
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 217.7
+                "at_ms": 199.4
+              },
+              {
+                "counter": "runtime",
+                "value": 10,
+                "at_ms": 215.9
               }
             ]
           },
@@ -2512,11 +2518,11 @@
             "interface_inert": true,
             "disabled_control_count": 8,
             "total_control_count": 8,
-            "drive_x": "0.08",
+            "drive_x": "0.09",
             "drive_z": "-0.00",
             "boot_frame_count": "2",
-            "runtime_frame_count": "9",
-            "terminal_frame_count": "9",
+            "runtime_frame_count": "10",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2530,11 +2536,11 @@
             "interface_inert": true,
             "disabled_control_count": 8,
             "total_control_count": 8,
-            "drive_x": "0.08",
+            "drive_x": "0.09",
             "drive_z": "-0.00",
             "boot_frame_count": "2",
-            "runtime_frame_count": "9",
-            "terminal_frame_count": "9",
+            "runtime_frame_count": "10",
+            "terminal_frame_count": "10",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2549,52 +2555,52 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 95.9
+                "at_ms": 94.2
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 97.6
+                "at_ms": 95.7
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 103.2
+                "at_ms": 102.5
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 118.4
+                "at_ms": 118.1
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 135
+                "at_ms": 135.5
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 151.5
+                "at_ms": 152.1
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 168.2
+                "at_ms": 168.9
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 183.3
+                "at_ms": 184.8
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 201.6
+                "at_ms": 202.3
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 218.2
+                "at_ms": 218.9
               }
             ]
           },

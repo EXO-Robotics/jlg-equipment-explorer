@@ -16,11 +16,11 @@ export const ES1930M_MECHANISM = Object.freeze({
   cylinderStroke: 0.6855,
   cylinderClosedPins: 0.43,
   steeringCylinderStrokeEachDirection: 0.08,
-  rearFixedX: -0.552743210183,
-  cylinderLower: Object.freeze(new THREE.Vector3(0.082863611531, 0.134320145689, 0)),
+  frontFixedX: 0.552743210183,
+  cylinderLower: Object.freeze(new THREE.Vector3(-0.082863611531, 0.134320145689, 0)),
   kickerPivotFraction: 0.5,
-  cylinderUpperOffset: Object.freeze(new THREE.Vector2(0.26, 0.16)),
-  kickerRollerOffset: Object.freeze(new THREE.Vector2(-0.12, 0.18)),
+  cylinderUpperOffset: Object.freeze(new THREE.Vector2(0.26, -0.16)),
+  kickerRollerOffset: Object.freeze(new THREE.Vector2(-0.12, -0.18)),
 });
 
 const X_AXIS = new THREE.Vector3(1, 0, 0);
@@ -48,15 +48,15 @@ export function solveES1930MState(liftInput, deckInput = 0, steerInput = 0) {
   const rise = (floorY - ES1930M_MECHANISM.basePivotY - ES1930M_MECHANISM.deckOffsetY) / ES1930M_MECHANISM.levels;
   const span = Math.sqrt(ES1930M_MECHANISM.armLength ** 2 - rise ** 2);
   const boundaries = Array.from({ length: ES1930M_MECHANISM.levels + 1 }, (_, index) => ({
-    rear: new THREE.Vector3(ES1930M_MECHANISM.rearFixedX, ES1930M_MECHANISM.basePivotY + index * rise, 0),
-    front: new THREE.Vector3(ES1930M_MECHANISM.rearFixedX + span, ES1930M_MECHANISM.basePivotY + index * rise, 0),
+    rear: new THREE.Vector3(ES1930M_MECHANISM.frontFixedX - span, ES1930M_MECHANISM.basePivotY + index * rise, 0),
+    front: new THREE.Vector3(ES1930M_MECHANISM.frontFixedX, ES1930M_MECHANISM.basePivotY + index * rise, 0),
   }));
   const levelOne = boundaries[0];
   const levelTwo = boundaries[1];
-  const levelOneAStart = levelOne.rear;
-  const levelOneAEnd = levelTwo.front;
-  const kickerPivot = pointAlong(levelOneAStart, levelOneAEnd, ES1930M_MECHANISM.kickerPivotFraction);
-  const armDirection = levelOneAEnd.clone().sub(levelOneAStart).normalize();
+  const levelOneBStart = levelOne.front;
+  const levelOneBEnd = levelTwo.rear;
+  const kickerPivot = pointAlong(levelOneBStart, levelOneBEnd, ES1930M_MECHANISM.kickerPivotFraction);
+  const armDirection = levelOneBEnd.clone().sub(levelOneBStart).normalize();
   const cylinderUpper = pointInLinkFrame(kickerPivot, armDirection, ES1930M_MECHANISM.cylinderUpperOffset);
   const kickerRoller = pointInLinkFrame(kickerPivot, armDirection, ES1930M_MECHANISM.kickerRollerOffset);
   const cylinderPinDistance = cylinderUpper.distanceTo(ES1930M_MECHANISM.cylinderLower);
@@ -135,7 +135,7 @@ export function createES1930MRig(root) {
     extension: required(root, "ExtensionDeck"),
     lowerSlides: [required(root, "LowerSlideBlock_RIGHT_PLANE"), required(root, "LowerSlideBlock_LEFT_PLANE")],
     upperSlides: [required(root, "UpperSlideBlock_RIGHT_PLANE"), required(root, "UpperSlideBlock_LEFT_PLANE")],
-    rearAnchors: [required(root, "PIVOT_STACK_LOWER_REAR_RIGHT_PLANE"), required(root, "PIVOT_STACK_LOWER_REAR_LEFT_PLANE")],
+    frontAnchors: [required(root, "PIVOT_STACK_LOWER_FRONT_RIGHT_PLANE"), required(root, "PIVOT_STACK_LOWER_FRONT_LEFT_PLANE")],
     cylinderBarrel: required(root, "LiftCylinderBarrel"),
     cylinderRod: required(root, "LiftCylinderRod"),
     kickerWebs: [required(root, "KickerArmWeb_SCISSOR_CYLINDER"), required(root, "KickerArmWeb_CYLINDER_ROLLER"), required(root, "KickerArmWeb_ROLLER_SCISSOR")],
@@ -162,13 +162,13 @@ export function selfTestES1930MRig(rig, restoreState) {
   for (const sample of [[0, 0, -1], [0.5, 1, 0], [1, 1, 1]]) {
     const solved = solveES1930MState(...sample);
     applyES1930MState(rig, solved);
-    for (const marker of rig.rearAnchors) {
-      if (Math.abs(marker.position.x - ES1930M_MECHANISM.rearFixedX) > 1e-6) failures.push("rear anchor drift");
+    for (const marker of rig.frontAnchors) {
+      if (Math.abs(marker.position.x - ES1930M_MECHANISM.frontFixedX) > 1e-6) failures.push("front anchor drift");
     }
     if (Math.abs(rig.lowerSlides[0].position.x - rig.lowerSlides[1].position.x) > 1e-6) failures.push("lower slide pair split");
-    if (Math.abs(rig.lowerSlides[0].position.x - solved.boundaries[0].front.x) > 1e-6) failures.push("front track mismatch");
+    if (Math.abs(rig.lowerSlides[0].position.x - solved.boundaries[0].rear.x) > 1e-6) failures.push("rear track mismatch");
     for (const slide of rig.upperSlides) {
-      if (Math.abs(slide.position.x - solved.boundaries.at(-1).front.x) > 1e-6 || Math.abs(slide.position.y - solved.boundaries.at(-1).front.y) > 1e-6) failures.push("upper slide track mismatch");
+      if (Math.abs(slide.position.x - solved.boundaries.at(-1).rear.x) > 1e-6 || Math.abs(slide.position.y - solved.boundaries.at(-1).rear.y) > 1e-6) failures.push("upper slide track mismatch");
     }
     if (Math.abs(rig.hitVolumes.Platform_Hit.position.y - (1.44 + rig.platform.position.y)) > 1e-6) failures.push("platform hit-volume drift");
     if (Math.abs(rig.extension.position.x - solved.deckTranslation) > 1e-6) failures.push("extension translation drift");
@@ -209,10 +209,10 @@ export function applyES1930MState(rig, state) {
       alignCylinderY(node, lateralStart.clone().add(point), lateralEnd.clone().add(point), 0.62);
     }
   }
-  for (const slide of rig.lowerSlides) slide.position.x = state.boundaries[0].front.x;
+  for (const slide of rig.lowerSlides) slide.position.x = state.boundaries[0].rear.x;
   for (const slide of rig.upperSlides) {
-    slide.position.x = state.boundaries.at(-1).front.x;
-    slide.position.y = state.boundaries.at(-1).front.y;
+    slide.position.x = state.boundaries.at(-1).rear.x;
+    slide.position.y = state.boundaries.at(-1).rear.y;
   }
   rig.platform.position.y = state.floorY - ES1930M_MECHANISM.stowedDeckY;
   rig.extension.position.x = state.deckTranslation;
@@ -235,7 +235,7 @@ export function applyES1930MState(rig, state) {
 
   const scissorHit = rig.hitVolumes.Scissor_Hit;
   const scissorTop = state.floorY - ES1930M_MECHANISM.deckOffsetY;
-  scissorHit.position.x = ES1930M_MECHANISM.rearFixedX + state.span / 2;
+  scissorHit.position.x = ES1930M_MECHANISM.frontFixedX - state.span / 2;
   scissorHit.position.y = (ES1930M_MECHANISM.basePivotY + scissorTop) / 2;
   scissorHit.scale.x = Math.max(state.span / 1.12, 0.34);
   scissorHit.scale.y = Math.max((scissorTop - ES1930M_MECHANISM.basePivotY) / 0.55, 1);
