@@ -41,6 +41,26 @@ def proof_beam(name, start, end, radius, material):
     return target
 
 
+def proof_label(name, body, location, size, material):
+    bpy.ops.object.text_add(location=location, rotation=(math.pi / 2, 0, 0))
+    target = bpy.context.object
+    target.name = name
+    target.data.body = body
+    target.data.align_x = "CENTER"
+    target.data.align_y = "CENTER"
+    target.data.size = size
+    target.data.extrude = .008
+    target.data.materials.append(material)
+    return target
+
+
+def face_labels(labels, active_camera):
+    for target in labels:
+        direction = active_camera.location - target.location
+        target.rotation_mode = "QUATERNION"
+        target.rotation_quaternion = direction.to_track_quat("Z", "Y")
+
+
 def mesh_world_points(names):
     return [target.matrix_world @ vertex.co for name in names
             for target in [bpy.data.objects[name]] for vertex in target.data.vertices]
@@ -193,7 +213,8 @@ for obj in steer_cutaway:
     obj.hide_render = False
 pose_circle_steering(0.0)
 
-pose_mechanisms(0.61, 0.68)
+cutaway_pose = solved_pose(0.61, 0.68)
+apply_solved_pose(cutaway_pose)
 camera.location = (12.0, 14.0, 9.2)
 point_at(camera, (2.2, 0, 5.0))
 scene.render.filepath = str(OUTPUT_DIR / "742-extended-front-left.png")
@@ -217,8 +238,34 @@ chain_objects = [obj for obj in bpy.data.objects if any(token in obj.name for to
 chain_center = sum((obj.matrix_world.translation for obj in chain_objects), Vector()) / len(chain_objects)
 camera.location = chain_center + Vector((3.8, -7.2, 2.6))
 point_at(camera, chain_center)
+chain_context_mat = bpy.data.materials.new("ChainContextOrange")
+chain_context_mat.diffuse_color = (1.0, .16, .02, 1.0)
+chain_context_mat.use_nodes = True
+chain_bsdf = chain_context_mat.node_tree.nodes.get("Principled BSDF")
+chain_bsdf.inputs["Base Color"].default_value = (1.0, .04, .005, 1.0)
+if "Emission Color" in chain_bsdf.inputs:
+    chain_bsdf.inputs["Emission Color"].default_value = (1.0, .015, .002, 1.0)
+    chain_bsdf.inputs["Emission Strength"].default_value = 3.0
+chain_context = []
+for index, (label, beam_name) in enumerate((("FIXED ADJUSTER / FIRST SECTION", "RetractChain_C"),
+                                            ("MOVING ATTACHMENT / THIRD SECTION", "RetractChain_C_Moving"))):
+    beam_obj = bpy.data.objects[beam_name]
+    half_authored = float(beam_obj.get("authored_length_m")) / 2
+    endpoint = beam_obj.matrix_world @ Vector((0, 0, -half_authored if index == 0 else half_authored))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=10, radius=.075, location=endpoint)
+    marker = bpy.context.object
+    marker.data.materials.append(chain_context_mat)
+    chain_context.append(marker)
+    label_location = chain_center + Vector((-.55 if index == 0 else .55, -.35, -.38 if index == 0 else .38))
+    chain_context.append(proof_beam(f"Proof_{beam_name}_Leader", endpoint, label_location,
+                                    .012, chain_context_mat))
+    chain_context.append(proof_label(f"Proof_{beam_name}_Anchor", label,
+                                     label_location, .12, chain_context_mat))
+face_labels([obj for obj in chain_context if obj.type == "FONT"], camera)
 scene.render.filepath = str(OUTPUT_DIR / "742-retract-chain-routing-cutaway.png")
 bpy.ops.render.render(write_still=True)
+for obj in chain_context:
+    bpy.data.objects.remove(obj, do_unlink=True)
 for obj in chain_cutaway:
     obj.hide_render = False
 pose_mechanisms(1.0, 1.0)
@@ -231,10 +278,28 @@ datum_bsdf.inputs["Roughness"].default_value = 0.24
 if "Emission Color" in datum_bsdf.inputs:
     datum_bsdf.inputs["Emission Color"].default_value = (1.0, 0.008, 0.002, 1.0)
     datum_bsdf.inputs["Emission Strength"].default_value = 2.0
+label_mat = bpy.data.materials.new("ProofLabelWhite")
+label_mat.diffuse_color = (1.0, .96, .88, 1.0)
+label_mat.use_nodes = True
+label_bsdf = label_mat.node_tree.nodes.get("Principled BSDF")
+label_bsdf.inputs["Base Color"].default_value = (1.0, .96, .88, 1.0)
+if "Emission Color" in label_bsdf.inputs:
+    label_bsdf.inputs["Emission Color"].default_value = (1.0, .78, .45, 1.0)
+    label_bsdf.inputs["Emission Strength"].default_value = 2.0
 max_lift_forks = mesh_world_points(("ForkL", "ForkR"))
 max_lift_surface = max(point.z for point in max_lift_forks)
 level_datum = proof_beam("Proof_MaxLiftForkLevel", (2.2, -1.1, max_lift_surface + .08),
                          (5.2, -1.1, max_lift_surface + .08), .022, datum_mat)
+lift_ground_datum = proof_beam("Proof_MaxLiftGround", (2.2, -1.1, .04),
+                               (5.2, -1.1, .04), .022, datum_mat)
+lift_dimension = proof_beam("Proof_MaxLiftDimension", (5.05, -1.1, .04),
+                            (5.05, -1.1, max_lift_surface + .08), .018, datum_mat)
+lift_labels = [
+    proof_label("Proof_MaxLiftValue", "ACTUAL GLB FORK LOAD SURFACE  12.798856 m",
+                (3.55, -1.12, max_lift_surface + .38), .24, label_mat),
+    proof_label("Proof_MaxLiftGroundLabel", "GROUND DATUM  0.000 m",
+                (4.25, -1.12, .68), .22, label_mat),
+]
 bpy.ops.object.light_add(type="AREA", location=(8.0, -5.0, 16.0))
 max_lift_key = bpy.context.object
 max_lift_key.name = "MaxLiftKey"
@@ -246,6 +311,7 @@ scene.render.resolution_y = 1200
 camera.data.lens = 52
 camera.location = (2.0, -28.0, 13.5)
 point_at(camera, (2.0, 0, 7.0))
+face_labels(lift_labels, camera)
 scene.render.filepath = str(OUTPUT_DIR / "742-maximum-lift-level-forks.png")
 bpy.ops.render.render(write_still=True)
 fork_cutaway = [target for target in bpy.data.objects
@@ -264,6 +330,10 @@ bpy.ops.render.render(write_still=True)
 for target in fork_cutaway:
     target.hide_render = False
 level_datum.hide_render = True
+lift_ground_datum.hide_render = True
+lift_dimension.hide_render = True
+for target in lift_labels:
+    target.hide_render = True
 max_lift_key.hide_render = True
 pose_mechanisms(3 / 69, 1.0)
 bpy.context.view_layer.update()
@@ -282,12 +352,21 @@ datum_objects = [
                (load_center, -1.45, 2.25), .018, datum_mat),
     proof_beam("Proof_LoadCenterCross", (load_center - .18, -1.45, 1.04),
                (load_center + .18, -1.45, 1.04), .024, datum_mat),
+    proof_beam("Proof_24InLoadCenter", (fork_heel, -1.45, 1.18),
+               (load_center, -1.45, 1.18), .018, datum_mat),
+    proof_label("Proof_FrontTirePlaneLabel", "FRONT TIRE TREAD PLANE",
+                (front_tire_plane, -1.47, .34), .20, label_mat),
+    proof_label("Proof_LoadCenterLabel", "24 in / 0.6096 m LOAD CENTER",
+                ((fork_heel + load_center) / 2, -1.47, 1.46), .20, label_mat),
+    proof_label("Proof_ReachValue", "SELECTED RECONSTRUCTED 3 deg POSE   8.867096 m REACH",
+                ((front_tire_plane + load_center) / 2, -1.47, 2.92), .24, label_mat),
 ]
 scene.render.resolution_x = 1400
 scene.render.resolution_y = 800
 camera.data.lens = 52
 camera.location = (4.8, -30.0, 5.6)
 point_at(camera, (4.8, 0, 1.45))
+face_labels([target for target in datum_objects if target.type == "FONT"], camera)
 scene.render.filepath = str(OUTPUT_DIR / "742-maximum-reach-24in-load-center.png")
 bpy.ops.render.render(write_still=True)
 for target in datum_objects:

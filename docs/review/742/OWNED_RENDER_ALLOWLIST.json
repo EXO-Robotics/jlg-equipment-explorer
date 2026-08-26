@@ -44,16 +44,16 @@
     },
     {
       "path": "docs/review/742/maximum-lift-level-forks.png",
-      "sha256": "c117e2439b107bf9d4b4292f46c95c202c8976a38ac4d46c22eb62934a875321",
-      "bytes": 909261,
+      "sha256": "76b743b1cfce75f59c1b54a942b39e6e7e52def91a680d98c4425aa74df3ca44",
+      "bytes": 929363,
       "width_px": 1000,
       "height_px": 1200,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
     },
     {
       "path": "docs/review/742/maximum-reach-24in-load-center.png",
-      "sha256": "376e0099fac1ca735c2472017c30f2b3a8c71bc8968c6010500980a3e13c8195",
-      "bytes": 873307,
+      "sha256": "c1b0190d30c5bc4c0f15ca0040ae07899aad18048fe3892b10cd0dc6ef5ccdeb",
+      "bytes": 895255,
       "width_px": 1400,
       "height_px": 800,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
@@ -68,8 +68,8 @@
     },
     {
       "path": "docs/review/742/retract-chain-routing-cutaway.png",
-      "sha256": "4b7dabbc8d8615966c323e4010147cceec3fe9163141c84439c203ca603062ff",
-      "bytes": 646860,
+      "sha256": "ad0309b30b16eaffc293f127c3be07e565c776057f131b6012f234820cfd6002",
+      "bytes": 661797,
       "width_px": 1200,
       "height_px": 900,
       "provenance": "Deterministic render of the independently authored 742 Blender source."
