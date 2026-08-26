@@ -38,7 +38,7 @@ def main():
         f'PVC 2411 accuracy reconstruction / {CONFIG["target_release"]}', 'id="reduced-motion-note"',
         'window.__show742ModuleFailure', 'module-load-failed', 'onerror="window.__show742ModuleFailure()"',
         'Presentation-only mechanism limits.', 'No load, stability, service, training, or safety behavior is simulated.',
-        '<h2 id="operate-title">Machine controls</h2>', '<output id="motion-status">Stowed</output>',
+        '<h2 id="operate-title">Machine controls</h2>', '<output id="motion-status" aria-hidden="true">Stowed</output>',
         'id="stow" type="button">Stow machine</button>',
         'Drag to orbit <span>/</span> Scroll or pinch to zoom <span>/</span> Buttons open details',
     ], "742 HTML")
@@ -125,7 +125,7 @@ def main():
         raise RuntimeError("742 implementation leaked back into ES1930M shared runtime/style")
     require(MACHINE, [
         '742-PVC2411-US-STD-OC-D36-FF370-C50-PF481', 'interactionVolumes', 'showcase(t)',
-        'steerMode: "circle"', 'JLG742_GLB_URL', 'status: stowed ? "Stowed" : "Positioning"',
+        'steerMode: "circle"', 'JLG742_GLB_URL', 'status: stowed ? "Stowed" : "Holding"',
     ], "742 machine module")
     require(ARTICULATION, [
         '"BoomAngleSensorCrank"', '"BoomAngleSensorLink"', '"BoomAngleSensorFrameJoint"',
