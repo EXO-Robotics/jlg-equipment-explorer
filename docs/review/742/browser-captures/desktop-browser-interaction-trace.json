@@ -2,15 +2,33 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "desktop_browser_interaction",
-  "captured_at_utc": "2026-08-26T05:49:38.680Z",
+  "captured_at_utc": "2026-08-26T06:53:49.504Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
+  "toolchain": {
+    "tool": "Playwright",
+    "version": "1.62.1",
+    "source": "repo-locked-default",
+    "lockfile": {
+      "path": "package-lock.json",
+      "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9",
+      "bytes": 1786
+    },
+    "browser_executable": {
+      "product": "chromium",
+      "revision": "1234",
+      "browser_version": "151.0.7922.34",
+      "executable_basename": "Google Chrome for Testing",
+      "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e",
+      "bytes": 52112
+    }
+  },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
-    "bytes": 48162
+    "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e",
+    "bytes": 60044
   },
-  "outcomes_sha256": "f118a3d622df6b0b6e602028613f37efa0563f1ca02cf5e53a7d77d436fea2b7",
+  "outcomes_sha256": "8094cf5a7ccb9b0de6257f1b3ae3b2fed50b10860e392b8df209906a5f630cc3",
   "outcomes": {
     "load_stowed": {
       "outcome": "pass",
@@ -38,7 +56,7 @@
         },
         "#steer-control": {
           "value": "80",
-          "ariaValueText": "44° R",
+          "ariaValueText": "Circle steer right; actual wheel headings FL 22.3 degrees, FR 39.7 degrees, RL -22.3 degrees, RR -39.7 degrees; published service steering limit 55 degrees",
           "disabled": false
         },
         "#level-control": {
@@ -78,46 +96,40 @@
           "#steer-control": "80",
           "#level-control": "50"
         },
-        "pose_frame_distance_m": 36.93,
-        "camera_distance_m": 36.915,
-        "desired_distance_m": 36.93,
+        "pose_frame_distance_m": 36.64,
+        "camera_distance_m": 36.626,
+        "desired_distance_m": 36.64,
         "base_max_distance_m": 24,
-        "effective_max_distance_m": 38.78,
+        "effective_max_distance_m": 38.47,
         "selected_component": null
       },
       "settle": {
-        "camera_distance_m": 36.915,
-        "desired_distance_m": 36.93,
+        "camera_distance_m": 36.626,
+        "desired_distance_m": 36.64,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          36.467,
-          36.521,
-          36.569,
-          36.611,
-          36.649,
-          36.682,
-          36.711,
-          36.737,
-          36.759,
-          36.779,
-          36.797,
-          36.813,
-          36.827,
-          36.839,
-          36.85,
-          36.859,
-          36.868,
-          36.875,
-          36.882,
-          36.887,
-          36.892,
-          36.897,
-          36.901,
-          36.905,
-          36.908,
-          36.91,
-          36.913,
-          36.915
+          36.424,
+          36.45,
+          36.472,
+          36.492,
+          36.509,
+          36.525,
+          36.539,
+          36.551,
+          36.561,
+          36.571,
+          36.579,
+          36.586,
+          36.593,
+          36.598,
+          36.603,
+          36.608,
+          36.612,
+          36.615,
+          36.618,
+          36.621,
+          36.624,
+          36.626
         ]
       }
     },

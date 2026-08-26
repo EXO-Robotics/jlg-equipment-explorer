@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 8706,
+      "bytes": 10272,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "28abb4f6bb04a0c30d5c81be79fa9e4969dcaffcfeadb42c7ed95c1b3a3ddfd4"
+      "sha256": "248315dcf5ccb7f8384df7e92a7ab4d7fb053a96c430c0f3c298150b5a198ffa"
     },
     "review_renderer": {
       "bytes": 2416,
@@ -73,21 +73,26 @@
   },
   "release": "1.0.4",
   "release_status": "candidate_not_deployable",
+  "review_binding": {
+    "error": null,
+    "predeploy_gates": 13,
+    "status": "exact_executable_predeploy_evidence"
+  },
   "review_flags": {
-    "600s_regression_suite_pass": false,
-    "accessibility_reviewed": false,
+    "600s_regression_suite_pass": true,
+    "accessibility_reviewed": true,
     "deployed_pages_reviewed": false,
-    "desktop_browser_zero_errors": false,
-    "extension_browser_reviewed": false,
-    "figure_eight_presentation_reviewed": false,
-    "mobile_and_pinch_reviewed": false,
-    "mobile_drag_direction_reviewed": false,
-    "performance_reviewed": false,
-    "platform_controls_visual_reviewed": false,
-    "raised_pose_browser_reviewed": false,
-    "selection_and_focus_reviewed": false,
-    "steering_boundary_reviewed": false,
-    "stowed_silhouette_reviewed": false
+    "desktop_browser_zero_errors": true,
+    "extension_browser_reviewed": true,
+    "figure_eight_presentation_reviewed": true,
+    "mobile_and_pinch_reviewed": true,
+    "mobile_drag_direction_reviewed": true,
+    "performance_reviewed": true,
+    "platform_controls_visual_reviewed": true,
+    "raised_pose_browser_reviewed": true,
+    "selection_and_focus_reviewed": true,
+    "steering_boundary_reviewed": true,
+    "stowed_silhouette_reviewed": true
   },
   "runtime": {
     "files": [
@@ -103,7 +108,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "aa684a81d30e45377be80ea5ea5040c4f5689ca612a55f763da2cfd34d8c6420"
+    "sha256": "1cabcf3d0806cc95c89f8c90813276ac42229f42b3a9919fbbf93baf0151c969"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"

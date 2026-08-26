@@ -1,382 +1,672 @@
 {
-  "boundary": "Exact current upstream release regression in local headless Chromium only; no deployment, physical-device, or manufacturer-equivalence claim.",
-  "candidate_tree_sha256": "69e969039aaea7244d601f7bd49bbdd0d56537cf180ac9369d2e0355dc985dda",
-  "capture_artifacts": {
-    "automation_trace": {
-      "bytes": 2581,
-      "height_px": null,
-      "path": "docs/review/742/browser-captures/600s-browser-regression-trace.json",
-      "sha256": "398e940be48dadd2d3d3207ce01d37f44fd8657db9b30c00c9654c6a7fc29b3c",
-      "width_px": null
-    },
-    "screenshots": [
-      {
-        "bytes": 141854,
-        "height_px": 720,
-        "path": "docs/review/742/browser-captures/600s-regression-desktop.png",
-        "sha256": "587b4e1771de37e4a3db2b4bf6d50a55fc3808a020b45a55eea7dccd967b9427",
-        "width_px": 1280
-      },
-      {
-        "bytes": 92516,
-        "height_px": 844,
-        "path": "docs/review/742/browser-captures/600s-regression-mobile.png",
-        "sha256": "bb4a35849e945da7c1fac733dfa75cdc76ed5170239d429fec0fa5ba79cea440",
-        "width_px": 390
-      }
-    ]
-  },
-  "capture_runner": {
-    "bytes": 48162,
-    "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17"
-  },
+  "schema_version": "2.0.0",
+  "kind": "742-upstream-regression-capture",
+  "gate": "600s_browser_regression",
   "capture_status": "complete",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
+  "candidate_tree_sha256": "PENDING",
+  "reviewed_source_commit": "PENDING",
   "environment": {
-    "assistive_technology_session": false,
-    "automation": {
-      "tool": "Playwright",
-      "version": "1.62.1"
-    },
     "browser": {
       "name": "Chromium",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
-      "version": "151.0.7922.34"
-    },
-    "captured_at_utc": "2026-08-26T05:50:16.025Z",
-    "gpu": {
-      "api": "WebGL 2",
-      "collection_method": "WEBGL_debug_renderer_info",
-      "reason": null,
-      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Ultra, Unspecified Version)",
-      "status": "observed",
-      "vendor": "Google Inc. (Apple)"
+      "version": "151.0.7922.34",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
     },
     "os": {
-      "build": "25F84",
       "name": "macOS",
-      "version": "26.5.2"
+      "version": "26.5.2",
+      "build": "25F84"
     },
-    "physical_device_session": false
+    "gpu": {
+      "status": "observed",
+      "vendor": "Google Inc. (Apple)",
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Ultra, Unspecified Version)",
+      "api": "WebGL 2",
+      "collection_method": "WEBGL_debug_renderer_info",
+      "reason": null
+    },
+    "automation": {
+      "tool": "Playwright",
+      "version": "1.62.1",
+      "source": "repo-locked-default",
+      "lockfile": {
+        "path": "package-lock.json",
+        "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9",
+        "bytes": 1786
+      },
+      "browser_executable": {
+        "product": "chromium",
+        "revision": "1234",
+        "browser_version": "151.0.7922.34",
+        "executable_basename": "Google Chrome for Testing",
+        "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e",
+        "bytes": 52112
+      }
+    },
+    "captured_at_utc": "2026-08-26T06:54:27.841Z",
+    "physical_device_session": false,
+    "assistive_technology_session": false
   },
-  "gate": "600s_browser_regression",
-  "kind": "742-upstream-regression-capture",
+  "capture_runner": {
+    "path": "scripts/capture_742_browser_evidence.mjs",
+    "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e",
+    "bytes": 60044
+  },
+  "capture_artifacts": {
+    "screenshots": [
+      {
+        "path": "docs/review/742/browser-captures/600s-regression-desktop.png",
+        "sha256": "bc84a023687511ef7f89cf37b0f8427f7962f06e120cb9360e09dcf8342f980d",
+        "bytes": 142031,
+        "width_px": 1280,
+        "height_px": 720
+      },
+      {
+        "path": "docs/review/742/browser-captures/600s-regression-mobile.png",
+        "sha256": "af3be00bf29e6e3bfe2ad3e3a1461f1d4d1f1c817725da2d1003062567b05451",
+        "bytes": 92285,
+        "width_px": 390,
+        "height_px": 844
+      }
+    ],
+    "automation_trace": {
+      "path": "docs/review/742/browser-captures/600s-browser-regression-trace.json",
+      "sha256": "6a3a84b16b259c60a80d0252c898e0ed01a17a653bee7ebc88b97234e1079b58",
+      "bytes": 8387,
+      "width_px": null,
+      "height_px": null
+    }
+  },
   "observations": {
+    "page": {
+      "route": "/",
+      "title": "600S Interactive Equipment Study",
+      "status_text": "source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 131 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
+      "parsed_status": {
+        "source": "blender-showcase-v1.1.0",
+        "meshes": 92,
+        "selection": "5/5 pass",
+        "errors": 0,
+        "load_ms": 131,
+        "render_profile": "desktop",
+        "fps": 60,
+        "p95_ms": 16.8,
+        "reduced_motion": "off"
+      }
+    },
+    "dom_snapshots": {
+      "desktop": {
+        "viewport_css_px": [
+          1280,
+          720
+        ],
+        "url": "http://127.0.0.1:8111/?diagnostics=1",
+        "nodes": [
+          {
+            "selector": "body",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      Accuracy reconstruction / 1.1\n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading012°\n            Loop3%\n          \n          Start auto\n        \n\n        \n          Boom lift18°\n          \n        \n        \n          Extend47%\n          \n        \n        \n          Rotate33°\n          \n        \n        \n          Steering20°\n          \n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 131 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "attributes": {
+              "data-viewer-started": "true",
+              "data-render-profile": "desktop",
+              "data-reduced-motion": "false",
+              "data-viewer-runtime-active": "true",
+              "data-runtime-error-count": "0",
+              "data-machine-source": "blender-showcase-v1.1.0",
+              "data-autonomy-mode": "manual",
+              "data-autonomy-overrides": "none",
+              "data-drive-heading": "12",
+              "data-drive-loop": "3",
+              "data-drive-route-error-m": "0.01",
+              "data-canvas-interaction": "navigation-only",
+              "data-orbit-camera-distance-m": "18.000",
+              "data-orbit-desired-distance-m": "18.000",
+              "data-viewer-module-loaded": "true",
+              "data-drive-x": "1.50",
+              "data-drive-z": "-0.14",
+              "data-steer-left-deg": "24.2",
+              "data-steer-right-deg": "18.1",
+              "data-machine-visible-meshes": "92",
+              "data-machine-merged-buckets": "37",
+              "data-wheel-roll-hierarchy": "separated",
+              "data-hose-solver-count": "2",
+              "data-load-ms": "131",
+              "data-selection-selftest": "pass",
+              "data-sampled-fps": "60",
+              "data-frame-p95-ms": "16.8"
+            }
+          },
+          {
+            "selector": "#machine-title",
+            "text": "600S",
+            "attributes": {
+              "id": "machine-title"
+            }
+          },
+          {
+            "selector": "#diagnostics",
+            "text": "source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 131 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics",
+              "aria-live": "polite"
+            }
+          },
+          {
+            "selector": "#controls-toggle",
+            "text": "Close",
+            "attributes": {
+              "class": "controls-toggle",
+              "id": "controls-toggle",
+              "type": "button",
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "true",
+              "hidden": "",
+              "aria-label": "Close machine controls"
+            }
+          },
+          {
+            "selector": "#inspector",
+            "text": "×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference",
+            "attributes": {
+              "class": "inspector",
+              "id": "inspector",
+              "role": "dialog",
+              "aria-modal": "true",
+              "aria-labelledby": "inspector-title",
+              "aria-describedby": "inspector-copy",
+              "inert": ""
+            }
+          }
+        ]
+      },
+      "mobile": {
+        "viewport_css_px": [
+          390,
+          844
+        ],
+        "url": "http://127.0.0.1:8111/?diagnostics=1",
+        "nodes": [
+          {
+            "selector": "body",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the mobile render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      Accuracy reconstruction / 1.1\n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading002°\n            Loop1%\n          \n          Start auto\n        \n\n        \n          Boom lift13°\n          \n        \n        \n          Extend35%\n          \n        \n        \n          Rotate25°\n          \n        \n        \n          Steering23°\n          \n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 121 ms · render mobile / sampling · reduced motion off\n  \n\n  \n  \n    ×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "attributes": {
+              "data-viewer-started": "true",
+              "data-render-profile": "mobile",
+              "data-reduced-motion": "false",
+              "data-viewer-runtime-active": "true",
+              "data-runtime-error-count": "0",
+              "data-machine-source": "blender-showcase-v1.1.0",
+              "data-autonomy-mode": "manual",
+              "data-autonomy-overrides": "none",
+              "data-drive-heading": "2",
+              "data-drive-loop": "1",
+              "data-drive-route-error-m": "0.00",
+              "data-canvas-interaction": "navigation-only",
+              "data-orbit-camera-distance-m": "24.000",
+              "data-orbit-desired-distance-m": "24.000",
+              "data-viewer-module-loaded": "true",
+              "data-drive-x": "0.39",
+              "data-drive-z": "-0.00",
+              "data-steer-left-deg": "24.3",
+              "data-steer-right-deg": "18.1",
+              "data-machine-visible-meshes": "92",
+              "data-machine-merged-buckets": "37",
+              "data-wheel-roll-hierarchy": "separated",
+              "data-hose-solver-count": "2",
+              "data-load-ms": "121",
+              "data-selection-selftest": "pass",
+              "class": "mobile-controls-open"
+            }
+          },
+          {
+            "selector": "#machine-title",
+            "text": "600S",
+            "attributes": {
+              "id": "machine-title"
+            }
+          },
+          {
+            "selector": "#diagnostics",
+            "text": "source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 121 ms · render mobile / sampling · reduced motion off",
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics",
+              "aria-live": "polite"
+            }
+          },
+          {
+            "selector": "#controls-toggle",
+            "text": "Close",
+            "attributes": {
+              "class": "controls-toggle",
+              "id": "controls-toggle",
+              "type": "button",
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "true",
+              "aria-label": "Close machine controls"
+            }
+          },
+          {
+            "selector": "#inspector",
+            "text": "×\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference",
+            "attributes": {
+              "class": "inspector",
+              "id": "inspector",
+              "role": "dialog",
+              "aria-modal": "true",
+              "aria-labelledby": "inspector-title",
+              "aria-describedby": "inspector-copy",
+              "inert": ""
+            }
+          }
+        ]
+      },
+      "modal_open": {
+        "viewport_css_px": [
+          1280,
+          720
+        ],
+        "url": "http://127.0.0.1:8111/?diagnostics=1",
+        "nodes": [
+          {
+            "selector": "body",
+            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      Viewer unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      Accuracy reconstruction / 1.1\n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59′ 8″Platform height\n      50′ 2″Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Positioning\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading000°\n            Loop0%\n          \n          Start auto\n        \n\n        \n          Boom lift0°\n          \n        \n        \n          Extend0%\n          \n        \n        \n          Rotate0°\n          \n        \n        \n          Steering0°\n          \n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 131 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off\n  \n\n  \n  \n    ×\n    Component view\n    Chassis\n    The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.\n    Visible systemFrame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deckConfiguration4WD hydrostatic with two-wheel front steerBoundarySteering anchors and angles remain visual reconstructions\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    window.__show600BootstrapFailure = function (message, source = \"module-load-failed\") {\n      if (document.body.dataset.viewerTerminal === \"true\") return;\n      const failure = document.querySelector(\"#error\");\n      document.body.classList.add(\"viewer-terminal-error\");\n      document.body.dataset.viewerTerminal = \"true\";\n      document.body.dataset.machineSource = source;\n      document.body.dataset.runtimeErrorCount = \"1\";\n      document.querySelector(\"#loader\").hidden = true;\n      document.querySelector(\"#error-copy\").textContent = message;\n      failure.hidden = false;\n      for (const selector of [\"#app\", \".interface\", \"#inspector\", \"#machine-controls-body\"]) document.querySelector(selector)?.setAttribute(\"inert\", \"\");\n      document.querySelector(\".control-panel\")?.setAttribute(\"aria-disabled\", \"true\");\n      document.querySelectorAll(\".interface button, .interface input\").forEach((control) => { control.disabled = true; });\n      failure.focus({ preventScroll: true });\n    };\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerRuntimeActive === \"true\" || document.body.dataset.viewerTerminal === \"true\") return;\n      window.__show600BootstrapFailure(\"The 600S rendering runtime did not initialize in time. Reload the page or verify the deployed vendor files.\", \"bootstrap-timeout\");\n    }, 8000);",
+            "attributes": {
+              "data-viewer-started": "true",
+              "data-render-profile": "desktop",
+              "data-reduced-motion": "false",
+              "data-viewer-runtime-active": "true",
+              "data-runtime-error-count": "0",
+              "data-machine-source": "blender-showcase-v1.1.0",
+              "data-autonomy-mode": "manual",
+              "data-autonomy-overrides": "none",
+              "data-drive-heading": "0",
+              "data-drive-loop": "0",
+              "data-drive-route-error-m": "0.00",
+              "data-canvas-interaction": "navigation-only",
+              "data-orbit-camera-distance-m": "17.243",
+              "data-orbit-desired-distance-m": "8.500",
+              "data-viewer-module-loaded": "true",
+              "data-drive-x": "0.00",
+              "data-drive-z": "0.00",
+              "data-steer-left-deg": "0.3",
+              "data-steer-right-deg": "0.3",
+              "data-machine-visible-meshes": "92",
+              "data-machine-merged-buckets": "37",
+              "data-wheel-roll-hierarchy": "separated",
+              "data-hose-solver-count": "2",
+              "data-load-ms": "131",
+              "data-selection-selftest": "pass",
+              "data-sampled-fps": "60",
+              "data-frame-p95-ms": "16.8",
+              "class": "inspector-open"
+            }
+          },
+          {
+            "selector": "#machine-title",
+            "text": "600S",
+            "attributes": {
+              "id": "machine-title"
+            }
+          },
+          {
+            "selector": "#diagnostics",
+            "text": "source blender-showcase-v1.1.0 · meshes 92 · selection 5/5 pass · errors 0 · load 131 ms · render desktop / 60 fps / p95 16.8 ms · reduced motion off",
+            "attributes": {
+              "class": "diagnostics",
+              "id": "diagnostics",
+              "aria-live": "polite"
+            }
+          },
+          {
+            "selector": "#controls-toggle",
+            "text": "Close",
+            "attributes": {
+              "class": "controls-toggle",
+              "id": "controls-toggle",
+              "type": "button",
+              "aria-controls": "machine-controls-body",
+              "aria-expanded": "true",
+              "hidden": "",
+              "aria-label": "Close machine controls"
+            }
+          },
+          {
+            "selector": "#inspector",
+            "text": "×\n    Component view\n    Chassis\n    The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.\n    Visible systemFrame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deckConfiguration4WD hydrostatic with two-wheel front steerBoundarySteering anchors and angles remain visual reconstructions",
+            "attributes": {
+              "class": "inspector",
+              "id": "inspector",
+              "role": "dialog",
+              "aria-modal": "true",
+              "aria-labelledby": "inspector-title",
+              "aria-describedby": "inspector-copy"
+            }
+          }
+        ]
+      }
+    },
     "accessibility_tree_snapshot": {
       "source": "Chromium CDP Accessibility.getFullAXTree",
       "states": [
         {
+          "state": "controls_open",
           "nodes": [
             {
-              "name": "Interactive 3D JLG 600S visualization",
               "role": "application",
+              "name": "Interactive 3D JLG 600S visualization",
+              "value": null,
               "states": {
                 "focusable": true,
                 "focused": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "ABOUT",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "01 Chassis",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "02 Turntable",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "03 Boom",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "04 Platform",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "STOW MACHINE",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "RESET VIEW",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "START AUTO",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "slider",
               "name": "Boom lift",
-              "role": "slider",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             },
             {
+              "role": "slider",
               "name": "Extend",
-              "role": "slider",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             },
             {
+              "role": "slider",
               "name": "Rotate",
-              "role": "slider",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             },
             {
-              "name": "Steering",
               "role": "slider",
+              "name": "Steering",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             }
-          ],
-          "state": "controls_open"
+          ]
         },
         {
+          "state": "modal_open",
           "nodes": [
             {
-              "name": "Interactive 3D JLG 600S visualization",
               "role": "application",
+              "name": "Interactive 3D JLG 600S visualization",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
-              "name": "Chassis",
               "role": "dialog",
+              "name": "Chassis",
+              "value": null,
               "states": {
                 "modal": true
-              },
-              "value": null
+              }
             },
             {
-              "name": "Close inspector",
               "role": "button",
+              "name": "Close inspector",
+              "value": null,
               "states": {
                 "focusable": true,
                 "focused": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "ABOUT",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "01 Chassis",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "02 Turntable",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "03 Boom",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "04 Platform",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "STOW MACHINE",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "RESET VIEW",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "button",
               "name": "START AUTO",
-              "role": "button",
+              "value": null,
               "states": {
                 "focusable": true
-              },
-              "value": null
+              }
             },
             {
+              "role": "slider",
               "name": "Boom lift",
-              "role": "slider",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             },
             {
+              "role": "slider",
               "name": "Extend",
-              "role": "slider",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             },
             {
+              "role": "slider",
               "name": "Rotate",
-              "role": "slider",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             },
             {
-              "name": "Steering",
               "role": "slider",
+              "name": "Steering",
+              "value": 0,
               "states": {
                 "focusable": true,
-                "orientation": "horizontal",
                 "settable": true,
+                "orientation": "horizontal",
                 "valuetext": "0"
-              },
-              "value": 0
+              }
             }
-          ],
-          "state": "modal_open"
+          ]
         }
       ]
     },
     "assertions": {
-      "desktop_controls": {
-        "outcome": "pass",
-        "result": {
-          "ariaValueText": "35\u00b0",
-          "disabled": false,
-          "value": "35"
-        },
-        "selector": "#boom-control"
-      },
-      "drag_orbit": {
-        "after_canvas_sha256": "3c98740ebebf92f0dd0c2cca1a73bb9adfb1938be1b92d968879f4ec6f0348b1",
-        "before_canvas_sha256": "40c83942c8a087363b3b656815113d462f068df79397fb8c20daa8cbf6357939",
-        "outcome": "pass"
-      },
       "load_exact_release": {
         "outcome": "pass",
+        "route": "/",
         "parsed_status": {
-          "errors": 0,
-          "fps": 60,
-          "load_ms": 126,
+          "source": "blender-showcase-v1.1.0",
           "meshes": 92,
-          "p95_ms": 16.7,
-          "reduced_motion": "off",
-          "render_profile": "desktop",
           "selection": "5/5 pass",
-          "source": "blender-showcase-v1.1.0"
-        },
-        "route": "/"
+          "errors": 0,
+          "load_ms": 131,
+          "render_profile": "desktop",
+          "fps": 60,
+          "p95_ms": 16.8,
+          "reduced_motion": "off"
+        }
+      },
+      "desktop_controls": {
+        "outcome": "pass",
+        "selector": "#boom-control",
+        "result": {
+          "value": "35",
+          "ariaValueText": "35°",
+          "disabled": false
+        }
       },
       "mobile_controls": {
-        "aria_expanded": true,
         "outcome": "pass",
         "viewport_css_px": [
           390,
           844
-        ]
+        ],
+        "aria_expanded": true
       },
       "modal_keyboard": {
-        "initial_focus_id": "inspector-close",
         "outcome": "pass",
-        "restored_focus_component": "chassis",
-        "tab_inside": true
+        "initial_focus_id": "inspector-close",
+        "tab_inside": true,
+        "restored_focus_component": "chassis"
+      },
+      "drag_orbit": {
+        "outcome": "pass",
+        "before_canvas_sha256": "ed8a3b1cd97e508954bdb58f30b686b013535e9260937df3a07461414302f3ea",
+        "after_canvas_sha256": "33d0e258e51638af431431494f9f046303dc2e533d968cb38895bee6c5dbd47e"
       },
       "pinch_zoom": {
-        "after_canvas_sha256": "ba23edfdc334fce193caa465e5dc31ee8d0597f0d0aaaacbc6d0baacb3bd8b07",
-        "after_desired_distance_m": null,
-        "before_canvas_sha256": "2c9c88a7aee528cac73bd73573ac410a74e7cbd77ec433a8906efbb2d5555d8f",
-        "before_desired_distance_m": null,
+        "outcome": "pass",
+        "start_points_css_px": [
+          [
+            160,
+            253.2
+          ],
+          [
+            230,
+            253.2
+          ]
+        ],
         "end_points_css_px": [
           [
             95,
@@ -393,299 +683,364 @@
           "CANVAS",
           "CANVAS"
         ],
-        "observable_render_or_distance_change": true,
-        "outcome": "pass",
-        "start_points_css_px": [
-          [
-            160,
-            253.2
-          ],
-          [
-            230,
-            253.2
-          ]
-        ]
+        "before_canvas_sha256": "21e38b8721e09e456ff43ae3878827b44032c3ec8b7ec5905a4b6cd5703c36ec",
+        "after_canvas_sha256": "fc232f86b354b2a83b984609642b369403f4e79000610419c180055b30b8cd1a",
+        "before_desired_distance_m": "24.000",
+        "after_desired_distance_m": "8.400",
+        "observable_render_or_distance_change": true
       },
       "reduced_motion": {
-        "autonomy_disabled": true,
-        "body_dataset": "true",
-        "manual_controls_enabled": true,
         "outcome": "pass",
-        "query": "reduce=1"
+        "transition": "no-preference->reduce->no-preference",
+        "raw_samples": {
+          "moving_start": {
+            "x": "0.34",
+            "z": "-0.00"
+          },
+          "before_reduce": {
+            "x": "0.53",
+            "z": "-0.01"
+          },
+          "reduced_start": {
+            "x": "0.54",
+            "z": "-0.01"
+          },
+          "reduced_end": {
+            "x": "0.54",
+            "z": "-0.01"
+          },
+          "relaxed": {
+            "x": "0.54",
+            "z": "-0.01",
+            "autonomyPressed": "false",
+            "manual": true
+          }
+        },
+        "moving_before": true,
+        "frozen_while_reduced": true,
+        "did_not_auto_resume": true,
+        "manual_controls_enabled": true
+      },
+      "fatal_failures": {
+        "outcome": "pass",
+        "cases": {
+          "module": {
+            "outcome": "pass",
+            "fault": "module",
+            "expected_source": "module-load-failed",
+            "terminal_first": {
+              "source": "module-load-failed",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": null,
+              "drive_z": null
+            },
+            "terminal_after_250ms": {
+              "source": "module-load-failed",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": null,
+              "drive_z": null
+            },
+            "animation_state_stable_250ms": true
+          },
+          "webgl": {
+            "outcome": "pass",
+            "fault": "webgl",
+            "expected_source": "webgl-unavailable",
+            "terminal_first": {
+              "source": "webgl-unavailable",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": null,
+              "drive_z": null
+            },
+            "terminal_after_250ms": {
+              "source": "webgl-unavailable",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": null,
+              "drive_z": null
+            },
+            "animation_state_stable_250ms": true
+          },
+          "network": {
+            "outcome": "pass",
+            "fault": "network",
+            "expected_source": "load-failed",
+            "terminal_first": {
+              "source": "load-failed",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": "0.00",
+              "drive_z": "0.00"
+            },
+            "terminal_after_250ms": {
+              "source": "load-failed",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": "0.00",
+              "drive_z": "0.00"
+            },
+            "animation_state_stable_250ms": true
+          },
+          "contract": {
+            "outcome": "pass",
+            "fault": "contract",
+            "expected_source": "contract-failed",
+            "terminal_first": {
+              "source": "contract-failed",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": "0.00",
+              "drive_z": "0.00"
+            },
+            "terminal_after_250ms": {
+              "source": "contract-failed",
+              "viewer_terminal": true,
+              "error_role": "alert",
+              "error_aria_live": "assertive",
+              "error_visible": true,
+              "error_focused": true,
+              "app_inert": true,
+              "interface_inert": true,
+              "disabled_control_count": 8,
+              "total_control_count": 8,
+              "drive_x": "0.00",
+              "drive_z": "0.00"
+            },
+            "animation_state_stable_250ms": true
+          }
+        }
       }
-    },
-    "dom_snapshots": {
-      "desktop": {
-        "nodes": [
-          {
-            "attributes": {
-              "data-autonomy-mode": "manual",
-              "data-autonomy-overrides": "none",
-              "data-canvas-interaction": "navigation-only",
-              "data-drive-heading": "12",
-              "data-drive-loop": "3",
-              "data-drive-route-error-m": "0.01",
-              "data-drive-x": "1.50",
-              "data-drive-z": "-0.14",
-              "data-frame-p95-ms": "16.7",
-              "data-hose-solver-count": "2",
-              "data-load-ms": "126",
-              "data-machine-merged-buckets": "37",
-              "data-machine-source": "blender-showcase-v1.1.0",
-              "data-machine-visible-meshes": "92",
-              "data-reduced-motion": "false",
-              "data-render-profile": "desktop",
-              "data-runtime-error-count": "0",
-              "data-sampled-fps": "60",
-              "data-selection-selftest": "pass",
-              "data-steer-left-deg": "24.2",
-              "data-steer-right-deg": "18.1",
-              "data-viewer-started": "true",
-              "data-wheel-roll-hierarchy": "separated"
-            },
-            "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      WebGL is unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      Accuracy reconstruction / 1.1\n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59\u2032 8\u2033Platform height\n      50\u2032 2\u2033Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading012\u00b0\n            Loop3%\n          \n          Start auto\n        \n\n        \n          Boom lift18\u00b0\n          \n        \n        \n          Extend47%\n          \n        \n        \n          Rotate33\u00b0\n          \n        \n        \n          Steering20\u00b0\n          \n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 126 ms \u00b7 render desktop / 60 fps / p95 16.7 ms \u00b7 reduced motion off\n  \n\n  \n  \n    \u00d7\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerStarted) return;\n      const status = document.querySelector(\"#loader-status\");\n      const detail = document.querySelector(\"#loader-detail\");\n      if (status) status.textContent = \"Rendering runtime delayed\";\n      if (detail) detail.textContent = \"The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.\";\n    }, 8000);"
-          },
-          {
-            "attributes": {
-              "id": "machine-title"
-            },
-            "selector": "#machine-title",
-            "text": "600S"
-          },
-          {
-            "attributes": {
-              "aria-live": "polite",
-              "class": "diagnostics",
-              "id": "diagnostics"
-            },
-            "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 126 ms \u00b7 render desktop / 60 fps / p95 16.7 ms \u00b7 reduced motion off"
-          },
-          {
-            "attributes": {
-              "aria-controls": "machine-controls-body",
-              "aria-expanded": "true",
-              "aria-label": "Close machine controls",
-              "class": "controls-toggle",
-              "hidden": "",
-              "id": "controls-toggle",
-              "type": "button"
-            },
-            "selector": "#controls-toggle",
-            "text": "Close"
-          },
-          {
-            "attributes": {
-              "aria-describedby": "inspector-copy",
-              "aria-labelledby": "inspector-title",
-              "aria-modal": "true",
-              "class": "inspector",
-              "id": "inspector",
-              "inert": "",
-              "role": "dialog"
-            },
-            "selector": "#inspector",
-            "text": "\u00d7\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference"
-          }
-        ],
-        "url": "http://127.0.0.1:8092/?diagnostics=1",
-        "viewport_css_px": [
-          1280,
-          720
-        ]
-      },
-      "mobile": {
-        "nodes": [
-          {
-            "attributes": {
-              "class": "mobile-controls-open",
-              "data-autonomy-mode": "manual",
-              "data-autonomy-overrides": "none",
-              "data-canvas-interaction": "navigation-only",
-              "data-drive-heading": "2",
-              "data-drive-loop": "1",
-              "data-drive-route-error-m": "0.00",
-              "data-drive-x": "0.40",
-              "data-drive-z": "-0.00",
-              "data-hose-solver-count": "2",
-              "data-load-ms": "125",
-              "data-machine-merged-buckets": "37",
-              "data-machine-source": "blender-showcase-v1.1.0",
-              "data-machine-visible-meshes": "92",
-              "data-reduced-motion": "false",
-              "data-render-profile": "mobile",
-              "data-runtime-error-count": "0",
-              "data-selection-selftest": "pass",
-              "data-steer-left-deg": "24.5",
-              "data-steer-right-deg": "18.3",
-              "data-viewer-started": "true",
-              "data-wheel-roll-hierarchy": "separated"
-            },
-            "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the mobile render profile\n  \n\n  \n    \n      WebGL is unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      Accuracy reconstruction / 1.1\n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59\u2032 8\u2033Platform height\n      50\u2032 2\u2033Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Manual\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading002\u00b0\n            Loop1%\n          \n          Start auto\n        \n\n        \n          Boom lift13\u00b0\n          \n        \n        \n          Extend35%\n          \n        \n        \n          Rotate25\u00b0\n          \n        \n        \n          Steering23\u00b0\n          \n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 125 ms \u00b7 render mobile / sampling \u00b7 reduced motion off\n  \n\n  \n  \n    \u00d7\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference\n    \n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerStarted) return;\n      const status = document.querySelector(\"#loader-status\");\n      const detail = document.querySelector(\"#loader-detail\");\n      if (status) status.textContent = \"Rendering runtime delayed\";\n      if (detail) detail.textContent = \"The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.\";\n    }, 8000);"
-          },
-          {
-            "attributes": {
-              "id": "machine-title"
-            },
-            "selector": "#machine-title",
-            "text": "600S"
-          },
-          {
-            "attributes": {
-              "aria-live": "polite",
-              "class": "diagnostics",
-              "id": "diagnostics"
-            },
-            "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 125 ms \u00b7 render mobile / sampling \u00b7 reduced motion off"
-          },
-          {
-            "attributes": {
-              "aria-controls": "machine-controls-body",
-              "aria-expanded": "true",
-              "aria-label": "Close machine controls",
-              "class": "controls-toggle",
-              "id": "controls-toggle",
-              "type": "button"
-            },
-            "selector": "#controls-toggle",
-            "text": "Close"
-          },
-          {
-            "attributes": {
-              "aria-describedby": "inspector-copy",
-              "aria-labelledby": "inspector-title",
-              "aria-modal": "true",
-              "class": "inspector",
-              "id": "inspector",
-              "inert": "",
-              "role": "dialog"
-            },
-            "selector": "#inspector",
-            "text": "\u00d7\n    Project note\n    A visual replica,not an engineering model.\n    This unofficial study is designed to explain visible product systems through a simplified, interactive model based on public reference material.\n    \n      ModelBlender Accuracy reconstruction v1.1\n      PurposePortfolio and educational visualization\n      BoundaryNot a service, training, fabrication, or safety reference"
-          }
-        ],
-        "url": "http://127.0.0.1:8092/?diagnostics=1",
-        "viewport_css_px": [
-          390,
-          844
-        ]
-      },
-      "modal_open": {
-        "nodes": [
-          {
-            "attributes": {
-              "class": "inspector-open",
-              "data-autonomy-mode": "manual",
-              "data-autonomy-overrides": "none",
-              "data-canvas-interaction": "navigation-only",
-              "data-drive-heading": "0",
-              "data-drive-loop": "0",
-              "data-drive-route-error-m": "0.00",
-              "data-drive-x": "0.00",
-              "data-drive-z": "0.00",
-              "data-frame-p95-ms": "16.7",
-              "data-hose-solver-count": "2",
-              "data-load-ms": "126",
-              "data-machine-merged-buckets": "37",
-              "data-machine-source": "blender-showcase-v1.1.0",
-              "data-machine-visible-meshes": "92",
-              "data-reduced-motion": "false",
-              "data-render-profile": "desktop",
-              "data-runtime-error-count": "0",
-              "data-sampled-fps": "60",
-              "data-selection-selftest": "pass",
-              "data-steer-left-deg": "0.3",
-              "data-steer-right-deg": "0.3",
-              "data-viewer-started": "true",
-              "data-wheel-roll-hierarchy": "separated"
-            },
-            "selector": "body",
-            "text": "Use arrow keys to orbit, plus and minus to zoom, number keys one through four to inspect components, and zero to reset the view.\n\n  \n    \n    Preparing materials and shadows\n    Applying the desktop render profile\n  \n\n  \n    \n      WebGL is unavailable.\n      This interactive study needs a browser with WebGL enabled.\n    \n  \n\n  \n    \n      \n        EquipmentExplorer\n      \n      Accuracy reconstruction / 1.1\n      About\n    \n\n    \n      Interactive study\n      600S\n      Telescopic boom lift\n    \n\n    \n      59\u2032 8\u2033Platform height\n      50\u2032 2\u2033Horizontal outreach\n      1,000 lbRestricted capacity\n      Unofficial visualization. Not an engineering or service reference.\n    \n\n    \n      \n        OperateMachine controls\n        \n          Positioning\n          Close\n        \n      \n\n      \n        \n          \n            Drive mode\n            Manual\n            All machine controls are live.\n          \n          \n            Heading000\u00b0\n            Loop0%\n          \n          Start auto\n        \n\n        \n          Boom lift0\u00b0\n          \n        \n        \n          Extend0%\n          \n        \n        \n          Rotate0\u00b0\n          \n        \n        \n          Steering0\u00b0\n          \n        \n\n        \n          Stow machine\n          Reset view\n        \n        Presentation-only motion limits. Not operational data.\n      \n    \n\n    \n      Explore\n      01Chassis\n      02Turntable\n      03Boom\n      04Platform\n    \n\n    Drag to orbit / Scroll or pinch to zoom / Buttons open details\n    source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 126 ms \u00b7 render desktop / 60 fps / p95 16.7 ms \u00b7 reduced motion off\n  \n\n  \n  \n    \u00d7\n    Component view\n    Chassis\n    The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.\n    Visible systemFrame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deckConfiguration4WD hydrostatic with two-wheel front steerBoundarySteering anchors and angles remain visual reconstructions\n  \n\n  \n    window.__showcaseBootAt = performance.now();\n    window.setTimeout(() => {\n      if (document.body.dataset.viewerStarted) return;\n      const status = document.querySelector(\"#loader-status\");\n      const detail = document.querySelector(\"#loader-detail\");\n      if (status) status.textContent = \"Rendering runtime delayed\";\n      if (detail) detail.textContent = \"The local rendering files did not initialize. Reload the page or verify the deployed vendor directory.\";\n    }, 8000);"
-          },
-          {
-            "attributes": {
-              "id": "machine-title"
-            },
-            "selector": "#machine-title",
-            "text": "600S"
-          },
-          {
-            "attributes": {
-              "aria-live": "polite",
-              "class": "diagnostics",
-              "id": "diagnostics"
-            },
-            "selector": "#diagnostics",
-            "text": "source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 126 ms \u00b7 render desktop / 60 fps / p95 16.7 ms \u00b7 reduced motion off"
-          },
-          {
-            "attributes": {
-              "aria-controls": "machine-controls-body",
-              "aria-expanded": "true",
-              "aria-label": "Close machine controls",
-              "class": "controls-toggle",
-              "hidden": "",
-              "id": "controls-toggle",
-              "type": "button"
-            },
-            "selector": "#controls-toggle",
-            "text": "Close"
-          },
-          {
-            "attributes": {
-              "aria-describedby": "inspector-copy",
-              "aria-labelledby": "inspector-title",
-              "aria-modal": "true",
-              "class": "inspector",
-              "id": "inspector",
-              "role": "dialog"
-            },
-            "selector": "#inspector",
-            "text": "\u00d7\n    Component view\n    Chassis\n    The mobile base carries the axles, steering assemblies, lower controls, and the rotating upper structure.\n    Visible systemFrame, axles, drive hubs, wheels, two moving steer cylinders, tie rod, and deckConfiguration4WD hydrostatic with two-wheel front steerBoundarySteering anchors and angles remain visual reconstructions"
-          }
-        ],
-        "url": "http://127.0.0.1:8092/?diagnostics=1",
-        "viewport_css_px": [
-          1280,
-          720
-        ]
-      }
-    },
-    "page": {
-      "parsed_status": {
-        "errors": 0,
-        "fps": 60,
-        "load_ms": 126,
-        "meshes": 92,
-        "p95_ms": 16.7,
-        "reduced_motion": "off",
-        "render_profile": "desktop",
-        "selection": "5/5 pass",
-        "source": "blender-showcase-v1.1.0"
-      },
-      "route": "/",
-      "status_text": "source blender-showcase-v1.1.0 \u00b7 meshes 92 \u00b7 selection 5/5 pass \u00b7 errors 0 \u00b7 load 126 ms \u00b7 render desktop / 60 fps / p95 16.7 ms \u00b7 reduced motion off",
-      "title": "600S Interactive Equipment Study"
     },
     "reduced_motion": {
-      "autonomy_disabled": true,
-      "body_dataset": "true",
-      "manual_controls_enabled": true,
-      "query": "reduce=1"
+      "transition": "no-preference->reduce->no-preference",
+      "raw_samples": {
+        "moving_start": {
+          "x": "0.34",
+          "z": "-0.00"
+        },
+        "before_reduce": {
+          "x": "0.53",
+          "z": "-0.01"
+        },
+        "reduced_start": {
+          "x": "0.54",
+          "z": "-0.01"
+        },
+        "reduced_end": {
+          "x": "0.54",
+          "z": "-0.01"
+        },
+        "relaxed": {
+          "x": "0.54",
+          "z": "-0.01",
+          "autonomyPressed": "false",
+          "manual": true
+        }
+      },
+      "moving_before": true,
+      "frozen_while_reduced": true,
+      "did_not_auto_resume": true,
+      "manual_controls_enabled": true
+    },
+    "fatal_failures": {
+      "module": {
+        "outcome": "pass",
+        "fault": "module",
+        "expected_source": "module-load-failed",
+        "terminal_first": {
+          "source": "module-load-failed",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": null,
+          "drive_z": null
+        },
+        "terminal_after_250ms": {
+          "source": "module-load-failed",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": null,
+          "drive_z": null
+        },
+        "animation_state_stable_250ms": true
+      },
+      "webgl": {
+        "outcome": "pass",
+        "fault": "webgl",
+        "expected_source": "webgl-unavailable",
+        "terminal_first": {
+          "source": "webgl-unavailable",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": null,
+          "drive_z": null
+        },
+        "terminal_after_250ms": {
+          "source": "webgl-unavailable",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": null,
+          "drive_z": null
+        },
+        "animation_state_stable_250ms": true
+      },
+      "network": {
+        "outcome": "pass",
+        "fault": "network",
+        "expected_source": "load-failed",
+        "terminal_first": {
+          "source": "load-failed",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": "0.00",
+          "drive_z": "0.00"
+        },
+        "terminal_after_250ms": {
+          "source": "load-failed",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": "0.00",
+          "drive_z": "0.00"
+        },
+        "animation_state_stable_250ms": true
+      },
+      "contract": {
+        "outcome": "pass",
+        "fault": "contract",
+        "expected_source": "contract-failed",
+        "terminal_first": {
+          "source": "contract-failed",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": "0.00",
+          "drive_z": "0.00"
+        },
+        "terminal_after_250ms": {
+          "source": "contract-failed",
+          "viewer_terminal": true,
+          "error_role": "alert",
+          "error_aria_live": "assertive",
+          "error_visible": true,
+          "error_focused": true,
+          "app_inert": true,
+          "interface_inert": true,
+          "disabled_control_count": 8,
+          "total_control_count": 8,
+          "drive_x": "0.00",
+          "drive_z": "0.00"
+        },
+        "animation_state_stable_250ms": true
+      }
     }
   },
-  "reviewed_source_commit": "60f08b1c6d5f10a04333c84b5af4bd4829834859",
-  "schema_version": "2.0.0",
+  "boundary": "Exact current upstream release regression in local headless Chromium only; no deployment, physical-device, or manufacturer-equivalence claim.",
   "upstream_identity": {
-    "asset_sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
-    "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
-    "receipt_bytes": 2747,
-    "receipt_sha256": "89d406fda150ac983059b82e7445a3daeb10a8c3313fc706c6dbc34abd42a5ff",
-    "release": "1.1.0",
     "route": "/",
-    "runtime_sha256": "8b053df5d04b94eafb36c40953cd584628267e62599d8515263829759c49b66a"
+    "configuration_id": "600S-PVC2607-US-B3-2WS-D29-FF-RRP3696",
+    "release": "1.1.0",
+    "asset_sha256": "64b969d1b24fd308c71a72775eac55cf39e5b8fab82cee7ec98b054fdcefb4c1",
+    "runtime_sha256": "f274b2f3724b0209b1a1b2164440c670d5c4e6b4815be8c90a264cb523da784b",
+    "receipt_sha256": "0a9200b5d5125535d4e3487a5cf96fdb1478678ceaa223fcff06edad0e6fad76",
+    "receipt_bytes": 2747
   }
 }

@@ -2,15 +2,33 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "mobile_browser_interaction",
-  "captured_at_utc": "2026-08-26T05:49:55.907Z",
+  "captured_at_utc": "2026-08-26T06:54:06.654Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
+  "toolchain": {
+    "tool": "Playwright",
+    "version": "1.62.1",
+    "source": "repo-locked-default",
+    "lockfile": {
+      "path": "package-lock.json",
+      "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9",
+      "bytes": 1786
+    },
+    "browser_executable": {
+      "product": "chromium",
+      "revision": "1234",
+      "browser_version": "151.0.7922.34",
+      "executable_basename": "Google Chrome for Testing",
+      "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e",
+      "bytes": 52112
+    }
+  },
   "runner": {
     "path": "scripts/capture_742_browser_evidence.mjs",
-    "sha256": "c905431cbe042070f6953ada3cde511432773138d5ee88f2ee819f8f2506bd17",
-    "bytes": 48162
+    "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e",
+    "bytes": 60044
   },
-  "outcomes_sha256": "c5f468aa4f40afc7f3111069502735f909fd7abcea7146026b3ad2bb238fc431",
+  "outcomes_sha256": "b2848f3a69e21e8e8c5a7835eb0f2cc1548d14a267abbba37591fefa4cf8d4af",
   "outcomes": {
     "portrait_controls": {
       "outcome": "pass",
@@ -24,12 +42,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 541.8125,
+            "y": 523.625,
             "width": 336,
             "height": 12,
-            "top": 541.8125,
+            "top": 523.625,
             "right": 363,
-            "bottom": 553.8125,
+            "bottom": 535.625,
             "left": 27
           }
         },
@@ -38,12 +56,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 578.8125,
+            "y": 560.625,
             "width": 336,
             "height": 12,
-            "top": 578.8125,
+            "top": 560.625,
             "right": 363,
-            "bottom": 590.8125,
+            "bottom": 572.625,
             "left": 27
           }
         },
@@ -52,12 +70,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 615.8125,
+            "y": 597.625,
             "width": 336,
             "height": 12,
-            "top": 615.8125,
+            "top": 597.625,
             "right": 363,
-            "bottom": 627.8125,
+            "bottom": 609.625,
             "left": 27
           }
         },
@@ -66,12 +84,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 652.8125,
+            "y": 634.625,
             "width": 336,
             "height": 12,
-            "top": 652.8125,
+            "top": 634.625,
             "right": 363,
-            "bottom": 664.8125,
+            "bottom": 646.625,
             "left": 27
           }
         },
@@ -80,12 +98,12 @@
           "disabled": false,
           "box": {
             "x": 27,
-            "y": 729.8125,
+            "y": 711.625,
             "width": 336,
             "height": 12,
-            "top": 729.8125,
+            "top": 711.625,
             "right": 363,
-            "bottom": 741.8125,
+            "bottom": 723.625,
             "left": 27
           }
         }
@@ -230,10 +248,10 @@
         "stable_frames": 6,
         "samples_camera_distance_m": [
           28.55,
-          26.55,
+          26.538,
           24.784,
-          23.233,
-          21.855,
+          23.224,
+          21.846,
           20.637,
           19.562,
           18.618,
@@ -241,14 +259,14 @@
           17.038,
           16.388,
           15.809,
-          15.301,
+          15.298,
           14.85,
-          14.451,
-          14.099,
+          14.454,
+          14.102,
           13.79,
           13.516,
           13.273,
-          13.059,
+          13.06,
           12.871,
           12.704,
           12.557,
@@ -256,11 +274,11 @@
           12.311,
           12.209,
           12.12,
-          12.04,
+          12.041,
           11.97,
           11.908,
           11.854,
-          11.805,
+          11.806,
           11.763,
           11.725,
           11.692,
@@ -268,7 +286,7 @@
           11.637,
           11.614,
           11.593,
-          11.575,
+          11.576,
           11.56,
           11.546,
           11.533,
