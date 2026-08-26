@@ -71,6 +71,12 @@ jobs:
             --blender "${BLENDER_BIN}" \
             --output _attestations/742-deterministic-rebuild-attestation.json
 
+      - name: Run pinned-Blender posed-GLB companion gate
+        run: |
+          test "${GITHUB_SHA}" = "$(git rev-parse HEAD)"
+          BLENDER_BIN="${BLENDER_BIN}" python3 -B scripts/run_742_posed_glb_gate.py \
+            > _attestations/742-blender-posed-glb-result.json
+
       - name: Validate repository contracts
         run: |
           npm run check

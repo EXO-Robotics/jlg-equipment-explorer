@@ -18,7 +18,7 @@ from datetime import date
 from pathlib import Path
 
 from validate_742_review import HUMAN_GATES, validate_review_manifest
-from run_742_posed_glb_gate import EXPECTED_ASSET_PATH
+from validate_742_portable_posed_glb import EXPECTED_ASSET_PATH
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,8 +31,9 @@ FILES = {
     "builder": ROOT / "scripts/build_742.py",
     "solver_bridge": ROOT / "scripts/solve_742_pose.mjs",
     "solver_validator": ROOT / "scripts/validate_742_solver.mjs",
-    "posed_glb_validator": ROOT / "scripts/validate_742_posed_glb.py",
-    "posed_glb_runner": ROOT / "scripts/run_742_posed_glb_gate.py",
+    "portable_posed_glb_validator": ROOT / "scripts/validate_742_portable_posed_glb.py",
+    "blender_posed_glb_validator": ROOT / "scripts/validate_742_posed_glb.py",
+    "blender_posed_glb_runner": ROOT / "scripts/run_742_posed_glb_gate.py",
     "receipt_writer": ROOT / "scripts/write_742_receipt.py",
     "receipt_validator": ROOT / "scripts/validate_742_receipt.py",
     "project_readme": ROOT / "README.md",
@@ -91,7 +92,7 @@ AUTOMATED_CHECKS = {
     "evidence_ledger": ("validate_742_evidence.py", ["--manifest-only"]),
     "asset_contract": ("validate_742_glb.py", []),
     "mechanical_kinematics": ("validate_742_kinematics.py", []),
-    "actual_posed_glb": ("run_742_posed_glb_gate.py", []),
+    "actual_posed_glb": ("validate_742_portable_posed_glb.py", []),
     "route_contract": ("validate_742_route.py", []),
     "review_evidence_parser": ("test_742_browser_evidence.py", []),
     "review_visual_semantics_parser": ("test_742_review_semantics.py", []),
@@ -149,7 +150,7 @@ def run_check(script: str, extra_args: list[str]) -> dict:
         raise RuntimeError(f"Automated check did not emit one JSON result: {script}") from error
     if result.get("status") != "PASS":
         raise RuntimeError(f"Automated check did not pass: {script}")
-    if script == "run_742_posed_glb_gate.py" and result.get("asset") != EXPECTED_ASSET_PATH:
+    if script == "validate_742_portable_posed_glb.py" and result.get("asset") != EXPECTED_ASSET_PATH:
         raise RuntimeError("742 posed-GLB check emitted a checkout-specific asset path")
     canonical_result = json.dumps(result, sort_keys=True, separators=(",", ":")).encode()
     return {
@@ -216,6 +217,12 @@ def main() -> None:
         "solver_maximum_crab_corresponding_heading_error_degrees": steering_linkage["maximum_crab_corresponding_heading_error_degrees"],
         "solver_maximum_front_mode_icr_relative_spread": steering_linkage["maximum_front_mode_icr_relative_spread"],
         "solver_ackermann_authority": steering_linkage["ackermann_authority"],
+        "solver_maximum_front_mode_wheel_angle_degrees": steering_linkage["maximum_front_mode_wheel_angle_degrees"],
+        "solver_maximum_crab_mode_wheel_angle_degrees": steering_linkage["maximum_crab_mode_wheel_angle_degrees"],
+        "solver_minimum_useful_mode_angle_degrees": steering_linkage["minimum_useful_mode_angle_degrees"],
+        "solver_static_linkage_authority": steering_linkage["static_linkage_authority"],
+        "solver_scrub_boundary": steering_linkage["scrub_boundary"],
+        "solver_crab_parallelism_boundary": steering_linkage["crab_parallelism_boundary"],
         "solver_maximum_reconstructed_circle_center_spread_m": kinematic_result["maximum_reconstructed_circle_center_spread_m"],
         "solver_rigid_link_ranges_m": kinematic_result["rigid_link_ranges_m"],
         "solver_chain_paths": kinematic_result["chain_paths"],
@@ -223,13 +230,50 @@ def main() -> None:
         "continuous_hose_samples": kinematic_result["continuous_hose_samples"],
         "solver_maximum_chain_tangent_dot_error": kinematic_result["maximum_chain_tangent_dot_error"],
         "solver_minimum_chain_to_sheave_surface_clearance_m": kinematic_result["minimum_chain_to_sheave_surface_clearance_m"],
+        "solver_minimum_boom_hose_to_rigid_tube_surface_clearance_m": kinematic_result["minimum_boom_hose_to_rigid_tube_surface_clearance_m"],
+        "solver_maximum_boom_hose_adjacent_direction_change_degrees": kinematic_result["maximum_boom_hose_adjacent_direction_change_degrees"],
+        "solver_boom_hose_nominal_centerline_length_m": kinematic_result["boom_hose_nominal_centerline_length_m"],
         "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_m": posed_glb_result["minimum_frame_level_clearance"]["clearance_m"],
         "actual_posed_glb_minimum_frame_level_clearance_node": posed_glb_result["minimum_frame_level_clearance"]["limiting_node"],
         "actual_posed_glb_named_presets": posed_glb_result["named_presets_posed"],
+        "actual_posed_glb_gate_kind": posed_glb_result["gate_kind"],
+        "actual_posed_glb_asset_sha256": posed_glb_result["asset_sha256"],
+        "actual_posed_glb_configuration_id": posed_glb_result["configuration_id"],
+        "actual_posed_glb_parser": posed_glb_result["parser"],
+        "actual_posed_glb_production_solver_bridge": posed_glb_result["production_solver_bridge"],
+        "actual_posed_glb_neutral_binary_contract": posed_glb_result["neutral_binary_contract"],
+        "actual_posed_glb_stowed_fork_bottom_m": posed_glb_result["stow"]["bottom_m"],
+        "actual_posed_glb_maximum_lift_surface_m": posed_glb_result["maximum_lift"]["load_surface_m"],
+        "actual_posed_glb_maximum_lift_fork_pitch_degrees": posed_glb_result["maximum_lift"]["pitch_degrees"],
+        "actual_posed_glb_maximum_reach_m": posed_glb_result["maximum_reach"]["forward_reach_m"],
+        "actual_posed_glb_maximum_reach_fork_pitch_degrees": posed_glb_result["maximum_reach"]["pitch_degrees"],
+        "actual_posed_glb_maximum_circle_wheel_angle_degrees": posed_glb_result["maximum_circle_steer"]["inner_wheel_angle_degrees"],
+        "actual_posed_glb_maximum_crab_wheel_angle_degrees": posed_glb_result["maximum_crab_steer"]["maximum_wheel_angle_degrees"],
+        "actual_posed_glb_maximum_crab_heading_spread_degrees": posed_glb_result["maximum_crab_steer"]["maximum_heading_spread_degrees"],
+        "actual_posed_glb_maximum_front_wheel_angle_degrees": posed_glb_result["maximum_front_steer"]["maximum_front_wheel_angle_degrees"],
+        "actual_posed_glb_maximum_rear_wheel_angle_in_front_mode_degrees": posed_glb_result["maximum_front_steer"]["maximum_rear_wheel_angle_degrees"],
         "actual_posed_glb_maximum_beam_endpoint_error_m": max(
             pose["maximum_beam_endpoint_error_m"] for pose in posed_glb_result["pose_contracts"].values()
         ),
+        "actual_posed_glb_maximum_point_position_error_m": max(
+            pose["maximum_point_position_error_m"] for pose in posed_glb_result["pose_contracts"].values()
+        ),
+        "actual_posed_glb_minimum_boom_hose_to_rigid_tube_surface_clearance_m": min(
+            pose["minimum_boom_hose_to_rigid_tube_surface_clearance_m"]
+            for pose in posed_glb_result["pose_contracts"].values()
+        ),
+        "actual_posed_glb_maximum_boom_hose_adjacent_direction_change_degrees": max(
+            pose["maximum_boom_hose_adjacent_direction_change_degrees"]
+            for pose in posed_glb_result["pose_contracts"].values()
+        ),
+        "blender_posed_glb_companion": {
+            "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",
+            "version": "5.1.1",
+            "runner": posed_glb_result["blender_companion"],
+            "validator": "scripts/validate_742_posed_glb.py",
+            "included_in_standard_npm_check": False,
+        },
         "approximate_published_rigid_underbody_clearance_m": mechanism["collision_proxies"]["minimum_rigid_underbody_clearance_m"],
         "published_hydraulic_cylinder_strokes_m": mechanism["hydraulic_cylinder_strokes_m"],
         "solver_evidence_stroke_usage_m": solver_stroke_usage(kinematic_result),
@@ -254,14 +298,17 @@ def main() -> None:
         raise RuntimeError("742 receipt 55-degree steering proof drift")
     if mechanical_proof["solver_maximum_steering_bar_length_drift_m"] > 1e-12 or mechanical_proof["solver_maximum_opposed_rod_joint_span_drift_m"] > 1e-12 or mechanical_proof["solver_maximum_rod_bar_closure_error_m"] > 1e-12:
         raise RuntimeError("742 receipt rigid steering-linkage proof drift")
-    if mechanical_proof["solver_maximum_ackermann_relative_error"] > 0.005 or "not factory steering or crab calibration" not in mechanical_proof["solver_ackermann_authority"]:
-        raise RuntimeError("742 receipt reconstructed Ackermann-fit boundary drift")
-    if mechanical_proof["solver_maximum_four_wheel_icr_relative_spread"] > 0.005:
-        raise RuntimeError("742 receipt reconstructed four-wheel ICR proof drift")
-    if mechanical_proof["solver_maximum_crab_heading_spread_degrees"] > 2.1 or mechanical_proof["solver_maximum_crab_corresponding_heading_error_degrees"] > 2.1:
-        raise RuntimeError("742 receipt reconstructed crab residual-toe proof drift")
-    if mechanical_proof["solver_maximum_front_mode_icr_relative_spread"] > 0.05:
-        raise RuntimeError("742 receipt limited-rack front-mode ICR proof drift")
+    if (
+        mechanical_proof["solver_maximum_front_mode_wheel_angle_degrees"] < 35
+        or mechanical_proof["solver_maximum_crab_mode_wheel_angle_degrees"] < 20
+        or mechanical_proof["solver_minimum_useful_mode_angle_degrees"] != 35
+        or mechanical_proof["solver_maximum_crab_heading_spread_degrees"] > 1
+        or mechanical_proof["solver_maximum_crab_corresponding_heading_error_degrees"] > 1
+        or "one fixed axle-mounted double-rod cylinder" not in mechanical_proof["solver_static_linkage_authority"]
+        or "not Ackermann acceptance gates" not in mechanical_proof["solver_scrub_boundary"]
+        or "no mode-dependent toe" not in mechanical_proof["solver_crab_parallelism_boundary"]
+    ):
+        raise RuntimeError("742 receipt source-correct static-linkage steering proof drift")
     if any(max(values) - min(values) > 1e-12 for values in mechanical_proof["solver_rigid_link_ranges_m"].values()):
         raise RuntimeError("742 receipt rigid-link invariant proof drift")
     if any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.04 or path["wrap_degrees"] != 180 for path in mechanical_proof["solver_chain_paths"].values()):
@@ -270,9 +317,55 @@ def main() -> None:
         raise RuntimeError("742 receipt chain tangency/clearance/continuity proof drift")
     if mechanical_proof["continuous_hose_samples"] < 2001 or any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < (0.05 if name.startswith("BoomHose") else 0.10) for name, path in mechanical_proof["solver_hose_paths"].items()):
         raise RuntimeError("742 receipt invariant articulated-hose proof drift")
+    if (
+        mechanical_proof["solver_minimum_boom_hose_to_rigid_tube_surface_clearance_m"] < 0.005
+        or mechanical_proof["solver_maximum_boom_hose_adjacent_direction_change_degrees"] > 22.500001
+        or abs(mechanical_proof["solver_boom_hose_nominal_centerline_length_m"] - 5.0) > 1e-12
+    ):
+        raise RuntimeError("742 receipt analytic boom-hose route proof drift")
     if mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
         raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")
-    if mechanical_proof["actual_posed_glb_minimum_frame_level_clearance_m"] + 1e-6 < mechanical_proof["approximate_published_rigid_underbody_clearance_m"] or mechanical_proof["actual_posed_glb_maximum_beam_endpoint_error_m"] > 2e-6:
+    neutral_binary = mechanical_proof["actual_posed_glb_neutral_binary_contract"]
+    expected_blender_companion = {
+        "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",
+        "version": "5.1.1",
+        "runner": "scripts/run_742_posed_glb_gate.py",
+        "validator": "scripts/validate_742_posed_glb.py",
+        "included_in_standard_npm_check": False,
+    }
+    if (
+        mechanical_proof["actual_posed_glb_gate_kind"] != "portable_committed_glb_production_solver"
+        or mechanical_proof["actual_posed_glb_asset_sha256"] != mechanical_proof["asset_sha256"]
+        or mechanical_proof["actual_posed_glb_configuration_id"] != EXPECTED_ID
+        or mechanical_proof["actual_posed_glb_parser"] != "scripts/validate_742_portable_posed_glb.py"
+        or mechanical_proof["actual_posed_glb_production_solver_bridge"] != "scripts/solve_742_pose.mjs"
+        or mechanical_proof["blender_posed_glb_companion"] != expected_blender_companion
+        or mechanical_proof["actual_posed_glb_named_presets"] != [
+            "stow_0deg", "maximum_lift_69deg", "maximum_reach_selected_3deg",
+            "maximum_circle_steer", "maximum_crab_steer", "maximum_front_steer",
+            "frame_level_dense_41",
+        ]
+        or neutral_binary["beams_checked"] <= 0
+        or neutral_binary["points_checked"] <= 0
+        or neutral_binary["maximum_neutral_beam_endpoint_error_m"] > 2e-6
+        or neutral_binary["maximum_neutral_point_position_error_m"] > 2e-6
+        or mechanical_proof["actual_posed_glb_stowed_fork_bottom_m"] > 0.35
+        or abs(mechanical_proof["actual_posed_glb_maximum_lift_surface_m"] - mechanical_proof["published_maximum_lift_height_m"]) > 0.02
+        or abs(mechanical_proof["actual_posed_glb_maximum_lift_fork_pitch_degrees"]) > 0.1
+        or abs(mechanical_proof["actual_posed_glb_maximum_reach_m"] - mechanical_proof["published_maximum_forward_reach_m"]) > 0.02
+        or abs(mechanical_proof["actual_posed_glb_maximum_reach_fork_pitch_degrees"]) > 0.1
+        or mechanical_proof["actual_posed_glb_maximum_circle_wheel_angle_degrees"] < 35
+        or mechanical_proof["actual_posed_glb_maximum_circle_wheel_angle_degrees"] > 55.000001
+        or mechanical_proof["actual_posed_glb_maximum_crab_wheel_angle_degrees"] < 20
+        or mechanical_proof["actual_posed_glb_maximum_crab_heading_spread_degrees"] > 1
+        or mechanical_proof["actual_posed_glb_maximum_front_wheel_angle_degrees"] < 35
+        or mechanical_proof["actual_posed_glb_maximum_rear_wheel_angle_in_front_mode_degrees"] > 1e-9
+        or mechanical_proof["actual_posed_glb_minimum_frame_level_clearance_m"] + 1e-6 < mechanical_proof["approximate_published_rigid_underbody_clearance_m"]
+        or mechanical_proof["actual_posed_glb_maximum_beam_endpoint_error_m"] > 2e-6
+        or mechanical_proof["actual_posed_glb_maximum_point_position_error_m"] > 1e-9
+        or mechanical_proof["actual_posed_glb_minimum_boom_hose_to_rigid_tube_surface_clearance_m"] < 0.005
+        or mechanical_proof["actual_posed_glb_maximum_boom_hose_adjacent_direction_change_degrees"] > 22.502
+    ):
         raise RuntimeError("742 receipt actual posed-GLB mechanical proof drift")
     if any(max(values) - min(values) > 1e-12 for values in mechanical_proof["solver_fixed_barrel_length_ranges_m"].values()):
         raise RuntimeError("742 receipt fixed-barrel proof drift")
