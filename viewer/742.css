@@ -59,7 +59,7 @@ body[data-machine="742"].viewer-terminal-error #app, body[data-machine="742"].vi
   .component-nav button:last-of-type { border-right: 1px solid var(--line); }
   .component-nav i { display: none; }
   .interaction-hint { display: none; }
-  .diagnostics { top: calc(var(--header) + 7px); font-size: 7px; }
+  .diagnostics { left: auto; right: 12px; top: calc(var(--header) + 7px); max-width: calc(54vw - 24px); transform: none; font-size: 7px; }
   body.mobile-controls-open .identity { opacity: 0; visibility: hidden; }
 }
 @media (max-height: 670px) and (max-width: 800px) {

@@ -92,6 +92,7 @@ def main() -> None:
         "transition: none !important",
         "@media (forced-colors: active)",
         ".diagnostics",
+        "pointer-events: none",
         ".sr-only",
         "--mobile-controls-height",
         "body.mobile-controls-open .panel-heading",

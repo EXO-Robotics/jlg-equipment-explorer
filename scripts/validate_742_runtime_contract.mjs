@@ -51,6 +51,7 @@ if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
 requireTokens(style, [
   "viewer-terminal-error", "visibility: hidden", "pointer-events: none",
   "@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)",
+  "max-width: calc(54vw - 24px)",
 ]);
 requireTokens(articulation, [
   '"BoomAngleSensorCrank"', '"BoomAngleSensorFrameJoint"', '"BoomAngleSensorCrankJoint"',
