@@ -21,7 +21,7 @@ These are interaction-test values, not JLG operating data. The Blender GLB and t
 | Control | GLB blockout | Procedural fixture | Authority status |
 |---|---:|---:|---|
 | Boom slider | 0 to 72 degrees | 0 to 72 degrees | visual approximation |
-| Telescope slider | 0 to 100% mapped to 0.36 m Mid + 0.54 m Fly visual staging | 0 to 100% mapped to 3.8 m | visual approximation; GLB total and split are overlap-bounded presentation values |
+| Telescope slider | 0 to 100% mapped to 1.52 m Mid + 2.28 m Fly visual staging | 0 to 100% mapped to 3.8 m | visual approximation; GLB total, full nested-shell lengths, and split are overlap-bounded presentation values |
 | Turntable slider | -180 to +180 degrees | -180 to +180 degrees | UI representation of verified continuous swing, not a physical stop |
 | Steering slider | -28 to +28 degrees | -28 to +28 degrees | visual approximation |
 | Platform leveling | retain starting angle and solve visible level cylinder | counter-rotate `PlatformPivot` | visual only; not gravity auto-leveling |

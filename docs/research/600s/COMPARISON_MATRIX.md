@@ -19,7 +19,7 @@ The query poses are presentation controls, not manufacturer operating positions.
 |---|---|---|
 | Chassis | correct four-wheel stance; front-only visual steer; believable axle, hub, lug, tread, fork-pocket, step, tie-down, and belly-pan relationships | wheelbase and clearance are published; undimensioned offsets and fastener geometry are reconstructed |
 | Turntable | B3 twin-cover/counterweight silhouette; rear grille; cover seams/latches; ground-control, tank, valve, and harness cues read at showcase distance | tailswing is published; enclosure curvature, internal packaging, valve spacing, and routes are reconstructed |
-| Boom | base/mid/fly nesting remains legible; tower links, pivot pin, cylinder, powertrack, wear collars, bundles, and sensors move with the correct parent groups | boom angles, section lengths, anchor coordinates, and 0.90 m viewer travel are visual values |
+| Boom | base/mid/fly nesting remains legible; tower links, pivot pin, cylinder, powertrack, wear collars, bundles, and sensors move with the correct parent groups | boom angles, full nested-section lengths, anchor coordinates, and 3.80 m viewer travel are visual values |
 | Platform | verified 36 × 96 envelope; orange rails, swing gate, console, footswitch, SkyGuard, lanyard points, rotator support, hose/harness cues, and toeboards are visible | envelope is published; detailed construction and control placement are reconstructed |
 | Materials and markings | orange powder coat, cream boom sections, dark steel/rubber, zinc/metal cues, subtle part-to-part roughness, and readable model/product marks support recognition | runtime marks are independently typeset nominative identifiers, not copied JLG artwork or manufacturer endorsement |
 
@@ -35,7 +35,7 @@ The query poses are presentation controls, not manufacturer operating positions.
 
 - Official assets `140381`, `139098`, and `138896` were re-opened from the recorded JLG DAM URLs and compared against the live Safari v1.0 stowed and working poses.
 - Strongest agreement: recognizable current orange/cream/dark material split; B3 hood/counterweight massing; three-section boom read; underside powertrack; four-wheel stance; orange rapid platform; model/product marking locations.
-- Most important remaining visual gaps: the viewer's evidence-safe 0.90 m telescope cap cannot reproduce full outreach; the official molded covers are smoother and more compound-curved; the current tire chevron and sidewall are richer; the boom head/pivot package, exact label fields, and hose loops remain simplified.
+- Most important remaining visual gaps: the 3.80 m display cap improves Base/Mid/Fly readability but is still not a manufacturer-authoritative full-outreach solution; the official molded covers are smoother and more compound-curved; the current tire chevron and sidewall are richer; the boom head/pivot package, exact label fields, and hose loops remain simplified.
 - The v1.0 additions improve recognition without crossing authority boundaries: independently typeset nominative marks, a generic independently authored hazard-band cue, restrained per-part finish variation, and visible moving hit-volume outlines.
 
 The receipt may record showcase runtime acceptance when its mechanical and browser gates pass, but
@@ -47,7 +47,9 @@ manufacturer-authoritative full-reach reconstruction remain open evidence gates.
 - Corrected the current telescope identity to cylinder `1001309294` and rejected
   legacy cylinder `1683618` dimensions as current-PVC geometry authority.
 - Replaced one rigid telescope translation with separate MidBoom and FlyBoom
-  visual transforms while retaining a clearly labeled 0.90 m presentation cap.
+  visual transforms. Runtime 1.1.10 lengthens the hidden rear portions of both
+  shells and uses a clearly labeled 3.80 m display cap so all three sections can
+  be inspected; the shell lengths and 1.52 / 2.28 m split remain reconstructed.
 - Replaced static tower-link, steering-cylinder, and tie-rod dressing with moving
   two-anchor visual linkages; added a visible platform-level cylinder.
 - Rebuilt the powertrack as static, moving, bend, support, and push-tube groups.

@@ -48,11 +48,20 @@ pins, boom sensors, telescope cylinder/rope/sheave cues, cable/hydraulic bundles
 evidence-bounded lift cylinder.
 
 Evidence: parts pages 520 and 540; service pages 641 and 648; operation nomenclature page 28.
-The 0.90 m telescope control is deliberately split into 0.36 m MidBoom and 0.54 m FlyBoom
-visual transforms. Mechanical validation retains 1.207 m as the smaller section overlap at 100
-percent. Neither the total nor the split is a manufacturer-published stroke or factory ratio.
-Section lengths, pivot offsets, anchor coordinates, rope paths, and cylinder stroke remain
-reconstructed.
+The 3.80 m telescope display control is deliberately split into 1.52 m MidBoom and 2.28 m
+FlyBoom visual transforms. The inner shells continue rearward inside their parents instead of
+existing only as short exposed tips, and mechanical validation retains positive section overlap at
+100 percent. Neither the total, the full nested-shell lengths, nor the split is a
+manufacturer-published stroke, section dimension, or factory ratio. Pivot offsets, anchor
+coordinates, rope paths, and cylinder stroke also remain reconstructed.
+
+Runtime 1.1.10 adds a readability pass patterned after the evidence-led 742 presentation: a darker
+recessed MidBoom shell, distinct top plates, narrow side reveals, and wear-pad/exit cues around the
+Base-to-Mid and Mid-to-Fly boundaries. The autonomous loop now exercises 28–92 percent of the same
+3.80 m display travel so the coupled stages can be read in motion. The fixed carrier run and
+fly-attached push tube retain measured overlap through that display range. These are restrained
+presentation cues only; they do not add a manufacturer stroke, stage ratio, wear-pad dimension, or
+factory section coordinate.
 
 ### Lift cylinder visual solver
 
@@ -147,6 +156,7 @@ full visual telescope travel, and reviewed collapsed/expanded 390 × 844 plus ex
 mobile layouts with Steering still reachable. This is local acceptance, not deployed Pages proof.
 
 Remaining acceptance work is narrower: a captured Chrome performance trace and fixed-camera paired
-source overlays. The source comparison also confirms that the 0.90 m evidence-safe telescope cap cannot
-represent the real machine's full outreach. Those gaps must not be inferred away from the mechanical
-validator or the runtime diagnostic self-test.
+source overlays. The 3.80 m display cap improves section readability but is not a
+manufacturer-authoritative full-outreach pose. Exact current stroke, section lengths, and staging
+remain explicit deferred gates and must not be inferred away from the mechanical validator or the
+runtime diagnostic self-test.

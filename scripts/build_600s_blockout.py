@@ -29,12 +29,12 @@ PLATFORM_SIZE_M = Vector((0.91, 2.44))
 WHEELBASE_M = 2.50
 GROUND_CLEARANCE_M = 0.29
 TAILSWING_M = 1.22
-TELESCOPE_TRAVEL_M = 0.90
-TELESCOPE_MID_TRAVEL_M = 0.36
-TELESCOPE_FLY_TRAVEL_M = 0.54
+TELESCOPE_TRAVEL_M = 3.80
+TELESCOPE_MID_TRAVEL_M = 1.52
+TELESCOPE_FLY_TRAVEL_M = 2.28
 POWERTRACK_LINK_LENGTH_M = 0.198
 POWERTRACK_LINK_PITCH_M = 0.20
-POWERTRACK_BASE_DISPLAY_COUNT = 18
+POWERTRACK_BASE_DISPLAY_COUNT = 24
 POWERTRACK_MOVING_DISPLAY_COUNT = 9
 POWERTRACK_MAX_VISIBLE_GAP_M = 0.004
 ASSET_VERSION = "1.1.0"
@@ -535,6 +535,8 @@ scene.collection.children.link(collection)
 MAT_ORANGE = material("JLG_Orange_PowderCoat", (0.94, 0.30, 0.035, 1.0), 0.04, 0.48)
 MAT_ORANGE_DEEP = material("JLG_Orange_Shadow", (0.64, 0.16, 0.025, 1.0), 0.05, 0.58)
 MAT_BOOM = material("JLG_Boom_Cream", (0.78, 0.75, 0.57, 1.0), 0.03, 0.52)
+MAT_BOOM_INNER = material("JLG_Boom_Inner_Cream", (0.66, 0.61, 0.43, 1.0), 0.04, 0.56)
+MAT_BOOM_WEAR = material("JLG_Boom_Wear", (0.12, 0.13, 0.12, 1.0), 0.28, 0.58)
 MAT_DARK = material("JLG_Black_PowderCoat", (0.025, 0.03, 0.03, 1.0), 0.18, 0.64)
 MAT_TIRE = material("JLG_Tire_Rubber", (0.012, 0.014, 0.013, 1.0), 0.0, 0.92)
 MAT_METAL = material("JLG_Zinc_Steel", (0.42, 0.44, 0.42, 1.0), 0.68, 0.38)
@@ -723,6 +725,13 @@ main_boom = empty("MainBoom", boom_pivot)
 set_authority(main_boom, "verified", "3122579600:28; 3122579700:641")
 base_profile = ((0.0, -0.31), (4.78, -0.25), (5.12, -0.20), (5.12, 0.20), (4.78, 0.25), (0.0, 0.31))
 prism_xz("BaseBoomShell", base_profile, 0.68, main_boom, (0.0, 0.0, 0.0), MAT_BOOM, "boom", evidence="3122579800:540; 3122579700:641", round=0.025)
+# The current manuals establish nested weldments and wear pads but do not
+# dimension their exposed faces. These restrained exit cues make the three
+# verified sections legible without changing the evidence-bounded travel.
+box("BaseBoomExitWearTop", (0.16, 0.70, 0.045), main_boom, (5.00, 0.0, 0.225), MAT_BOOM_WEAR, "boom", round=0.012, evidence="3122579800:540; wear-pad presentation reconstructed")
+box("BaseBoomExitWearBottom", (0.16, 0.70, 0.045), main_boom, (5.00, 0.0, -0.225), MAT_BOOM_WEAR, "boom", round=0.012, evidence="3122579800:540; wear-pad presentation reconstructed")
+for side, y in (("L", 0.352), ("R", -0.352)):
+    box(f"BaseBoomExitWear_{side}", (0.16, 0.035, 0.44), main_boom, (5.00, y, 0.0), MAT_BOOM_WEAR, "boom", round=0.010, evidence="3122579800:540; wear-pad presentation reconstructed")
 for side, y in (("L", 0.39), ("R", -0.39)):
     prism_xz(f"BoomCheek_{side}", ((-0.18, -0.39), (0.58, -0.33), (0.74, 0.18), (0.42, 0.38), (-0.18, 0.34)), 0.07, main_boom, (0.0, y, 0.0), MAT_BOOM, "boom", evidence="3122579700:648", round=0.018)
 cylinder_mesh("BoomPivotPin", 0.25, 0.90, main_boom, (0.0, 0.0, 0.0), (math.pi / 2.0, 0.0, 0.0), MAT_DARK_METAL, "boom", 28, evidence="3122579700:648")
@@ -749,17 +758,30 @@ telescope["telescope_travel_m"] = TELESCOPE_TRAVEL_M
 telescope["mid_visual_travel_m"] = TELESCOPE_MID_TRAVEL_M
 telescope["fly_visual_travel_m"] = TELESCOPE_FLY_TRAVEL_M
 telescope["runtime_solver"] = "evidence_bounded_coupled_visual"
+telescope["travel_is_published_stroke"] = False
 mid_boom = empty("MidBoom", telescope)
 set_authority(mid_boom, "verified", "3122579600:28; 3122579700:641")
-mid_profile = ((0.0, -0.245), (2.58, -0.20), (2.58, 0.20), (0.0, 0.245))
-prism_xz("MidBoomShell", mid_profile, 0.54, mid_boom, (0.0, 0.0, 0.0), MAT_BOOM, "boom", evidence="3122579700:641", round=0.022)
-box("MidBoomWearPadCollar", (0.18, 0.60, 0.53), mid_boom, (0.10, 0.0, 0.0), MAT_DARK_METAL, "boom", round=0.018, evidence="3122579800:540")
+mid_boom["reconstructed_shell_interval_m"] = [-1.80, 2.58]
+mid_profile = ((-1.80, -0.245), (2.58, -0.20), (2.58, 0.20), (-1.80, 0.245))
+prism_xz("MidBoomShell", mid_profile, 0.54, mid_boom, (0.0, 0.0, 0.0), MAT_BOOM_INNER, "boom", evidence="3122579700:641; full nested shell length reconstructed", round=0.022)
+box("MidBoomWearPadCollar", (0.18, 0.60, 0.53), mid_boom, (0.10, 0.0, 0.0), MAT_BOOM_WEAR, "boom", round=0.018, evidence="3122579800:540")
+box("MidBoomTopPlate", (2.30, 0.47, 0.026), mid_boom, (1.34, 0.0, 0.224), MAT_BOOM, "boom", round=0.010, evidence="3122579800:540; shell relief reconstructed")
+for side, y in (("L", 0.279), ("R", -0.279)):
+    box(f"MidBoomSideReveal_{side}", (2.30, 0.018, 0.052), mid_boom, (1.34, y, -0.145), MAT_BOOM_WEAR, "boom", round=0.006, evidence="3122579800:540; section reveal reconstructed")
+box("MidBoomExitWearTop", (0.15, 0.56, 0.040), mid_boom, (2.50, 0.0, 0.222), MAT_BOOM_WEAR, "boom", round=0.010, evidence="3122579800:540; wear-pad presentation reconstructed")
+box("MidBoomExitWearBottom", (0.15, 0.56, 0.040), mid_boom, (2.50, 0.0, -0.222), MAT_BOOM_WEAR, "boom", round=0.010, evidence="3122579800:540; wear-pad presentation reconstructed")
+for side, y in (("L", 0.289), ("R", -0.289)):
+    box(f"MidBoomExitWear_{side}", (0.15, 0.030, 0.43), mid_boom, (2.50, y, 0.0), MAT_BOOM_WEAR, "boom", round=0.009, evidence="3122579800:540; wear-pad presentation reconstructed")
 
 fly_boom = empty("FlyBoom", mid_boom, (0.75, 0.0, 0.0))
 set_authority(fly_boom, "verified", "3122579600:28; 3122579700:641")
-fly_profile = ((0.0, -0.19), (1.88, -0.16), (1.88, 0.16), (0.0, 0.19))
-prism_xz("FlyBoomShell", fly_profile, 0.43, fly_boom, (0.0, 0.0, 0.0), MAT_ORANGE, "boom", evidence="MECHANISM_EVIDENCE:VIS-001", round=0.018)
-box("FlyBoomWearPadCollar", (0.16, 0.48, 0.43), fly_boom, (0.09, 0.0, 0.0), MAT_DARK_METAL, "boom", round=0.015, evidence="3122579800:540")
+fly_boom["reconstructed_shell_interval_m"] = [-2.00, 1.88]
+fly_profile = ((-2.00, -0.19), (1.88, -0.16), (1.88, 0.16), (-2.00, 0.19))
+prism_xz("FlyBoomShell", fly_profile, 0.43, fly_boom, (0.0, 0.0, 0.0), MAT_ORANGE, "boom", evidence="MECHANISM_EVIDENCE:VIS-001; full nested shell length reconstructed", round=0.018)
+box("FlyBoomWearPadCollar", (0.16, 0.48, 0.43), fly_boom, (0.09, 0.0, 0.0), MAT_BOOM_WEAR, "boom", round=0.015, evidence="3122579800:540")
+box("FlyBoomTopPlate", (1.55, 0.37, 0.024), fly_boom, (1.00, 0.0, 0.177), MAT_ORANGE_DEEP, "boom", round=0.009, evidence="MECHANISM_EVIDENCE:VIS-001; shell relief reconstructed")
+for side, y in (("L", 0.224), ("R", -0.224)):
+    box(f"FlyBoomSideReveal_{side}", (1.55, 0.018, 0.046), fly_boom, (1.00, y, -0.112), MAT_ORANGE_DEEP, "boom", round=0.006, evidence="MECHANISM_EVIDENCE:VIS-001; section reveal reconstructed")
 box("BoomHead", (0.26, 0.46, 0.44), fly_boom, (1.78, 0.0, 0.0), MAT_ORANGE, "boom", round=0.035, evidence="3122579700:641")
 
 powertrack_moving_run = empty("PowertrackMovingRun", mid_boom)
@@ -775,7 +797,7 @@ for bend_index, angle in enumerate((-1.15, -0.65, -0.15, 0.35, 0.85), start=1):
 # The fly-attached tube slides through the mid-stage carrier bend. Keep enough
 # aft engagement for the complete evidence-bounded FlyBoom visual travel rather
 # than fitting only the stowed pose.
-tube("PowertrackPushTube", (-0.26, 0.0, -0.31), (1.45, 0.0, -0.30), 0.035, fly_boom, MAT_DARK_METAL, "boom", 12, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-002")
+tube("PowertrackPushTube", (-2.20, 0.0, -0.31), (1.45, 0.0, -0.30), 0.035, fly_boom, MAT_DARK_METAL, "boom", 12, evidence="MECHANISM_EVIDENCE:PWR-001,PWR-002; engagement length reconstructed")
 
 box("TelescopeCylinderBarrel", (2.40, 0.16, 0.16), main_boom, (2.05, 0.0, -0.08), MAT_HYDRAULIC, "boom", round=0.06, evidence="MECHANISM_EVIDENCE:TEL-003")
 box("TelescopeCylinderRod", (1.35, 0.08, 0.08), mid_boom, (0.42, 0.0, -0.08), MAT_METAL, "boom", round=0.03, evidence="MECHANISM_EVIDENCE:TEL-003")
@@ -1037,8 +1059,11 @@ if not math.isclose(deck.dimensions.x, PLATFORM_SIZE_M.x, abs_tol=0.002) or not 
 
 main_end_x = 5.12
 telescope_start_x = 3.60
-mid_overlap_100 = main_end_x - (telescope_start_x + TELESCOPE_MID_TRAVEL_M)
-fly_overlap_100 = 2.58 - (0.75 + TELESCOPE_FLY_TRAVEL_M)
+mid_rear_x = min(point[0] for point in mid_profile)
+mid_front_x = max(point[0] for point in mid_profile)
+fly_rear_x = min(point[0] for point in fly_profile)
+mid_overlap_100 = main_end_x - (telescope_start_x + mid_rear_x + TELESCOPE_MID_TRAVEL_M)
+fly_overlap_100 = mid_front_x - (fly_boom.location.x + fly_rear_x + TELESCOPE_FLY_TRAVEL_M)
 if mid_overlap_100 <= 0.001 or fly_overlap_100 <= 0.001:
     raise RuntimeError(
         f"Coupled telescope would separate at 100% travel: mid={mid_overlap_100:.4f} m, "

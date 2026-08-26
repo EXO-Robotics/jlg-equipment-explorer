@@ -60,7 +60,7 @@ The current parts/service pages now support the assembly relationships below, bu
 - main-boom and nested-section visible lengths
 - platform-pivot offset
 - lift-cylinder lower and upper anchor coordinates
-- 0.36 m MidBoom and 0.54 m FlyBoom visual stage split within the 0.90 m cap
+- 1.52 m MidBoom and 2.28 m FlyBoom visual stage split within the 3.80 m display cap, plus the rearward shell extents needed to keep both sections nested
 - steering-cylinder and tie-rod anchor coordinates
 - tower-link and tension-link pivot coordinates
 - platform-level cylinder and rotator-pin coordinates

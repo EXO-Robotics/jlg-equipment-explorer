@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.9";
+} from "./assets/models/600s.version.js?v=1.1.10";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -329,7 +329,11 @@ const requiredNodes = [
   "Wheel_FL_Roll", "Wheel_FR_Roll", "Wheel_RL_Roll", "Wheel_RR_Roll",
   "Turntable", "SlewRing", "UpperFrame", "EngineCover", "TankCover",
   "Counterweight", "Controls", "BoomPivot", "MainBoom", "Telescope",
-  "MidBoom", "FlyBoom", "PlatformPivot", "PlatformRotator", "Platform",
+  "BaseBoomExitWearTop", "BaseBoomExitWearBottom", "BaseBoomExitWear_L", "BaseBoomExitWear_R",
+  "MidBoom", "MidBoomTopPlate", "MidBoomSideReveal_L", "MidBoomSideReveal_R",
+  "MidBoomExitWearTop", "MidBoomExitWearBottom", "MidBoomExitWear_L", "MidBoomExitWear_R",
+  "FlyBoom", "FlyBoomTopPlate", "FlyBoomSideReveal_L", "FlyBoomSideReveal_R",
+  "PlatformPivot", "PlatformRotator", "Platform",
   "LiftCylinder", "LiftCylinderLowerAnchor", "LiftCylinderUpperAnchor",
   "LiftCylinderBarrel", "LiftCylinderRod", "LiftCylinderBasePin", "LiftCylinderRodPin",
   "TowerLink", "TowerLinkLowerAnchor", "TowerLinkUpperAnchor", "TowerLinkBody",
@@ -360,6 +364,8 @@ const materialProfiles = {
   JLG_Orange_PowderCoat: { color: "#f36f21", roughness: 0.42, metalness: 0.04 },
   JLG_Orange_Shadow: { color: "#a93612", roughness: 0.56, metalness: 0.05 },
   JLG_Boom_Cream: { color: "#d8c992", roughness: 0.48, metalness: 0.03 },
+  JLG_Boom_Inner_Cream: { color: "#bfae74", roughness: 0.54, metalness: 0.04 },
+  JLG_Boom_Wear: { color: "#252a28", roughness: 0.60, metalness: 0.24 },
   JLG_Black_PowderCoat: { color: "#111516", roughness: 0.64, metalness: 0.18 },
   JLG_Tire_Rubber: { color: "#111313", roughness: 0.94, metalness: 0 },
   JLG_Zinc_Steel: { color: "#777b76", roughness: 0.38, metalness: 0.68 },
@@ -497,8 +503,10 @@ function tuneBlockoutMaterials(root) {
     ["Counterweight", { color: "#e85d1d", roughness: 0.51, metalness: 0.05 }, "CastPowderCoat"],
     ["LowerDeck", { color: "#e86520", roughness: 0.58, metalness: 0.06 }, "DeckPowderCoat"],
     ["PlatformDeck", { color: "#e76220", roughness: 0.62, metalness: 0.06 }, "WearDeckPowderCoat"],
-    ["MidBoomShell", { color: "#d1c28d", roughness: 0.53, metalness: 0.03 }, "NestedCream"],
+    ["MidBoomShell", { color: "#bfae74", roughness: 0.54, metalness: 0.04 }, "NestedCream"],
+    ["MidBoomTopPlate", { color: "#e1d3a4", roughness: 0.49, metalness: 0.03 }, "NestedTopPlate"],
     ["FlyBoomShell", { color: "#e96720", roughness: 0.48, metalness: 0.04 }, "CurrentFlyOrange"],
+    ["FlyBoomTopPlate", { color: "#a93612", roughness: 0.56, metalness: 0.05 }, "FlyTopReveal"],
   ];
   finishVariations.forEach(([name, profile, suffix]) => applyDisplayMaterial(root.getObjectByName(name), profile, suffix));
 }
@@ -684,6 +692,12 @@ function configureBlockoutRig(gltf) {
   document.body.dataset.hoseSolverCount = String([
     nodes.SteerHydraulicHose_L_Flexible, nodes.SteerHydraulicHose_R_Flexible,
   ].filter((node) => node.userData.runtime_solver === "two_anchor_visual_hose").length);
+  document.body.dataset.telescopeLayerCueCount = String([
+    nodes.BaseBoomExitWearTop, nodes.BaseBoomExitWearBottom, nodes.BaseBoomExitWear_L, nodes.BaseBoomExitWear_R,
+    nodes.MidBoomTopPlate, nodes.MidBoomSideReveal_L, nodes.MidBoomSideReveal_R,
+    nodes.MidBoomExitWearTop, nodes.MidBoomExitWearBottom, nodes.MidBoomExitWear_L, nodes.MidBoomExitWear_R,
+    nodes.FlyBoomTopPlate, nodes.FlyBoomSideReveal_L, nodes.FlyBoomSideReveal_R,
+  ].filter(Boolean).length);
 
   return {
     machine: gltf.scene,
@@ -936,8 +950,25 @@ function defaultOrbitRadius() {
   return innerWidth <= 800 ? 24 : 18;
 }
 
+function adaptiveOrbitRadius(telescope = 0) {
+  const telescopeProgress = THREE.MathUtils.clamp(telescope / 100, 0, 1);
+  return defaultOrbitRadius() + telescopeProgress * (innerWidth <= 800 ? 10 : 2);
+}
+
 function defaultOrbitTargetY(boomAngle = 0) {
   return 1.85 + Math.sin(THREE.MathUtils.degToRad(boomAngle)) * 3.0;
+}
+
+function defaultOrbitTargetPose(state = machineState) {
+  const telescopeProgress = THREE.MathUtils.clamp(state.telescope / 100, 0, 1);
+  const displayTravel = rig?.telescopeTravelM || TELESCOPE_TRAVEL_M;
+  const boomHeading = autonomy.heading + THREE.MathUtils.degToRad(state.turntableAngle);
+  const longitudinalOffset = 0.8 + telescopeProgress * displayTravel * 0.72;
+  return new THREE.Vector3(
+    rig.machine.position.x + Math.cos(boomHeading) * longitudinalOffset,
+    defaultOrbitTargetY(state.boomAngle) + Math.sin(THREE.MathUtils.degToRad(state.boomAngle)) * telescopeProgress * displayTravel * 0.18,
+    rig.machine.position.z - Math.sin(boomHeading) * longitudinalOffset
+  );
 }
 
 const orbit = {
@@ -951,6 +982,7 @@ const orbit = {
   vPhi: 0,
   dragging: false,
   moved: false,
+  userZoomed: false,
   lastX: 0,
   lastY: 0,
   idle: 0,
@@ -997,7 +1029,8 @@ canvas.addEventListener("pointermove", (event) => {
   if (pointers.size >= 2) {
     const active = [...pointers.values()];
     const distance = Math.hypot(active[0][0] - active[1][0], active[0][1] - active[1][1]);
-    orbit.radiusGoal = THREE.MathUtils.clamp(orbit.pinchRadius * orbit.pinch / distance, 7, 27);
+    orbit.radiusGoal = THREE.MathUtils.clamp(orbit.pinchRadius * orbit.pinch / distance, 7, 38);
+    orbit.userZoomed = true;
     orbit.idle = 0;
     return;
   }
@@ -1033,7 +1066,8 @@ canvas.addEventListener("pointerleave", () => {
 });
 canvas.addEventListener("wheel", (event) => {
   event.preventDefault();
-  orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal * Math.exp(event.deltaY * 0.0012), 7, 27);
+  orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal * Math.exp(event.deltaY * 0.0012), 7, 38);
+  orbit.userZoomed = true;
   orbit.idle = 0;
 }, { passive: false });
 
@@ -1043,14 +1077,9 @@ function resetView() {
     button.classList.remove("active");
     button.setAttribute("aria-pressed", "false");
   });
-  const headingCos = Math.cos(autonomy.heading);
-  const headingSin = Math.sin(autonomy.heading);
-  orbit.targetGoal.set(
-    rig.machine.position.x + headingCos * 0.8,
-    defaultOrbitTargetY(machineState.boomAngle),
-    rig.machine.position.z - headingSin * 0.8
-  );
-  orbit.radiusGoal = defaultOrbitRadius();
+  orbit.targetGoal.copy(defaultOrbitTargetPose(targets));
+  orbit.radiusGoal = adaptiveOrbitRadius(targets.telescope);
+  orbit.userZoomed = false;
   orbit.theta = 0.76;
   orbit.phi = 1.44;
   orbit.vTheta = 0;
@@ -1066,8 +1095,8 @@ app.addEventListener("keydown", (event) => {
   else if (event.key === "ArrowRight") orbit.theta += 0.12;
   else if (event.key === "ArrowUp") orbit.phi = THREE.MathUtils.clamp(orbit.phi - 0.08, 0.42, 1.48);
   else if (event.key === "ArrowDown") orbit.phi = THREE.MathUtils.clamp(orbit.phi + 0.08, 0.42, 1.48);
-  else if (event.key === "+" || event.key === "=") orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal - 1.2, 7, 27);
-  else if (event.key === "-" || event.key === "_") orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal + 1.2, 7, 27);
+  else if (event.key === "+" || event.key === "=") { orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal - 1.2, 7, 38); orbit.userZoomed = true; }
+  else if (event.key === "-" || event.key === "_") { orbit.radiusGoal = THREE.MathUtils.clamp(orbit.radiusGoal + 1.2, 7, 38); orbit.userZoomed = true; }
   else if (focusKeys[event.key]) focusComponent(focusKeys[event.key]);
   else if (event.key === "0") resetView();
   else handled = false;
@@ -1091,8 +1120,8 @@ const componentContent = {
   },
   boom: {
     title: "Telescopic boom",
-    copy: "The primary lifting structure changes elevation at its base pivot while a nested section extends the platform outward.",
-    facts: [["Motion", "Lift, coupled Mid/Fly staging, moving tower/tension links, and carrier travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope controller → MidBoom → FlyBoom"], ["Boundary", "The 0.90 m cap and stage split are visual reconstructions, not JLG stroke data"]],
+    copy: "The primary lifting structure changes elevation at its base pivot while separate Mid and Fly sleeves extend the platform outward.",
+    facts: [["Motion", "Lift, coupled Mid/Fly staging, moving tower/tension links, and carrier travel"], ["Hierarchy", "BoomPivot → MainBoom → Telescope controller → MidBoom → FlyBoom"], ["Boundary", "The 3.80 m display cap and 1.52 / 2.28 m stage split are reconstructions, not JLG stroke data"]],
     radius: 9.5,
   },
   platform: {
@@ -1175,11 +1204,22 @@ function focusComponent(component) {
   });
   const worldPosition = new THREE.Vector3();
   const node = component === "chassis" ? rig.chassis : component === "turntable" ? rig.turntablePivot : component === "boom" ? rig.boomPivot : rig.platformMount;
+  node.updateWorldMatrix(true, true);
   node.getWorldPosition(worldPosition);
   if (component === "platform") worldPosition.y += 0.2;
-  if (component === "boom") worldPosition.copy(node.localToWorld(new THREE.Vector3(2.2, 0, 0)));
+  let componentRadius = componentContent[component].radius;
+  if (component === "boom") {
+    const bounds = new THREE.Box3().setFromObject(node);
+    const size = bounds.getSize(new THREE.Vector3());
+    bounds.getCenter(worldPosition);
+    const halfFovTangent = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+    const verticalRadius = size.y / Math.max(2 * halfFovTangent, 0.001);
+    const horizontalRadius = size.x / Math.max(2 * halfFovTangent * camera.aspect, 0.001);
+    componentRadius = THREE.MathUtils.clamp(Math.max(componentRadius, verticalRadius, horizontalRadius) * 1.12, 7, 38);
+  }
   orbit.targetGoal.copy(worldPosition);
-  orbit.radiusGoal = componentContent[component].radius;
+  orbit.radiusGoal = componentRadius;
+  orbit.userZoomed = false;
   orbit.idle = 0;
   updateHitVolumeEmphasis(hoveredHit);
   openInspector(component);
@@ -1383,7 +1423,7 @@ function updateAutonomy(dt, now) {
 
   const commands = {
     boomAngle: 21 + Math.sin(phase - 0.6) * 8,
-    telescope: 34 + Math.sin(phase * 2 + 0.8) * 14,
+    telescope: 60 + Math.sin(phase * 2 + 0.8) * 32,
     turntableAngle: Math.sin(phase + 1.2) * 34,
     steeringAngle: steeringCommand,
   };
@@ -1419,13 +1459,8 @@ function updateRig(dt) {
   updateLiftCylinder();
   updateEvidenceBoundedLinkages();
   if (!focusedComponent) {
-    const headingCos = Math.cos(autonomy.heading);
-    const headingSin = Math.sin(autonomy.heading);
-    orbit.targetGoal.set(
-      rig.machine.position.x + headingCos * 0.8,
-      defaultOrbitTargetY(machineState.boomAngle),
-      rig.machine.position.z - headingSin * 0.8
-    );
+    orbit.targetGoal.copy(defaultOrbitTargetPose());
+    if (!orbit.userZoomed) orbit.radiusGoal = adaptiveOrbitRadius(machineState.telescope);
   }
   const moving = Object.keys(machineState).some((key) => Math.abs(machineState[key] - targets[key]) > 0.1);
   const stowed = Object.values(targets).every((value) => Math.abs(value) < 0.1);

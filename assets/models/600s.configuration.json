@@ -87,9 +87,23 @@
     "EngineHarness": "Turntable",
     "BoomPivot": "Turntable",
     "MainBoom": "BoomPivot",
+    "BaseBoomExitWearTop": "MainBoom",
+    "BaseBoomExitWearBottom": "MainBoom",
+    "BaseBoomExitWear_L": "MainBoom",
+    "BaseBoomExitWear_R": "MainBoom",
     "Telescope": "MainBoom",
     "MidBoom": "Telescope",
+    "MidBoomTopPlate": "MidBoom",
+    "MidBoomSideReveal_L": "MidBoom",
+    "MidBoomSideReveal_R": "MidBoom",
+    "MidBoomExitWearTop": "MidBoom",
+    "MidBoomExitWearBottom": "MidBoom",
+    "MidBoomExitWear_L": "MidBoom",
+    "MidBoomExitWear_R": "MidBoom",
     "FlyBoom": "MidBoom",
+    "FlyBoomTopPlate": "FlyBoom",
+    "FlyBoomSideReveal_L": "FlyBoom",
+    "FlyBoomSideReveal_R": "FlyBoom",
     "PlatformPivot": "FlyBoom",
     "Platform": "PlatformPivot",
     "LiftCylinder": "Turntable",
@@ -158,7 +172,7 @@
       "evidence": ["3122579800:70-242"]
     },
     "boom": {
-      "required_nodes": ["BoomPivot", "MainBoom", "Telescope", "MidBoom", "FlyBoom", "TowerLink", "TensionLink", "Powertrack", "PowertrackSupport", "PowertrackPushTube", "TelescopeCylinderBarrel", "TelescopeCylinderRod", "TelescopeExtendWireRope", "TelescopeRetractWireRope_L", "TelescopeRetractWireRope_R"],
+      "required_nodes": ["BoomPivot", "MainBoom", "BaseBoomExitWearTop", "BaseBoomExitWearBottom", "BaseBoomExitWear_L", "BaseBoomExitWear_R", "Telescope", "MidBoom", "MidBoomTopPlate", "MidBoomSideReveal_L", "MidBoomSideReveal_R", "MidBoomExitWearTop", "MidBoomExitWearBottom", "MidBoomExitWear_L", "MidBoomExitWear_R", "FlyBoom", "FlyBoomTopPlate", "FlyBoomSideReveal_L", "FlyBoomSideReveal_R", "TowerLink", "TensionLink", "Powertrack", "PowertrackSupport", "PowertrackPushTube", "TelescopeCylinderBarrel", "TelescopeCylinderRod", "TelescopeExtendWireRope", "TelescopeRetractWireRope_L", "TelescopeRetractWireRope_R"],
       "evidence": ["MECHANISM_EVIDENCE:TEL-001, TEL-002, TEL-003", "MECHANISM_EVIDENCE:LIFT-001", "MECHANISM_EVIDENCE:PWR-001, PWR-002"]
     },
     "platform": {
