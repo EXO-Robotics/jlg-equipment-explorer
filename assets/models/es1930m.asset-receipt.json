@@ -74,7 +74,7 @@
   "release": "1.0.5",
   "release_status": "candidate_not_deployable",
   "review_binding": {
-    "error": "es1930m capture runner hash drift",
+    "error": "ES immutable browser evidence binding drift",
     "predeploy_gates": 0,
     "status": "pending_or_stale"
   },
@@ -109,7 +109,7 @@
       "machines/es1930m/cameras.js",
       "machines/es1930m/version.js"
     ],
-    "sha256": "f2a469a3015cfda07d60272ab5b371f58faff6b8040f76367857650a1ba95350"
+    "sha256": "f227bb6fb155a726c01f3457d12bdeea8b1860fd992785a7d2d4b893cba37810"
   },
   "schema_version": "1.0.0",
   "written": "2026-08-26"

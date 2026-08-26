@@ -450,6 +450,13 @@ def build():
     cylinder("CarriageTiltLinkPin", 0.035, 0.20, tilt_link_pin, MAT["zinc"], fly, component="hydraulics")
     for node in ("CarriageTiltCylinderBarrel", "CarriageTiltCylinderRod"):
         bpy.data.objects[node]["published_stroke_m"] = 0.388
+    for node in (
+        "CarriageTiltBaseClevisInboard", "CarriageTiltBaseClevisOutboard",
+        "CarriageTiltCylinderBasePin", "CarriageTiltCylinderBarrel",
+        "CarriageTiltCylinderRod", "CarriageTiltCylinderRodPin",
+        "CarriageTiltLink", "CarriageTiltLinkPin",
+    ):
+        bpy.data.objects[node]["presentation_visibility"] = "concealed_inside_boom_head"
 
     beam("FrameLevelCylinderBarrel", (-0.0133,0.6054,0.4865), (0.06,0.96,0.88), 0.120, MAT["hydraulic"], root, "frame", 20)
     beam("FrameLevelCylinderRod", (0.045,0.90,0.82), (0.1121,1.2428,1.1607), 0.055, MAT["zinc"], root, "frame", 18)

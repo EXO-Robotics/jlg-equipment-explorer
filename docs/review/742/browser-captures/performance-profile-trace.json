@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "performance_profile",
-  "captured_at_utc": "2026-08-26T13:53:39.853Z",
+  "captured_at_utc": "2026-08-26T14:18:37.269Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2021,7 +2021,7 @@
     "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
     "bytes": 88402
   },
-  "outcomes_sha256": "16c15045d92e0d0150181beb1627328162ee5d49b2b6d928179c22b5c2fc6195",
+  "outcomes_sha256": "b3436080424cc0ff090a33077bc22273cf89c355a8ddb9cd318023b0aeb25e60",
   "outcomes": {
     "desktop": {
       "outcome": "pass",
@@ -2031,7 +2031,7 @@
       ],
       "summary": {
         "sample_count": 180,
-        "p95_ms": 16.7,
+        "p95_ms": 16.8,
         "worst_ms": 16.8,
         "visible_stall_count_gte_250ms": 0
       }
@@ -2057,7 +2057,7 @@
       ],
       "summary": {
         "sample_count": 180,
-        "p95_ms": 16.8,
+        "p95_ms": 16.7,
         "worst_ms": 16.8,
         "visible_stall_count_gte_250ms": 0
       }

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+  "asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
   "authority": "Exact world-space AABBs measured from named static obstacle meshes in the bound exported GLB; owned reconstruction, not manufacturer clearance authority.",
   "cab": [
     {

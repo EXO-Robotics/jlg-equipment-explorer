@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "kind": "browser-automation-trace",
   "gate": "desktop_browser_interaction",
-  "captured_at_utc": "2026-08-26T13:53:19.681Z",
+  "captured_at_utc": "2026-08-26T14:18:16.893Z",
   "tool": "Playwright",
   "tool_version": "1.62.1",
   "toolchain": {
@@ -2021,7 +2021,7 @@
     "sha256": "dbd995acf48119eef20cef4144318c76f5bb973364c637644905d762353dc87f",
     "bytes": 88402
   },
-  "outcomes_sha256": "50dd05155c05ebebc3cdf4e875aa4e44db3e08253b4396e63ec3a29e894cef89",
+  "outcomes_sha256": "b757851c3548b9c38d3d31ff64cb48673036e8d9076eb003aa590393e445348d",
   "outcomes": {
     "load_stowed": {
       "outcome": "pass",
@@ -2107,26 +2107,26 @@
         "desired_distance_m": 37.58,
         "stable_frames": 6,
         "samples_camera_distance_m": [
-          36.659,
-          36.766,
-          36.861,
-          36.945,
-          37.019,
-          37.085,
+          36.661,
+          36.769,
+          36.863,
+          36.946,
+          37.021,
+          37.086,
           37.143,
-          37.193,
-          37.238,
-          37.278,
-          37.313,
-          37.344,
+          37.194,
+          37.239,
+          37.279,
+          37.314,
+          37.345,
           37.372,
-          37.396,
+          37.397,
           37.418,
-          37.436,
+          37.437,
           37.453,
           37.468,
           37.481,
-          37.492,
+          37.493,
           37.503,
           37.512,
           37.52,
@@ -2164,42 +2164,42 @@
               {
                 "counter": "boot",
                 "value": 1,
-                "at_ms": 45.2
+                "at_ms": 42.3
               },
               {
                 "counter": "boot",
                 "value": 2,
-                "at_ms": 58.1
+                "at_ms": 54.9
               },
               {
                 "counter": "boot",
                 "value": 3,
-                "at_ms": 70.6
+                "at_ms": 68.4
               },
               {
                 "counter": "boot",
                 "value": 4,
-                "at_ms": 85.7
+                "at_ms": 85.1
               },
               {
                 "counter": "boot",
                 "value": 5,
-                "at_ms": 101.9
+                "at_ms": 102.4
               },
               {
                 "counter": "boot",
                 "value": 6,
-                "at_ms": 118.5
+                "at_ms": 119.2
               },
               {
                 "counter": "boot",
                 "value": 7,
-                "at_ms": 135.3
+                "at_ms": 136.1
               },
               {
                 "counter": "boot",
                 "value": 8,
-                "at_ms": 151.8
+                "at_ms": 153.3
               }
             ]
           },
@@ -2253,42 +2253,47 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 90.8
+                "at_ms": 89.9
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 96
+                "at_ms": 94.8
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 99.6
+                "at_ms": 95.8
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 117.3
+                "at_ms": 112.1
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 133.9
+                "at_ms": 128.6
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 150.4
+                "at_ms": 145.2
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 167.2
+                "at_ms": 162.4
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 183.8
+                "at_ms": 179.4
+              },
+              {
+                "counter": "runtime",
+                "value": 9,
+                "at_ms": 196.6
               }
             ]
           },
@@ -2307,8 +2312,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "8",
-            "terminal_frame_count": "8",
+            "runtime_frame_count": "9",
+            "terminal_frame_count": "9",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2325,8 +2330,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "8",
-            "terminal_frame_count": "8",
+            "runtime_frame_count": "9",
+            "terminal_frame_count": "9",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2342,12 +2347,12 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 92.6
+                "at_ms": 86.7
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 98
+                "at_ms": 91.2
               }
             ]
           },
@@ -2365,7 +2370,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "3",
+            "boot_frame_count": "2",
             "runtime_frame_count": "2",
             "terminal_frame_count": "2",
             "terminal_frame_source": "runtime"
@@ -2383,7 +2388,7 @@
             "total_control_count": 12,
             "drive_x": null,
             "drive_z": null,
-            "boot_frame_count": "3",
+            "boot_frame_count": "2",
             "runtime_frame_count": "2",
             "terminal_frame_count": "2",
             "terminal_frame_source": "runtime"
@@ -2401,132 +2406,137 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 86.1
+                "at_ms": 86.5
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 91.9
+                "at_ms": 92.4
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 145.1
+                "at_ms": 145.2
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 149.4
+                "at_ms": 151.6
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 166
+                "at_ms": 167.4
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 182.8
+                "at_ms": 181.7
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 199.4
+                "at_ms": 200.5
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 216.4
+                "at_ms": 217.3
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 233.1
+                "at_ms": 232.3
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 248.9
+                "at_ms": 249.3
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 266.5
+                "at_ms": 266.2
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 282.6
+                "at_ms": 283.1
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 299.7
+                "at_ms": 299.2
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 316.4
+                "at_ms": 317.5
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 332.8
+                "at_ms": 334.7
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 349.9
+                "at_ms": 349.3
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 366.1
+                "at_ms": 365.8
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 382.1
+                "at_ms": 383.1
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 399.8
+                "at_ms": 399
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 416.1
+                "at_ms": 416.5
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 432.1
+                "at_ms": 433.8
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 449.3
+                "at_ms": 448.4
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 465.6
+                "at_ms": 466.1
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 484.6
+                "at_ms": 483.6
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 526.7
+                "at_ms": 501.9
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 528.4
+                "at_ms": 542.7
+              },
+              {
+                "counter": "runtime",
+                "value": 27,
+                "at_ms": 544.4
               }
             ]
           },
@@ -2539,7 +2549,7 @@
                 "steer-control": "0",
                 "level-control": "0"
               },
-              "runtime_frame_count": 23
+              "runtime_frame_count": 24
             },
             "end": {
               "controls": {
@@ -2549,7 +2559,7 @@
                 "steer-control": "1",
                 "level-control": "0"
               },
-              "runtime_frame_count": 26
+              "runtime_frame_count": 27
             }
           },
           "terminal_first": {
@@ -2566,8 +2576,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "26",
-            "terminal_frame_count": "26",
+            "runtime_frame_count": "27",
+            "terminal_frame_count": "27",
             "terminal_frame_source": "runtime"
           },
           "terminal_after_250ms": {
@@ -2584,8 +2594,8 @@
             "drive_x": null,
             "drive_z": null,
             "boot_frame_count": "2",
-            "runtime_frame_count": "26",
-            "terminal_frame_count": "26",
+            "runtime_frame_count": "27",
+            "terminal_frame_count": "27",
             "terminal_frame_source": "runtime"
           },
           "animation_state_stable_250ms": true
@@ -2601,132 +2611,132 @@
               {
                 "counter": "runtime",
                 "value": 1,
-                "at_ms": 82.7
+                "at_ms": 87.7
               },
               {
                 "counter": "runtime",
                 "value": 2,
-                "at_ms": 88.7
+                "at_ms": 93.6
               },
               {
                 "counter": "runtime",
                 "value": 3,
-                "at_ms": 141.5
+                "at_ms": 147.3
               },
               {
                 "counter": "runtime",
                 "value": 4,
-                "at_ms": 145.9
+                "at_ms": 151.6
               },
               {
                 "counter": "runtime",
                 "value": 5,
-                "at_ms": 152.3
+                "at_ms": 168.8
               },
               {
                 "counter": "runtime",
                 "value": 6,
-                "at_ms": 168.7
+                "at_ms": 184.1
               },
               {
                 "counter": "runtime",
                 "value": 7,
-                "at_ms": 185.1
+                "at_ms": 201.2
               },
               {
                 "counter": "runtime",
                 "value": 8,
-                "at_ms": 202.7
+                "at_ms": 217.6
               },
               {
                 "counter": "runtime",
                 "value": 9,
-                "at_ms": 218.8
+                "at_ms": 233.2
               },
               {
                 "counter": "runtime",
                 "value": 10,
-                "at_ms": 236.1
+                "at_ms": 250
               },
               {
                 "counter": "runtime",
                 "value": 11,
-                "at_ms": 252.8
+                "at_ms": 268.1
               },
               {
                 "counter": "runtime",
                 "value": 12,
-                "at_ms": 269
+                "at_ms": 283.4
               },
               {
                 "counter": "runtime",
                 "value": 13,
-                "at_ms": 285.5
+                "at_ms": 299.8
               },
               {
                 "counter": "runtime",
                 "value": 14,
-                "at_ms": 302.6
+                "at_ms": 317.4
               },
               {
                 "counter": "runtime",
                 "value": 15,
-                "at_ms": 319
+                "at_ms": 334
               },
               {
                 "counter": "runtime",
                 "value": 16,
-                "at_ms": 341.5
+                "at_ms": 350
               },
               {
                 "counter": "runtime",
                 "value": 17,
-                "at_ms": 352.3
+                "at_ms": 366.8
               },
               {
                 "counter": "runtime",
                 "value": 18,
-                "at_ms": 368.7
+                "at_ms": 383.6
               },
               {
                 "counter": "runtime",
                 "value": 19,
-                "at_ms": 385.3
+                "at_ms": 401.4
               },
               {
                 "counter": "runtime",
                 "value": 20,
-                "at_ms": 402
+                "at_ms": 416.3
               },
               {
                 "counter": "runtime",
                 "value": 21,
-                "at_ms": 418.6
+                "at_ms": 434.1
               },
               {
                 "counter": "runtime",
                 "value": 22,
-                "at_ms": 435.4
+                "at_ms": 449.4
               },
               {
                 "counter": "runtime",
                 "value": 23,
-                "at_ms": 452.1
+                "at_ms": 466.8
               },
               {
                 "counter": "runtime",
                 "value": 24,
-                "at_ms": 471.2
+                "at_ms": 486.1
               },
               {
                 "counter": "runtime",
                 "value": 25,
-                "at_ms": 522.5
+                "at_ms": 523.4
               },
               {
                 "counter": "runtime",
                 "value": 26,
-                "at_ms": 524.2
+                "at_ms": 525.1
               }
             ]
           },

@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.9";
-import { orbitDragDelta } from "./pointer-gestures.mjs?v=1.0.9";
+import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.10";
+import { telehandlerDragDelta } from "./pointer-gestures.mjs?v=1.0.10";
 
-const ROUTE_RELEASE = "1.6.6";
+const ROUTE_RELEASE = "1.6.7";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -308,7 +308,7 @@ renderer.domElement.addEventListener("pointermove", (event) => {
   }
   const dx = active.x - previousX;
   const dy = active.y - previousY;
-  const drag = orbitDragDelta(dx, dy, active.pointerType);
+  const drag = telehandlerDragDelta(dx, dy, active.pointerType);
   orbit.velocityAzimuth = drag.azimuth;
   orbit.velocityPolar = drag.polar;
   orbit.azimuth += orbit.velocityAzimuth;

@@ -258,7 +258,7 @@
       "arguments": [],
       "result": {
         "asset": "assets/models/742.glb",
-        "asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+        "asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
         "blender_companion": "scripts/run_742_posed_glb_gate.py",
         "boundary": "Portable committed-binary pose verification; pinned Blender remains a distinct CI/authoring companion.",
         "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
@@ -468,7 +468,7 @@
           "tip_x_m": 4.597200086116791
         }
       },
-      "result_sha256": "7758b4e67e01a1375301d908864b300d97838eab4c4476e5ede906180e551866",
+      "result_sha256": "d075ae7b881dbe76294b7cd7b9f6af54efc2c1cbcc1079babc7a95c34061a53f",
       "status": "pass",
       "validator": {
         "bytes": 31726,
@@ -486,7 +486,7 @@
           1.8380003253763921,
           0.3000002693778553
         ],
-        "bytes": 1790896,
+        "bytes": 1791336,
         "clearance_obstacle_fixture": {
           "nodes": [
             "CabHandrail_inner",
@@ -502,7 +502,7 @@
             "ValveSolenoid_5"
           ],
           "path": "machines/742/clearance-obstacles.json",
-          "sha256": "c26c04579c26ab47b8cac3f213171ebbabb78e9d8749bc836f14ced2967f545a"
+          "sha256": "a10e1eebde821c25b7b5f96fa25d870bede568e3de3beac01bcb7bb04d13314b"
         },
         "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
         "detail_validation_basis": "named mechanisms and dimensions; no mesh-count quality floor",
@@ -676,8 +676,8 @@
         "meshes": 424,
         "mirror_inclusive_visual_width_m": 2.5886866727537887,
         "nodes": 444,
-        "sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
-        "source_blend_sha256": "d40d894e2b309dd4add66a66b499be83792b9bcdcb314de92a1a846a9860c5cf",
+        "sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
+        "source_blend_sha256": "5e5f5147eba95573d745ed6724033b1f09779a431b0698d34b5aa1bd0a27f4af",
         "status": "PASS",
         "stowed_boom_clearance": {
           "cab": {
@@ -725,7 +725,7 @@
           2.5886866727537887
         ]
       },
-      "result_sha256": "3df488b6826b8876d2fd12f425866b3df9d27e228d9f6bce96b25bd983271f47",
+      "result_sha256": "f8313338f92da1aeda2779ff51698bf02b6d060cd9f0856ba9f89afc6085b942",
       "status": "pass",
       "validator": {
         "bytes": 20053,
@@ -1301,9 +1301,9 @@
           "lift_samples": 201,
           "minimum_cab_surface_clearance_m": 0.15302709152353172,
           "minimum_engine_proxy_surface_clearance_m": 0.033999866388686475,
-          "obstacle_asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+          "obstacle_asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
           "obstacle_fixture_path": "machines/742/clearance-obstacles.json",
-          "obstacle_fixture_sha256": "c26c04579c26ab47b8cac3f213171ebbabb78e9d8749bc836f14ced2967f545a",
+          "obstacle_fixture_sha256": "a10e1eebde821c25b7b5f96fa25d870bede568e3de3beac01bcb7bb04d13314b",
           "obstacle_nodes": [
             "CabHandrail_inner",
             "EngineHoodLower",
@@ -1353,7 +1353,7 @@
         "unique_multidimensional_state_samples": 416745,
         "visual_circle_outside_wheel_center_radius_m": 3.714827974177304
       },
-      "result_sha256": "8fba2e8dbe0f4a6333f08764bbf04b434232731b2da39f2329559499129e15d0",
+      "result_sha256": "df318985dd9b2fbf003678b4395c1171c9b5a584f5f21a7b42e8ac0c7bb20513",
       "status": "pass",
       "validator": {
         "bytes": 13237,
@@ -1419,7 +1419,7 @@
       "arguments": [],
       "result": {
         "adaptive_shadow_profile": true,
-        "asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+        "asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
         "candidate_release": "1.4.0",
         "coherent_performance_window": true,
         "component_focus_targets": 7,
@@ -1443,7 +1443,7 @@
         "pose_aware_reset": true,
         "reduced_motion_showcase_disabled": true,
         "route": "/742/",
-        "runtime_release": "1.6.6",
+        "runtime_release": "1.6.7",
         "selection_reset_contract": true,
         "semantic_volume_self_test": true,
         "settled_motion_live_region": true,
@@ -1453,7 +1453,7 @@
         "terminal_accessible_failure_ui": true,
         "visible_stalls_included": true
       },
-      "result_sha256": "06153185978bffe79278f0a95d963f485047cae343da86f4aa05ac26a9c0b883",
+      "result_sha256": "9dae7b0aa9b9d39e3471ed63c1965b5b7964604e88b264c7ef198a8e920ee726",
       "status": "pass",
       "validator": {
         "bytes": 13098,
@@ -1463,7 +1463,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "fc64de01d4d8588f40fc2b9ab01376a5268e5249073d439bd5a4b3ba3eb795bb",
+  "candidate_tree_sha256": "4db29e418a2b7ec2596c12da661558fed759477be4ff6c7c6204ed57ce984e8d",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -1481,9 +1481,9 @@
       "sha256": "e526c2ba3f14432c9ff90c1cae6e1944a6a2e0b80f018b747fa9e8ade0cbeeb5"
     },
     "asset": {
-      "bytes": 1790896,
+      "bytes": 1791336,
       "path": "assets/models/742.glb",
-      "sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691"
+      "sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2"
     },
     "blender_posed_glb_runner": {
       "bytes": 2583,
@@ -1521,14 +1521,14 @@
       "sha256": "3c1d66b9786d389dce0e9e043e78e17c66db2ff724be2cb4b8d285f4694daf64"
     },
     "builder": {
-      "bytes": 31559,
+      "bytes": 31933,
       "path": "scripts/build_742.py",
-      "sha256": "9cfcb49101fc66dbe61df9755733b8e2d88885ed8b1d573f0bd2341d4591d3a7"
+      "sha256": "e1297b0ce916009a15654757a25bee857c62333eb64d56f37356195f942c89b5"
     },
     "clearance_obstacles": {
       "bytes": 2282,
       "path": "machines/742/clearance-obstacles.json",
-      "sha256": "c26c04579c26ab47b8cac3f213171ebbabb78e9d8749bc836f14ced2967f545a"
+      "sha256": "a10e1eebde821c25b7b5f96fa25d870bede568e3de3beac01bcb7bb04d13314b"
     },
     "comparison_matrix": {
       "bytes": 1267,
@@ -1673,12 +1673,12 @@
     "solver_validator": {
       "bytes": 22065,
       "path": "scripts/validate_742_solver.mjs",
-      "sha256": "c3c642be33dd4c6f42ec5d188503a9fef5a96fd02d7215bb48ce983fda8750fb"
+      "sha256": "17b8109217bd83156d2d85df6e1b2813f8f5c6a30250e660c6ec2d659e28f8c5"
     },
     "source_blend": {
-      "bytes": 339265,
+      "bytes": 340042,
       "path": "source/blender/742-showcase-v1.0.blend",
-      "sha256": "d40d894e2b309dd4add66a66b499be83792b9bcdcb314de92a1a846a9860c5cf"
+      "sha256": "5e5f5147eba95573d745ed6724033b1f09779a431b0698d34b5aa1bd0a27f4af"
     },
     "source_manifest": {
       "bytes": 4939,
@@ -1866,7 +1866,7 @@
     "actual_glb_stowed_boom_to_engine_hood_clearance_m": 0.04999990042840052,
     "actual_glb_stowed_service_line_to_cab_clearance_m": 0.15361462048608182,
     "actual_glb_stowed_service_line_to_engine_clearance_m": 0.033999901757566064,
-    "actual_posed_glb_asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+    "actual_posed_glb_asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
     "actual_posed_glb_configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
     "actual_posed_glb_gate_kind": "portable_committed_glb_production_solver",
     "actual_posed_glb_maximum_beam_endpoint_error_m": 1.776573666601473e-15,
@@ -1903,7 +1903,7 @@
     "actual_posed_glb_production_solver_bridge": "scripts/solve_742_pose.mjs",
     "actual_posed_glb_stowed_fork_bottom_m": 0.3280001599341631,
     "approximate_published_rigid_underbody_clearance_m": 0.432,
-    "asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+    "asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
     "blender_posed_glb_companion": {
       "execution_status": "required_in_pinned_pages_ci_not_run_by_portable_receipt",
       "included_in_standard_npm_check": false,
@@ -2116,9 +2116,9 @@
       "lift_samples": 201,
       "minimum_cab_surface_clearance_m": 0.15302709152353172,
       "minimum_engine_proxy_surface_clearance_m": 0.033999866388686475,
-      "obstacle_asset_sha256": "af62be402153793a0eb08d85e7223e75547a00479b4aa6e05c0477d9b9570691",
+      "obstacle_asset_sha256": "6cc1585b7ce32cb60058a7fc406d865436b134cb70b143c6f8e3ac237e0d45b2",
       "obstacle_fixture_path": "machines/742/clearance-obstacles.json",
-      "obstacle_fixture_sha256": "c26c04579c26ab47b8cac3f213171ebbabb78e9d8749bc836f14ced2967f545a",
+      "obstacle_fixture_sha256": "a10e1eebde821c25b7b5f96fa25d870bede568e3de3beac01bcb7bb04d13314b",
       "obstacle_nodes": [
         "CabHandrail_inner",
         "EngineHoodLower",
@@ -2137,7 +2137,7 @@
       "telescope_samples": 201
     },
     "solver_static_linkage_authority": "one fixed axle-mounted double-rod cylinder and two invariant tie bars per axle; identical full front-rack mapping in every mode; rear rack opposite phase in circle, held in front, same phase in crab",
-    "source_blend_sha256": "d40d894e2b309dd4add66a66b499be83792b9bcdcb314de92a1a846a9860c5cf",
+    "source_blend_sha256": "5e5f5147eba95573d745ed6724033b1f09779a431b0698d34b5aa1bd0a27f4af",
     "stowed_fork_bottom_m": 0.32800000000000007,
     "unique_multidimensional_state_samples": 416745
   },
@@ -2157,7 +2157,7 @@
       "machines/742/version.js",
       "machines/742/solver.js"
     ],
-    "sha256": "5b0d09e661742b8852e3e7b230c5699d3ab3634e4772d5933038f71e8425bb1e"
+    "sha256": "31bf53bb37deee13fe1c9f5b06d68644d79d8df89dffa600c29e1f0a3135b191"
   },
   "schema_version": "2.0.0",
   "written": "2026-08-26"
