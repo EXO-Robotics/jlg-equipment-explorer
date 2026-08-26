@@ -18,6 +18,11 @@ concurrency:
 jobs:
   deploy:
     env:
+      BLENDER_VERSION: "5.1.1"
+      BLENDER_ARCHIVE: blender-5.1.1-linux-x64.tar.xz
+      # Published in https://mirror.blender.org/release/Blender5.1/blender-5.1.1.sha256
+      BLENDER_SHA256: 6f9fff89fef154ef7974d1a1c4b916ab4bc1f5618bcb48d5befee1bd0a7c7f2a
+      BLENDER_BIN: ${{ github.workspace }}/.tooling/blender-5.1.1-linux-x64/blender
       JLG742_SOURCE_EVIDENCE_RUN_ID: ${{ vars.JLG742_SOURCE_EVIDENCE_RUN_ID }}
     environment:
       name: github-pages
@@ -41,6 +46,18 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
           run-id: ${{ vars.JLG742_SOURCE_EVIDENCE_RUN_ID }}
+
+      - name: Install checksum-pinned Blender 5.1.1
+        run: |
+          test "$(uname -m)" = "x86_64"
+          mkdir -p .tooling
+          curl --fail --location --retry 3 \
+            --output ".tooling/${BLENDER_ARCHIVE}" \
+            "https://mirror.blender.org/release/Blender5.1/blender-5.1.1-linux-x64.tar.xz"
+          echo "${BLENDER_SHA256}  .tooling/${BLENDER_ARCHIVE}" | sha256sum --check -
+          tar -xJf ".tooling/${BLENDER_ARCHIVE}" -C .tooling
+          test -x "${BLENDER_BIN}"
+          test "$("${BLENDER_BIN}" --version | head -n 1)" = "Blender ${BLENDER_VERSION}"
 
       - name: Validate repository contracts
         run: |

@@ -11,6 +11,43 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 site = Path(sys.argv[1] if len(sys.argv) > 1 else "_site").resolve()
+workflow_source = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
+package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+posed_runner_source = (ROOT / "scripts/run_742_posed_glb_gate.py").read_text(encoding="utf-8")
+posed_gate = "python3 -B scripts/run_742_posed_glb_gate.py"
+if posed_gate not in (package.get("scripts") or {}).get("check:742", ""):
+    raise RuntimeError("Pages CI contract requires the actual posed-GLB gate in check:742")
+if 'os.environ.get("BLENDER_BIN")' not in posed_runner_source:
+    raise RuntimeError("Posed-GLB runner must consume the checksum-pinned CI Blender path")
+required_blender_ci_tokens = {
+    'BLENDER_VERSION: "5.1.1"',
+    "BLENDER_ARCHIVE: blender-5.1.1-linux-x64.tar.xz",
+    "BLENDER_SHA256: 6f9fff89fef154ef7974d1a1c4b916ab4bc1f5618bcb48d5befee1bd0a7c7f2a",
+    "BLENDER_BIN: ${{ github.workspace }}/.tooling/blender-5.1.1-linux-x64/blender",
+    "https://mirror.blender.org/release/Blender5.1/blender-5.1.1-linux-x64.tar.xz",
+    'test "$(uname -m)" = "x86_64"',
+    'curl --fail --location --retry 3',
+    'echo "${BLENDER_SHA256}  .tooling/${BLENDER_ARCHIVE}" | sha256sum --check -',
+    'tar -xJf ".tooling/${BLENDER_ARCHIVE}" -C .tooling',
+    'test -x "${BLENDER_BIN}"',
+    'test "$("${BLENDER_BIN}" --version | head -n 1)" = "Blender ${BLENDER_VERSION}"',
+    "npm run check",
+}
+missing_blender_ci_tokens = sorted(required_blender_ci_tokens - set(
+    token for token in required_blender_ci_tokens if token in workflow_source
+))
+if missing_blender_ci_tokens:
+    raise RuntimeError(f"Pages CI pinned-Blender contract drift: {missing_blender_ci_tokens}")
+private_rebuild = "--rebuild-attestation _private-evidence/742/742-deterministic-rebuild-attestation.json"
+deployment_rebuild = "--rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json"
+if (
+    workflow_source.count(private_rebuild) != 2
+    or workflow_source.count(deployment_rebuild) != 1
+    or workflow_source.count("--require-release") != 1
+):
+    raise RuntimeError("Pages CI rebuild-attestation release path drift")
+if workflow_source.index("Install checksum-pinned Blender 5.1.1") > workflow_source.index("npm run check"):
+    raise RuntimeError("Pages CI must install pinned Blender before running the mandatory posed-GLB gate")
 research = {
     "README.md", "REFERENCES.md", "CONFIGURATION.md", "DIMENSIONS.md", "ARTICULATION.md",
     "SOURCE_RECONCILIATION.md", "DETAILED_RECONSTRUCTION.md", "COMPARISON_MATRIX.md",
@@ -100,4 +137,5 @@ print(json.dumps({
     "status": "PASS", "required_files": len(required), "manifest_files": len(expected_records),
     "candidate_receipt_packaged": False, "review_evidence_packaged": False,
     "manufacturer_source_binaries": [], "favicon_routes_verified": len(favicon_routes),
+    "posed_glb_ci_blender": "5.1.1-checksum-pinned",
 }, indent=2, sort_keys=True))
