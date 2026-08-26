@@ -10,6 +10,7 @@ spec = json.loads((ROOT / "machines/es1930m/mechanism.json").read_text())
 source = (ROOT / "machines/es1930m/articulation.js").read_text()
 viewer_source = (ROOT / "viewer/runtime.js").read_text()
 route_source = (ROOT / "viewer/presentation-route.mjs").read_text()
+html_source = (ROOT / "es1930m/index.html").read_text()
 
 expected = {
     "levels": spec["solver"]["level_count"],
@@ -59,7 +60,13 @@ required_presentation = [
 for snippet in required_presentation:
     if snippet not in viewer_source:
         raise RuntimeError(f"Presentation route contract missing: {snippet}")
-for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
+for snippet in ("radiusX: 8.2", "radiusZ: 6.0", "Math.tanh", "const curvature = -planarCurvature", "speedMps: 0.72", "wheelbaseM: 1.07", "wheelRadiusM: 0.13"):
     if snippet not in route_source:
         raise RuntimeError(f"Figure-eight math contract missing: {snippet}")
-print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion), "presentation_contracts_checked": len(required_presentation) + 6}, indent=2))
+for snippet in ('aria-label="Autonomous presentation route"', "Drive mode", "Start auto"):
+    if snippet not in html_source:
+        raise RuntimeError(f"600S-aligned control-board naming missing: {snippet}")
+for snippet in ('"Auto loop"', '"Pause auto"', '"Resume auto"', 'dataset.autonomyMode'):
+    if snippet not in viewer_source:
+        raise RuntimeError(f"600S-aligned runtime naming missing: {snippet}")
+print(json.dumps({"status": "PASS", "constants_checked": len(expected), "motion_contracts_checked": len(required_motion), "presentation_contracts_checked": len(required_presentation) + 7, "control_board_names_checked": 7}, indent=2))

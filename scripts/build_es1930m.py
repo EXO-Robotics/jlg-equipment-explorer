@@ -194,7 +194,7 @@ def build():
     root["model"] = "JLG ES1930M"
     root["configuration_id"] = CONFIG["configuration_id"]
     root["pvc"] = "2404"
-    root["release"] = "1.0.3"
+    root["release"] = "1.0.4"
     root["units"] = "meters"
     root["disclaimer"] = "visual reconstruction; not a safety, stability, load, or service simulation"
 
@@ -403,7 +403,7 @@ def build():
     # controller module nested inside a deep molded carrier. The control faces
     # inboard so the operator can reach it while the carrier remains outside the
     # working envelope. Dimensions here are visually reconciled, not service data.
-    controls = empty("PlatformControls", parent=platform)
+    controls = empty("PlatformConsole", parent=platform)
     controls["component"] = "controls"
     controls["authority"] = "PVC2404_parts_fig_4_14_4_15_operation_fig_11_visual_reconstruction"
 
@@ -421,18 +421,18 @@ def build():
         cylinder(f"PlatformControlCarrierMountBolt_{side}", 0.010, 0.040, (x, -0.343, 1.692), MAT["zinc"], carrier, rotation=(math.pi / 2, 0, 0), vertices=16, component="controls")
         cylinder(f"PlatformControlCarrierMountWasher_{side}", 0.017, 0.006, (x, -0.365, 1.692), MAT["zinc"], carrier, rotation=(math.pi / 2, 0, 0), vertices=20, component="controls")
 
-    module = empty("PlatformControlModule", parent=controls)
+    module = empty("PlatformConsoleModule", parent=controls)
     module["component"] = "controls"
     module["part_number"] = "1001274605"
-    housing = bevelled_box("PlatformControlHousing", (0.285, 0.125, 0.215), (0.32, -0.230, 1.755), MAT["black"], module, 0.022, "controls")
+    housing = bevelled_box("PlatformConsoleHousing", (0.285, 0.125, 0.215), (0.32, -0.230, 1.755), MAT["black"], module, 0.022, "controls")
     housing["part_number"] = "1001274604"
-    bevelled_box("PlatformControlUpperShoulder", (0.270, 0.112, 0.055), (0.32, -0.225, 1.875), MAT["black"], module, 0.018, "controls", rotation=(math.radians(-8), 0, 0))
-    bevelled_box("PlatformControlFaceBezel", (0.258, 0.020, 0.112), (0.32, -0.157, 1.795), MAT["zinc"], module, 0.009, "controls", rotation=(math.radians(-7), 0, 0))
-    bevelled_box("PlatformControlFace", (0.244, 0.012, 0.100), (0.32, -0.144, 1.795), MAT["black"], module, 0.007, "controls", rotation=(math.radians(-7), 0, 0))
+    bevelled_box("PlatformConsoleUpperShoulder", (0.270, 0.112, 0.055), (0.32, -0.225, 1.875), MAT["black"], module, 0.018, "controls", rotation=(math.radians(-8), 0, 0))
+    bevelled_box("PlatformConsoleFaceBezel", (0.258, 0.020, 0.112), (0.32, -0.157, 1.795), MAT["zinc"], module, 0.009, "controls", rotation=(math.radians(-7), 0, 0))
+    bevelled_box("PlatformConsoleFace", (0.244, 0.012, 0.100), (0.32, -0.144, 1.795), MAT["black"], module, 0.007, "controls", rotation=(math.radians(-7), 0, 0))
     # The upper face is a symbol-and-status legend, not a display. Recessed
     # pictograms and battery bars keep the PVC 2404 visual organization legible
     # without claiming live telemetry or inventing printed text.
-    bevelled_box("PlatformIndicatorLegendPanel", (0.190, 0.007, 0.060), (0.345, -0.136, 1.822), MAT["black"], module, 0.004, "controls", rotation=(math.radians(-7), 0, 0))
+    bevelled_box("PlatformConsoleDisplay", (0.190, 0.007, 0.060), (0.345, -0.136, 1.822), MAT["black"], module, 0.004, "controls", rotation=(math.radians(-7), 0, 0))
     icon_y = -0.127
     icon_xs = (0.272, 0.296, 0.320, 0.348, 0.376, 0.404, 0.428)
     # Indoor house, outdoor sun, fault cross, battery field, tilt triangle,
@@ -466,7 +466,7 @@ def build():
     ):
         cylinder(name, 0.0055, 0.009, (x, -0.126, z), mat, module, rotation=(math.pi / 2, 0, 0), vertices=16, component="controls")
     for corner, (x, z) in enumerate(((0.205, 1.755), (0.435, 1.755), (0.205, 1.835), (0.435, 1.835))):
-        cylinder(f"PlatformControlFaceScrew_{corner + 1}", 0.005, 0.010, (x, -0.128, z), MAT["zinc"], module, rotation=(math.pi / 2, 0, 0), vertices=12, component="controls")
+        cylinder(f"PlatformConsoleFaceScrew_{corner + 1}", 0.005, 0.010, (x, -0.128, z), MAT["zinc"], module, rotation=(math.pi / 2, 0, 0), vertices=12, component="controls")
 
     # The lower bank follows operation Fig. 11: mushroom stop, lift/drive,
     # horn, indoor/outdoor mode, and drive speed. Indicator colors describe
@@ -515,14 +515,14 @@ def build():
     for corner, (x, y) in enumerate(((0.195, -0.255), (0.281, -0.255), (0.195, -0.189), (0.281, -0.189))):
         cylinder(f"PlatformJoystickMountScrew_{corner + 1}", 0.0045, 0.010, (x, y, 1.905), MAT["zinc"], joystick, vertices=12, component="controls")
 
-    cable = empty("PlatformControlCable", parent=controls)
+    cable = empty("PlatformConsoleCable", parent=controls)
     cable["component"] = "controls"
-    cylinder("PlatformControlCableConnector", 0.021, 0.040, (0.500, -0.273, 1.688), MAT["zinc"], cable, rotation=(0, math.pi / 2, 0), vertices=20, component="controls")
+    cylinder("PlatformConsoleCableConnector", 0.021, 0.040, (0.500, -0.273, 1.688), MAT["zinc"], cable, rotation=(0, math.pi / 2, 0), vertices=20, component="controls")
     # Standard-machine evidence supports the removable box harness, but JLG
     # lists the coiled platform-control cable as an option. Keep this frozen
     # configuration to a short relaxed lead with reconstructed routing.
-    beam_between("PlatformControlCableLead", (0.520, -0.273, 1.688), (0.548, -0.300, 1.640), 0.009, MAT["rubber"], cable, "controls", vertices=12)
-    beam_between("PlatformControlCableDrop", (0.548, -0.300, 1.640), (0.525, -0.310, 1.575), 0.009, MAT["rubber"], cable, "controls", vertices=12)
+    beam_between("PlatformConsoleCableLead", (0.520, -0.273, 1.688), (0.548, -0.300, 1.640), 0.009, MAT["rubber"], cable, "controls", vertices=12)
+    beam_between("PlatformConsoleCableDrop", (0.548, -0.300, 1.640), (0.525, -0.310, 1.575), 0.009, MAT["rubber"], cable, "controls", vertices=12)
 
     for name, size, location, component in (
         ("Chassis_Hit", (1.48, 0.76, 0.55), (0, 0, 0.30), "chassis"),
