@@ -58,7 +58,7 @@ EXPECTED_STOW_SLIDER_VALUES = {
     "Boom lift": "0°",
     "Boom telescope": "0.00 m visual",
     "Carriage tilt": "0°",
-    "Steering angle": "Center",
+    "Steering angle": "All wheel headings centered",
     "Frame level": "Level",
 }
 CAPTURE_RUNNER_PATH = "scripts/capture_742_browser_evidence.mjs"
@@ -941,7 +941,7 @@ def validate_complete_browser_artifact(
         _validate_accessibility_tree(observations["accessibility_tree_snapshot"], set(EXPECTED_STOW_SLIDER_VALUES))
         for selector, expected in {
             "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°",
-            "#steer-control": "Center", "#level-control": "Level",
+            "#steer-control": "All wheel headings centered", "#level-control": "Level",
         }.items():
             if _snapshot_node(observations["dom_snapshot"], selector)["attributes"].get("aria-valuetext") != expected:
                 raise RuntimeError(f"742 accessibility DOM slider value text drift: {selector}")

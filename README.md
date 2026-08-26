@@ -10,7 +10,7 @@ From this directory:
 npm start
 ```
 
-Then open `http://localhost:8080/?v=1.1.11`.
+Then open `http://localhost:8080/?v=1.1.12`.
 
 The telehandler showcase is available at `http://localhost:8080/742/?diagnostics=1`.
 

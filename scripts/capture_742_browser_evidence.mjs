@@ -489,7 +489,7 @@ async function captureAccessibility742() {
   await waitLoaded(page, "glb-validated", "selection 6/6 ready");
   const dom = await snapshot(page, [...BASE_SELECTORS, ...SLIDER_SELECTORS]);
   const values = Object.fromEntries(await Promise.all(SLIDER_SELECTORS.map(async (selector) => [selector, await page.locator(selector).getAttribute("aria-valuetext")])));
-  assert(JSON.stringify(values) === JSON.stringify({ "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°", "#steer-control": "Center", "#level-control": "Level" }), `stow aria values drift: ${JSON.stringify(values)}`);
+  assert(JSON.stringify(values) === JSON.stringify({ "#lift-control": "0°", "#telescope-control": "0.00 m visual", "#tilt-control": "0°", "#steer-control": "All wheel headings centered", "#level-control": "Level" }), `stow aria values drift: ${JSON.stringify(values)}`);
   const ax = await axTwoStates(page);
   assert((await page.evaluate(() => document.activeElement?.id)) === "inspector-close", "a11y modal did not focus close");
   const screenshotPath = await screenshot(page, "742-accessibility-modal.png");

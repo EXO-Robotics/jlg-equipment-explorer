@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.11";
+} from "./assets/models/600s.version.js?v=1.1.12";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -1518,6 +1518,8 @@ function updateCamera(dt) {
     orbit.radius = THREE.MathUtils.damp(orbit.radius, orbit.radiusGoal, 5, dt);
     orbit.target.lerp(orbit.targetGoal, 1 - Math.exp(-5 * dt));
   }
+  document.body.dataset.orbitCameraDistanceM = orbit.radius.toFixed(3);
+  document.body.dataset.orbitDesiredDistanceM = orbit.radiusGoal.toFixed(3);
   const sinPhi = Math.sin(orbit.phi);
   camera.position.set(
     orbit.target.x + orbit.radius * sinPhi * Math.sin(orbit.theta),

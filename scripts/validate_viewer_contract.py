@@ -127,6 +127,8 @@ def main() -> None:
         'event.key !== "Tab"',
         "reducedMotion ? targets[key]",
         "orbit.target.copy(orbit.targetGoal)",
+        "document.body.dataset.orbitCameraDistanceM = orbit.radius.toFixed(3)",
+        "document.body.dataset.orbitDesiredDistanceM = orbit.radiusGoal.toFixed(3)",
         'authority = "independently-typeset-nominative-mark"',
         "not_manufacturer_artwork",
         "frameP95Ms",
