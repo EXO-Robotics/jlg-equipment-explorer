@@ -7,14 +7,15 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.13";
+} from "./assets/models/600s.version.js?v=1.1.14";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
 const forceReducedMotion = query.get("reduce") === "1";
 const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)") ?? null;
 let reducedMotion = forceReducedMotion || Boolean(motionPreference?.matches);
-const compactRender = window.matchMedia?.("(max-width: 800px)").matches ?? false;
+const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)";
+const compactRender = window.matchMedia?.(COMPACT_VIEWPORT_QUERY).matches ?? false;
 const lowMemoryDevice = Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4;
 const renderProfile = lowMemoryDevice ? "economy" : compactRender ? "mobile" : "desktop";
 const maximumPixelRatio = lowMemoryDevice ? 1.15 : compactRender ? 1.35 : 1.75;
@@ -30,7 +31,7 @@ const diagnosticsOutput = document.querySelector("#diagnostics");
 const controlPanel = document.querySelector(".control-panel");
 const controlsBody = document.querySelector("#machine-controls-body");
 const controlsToggle = document.querySelector("#controls-toggle");
-const mobileControlsQuery = window.matchMedia("(max-width: 800px)");
+const mobileControlsQuery = window.matchMedia(COMPACT_VIEWPORT_QUERY);
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 const runtimeDiagnostics = {
   errors: 0,

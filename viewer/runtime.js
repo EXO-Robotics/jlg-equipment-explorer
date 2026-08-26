@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.7";
-import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.7";
-import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.7";
+import ES1930M_MACHINE from "../machines/es1930m/machine.js?v=1.0.8";
+import { orbitDragDelta, pointerDistance, scaledPinchDistance } from "./pointer-gestures.mjs?v=1.0.8";
+import { advanceFigureEight, sampleFigureEight } from "./presentation-route.mjs?v=1.0.8";
 
 const MACHINES = Object.freeze({ es1930m: ES1930M_MACHINE });
 const machine = MACHINES[document.body.dataset.machine];
@@ -24,7 +24,8 @@ const errorCopy = document.querySelector("#error-copy");
 const controlsBody = document.querySelector("#machine-controls-body");
 const controlsToggle = document.querySelector("#controls-toggle");
 const controlPanel = document.querySelector(".control-panel");
-const mobileQuery = matchMedia("(max-width: 800px)");
+const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)";
+const mobileQuery = matchMedia(COMPACT_VIEWPORT_QUERY);
 const diagnostics = document.querySelector("#diagnostics");
 const diagnosticsEnabled = query.get("diagnostics") === "1";
 const autonomyToggle = document.querySelector("#autonomy-toggle");

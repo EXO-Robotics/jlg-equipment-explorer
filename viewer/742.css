@@ -20,7 +20,7 @@ body[data-machine="742"].viewer-terminal-error #app, body[data-machine="742"].vi
 .inspector { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--accent) rgba(255,255,255,.08); }
 .inspector-close { position: sticky; top: 0; z-index: 1; flex: 0 0 auto; margin-left: auto; }
 .nav-overflow-cue { display: none; }
-@media (max-width: 800px), (max-height: 500px) and (max-width: 1000px) {
+@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
   .identity-long h1 { font-size: clamp(44px, 13vw, 67px); letter-spacing: -.065em; }
   .evidence-chip { display: none; }
   body[data-machine="742"] .control-panel { width: auto; }
@@ -35,7 +35,7 @@ body[data-machine="742"].viewer-terminal-error #app, body[data-machine="742"].vi
   .nav-overflow-cue:not([hidden]) { display: grid; }
   .inspector { padding-bottom: max(30px, env(safe-area-inset-bottom)); }
 }
-@media (max-height: 500px) and (min-width: 801px) and (max-width: 1000px) {
+@media (max-height: 500px) and (orientation: landscape) and (min-width: 801px) and (max-width: 1000px) {
   :root { --header: 58px; }
   .topbar { padding: 0 16px; height: var(--header); grid-template-columns: 1fr 1fr; }
   .prototype-label { display: none; }

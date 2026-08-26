@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import JLG742_MACHINE from "../machines/742/machine.js?v=1.1.7";
 
-const ROUTE_RELEASE = "1.6.3";
+const ROUTE_RELEASE = "1.6.4";
 const DEFAULT_ASSET_LOAD_TIMEOUT_MS = 15000;
 const TEST_FAULTS = new Set(["bootstrap-timeout", "asset-timeout", "loader-start", "runtime-error", "unhandled-rejection"]);
 const machine = JLG742_MACHINE;
@@ -15,7 +15,8 @@ if (testFault === "bootstrap-timeout") await new Promise(() => {});
 const forceReducedMotion = query.get("reduce") === "1";
 const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
 let reducedMotion = forceReducedMotion || motionPreference.matches;
-const mobileQuery = matchMedia("(max-width: 800px), (max-height: 500px) and (max-width: 1000px)");
+const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)";
+const mobileQuery = matchMedia(COMPACT_VIEWPORT_QUERY);
 let compact = mobileQuery.matches;
 const app = document.querySelector("#app");
 const loader = document.querySelector("#loader");

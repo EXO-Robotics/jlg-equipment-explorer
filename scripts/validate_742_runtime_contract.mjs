@@ -15,6 +15,8 @@ function requireTokens(source, tokens, label) {
 }
 
 requireTokens(runtime, [
+  'const COMPACT_VIEWPORT_QUERY = "(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)"',
+  "matchMedia(COMPACT_VIEWPORT_QUERY)",
   "nearestVisibleComponentIntersection", "resolveSelectionIntersection(semanticHits, visibleSurfaceHit)",
   "frontmost-rendered-component-then-nearest-proxy", "selectionOverlapOutcomes", "selectionFixtureOutcomes",
   "setProgrammaticViewDistance", "orbitEffectiveMaxDistanceM", "effectiveMaxDistance",
@@ -46,7 +48,10 @@ requireTokens(index, [
 if (/id="(?:motion-status|diagnostics)"[^>]+aria-live/.test(index)) {
   throw new Error("Per-frame outputs must not be live regions");
 }
-requireTokens(style, ["viewer-terminal-error", "visibility: hidden", "pointer-events: none"]);
+requireTokens(style, [
+  "viewer-terminal-error", "visibility: hidden", "pointer-events: none",
+  "@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)",
+]);
 requireTokens(articulation, [
   '"BoomAngleSensorCrank"', '"BoomAngleSensorFrameJoint"', '"BoomAngleSensorCrankJoint"',
   '...["L","R"].flatMap', "Array.from({length:8}", '"RetractChain_C_Moving"',
@@ -88,6 +93,11 @@ const frameWindow = [16.7, 271, 17.1];
 const stalls = frameWindow.filter((sample) => sample >= 250);
 if (stalls.length !== 1 || Math.max(...frameWindow) !== 271) throw new Error("Visible-stall window fixture failed");
 
+const compactViewport = (width, height) => width <= 800 || (height <= 500 && width > height && width <= 1000);
+if (!compactViewport(844, 390) || compactViewport(1280, 720)) {
+  throw new Error("Responsive control fixture drift: 844x390 must be compact and 1280x720 must remain desktop");
+}
+
 console.log(JSON.stringify({
   status: "PASS",
   selection_fixture_cases: dataset.selectionFixtureCases,
@@ -102,4 +112,6 @@ console.log(JSON.stringify({
   settled_live_region: true,
   dynamic_reduced_motion_listener: true,
   dynamic_chain_and_sensor_consumer: true,
+  compact_short_landscape: [844, 390],
+  desktop_expanded: [1280, 720],
 }, null, 2));

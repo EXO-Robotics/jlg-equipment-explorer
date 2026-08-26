@@ -15,6 +15,11 @@ STYLE_PATH = PROJECT_ROOT / "viewer.css"
 VIEWER_PATH = PROJECT_ROOT / "viewer.js"
 VERSION_PATH = PROJECT_ROOT / "assets/models/600s.version.js"
 PACKAGE_PATH = PROJECT_ROOT / "package.json"
+COMPACT_VIEWPORT_QUERY = '(max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px)'
+
+
+def compact_viewport(width: int, height: int) -> bool:
+    return width <= 800 or (height <= 500 and width > height and width <= 1000)
 
 
 def require_tokens(source: str, tokens: list[str], contract: str) -> None:
@@ -91,9 +96,13 @@ def main() -> None:
         "--mobile-controls-height",
         "body.mobile-controls-open .panel-heading",
         ".autonomy-bar",
+        f"@media {COMPACT_VIEWPORT_QUERY}",
     ], "CSS accessibility")
 
     require_tokens(viewer, [
+        f'const COMPACT_VIEWPORT_QUERY = "{COMPACT_VIEWPORT_QUERY}"',
+        "window.matchMedia?.(COMPACT_VIEWPORT_QUERY)",
+        "window.matchMedia(COMPACT_VIEWPORT_QUERY)",
         'query.get("reduce") === "1"',
         'const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)")',
         "let reducedMotion = forceReducedMotion",
@@ -178,6 +187,9 @@ def main() -> None:
         if forbidden in viewer:
             raise RuntimeError(f"Canvas must remain navigation-only; found {forbidden!r}")
 
+    if not compact_viewport(844, 390) or compact_viewport(1280, 720):
+        raise RuntimeError("Responsive control fixture drift: 844x390 must be compact and 1280x720 must remain desktop")
+
     print(json.dumps({
         "status": "PASS",
         "release": release,
@@ -187,6 +199,8 @@ def main() -> None:
         "motion_ranges_described": 4,
         "selection_volumes_self_tested": 5,
         "remote_startup_assets": 0,
+        "compact_short_landscape": [844, 390],
+        "desktop_expanded": [1280, 720],
     }, indent=2, sort_keys=True))
 
 

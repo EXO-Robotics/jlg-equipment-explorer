@@ -126,7 +126,7 @@ body.inspector-open .scrim { opacity: 1; visibility: visible; }
 .inspector dt { color: var(--accent); font: 700 8px/1.3 "Courier New", monospace; letter-spacing: .12em; text-transform: uppercase; }
 .inspector dd { margin: 0; color: var(--paper); font: 11px/1.5 "Courier New", monospace; }
 
-@media (max-width: 800px) {
+@media (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
   :root { --header: 58px; }
   .topbar { padding: env(safe-area-inset-top) 16px 0; height: calc(var(--header) + env(safe-area-inset-top)); grid-template-columns: 1fr 1fr; }
   .prototype-label { display: none; }
@@ -156,7 +156,7 @@ body.inspector-open .scrim { opacity: 1; visibility: visible; }
   .diagnostics { top: calc(var(--header) + env(safe-area-inset-top) + 8px); font-size: 7px; }
 }
 
-@media (max-height: 670px) and (max-width: 800px) {
+@media (max-height: 670px) and (max-width: 800px), (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
   .specs { display: none; }
   .identity h1 { font-size: 52px; }
   .compact-control { display: none; }
