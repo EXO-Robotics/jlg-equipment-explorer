@@ -14,6 +14,9 @@ site = Path(sys.argv[1] if len(sys.argv) > 1 else "_site").resolve()
 workflow_source = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
 package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
 posed_runner_source = (ROOT / "scripts/run_742_posed_glb_gate.py").read_text(encoding="utf-8")
+rebuild_verifier_source = (ROOT / "scripts/verify_742_deterministic_rebuild.py").read_text(encoding="utf-8")
+deployment_verifier_source = (ROOT / "scripts/verify_pages_deployment.py").read_text(encoding="utf-8")
+receipt_validator_source = (ROOT / "scripts/validate_742_receipt.py").read_text(encoding="utf-8")
 posed_gate = "python3 -B scripts/run_742_posed_glb_gate.py"
 if posed_gate not in (package.get("scripts") or {}).get("check:742", ""):
     raise RuntimeError("Pages CI contract requires the actual posed-GLB gate in check:742")
@@ -38,16 +41,53 @@ missing_blender_ci_tokens = sorted(required_blender_ci_tokens - set(
 ))
 if missing_blender_ci_tokens:
     raise RuntimeError(f"Pages CI pinned-Blender contract drift: {missing_blender_ci_tokens}")
-private_rebuild = "--rebuild-attestation _private-evidence/742/742-deterministic-rebuild-attestation.json"
-deployment_rebuild = "--rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json"
-if (
-    workflow_source.count(private_rebuild) != 2
-    or workflow_source.count(deployment_rebuild) != 1
-    or workflow_source.count("--require-release") != 1
-):
-    raise RuntimeError("Pages CI rebuild-attestation release path drift")
-if workflow_source.index("Install checksum-pinned Blender 5.1.1") > workflow_source.index("npm run check"):
-    raise RuntimeError("Pages CI must install pinned Blender before running the mandatory posed-GLB gate")
+rebuild_companion = "_attestations/742-deterministic-rebuild-attestation.json"
+required_rebuild_ci_tokens = {
+    'test "${GITHUB_SHA}" = "$(git rev-parse HEAD)"',
+    "git diff --exit-code",
+    "git diff --cached --exit-code",
+    "python3 -B scripts/verify_742_deterministic_rebuild.py",
+    '--blender "${BLENDER_BIN}"',
+    f"--output {rebuild_companion}",
+    "--require-human-reviewed",
+    "--require-release",
+}
+missing_rebuild_ci_tokens = sorted(token for token in required_rebuild_ci_tokens if token not in workflow_source)
+if missing_rebuild_ci_tokens:
+    raise RuntimeError(f"Pages CI in-job deterministic-rebuild contract drift: {missing_rebuild_ci_tokens}")
+if workflow_source.count("python3 -B scripts/verify_742_deterministic_rebuild.py") != 1:
+    raise RuntimeError("Pages CI must perform exactly one two-build deterministic-rebuild invocation")
+required_two_build_tokens = {
+    'build_once(args.blender, temp / "run-1")',
+    'build_once(args.blender, temp / "run-2")',
+    "run1_glb != run2_glb or run1_glb != committed_glb",
+}
+missing_two_build_tokens = sorted(token for token in required_two_build_tokens if token not in rebuild_verifier_source)
+if missing_two_build_tokens:
+    raise RuntimeError(f"742 deterministic rebuild no longer proves two current-GLB builds: {missing_two_build_tokens}")
+required_deployment_authority_tokens = {
+    '"authority": "generated_in_deployment_workflow"',
+    '"workflow_run_url": args.workflow_run_url',
+    '"source_commit": manifest["source_commit"]',
+    "copy_if_distinct(args.rebuild_attestation, rebuild_copy)",
+}
+missing_deployment_authority_tokens = sorted(
+    token for token in required_deployment_authority_tokens if token not in deployment_verifier_source
+)
+if missing_deployment_authority_tokens:
+    raise RuntimeError(f"Pages deployment rebuild-authority contract drift: {missing_deployment_authority_tokens}")
+for token in ('"authority"', '"workflow_run_url"', '"source_commit"', 'generated_in_deployment_workflow'):
+    if token not in receipt_validator_source:
+        raise RuntimeError(f"742 receipt no longer verifies in-job rebuild authority: {token}")
+private_rebuild = "_private-evidence/742/742-deterministic-rebuild-attestation.json"
+if private_rebuild in workflow_source or workflow_source.count(f"--rebuild-attestation {rebuild_companion}") != 3:
+    raise RuntimeError("Pages CI must use only its in-job deterministic-rebuild companion")
+install_index = workflow_source.index("Install checksum-pinned Blender 5.1.1")
+rebuild_index = workflow_source.index("python3 -B scripts/verify_742_deterministic_rebuild.py")
+validation_index = workflow_source.index("npm run check")
+deploy_index = workflow_source.index("uses: actions/deploy-pages@")
+if not install_index < rebuild_index < validation_index < deploy_index:
+    raise RuntimeError("Pages CI must install Blender, rebuild twice, validate, then deploy in that order")
 research = {
     "README.md", "REFERENCES.md", "CONFIGURATION.md", "DIMENSIONS.md", "ARTICULATION.md",
     "SOURCE_RECONCILIATION.md", "DETAILED_RECONSTRUCTION.md", "COMPARISON_MATRIX.md",

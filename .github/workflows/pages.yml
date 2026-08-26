@@ -32,13 +32,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
-      - name: Require private 742 release-evidence artifact identity
+      - name: Require private 742 frozen-source artifact identity
         run: |
           case "${JLG742_SOURCE_EVIDENCE_RUN_ID}" in
             ''|*[!0-9]*) echo "JLG742_SOURCE_EVIDENCE_RUN_ID must be an exact Actions run ID" >&2; exit 1 ;;
           esac
 
-      - name: Download private frozen 742 release evidence
+      - name: Download private frozen 742 source evidence
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: 742-frozen-source-evidence
@@ -59,12 +59,20 @@ jobs:
           test -x "${BLENDER_BIN}"
           test "$("${BLENDER_BIN}" --version | head -n 1)" = "Blender ${BLENDER_VERSION}"
 
+      - name: Rebuild exact checked-out 742 candidate twice
+        run: |
+          test "${GITHUB_SHA}" = "$(git rev-parse HEAD)"
+          git diff --exit-code
+          git diff --cached --exit-code
+          mkdir -p _attestations
+          python3 -B scripts/verify_742_deterministic_rebuild.py \
+            --blender "${BLENDER_BIN}" \
+            --output _attestations/742-deterministic-rebuild-attestation.json
+
       - name: Validate repository contracts
         run: |
           npm run check
           python3 -B scripts/validate_es1930m_receipt.py --require-predeploy
-          test -f _private-evidence/742/742-deterministic-rebuild-attestation.json
-          mkdir -p _attestations
           python3 -B scripts/validate_742_evidence.py \
             --sources-dir _private-evidence/742 \
             --require-source-binaries \
@@ -73,7 +81,7 @@ jobs:
             --sources-dir _private-evidence/742 \
             --require-source-binaries \
             --require-human-reviewed \
-            --rebuild-attestation _private-evidence/742/742-deterministic-rebuild-attestation.json
+            --rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json
 
       - name: Assemble static site
         run: |
@@ -102,7 +110,7 @@ jobs:
             --workflow-run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
             --source-replay-result _attestations/742-source-replay-result.json \
             --source-evidence-run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${JLG742_SOURCE_EVIDENCE_RUN_ID}" \
-            --rebuild-attestation _private-evidence/742/742-deterministic-rebuild-attestation.json \
+            --rebuild-attestation _attestations/742-deterministic-rebuild-attestation.json \
             --output _attestations/742-pages-http-attestation.json
 
       - name: Enforce complete deployed candidate gate
