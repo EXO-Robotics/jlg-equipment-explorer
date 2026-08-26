@@ -30,6 +30,7 @@
     "accessibility_semantics_and_keyboard": {
       "viewports_css_px": [[1280, 720]],
       "screenshots_minimum": 1,
+      "accessibility_tree_states": ["controls_open", "modal_open"],
       "required_slider_names": ["Boom lift", "Boom telescope", "Carriage tilt", "Steering angle", "Frame level"],
       "required_stowed_slider_value_text": {"Boom lift": "0°", "Boom telescope": "0.00 m visual", "Carriage tilt": "0°", "Steering angle": "Center", "Frame level": "Level"},
       "transcript_ids": ["application_instructions", "slider_value_text", "dialog_focus_trap", "escape_restore", "reduced_motion"]

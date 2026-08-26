@@ -865,7 +865,7 @@
     }
   },
   "boundary": "Visual reconstruction only; not load, stability, service, training, fabrication, or safety authority.",
-  "candidate_tree_sha256": "69c18c106a40dd39a1194ee39ca00189a302b9d1a8f080ad63ff2e3444d193a1",
+  "candidate_tree_sha256": "e88700723e83ef4cf5e4f5f0f2afdf6870f571bbe6ea9dc62f3d75389a1ddbb3",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "deployment_attestation": {
     "artifact": null,
@@ -893,19 +893,19 @@
       "sha256": "a65a1c1b9af093d8c1109d736c31e8b4a274456a2be2cda3a81d2575690ab70c"
     },
     "browser_capture_probe": {
-      "bytes": 3681,
+      "bytes": 3749,
       "path": "scripts/742_browser_capture_probe.js",
-      "sha256": "de9649918dd4d67f7e34dfeb270d083523c231e7d818475939d4a43af8b7c017"
+      "sha256": "a87b31d24c9e76634c357d325d5384c0dd4c2c428c8ef0590c472b6cde9aedd1"
     },
     "browser_capture_requirements": {
-      "bytes": 4311,
+      "bytes": 4379,
       "path": "docs/review/742/CAPTURE_REQUIREMENTS.json",
-      "sha256": "db4910b7d73ac5564625bc6762ac42906c037f2cd65aeea770507ef0f13853b4"
+      "sha256": "d50d37df656a4559b7d25656bb7294c8c9c01996d8662e035d2d1018d093b2db"
     },
     "browser_capture_validator": {
-      "bytes": 35454,
+      "bytes": 36105,
       "path": "scripts/validate_742_browser_evidence.py",
-      "sha256": "c4fc0f71eb406ea670bd72deb9da2f939e7c189364109b921ce2fff044f3d1b7"
+      "sha256": "5c44e5df0b2908779f88ac953a074e105d3a73743503df03e58d3b6b6d532c5e"
     },
     "builder": {
       "bytes": 29963,

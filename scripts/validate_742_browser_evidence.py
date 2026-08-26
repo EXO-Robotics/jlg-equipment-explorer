@@ -304,24 +304,36 @@ def _validate_frame_capture(capture: dict, expected_viewport: list[int]) -> None
 def _validate_accessibility_tree(
     snapshot: dict, slider_names: set[str], expected_value_text: dict[str, str] | None = None
 ) -> None:
-    if set(snapshot or {}) != {"source", "nodes"} or not isinstance(snapshot["source"], str) or not snapshot["source"].strip():
+    if set(snapshot or {}) != {"source", "states"} or snapshot["source"] != "Chromium CDP Accessibility.getFullAXTree":
         raise RuntimeError("742 accessibility-tree snapshot schema drift")
-    nodes = snapshot["nodes"]
-    if not isinstance(nodes, list) or not nodes:
-        raise RuntimeError("742 accessibility-tree snapshot is empty")
+    states = snapshot["states"]
+    if not isinstance(states, list) or [record.get("state") for record in states] != ["controls_open", "modal_open"]:
+        raise RuntimeError("742 accessibility-tree state set drift")
+    state_nodes = {}
+    for record in states:
+        if set(record or {}) != {"state", "nodes"} or not isinstance(record["nodes"], list) or not record["nodes"]:
+            raise RuntimeError("742 accessibility-tree state snapshot is empty")
+        state_nodes[record["state"]] = record["nodes"]
     observed_sliders = set()
-    roles = set()
-    for node in nodes:
-        if set(node or {}) != {"role", "name", "states"} or not isinstance(node["states"], dict):
-            raise RuntimeError("742 accessibility-tree node schema drift")
-        roles.add(node["role"])
-        if node["role"] == "slider":
-            observed_sliders.add(node["name"])
-            if expected_value_text is not None and node["name"] in expected_value_text:
-                if node["states"].get("valuetext") != expected_value_text[node["name"]]:
-                    raise RuntimeError(f"742 accessibility-tree slider value text drift: {node['name']}")
+    roles_by_state = {}
+    for state, nodes in state_nodes.items():
+        roles = set()
+        for node in nodes:
+            if set(node or {}) != {"role", "name", "states"} or not isinstance(node["states"], dict):
+                raise RuntimeError("742 accessibility-tree node schema drift")
+            roles.add(node["role"])
+            if state == "controls_open" and node["role"] == "slider":
+                observed_sliders.add(node["name"])
+                if expected_value_text is not None and node["name"] in expected_value_text:
+                    if node["states"].get("valuetext") != expected_value_text[node["name"]]:
+                        raise RuntimeError(f"742 accessibility-tree slider value text drift: {node['name']}")
+        roles_by_state[state] = roles
     sliders_complete = all(any(observed.startswith(required) for observed in observed_sliders) for required in slider_names)
-    if not {"application", "dialog", "button"}.issubset(roles) or not sliders_complete:
+    if (
+        not {"application", "button"}.issubset(roles_by_state["controls_open"])
+        or not {"dialog", "button"}.issubset(roles_by_state["modal_open"])
+        or not sliders_complete
+    ):
         raise RuntimeError("742 accessibility-tree snapshot omits required semantics")
 
 

@@ -43,7 +43,8 @@ export function collectDomSnapshot(selectors) {
       if (node === document.body) {
         for (const [name, value] of Object.entries(node.dataset)) attributes[`data-${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`] = value;
       }
-      return { selector, text: (node.textContent || "").trim(), attributes };
+      const text = node instanceof HTMLOutputElement ? node.value : (node.textContent || "").trim();
+      return { selector, text, attributes };
     }),
   };
 }
