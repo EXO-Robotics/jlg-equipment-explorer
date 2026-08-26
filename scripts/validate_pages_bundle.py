@@ -19,9 +19,59 @@ posed_runner_source = (ROOT / "scripts/run_742_posed_glb_gate.py").read_text(enc
 rebuild_verifier_source = (ROOT / "scripts/verify_742_deterministic_rebuild.py").read_text(encoding="utf-8")
 deployment_verifier_source = (ROOT / "scripts/verify_pages_deployment.py").read_text(encoding="utf-8")
 receipt_validator_source = (ROOT / "scripts/validate_742_receipt.py").read_text(encoding="utf-8")
-posed_gate = "python3 -B scripts/run_742_posed_glb_gate.py"
-if posed_gate not in (package.get("scripts") or {}).get("check:742", ""):
-    raise RuntimeError("Pages CI contract requires the actual posed-GLB gate in check:742")
+portable_posed_gate = "python3 -B scripts/validate_742_portable_posed_glb.py"
+pinned_posed_invocation = 'BLENDER_BIN="${BLENDER_BIN}" python3 -B scripts/run_742_posed_glb_gate.py'
+
+
+def validate_posed_gate_placement(package_check: str, workflow: str) -> None:
+    if portable_posed_gate not in package_check:
+        raise RuntimeError("Repository check:742 must include the portable posed-GLB gate")
+    if "python3 -B scripts/run_742_posed_glb_gate.py" in package_check:
+        raise RuntimeError("Pinned-Blender posed-GLB gate must remain a separate Pages workflow step")
+    posed_step = workflow.find("- name: Run pinned-Blender posed-GLB companion gate")
+    repository_step = workflow.find("- name: Validate repository contracts")
+    deploy_step = workflow.find("- name: Deploy to GitHub Pages")
+    if min(posed_step, repository_step, deploy_step) < 0:
+        raise RuntimeError("Pages workflow posed/repository/deploy step contract is incomplete")
+    if not posed_step < repository_step < deploy_step:
+        raise RuntimeError("Pages workflow must run pinned posing before repository validation and deployment")
+    posed_block = workflow[posed_step:repository_step]
+    if pinned_posed_invocation not in posed_block or "> _attestations/742-blender-posed-glb-result.json" not in posed_block:
+        raise RuntimeError("Pages workflow lacks the exact pinned-Blender posed-GLB invocation/result")
+
+
+def expect_placement_failure(package_check: str, workflow: str, description: str) -> None:
+    try:
+        validate_posed_gate_placement(package_check, workflow)
+    except RuntimeError:
+        return
+    raise RuntimeError(f"Pages posed-gate negative fixture passed: {description}")
+
+
+package_check_742 = (package.get("scripts") or {}).get("check:742", "")
+validate_posed_gate_placement(package_check_742, workflow_source)
+expect_placement_failure(
+    package_check_742.replace(portable_posed_gate, ""), workflow_source,
+    "missing portable gate",
+)
+expect_placement_failure(
+    package_check_742, workflow_source.replace(pinned_posed_invocation, "python3 -B scripts/run_742_posed_glb_gate.py"),
+    "unpinned workflow invocation",
+)
+expect_placement_failure(
+    package_check_742,
+    workflow_source.replace("- name: Run pinned-Blender posed-GLB companion gate", "- name: Disabled pose companion gate"),
+    "missing exact posed workflow step",
+)
+_posed_fixture_start = workflow_source.find("- name: Run pinned-Blender posed-GLB companion gate")
+_repository_fixture_start = workflow_source.find("- name: Validate repository contracts")
+_late_posed_workflow = (
+    workflow_source[:_posed_fixture_start]
+    + workflow_source[_repository_fixture_start:]
+    + "\n"
+    + workflow_source[_posed_fixture_start:_repository_fixture_start]
+)
+expect_placement_failure(package_check_742, _late_posed_workflow, "posed gate after deployment")
 if 'os.environ.get("BLENDER_BIN")' not in posed_runner_source:
     raise RuntimeError("Posed-GLB runner must consume the checksum-pinned CI Blender path")
 required_blender_ci_tokens = {
