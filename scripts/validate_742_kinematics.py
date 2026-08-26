@@ -110,6 +110,15 @@ def main() -> None:
         failures.append("chain centerline/tube intersects a sheave surface")
     if result["maximum_chain_endpoint_step_m"] > 0.004:
         failures.append("chain endpoint continuity exceeded the dense-step bound")
+    if result["continuous_hose_samples"] < 2001:
+        failures.append("continuous service-line sweep is not dense enough")
+    for name, hose in result["hose_paths"].items():
+        if hose["maximum_total_length_drift_m"] > 1e-9:
+            failures.append(f"{name} changes total hose length")
+        if hose["minimum_segment_length_m"] < 0.10:
+            failures.append(f"{name} articulated route collapsed")
+    if result["maximum_hose_endpoint_step_m"] > 0.002:
+        failures.append("service-line endpoint continuity exceeded the dense-step bound")
     if result["minimum_fork_blade_y_m"] < MECH["collision_proxies"]["minimum_fork_y_m"] - 1e-6:
         failures.append("fork blade crossed the flat-floor proxy")
     target_height = CONFIG["published_performance"]["maximum_lift_height_m"]
@@ -138,10 +147,12 @@ def main() -> None:
         failures.append("steering rod/bar joint lost endpoint closure")
     if abs(steering["maximum_inner_wheel_angle_degrees"] - 55) > 1e-9:
         failures.append("rigid steering linkage misses the published 55-degree inner-wheel limit")
-    if steering["maximum_ackermann_relative_error"] > 0.11:
+    if steering["maximum_ackermann_relative_error"] > 0.005:
         failures.append("reconstructed rigid linkage exceeds its visual Ackermann-fit boundary")
-    if result["maximum_reconstructed_circle_center_spread_m"] > 1e-12:
-        failures.append("front/rear circle-steer linkage lost symmetric center placement")
+    if steering["maximum_four_wheel_icr_relative_spread"] > 0.005:
+        failures.append("four-wheel circle-steer linkage lost its reconstructed ICR closure")
+    if steering["maximum_crab_heading_spread_degrees"] > 2.1 or steering["maximum_crab_corresponding_heading_error_degrees"] > 2.1:
+        failures.append("continuous-rack crab presentation exceeded its explicit residual-toe boundary")
     for name, values in result["rigid_link_ranges_m"].items():
         if values[1] - values[0] > 1e-12:
             failures.append(f"{name} changes length")
@@ -172,7 +183,7 @@ def main() -> None:
         "dynamic_point_nodes_checked": sorted(POINT_PARENT),
         "actual_glb_front_tire_tread_plane_x_m": front_tire_plane,
         "actual_glb_minimum_named_rigid_underbody_clearance_m": underbody_clearance,
-        "posed_glb_blender_gate": "scripts/validate_742_posed_glb.py",
+        "posed_glb_blender_gate": "scripts/run_742_posed_glb_gate.py",
         "rear_axle_stabilization_published_stroke_m": strokes["rear_axle_stabilization"],
         "rear_axle_stabilization_usage_boundary": "only frame-level-induced endpoint travel is shown; free/slow/locked RAS behavior is not simulated",
     })

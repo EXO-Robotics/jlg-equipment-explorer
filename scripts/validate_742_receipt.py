@@ -24,6 +24,8 @@ CANONICAL_FILES = {
     "builder": "scripts/build_742.py",
     "solver_bridge": "scripts/solve_742_pose.mjs",
     "solver_validator": "scripts/validate_742_solver.mjs",
+    "posed_glb_validator": "scripts/validate_742_posed_glb.py",
+    "posed_glb_runner": "scripts/run_742_posed_glb_gate.py",
     "receipt_writer": "scripts/write_742_receipt.py",
     "receipt_validator": "scripts/validate_742_receipt.py",
     "project_readme": "README.md",
@@ -81,6 +83,7 @@ AUTOMATED_CHECKS = {
     "evidence_ledger": ("scripts/validate_742_evidence.py", ["--manifest-only"]),
     "asset_contract": ("scripts/validate_742_glb.py", []),
     "mechanical_kinematics": ("scripts/validate_742_kinematics.py", []),
+    "actual_posed_glb": ("scripts/run_742_posed_glb_gate.py", []),
     "route_contract": ("scripts/validate_742_route.py", []),
     "review_evidence_parser": ("scripts/test_742_browser_evidence.py", []),
 }
@@ -443,6 +446,7 @@ def main() -> None:
 
     asset_result = checks["asset_contract"]["result"]
     kinematic_result = checks["mechanical_kinematics"]["result"]
+    posed_glb_result = checks["actual_posed_glb"]["result"]
     mechanism = json.loads((ROOT / CANONICAL_FILES["mechanism"]).read_text(encoding="utf-8"))
     steering_linkage = kinematic_result["steering_linkage"]
     expected_mechanical_proof = {
@@ -464,13 +468,24 @@ def main() -> None:
         "solver_maximum_rod_bar_closure_error_m": steering_linkage["maximum_rod_bar_closure_error_m"],
         "solver_maximum_ackermann_fit_error_m": steering_linkage["maximum_ackermann_fit_error_m"],
         "solver_maximum_ackermann_relative_error": steering_linkage["maximum_ackermann_relative_error"],
+        "solver_maximum_four_wheel_icr_relative_spread": steering_linkage["maximum_four_wheel_icr_relative_spread"],
+        "solver_maximum_crab_heading_spread_degrees": steering_linkage["maximum_crab_heading_spread_degrees"],
+        "solver_maximum_crab_corresponding_heading_error_degrees": steering_linkage["maximum_crab_corresponding_heading_error_degrees"],
         "solver_ackermann_authority": steering_linkage["ackermann_authority"],
         "solver_maximum_reconstructed_circle_center_spread_m": kinematic_result["maximum_reconstructed_circle_center_spread_m"],
         "solver_rigid_link_ranges_m": kinematic_result["rigid_link_ranges_m"],
         "solver_chain_paths": kinematic_result["chain_paths"],
+        "solver_hose_paths": kinematic_result["hose_paths"],
+        "continuous_hose_samples": kinematic_result["continuous_hose_samples"],
         "solver_maximum_chain_tangent_dot_error": kinematic_result["maximum_chain_tangent_dot_error"],
         "solver_minimum_chain_to_sheave_surface_clearance_m": kinematic_result["minimum_chain_to_sheave_surface_clearance_m"],
         "actual_glb_minimum_named_rigid_underbody_clearance_m": kinematic_result["actual_glb_minimum_named_rigid_underbody_clearance_m"],
+        "actual_posed_glb_minimum_frame_level_clearance_m": posed_glb_result["minimum_frame_level_clearance"]["clearance_m"],
+        "actual_posed_glb_minimum_frame_level_clearance_node": posed_glb_result["minimum_frame_level_clearance"]["limiting_node"],
+        "actual_posed_glb_named_presets": posed_glb_result["named_presets_posed"],
+        "actual_posed_glb_maximum_beam_endpoint_error_m": max(
+            pose["maximum_beam_endpoint_error_m"] for pose in posed_glb_result["pose_contracts"].values()
+        ),
         "approximate_published_rigid_underbody_clearance_m": mechanism["collision_proxies"]["minimum_rigid_underbody_clearance_m"],
         "published_hydraulic_cylinder_strokes_m": mechanism["hydraulic_cylinder_strokes_m"],
         "solver_evidence_stroke_usage_m": solver_stroke_usage(kinematic_result),
@@ -497,18 +512,24 @@ def main() -> None:
         raise RuntimeError("742 receipt 55-degree steering proof drift")
     if expected_mechanical_proof["solver_maximum_steering_bar_length_drift_m"] > 1e-12 or expected_mechanical_proof["solver_maximum_opposed_rod_joint_span_drift_m"] > 1e-12 or expected_mechanical_proof["solver_maximum_rod_bar_closure_error_m"] > 1e-12:
         raise RuntimeError("742 receipt rigid steering-linkage proof drift")
-    if expected_mechanical_proof["solver_maximum_ackermann_relative_error"] > 0.11 or "not factory steering calibration" not in expected_mechanical_proof["solver_ackermann_authority"]:
+    if expected_mechanical_proof["solver_maximum_ackermann_relative_error"] > 0.005 or "not factory steering or crab calibration" not in expected_mechanical_proof["solver_ackermann_authority"]:
         raise RuntimeError("742 receipt reconstructed Ackermann-fit boundary drift")
-    if expected_mechanical_proof["solver_maximum_reconstructed_circle_center_spread_m"] > 1e-12:
-        raise RuntimeError("742 receipt reconstructed circle symmetry proof drift")
+    if expected_mechanical_proof["solver_maximum_four_wheel_icr_relative_spread"] > 0.005:
+        raise RuntimeError("742 receipt reconstructed four-wheel ICR proof drift")
+    if expected_mechanical_proof["solver_maximum_crab_heading_spread_degrees"] > 2.1 or expected_mechanical_proof["solver_maximum_crab_corresponding_heading_error_degrees"] > 2.1:
+        raise RuntimeError("742 receipt reconstructed crab residual-toe proof drift")
     if any(max(values) - min(values) > 1e-12 for values in expected_mechanical_proof["solver_rigid_link_ranges_m"].values()):
         raise RuntimeError("742 receipt rigid-link invariant proof drift")
     if any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.04 or path["wrap_degrees"] != 180 for path in expected_mechanical_proof["solver_chain_paths"].values()):
         raise RuntimeError("742 receipt invariant chain-route proof drift")
     if expected_mechanical_proof["solver_maximum_chain_tangent_dot_error"] > 1e-12 or expected_mechanical_proof["solver_minimum_chain_to_sheave_surface_clearance_m"] <= 0 or expected_mechanical_proof["continuous_all_chain_samples"] < 2001:
         raise RuntimeError("742 receipt chain tangency/clearance/continuity proof drift")
+    if expected_mechanical_proof["continuous_hose_samples"] < 2001 or any(path["maximum_total_length_drift_m"] > 1e-9 or path["minimum_segment_length_m"] < 0.10 for path in expected_mechanical_proof["solver_hose_paths"].values()):
+        raise RuntimeError("742 receipt invariant articulated-hose proof drift")
     if expected_mechanical_proof["actual_glb_minimum_named_rigid_underbody_clearance_m"] + 1e-6 < expected_mechanical_proof["approximate_published_rigid_underbody_clearance_m"]:
         raise RuntimeError("742 receipt approximate rigid-underbody clearance proof drift")
+    if expected_mechanical_proof["actual_posed_glb_minimum_frame_level_clearance_m"] + 1e-6 < expected_mechanical_proof["approximate_published_rigid_underbody_clearance_m"] or expected_mechanical_proof["actual_posed_glb_maximum_beam_endpoint_error_m"] > 2e-6:
+        raise RuntimeError("742 receipt actual posed-GLB mechanical proof drift")
     if any(max(values) - min(values) > 1e-12 for values in expected_mechanical_proof["solver_fixed_barrel_length_ranges_m"].values()):
         raise RuntimeError("742 receipt fixed-barrel proof drift")
     usage = expected_mechanical_proof["solver_evidence_stroke_usage_m"]

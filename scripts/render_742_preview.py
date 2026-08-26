@@ -74,6 +74,10 @@ def pose_circle_steering(amount=1.0):
     apply_solved_pose(solved_pose(0, 0, steer=amount, steer_mode="circle"))
 
 
+def pose_steering(mode, amount=1.0):
+    apply_solved_pose(solved_pose(0, 0, steer=amount, steer_mode=mode))
+
+
 def pose_mechanisms(lift, telescope, tilt=0.0, level=0.0):
     apply_solved_pose(solved_pose(lift, telescope, tilt=tilt, level=level))
 
@@ -138,6 +142,15 @@ steer_cutaway = [
 ]
 for obj in steer_cutaway:
     obj.hide_render = True
+camera.data.lens = 58
+camera.location = (0.0, 0.0, 8.8)
+point_at(camera, (0.0, 0.0, 0.58))
+scene.render.filepath = str(OUTPUT_DIR / "742-circle-steering-plan.png")
+bpy.ops.render.render(write_still=True)
+pose_steering("crab", 1.0)
+scene.render.filepath = str(OUTPUT_DIR / "742-crab-steering-plan.png")
+bpy.ops.render.render(write_still=True)
+pose_circle_steering(1.0)
 steer_names = {"FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight",
                "FrontSteerBarLeft", "FrontSteerBarRight"}
 steer_occluders = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURVE", "FONT"}
@@ -156,6 +169,25 @@ point_at(camera, steer_center)
 scene.render.filepath = str(OUTPUT_DIR / "742-front-double-ended-steer-cylinder-cutaway.png")
 bpy.ops.render.render(write_still=True)
 for obj in steer_occluders:
+    obj.hide_render = False
+rear_keep = {"RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight",
+             "RearSteerBarLeft", "RearSteerBarRight", "RearAxle", "RearDifferential",
+             "RearAxleTubeLeft", "RearAxleTubeRight", "RearPinionFlange",
+             "SteerPivot_RL", "SteerPivot_RR"}
+rear_visual_prefixes = ("Tire_R", "Tread_R", "WheelRimOuter_R", "WheelHub_R",
+                        "PlanetaryCap_R", "Lug_R")
+rear_occluders = [obj for obj in bpy.data.objects if obj.type in {"MESH", "CURVE", "FONT"}
+                  and obj.get("component") == "steering" and obj.name not in rear_keep
+                  and not obj.name.startswith(rear_visual_prefixes)]
+for obj in rear_occluders:
+    obj.hide_render = True
+rear_center = sum((bpy.data.objects[name].matrix_world.translation for name in rear_keep), Vector()) / len(rear_keep)
+camera.data.lens = 52
+camera.location = rear_center + Vector((0.0, 0.0, 8.8))
+point_at(camera, rear_center)
+scene.render.filepath = str(OUTPUT_DIR / "742-rear-steering-linkage.png")
+bpy.ops.render.render(write_still=True)
+for obj in rear_occluders:
     obj.hide_render = False
 for obj in steer_cutaway:
     obj.hide_render = False

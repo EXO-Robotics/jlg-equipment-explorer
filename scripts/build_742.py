@@ -287,7 +287,7 @@ def build():
     frame["pivot_authority"] = "reconstructed_longitudinal_roll_axis_at_0.82m_visual_height_not_manufacturer_axle_centerline"
     chassis = empty("Chassis", (0, -0.82, 0), frame, component="chassis")
     box("MainFrame", (4.72, 0.34, 1.56), (0, 0.88, 0), MAT["black"], chassis, 0.09, "chassis")
-    box("BellyPan", (4.60, 0.16, 1.63), (-0.05, 0.64, 0), MAT["black_soft"], chassis, 0.05, "chassis")
+    box("BellyPan", (4.60, 0.16, 1.63), (-0.05, 0.66, 0), MAT["black_soft"], chassis, 0.05, "chassis")
     for z in (-0.77, 0.77):
         box(f"FrameRail_{z:+.0f}", (4.65, 0.42, 0.18), (-0.015, 0.87, z), MAT["black"], chassis, 0.035, "chassis")
         for x in (front_x, rear_x):
@@ -475,10 +475,13 @@ def build():
     for name, point in stow["geometry"]["points"].items():
         bpy.data.objects[name].location = point
     root["solver_contract"] = "machines/742/solver.js"
+    chain_alias = lambda prefix: [prefix, f"{prefix}_Wrap", *[
+        f"{prefix}_Wrap_{index}" for index in range(1, 8)
+    ], f"{prefix}_Moving"]
     root["mechanism_aliases"] = json.dumps({
-        "extend_chain_left": sorted(name for name in chain_stow if name.startswith("ExtendChain_L")),
-        "extend_chain_right": sorted(name for name in chain_stow if name.startswith("ExtendChain_R")),
-        "retract_chain": sorted(name for name in chain_stow if name.startswith("RetractChain_C")),
+        "extend_chain_left": chain_alias("ExtendChain_L"),
+        "extend_chain_right": chain_alias("ExtendChain_R"),
+        "retract_chain": chain_alias("RetractChain_C"),
         "front_steer_actuator": ["FrontSteerCylinderBarrel", "FrontSteerCylinderRodLeft", "FrontSteerCylinderRodRight", "FrontSteerBarLeft", "FrontSteerBarRight"],
         "rear_steer_actuator": ["RearSteerCylinderBarrel", "RearSteerCylinderRodLeft", "RearSteerCylinderRodRight", "RearSteerBarLeft", "RearSteerBarRight"],
     }, sort_keys=True)

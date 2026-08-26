@@ -73,9 +73,11 @@ def main():
     for alias, prefix in (("extend_chain_left", "ExtendChain_L"),
                           ("extend_chain_right", "ExtendChain_R"),
                           ("retract_chain", "RetractChain_C")):
-        expected = sorted(name for name in REQUIRED_MECHANICAL_DETAIL if name.startswith(prefix))
+        expected = [prefix, f"{prefix}_Wrap", *[
+            f"{prefix}_Wrap_{index}" for index in range(1, 8)
+        ], f"{prefix}_Moving"]
         if aliases.get(alias) != expected:
-            raise RuntimeError(f"742 {alias} canonical aliases drifted")
+            raise RuntimeError(f"742 {alias} ordered path aliases drifted")
     if extras.get("release") != config.get("target_release"):
         raise RuntimeError("742 GLB release metadata does not match configuration target")
     boom_angles = (nodes[by_name["BoomLiftPivot"]].get("extras") or {}).get("visual_angle_degrees")

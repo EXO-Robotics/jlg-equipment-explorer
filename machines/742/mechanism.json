@@ -28,7 +28,14 @@
     "wheel_center_track_m": 2.1005,
     "published_outside_turning_radius_m": 3.66,
     "linkage": "one fixed double-ended cylinder barrel, one continuous translated opposed-rod rack, and two invariant steering bars per axle",
-    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit. Wheel-center track, rack stroke, steering-arm anchors, and the resulting linkage curve are reconstructed. The published outside-radius reference locus and tire/body swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the reconstructed swept envelope"
+    "reconstructed_geometry": {"steering_bar_length_m": 0.3309588579567261, "rack_joint_span_m": 1.735341218434296, "rack_maximum_shift_m": 0.22052192595337095, "crab_rack_scale": 0.3},
+    "acceptance": {"maximum_circle_icr_relative_spread": 0.005, "maximum_crab_residual_toe_degrees": 2.1},
+    "authority": "published modes, wheelbase, and outside turning radius plus service-manual 55 degree limit. Wheel-center track, rack stroke, steering-arm anchors, crab rack scale, and the resulting linkage curves are reconstructed. Exact nonzero crab parallelism is incompatible with this owned continuous-rack/fixed-bar Ackermann topology, so residual toe is measured rather than hidden. The published outside-radius reference locus and tire/body swept-envelope convention are unresolved, so 3.66 m is reported independently and is not equated to the reconstructed swept envelope"
+  },
+  "service_lines": {
+    "lift_hose_total_length_m": 3.21,
+    "boom_intersection_hose_total_length_m": 4.65,
+    "authority": "parts/service sources establish flexible auxiliary lines inside or below the boom; exact hose lengths, bend guides and anchors are unresolved reconstructed presentation coordinates"
   },
   "carriage": {
     "type": "standard floating 50 inch",
@@ -57,7 +64,7 @@
     "minimum_fork_y_m": 0.08,
     "minimum_boom_overlap_m": 0.18,
     "minimum_rigid_underbody_clearance_m": 0.432,
-    "ground_clearance_authority": "published approximate ground clearance; exact manufacturer component locus is unresolved, so validation uses the named reconstructed rigid-underbody proxy set with grounded tires",
+    "ground_clearance_authority": "published approximate ground clearance; exact manufacturer component locus is unresolved, so validation uses the named reconstructed rigid-underbody proxy set with grounded tires and sweeps the complete displayed frame-level range",
     "base_machine_lateral_bounds_m": [-1.23025, 1.23025],
     "visual_bounds_including_mirrors_m": [-1.35, 1.23025]
   }
