@@ -7,7 +7,7 @@ import {
   TELESCOPE_TRAVEL_M,
   TELESCOPE_MID_TRAVEL_M,
   TELESCOPE_FLY_TRAVEL_M,
-} from "./assets/models/600s.version.js?v=1.1.7";
+} from "./assets/models/600s.version.js?v=1.1.8";
 
 document.body.dataset.viewerStarted = "true";
 const query = new URLSearchParams(location.search);
@@ -1024,7 +1024,7 @@ function endPointer(event) {
   updateHitVolumeEmphasis(hoveredHit);
   if (hit) {
     document.body.dataset.lastSelectionVolume = hit.object.name;
-    focusComponent(hit.component);
+    focusComponent(hit.component, { revealDetails: false });
   }
   canvas.style.cursor = hit ? "pointer" : "grab";
 }
@@ -1170,7 +1170,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-function focusComponent(component) {
+function focusComponent(component, { revealDetails = true } = {}) {
   setAutonomyEnabled(false);
   focusedComponent = component;
   document.querySelectorAll("[data-focus]").forEach((button) => {
@@ -1187,7 +1187,7 @@ function focusComponent(component) {
   orbit.radiusGoal = componentContent[component].radius;
   orbit.idle = 0;
   updateHitVolumeEmphasis(hoveredHit);
-  openInspector(component);
+  if (revealDetails) openInspector(component);
 }
 document.querySelectorAll("[data-focus]").forEach((button) => button.addEventListener("click", () => focusComponent(button.dataset.focus)));
 
