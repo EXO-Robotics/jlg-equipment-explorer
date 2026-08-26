@@ -799,8 +799,16 @@ def validate_complete_browser_artifact(
         raise RuntimeError(f"742 browser evidence still requires recapture: {gate}")
     if artifact.get("candidate_tree_sha256") != candidate_tree_sha256 or artifact.get("reviewed_source_commit") != reviewed_commit:
         raise RuntimeError(f"742 browser evidence candidate binding drift: {gate}")
-    if expected_upstream_identity is not None and artifact.get("upstream_identity") != expected_upstream_identity:
-        raise RuntimeError(f"742 upstream regression exact-release binding drift: {gate}")
+    if expected_upstream_identity is not None:
+        upstream_identity = artifact.get("upstream_identity") or {}
+        if (
+            set(upstream_identity) != set(expected_upstream_identity) | {"receipt_sha256", "receipt_bytes"}
+            or any(upstream_identity.get(key) != value for key, value in expected_upstream_identity.items())
+            or not re.fullmatch(r"[0-9a-f]{64}", str(upstream_identity.get("receipt_sha256", "")))
+            or not isinstance(upstream_identity.get("receipt_bytes"), int)
+            or upstream_identity["receipt_bytes"] <= 0
+        ):
+            raise RuntimeError(f"742 upstream regression exact-release binding drift: {gate}")
     if not isinstance(artifact.get("boundary"), str) or not artifact["boundary"].strip():
         raise RuntimeError(f"742 browser evidence boundary missing: {gate}")
     _validate_capture_runner(artifact["capture_runner"])

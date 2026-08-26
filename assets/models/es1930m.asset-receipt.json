@@ -35,9 +35,9 @@
       "sha256": "460794791efb843a073e891f5fd2ee9035100a4cbdc3d7b8434c5650cf1fe059"
     },
     "review_evidence": {
-      "bytes": 10272,
+      "bytes": 14247,
       "path": "docs/research/es1930m/REVIEW_EVIDENCE.json",
-      "sha256": "248315dcf5ccb7f8384df7e92a7ab4d7fb053a96c430c0f3c298150b5a198ffa"
+      "sha256": "b4daa0ce8c0a4add8d80a97ef1ddbb5b5439b03cefb6d8397bf7c36d4eae931e"
     },
     "review_renderer": {
       "bytes": 2416,

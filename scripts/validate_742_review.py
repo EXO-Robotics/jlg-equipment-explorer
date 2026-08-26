@@ -168,8 +168,6 @@ def _expected_upstream_identity(model: str) -> dict:
             "release": receipt["release"],
             "asset_sha256": receipt["sha256"],
             "runtime_sha256": receipt["runtime_sha256"],
-            "receipt_sha256": digest(receipt_path),
-            "receipt_bytes": receipt_path.stat().st_size,
         }
     receipt_path = ROOT / "assets/models/es1930m.asset-receipt.json"
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
@@ -179,8 +177,6 @@ def _expected_upstream_identity(model: str) -> dict:
         "release": receipt["release"],
         "asset_sha256": receipt["files"]["asset"]["sha256"],
         "runtime_sha256": receipt["runtime"]["sha256"],
-        "receipt_sha256": digest(receipt_path),
-        "receipt_bytes": receipt_path.stat().st_size,
     }
 
 

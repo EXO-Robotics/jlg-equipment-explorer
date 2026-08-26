@@ -1,33 +1,115 @@
 {
-  "boundary": "Owned rendered presentation geometry only; no manufacturer geometry, load, stability, hydraulic response, service, or safety claim.",
-  "candidate_tree_sha256": "69e969039aaea7244d601f7bd49bbdd0d56537cf180ac9369d2e0355dc985dda",
+  "boundary": "Owned rendered presentation geometry only; no manufacturer geometry; reconstructed steering evidence is not factory steering or crab calibration. No load, stability, hydraulic response, service, or safety claim.",
+  "candidate_tree_sha256": "PENDING",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
   "environment": {
-    "os": {
-      "build": "25F84",
-      "name": "macOS",
-      "version": "26.5.2"
-    },
+    "os": null,
     "renderer": "Blender 5.1.1 deterministic review renderer"
   },
   "gate": "extended_visual_fidelity",
   "kind": "742-visual-gate-observation",
-  "observations": {
-    "maximum_lift_fork_closeup_visible": true,
-    "maximum_lift_level_attachment_visible": true,
-    "maximum_reach_load_center_pose_visible": true,
-    "retract_chain_tangent_sheave_routing_visible": true,
-    "rigid_boom_angle_sensor_crank_and_link_visible": true,
-    "rigid_double_ended_steering_rack_and_bars_visible": true
-  },
-  "render_artifacts": [
-    "docs/review/742/maximum-lift-level-forks.png",
-    "docs/review/742/maximum-lift-forks-close.png",
-    "docs/review/742/maximum-reach-24in-load-center.png",
-    "docs/review/742/retract-chain-routing-cutaway.png",
-    "docs/review/742/steering-linkage-cutaway.png",
-    "docs/review/742/boom-pivot-angle-sensor.png"
+  "render_observations": [
+    {
+      "artifact": {
+        "bytes": 931798,
+        "path": "docs/review/742/maximum-lift-level-forks.png",
+        "sha256": "b8330d242ac2f389e92de732c773fce8e8c5a1e3b052d8f402c873945b645e87"
+      },
+      "claim": "Level fork load surface is visible at the selected reconstructed maximum-lift pose.",
+      "observed": true,
+      "semantic_id": "maximum_lift_level_attachment"
+    },
+    {
+      "artifact": {
+        "bytes": 850684,
+        "path": "docs/review/742/maximum-lift-forks-close.png",
+        "sha256": "e3b161120f3fbcaef548e03e26d73c4eeb2d3babd55231002097a0f65bbb2e42"
+      },
+      "claim": "Fork heels, blades, attachment, and level relationship are visible at maximum lift.",
+      "observed": true,
+      "semantic_id": "maximum_lift_fork_closeup"
+    },
+    {
+      "artifact": {
+        "bytes": 895098,
+        "path": "docs/review/742/maximum-reach-24in-load-center.png",
+        "sha256": "00c008dbb58d47aa9ea52af9b3777bd02c5d93a4e81110b7dd56c4f8bd2d2efb"
+      },
+      "claim": "The selected 3 degree maximum-reach pose and 24 inch load-center reference are visible.",
+      "observed": true,
+      "semantic_id": "maximum_reach_load_center_pose"
+    },
+    {
+      "artifact": {
+        "bytes": 674756,
+        "path": "docs/review/742/retract-chain-routing-cutaway.png",
+        "sha256": "65050f1accbdeecfd4c00e635a777411a5fb4b65cf57a1d755b9bd569cda4462"
+      },
+      "claim": "Retract-chain tangent legs, sheave wrap, and moving termination are visible.",
+      "observed": true,
+      "semantic_id": "retract_chain_tangent_sheave_routing"
+    },
+    {
+      "artifact": {
+        "bytes": 957681,
+        "path": "docs/review/742/steering-linkage-cutaway.png",
+        "sha256": "65184c67f9ae67eeaa272e983b5c4166b05ea7493ad2ac69bfbfe8c66cf26cf8"
+      },
+      "claim": "Rigid double-ended steering racks, rods, bars, and wheel pivots are visible.",
+      "observed": true,
+      "semantic_id": "rigid_double_ended_steering_rack_and_bars"
+    },
+    {
+      "artifact": {
+        "bytes": 1135308,
+        "path": "docs/review/742/rear-steering-linkage.png",
+        "sha256": "3f607b8158140888fed2257d5d11bd8e2ec8caf9ba10895c7d8a4d339ff32093"
+      },
+      "claim": "Rear axle rack, opposed rods, steering bars, and wheel pivots are visible.",
+      "observed": true,
+      "semantic_id": "rear_steering_rack_bar_topology"
+    },
+    {
+      "artifact": {
+        "bytes": 1276205,
+        "path": "docs/review/742/circle-steering-plan.png",
+        "sha256": "c55c8081dfe556c0e4674215a8e3a6f9e5b00f26a9c8ec6af45336444e29c49c"
+      },
+      "claim": "Reconstructed four-wheel circle-steering topology and common-ICR evidence are visible.",
+      "observed": true,
+      "semantic_id": "circle_four_wheel_icr_topology"
+    },
+    {
+      "artifact": {
+        "bytes": 1231421,
+        "path": "docs/review/742/crab-steering-plan.png",
+        "sha256": "ded9f2b52988b733050b51f5d89028f7d76c77a2a29a9bb80cf4914a12c2cd92"
+      },
+      "claim": "Reconstructed translated-rack crab topology and measured residual-toe boundary are visible.",
+      "observed": true,
+      "semantic_id": "crab_translated_rack_residual_toe_topology"
+    },
+    {
+      "artifact": {
+        "bytes": 1226419,
+        "path": "docs/review/742/front-steering-limited-plan.png",
+        "sha256": "a8fae4608933bb69547d6e69db028e5b7e7f00172e7b4972493b342eb81c4a05"
+      },
+      "claim": "Front-only limited-rack topology, neutral rear wheels, and reconstructed front-mode ICR spread are visible.",
+      "observed": true,
+      "semantic_id": "front_only_limited_rack_neutral_rear_front_mode_icr"
+    },
+    {
+      "artifact": {
+        "bytes": 1249929,
+        "path": "docs/review/742/boom-pivot-angle-sensor.png",
+        "sha256": "a29afb08a7428a2ca50b32ced0272719ef462f4f7a918e0001c17a1a1941f0da"
+      },
+      "claim": "Rigid boom-angle sensor crank, link, frame joint, and boom joint are visible.",
+      "observed": true,
+      "semantic_id": "rigid_boom_angle_sensor_crank_and_link"
+    }
   ],
-  "reviewed_source_commit": "60f08b1c6d5f10a04333c84b5af4bd4829834859",
-  "schema_version": "1.0.0"
+  "reviewed_source_commit": "PENDING",
+  "schema_version": "2.0.0"
 }

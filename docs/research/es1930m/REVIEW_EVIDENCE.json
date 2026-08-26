@@ -1,12 +1,116 @@
 {
   "binding": {
     "600s_browser_artifact": "docs/review/742/600s-browser-regression.json",
-    "600s_browser_artifact_sha256": "fc6d0b9bedaeda52b8d209b4a53ab4312097fc1d90bdade38ce0d97323b22793",
+    "600s_browser_evidence": {
+      "assertions_sha256": "1db48e237754f90c51ef3cdf87ace968af1b4e0cb46ca0734279a9e60848d34e",
+      "automation_trace": {
+        "bytes": 8387,
+        "height_px": null,
+        "path": "docs/review/742/browser-captures/600s-browser-regression-trace.json",
+        "sha256": "6a3a84b16b259c60a80d0252c898e0ed01a17a653bee7ebc88b97234e1079b58",
+        "width_px": null
+      },
+      "normalized_artifact_sha256": "f1926ce1af533822ce8ea6cd46072f4ec628acfb94198daf85434a83d8665c3f",
+      "runner": {
+        "bytes": 60044,
+        "path": "scripts/capture_742_browser_evidence.mjs",
+        "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e"
+      },
+      "screenshots": [
+        {
+          "bytes": 142031,
+          "height_px": 720,
+          "path": "docs/review/742/browser-captures/600s-regression-desktop.png",
+          "sha256": "bc84a023687511ef7f89cf37b0f8427f7962f06e120cb9360e09dcf8342f980d",
+          "width_px": 1280
+        },
+        {
+          "bytes": 92285,
+          "height_px": 844,
+          "path": "docs/review/742/browser-captures/600s-regression-mobile.png",
+          "sha256": "af3be00bf29e6e3bfe2ad3e3a1461f1d4d1f1c817725da2d1003062567b05451",
+          "width_px": 390
+        }
+      ],
+      "toolchain": {
+        "browser_executable": {
+          "browser_version": "151.0.7922.34",
+          "bytes": 52112,
+          "executable_basename": "Google Chrome for Testing",
+          "product": "chromium",
+          "revision": "1234",
+          "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e"
+        },
+        "lockfile": {
+          "bytes": 1786,
+          "path": "package-lock.json",
+          "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9"
+        },
+        "source": "repo-locked-default",
+        "tool": "Playwright",
+        "version": "1.62.1"
+      }
+    },
     "assistive_technology_session": false,
-    "capture_runner_sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e",
     "deployment_claimed": false,
     "es_browser_artifact": "docs/review/742/es1930m-browser-regression.json",
-    "es_browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+    "es_browser_evidence": {
+      "assertions_sha256": "a2f104b51c867de17eb656cb886ea9c41173bd4ba3841c469898b4364dde3948",
+      "automation_trace": {
+        "bytes": 17378,
+        "height_px": null,
+        "path": "docs/review/742/browser-captures/es1930m-browser-regression-trace.json",
+        "sha256": "b0ec1327395ab5f17a98449f2793e8aab939a5e592122d4f59487bb2370c9756",
+        "width_px": null
+      },
+      "normalized_artifact_sha256": "992dcd7aa010081e2ed13b8379108f390f88bbedf6fdc581a7e271f900a8f072",
+      "runner": {
+        "bytes": 60044,
+        "path": "scripts/capture_742_browser_evidence.mjs",
+        "sha256": "1db2a0bb789775d808d37237566b517f549cbd6bdfede2a1184c33d14d050e3e"
+      },
+      "screenshots": [
+        {
+          "bytes": 177418,
+          "height_px": 720,
+          "path": "docs/review/742/browser-captures/es1930m-regression-maximum-pose.png",
+          "sha256": "5776c35b82bcd9642cd02818cc5955d98246f5e91b39e84d865aa42dc38d80cf",
+          "width_px": 1280
+        },
+        {
+          "bytes": 203585,
+          "height_px": 720,
+          "path": "docs/review/742/browser-captures/es1930m-regression-desktop.png",
+          "sha256": "4b2b705d37b5f36db80817415028f721986e9bd83a074ca7640ba294a1f6c25d",
+          "width_px": 1280
+        },
+        {
+          "bytes": 101559,
+          "height_px": 844,
+          "path": "docs/review/742/browser-captures/es1930m-regression-mobile.png",
+          "sha256": "96b0afac073f1b2774a2ad50f2a751dd3c250fe1f678fb85b0c002fa4a8b18e7",
+          "width_px": 390
+        }
+      ],
+      "toolchain": {
+        "browser_executable": {
+          "browser_version": "151.0.7922.34",
+          "bytes": 52112,
+          "executable_basename": "Google Chrome for Testing",
+          "product": "chromium",
+          "revision": "1234",
+          "sha256": "a596b1cfc6353e987fcec8d71a23a28cd6a9e7a6b4e20b908e4c4fcffe51158e"
+        },
+        "lockfile": {
+          "bytes": 1786,
+          "path": "package-lock.json",
+          "sha256": "7d637a5055982dccf7643e489e6aa3208a572b503b9914a0e28aecdd120537b9"
+        },
+        "source": "repo-locked-default",
+        "tool": "Playwright",
+        "version": "1.62.1"
+      }
+    },
     "physical_device_session": false,
     "static_checks": {
       "600s_suite": {
@@ -59,7 +163,7 @@
   },
   "gates": {
     "600s_regression_suite_pass": {
-      "browser_artifact_sha256": "fc6d0b9bedaeda52b8d209b4a53ab4312097fc1d90bdade38ce0d97323b22793",
+      "browser_evidence_sha256": "abbf536bcc68e596f56726538f65e5bdd9d0e549ded9d83c096496ab4535c602",
       "evidence": "Exact current 600S browser regression, fatal-path suite, live reduced-motion transition and repository validators passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -67,7 +171,7 @@
       "status": "pass"
     },
     "accessibility_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "CDP accessibility tree, engineering slider values, modal focus trap, Escape restoration, live reduced-motion transition and all terminal alerts passed; no AT session is claimed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -75,7 +179,7 @@
       "status": "pass"
     },
     "deployed_pages_reviewed": {
-      "browser_artifact_sha256": null,
+      "browser_evidence_sha256": null,
       "evidence": "No deployment, physical-device, or assistive-technology claim is made by this predeploy binding.",
       "method": "Exact public deployment review is intentionally deferred until after Pages deployment.",
       "reviewed_asset_sha256": null,
@@ -83,7 +187,7 @@
       "status": "pending"
     },
     "desktop_browser_zero_errors": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Exact current runtime loaded with zero runtime and console errors before browser interactions.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -91,7 +195,7 @@
       "status": "pass"
     },
     "extension_browser_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Executable controls reached the verified 0.55 m deck extension and the kinematic/GLB gates passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -99,7 +203,7 @@
       "status": "pass"
     },
     "figure_eight_presentation_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Executable auto start, pause and resume passed with the 2400-sample route validator.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -107,7 +211,7 @@
       "status": "pass"
     },
     "mobile_and_pinch_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "390x844 controls and numeric camera-distance pinch proof passed in emulated Chromium; no physical touchscreen is claimed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -115,7 +219,7 @@
       "status": "pass"
     },
     "mobile_drag_direction_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Current mobile browser capture plus deterministic touch-direction and camera-basis tests passed; no physical device is claimed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -123,7 +227,7 @@
       "status": "pass"
     },
     "performance_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Exact current runtime reported a finite local Chromium FPS and p95 sample; no physical low-end device claim is made.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -131,7 +235,7 @@
       "status": "pass"
     },
     "platform_controls_visual_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "The exact current maximum-pose browser capture and GLB contract include the authored platform-control hierarchy.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -139,7 +243,7 @@
       "status": "pass"
     },
     "raised_pose_browser_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Executable controls reached 5.64 m platform height and captured the exact raised pose.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -147,7 +251,7 @@
       "status": "pass"
     },
     "selection_and_focus_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "The exported selection self-test and platform modal focus/restore browser assertions passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -155,7 +259,7 @@
       "status": "pass"
     },
     "steering_boundary_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Executable steering reached 80 mm right cylinder displacement and the route solver gate passed.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -163,7 +267,7 @@
       "status": "pass"
     },
     "stowed_silhouette_reviewed": {
-      "browser_artifact_sha256": "49b721948b274113c1bbcb0c906140648bb141724ac06bdfb3ed6baf7d24ece4",
+      "browser_evidence_sha256": "0668121c100f6ff54c6c03fe1e7e52db459e84e025ce1b1ff7d6bbf6a19356e8",
       "evidence": "Exact current GLB loaded at desktop and mobile with bound screenshots, selection self-test pass and zero runtime errors.",
       "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
       "reviewed_asset_sha256": "c128b99ceb3aa0b0b86cb54cb93b1d270db5b704923850ab13a5d993375cd5af",
@@ -171,6 +275,6 @@
       "status": "pass"
     }
   },
-  "policy": "Predeploy gates pass only from exact hash-bound executable browser artifacts and passing repository validators. Public deployment remains a separate pending gate.",
-  "schema_version": "2.0.0"
+  "policy": "Predeploy gates pass only from immutable raw traces, screenshots, repository-owned runner/toolchain identity, normalized semantic assertions, and passing repository validators. The later 742 candidate/review binding envelope is excluded; public deployment remains a separate pending gate.",
+  "schema_version": "3.0.0"
 }

@@ -43,7 +43,7 @@ def run_static_checks() -> dict:
     return records
 
 
-def gate_record(gate: str, *, runtime_sha: str, asset_sha: str, artifact_sha: str) -> dict:
+def gate_record(gate: str, *, runtime_sha: str, asset_sha: str, evidence_sha: str) -> dict:
     summaries = {
         "stowed_silhouette_reviewed": "Exact current GLB loaded at desktop and mobile with bound screenshots, selection self-test pass and zero runtime errors.",
         "platform_controls_visual_reviewed": "The exact current maximum-pose browser capture and GLB contract include the authored platform-control hierarchy.",
@@ -63,7 +63,7 @@ def gate_record(gate: str, *, runtime_sha: str, asset_sha: str, artifact_sha: st
         "status": "pass",
         "reviewed_runtime_sha256": runtime_sha,
         "reviewed_asset_sha256": asset_sha,
-        "browser_artifact_sha256": artifact_sha,
+        "browser_evidence_sha256": evidence_sha,
         "method": "Hash-bound executable local Chromium capture plus repository static/model validators",
         "evidence": summaries[gate],
     }
@@ -85,7 +85,7 @@ def main() -> None:
             gate,
             runtime_sha=runtime_sha,
             asset_sha=asset_sha,
-            artifact_sha=upstream_600s["artifact_sha256"] if gate == "600s_regression_suite_pass" else es["artifact_sha256"],
+            evidence_sha=upstream_600s["evidence_sha256"] if gate == "600s_regression_suite_pass" else es["evidence_sha256"],
         )
         for gate in PREDEPLOY_GATES
     }
@@ -93,19 +93,18 @@ def main() -> None:
         "status": "pending",
         "reviewed_runtime_sha256": None,
         "reviewed_asset_sha256": None,
-        "browser_artifact_sha256": None,
+        "browser_evidence_sha256": None,
         "method": "Exact public deployment review is intentionally deferred until after Pages deployment.",
         "evidence": "No deployment, physical-device, or assistive-technology claim is made by this predeploy binding.",
     }
     review = {
-        "schema_version": "2.0.0",
-        "policy": "Predeploy gates pass only from exact hash-bound executable browser artifacts and passing repository validators. Public deployment remains a separate pending gate.",
+        "schema_version": "3.0.0",
+        "policy": "Predeploy gates pass only from immutable raw traces, screenshots, repository-owned runner/toolchain identity, normalized semantic assertions, and passing repository validators. The later 742 candidate/review binding envelope is excluded; public deployment remains a separate pending gate.",
         "binding": {
             "es_browser_artifact": str(ES_ARTIFACT.relative_to(ROOT)),
-            "es_browser_artifact_sha256": es["artifact_sha256"],
+            "es_browser_evidence": es["evidence"],
             "600s_browser_artifact": str(UPSTREAM_600S_ARTIFACT.relative_to(ROOT)),
-            "600s_browser_artifact_sha256": upstream_600s["artifact_sha256"],
-            "capture_runner_sha256": es["runner_sha256"],
+            "600s_browser_evidence": upstream_600s["evidence"],
             "static_checks": static,
             "physical_device_session": False,
             "assistive_technology_session": False,

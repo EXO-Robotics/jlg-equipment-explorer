@@ -1,110 +1,59 @@
 {
-  "candidate_tree_sha256": "69e969039aaea7244d601f7bd49bbdd0d56537cf180ac9369d2e0355dc985dda",
+  "candidate_tree_sha256": "PENDING",
   "configuration_id": "742-PVC2411-US-STD-OC-D36-FF370-C50-PF481",
-  "environment": {
-    "browser": {
-      "name": "Chromium",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
-      "version": "151.0.7922.34"
-    },
-    "os": {
-      "build": "25F84",
-      "name": "macOS",
-      "version": "26.5.2"
-    }
-  },
+  "environment": null,
   "gates": {
     "600s_browser_regression": {
-      "artifact": {
-        "bytes": 30579,
-        "path": "docs/review/742/600s-browser-regression.json",
-        "sha256": "d703ef3eaeadb40538e52dbe73ae1c25a4a5038205f20a527edbe77a2f7fc28c"
-      },
-      "notes": "Fresh exact 600S 1.1.10 interaction, responsive, modal, gesture, and reduced-motion capture required.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 600S regression capture; binding remains pending until candidate identity is computed.",
+      "status": "pending"
     },
     "accessibility_semantics_and_keyboard": {
-      "artifact": {
-        "bytes": 25539,
-        "path": "docs/review/742/accessibility-semantics-keyboard.json",
-        "sha256": "d48a1c295783fceb03dafb148adc8fa4e3db58dbba87c1c6a54e3b13a664baca"
-      },
-      "notes": "Fresh DOM/accessibility-tree and keyboard capture required; no physical AT session claimed.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 DOM, accessibility-tree, and keyboard capture; no physical AT session is claimed.",
+      "status": "pending"
     },
     "cab_closeup_fidelity": {
-      "artifact": {
-        "bytes": 1505832,
-        "path": "docs/review/742/cab-close.png",
-        "sha256": "9e5b2bf74b7f2cac6841021a73fe555d9cac4998c56d72124a2efd2c0877de69"
-      },
-      "notes": "Repeat the final cab close-up review after the Wave 5 freeze.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact frozen Wave6 cab close-up render.",
+      "status": "pending"
     },
     "desktop_browser_interaction": {
-      "artifact": {
-        "bytes": 51269,
-        "path": "docs/review/742/desktop-browser-interaction.json",
-        "sha256": "2ab5b18b2e929de1e58b0b1a0a07bb8cd59ab187ddbd65b4d7643c30138e8241"
-      },
-      "notes": "Fresh committed-runner schema-2 browser capture required.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 desktop browser capture and terminal/reset evidence.",
+      "status": "pending"
     },
     "es1930m_browser_regression": {
-      "artifact": {
-        "bytes": 27188,
-        "path": "docs/review/742/es1930m-browser-regression.json",
-        "sha256": "2a2233f39aba786d2f7235079d0856a94f4df14241f931483ef61244b23afc53"
-      },
-      "notes": "Fresh exact ES1930M runtime 1.0.5 interaction, responsive, modal, gesture, auto-route, and reduced-motion capture required.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 ES1930M 1.0.6 regression capture and fatal-path evidence.",
+      "status": "pending"
     },
     "extended_visual_fidelity": {
-      "artifact": {
-        "bytes": 1377,
-        "path": "docs/review/742/extended-visual-fidelity.json",
-        "sha256": "20f6b2cab5cc375c59e0d514a4b49a74d35f8c17713547aee66255a2148defb6"
-      },
-      "notes": "Repeat all six mechanism-specific view reviews against the final Wave 5 renders.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed all ten named, hash-bound Wave6 mechanism render claims.",
+      "status": "pending"
     },
     "mobile_browser_interaction": {
-      "artifact": {
-        "bytes": 39580,
-        "path": "docs/review/742/mobile-browser-interaction.json",
-        "sha256": "38dce5efe5252e2eb464f385f66f9962a202663e88caf2f58b5ac6aff7dc53f1"
-      },
-      "notes": "Fresh portrait and short-landscape capture with actual camera-distance pinch proof required.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 portrait and short-landscape captures with distance-bound pinch proof.",
+      "status": "pending"
     },
     "performance_profile": {
-      "artifact": {
-        "bytes": 12115,
-        "path": "docs/review/742/performance-profile.json",
-        "sha256": "477d3e24c17930f690b2126e5cc455cae989a891aff6a8badb0a90ffcd2a390d"
-      },
-      "notes": "Fresh coherent raw visible-frame interval arrays required.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 local performance screenshots; raw visible-frame arrays remain local-browser evidence only.",
+      "status": "pending"
     },
     "semantic_selection": {
-      "artifact": {
-        "bytes": 34259,
-        "path": "docs/review/742/semantic-selection.json",
-        "sha256": "23955e6a3aff5bc0274e96ba89abf0f180d6e464e74d88b3a3e0e63728512344"
-      },
-      "notes": "Fresh visible-canvas frontmost-surface and independent ray outcomes required.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact Wave6 six-component visible-canvas capture and independent selection outcomes.",
+      "status": "pending"
     },
     "stowed_visual_fidelity": {
-      "artifact": {
-        "bytes": 1278204,
-        "path": "docs/review/742/stowed-front-left.png",
-        "sha256": "9685042f41b8ad146df51078402f2d53b097037377442753ba84cc1c17803e98"
-      },
-      "notes": "Repeat against the final Wave 5 stowed render.",
-      "status": "pass"
+      "artifact": null,
+      "notes": "Root directly reviewed the exact frozen Wave6 stowed render.",
+      "status": "pending"
     }
   },
-  "reviewed_source_commit": "60f08b1c6d5f10a04333c84b5af4bd4829834859",
+  "reviewed_source_commit": "PENDING",
   "schema_version": "3.0.0"
 }
